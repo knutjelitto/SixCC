@@ -13,6 +13,7 @@ namespace SixCC
     {
         private static void Main(string[] args)
         {
+            var quick = true;
             try
             {
                 Compile();
@@ -20,10 +21,15 @@ namespace SixCC
             catch (DiagnosticException error)
             {
                 error.Diagnostic.Report(new ConsoleWriter());
+                quick = false;
             }
 
-            Console.Write("any key ... ");
-            Console.ReadKey(true);
+            if (!quick)
+            {
+                Console.Write("any key ... ");
+                Console.ReadKey(true);
+
+            }
         }
 
         static void Compile()

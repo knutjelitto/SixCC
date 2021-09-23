@@ -10,17 +10,17 @@ namespace SixCC.Sdk.Earley
     {
         public static int IdCounter;
 
-        public CoreNode(NodeKey key, int start, int next)
+        public CoreNode(NodeKey key, Extend extend)
         {
             Key = key;
-            Start = start;
-            Next = next;
+            Extend = extend;
             Id = ++IdCounter;
         }
 
         public NodeKey Key { get; }
-        public int Start { get; }
-        public int Next { get; }
+        public Extend Extend { get; }
+        public int Start => Extend.Start;
+        public int Next => Extend.Next;
         public int Id { get; }
 
         public List<CoreNode?> Children = new();
@@ -28,13 +28,13 @@ namespace SixCC.Sdk.Earley
 
     public class SymbolNode : CoreNode
     {
-        public SymbolNode(NodeKey key, int start, int next, DFA rule)
-            : base(key, start, next)
+        public SymbolNode(NodeKey key, Extend extend, DFA rule)
+            : base(key, extend)
         {
             Rule = rule;
         }
 
-        public Automata.DFA Rule { get; }
+        public DFA Rule { get; }
         public string Symbol => Rule.Symbol;
 
         public override string ToString()
@@ -45,8 +45,8 @@ namespace SixCC.Sdk.Earley
 
     public class TerminalNode : SymbolNode
     {
-        public TerminalNode(NodeKey key, int start, int next, DFA rule)
-            : base(key, start, next, rule)
+        public TerminalNode(NodeKey key, Extend extend, DFA rule)
+            : base(key, extend, rule)
         {
         }
 
@@ -58,8 +58,8 @@ namespace SixCC.Sdk.Earley
 
     public class NonterminalNode : SymbolNode
     {
-        public NonterminalNode(NodeKey key, int start, int next, DFA rule)
-            : base(key, start, next, rule)
+        public NonterminalNode(NodeKey key, Extend extend, DFA rule)
+            : base(key, extend, rule)
         {
         }
 
@@ -71,8 +71,8 @@ namespace SixCC.Sdk.Earley
 
     public class IntermediateNode : SymbolNode
     {
-        public IntermediateNode(NodeKey key, int start, int next, DFA rule)
-            : base(key, start, next, rule)
+        public IntermediateNode(NodeKey key, Extend extend, DFA rule)
+            : base(key, extend, rule)
         {
         }
 
@@ -84,16 +84,16 @@ namespace SixCC.Sdk.Earley
 
     public class RootNode : CoreNode
     {
-        public RootNode(int start, int next)
-            : base(new NodeKey(), start, next)
+        public RootNode(Extend extend)
+            : base(new NodeKey(), extend)
         {
         }
     }
 
     public class PackedNode : CoreNode
     {
-        public PackedNode(int start, int next, CoreNode? left, CoreNode right)
-            : base(new NodeKey(), start, next)
+        public PackedNode(Extend extend, CoreNode? left, CoreNode right)
+            : base(new NodeKey(), extend)
         {
             Debug.Assert(right != null);
             Children.Add(left);
@@ -137,6 +137,16 @@ namespace SixCC.Sdk.Earley
         {
             return $"({Dfa},{State},{Start},{Next})";
         }
+
+        public static bool operator ==(NodeKey left, NodeKey right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(NodeKey left, NodeKey right)
+        {
+            return !(left == right);
+        }
     }
 
     public class ForrestBuilder
@@ -155,7 +165,7 @@ namespace SixCC.Sdk.Earley
 
         public CoreNode Build()
         {
-            var root = new RootNode(Chart.First.ID, Chart.Last.ID);
+            var root = new RootNode(new Extend(Chart.First.ID, Chart.Last.ID));
             
             foreach (var item in Chart.Results())
             {
@@ -166,6 +176,71 @@ namespace SixCC.Sdk.Earley
             }
 
             return root;
+        }
+
+        private CoreNode BuildLeft(EarleyItem left)
+        {
+            throw new NotImplementedException();
+        }
+
+        private CoreNode BuildRight(EarleyItem left)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<CoreNode> BuildNodes(EarleyItem item)
+        {
+            foreach (var from in item.From)
+            {
+                var origin = from.Origin;
+                var finished = from.Finished;
+
+                if (origin.From.Count == 0)
+                {
+                    var finishedKey = new NodeKey(finished);
+                    if (items.TryGetValue(finishedKey, out var node))
+                    {
+                        Debug.Assert(node != null);
+                        yield return node!;
+                    }
+                    else
+                    {
+                        yield return BuildPacked(finishedKey, finished);
+                    }
+                }
+                else
+                {
+
+                }
+            }
+
+            yield break;
+        }
+
+        private CoreNode BuildPacked(NodeKey key, EarleyItem item)
+        {
+            CoreNode? left = null;
+            CoreNode? right = null;
+
+            if (item.IsTerminal)
+            {
+                left = null;
+                right = Add(key, new TerminalNode(key, item.Extend, item.Dfa));
+            }
+            else if (item.From.Count > 0)
+            {
+                left = BuildLeft(item);
+                right = Add(key, new NonterminalNode(key, item.Extend, item.Dfa));
+            }
+
+            Debug.Assert(right != null);
+            return new PackedNode(item.Extend, left, right);
+        }
+
+        private CoreNode Add(NodeKey key, CoreNode node)
+        {
+            items.Add(key, node);
+            return node;
         }
 
         private CoreNode? Build(EarleyItem item)
@@ -181,7 +256,7 @@ namespace SixCC.Sdk.Earley
             {
                 if (item.Dfa.IsTerminal)
                 {
-                    node = new TerminalNode(key, item.OriginSet.ID, item.Set.ID, item.Dfa);
+                    node = new TerminalNode(key, item.Extend, item.Dfa);
                     items.Add(key, node);
                 }
                 else
@@ -190,7 +265,7 @@ namespace SixCC.Sdk.Earley
                     {
                         if (item.IsFinal)
                         {
-                            node = new NonterminalNode(key, item.OriginSet.ID, item.Set.ID, item.Dfa);
+                            node = new NonterminalNode(key, item.Extend, item.Dfa);
                             items.Add(key, node);
                         }
                         else
@@ -202,7 +277,7 @@ namespace SixCC.Sdk.Earley
                     }
                     else
                     {
-                        node = new IntermediateNode(key, item.OriginSet.ID, item.Set.ID, item.Dfa);
+                        node = new IntermediateNode(key, item.Extend, item.Dfa);
                         items.Add(key, node);
 
                         foreach (var from in item.From)
@@ -221,7 +296,7 @@ namespace SixCC.Sdk.Earley
                                 left = null;
                             }
 
-                            var packed = new PackedNode(start, next, left, right);
+                            var packed = new PackedNode(new Extend(start, next), left, right);
                             node.Children.Add(packed);
                         }
                     }

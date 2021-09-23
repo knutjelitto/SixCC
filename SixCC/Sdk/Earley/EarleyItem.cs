@@ -22,12 +22,13 @@ namespace SixCC.Sdk.Earley
         public EarleySet OriginSet { get; }
 
         public bool IsEmpty => Set.ID == OriginSet.ID;
-
         public virtual bool IsFinal => State.Final;
+        public bool IsTerminal => Dfa.IsTerminal;
+        public Extend Extend => new Extend(OriginSet.ID, Set.ID);
 
-        public EarleyItem AddFrom(EarleyItem finished, EarleyItem item)
+        public EarleyItem AddFrom(EarleyItem origin, EarleyItem finished)
         {
-            From.Add(new FromTransition(finished, item));
+            From.Add(new FromTransition(origin, finished));
             return this;
         }
 

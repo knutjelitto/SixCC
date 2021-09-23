@@ -82,7 +82,7 @@ namespace SixCC.Sdk.Earley
         {
             var next = AddItem(item.Dfa, transition.Target, item.OriginSet);
 
-            next.AddFrom(finished, item);
+            next.AddFrom(item, finished);
 
             return next;
         }
