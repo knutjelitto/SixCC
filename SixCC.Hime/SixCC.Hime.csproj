@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <WarningsAsErrors />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Grammars\Expressions.gsix" />
+	  <None Remove="LinguLexer.bin" />
+	  <None Remove="LinguParser.bin" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Grammars\Expressions.gsix" />
+	  <EmbeddedResource Include="LinguLexer.bin" />
+	  <EmbeddedResource Include="LinguParser.bin" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Hime.Build.Task" Version="0.1.6" IncludeAssets="build" />
+		<PackageReference Include="Hime.SDK" Version="3.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SixCC.Runtime\SixCC.Runtime.csproj" />
+		<ProjectReference Include="..\SixCC.Sdk\SixCC.Sdk.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Ast\" />
+	</ItemGroup>
+
+
+	<Target Name="CompileGrammar" BeforeTargets="BeforeCompile">
+		<CompileGrammar GrammarName="Lingu" GrammarFile="Lingu.hime" Namespace="SixCC.Hime" OutputMode="Source" CodeAccess="Internal" OutputPath="." />
+	</Target>
+
+	<Target Name="CleanGrammar" BeforeTargets="Clean">
+		<Delete Files="LinguLexer.bin" />
+		<Delete Files="LinguParser.bin" />
+		<Delete Files="LinguParser.cs" />
+		<Delete Files="LinguLexer.cs" />
+	</Target>
+
+</Project>

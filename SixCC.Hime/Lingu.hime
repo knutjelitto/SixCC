@@ -1,0 +1,159 @@
+﻿grammar Lingu
+{
+    options
+    {
+        Axiom = "file";
+        Separator = "SPACE";
+    }
+
+    terminals
+    {
+        fragment NEW_LINE
+            -> U+000D           // CR
+            |  U+000A           // LF
+            |  U+000D U+000A    // CR LF
+			|  U+0085           // NL Next line character
+			|  U+2028           // LS Line separator character
+			|  U+2029           // PS Paragraph separator character
+            ;
+
+        fragment WHITE_SPACE    -> uc{Zs} | U+0009 | U+000B | U+000C ;
+
+        fragment COMMENT_LINE
+            -> '//' (. - NEW_LINE)*
+            ;
+
+        fragment COMMENT_BLOCK
+            -> '/*' (.* - (.* '*/' .*)) '*/'
+            ;
+
+        BLOCK_COMMENT
+            -> '/*' (.* - (.* '*/' .*)) '*/'    
+            ;
+
+        SPACE               -> (NEW_LINE | WHITE_SPACE | COMMENT_LINE | COMMENT_BLOCK)+;
+
+        fragment LETTER         -> [a-zA-Z];
+        fragment DIGIT          -> [0-9];
+        fragment UNDERSCORE     -> [_];
+        fragment name_start     -> LETTER (LETTER | DIGIT)*;
+        fragment name_tail      -> '-' (LETTER | DIGIT)+;
+        NAME                    -> name_start name_tail*;
+
+        INTEGER                 -> '0' | [1-9] [0-9]*;
+        fragment ESCAPEES       -> '\\\\'                       // Backslash
+                                |  '\\\''                       //
+                                |  '\\0'                        // Unicode character 0
+                                |  '\\a'                        // Alert (character 7)
+                                |  '\\b'                        // Backspace (character 8)
+                                |  '\\f'                        // Form feed (character 12)
+                                |  '\\n'                        // New line (character 10)
+                                |  '\\r'                        // Carriage return (character 13)
+                                |  '\\t'                        // Horizontal tab (character 9)
+                                |  '\\v'                        // Vertical quote (character 11)
+                                |  '\\u{' [a-fA-F0-9]{1,6} '}'  // Unicode code point
+                                ;
+
+        LITERAL_ANY             -> '.';
+        LITERAL_TEXT            -> '\'' ( [^\\'] | ESCAPEES )+ '\'';
+
+        UNICODE_BLOCK           -> '\\ub' '{' ([_a-zA-Z0-9] | '-')+ '}' ;
+        UNICODE_CATEGORY        -> '\\uc' '{' ([_a-zA-Z0-9] | '-')+ '}' ;
+        UNICODE_CODEPOINT       -> '\\u{' [a-fA-F0-9]{1,6} '}'
+                                |  [uU]'+' [a-fA-F0-9]{1,6}
+                                ;
+    }
+
+    rules
+    {
+        file
+            -> cf_grammar
+            ;
+
+        cf_grammar
+            -> 'grammar' NAME '{' {grammar_item+} '}'
+            ;
+
+        grammar_item
+            -> grammar_options
+            |  grammar_rules
+            ;
+
+        /* OPTIONS */
+        grammar_options
+            -> 'options' '{' {option*} '}'
+            ;
+
+        option
+            -> NAME '=' NAME ';'
+            ;
+
+        range
+            -> character '..' character
+            ;
+
+        character
+            -> UNICODE_CODEPOINT
+            |  string
+            ;
+
+        string
+            -> LITERAL_TEXT
+            ;
+
+        /* RULES */
+        grammar_rules
+            -> 'rules' '{' {rule*} '}'
+            ;
+
+        rule                        
+            -> NAME (':'|'->') rule_expression ';'
+            ;
+
+        rule_expression
+            -> rule_alternative ('|' rule_alternative)*
+            ;
+
+        rule_alternative
+            -> rule_sequence ('-' rule_sequence)?
+            | // epsilon
+            ;
+
+        rule_sequence
+            -> rule_repetition+
+            ;
+
+        rule_repetition
+            -> rule_element ('?' | '*' | '+')?
+            ;
+
+        rule_element
+            -> rule_sub
+            |  rule_atom
+            |  rule_not
+            |  '(' rule_expression ')'
+            ;
+
+        rule_sub 
+            -> '{' NAME (':'|'->') rule_expression '}'
+            ;
+
+        rule_not
+            -> '~' rule_element
+            ;
+
+        rule_atom
+            -> reference
+            |  string
+            |  range
+            |  LITERAL_ANY
+            |  UNICODE_CODEPOINT
+            |  UNICODE_BLOCK
+            |  UNICODE_CATEGORY
+            ;
+
+        reference
+            -> NAME
+            ;
+    }
+}

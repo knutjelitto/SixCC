@@ -1,0 +1,4 @@
+﻿grammar Bug;
+
+S   : (S S | 'a')?
+    ;

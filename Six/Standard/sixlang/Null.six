@@ -1,0 +1,3 @@
+shared abstract class Null of null : Anything;
+
+shared object null : Null;

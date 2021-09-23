@@ -1,0 +1,86 @@
+﻿grammar SixCC;
+
+grammar
+    : 'grammar' name ';' rules
+    ;
+
+rules
+    : rule+
+    ;
+
+rule
+    : name ':' expression ';'
+    ;
+
+expression
+    : sequence ('|' sequence)*
+    ;
+
+sequence
+    : difference+
+    ;
+
+difference
+    : element
+    | element '-' element
+    ;
+
+element
+    : primary '?'           // zero or one
+    | primary '*'           // zero or more
+    | primary '+'           // one or more
+    | primary '-' primary   // difference
+    | primary
+    ;
+
+primary
+    : literal
+    | literal '..' literal  // character range
+    | reference
+    | '.'
+    | '(' (name ':')? expression ')'
+    | '!' primary           // complement
+    ;
+
+literal
+    : string-literal
+    ;
+
+reference
+    : name
+    ;
+
+name
+    : name-start name-rest*
+    ;
+
+name-start
+    : letter letter-or-digit*
+    ;
+
+name-rest
+    : '-' letter letter-or-digit*
+    ;
+
+letter
+    : 'a' .. 'z' | 'A' .. 'Z'
+    ;
+
+digit
+    : '0' .. '9'
+    ;
+
+hex-digit
+    : 'a' .. 'f' 
+    | 'A' .. 'F'
+    | '0' .. '9'
+    ;
+
+letter-or-digit
+    : letter
+    | digit
+    ;
+
+string-literal
+    : '\'' (. - '\'')+ '\''
+    ;

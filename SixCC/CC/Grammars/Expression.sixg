@@ -1,0 +1,111 @@
+﻿grammar Expression;
+
+program
+    : expression
+    ;
+
+expression
+    : expression add-op term
+    | term
+    ;
+
+add-op
+    : '+'
+    | '-'
+    ;
+
+term
+    : term mul-op factor
+    | factor
+    ;
+
+mul-op
+    : '*'
+    | '/'
+    ;
+
+factor
+    : primary
+    ;
+
+primary
+    : '(' expression ')'
+    | name
+    | number
+    | call
+    ;
+
+call
+    : primary '(' arguments? ')'
+    ;
+
+
+arguments
+    : argument (',' argument)*
+    ;
+
+argument
+    : expression
+    ;
+
+letter
+    : 'a' .. 'z'
+    | 'A' .. 'Z'
+    ;
+
+digit
+    : '0'..'9'
+    ;
+
+letter-or-digit
+    : letter
+    | digit
+    ;
+
+name
+    : name-start name-rest*
+    ;
+
+name-start
+    : name-part
+    ;
+
+name-rest
+    : '-' name-part
+    ;
+
+name-part
+    : letter letter-or-digit*
+    ;
+
+number
+    : '0'
+    | '1'..'9' digit*
+    ;
+
+space
+    : ' '
+    | '\t'
+    ;
+
+line-end
+    : '\r'
+    | '\r\n'
+    | '\n'
+    ;
+
+line-comment
+    : '//' (. - line-end)* line-end
+    ;
+
+block-comment
+    : '/*' !(.* '*/' .*) '*/'
+    ;
+
+whitespace
+    : space
+    | line-end
+    | line-comment
+    | block-comment
+    ;
+    

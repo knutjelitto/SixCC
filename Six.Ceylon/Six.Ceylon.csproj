@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="CeylonLexer.g4" />
+      <None Remove="CeylonParser.g4" />
+    </ItemGroup>
+
+	<ItemGroup>
+		<Antlr4 Include="CeylonLexer.g4">
+		  <Error>true</Error>
+		  <AntOutDir></AntOutDir>
+		</Antlr4>
+		<Antlr4 Include="CeylonParser.g4">
+		  <Error>true</Error>
+		  <AntOutDir></AntOutDir>
+		  <Visitor>false</Visitor>
+		</Antlr4>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="obj\Debug\net6.0\CeylonLexer.cs" />
+	  <None Include="obj\Debug\net6.0\CeylonParser.cs" />
+	  <None Include="obj\Debug\net6.0\CeylonParserBaseListener.cs" />
+	  <None Include="obj\Debug\net6.0\CeylonParserListener.cs" />
+	</ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
+		<PackageReference Include="Antlr4BuildTasks" Version="8.14.0">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Six.Tools\Six.Tools.csproj" />
+    </ItemGroup>
+
+</Project>

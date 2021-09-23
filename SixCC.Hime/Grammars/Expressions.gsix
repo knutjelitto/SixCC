@@ -1,0 +1,55 @@
+﻿grammar Expressions
+{
+	options
+	{
+		Spacing = Separator;
+	}
+
+	rules
+	{
+		start
+			: expression
+			;
+
+		expression
+			: addExpression
+			;
+
+		addExpression
+			: addExpression ('+'|'-') mulExpression
+			| mulExpression
+			;
+
+		mulExpression
+			: mulExpression ('*'|'/') primaryExpression
+			| primaryExpression
+			;
+
+		primaryExpression
+			: Integer
+			| '(' expression ')'
+			;
+
+		Separator
+			: (Space | Newline | LineComment)*
+			;
+
+		Space
+			: ' '
+			;
+
+		Newline
+			: '\n'
+			| '\r' '\n'
+			| '\r'
+			;
+
+		LineComment
+			: '//' (. - Newline)* Newline
+			;
+
+		Integer
+			: '0' | '1' .. '9' ('0' .. '9')*
+			;
+	}
+}	

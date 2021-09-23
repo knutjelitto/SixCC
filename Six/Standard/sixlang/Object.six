@@ -1,0 +1,6 @@
+shared abstract class Object : Anything
+{
+	equals(other: Object): bool;
+	hash: int;
+	string: String => className(self) + "@" + Integer.format(hash, #10);
+}

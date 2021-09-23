@@ -1,0 +1,11 @@
+﻿[*.{cs,vb}]
+
+# IDE0040: Add accessibility modifiers
+dotnet_style_require_accessibility_modifiers = for_non_interface_members
+
+[*.cs]
+csharp_prefer_simple_using_statement=false:suggestion
+csharp_style_expression_bodied_methods=false:silent
+csharp_style_expression_bodied_constructors=when_on_single_line:silent
+csharp_style_expression_bodied_operators=true:silent
+csharp_style_expression_bodied_local_functions=true:silent
