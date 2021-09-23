@@ -178,65 +178,6 @@ namespace SixCC.Sdk.Earley
             return root;
         }
 
-        private CoreNode BuildLeft(EarleyItem left)
-        {
-            throw new NotImplementedException();
-        }
-
-        private CoreNode BuildRight(EarleyItem left)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IEnumerable<CoreNode> BuildNodes(EarleyItem item)
-        {
-            foreach (var from in item.From)
-            {
-                var origin = from.Origin;
-                var finished = from.Finished;
-
-                if (origin.From.Count == 0)
-                {
-                    var finishedKey = new NodeKey(finished);
-                    if (items.TryGetValue(finishedKey, out var node))
-                    {
-                        Debug.Assert(node != null);
-                        yield return node!;
-                    }
-                    else
-                    {
-                        yield return BuildPacked(finishedKey, finished);
-                    }
-                }
-                else
-                {
-
-                }
-            }
-
-            yield break;
-        }
-
-        private CoreNode BuildPacked(NodeKey key, EarleyItem item)
-        {
-            CoreNode? left = null;
-            CoreNode? right = null;
-
-            if (item.IsTerminal)
-            {
-                left = null;
-                right = Add(key, new TerminalNode(key, item.Extend, item.Dfa));
-            }
-            else if (item.From.Count > 0)
-            {
-                left = BuildLeft(item);
-                right = Add(key, new NonterminalNode(key, item.Extend, item.Dfa));
-            }
-
-            Debug.Assert(right != null);
-            return new PackedNode(item.Extend, left, right);
-        }
-
         private CoreNode Add(NodeKey key, CoreNode node)
         {
             items.Add(key, node);
@@ -256,8 +197,7 @@ namespace SixCC.Sdk.Earley
             {
                 if (item.Dfa.IsTerminal)
                 {
-                    node = new TerminalNode(key, item.Extend, item.Dfa);
-                    items.Add(key, node);
+                    node = Add(key, new TerminalNode(key, item.Extend, item.Dfa));
                 }
                 else
                 {
@@ -265,8 +205,7 @@ namespace SixCC.Sdk.Earley
                     {
                         if (item.IsFinal)
                         {
-                            node = new NonterminalNode(key, item.Extend, item.Dfa);
-                            items.Add(key, node);
+                            Add(key, new NonterminalNode(key, item.Extend, item.Dfa));
                         }
                         else
                         {
@@ -277,26 +216,23 @@ namespace SixCC.Sdk.Earley
                     }
                     else
                     {
-                        node = new IntermediateNode(key, item.Extend, item.Dfa);
-                        items.Add(key, node);
+                        node = Add(key, new IntermediateNode(key, item.Extend, item.Dfa));
 
                         foreach (var from in item.From)
                         {
-                            var start = from.Origin.Set.ID;
-                            var next = from.Finished.Set.ID;
-                            var left = Build(from.Finished);
+                            var left = Build(from.Origin);
                             if (left == null)
                             {
                                 Debug.Assert(true);
                             }
-                            var right = Build(from.Origin)!;
+                            var right = Build(from.Finished)!;
                             Debug.Assert(right != null);
                             if (left == right)
                             {
                                 left = null;
                             }
 
-                            var packed = new PackedNode(new Extend(start, next), left, right);
+                            var packed = new PackedNode(from.Extend, left, right);
                             node.Children.Add(packed);
                         }
                     }

@@ -10,6 +10,7 @@
 
         public EarleyItem Origin { get; }
         public EarleyItem Finished { get; }
+        public Extend Extend => new Extend(Origin.Set.ID, Finished.Set.ID);
 
         public override bool Equals(object? obj)
         {
