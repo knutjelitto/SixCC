@@ -43,14 +43,14 @@ namespace SixCC.CC.Analyzers
             Set(tree, rule);
         }
 
-        protected override void Visit(Tree.Alternatives tree)
+        protected override void Visit(Tree.Alt tree)
         {
             base.Visit(tree);
 
             Set(tree, new Alternation(tree.Location, GetMany<Sequence>(tree)));
         }
 
-        protected override void Visit(Tree.Sequence tree)
+        protected override void Visit(Tree.Cat tree)
         {
             base.Visit(tree);
 

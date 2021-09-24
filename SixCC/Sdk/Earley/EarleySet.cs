@@ -33,8 +33,12 @@ namespace SixCC.Sdk.Earley
                 {
                     if (transition.Matches(finished))
                     {
-                        AdvanceItem(finished, item, transition);
+                        AdvanceItem(finished, item, transition.Target);
                     }
+                }
+                if (item == finished)
+                {
+                    AdvanceItem(finished, finished, finished.State);
                 }
             }
         }
@@ -78,9 +82,9 @@ namespace SixCC.Sdk.Earley
             }
         }
 
-        public EarleyItem AdvanceItem(EarleyItem finished, EarleyItem item, Transition transition)
+        public EarleyItem AdvanceItem(EarleyItem finished, EarleyItem item, State target)
         {
-            var next = AddItem(item.Dfa, transition.Target, item.OriginSet);
+            var next = AddItem(item.Dfa, target, item.OriginSet);
 
             next.AddFrom(item, finished);
 

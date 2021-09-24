@@ -2,9 +2,9 @@
 
 namespace SixCC.CC.Tree
 {
-    internal class Sequence : Family, Expression
+    internal class Cat : Family, Expression
     {
-        public Sequence(ILocation location, IEnumerable<Expression> children)
+        public Cat(ILocation location, IEnumerable<Expression> children)
             : base(location, children)
         {
         }

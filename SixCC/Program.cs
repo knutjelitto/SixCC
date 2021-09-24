@@ -13,7 +13,7 @@ namespace SixCC
     {
         private static void Main(string[] args)
         {
-            var quick = true;
+            var quick = false;
             try
             {
                 Compile();

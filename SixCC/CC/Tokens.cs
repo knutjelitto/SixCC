@@ -19,7 +19,7 @@ namespace SixCC.CC
         {
             while (buffer.Count <= index)
             {
-                buffer.Add(lexer.Next());
+                buffer.Add(lexer.GetNext());
             }
             return buffer[index];
         }

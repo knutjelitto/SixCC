@@ -28,7 +28,7 @@
 
         public override string ToString()
         {
-            return $"<{Origin.Set.ID},{Origin.ID}>({Finished.Set.ID},{Finished.ID})";
+            return $"({Finished.Set.ID},{Finished.ID})->({Origin.Set.ID},{Origin.ID})";
         }
     }
 }

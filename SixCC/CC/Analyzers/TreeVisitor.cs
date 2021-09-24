@@ -35,7 +35,7 @@ namespace SixCC.CC.Analyzers
             }
         }
 
-        protected virtual void Visit(Alternatives expression)
+        protected virtual void Visit(Alt expression)
         {
             foreach (var expr in expression.Children)
             {
@@ -82,7 +82,7 @@ namespace SixCC.CC.Analyzers
         {
         }
 
-        protected virtual void Visit(Sequence expression)
+        protected virtual void Visit(Cat expression)
         {
             foreach (var expr in expression.Children)
             {
@@ -113,7 +113,7 @@ namespace SixCC.CC.Analyzers
         {
             switch (node)
             {
-                case Alternatives expression:
+                case Alt expression:
                     Visit(expression);
                     break;
                 case Any expression:
@@ -140,7 +140,7 @@ namespace SixCC.CC.Analyzers
                 case Reference expression:
                     Visit(expression);
                     break;
-                case Sequence expression:
+                case Cat expression:
                     Visit(expression);
                     break;
                 case Complement expression:

@@ -1,4 +1,7 @@
 ﻿grammar Bug;
 
-S   : (S S | 'a')?
+S   : S S
+    | 'a'
+    | ε
+    | epsilon
     ;

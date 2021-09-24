@@ -15,25 +15,40 @@ namespace SixCC.CC
         {
             Source = source;
             start = 0;
-            current = 0;
+            offset = 0;
         }
 
         public ISource Source { get; }
 
         private int start = 0;
-        private int current = 0;
+        private int offset = 0;
 
-        public Token Next()
+        private int Current => Source[offset];
+        private int Next => Source[offset + 1];
+
+        public Token GetNext()
         {
             SkipWhitespace();
             if (More)
             {
-                switch(Source[current])
+                switch(Current)
                 {
                     case '(':
                         return Token(TKind.LeftParent);
                     case ')':
                         return Token(TKind.RightParent);
+                    case '{':
+                        return Token(TKind.LeftCurly);
+                    case '}':
+                        return Token(TKind.RightCurly);
+                    case '[':
+                        return Token(TKind.LeftBracket);
+                    case ']':
+                        return Token(TKind.RightBracket);
+                    case '<':
+                        return Token(TKind.LeftAngle);
+                    case '>':
+                        return Token(TKind.RightAngle);
                     case ':':
                         return Token(TKind.Colon);
                     case ';':
@@ -52,14 +67,14 @@ namespace SixCC.CC
                         return Token(TKind.Plus);
                     case '-':
                         return Token(TKind.Minus);
-                    case '.' when OneMore && Source[current + 1] == '.':
+                    case '.' when OneMore && Next == '.':
                         return Token(TKind.Range, 2);
                     case '.':
                         return Token(TKind.Any);
                     case '\'':
                         return Literal();
                     default:
-                        if (Letter(Source[current]))
+                        if (Letter(Current))
                         {
                             return Identifier();
                         }
@@ -80,79 +95,84 @@ namespace SixCC.CC
 
         private Token Identifier()
         {
-            Debug.Assert(Letter(Source[current]));
-            current += 1;
-            while (More && LetterOrDigit(Source[current]))
+            Debug.Assert(Letter(Current));
+            offset += 1;
+            while (More && LetterOrDigit(Current))
             {
-                current += 1;
+                offset += 1;
             }
-            while (More && Source[current] == '-' && OneMore && Letter(Source[current+1]))
+            while (More && Current == '-' && OneMore && Letter(Next))
             {
-                current += 2;
-                while (More && LetterOrDigit(Source[current]))
+                offset += 2;
+                while (More && LetterOrDigit(Current))
                 {
-                    current += 1;
+                    offset += 1;
                 }
             }
 
             var text = GetLocation(0).GetText();
 
+            if (text == "epsilon" || text == "ε")
+            {
+                return Token(TKind.Epsilon, 0);
+            }
+
             return Token(TKind.Name, 0);
         }
 
-        private static bool Letter(char c)
+        private static bool Letter(int c)
         {
-            return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+            return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == 'ε';
         }
 
-        private static bool Digit(char c)
+        private static bool Digit(int c)
         {
             return '0' <= c && c <= '9';
         }
 
-        private static bool LetterOrDigit(char c)
+        private static bool LetterOrDigit(int c)
         {
             return Letter(c) || Digit(c);
         }
 
         private Token Literal()
         {
-            Debug.Assert(Source[current] == '\'');
-            current += 1;
+            Debug.Assert(Current == '\'');
+            offset += 1;
             if (!More)
             {
                 Error(eofInLiteral);
             }
             while (true)
             {
-                switch (Source[current])
+                switch (Current)
                 {
                     case '\'':
-                        if (current - start < 2)
+                        if (offset - start < 2)
                         {
                             Error(shortLiteral);
                         }
                         return Token(TKind.Literal);
                     case '\\':
-                        current += 1;
+                        offset += 1;
                         if (!More)
                         {
                             Error(incompleteEscape);
                             break;
                         }
-                        switch (Source[current])
+                        switch (Current)
                         {
                             case '\\':
                             case '\'':
                             case 't':
                             case 'r':
                             case 'n':
-                                current += 1;
+                                offset += 1;
                                 break;
                         }
                         break;
                     default:
-                        current += 1;
+                        offset += 1;
                         break;
                 }
                 if (!More)
@@ -165,43 +185,43 @@ namespace SixCC.CC
 
         private Location GetLocation(int skip = 1)
         {
-            return Location.From(Source, start, current - start + skip);
+            return Location.From(Source, start, offset - start + skip);
         }
 
         private Token Token(TKind kind, int skip = 1)
         {
             var token =  new Token(kind, GetLocation(skip));
-            current += skip;
+            offset += skip;
             return token;
         }
 
         private void SkipWhitespace()
         {
-            start = current;
+            start = offset;
             var done = false;
             while (!done && More)
             {
-                switch(Source[current])
+                switch(Current)
                 {
                     case ' ':
                     case '\r':
-                        current += 1;
+                        offset += 1;
                         break;
                     case '\n':
-                        current += 1;
-                        Source.IndexNewline(current);
+                        offset += 1;
+                        Source.IndexNewline(offset);
                         break;
-                    case '/' when OneMore && Source[current + 1] == '/':
-                        current += 2;
+                    case '/' when OneMore && Next == '/':
+                        offset += 2;
                         while (More)
                         {
-                            if (Source[current] == '\n')
+                            if (Current == '\n')
                             {
-                                current += 1;
-                                Source.IndexNewline(current);
+                                offset += 1;
+                                Source.IndexNewline(offset);
                                 break;
                             }
-                            current += 1;
+                            offset += 1;
                         }
                         break;
                     default:
@@ -209,11 +229,11 @@ namespace SixCC.CC
                         break;
                 }
             }
-            start = current;
+            start = offset;
         }
 
-        private bool More => current < Source.Length;
-        private bool OneMore => current + 1 < Source.Length;
+        private bool More => offset < Source.Length;
+        private bool OneMore => offset + 1 < Source.Length;
 
     }
 }

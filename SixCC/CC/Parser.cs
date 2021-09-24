@@ -44,19 +44,19 @@ namespace SixCC.CC
             return new Rule(name, expression);
         }
 
-        private Alternatives Expression()
+        private Alt Expression()
         {
-            var expressions = new List<Sequence>();
+            var expressions = new List<Cat>();
             do
             {
                 expressions.Add(Sequence());
             }
             while (Try(TKind.Alter));
             
-            return new Alternatives(expressions[0].Location, expressions);
+            return new Alt(expressions[0].Location, expressions);
         }
 
-        private Sequence Sequence()
+        private Cat Sequence()
         {
             var expressions = new List<Expression>();
             while (!Check(TKind.Alter, TKind.Semi, TKind.RightParent, TKind.EOF))
@@ -64,7 +64,7 @@ namespace SixCC.CC
                 expressions.Add(Difference());
             }
             var location = expressions.FirstOrDefault()?.Location ?? Current.Location;
-            return new Sequence(location, expressions);
+            return new Cat(location, expressions);
         }
 
         private Expression Difference()
@@ -125,6 +125,9 @@ namespace SixCC.CC
                 case TKind.Name:
                     expression = Reference();
                     break;
+                case TKind.Epsilon:
+                    expression = Epsilon();
+                    break;
                 case TKind.Any:
                     expression = Any();
                     break;
@@ -162,6 +165,11 @@ namespace SixCC.CC
         private Any Any()
         {
             return new Any(Match(TKind.Any));
+        }
+
+        private Epsilon Epsilon()
+        {
+            return new Epsilon(Match(TKind.Epsilon));
         }
 
         private bool Check(params TKind[] kinds)

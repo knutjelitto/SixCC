@@ -135,7 +135,7 @@ namespace SixCC.Sdk.Earley
 
         public override string ToString()
         {
-            return $"({Dfa},{State},{Start},{Next})";
+            return $"({State},{Start},{Next})";
         }
 
         public static bool operator ==(NodeKey left, NodeKey right)
@@ -184,14 +184,21 @@ namespace SixCC.Sdk.Earley
             return node;
         }
 
+        private PackedNode BuildPacked(FromTransition back)
+        {
+            var origin = back.Origin;
+            var finished = back.Finished;
+
+            if (finished.IsTerminal)
+            {
+
+            }
+            throw new NotImplementedException();
+        }
+
         private CoreNode? Build(EarleyItem item)
         {
             var key = new NodeKey(item);
-
-            if (key.ToString() == "(0,1,0,0)")
-            {
-                Debug.Assert(true);
-            }
 
             if (!items.TryGetValue(key, out var node))
             {
@@ -201,40 +208,37 @@ namespace SixCC.Sdk.Earley
                 }
                 else
                 {
-                    if (item.From.Count == 0)
+                    if (item.IsFinal)
                     {
-                        if (item.IsFinal)
-                        {
-                            Add(key, new NonterminalNode(key, item.Extend, item.Dfa));
-                        }
-                        else
-                        {
-                            Debug.Assert(item.State.ID == 0);
+                        Debug.Assert(item.From.Count >= 0);
+                        node = Add(key, new NonterminalNode(key, item.Extend, item.Dfa));
 
-                            node = null;
+                        if (item.From.Count == 0)
+                        {
+                            return node;
                         }
                     }
                     else
                     {
+                        Debug.Assert(item.From.Count > 0);
                         node = Add(key, new IntermediateNode(key, item.Extend, item.Dfa));
+                    }
 
-                        foreach (var from in item.From)
+                    foreach (var from in item.From)
+                    {
+                        var finished = from.Finished;
+                        var origin = from.Origin;
+
+                        var right = Build(finished)!;
+                        Debug.Assert(right != null);
+                        CoreNode? left = null;
+                        if (finished != origin)
                         {
-                            var left = Build(from.Origin);
-                            if (left == null)
-                            {
-                                Debug.Assert(true);
-                            }
-                            var right = Build(from.Finished)!;
-                            Debug.Assert(right != null);
-                            if (left == right)
-                            {
-                                left = null;
-                            }
-
-                            var packed = new PackedNode(from.Extend, left, right);
-                            node.Children.Add(packed);
+                            left = Build(origin);
                         }
+
+                        var packed = new PackedNode(from.Extend, left, right);
+                        node.Children.Add(packed);
                     }
                 }
             }

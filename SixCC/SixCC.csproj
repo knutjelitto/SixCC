@@ -19,7 +19,7 @@
     <None Remove="CC\Grammars\Json.sixg" />
     <None Remove="CC\Grammars\List.sixg" />
     <None Remove="CC\Grammars\SixCC.sixg" />
-    <None Remove="CC\Grammars\Wikipedia.sixg" />
+    <None Remove="CC\Grammars\Wiki.sixg" />
     <None Remove="CC\Grammars\Γ2.1.sixg" />
   </ItemGroup>
 
@@ -29,7 +29,7 @@
     <EmbeddedResource Include="CC\Grammars\List.sixg" />
     <EmbeddedResource Include="CC\Grammars\Expr.sixg" />
     <EmbeddedResource Include="CC\Grammars\Bug.sixg" />
-    <EmbeddedResource Include="CC\Grammars\Wikipedia.sixg" />
+    <EmbeddedResource Include="CC\Grammars\Wiki.sixg" />
     <EmbeddedResource Include="CC\Grammars\Json.sixg" />
     <EmbeddedResource Include="CC\Grammars\Expression.sixg" />
     <EmbeddedResource Include="CC\Grammars\SixCC.sixg" />

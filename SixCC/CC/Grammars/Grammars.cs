@@ -24,7 +24,7 @@
 
         public static string Wiki()
         {
-            return ReadResource("Wikipedia");
+            return ReadResource("Wiki");
         }
 
         public static string Bug()

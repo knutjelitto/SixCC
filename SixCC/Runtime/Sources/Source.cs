@@ -15,7 +15,7 @@ namespace SixCC.Runtime.Sources
             Lines.Add(0);
         }
 
-        public char this[int index] => Content[index];
+        public int this[int index] => index < Content.Length ? Content[index] : -1;
 
         public string Content { get; }
 
