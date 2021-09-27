@@ -1,9 +1,9 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class Range : Symbol
+    public class Range : Symbol
     {
         public Range(ILocation location, Literal left, Literal right)
             : base(location)

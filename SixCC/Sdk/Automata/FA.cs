@@ -15,7 +15,7 @@ namespace SixCC.Sdk.Automata
         public Factory Factory { get; }
         public State Start { get; }
         public List<State> States { get; }
-        public IEnumerable<State> Finals => States.Where(state => state.Final);
+        public IEnumerable<State> Finals => States.Where(state => state.IsFinal);
         public bool IsTerminal => Factory.IsTerminal;
         public bool IsNonterminal => !Factory.IsTerminal;
 
@@ -26,8 +26,8 @@ namespace SixCC.Sdk.Automata
             foreach (var state in States)
             {
                 var aa = current == state.ID ? "[" : ".";
-                var ab = state.Final ? "(" : ".";
-                var oa = state.Final ? ")" : ".";
+                var ab = state.IsFinal ? "(" : ".";
+                var oa = state.IsFinal ? ")" : ".";
                 var ob = current == state.ID ? "]" : ".";
 
                 writer.WriteLine($"{aa}{ab}{state.ID}{oa}{ob}");
@@ -74,7 +74,7 @@ namespace SixCC.Sdk.Automata
 
                 if (!map.TryGetValue(state, out var mapped))
                 {
-                    mapped = new State(Factory, state.Final);
+                    mapped = new State(Factory, state.IsFinal);
                     mapped.AddPayload(state);
                     map.Add(state, mapped);
 

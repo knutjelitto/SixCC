@@ -36,7 +36,7 @@ namespace SixCC.Sdk.Automata
                 }
             }
 
-            return State.Final;
+            return State.IsFinal;
         }
     }
 }

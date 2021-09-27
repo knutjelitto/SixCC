@@ -16,16 +16,16 @@
     <None Remove="CC\Grammars\Bug.sixg" />
     <None Remove="CC\Grammars\Expr.sixg" />
     <None Remove="CC\Grammars\Expression.sixg" />
+    <None Remove="CC\Grammars\Gamma21.sixg" />
     <None Remove="CC\Grammars\Json.sixg" />
     <None Remove="CC\Grammars\List.sixg" />
     <None Remove="CC\Grammars\SixCC.sixg" />
     <None Remove="CC\Grammars\Wiki.sixg" />
-    <None Remove="CC\Grammars\Γ2.1.sixg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="CC\Grammars\Ambiguous.sixg" />
-    <EmbeddedResource Include="CC\Grammars\Γ2.1.sixg" />
+    <EmbeddedResource Include="CC\Grammars\Gamma21.sixg" />
     <EmbeddedResource Include="CC\Grammars\List.sixg" />
     <EmbeddedResource Include="CC\Grammars\Expr.sixg" />
     <EmbeddedResource Include="CC\Grammars\Bug.sixg" />

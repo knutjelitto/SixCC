@@ -32,7 +32,7 @@ namespace SixCC.Sdk.Earley
                     {
                         Writer.WriteLine($"n_{dfa.ID}_{state.ID}");
                         Writer.WriteLine($"  [label={state.ID}]");
-                        if (state.Final)
+                        if (state.IsFinal)
                         {
                             Writer.WriteLine($"  [shape=doublecircle]");
                         }

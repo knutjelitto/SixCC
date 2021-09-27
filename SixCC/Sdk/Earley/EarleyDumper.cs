@@ -27,8 +27,8 @@ namespace SixCC.Sdk.Earley
                                 foreach (var state in item.Dfa.States)
                                 {
                                     var l1 = item.State == state ? "[" : " ";
-                                    var l2 = state.Final ? "|" : ".";
-                                    var r2 = state.Final ? "|" : ".";
+                                    var l2 = state.IsFinal ? "|" : ".";
+                                    var r2 = state.IsFinal ? "|" : ".";
                                     var r1 = item.State == state ? "]" : " ";
 
                                     var from = string.Empty;

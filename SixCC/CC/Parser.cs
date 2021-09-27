@@ -1,7 +1,5 @@
 ﻿using SixCC.CC.Errors;
 using SixCC.CC.Tree;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SixCC.CC
 {
@@ -23,15 +21,42 @@ namespace SixCC.CC
         {
             Keyword("grammar");
             var name = Name();
-            Match(TKind.Semi);
+            Match(TKind.LeftCurly);
+            var rules = Rules();
+            var terminals = Terminals();
+            Match(TKind.RightCurly);
+
+            return new Grammar(name, rules, terminals);
+        }
+
+        public List<Rule> Rules()
+        {
+            Keyword("rules");
+            Match(TKind.LeftCurly);
             var rules = new List<Rule>();
             do
             {
                 rules.Add(Rule());
             }
-            while (Current.Kind != TKind.EOF);
+            while (Current.Kind != TKind.EOF && Current.Kind != TKind.RightCurly);
+            Match(TKind.RightCurly);
 
-            return new Grammar(name, rules);
+            return rules;
+        }
+
+        public List<Rule> Terminals()
+        {
+            Keyword("terminals");
+            Match(TKind.LeftCurly);
+            var rules = new List<Rule>();
+            do
+            {
+                rules.Add(Terminal());
+            }
+            while (Current.Kind != TKind.EOF && Current.Kind != TKind.RightCurly);
+            Match(TKind.RightCurly);
+
+            return rules;
         }
 
         private Rule Rule()
@@ -44,39 +69,48 @@ namespace SixCC.CC
             return new Rule(name, expression);
         }
 
-        private Alt Expression()
+        private Rule Terminal()
         {
-            var expressions = new List<Cat>();
+            var name = Name();
+            Match(TKind.Colon);
+            var expression = ReExpression();
+            Match(TKind.Semi);
+
+            return new Rule(name, expression);
+        }
+
+        private Expression Expression()
+        {
+            var expressions = new List<Expression>();
             do
             {
                 expressions.Add(Sequence());
             }
             while (Try(TKind.Alter));
+
+            if (expressions.Count == 1)
+            {
+                return expressions[0];
+            }
             
-            return new Alt(expressions[0].Location, expressions);
+            return new Alt(expressions.First().Location, expressions);
         }
 
-        private Cat Sequence()
+        private Expression Sequence()
         {
             var expressions = new List<Expression>();
-            while (!Check(TKind.Alter, TKind.Semi, TKind.RightParent, TKind.EOF))
+            do
             {
-                expressions.Add(Difference());
+                expressions.Add(Element());
             }
-            var location = expressions.FirstOrDefault()?.Location ?? Current.Location;
-            return new Cat(location, expressions);
-        }
+            while (!Check(TKind.Alter, TKind.Semi, TKind.RightParent, TKind.RightCurly, TKind.EOF));
 
-        private Expression Difference()
-        {
-            var element = Element();
-            if (Current.Kind == TKind.Minus)
+            if (expressions.Count == 1)
             {
-                Match(TKind.Minus);
-                var element2 = Element();
-                element = new Difference(element, element2);
+                return expressions[0];
             }
-            return element;
+
+            return new Cat(expressions.First().Location, expressions);
         }
 
         private Expression Element()
@@ -116,6 +150,98 @@ namespace SixCC.CC
             {
                 case TKind.Literal:
                     expression = Literal();
+                    break;
+                case TKind.Name:
+                    expression = Reference();
+                    break;
+                case TKind.LeftParent:
+                    Match(TKind.LeftParent);
+                    expression = Expression();
+                    Match(TKind.RightParent);
+                    break;
+                default:
+                    expression = Error<Expression>($"expected 'primary', but found '{Current.Kind}'");
+                    break;
+            }
+            return expression;
+        }
+
+        private Expression ReExpression()
+        {
+            return ReAlternation();
+        }
+
+        private Expression ReAlternation()
+        {
+            var expressions = new List<Expression>();
+            do
+            {
+                expressions.Add(ReSequence());
+            }
+            while (Try(TKind.Alter));
+
+            if (expressions.Count == 1)
+            {
+                return expressions[0];
+            }
+
+            return new Alt(expressions.First().Location, expressions);
+        }
+
+        private Expression ReSequence()
+        {
+            var expressions = new List<Expression>();
+            do
+            {
+                expressions.Add(ReElement());
+            }
+            while (!Check(TKind.Alter, TKind.Semi, TKind.RightParent, TKind.RightCurly, TKind.EOF));
+
+            if (expressions.Count == 1)
+            {
+                return expressions[0];
+            }
+
+            return new Cat(expressions.First().Location, expressions);
+        }
+
+        private Expression ReElement()
+        {
+            var element = RePrimary();
+            switch (Current.Kind)
+            {
+                case TKind.Quest:
+                    Match(Current.Kind);
+                    element = new ZeroOrOne(element);
+                    break;
+                case TKind.Star:
+                    Match(Current.Kind);
+                    element = new ZeroOrMore(element);
+                    break;
+                case TKind.Plus:
+                    Match(Current.Kind);
+                    element = new OneOrMore(element);
+                    break;
+                case TKind.Minus:
+                    {
+                        Match(Current.Kind);
+                        var element2 = RePrimary();
+                        element = new Difference(element, element2);
+                        break;
+                    }
+                default:
+                    break;
+            }
+            return element;
+        }
+
+        private Expression RePrimary()
+        {
+            Expression expression;
+            switch (Current.Kind)
+            {
+                case TKind.Literal:
+                    expression = Literal();
                     if (Current.Kind == TKind.Range)
                     {
                         Match(TKind.Range);
@@ -133,15 +259,15 @@ namespace SixCC.CC
                     break;
                 case TKind.LeftParent:
                     Match(TKind.LeftParent);
-                    expression = Expression();
+                    expression = ReExpression();
                     Match(TKind.RightParent);
                     break;
                 case TKind.Exclam:
                     Match(TKind.Exclam);
-                    expression = new Complement(Primary());
+                    expression = new Complement(RePrimary());
                     break;
                 default:
-                    expression = Error<Expression>($"expected 'primary', but found '{Current.Kind}'");
+                    expression = Error<Expression>($"expected 're-primary', but found '{Current.Kind}'");
                     break;
             }
             return expression;

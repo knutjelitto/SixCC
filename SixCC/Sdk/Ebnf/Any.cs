@@ -1,28 +1,27 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class Epsilon : Symbol
+    public class Any : Symbol
     {
-        public Epsilon(ILocation location)
+        public Any(ILocation location)
             : base(location)
         {
-            IsNullable = true;
+            IsNullable = false;
             IsTerminal = true;
-            IsNonterminal = true;
         }
 
         public override NFA GetTerminalNfa(Factory builder)
         {
-            return builder.Epsilon();
+            return builder.Any();
         }
 
         public override NFA GetNonterminalNfa(Factory builder)
         {
-            return builder.Epsilon();
+            return builder.Any();
         }
 
-        public override string ToString() => "ε";
+        public override string ToString() => ".";
     }
 }

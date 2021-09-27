@@ -22,7 +22,7 @@ namespace SixCC.Sdk.Earley
         public EarleySet OriginSet { get; }
 
         public bool IsEmpty => Set.ID == OriginSet.ID;
-        public virtual bool IsFinal => State.Final;
+        public virtual bool IsFinal => State.IsFinal;
         public bool IsTerminal => Dfa.IsTerminal;
         public Extend Extend => new Extend(OriginSet.ID, Set.ID);
 

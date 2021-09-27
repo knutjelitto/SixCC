@@ -11,7 +11,7 @@
             {
                 throw new Exception("NFA: final state not reachable");
             }
-            if (States.Any(state => state.Final))
+            if (States.Any(state => state.IsFinal))
             {
                 Debug.Assert(false, "final state in NFA");
             }

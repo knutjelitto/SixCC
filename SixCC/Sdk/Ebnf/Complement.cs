@@ -1,11 +1,11 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class OneOrMore : Symbol
+    public class Complement : Symbol
     {
-        public OneOrMore(ILocation location, Symbol symbol)
+        public Complement(ILocation location, Symbol symbol)
             : base(location)
         {
             Symbol = symbol;
@@ -15,21 +15,17 @@ namespace SixCC.CC.Structure
 
         public override NFA GetTerminalNfa(Factory builder)
         {
-            return Symbol.GetTerminalNfa(builder).OneOrMore();
+            return builder.Complement(Symbol.GetTerminalNfa(builder));
         }
 
         public override NFA GetNonterminalNfa(Factory builder)
         {
-            return Symbol.GetNonterminalNfa(builder).OneOrMore();
+            return builder.Complement(Symbol.GetNonterminalNfa(builder));
         }
 
         public override string ToString()
         {
-            if (Symbol is Sequence production)
-            {
-                return $"({production})+";
-            }
-            return $"{Symbol}+";
+            return $"!({Symbol})";
         }
     }
 }

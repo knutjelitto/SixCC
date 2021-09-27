@@ -1,4 +1,4 @@
-﻿using SixCC.CC.Structure;
+﻿using SixCC.Sdk.Ebnf;
 
 namespace SixCC.CC.Analyzers
 {
@@ -38,7 +38,7 @@ namespace SixCC.CC.Analyzers
         {
             base.Visit(tree);
 
-            var rule = new Rule(tree.Location, Get<string>(tree.Name), Get<Alternation>(tree.Expression));
+            var rule = new Rule(tree.Location, Get<string>(tree.Name), Get<Symbol>(tree.Expression));
             rules.Add(rule);
             Set(tree, rule);
         }
@@ -47,7 +47,7 @@ namespace SixCC.CC.Analyzers
         {
             base.Visit(tree);
 
-            Set(tree, new Alternation(tree.Location, GetMany<Sequence>(tree)));
+            Set(tree, new Alternative(tree.Location, GetMany<Symbol>(tree)));
         }
 
         protected override void Visit(Tree.Cat tree)
@@ -92,7 +92,7 @@ namespace SixCC.CC.Analyzers
 
             var left = Get<Literal>(tree.Left);
             var right = Get<Literal>(tree.Right);
-            Set(tree, new Structure.Range(tree.Location, left, right));
+            Set(tree, new Sdk.Ebnf.Range(tree.Location, left, right));
         }
 
         protected override void Visit(Tree.Reference tree)
@@ -160,11 +160,12 @@ namespace SixCC.CC.Analyzers
             {
                 if (IsTerminalRule(inRule, symbol, out var rule))
                 {
+                    Debug.Assert(rule != null);
                     return rule!;
                 }
                 switch (symbol)
                 {
-                    case Alternation alternation:
+                    case Alternative alternation:
                         for (var i = 0; i < alternation.Sequences.Count; i += 1)
                         {
                             alternation.Sequences[i] = Build(inRule, alternation.Sequences[i]);
@@ -228,7 +229,7 @@ namespace SixCC.CC.Analyzers
         {
             foreach (var rule in grammar.Rules)
             {
-                Resolve(rule, rule.Symbol);
+                rule.Symbol = Resolve(rule, rule.Symbol);
             }
 
             Symbol Resolve(Rule rule, Symbol symbol)
@@ -239,10 +240,10 @@ namespace SixCC.CC.Analyzers
                         var resolved = grammar.Get(reference);
                         resolved.Usages.Add(rule);
                         return resolved;
-                    case Alternation alternation:
-                        foreach (var sequence in alternation.Sequences)
+                    case Alternative alternation:
+                        for (var i = 0; i < alternation.Sequences.Count; i += 1)
                         {
-                            Resolve(rule, sequence);
+                            alternation.Sequences[i] = Resolve(rule, alternation.Sequences[i]);
                         }
                         return symbol;
                     case Sequence sequence:
@@ -263,7 +264,7 @@ namespace SixCC.CC.Analyzers
                     case ZeroOrOne zeroOrOne:
                         zeroOrOne.Symbol = Resolve(rule, zeroOrOne.Symbol);
                         return symbol;
-                    case Structure.Range range:
+                    case Sdk.Ebnf.Range range:
                         range.Left = (Literal)Resolve(rule, range.Left);
                         range.Right = (Literal)Resolve(rule, range.Right);
                         return symbol;
@@ -321,7 +322,7 @@ namespace SixCC.CC.Analyzers
             {
                 switch (symbol)
                 {
-                    case Alternation alternation:
+                    case Alternative alternation:
                         foreach (var sequence in alternation.Sequences)
                         {
                             Terminal(sequence);

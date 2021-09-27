@@ -1,9 +1,9 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class ZeroOrOne : Symbol
+    public class ZeroOrOne : Bracketed
     {
         public ZeroOrOne(ILocation location, Symbol symbol)
             : base(location)
