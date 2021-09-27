@@ -1,9 +1,9 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class Reference : Symbol
+    public class Reference : Symbol
     {
         public Reference(ILocation location, string text)
             : base(location)

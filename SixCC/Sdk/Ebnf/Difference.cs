@@ -1,9 +1,9 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class Difference : Symbol
+    public class Difference : Symbol
     {
         public Difference(ILocation location, Symbol left, Symbol right)
             : base(location)

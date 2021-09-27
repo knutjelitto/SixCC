@@ -12,14 +12,14 @@ namespace SixCC.Sdk.Automata
         public State(Factory factory, bool isFinal = false)
         {
             Factory = factory;
-            Final = isFinal;
+            IsFinal = isFinal;
             ID = -1;
             Payload = -1;
             Transitions = new List<Transition>();
         }
 
         public Factory Factory { get; }
-        public bool Final { get; set; }
+        public bool IsFinal { get; set; }
         public int ID { get; set; }
         public int Payload { get; private set; }
         public bool IsPayload => Payload >= 0;
@@ -87,7 +87,7 @@ namespace SixCC.Sdk.Automata
 
         public override string ToString()
         {
-            return $"({ID},{Final},{Payload},({string.Join(",", Transitions)}))";
+            return $"({ID},{IsFinal},{Payload},({string.Join(",", Transitions)}))";
         }
     }
 }

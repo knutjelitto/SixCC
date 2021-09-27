@@ -1,86 +1,120 @@
-﻿grammar SixCC;
+﻿grammar SixCC
+{
+    rules
+    {
+        grammar
+            : 'grammar' name '{' rules terminals '}'
+            ;
 
-grammar
-    : 'grammar' name ';' rules
-    ;
+        rules
+            : 'rules' '{' rule+ '}'
+            ;
 
-rules
-    : rule+
-    ;
+        terminals
+            : 'terminals'  '{' terminal+ '}'
+            ;
 
-rule
-    : name ':' expression ';'
-    ;
+        terminal
+            : name ':' re-expression ';'
+            ;
 
-expression
-    : sequence ('|' sequence)*
-    ;
+        rule
+            : name ':' expression ';'
+            ;
 
-sequence
-    : difference+
-    ;
+        expression
+            : sequence ('|' sequence)*
+            ;
 
-difference
-    : element
-    | element '-' element
-    ;
+        sequence
+            : element+
+            ;
 
-element
-    : primary '?'           // zero or one
-    | primary '*'           // zero or more
-    | primary '+'           // one or more
-    | primary '-' primary   // difference
-    | primary
-    ;
+        element
+            : primary '?'           // zero or one
+            | primary '*'           // zero or more
+            | primary '+'           // one or more
+            | primary
+            ;
 
-primary
-    : literal
-    | literal '..' literal  // character range
-    | reference
-    | '.'
-    | '(' (name ':')? expression ')'
-    | '!' primary           // complement
-    ;
+        primary
+            : literal
+            | reference
+            | '(' expression ')'
+            ;
 
-literal
-    : string-literal
-    ;
+        reference
+            : name
+            ;
 
-reference
-    : name
-    ;
+        re-expression
+            : re-sequence ('|' re-sequence )*
+            ;
 
-name
-    : name-start name-rest*
-    ;
+        re-sequence
+            : re-element+
+            ;
 
-name-start
-    : letter letter-or-digit*
-    ;
+        re-element
+            : re-primary '?'            // zero or one
+            | re-primary '*'            // zero or more
+            | re-primary '+'            // one or more
+            | re-primary '-' re-primary // difference
+            | re-primary
+            ;
 
-name-rest
-    : '-' letter letter-or-digit*
-    ;
+        re-primary
+            : literal
+            | literal '..' literal      // character range
+            | reference                 // ^rule
+            | 'epsilon'
+            | 'ε'
+            | '.'                       // any
+            | '(' re-expression ')'     // grouped
+            | '!' re-primary            // complement
+            ;
+    }
 
-letter
-    : 'a' .. 'z' | 'A' .. 'Z'
-    ;
+    terminals
+    {
 
-digit
-    : '0' .. '9'
-    ;
+        literal
+            : string-literal
+            ;
 
-hex-digit
-    : 'a' .. 'f' 
-    | 'A' .. 'F'
-    | '0' .. '9'
-    ;
+        name
+            : name-start name-rest*
+            ;
 
-letter-or-digit
-    : letter
-    | digit
-    ;
+        name-start
+            : letter letter-or-digit*
+            ;
 
-string-literal
-    : '\'' (. - '\'')+ '\''
-    ;
+        name-rest
+            : '-' letter letter-or-digit*
+            ;
+
+        letter
+            : 'a' .. 'z' | 'A' .. 'Z' | 'ε'
+            ;
+
+        digit
+            : '0' .. '9'
+            ;
+
+        hex-digit
+            : 'a' .. 'f' 
+            | 'A' .. 'F'
+            | '0' .. '9'
+            ;
+
+        letter-or-digit
+            : letter
+            | digit
+            ;
+
+        string-literal
+            : '\'' (. - '\'')+ '\''
+            ;
+    }
+}

@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace SixCC.CC.Tree
+﻿namespace SixCC.CC.Tree
 {
     internal class Grammar : Family
     {
-        public Grammar(Name name, IEnumerable<Rule> rules)
+        public Grammar(Name name, IEnumerable<Rule> rules, IEnumerable<Rule> terminals)
             : base(name, rules)
         {
             Name = name;
-            Rules = rules.ToList();
+            Rules = rules.Concat(terminals).ToList();
         }
 
         public Name Name { get; }

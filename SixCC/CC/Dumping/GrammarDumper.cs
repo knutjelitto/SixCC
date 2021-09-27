@@ -1,5 +1,5 @@
-﻿using SixCC.CC.Structure;
-using SixCC.Sdk.Automata;
+﻿using SixCC.Sdk.Automata;
+using SixCC.Sdk.Ebnf;
 using SixCC.Writing;
 
 namespace SixCC.CC.Dumping
@@ -59,7 +59,7 @@ namespace SixCC.CC.Dumping
                 writer.WriteLine($"[{rule.Number}] {rule.Name}{attrs}");
                 writer.WriteLine();
 
-                if (rule.Symbol is Alternation alternation)
+                if (rule.Symbol is Alternative alternation)
                 {
                     foreach (var sequence in alternation.Sequences)
                     {

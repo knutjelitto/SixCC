@@ -5,7 +5,7 @@
         private DFA(Factory factory, State start)
             : base(factory, start)
         {
-            if (!States.Any(state => state.Final))
+            if (!States.Any(state => state.IsFinal))
             {
                 Debug.Assert(false, "no final state in DFA");
             }
@@ -71,7 +71,7 @@
             return From(Factory, map[Start]);
         }
 
-        protected override bool IsFinal(State state) => state.Final;
+        protected override bool IsFinal(State state) => state.IsFinal;
 
         public DFA Explode()
         {

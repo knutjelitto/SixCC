@@ -1,6 +1,6 @@
-﻿using SixCC.CC.Structure;
-using SixCC.Sdk.Automata;
+﻿using SixCC.Sdk.Automata;
 using SixCC.Sdk.Earley;
+using SixCC.Sdk.Ebnf;
 
 namespace SixCC.CC.Analyzers
 {

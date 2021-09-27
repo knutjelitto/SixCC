@@ -1,11 +1,5 @@
-﻿using SixCC.Runtime.Sources;
-using SixCC.Runtime.Structures;
+﻿using SixCC.Runtime.Structures;
 using SixCC.Writing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SixCC.CC.Errors
 {

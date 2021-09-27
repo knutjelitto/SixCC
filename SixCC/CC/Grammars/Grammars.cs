@@ -1,50 +1,67 @@
 ﻿namespace SixCC.CC
 {
+    public class GrammarSource
+    {
+        public GrammarSource(string name, string text)
+        {
+            Name = name;
+            Text = text;
+        }
+
+        public string Name { get; }
+        public string Text { get; }
+    }
+
     public static class Grammars
     {
-        public static string Gamma21()
+        private static GrammarSource Read(string name)
         {
-            return ReadResource("Γ2.1");
+            return new GrammarSource(name, ReadResource(name));
         }
 
-        public static string SixCC()
+        public static GrammarSource Gamma21()
         {
-            return ReadResource("SixCC");
+            return Read("Gamma21");
         }
 
-        public static string Expression()
+        public static GrammarSource SixCC()
         {
-            return ReadResource("Expression");
+            return Read("SixCC");
         }
 
-        public static string Json()
+        public static GrammarSource Expression()
         {
-            return ReadResource("Json");
+            return Read("Expression");
         }
 
-        public static string Wiki()
+        public static GrammarSource Json()
         {
-            return ReadResource("Wiki");
+            return Read("Json");
         }
 
-        public static string Bug()
+        public static GrammarSource Wiki()
         {
-            return ReadResource("Bug");
+            return Read("Wiki");
         }
 
-        public static string List()
+        public static GrammarSource Bug()
         {
-            return ReadResource("List");
+            return Read("Bug");
         }
 
-        public static string Ambiguous()
+        public static GrammarSource List()
         {
-            return ReadResource("Ambiguous");
+            return Read("List");
         }
 
-        public static string Expr()
+        public static GrammarSource Ambiguous()
         {
-            return ReadResource("Expr");
+            return Read("Ambiguous");
+        }
+
+        public static GrammarSource Expr()
+        {
+            return Read("Expr");
         }
 
         private static string ReadResource(string grammarName)

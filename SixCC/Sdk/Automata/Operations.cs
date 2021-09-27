@@ -50,17 +50,17 @@ namespace SixCC.Sdk.Automata
 
         public static DFA Union(DFA dfa1, DFA dfa2)
         {
-            return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.Final || s2.Final);
+            return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.IsFinal || s2.IsFinal);
         }
 
         public static DFA Intersection(DFA dfa1, DFA dfa2)
         {
-            return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.Final && s2.Final);
+            return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.IsFinal && s2.IsFinal);
         }
 
         public static DFA Difference(DFA dfa1, DFA dfa2)
         {
-            return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.Final && !s2.Final);
+            return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.IsFinal && !s2.IsFinal);
         }
 
         private static class CrossBuilder
@@ -309,9 +309,9 @@ namespace SixCC.Sdk.Automata
                     {
                         if (i >= j) continue;
 
-                        table[i, j] = s[i].Final && !s[j].Final ||
-                                      !s[i].Final && s[j].Final ||
-                                      s[i].Final && s[j].Final && s[i].Payload != s[j].Payload;
+                        table[i, j] = s[i].IsFinal && !s[j].IsFinal ||
+                                      !s[i].IsFinal && s[j].IsFinal ||
+                                      s[i].IsFinal && s[j].IsFinal && s[i].Payload != s[j].Payload;
                     }
                 }
 
@@ -515,7 +515,7 @@ namespace SixCC.Sdk.Automata
             {
                 var set = closures[state];
 
-                if (set.All(s => !s.Final))
+                if (set.All(s => !s.IsFinal))
                 {
                     dead.UnionWith(set);
                 }
@@ -533,11 +533,13 @@ namespace SixCC.Sdk.Automata
 
             var map = new Dictionary<State, State>();
 
+            return DFA.From(dfa.Factory, Map(dfa.Start));
+
             State Map(State state)
             {
                 if (!map.TryGetValue(state, out var mapped))
                 {
-                    mapped = new State(dfa.Factory, state.Final);
+                    mapped = new State(dfa.Factory, state.IsFinal);
                     mapped.AddPayload(state);
                     map.Add(state, mapped);
 
@@ -552,8 +554,6 @@ namespace SixCC.Sdk.Automata
 
                 return mapped;
             }
-
-            return DFA.From(dfa.Factory, Map(dfa.Start));
         }
 
         public static DFA ToDfa(NFA nfa)
@@ -731,7 +731,7 @@ namespace SixCC.Sdk.Automata
             nfaFinal.ID = dfa.States.Count;
             foreach (var state in dfa.States)
             {
-                state.Final = false;
+                state.IsFinal = false;
             }
 
             return NFA.From(dfa.Factory, dfa.Start, nfaFinal);

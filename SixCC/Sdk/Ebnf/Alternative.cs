@@ -1,14 +1,15 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal class Alternation : Symbol
+    public class Alternative : Symbol
     {
-        public Alternation(ILocation location, IEnumerable<Symbol> sequences)
+        public Alternative(ILocation location, IEnumerable<Symbol> sequences)
             : base(location)
         {
             Sequences = sequences.ToList();
+            Debug.Assert(Sequences.Count >= 2);
         }
 
         public List<Symbol> Sequences { get; }

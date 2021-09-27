@@ -1,8 +1,8 @@
 ﻿using SixCC.CC.Errors;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal sealed class Grammar
+    public sealed class Grammar
     {
         private readonly List<Rule> rules = new();
         private readonly Dictionary<string, Rule> index = new();

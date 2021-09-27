@@ -1,9 +1,9 @@
 ﻿using SixCC.Runtime.Structures;
 using SixCC.Sdk.Automata;
 
-namespace SixCC.CC.Structure
+namespace SixCC.Sdk.Ebnf
 {
-    internal sealed class Rule : Symbol
+    public sealed class Rule : Symbol
     {
         public Rule(ILocation location, string name, Symbol symbol)
             : base(location)
@@ -13,7 +13,7 @@ namespace SixCC.CC.Structure
         }
 
         public string Name { get; }
-        public Symbol Symbol { get; }
+        public Symbol Symbol { get; set; }
         public ISet<Rule> Usages { get; } = new HashSet<Rule>();
 
         public override NFA GetTerminalNfa(Factory builder)

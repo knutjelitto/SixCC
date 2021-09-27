@@ -4,12 +4,12 @@ namespace SixCC.CC.Tree
 {
     internal class Alt : Family, Expression
     {
-        public Alt(ILocation location, IEnumerable<Cat> children)
+        public Alt(ILocation location, IEnumerable<Expression> children)
             : base(location, children)
         {
         }
 
-        public new List<Cat> Children => base.Children.Cast<Cat>().ToList();
+        public new List<Expression> Children => base.Children.Cast<Expression>().ToList();
         public override string Head => "|";
     }
 }

@@ -47,7 +47,7 @@ namespace SixCC.Sdk.Earley
 
             nextOffset = offset;
             state = current;
-            return current.Final;
+            return current.IsFinal;
         }
     }
 }
