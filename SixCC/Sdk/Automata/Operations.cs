@@ -367,7 +367,7 @@ namespace SixCC.Sdk.Automata
                     }
                 }
 
-                var combines = new List<StatePair>();
+                var pairs = new List<StatePair>();
 
                 for (var i = 0; i < n; ++i)
                 {
@@ -377,20 +377,20 @@ namespace SixCC.Sdk.Automata
 
                         if (!table[i, j])
                         {
-                            combines.Add(new StatePair { s[i], s[j] });
+                            pairs.Add(new StatePair(s[i], s[j]));
                         }
                     }
                 }
 
                 var current = 0;
-                while (current < combines.Count)
+                while (current < pairs.Count)
                 {
-                    for (var i = current + 1; i < combines.Count;)
+                    for (var i = current + 1; i < pairs.Count;)
                     {
-                        if (combines[current].Overlaps(combines[i]))
+                        if (pairs[current].Overlaps(pairs[i]))
                         {
-                            combines[current].Add(combines[i]);
-                            combines.RemoveAt(i);
+                            pairs[current].Add(pairs[i]);
+                            pairs.RemoveAt(i);
                         }
                         else
                         {
@@ -401,7 +401,7 @@ namespace SixCC.Sdk.Automata
                 }
 
 
-                foreach (var set in combines)
+                foreach (var set in pairs)
                 {
                     var premium = set.First();
 

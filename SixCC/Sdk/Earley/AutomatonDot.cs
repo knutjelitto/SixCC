@@ -15,33 +15,51 @@ namespace SixCC.Sdk.Earley
 
         public void Dot()
         {
-            Writer.WriteLine($"digraph");
+            Writer.WriteLine($"digraph machinery");
             Writer.WriteLine("{");
             using (Writer.Indent())
             {
                 Writer.WriteLine("rankdir = LR;");
+                var no = 0;
+
                 foreach (var dfa in Automaton.Dfas.OrderByDescending(d => d.ID))
                 {
-                    Writer.WriteLine($"n_{dfa.ID}");
-                    Writer.WriteLine($"  [label=\"{dfa.Symbol}\"]");
-                    Writer.WriteLine($"  [shape=box]");
-                    Writer.WriteLine($"n_{dfa.ID} -> n_{dfa.ID}_0");
-                    Writer.WriteLine($"  [style=invis]");
-
-                    foreach (var state in dfa.States)
+                    Writer.WriteLine($"subgraph cluster_{no++}");
+                    Writer.WriteLine("{");
+                    using (Writer.Indent())
                     {
-                        Writer.WriteLine($"n_{dfa.ID}_{state.ID}");
-                        Writer.WriteLine($"  [label={state.ID}]");
-                        if (state.IsFinal)
+                        Writer.WriteLine($"label = \"{dfa.Symbol}\"");
+                        Writer.WriteLine($"labeljust = left");
+
+                        foreach (var state in dfa.States)
                         {
-                            Writer.WriteLine($"  [shape=doublecircle]");
-                        }
-                        else
-                        {
-                            Writer.WriteLine($"  [shape=circle]");
+                            Writer.WriteLine($"n_{dfa.ID}_{state.ID}");
+                            Writer.WriteLine($"  [label={state.ID}]");
+                            if (state.IsFinal)
+                            {
+                                Writer.WriteLine($"  [shape=doublecircle]");
+                            }
+                            else
+                            {
+                                Writer.WriteLine($"  [shape=circle]");
+                            }
+                            foreach (var transition in state.Transitions)
+                            {
+                                Writer.WriteLine($"n_{dfa.ID}_{state.ID} -> n_{dfa.ID}_{transition.Target.ID}");
+                                if (dfa.IsTerminal)
+                                {
+                                    Writer.WriteLine($"  [label=\"{transition.Set}\"]");
+                                }
+                                else
+                                {
+                                    Writer.WriteLine($"  [label=\"{Automaton.Dfas[transition.Set.Single].Symbol}\"]");
+                                }
+                            }
                         }
                     }
+                    Writer.WriteLine("}");
                 }
+#if false
                 foreach (var dfa in Automaton.Dfas)
                 {
                     foreach (var state in dfa.States)
@@ -60,6 +78,7 @@ namespace SixCC.Sdk.Earley
                         }
                     }
                 }
+#endif
             }
             Writer.WriteLine("}");
         }
