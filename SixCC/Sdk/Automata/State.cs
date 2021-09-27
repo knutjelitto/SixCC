@@ -1,8 +1,4 @@
 using SixCC.Sdk.Commons;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace SixCC.Sdk.Automata
 {

@@ -37,18 +37,18 @@ namespace SixCC.Sdk.Automata
 
     public abstract class Factory
     {
-        private readonly IntegerSet any;
+        private readonly IntegerSet universe;
 
-        protected Factory(IntegerSet any)
+        protected Factory(IntegerSet universe)
         {
-            this.any = any;
+            this.universe = universe;
         }
 
-        public IntegerSet AnySet => any;
-        public int Min => any.Min;
-        public int Max => any.Max;
+        public IntegerSet AnySet => universe;
+        public int Min => universe.Min;
+        public int Max => universe.Max;
 
-        public NFA Any() => Build.Any(this, any);
+        public NFA Any() => Build.Any(this, universe);
 
         public NFA Epsilon() => Build.Epsilon(this);
 

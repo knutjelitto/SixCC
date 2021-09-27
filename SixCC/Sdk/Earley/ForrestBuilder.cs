@@ -184,18 +184,6 @@ namespace SixCC.Sdk.Earley
             return node;
         }
 
-        private PackedNode BuildPacked(FromTransition back)
-        {
-            var origin = back.Origin;
-            var finished = back.Finished;
-
-            if (finished.IsTerminal)
-            {
-
-            }
-            throw new NotImplementedException();
-        }
-
         private CoreNode? Build(EarleyItem item)
         {
             var key = new NodeKey(item);

@@ -367,7 +367,7 @@ namespace SixCC.Sdk.Automata
                     }
                 }
 
-                var combines = new List<StateSet>();
+                var combines = new List<StatePair>();
 
                 for (var i = 0; i < n; ++i)
                 {
@@ -377,7 +377,7 @@ namespace SixCC.Sdk.Automata
 
                         if (!table[i, j])
                         {
-                            combines.Add(new StateSet { s[i], s[j] });
+                            combines.Add(new StatePair { s[i], s[j] });
                         }
                     }
                 }
@@ -619,7 +619,7 @@ namespace SixCC.Sdk.Automata
 
                 Set = set;
                 DfaState = new State(Factory, isFinal);
-                this.hashCode = Set.Hash();
+                hashCode = Set.Hash();
             }
 
             public Dictionary<IntegerSet, HashSet<State>> UnambiguateTransitions()
@@ -691,7 +691,7 @@ namespace SixCC.Sdk.Automata
                 return obj is Closure other && Set.SetEquals(other.Set);
             }
 
-            public override int GetHashCode() => this.hashCode;
+            public override int GetHashCode() => hashCode;
 
 
             [Conditional("DEBUG")]

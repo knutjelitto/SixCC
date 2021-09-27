@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
+#if false
 using SixCC.Sdk.Commons;
 
 namespace SixCC.Sdk.Automata
@@ -25,12 +22,12 @@ namespace SixCC.Sdk.Automata
 
         private StateSet(HashSet<State> states)
         {
-            this.set = states;
+            set = states;
         }
 
-        public int Count => this.set.Count;
+        public int Count => set.Count;
 
-        public bool IsEmpty => this.set.Count == 0;
+        public bool IsEmpty => set.Count == 0;
 
         public static bool operator ==(StateSet s1, StateSet s2)
         {
@@ -49,12 +46,12 @@ namespace SixCC.Sdk.Automata
 
         public void Add(State state)
         {
-            this.set.Add(state);
+            set.Add(state);
         }
 
         public void Add(StateSet other)
         {
-            this.set.UnionWith(other);
+            set.UnionWith(other);
         }
 
         public bool Contains(State state)
@@ -106,3 +103,4 @@ namespace SixCC.Sdk.Automata
         private readonly HashSet<State> set;
     }
 }
+#endif
