@@ -4,11 +4,23 @@ using SixCC.Sdk.Ebnf;
 
 namespace SixCC.CC.Analyzers
 {
+    internal static class FactoryExtensions
+    {
+        public static DFA GetDFA(this SymbolFactory nonterminalFactory, Rule rule)
+        {
+            return rule.Symbol.GetNonterminalNfa(nonterminalFactory).ToFinalDfa().Explode();
+        }
+        public static DFA GetDFA(this UnicodeFactory terminalFactory, Rule rule)
+        {
+            return rule.Symbol.GetTerminalNfa(terminalFactory).ToFinalDfa();
+        }
+    }
+
     internal class AutomatonBuilder
     {
-        public Sdk.Earley.Automaton Build(Grammar grammar)
+        public Automaton Build(Grammar grammar)
         {
-            var dfas = new List<Sdk.Automata.DFA>();
+            var dfas = new List<DFA>();
             int i = 0;
 
             var terminal = new UnicodeFactory();
@@ -17,34 +29,22 @@ namespace SixCC.CC.Analyzers
 
             while (i < grammar.Rules.Count && grammar.Rules[i].IsNonterminal)
             {
-                AddNonterminal(grammar.Rules[i]);
+                Add(nonterminal.GetDFA(grammar.Rules[i]), grammar.Rules[i]);
             }
 
             while (i < grammar.Rules.Count && grammar.Rules[i].IsTerminal && !grammar.Rules[i].IsFragment)
             {
-                AddTerminal(grammar.Rules[i]);
+                Add(terminal.GetDFA(grammar.Rules[i]), grammar.Rules[i]);
             }
 
-            return new Sdk.Earley.Automaton(grammar.Name, dfas);
+            return new Automaton(grammar.Name, dfas);
 
-            void Add(Sdk.Automata.DFA dfa, Rule rule)
+            void Add(DFA dfa, Rule rule)
             {
                 dfa.ID = i;
                 dfa.Symbol = rule.Name;
                 dfas.Add(dfa);
                 i += 1;
-            }
-
-            void AddNonterminal(Rule rule)
-            {
-                var dfa = rule.Symbol.GetNonterminalNfa(nonterminal).ToFinalDfa().Explode();
-                Add(dfa, rule);
-            }
-
-            void AddTerminal(Rule rule)
-            {
-                var dfa = rule.Symbol.GetTerminalNfa(terminal).ToFinalDfa();
-                Add(dfa, rule);
             }
         }
     }

@@ -23,6 +23,10 @@
             ;
 
         expression
+            : alternation
+            ;
+
+        alternation
             : sequence ('|' sequence)*
             ;
 

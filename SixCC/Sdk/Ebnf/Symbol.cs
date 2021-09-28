@@ -13,7 +13,6 @@ namespace SixCC.Sdk.Ebnf
         public ILocation Location { get; }
 
         public bool IsNullable = false;
-
         public bool IsTerminal = false;
         public bool IsFragment = false;
 

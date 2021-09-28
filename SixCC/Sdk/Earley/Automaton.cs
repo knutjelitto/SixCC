@@ -4,7 +4,7 @@ namespace SixCC.Sdk.Earley
 {
     public class Automaton
     {
-        public Automaton(string name, List<Automata.DFA> dfas)
+        public Automaton(string name, List<DFA> dfas)
         {
             Debug.Assert(dfas.Count > 0);
             Debug.Assert(dfas.All(d => d.Symbol.Length > 0));
