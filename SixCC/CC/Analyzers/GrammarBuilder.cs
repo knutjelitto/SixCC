@@ -34,11 +34,11 @@ namespace SixCC.CC.Analyzers
             base.Visit(grammar);
         }
 
-        protected override void Visit(Tree.Rule tree)
+        protected override void Visit(Tree.Nonterminal tree)
         {
             base.Visit(tree);
 
-            var rule = new Rule(tree.Location, Get<string>(tree.Name), Get<Symbol>(tree.Expression));
+            var rule = new Nonterminal(tree.Location, Get<string>(tree.Name), Get<Symbol>(tree.Expression));
             rules.Add(rule);
             Set(tree, rule);
         }
@@ -143,7 +143,7 @@ namespace SixCC.CC.Analyzers
                     var key = symbol.Key;
                     if (!grammar.TryGet(key, out rule))
                     {
-                        rule = new Rule(symbol.Location, key, symbol)
+                        rule = new Terminal(symbol.Location, key, symbol)
                         {
                             IsTerminal = true
                         };

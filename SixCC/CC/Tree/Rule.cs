@@ -1,6 +1,12 @@
-﻿namespace SixCC.CC.Tree
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SixCC.CC.Tree
 {
-    internal class Rule : Family, Expression
+    internal abstract class Rule : Family, Expression
     {
         public Rule(Name name, Expression expression)
             : base(name, expression)
@@ -11,6 +17,5 @@
 
         public Name Name { get; }
         public Expression Expression { get; }
-        public override string Head => "rule";
     }
 }

@@ -72,7 +72,7 @@ namespace SixCC.CC.Analyzers
             Visit(expression.Right);
         }
 
-        protected virtual void Visit(Rule rule)
+        protected virtual void Visit(Nonterminal rule)
         {
             Visit(rule.Name);
             Visit(rule.Expression);
@@ -134,7 +134,7 @@ namespace SixCC.CC.Analyzers
                 case Tree.Range expression:
                     Visit(expression);
                     break;
-                case Rule expression:
+                case Nonterminal expression:
                     Visit(expression);
                     break;
                 case Reference expression:

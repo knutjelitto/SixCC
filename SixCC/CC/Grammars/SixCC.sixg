@@ -48,6 +48,10 @@
             ;
 
         re-expression
+            : re-alternation
+            ;
+
+        re-alternation
             : re-sequence ('|' re-sequence )*
             ;
 

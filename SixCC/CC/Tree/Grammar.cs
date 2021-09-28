@@ -2,7 +2,7 @@
 {
     internal class Grammar : Family
     {
-        public Grammar(Name name, IEnumerable<Rule> rules, IEnumerable<Rule> terminals)
+        public Grammar(Name name, IEnumerable<Nonterminal> rules, IEnumerable<Nonterminal> terminals)
             : base(name, rules)
         {
             Name = name;
@@ -10,7 +10,7 @@
         }
 
         public Name Name { get; }
-        public List<Rule> Rules { get; }
+        public List<Nonterminal> Rules { get; }
         public override string Head => "grammar";
 
     }

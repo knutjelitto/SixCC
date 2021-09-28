@@ -29,11 +29,11 @@ namespace SixCC.CC
             return new Grammar(name, rules, terminals);
         }
 
-        public List<Rule> Rules()
+        public List<Nonterminal> Rules()
         {
             Keyword("rules");
             Match(TKind.LeftCurly);
-            var rules = new List<Rule>();
+            var rules = new List<Nonterminal>();
             do
             {
                 rules.Add(Rule());
@@ -44,11 +44,11 @@ namespace SixCC.CC
             return rules;
         }
 
-        public List<Rule> Terminals()
+        public List<Nonterminal> Terminals()
         {
             Keyword("terminals");
             Match(TKind.LeftCurly);
-            var rules = new List<Rule>();
+            var rules = new List<Nonterminal>();
             do
             {
                 rules.Add(Terminal());
@@ -59,24 +59,24 @@ namespace SixCC.CC
             return rules;
         }
 
-        private Rule Rule()
+        private Nonterminal Rule()
         {
             var name = Name();
             Match(TKind.Colon);
             var expression = Expression();
             Match(TKind.Semi);
 
-            return new Rule(name, expression);
+            return new Nonterminal(name, expression);
         }
 
-        private Rule Terminal()
+        private Nonterminal Terminal()
         {
             var name = Name();
             Match(TKind.Colon);
             var expression = ReExpression();
             Match(TKind.Semi);
 
-            return new Rule(name, expression);
+            return new Nonterminal(name, expression);
         }
 
         private Expression Expression()
