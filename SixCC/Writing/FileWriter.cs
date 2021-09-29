@@ -8,7 +8,7 @@ namespace SixCC.Writing
     public sealed class FileWriter : WriterCore
     {
         public FileWriter(string path)
-            : base(new IndentedTextWriter(new StreamWriter(path, false, Encoding.UTF8)))
+            : base(new IndentedTextWriter(new StreamWriter(path, false, new UTF8Encoding(false))))
         {
         }
 

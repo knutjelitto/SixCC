@@ -6,14 +6,10 @@ namespace SixCC.Sdk.Ebnf
     public class ZeroOrMore : Bracketed
     {
         public ZeroOrMore(ILocation location, Symbol symbol)
-            : base(location)
+            : base(location, symbol)
         {
-            Symbol = symbol;
-
             IsNullable = true;
         }
-
-        public Symbol Symbol { get; set; }
 
         public override NFA GetTerminalNfa(Factory builder)
         {

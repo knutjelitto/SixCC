@@ -5,6 +5,7 @@ using SixCC.CC.Errors;
 using SixCC.Runtime.Sources;
 using SixCC.Sdk.Commons;
 using SixCC.Sdk.Earley;
+using SixCC.Sdk.Ebnf;
 using SixCC.Writing;
 
 namespace SixCC
@@ -76,6 +77,23 @@ namespace SixCC
             }
 
             Console.WriteLine($"{test}");
+
+            var gv = new GraphVizNet.GraphViz();
+            foreach (var rule in grammar.Rules.Where(r => r is Nonterminal))
+            {
+                Console.WriteLine($"{rule.Name}");
+                var dots = dumpRoot.AppendDirectory("dot");
+                dots.Ensure();
+                var name = dots.AppendFile($"{rule.Name}.dot");
+                var name2 = dots.AppendFile($"{rule.Name}.svg");
+
+                using (var writer = new FileWriter(name))
+                {
+                    new RuleDot(writer, rule).Dot();
+                }
+
+                gv.LayoutAndRenderDotGraphFromFile(name.Path, name2.Path, "svg");
+            }
 
 #if false
             var earley = new Sdk.Earley.Parser(new Source("test", test), automaton);

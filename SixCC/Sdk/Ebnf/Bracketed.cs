@@ -10,9 +10,12 @@ namespace SixCC.Sdk.Ebnf
 {
     public abstract class Bracketed : Symbol
     {
-        public Bracketed(ILocation location)
+        public Bracketed(ILocation location, Symbol symbol)
             : base(location)
         {
+            Symbol = symbol;
         }
+
+        public Symbol Symbol { get; set; }
     }
 }

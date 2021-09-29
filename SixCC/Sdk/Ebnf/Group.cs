@@ -6,12 +6,9 @@ namespace SixCC.Sdk.Ebnf
     public sealed class Group : Bracketed
     {
         public Group(ILocation location, Symbol symbol)
-            : base(location)
+            : base(location, symbol)
         {
-            Symbol = symbol;
         }
-
-        public Symbol Symbol { get; }
 
         public override NFA GetNonterminalNfa(Factory builder)
         {
