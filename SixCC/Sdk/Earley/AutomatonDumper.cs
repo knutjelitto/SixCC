@@ -1,12 +1,11 @@
 ﻿using SixCC.Sdk.Automata;
-using SixCC.Sdk.Earley;
 using SixCC.Writing;
 
-namespace SixCC.CC.Dumping
+namespace SixCC.Sdk.Earley
 {
     internal static class AutomatonDumper
     {
-        public static void Dump(Writer writer, Sdk.Earley.Automaton automaton)
+        public static void Dump(Writer writer, Automaton automaton)
         {
             writer.WriteLine($"earley {automaton.Name}");
             writer.WriteLine();
@@ -20,7 +19,7 @@ namespace SixCC.CC.Dumping
                 }
             }
 
-            void DumpRule(int index, string name, Sdk.Automata.DFA dfa)
+            void DumpRule(int index, string name, DFA dfa)
             {
                 var attrs = dfa.IsTerminal ? "[terminal]" : "[nonterminal]";
 

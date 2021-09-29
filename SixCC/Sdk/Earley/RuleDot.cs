@@ -7,28 +7,26 @@ namespace SixCC.Sdk.Earley
     {
         private int nodeCount = 0;
 
-        public RuleDot(Writer writer, Rule rule)
+        public RuleDot(Writer writer)
         {
             Writer = writer;
-            Rule = rule;
         }
 
         public Writer Writer { get; }
-        public Rule Rule { get; }
 
-        public void Dot()
+        public void Dot(Rule rule)
         {
             Writer.WriteLine($"digraph");
             Writer.WriteLine("{");
             using (Writer.Indent())
             {
-                Writer.WriteLine($"comment = \"{Rule.Name}\"");
+                Writer.WriteLine($"comment = \"{rule.Name}\"");
                 Writer.WriteLine("rankdir = LR;");
 
                 var left = NewPoint();
                 var right = NewPoint();
 
-                DoDot(Rule.Symbol, left, right);
+                DoDot(rule.Symbol, left, right);
 
             }
             Writer.WriteLine("}");

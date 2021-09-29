@@ -78,21 +78,17 @@ namespace SixCC
 
             Console.WriteLine($"{test}");
 
-            var gv = new GraphVizNet.GraphViz();
             foreach (var rule in grammar.Rules.Where(r => r is Nonterminal))
             {
                 Console.WriteLine($"{rule.Name}");
-                var dots = dumpRoot.AppendDirectory("dot");
+                var dots = dumpRoot.AppendDirectory("svg");
                 dots.Ensure();
-                var name = dots.AppendFile($"{rule.Name}.dot");
-                var name2 = dots.AppendFile($"{rule.Name}.svg");
+                var name = dots.AppendFile($"{rule.Name}.svg");
 
                 using (var writer = new FileWriter(name))
                 {
-                    new RuleDot(writer, rule).Dot();
+                    new RuleSvg(writer).Write(rule);
                 }
-
-                gv.LayoutAndRenderDotGraphFromFile(name.Path, name2.Path, "svg");
             }
 
 #if false
