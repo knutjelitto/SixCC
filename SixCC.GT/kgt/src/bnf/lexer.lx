@@ -1,0 +1,31 @@
+#
+# Copyright 2014-2017 Katherine Flavel
+#
+# See LICENCE for the full copyright terms.
+#
+
+/[ \t\v\f\r]+/;
+
+'::=' -> $equals;
+'|'   -> $alt;
+
+# Newlines are whitespace, except for a double newline,
+# which acts as a production separator.
+"\n\n" -> $sep;
+"\n";
+
+"<" .. ">" -> $name {
+	/[\-a-z0-9_]/i -> $char;
+}
+
+"'" .. "'" -> $cs_literal {
+	/[^']/ -> $char;
+}
+
+'"' .. '"' -> $cs_literal {
+	/[^"]/ -> $char;
+}
+
+'""' -> $empty;
+"''" -> $empty;
+
