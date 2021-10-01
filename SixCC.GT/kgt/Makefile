@@ -1,57 +1,40 @@
-.MAKEFLAGS: -r -m share/mk
+.include "../share/mk/top.mk"
 
-# targets
-all::  mkdir .WAIT dep .WAIT prog
-dep::
-gen::
-test::
-install:: all
-clean::
+SRC += src/ast.c
+SRC += src/ast_binary.c
+SRC += src/bitmap.c
+SRC += src/main.c
+SRC += src/parsing_error.c
+SRC += src/rewrite_ci.c
+SRC += src/rewrite_invisible.c
+SRC += src/txt.c
+SRC += src/xalloc.c
 
-# things to override
-CC       ?= gcc
-BUILD    ?= build
-PREFIX   ?= /usr/local
-WASMTIME ?= wasmtime
+PROG += kgt
 
-# layout
-SUBDIR += src/bnf
-SUBDIR += src/blab
-SUBDIR += src/ebnfhtml5
-SUBDIR += src/dot
-SUBDIR += src/abnf
-SUBDIR += src/iso-ebnf
-SUBDIR += src/rbnf
-SUBDIR += src/sid
-SUBDIR += src/wsn
-SUBDIR += src/rrd
-SUBDIR += src/rrdump
-SUBDIR += src/rrtdump
-SUBDIR += src/rrparcon
-SUBDIR += src/rrll
-SUBDIR += src/rrta
-SUBDIR += src/rrtext
-SUBDIR += src/rrdot
-SUBDIR += src/svg
-SUBDIR += src/html5
-SUBDIR += src/json
-SUBDIR += src
+# XXX: ${SRC:Msrc/*.c} matches src/xyz/*.c which is not what we want
+#.for src in ${SRC:Msrc/*.c}
+#${BUILD}/bin/kgt: ${BUILD}/${src:R}.o
+#.endfor
 
-.include <subdir.mk>
-.include <sid.mk>
-.include <lx.mk>
-.include <obj.mk>
-.include <dep.mk>
-.include <ar.mk>
-.include <so.mk>
-.include <part.mk>
-.include <prog.mk>
-.include <mkdir.mk>
-.include <install.mk>
-.include <clean.mk>
+LFLAGS.kgt += -lm
 
-test::
-.if ${CC:T:Memcc}
-	echo 'hello = world.' | ${WASMTIME} ${BUILD}/bin/kgt.wasm -- -l wsn -e rrutf8
-.endif
+${BUILD}/bin/kgt: ${BUILD}/src/ast.o
+${BUILD}/bin/kgt: ${BUILD}/src/ast_binary.o
+${BUILD}/bin/kgt: ${BUILD}/src/bitmap.o
+${BUILD}/bin/kgt: ${BUILD}/src/main.o
+${BUILD}/bin/kgt: ${BUILD}/src/parsing_error.o
+${BUILD}/bin/kgt: ${BUILD}/src/rewrite_ci.o
+${BUILD}/bin/kgt: ${BUILD}/src/rewrite_invisible.o
+${BUILD}/bin/kgt: ${BUILD}/src/txt.o
+${BUILD}/bin/kgt: ${BUILD}/src/xalloc.o
+
+.for part in ${PART:Mbnf} ${PART:Mblab} ${PART:Mabnf} ${PART:Miso-ebnf} ${PART:Mrbnf} \
+	${PART:Msid} ${PART:Mdot} ${PART:Mwsn} \
+	${PART:Mebnfhtml5} \
+	${PART:Mrrd} ${PART:Mrrdot} ${PART:Mrrdump} ${PART:Mrrtdump} \
+	${PART:Mrrparcon} ${PART:Mrrll} ${PART:Mrrta} ${PART:Mrrtext} \
+	${PART:Msvg} ${PART:Mhtml5} ${PART:Mjson}
+${BUILD}/bin/kgt: ${BUILD}/lib/${part}.o
+.endfor
 

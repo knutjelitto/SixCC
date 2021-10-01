@@ -1,4 +1,4 @@
-﻿namespace SixCC.GT
+﻿namespace SixCC.GT.kgt
 {
     public enum ast_features
     {
@@ -201,6 +201,21 @@
                 alts = alts,
                 next = null,
             };
+        }
+
+        public static ast_rule? ast_find_rule(ast_rule grammar, string name)
+        {
+            ast_rule? p;
+
+	        for (p = grammar; p != null; p = p.next)
+            {
+		        if (p.name == name)
+                {
+			        return p;
+		        }
+            }
+
+            return null;
         }
     }
 }

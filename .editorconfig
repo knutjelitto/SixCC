@@ -9,3 +9,9 @@ csharp_style_expression_bodied_methods=false:silent
 csharp_style_expression_bodied_constructors=when_on_single_line:silent
 csharp_style_expression_bodied_operators=true:silent
 csharp_style_expression_bodied_local_functions=true:silent
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = silent
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = error

@@ -1,6 +1,6 @@
-﻿namespace SixCC.GT
+﻿namespace SixCC.GT.kgt
 {
-    public static class XAlloc
+	public static class XAlloc
     {
 		public static byte[] xmalloc(int size)
 		{
