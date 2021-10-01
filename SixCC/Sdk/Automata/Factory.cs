@@ -1,12 +1,14 @@
 ﻿#pragma warning disable CA1822 // Mark members as static
 
+using SixCC.Core;
+
 namespace SixCC.Sdk.Automata
 {
     public class UnicodeFactory : Factory
     {
         public UnicodeFactory()
             : base(UnicodeSets.Any())
-        { 
+        {
         }
 
         public override bool IsTerminal => true;
@@ -59,7 +61,7 @@ namespace SixCC.Sdk.Automata
             return nfa.ToDfa(true).Complement().ToNfa();
         }
 
-        public NFA Sequence(IEnumerable<int> sequence) =>  sequence.Select(s => Build.From(this, s)).Aggregate((a1, a2) => a1.AndThen(a2));
+        public NFA Sequence(IEnumerable<int> sequence) => sequence.Select(s => Build.From(this, s)).Aggregate((a1, a2) => a1.AndThen(a2));
 
         public NFA Range(int min, int max) => Build.From(this, min, max);
 

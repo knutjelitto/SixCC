@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace SixCC.Runtime.Commons
+namespace SixCC.Core
 {
     public static class CharRep
     {

@@ -1,3 +1,4 @@
+using SixCC.Core;
 using System.Globalization;
 
 namespace SixCC.Sdk.Automata
@@ -48,12 +49,12 @@ namespace SixCC.Sdk.Automata
             {
                 get
                 {
-                    if (this.sets.TryGetValue(category, out var result))
+                    if (sets.TryGetValue(category, out var result))
                     {
                         return result;
                     }
 
-                    var def = this.categories.FirstOrDefault(cat => cat.name == category);
+                    var def = categories.FirstOrDefault(cat => cat.name == category);
 
                     if (def.name == null)
                     {
@@ -62,7 +63,7 @@ namespace SixCC.Sdk.Automata
 
                     if (def.categories.Length == 1)
                     {
-                        this.sets.Add(def.name, this[def.categories[0]]);
+                        sets.Add(def.name, this[def.categories[0]]);
 
                         return this[def.categories[0]];
                     }
@@ -74,7 +75,7 @@ namespace SixCC.Sdk.Automata
                         set.Add(this[unicodeCategory]);
                     }
 
-                    this.sets.Add(def.name, set);
+                    sets.Add(def.name, set);
 
                     return set;
                 }
@@ -84,8 +85,8 @@ namespace SixCC.Sdk.Automata
             {
                 get
                 {
-                    var index = (int) category;
-                    return this.basicSets[index] ?? (this.basicSets[index] = Generate(category));
+                    var index = (int)category;
+                    return basicSets[index] ?? (basicSets[index] = Generate(category));
                 }
             }
 
@@ -95,7 +96,7 @@ namespace SixCC.Sdk.Automata
 
                 for (int ch = char.MinValue; ch <= char.MaxValue; ++ch)
                 {
-                    if (CharUnicodeInfo.GetUnicodeCategory((char) ch) == category)
+                    if (CharUnicodeInfo.GetUnicodeCategory((char)ch) == category)
                     {
                         set.Add(ch);
                     }
@@ -105,7 +106,7 @@ namespace SixCC.Sdk.Automata
             }
 
             private readonly IntegerSet[] basicSets = new IntegerSet[30];
-            private readonly Dictionary<string, IntegerSet> sets = new Dictionary<string, IntegerSet>();
+            private readonly Dictionary<string, IntegerSet> sets = new();
         }
     }
 }

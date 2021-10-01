@@ -1,3 +1,4 @@
+using SixCC.Core;
 using SixCC.Sdk.Commons;
 
 namespace SixCC.Sdk.Automata

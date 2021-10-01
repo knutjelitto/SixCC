@@ -1,4 +1,6 @@
-﻿namespace SixCC.Sdk.Automata
+﻿using SixCC.Core;
+
+namespace SixCC.Sdk.Automata
 {
     public sealed class DFA : FA<DFA>
     {

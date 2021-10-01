@@ -1,3 +1,5 @@
+using SixCC.Core;
+
 namespace SixCC.Sdk.Automata
 {
     public class EpsilonTransition : Transition

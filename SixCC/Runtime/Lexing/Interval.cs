@@ -1,4 +1,5 @@
-﻿using SixCC.Runtime.Commons;
+﻿using SixCC.Core;
+using SixCC.Runtime.Commons;
 
 namespace SixCC.Runtime.Lexing
 {

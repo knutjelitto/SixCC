@@ -1,7 +1,8 @@
-using SixCC.Runtime.Commons;
-using SixCC.Sdk.Commons;
+using System.Collections;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
-namespace SixCC.Sdk.Automata
+namespace SixCC.Core
 {
     public sealed class IntegerSet : IEnumerable<int>, IEquatable<IntegerSet>
     {
@@ -512,7 +513,7 @@ namespace SixCC.Sdk.Automata
                 }
                 if (Max - Min <= 3)
                 {
-                    return string.Join(", ", Enumerable.Range(Min, Max-Min+1).Select(x => CharRep.InRange(x)));
+                    return string.Join(", ", Enumerable.Range(Min, Max - Min + 1).Select(x => CharRep.InRange(x)));
                 }
 
                 return $"{CharRep.InRange(Min)}..{CharRep.InRange(Max)}";

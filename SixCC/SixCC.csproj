@@ -44,4 +44,8 @@
 	  <PackageReference Include="RailroadDiagrams" Version="0.1.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\SixCC.Core\SixCC.Core.csproj" />
+	</ItemGroup>
+
 </Project>
