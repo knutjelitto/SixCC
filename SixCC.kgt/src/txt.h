@@ -14,8 +14,22 @@ struct txt
 	txt() : p(nullptr), n(0)
 	{
 	}
+	txt(const char* chars, size_t length) : p(chars), n(length)
+	{
+	}
+
 	const char* p;
 	size_t n;
+};
+
+struct text : txt
+{
+	text(const txt t) : txt(t.p, t.n)
+	{
+	}
+	text(const char* chars) : txt(chars, strlen(chars))
+	{
+	}
 };
 
 int escputt(const struct txt* t, FILE* f, int (*e)(int, FILE*));
@@ -25,6 +39,8 @@ bool isalphastr(const struct txt* t);
 bool txt_any(const struct txt* t, bool (*predicate)(int c));
 int txtcasecmp(const struct txt *t1, const struct txt *t2);
 int txtcmp(const struct txt *t1, const struct txt *t2);
+
+#include "theout.h"
 
 #endif
 

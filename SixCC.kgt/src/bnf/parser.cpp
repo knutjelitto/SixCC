@@ -214,8 +214,8 @@
 
 	static void err(struct lex_state_s *lex_state, const char *fmt, ...)
 	{
-		parsing_error error;
-		va_list ap;
+		parsing_error error{};
+		va_list ap{};
 
 		assert(lex_state != NULL);
 

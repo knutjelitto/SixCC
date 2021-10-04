@@ -84,10 +84,10 @@ static int escputc(int c, FILE* f)
 
 static void print_comment(FILE *f, int depth, const char *fmt, ...)
 {
-	va_list ap;
-
 	assert(f != NULL);
 	assert(fmt != NULL);
+
+	va_list ap{};
 
 	va_start(ap, fmt);
 

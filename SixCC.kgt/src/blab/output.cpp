@@ -82,54 +82,65 @@ output_group(const struct ast_alt *group)
 	return 1;
 }
 
-static void
-output_repetition(unsigned int min, unsigned int max)
+static void output_repetition(unsigned int min, unsigned int max)
 {
-	if (min == 0 && max == 0) {
+	if (min == 0 && max == 0)
+	{
 		printf("*");
-	} else if (min == 0 && max == 1) {
+	}
+	else if (min == 0 && max == 1)
+	{
 		printf("?");
-	} else if (min == 1 && max == 0) {
+	}
+	else if (min == 1 && max == 0)
+	{
 		printf("+");
-	} else if (min == 1 && max == 1) {
+	}
+	else if (min == 1 && max == 1)
+	{
 		/* no operator */
-	} else if (min == max) {
+	}
+	else if (min == max)
+	{
 		printf("{%u}", min);
-	} else if (max == 0) {
+	}
+	else if (max == 0)
+	{
 		printf("{%u,}", min);
-	} else {
+	}
+	else
+	{
 		printf("{%u,%u}", min, max);
 	}
 }
 
-static int
-atomic(const struct ast_term *term)
+static int atomic(const struct ast_term* term)
 {
 	assert(term != NULL);
 
-	if (term->min == 1 && term->max == 1) {
+	if (term->min == 1 && term->max == 1)
+	{
 		return 1;
 	}
 
-	switch (term->type) {
-	case TYPE_EMPTY:
-	case TYPE_RULE:
-	case TYPE_CI_LITERAL:
-	case TYPE_CS_LITERAL:
-	case TYPE_TOKEN:
-	case TYPE_PROSE:
-		return 1;
+	switch (term->type)
+	{
+		case TYPE_EMPTY:
+		case TYPE_RULE:
+		case TYPE_CI_LITERAL:
+		case TYPE_CS_LITERAL:
+		case TYPE_TOKEN:
+		case TYPE_PROSE:
+			return 1;
 
-	case TYPE_GROUP:
-		return 0;
+		case TYPE_GROUP:
+			return 0;
 	}
 
 	assert(!"unreached");
 }
 
-WARN_UNUSED_RESULT
-static int
-output_term(const struct ast_term *term)
+WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
 	int a;
 
@@ -138,77 +149,84 @@ output_term(const struct ast_term *term)
 
 	a = atomic(term);
 
-	if (!a) {
+	if (!a)
+	{
 		printf(" (");
 	}
 
-	switch (term->type) {
-	case TYPE_EMPTY:
-		fputs(" \"\"", stdout);
-		break;
+	switch (term->type)
+	{
+		case TYPE_EMPTY:
+			fputs(" \"\"", stdout);
+			break;
 
-	case TYPE_RULE:
-		printf(" %s", term->u.rule->name);
-		break;
+		case TYPE_RULE:
+			printf(" %s", term->u.rule->name);
+			break;
 
-	case TYPE_CI_LITERAL: {
+		case TYPE_CI_LITERAL: {
 			size_t i;
 
 			putc(' ', stdout);
 
 			/* XXX: the tokenization here is wrong; this should be a single token */
 
-			for (i = 0; i < term->u.literal.n; i++) {
+			for (i = 0; i < term->u.literal.n; i++)
+			{
 				char uc, lc;
 
-				uc = toupper((unsigned char) term->u.literal.p[i]);
-				lc = tolower((unsigned char) term->u.literal.p[i]);
+				uc = toupper((unsigned char)term->u.literal.p[i]);
+				lc = tolower((unsigned char)term->u.literal.p[i]);
 
-				if (uc == lc) {
+				if (uc == lc)
+				{
 					putc('[', stdout);
-					(void) blab_escputc(stdout, term->u.literal.p[i]);
+					(void)blab_escputc(stdout, term->u.literal.p[i]);
 					putc(']', stdout);
 					continue;
 				}
 
-				if (uc != lc) {
+				if (uc != lc)
+				{
 					putc('[', stdout);
-					(void) blab_escputc(stdout, lc);
-					(void) blab_escputc(stdout, uc);
+					(void)blab_escputc(stdout, lc);
+					(void)blab_escputc(stdout, uc);
 					putc(']', stdout);
 				}
 			}
 		}
-		break;
+							break;
 
-	case TYPE_CS_LITERAL: {
+		case TYPE_CS_LITERAL: {
 			size_t i;
 
 			fputs(" \"", stdout);
 
-			for (i = 0; i < term->u.literal.n; i++) {
-				(void) blab_escputc(stdout, term->u.literal.p[i]);
+			for (i = 0; i < term->u.literal.n; i++)
+			{
+				(void)blab_escputc(stdout, term->u.literal.p[i]);
 			}
 
 			putc('\"', stdout);
 		}
-		break;
+							break;
 
-	case TYPE_TOKEN:
-		printf(" %s", term->u.token);
-		break;
+		case TYPE_TOKEN:
+			printf(" %s", term->u.token);
+			break;
 
-	case TYPE_PROSE:
-		fprintf(stderr, "unimplemented\n");
-		return 0;
-
-	case TYPE_GROUP:
-		if (!output_group(term->u.group))
+		case TYPE_PROSE:
+			fprintf(stderr, "unimplemented\n");
 			return 0;
-		break;
+
+		case TYPE_GROUP:
+			if (!output_group(term->u.group))
+				return 0;
+			break;
 	}
 
-	if (!a) {
+	if (!a)
+	{
 		printf(" )");
 	}
 

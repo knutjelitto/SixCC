@@ -225,10 +225,13 @@
     <ClCompile Include="src\rrdump\output.cpp">
       <Filter>src\rrdump</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrdot\output.cpp">
+    <ClCompile Include="src\rrdot\rrdot_output.cpp">
       <Filter>src\rrdot</Filter>
     </ClCompile>
     <ClCompile Include="src\strings.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\theout.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -366,6 +369,9 @@
       <Filter>src\rrdot</Filter>
     </ClInclude>
     <ClInclude Include="src\strings.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\theout.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

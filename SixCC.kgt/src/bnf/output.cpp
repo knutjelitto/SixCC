@@ -20,60 +20,61 @@
 
 #include "io.h"
 
-WARN_UNUSED_RESULT static int output_term(const struct ast_term *term)
+WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
 	assert(term->type != TYPE_GROUP);
 	assert(!term->invisible);
-	/* TODO: semantic checks ought to find if we can output to this language; groups cannot */
 
+	/* TODO: semantic checks ought to find if we can output to this language; groups cannot */
 	/* BNF cannot express term repetition; TODO: semantic checks for this */
+
 	assert(term->min == 1);
 	assert(term->max == 1);
 
-	switch (term->type) {
-	case TYPE_EMPTY:
-		fputs(" \"\"", stdout);
-		break;
+	switch (term->type)
+	{
+		case TYPE_EMPTY:
+			fputs(" \"\"", stdout);
+			break;
 
-	case TYPE_RULE:
-		printf(" <%s>", term->u.rule->name);
-		break;
+		case TYPE_RULE:
+			printf(" <%s>", term->u.rule->name);
+			break;
 
-	case TYPE_CI_LITERAL:
-		fprintf(stderr, "unimplemented\n");
-		return 0;
+		case TYPE_CI_LITERAL:
+			fprintf(stderr, "unimplemented\n");
+			return 0;
 
-	case TYPE_CS_LITERAL: {
+		case TYPE_CS_LITERAL: {
 			char c;
 
 			c = memchr(term->u.literal.p, '\"', term->u.literal.n) ? '\'' : '\"';
-			printf(" %c%.*s%c", c, (int) term->u.literal.n, term->u.literal.p, c);
+			printf(" %c%.*s%c", c, (int)term->u.literal.n, term->u.literal.p, c);
 		}
-		break;
+							break;
 
-	case TYPE_TOKEN:
-		printf(" <%s>", term->u.token);
-		break;
+		case TYPE_TOKEN:
+			printf(" <%s>", term->u.token);
+			break;
 
-	case TYPE_PROSE:
-		fprintf(stderr, "unimplemented\n");
-		return 0;
+		case TYPE_PROSE:
+			fprintf(stderr, "unimplemented\n");
+			return 0;
 
-	case TYPE_GROUP:
-		break;
+		case TYPE_GROUP:
+			break;
 	}
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_alt(const struct ast_alt *alt)
+WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	const struct ast_term *term;
+	const struct ast_term* term;
 
 	assert(!alt->invisible);
 
-	for (term = alt->terms; term != NULL; term = term->next) {
+	for (term = alt->terms; term != nullptr; term = term->next)
+	{
 		if (!output_term(term))
 			return 0;
 	}
@@ -82,19 +83,19 @@ output_alt(const struct ast_alt *alt)
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_rule(const struct ast_rule *rule)
+WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
-	const struct ast_alt *alt;
+	const struct ast_alt* alt;
 
 	printf("<%s> ::=", rule->name);
 
-	for (alt = rule->alts; alt != NULL; alt = alt->next) {
+	for (alt = rule->alts; alt != nullptr; alt = alt->next)
+	{
 		if (!output_alt(alt))
 			return 0;
 
-		if (alt->next != NULL) {
+		if (alt->next != nullptr)
+		{
 			printf("\t|");
 		}
 	}
@@ -103,16 +104,18 @@ output_rule(const struct ast_rule *rule)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int bnf_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int bnf_output(const struct ast_rule* grammar)
 {
 	printf("bnf-output\n");
 
-	const struct ast_rule *p;
+	const struct ast_rule* p;
 
-	for (p = grammar; p != NULL; p = p->next) {
+	for (p = grammar; p != nullptr; p = p->next)
+	{
 		if (!output_rule(p))
+		{
 			return 0;
+		}
 	}
 	return 1;
 }
-

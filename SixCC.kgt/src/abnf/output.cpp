@@ -157,9 +157,9 @@ output_terms(const struct ast_term *terms)
 
 WARN_UNUSED_RESULT
 static int
-output_alts(const struct ast_alt *alts)
+output_alts(const struct ast_alt* alts)
 {
-	const struct ast_alt *p;
+	const struct ast_alt* p;
 	struct bm bm;
 	int hi, lo;
 	int first;
@@ -172,13 +172,18 @@ output_alts(const struct ast_alt *alts)
 
 	first = 1;
 
-	while (p != NULL) {
+	while (p != NULL)
+	{
 		unsigned char c;
 
-		if (!char_terminal(p->terms, &c)) {
-			if (!first) {
+		if (!char_terminal(p->terms, &c))
+		{
+			if (!first)
+			{
 				printf(" / ");
-			} else {
+			}
+			else
+			{
 				first = 0;
 			}
 
@@ -188,21 +193,26 @@ output_alts(const struct ast_alt *alts)
 			continue;
 		}
 
-		if (!bm_get(&bm, c)) {
+		if (!bm_get(&bm, c))
+		{
 			/* already output */
 			p = p->next;
 			continue;
 		}
 
-		if (!first) {
+		if (!first)
+		{
 			printf(" / ");
-		} else {
+		}
+		else
+		{
 			first = 0;
 		}
 
 		/* start of range */
 		lo = bm_next(&bm, hi, 1);
-		if (lo > UCHAR_MAX) {
+		if (lo > UCHAR_MAX)
+		{
 			/* end of list */
 			break;
 		}
@@ -217,34 +227,38 @@ output_alts(const struct ast_alt *alts)
 
 		assert(hi > lo);
 
-		switch (hi - lo) {
+		switch (hi - lo)
+		{
 			int j;
 
-		case 1:
-		case 2:
-		case 3:
+			case 1:
+			case 2:
+			case 3:
 			{
-				struct txt t;
 				char a[1];
-				a[0] = (unsigned char) lo;
+				a[0] = (unsigned char)lo;
+				struct txt t;
 				t.p = a;
-				t.n = sizeof a / sizeof *a;
+				t.n = sizeof a / sizeof * a;
 				if (!output_string('s', &t))
+				{
 					return 0;
+				}
 			}
 			bm_unset(&bm, lo);
 
 			hi = lo;
 			break;
 
-		default:
-			output_range(lo, hi - 1);
+			default:
+				output_range(lo, hi - 1);
 
-			for (j = lo; j <= hi - 1; j++) {
-				bm_unset(&bm, j);
-			}
+				for (j = lo; j <= hi - 1; j++)
+				{
+					bm_unset(&bm, j);
+				}
 
-			break;
+				break;
 		}
 	}
 	return 1;
@@ -267,8 +281,7 @@ output_group(const struct ast_alt *group)
 	return 1;
 }
 
-static void
-output_repetition(unsigned int min, unsigned int max)
+static void output_repetition(unsigned int min, unsigned int max)
 {
 	if (min == 0 && max == 1)
 	{
@@ -301,88 +314,100 @@ output_repetition(unsigned int min, unsigned int max)
 	}
 }
 
-static int atomic(const struct ast_term *term)
+static int atomic(const struct ast_term* term)
 {
 	assert(term != NULL);
 
-	if (term->min == 1 && term->max == 1) {
+	if (term->min == 1 && term->max == 1)
+	{
 		return 1;
 	}
 
-	switch (term->type) {
-	case TYPE_EMPTY:
-	case TYPE_RULE:
-	case TYPE_CI_LITERAL:
-	case TYPE_CS_LITERAL:
-	case TYPE_TOKEN:
-	case TYPE_PROSE:
-		return 1;
+	switch (term->type)
+	{
+		case TYPE_EMPTY:
+		case TYPE_RULE:
+		case TYPE_CI_LITERAL:
+		case TYPE_CS_LITERAL:
+		case TYPE_TOKEN:
+		case TYPE_PROSE:
+			return 1;
 
-	case TYPE_GROUP:
-		return 0;
+		case TYPE_GROUP:
+			return 0;
 	}
 
 	__assume(false);
 	assert(!"unreached");
 }
 
-WARN_UNUSED_RESULT
-static int
-output_term(const struct ast_term *term)
+WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
-	int a;
-
 	assert(term != NULL);
 
-	a = atomic(term);
+	int a = atomic(term);
 
-	if (term->min == 0 && term->max == 1) {
+	if (term->min == 0 && term->max == 1)
+	{
 		printf("[ ");
-	} else {
+	}
+	else
+	{
 		output_repetition(term->min, term->max);
 
-		if (!a) {
+		if (!a)
+		{
 			printf("( ");
 		}
 	}
 
-	switch (term->type) {
-	case TYPE_EMPTY:
-		fputs("\"\"", stdout);
-		break;
+	switch (term->type)
+	{
+		case TYPE_EMPTY:
+			fputs("\"\"", stdout);
+			break;
 
-	case TYPE_RULE:
-		printf("%s", term->u.rule->name);
-		break;
+		case TYPE_RULE:
+			printf("%s", term->u.rule->name);
+			break;
 
-	case TYPE_CI_LITERAL:
-		if (!output_string('i', &term->u.literal))
-			return 0;
-		break;
+		case TYPE_CI_LITERAL:
+			if (!output_string('i', &term->u.literal))
+			{
+				return 0;
+			}
+			break;
 
-	case TYPE_CS_LITERAL:
-		if (!output_string('s', &term->u.literal))
-			return 0;
-		break;
+		case TYPE_CS_LITERAL:
+			if (!output_string('s', &term->u.literal))
+			{
+				return 0;
+			}
+			break;
 
-	case TYPE_TOKEN:
-		printf("%s", term->u.token);
-		break;
+		case TYPE_TOKEN:
+			printf("%s", term->u.token);
+			break;
 
-	case TYPE_PROSE:
-		/* TODO: escaping to somehow avoid > */
-		printf("< %s >", term->u.prose);
-		break;
+		case TYPE_PROSE:
+			/* TODO: escaping to somehow avoid > */
+			printf("< %s >", term->u.prose);
+			break;
 
-	case TYPE_GROUP:
-		if (!output_group(term->u.group))
-			return 0;
-		break;
+		case TYPE_GROUP:
+			if (!output_group(term->u.group))
+			{
+				return 0;
+			}
+			break;
 	}
 
-	if (term->min == 0 && term->max == 1) {
+	if (term->min == 0 && term->max == 1)
+	{
 		printf(" ]");
-	} else if (!a) {
+	}
+	else if (!a)
+	{
 		printf(" )");
 	}
 	return 1;

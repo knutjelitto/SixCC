@@ -186,13 +186,14 @@
     <ClCompile Include="src\iso-ebnf\parser.cpp" />
     <ClCompile Include="src\json\output.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\theout.cpp" />
     <ClCompile Include="src\parsing_error.cpp" />
     <ClCompile Include="src\rbnf\lexer.cpp" />
     <ClCompile Include="src\rbnf\output.cpp" />
     <ClCompile Include="src\rbnf\parser.cpp" />
     <ClCompile Include="src\rewrite_ci.cpp" />
     <ClCompile Include="src\rewrite_invisible.cpp" />
-    <ClCompile Include="src\rrdot\output.cpp" />
+    <ClCompile Include="src\rrdot\rrdot_output.cpp" />
     <ClCompile Include="src\rrdump\output.cpp" />
     <ClCompile Include="src\rrd\list.cpp" />
     <ClCompile Include="src\rrd\node.cpp" />
@@ -254,6 +255,7 @@
     <ClInclude Include="src\iso-ebnf\lexer.h" />
     <ClInclude Include="src\iso-ebnf\parser.h" />
     <ClInclude Include="src\json\io.h" />
+    <ClInclude Include="src\theout.h" />
     <ClInclude Include="src\parsing_error.h" />
     <ClInclude Include="src\rbnf\io.h" />
     <ClInclude Include="src\rbnf\lexer.h" />

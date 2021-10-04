@@ -18,6 +18,7 @@
 #include "getopt.h"
 
 #include "txt.h"
+#include "theout.h"
 #include "ast.h"
 #include "parsing_error.h"
 #include "rewrite.h"
@@ -166,12 +167,14 @@ static struct io* lang(enum io_dir dir, const char* s)
 int main(int argc, char* argv[])
 {
     struct ast_rule* g;
-    struct io* in, * out;
+    struct io* in, *out;
     const char* filter;
     parsing_error_queue errors = nullptr;
     in = lang(IO_IN, "abnf");
     out = lang(IO_OUT, "rrdot");
     filter = nullptr;
+
+    writer = new theout(stdout);
 
     {
         int c;
