@@ -4,9 +4,9 @@
 
 #include "txt.h"
 
-struct theout* writer;
+struct iwriter* writer;
 
-int theout::printf(const char* fmt, ...)
+int iwriter::printf(const char* fmt, ...)
 {
 	assert(fmt != NULL);
 
@@ -14,24 +14,31 @@ int theout::printf(const char* fmt, ...)
 
 	va_start(ap, fmt);
 
-	auto n = vfprintf(file, fmt, ap);
+	int n = vfprintf(file, fmt, ap);
 
 	va_end(ap);
 
 	return n;
 }
 
-int theout::puts(const char* text)
+int iwriter::vprintf(const char* fmt, va_list ap)
+{
+	assert(fmt != NULL);
+
+	return vfprintf(file, fmt, ap);
+}
+
+int iwriter::puts(const char* text)
 {
 	return fputs(text, file);
 }
 
-int theout::putc(int character)
+int iwriter::putc(int character)
 {
 	return fputc(character, file);
 }
 
-int theout::escape(const char* text, int (*esc)(int, theout*))
+int iwriter::escape(const char* text, int (*esc)(int, iwriter*))
 {
 	assert(text != nullptr);
 	assert(esc != nullptr);
@@ -55,7 +62,7 @@ int theout::escape(const char* text, int (*esc)(int, theout*))
 	return n;
 }
 
-int theout::escape(const struct txt* text, int (*esc)(int, theout*))
+int iwriter::escape(const struct txt* text, int (*esc)(int, iwriter*))
 {
 	assert(text != nullptr);
 	assert(text->p != nullptr);

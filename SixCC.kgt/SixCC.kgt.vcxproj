@@ -186,15 +186,15 @@
     <ClCompile Include="src\iso-ebnf\parser.cpp" />
     <ClCompile Include="src\json\json-output.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\theout.cpp" />
+    <ClCompile Include="src\iwriter.cpp" />
     <ClCompile Include="src\parsing_error.cpp" />
     <ClCompile Include="src\rbnf\lexer.cpp" />
-    <ClCompile Include="src\rbnf\output.cpp" />
+    <ClCompile Include="src\rbnf\rbnf-output.cpp" />
     <ClCompile Include="src\rbnf\parser.cpp" />
     <ClCompile Include="src\rewrite_ci.cpp" />
     <ClCompile Include="src\rewrite_invisible.cpp" />
     <ClCompile Include="src\rrdot\rrdot_output.cpp" />
-    <ClCompile Include="src\rrdump\output.cpp" />
+    <ClCompile Include="src\rrdump\rrdump-output.cpp" />
     <ClCompile Include="src\rrd\list.cpp" />
     <ClCompile Include="src\rrd\node.cpp" />
     <ClCompile Include="src\rrd\pretty.cpp" />
@@ -215,12 +215,12 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="src\rrll\output.cpp" />
-    <ClCompile Include="src\rrparcon\output.cpp" />
+    <ClCompile Include="src\rrll\rrll-output.cpp" />
+    <ClCompile Include="src\rrparcon\rrparcon-output.cpp" />
     <ClCompile Include="src\rrta\output.cpp" />
-    <ClCompile Include="src\rrtdump\output.cpp" />
-    <ClCompile Include="src\rrtext\output.cpp" />
-    <ClCompile Include="src\sid\output.cpp" />
+    <ClCompile Include="src\rrtdump\rrtdump-output.cpp" />
+    <ClCompile Include="src\rrtext\rrtext-output.cpp" />
+    <ClCompile Include="src\sid\sid-output.cpp" />
     <ClCompile Include="src\strings.cpp" />
     <ClCompile Include="src\svg\svg-output.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
@@ -232,7 +232,7 @@
     </ClCompile>
     <ClCompile Include="src\txt.cpp" />
     <ClCompile Include="src\wsn\lexer.cpp" />
-    <ClCompile Include="src\wsn\output.cpp" />
+    <ClCompile Include="src\wsn\wsn-output.cpp" />
     <ClCompile Include="src\wsn\parser.cpp" />
     <ClCompile Include="src\xalloc.cpp" />
   </ItemGroup>
@@ -255,7 +255,7 @@
     <ClInclude Include="src\iso-ebnf\lexer.h" />
     <ClInclude Include="src\iso-ebnf\parser.h" />
     <ClInclude Include="src\json\io.h" />
-    <ClInclude Include="src\theout.h" />
+    <ClInclude Include="src\iwriter.h" />
     <ClInclude Include="src\parsing_error.h" />
     <ClInclude Include="src\rbnf\io.h" />
     <ClInclude Include="src\rbnf\lexer.h" />

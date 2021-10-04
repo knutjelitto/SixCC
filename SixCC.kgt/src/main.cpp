@@ -8,8 +8,6 @@
 #define _POSIX_C_SOURCE 2
 #define _XOPEN_SOURCE 500
 
-//#include <unistd.h>
-
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,7 +16,6 @@
 #include "getopt.h"
 
 #include "txt.h"
-#include "theout.h"
 #include "ast.h"
 #include "parsing_error.h"
 #include "rewrite.h"
@@ -70,28 +67,28 @@ struct io
 
 struct io io[] =
 {
-    { "abnf",       abnf_input,     abnf_output,        (ast_features)0, (rrd_features)0 },
-    { "blab",       nullptr,        blab_output,        blab_ast_unsupported, (rrd_features)0 },
-    { "bnf",        bnf_input,      bnf_output,         (ast_features)bnf_ast_unsupported, (rrd_features)0 },
-    { "dot",        nullptr,        dot_output,         (ast_features)0, (rrd_features)0 },
-    { "ebnfhtml5",  nullptr,        ebnf_html5_output,  ebnf_html5_ast_unsupported, (rrd_features)0 },
-    { "ebnfxhtml5", nullptr,        ebnf_xhtml5_output, ebnf_html5_ast_unsupported, (rrd_features)0 },
-    { "html5",      nullptr,        html5_output,       (ast_features)0, (rrd_features)0 },
-    { "xhtml5",     nullptr,        xhtml5_output,      (ast_features)0, (rrd_features)0 },
-    { "iso-ebnf",   iso_ebnf_input, iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported, (rrd_features)0 },
-    { "json",       nullptr,        json_output,        json_ast_unsupported, (rrd_features)0 },
-    { "rbnf",       rbnf_input,     rbnf_output,        (ast_features)rbnf_ast_unsupported, (rrd_features)0 },
-    { "rrdump",     nullptr,        rrdump_output,      (ast_features)0, (rrd_features)0 },
-    { "rrtdump",    nullptr,        rrtdump_output,     (ast_features)0, (rrd_features)0 },
-    { "rrdot",      nullptr,        rrdot_output,       (ast_features)0, (rrd_features)0 },
-    { "rrparcon",   nullptr,        rrparcon_output,    (ast_features)rrparcon_ast_unsupported, (rrd_features)rrparcon_rrd_unsupported },
-    { "rrll",       nullptr,        rrll_output,        (ast_features)rrll_ast_unsupported, (rrd_features)rrll_rrd_unsupported     },
-    { "rrta",       nullptr,        rrta_output,        (ast_features)rrta_ast_unsupported, (rrd_features)rrta_rrd_unsupported     },
-    { "rrtext",     nullptr,        rrtext_output,      (ast_features)0, (rrd_features)0 },
-    { "rrutf8",     nullptr,        rrutf8_output,      (ast_features)0, (rrd_features)0 },
-    { "sid",        nullptr,        sid_output,         (ast_features)sid_ast_unsupported, (rrd_features)0 },
-    { "svg",        nullptr,        svg_output,         (ast_features)0, (rrd_features)0 },
-    { "wsn",        wsn_input,      wsn_output,         (ast_features)wsn_ast_unsupported, (rrd_features)0 },
+    { "abnf",       abnf_input,     abnf_output,        (ast_features)0,                            (rrd_features)0 },
+    { "blab",       nullptr,        blab_output,        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
+    { "bnf",        bnf_input,      bnf_output,         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
+    { "dot",        nullptr,        dot_output,         (ast_features)0,                            (rrd_features)0 },
+    { "ebnfhtml5",  nullptr,        ebnf_html5_output,  (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "ebnfxhtml5", nullptr,        ebnf_xhtml5_output, (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "html5",      nullptr,        html5_output,       (ast_features)0,                            (rrd_features)0 },
+    { "xhtml5",     nullptr,        xhtml5_output,      (ast_features)0,                            (rrd_features)0 },
+    { "iso-ebnf",   iso_ebnf_input, iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
+    { "json",       nullptr,        json_output,        (ast_features)json_ast_unsupported,         (rrd_features)0 },
+    { "rbnf",       rbnf_input,     rbnf_output,        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
+    { "sid",        nullptr,        sid_output,         (ast_features)sid_ast_unsupported,          (rrd_features)0 },
+    { "svg",        nullptr,        svg_output,         (ast_features)0,                            (rrd_features)0 },
+    { "wsn",        wsn_input,      wsn_output,         (ast_features)wsn_ast_unsupported,          (rrd_features)0 },
+    { "rrdot",      nullptr,        rrdot_output,       (ast_features)0,                            (rrd_features)0 },
+    { "rrdump",     nullptr,        rrdump_output,      (ast_features)0,                            (rrd_features)0 },
+    { "rrll",       nullptr,        rrll_output,        (ast_features)rrll_ast_unsupported,         (rrd_features)rrll_rrd_unsupported     },
+    { "rrparcon",   nullptr,        rrparcon_output,    (ast_features)rrparcon_ast_unsupported,     (rrd_features)rrparcon_rrd_unsupported },
+    { "rrta",       nullptr,        rrta_output,        (ast_features)rrta_ast_unsupported,         (rrd_features)rrta_rrd_unsupported     },
+    { "rrtdump",    nullptr,        rrtdump_output,     (ast_features)0,                            (rrd_features)0 },
+    { "rrtext",     nullptr,        rrtext_output,      (ast_features)0,                            (rrd_features)0 },
+    { "rrutf8",     nullptr,        rrutf8_output,      (ast_features)0,                            (rrd_features)0 },
 };
 
 enum io_dir
@@ -170,7 +167,7 @@ void tester()
     struct io* out = nullptr;
     parsing_error_queue errors = nullptr;
     FILE* outfile = fopen("nul:", "w");
-    writer = new theout(outfile);
+    writer = new struct iwriter(outfile);
 
     in = lang(IO_IN, "bnf");
 
@@ -189,9 +186,13 @@ void tester()
 
         printf("out %02i %s\n", i+1, out->name);
 
-        if (i < 7)
+        if (i < 22)
         {
-            out->out(grammar);
+            if (!out->out(grammar))
+            {
+                //fclose(outfile);
+                //err_exit();
+            }
         }
     }
 
@@ -213,7 +214,7 @@ int main(int argc, char* argv[])
     in = lang(IO_IN, "bnf");
     out = in;
 
-    writer = new theout(stdout);
+    writer = new struct iwriter(stdout);
 
     {
         int c;

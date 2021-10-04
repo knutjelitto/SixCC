@@ -44,7 +44,7 @@ int txtcmp(const struct txt *t1, const struct txt *t2);
 
 WARN_UNUSED_RESULT int cat(const char* in, const char* indent);
 
-#include "theout.h"
+#include "iwriter.h"
 
 #endif
 

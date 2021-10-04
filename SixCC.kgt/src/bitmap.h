@@ -11,17 +11,17 @@
 
 struct bm
 {
-	static constexpr int map_size = UCHAR_MAX / CHAR_BIT + 1;
+    static constexpr int map_size = UCHAR_MAX / CHAR_BIT + 1;
 
-	bm()
-	{
-		for (int i = 0; i < map_size; ++i)
-		{
-			map[i] = 0;
-		}
-	}
+    bm()
+    {
+        for (int i = 0; i < map_size; ++i)
+        {
+            map[i] = 0;
+        }
+    }
 
-	unsigned char map[map_size];
+    unsigned char map[map_size];
 };
 
 int bm_get(const struct bm *bm, size_t i);

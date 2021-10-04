@@ -48,7 +48,7 @@ struct render_context
 
 static void node_walk_render(const struct tnode *n, struct render_context *ctx, const char *base);
 
-static int svg_escputc(int c, theout* writer)
+static int svg_escputc(int c, iwriter* writer)
 {
 	assert(writer != nullptr);
 

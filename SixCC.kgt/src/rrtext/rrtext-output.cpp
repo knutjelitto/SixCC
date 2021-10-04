@@ -48,14 +48,12 @@ static void node_walk_render(const struct tnode *n, struct render_context *ctx);
 
 static void bprintf(struct render_context* ctx, const char* fmt, ...)
 {
-	va_list ap{};
-	unsigned n;
-
 	assert(ctx != NULL);
 	assert(ctx->scratch != NULL);
 
+	va_list ap{};
 	va_start(ap, fmt);
-	n = vsprintf(ctx->scratch, fmt, ap);
+	unsigned n = vsprintf(ctx->scratch, fmt, ap);
 	va_end(ap);
 
 	memcpy(ctx->lines[ctx->y] + ctx->x, ctx->scratch, n);
@@ -187,11 +185,11 @@ static void tile_puts(const char* s, int utf8)
 	{
 		if ((unsigned char)*p < sizeof tile / sizeof * tile)
 		{
-			printf("%s", tile[(unsigned char)*p][utf8]);
+			writer->printf("%s", tile[(unsigned char)*p][utf8]);
 			continue;
 		}
 
-		printf("%c", *p);
+		writer->printf("%c", *p);
 	}
 }
 
@@ -446,9 +444,9 @@ static void render_rule(const struct tnode* node, int utf8)
 	for (i = 0; i < h; i++)
 	{
 		rtrim(ctx.lines[i]);
-		printf("    ");
+		writer->printf("    ");
 		tile_puts(ctx.lines[i], utf8);
-		printf("\n");
+		writer->printf("\n");
 		free(ctx.lines[i]);
 	}
 
@@ -541,9 +539,9 @@ void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
 
 		node_free(rrd);
 
-		printf("%s:\n", p->name);
+		writer->printf("%s:\n", p->name);
 		render_rule(tnode, utf8);
-		printf("\n");
+		writer->printf("\n");
 
 		tnode_free(tnode);
 	}

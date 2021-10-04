@@ -26,20 +26,18 @@
 
 #include "io.h"
 
-static void
-print_indent(FILE *f, int n)
+static void print_indent(iwriter* writer, int n)
 {
-	int i;
+	assert(writer != nullptr);
 
-	assert(f != NULL);
-
-	for (i = 0; i < n; i++) {
-		fprintf(f, "  ");
+	for (int i = 0; i < n; i++)
+	{
+		writer->puts("  ");
 	}
 }
 
 /* javascript/json */
-static int escputc(int c, FILE* f)
+static int escputc(int c, iwriter* writer)
 {
 	size_t i;
 
@@ -59,40 +57,43 @@ static int escputc(int c, FILE* f)
 		{ '\t', "\\t"  }
 	};
 
-	assert(f != NULL);
+	assert(writer != nullptr);
 
 	for (i = 0; i < sizeof a / sizeof * a; i++)
 	{
 		if (a[i].c == c)
 		{
-			return fputs(a[i].s, f);
+			return writer->puts(a[i].s);
 		}
 	}
 
 	if (!isprint((unsigned char)c))
 	{
-		return fprintf(f, "\\u%04x", (unsigned char)c);
+		return writer->printf("\\u%04x", (unsigned char)c);
 	}
 
-	return fprintf(f, "%c", c);
+	return writer->printf("%c", c);
 }
 
-int normal(const struct list *list)
+int normal(const struct list* list)
 {
 	/*
 	 * This is an imperfect heuristic to guess which item in a list
 	 * is the most visually sensible default.
 	 */
 
-	if (list_count(list) == 2) {
-		const struct node *a = list->node;
-		const struct node *b = list->next->node;
+	if (list_count(list) == 2)
+	{
+		const struct node* a = list->node;
+		const struct node* b = list->next->node;
 
-		if (a == NULL && b->type == NODE_RULE) {
+		if (a == nullptr && b->type == NODE_RULE)
+		{
 			return 1;
 		}
 
-		if (a->type == NODE_RULE && b == NULL) {
+		if (a->type == NODE_RULE && b == nullptr)
+		{
 			return 0;
 		}
 	}
@@ -100,14 +101,14 @@ int normal(const struct list *list)
 	return 0;
 }
 
-WARN_UNUSED_RESULT static int node_walk(FILE* f, const struct node* n, int depth)
+WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int depth)
 {
-	assert(f != NULL);
+	assert(f != nullptr);
 
-	if (n == NULL)
+	if (n == nullptr)
 	{
 		print_indent(f, depth);
-		fprintf(f, "Skip()");
+		f->printf("Skip()");
 		return 1;
 	}
 
@@ -121,17 +122,17 @@ WARN_UNUSED_RESULT static int node_walk(FILE* f, const struct node* n, int depth
 
 		case NODE_CS_LITERAL:
 			print_indent(f, depth);
-			fprintf(f, "Terminal(\"");
-			escputt(&n->u.literal, f, escputc);
-			fprintf(f, "\")");
+			f->printf("Terminal(\"");
+			f->escape(&n->u.literal, escputc);
+			f->printf("\")");
 
 			break;
 
 		case NODE_RULE:
 			print_indent(f, depth);
-			fprintf(f, "NonTerminal(\"");
-			escputs(n->u.name, f, escputc);
-			fprintf(f, "\")");
+			f->printf("NonTerminal(\"");
+			f->escape(n->u.name, escputc);
+			f->printf("\")");
 
 			break;
 
@@ -142,56 +143,64 @@ WARN_UNUSED_RESULT static int node_walk(FILE* f, const struct node* n, int depth
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
 			print_indent(f, depth);
-			fprintf(f, "Choice(%d,\n", normal(n->u.alt));
+			f->printf("Choice(%d,\n", normal(n->u.alt));
 
 			if (n->type == NODE_ALT_SKIPPABLE)
 			{
 				print_indent(f, depth + 1);
-				fprintf(f, "Skip(),\n");
+				f->printf("Skip(),\n");
 			}
 
-			for (p = n->u.alt; p != NULL; p = p->next)
+			for (p = n->u.alt; p != nullptr; p = p->next)
 			{
 				if (!node_walk(f, p->node, depth + 1))
-					return 0;
-				if (p->next != NULL)
 				{
-					fprintf(f, ",");
-					fprintf(f, "\n");
+					return 0;
+				}
+				if (p->next != nullptr)
+				{
+					f->printf(",");
+					f->printf("\n");
 				}
 			}
-			fprintf(f, ")");
+			f->printf(")");
 
 			break;
 
 		case NODE_SEQ:
 			print_indent(f, depth);
-			fprintf(f, "Sequence(\n");
-			for (p = n->u.seq; p != NULL; p = p->next)
+			f->printf("Sequence(\n");
+			for (p = n->u.seq; p != nullptr; p = p->next)
 			{
 				if (!node_walk(f, p->node, depth + 1))
-					return 0;
-				if (p->next != NULL)
 				{
-					fprintf(f, ",");
-					fprintf(f, "\n");
+					return 0;
+				}
+				if (p->next != nullptr)
+				{
+					f->printf(",");
+					f->printf("\n");
 				}
 			}
-			fprintf(f, ")");
+			f->printf(")");
 
 			break;
 
 		case NODE_LOOP:
 			print_indent(f, depth);
-			fprintf(f, "%s(\n", n->u.loop.min == 0 ? "ZeroOrMore" : "OneOrMore");
+			f->printf("%s(\n", n->u.loop.min == 0 ? "ZeroOrMore" : "OneOrMore");
 
 			if (!node_walk(f, n->u.loop.forward, depth + 1))
+			{
 				return 0;
-			fprintf(f, ",\n");
+			}
+			f->printf(",\n");
 
 			if (!node_walk(f, n->u.loop.backward, depth + 1))
+			{
 				return 0;
-			fprintf(f, ")");
+			}
+			f->printf(")");
 
 			break;
 	}
@@ -202,7 +211,7 @@ WARN_UNUSED_RESULT int rrta_output(const struct ast_rule* grammar)
 {
 	const struct ast_rule* p;
 
-	for (p = grammar; p != NULL; p = p->next)
+	for (p = grammar; p != nullptr; p = p->next)
 	{
 		struct node* rrd;
 
@@ -223,16 +232,16 @@ WARN_UNUSED_RESULT int rrta_output(const struct ast_rule* grammar)
 			return 0;
 		}
 
-		printf("add('");
-		escputs(p->name, stdout, escputc);
-		printf("', Diagram(\n");
+		writer->printf("add('");
+		writer->escape(p->name, escputc);
+		writer->printf("', Diagram(\n");
 
-		if (!node_walk(stdout, rrd, 1))
+		if (!node_walk(writer, rrd, 1))
 		{
 			return 0;
 		}
-		printf("));\n");
-		printf("\n");
+		writer->printf("));\n");
+		writer->printf("\n");
 
 		node_free(rrd);
 	}

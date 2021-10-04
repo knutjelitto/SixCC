@@ -174,13 +174,13 @@
     <ClCompile Include="src\iso-ebnf\parser.cpp">
       <Filter>src\iso-ebnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrtext\output.cpp">
+    <ClCompile Include="src\rrtext\rrtext-output.cpp">
       <Filter>src\rrtext</Filter>
     </ClCompile>
     <ClCompile Include="src\rbnf\lexer.cpp">
       <Filter>src\rbnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\rbnf\output.cpp">
+    <ClCompile Include="src\rbnf\rbnf-output.cpp">
       <Filter>src\rbnf</Filter>
     </ClCompile>
     <ClCompile Include="src\rbnf\parser.cpp">
@@ -189,7 +189,7 @@
     <ClCompile Include="src\wsn\lexer.cpp">
       <Filter>src\wsn</Filter>
     </ClCompile>
-    <ClCompile Include="src\wsn\output.cpp">
+    <ClCompile Include="src\wsn\wsn-output.cpp">
       <Filter>src\wsn</Filter>
     </ClCompile>
     <ClCompile Include="src\wsn\parser.cpp">
@@ -207,22 +207,22 @@
     <ClCompile Include="src\html5\html5-output.cpp">
       <Filter>src\html5</Filter>
     </ClCompile>
-    <ClCompile Include="src\sid\output.cpp">
+    <ClCompile Include="src\sid\sid-output.cpp">
       <Filter>src\sid</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrtdump\output.cpp">
+    <ClCompile Include="src\rrtdump\rrtdump-output.cpp">
       <Filter>src\rrtdump</Filter>
     </ClCompile>
     <ClCompile Include="src\rrta\output.cpp">
       <Filter>src\rrta</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrparcon\output.cpp">
+    <ClCompile Include="src\rrparcon\rrparcon-output.cpp">
       <Filter>src\rrparcon</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrll\output.cpp">
+    <ClCompile Include="src\rrll\rrll-output.cpp">
       <Filter>src\rrll</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrdump\output.cpp">
+    <ClCompile Include="src\rrdump\rrdump-output.cpp">
       <Filter>src\rrdump</Filter>
     </ClCompile>
     <ClCompile Include="src\rrdot\rrdot_output.cpp">
@@ -231,7 +231,7 @@
     <ClCompile Include="src\strings.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\theout.cpp">
+    <ClCompile Include="src\iwriter.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -371,7 +371,7 @@
     <ClInclude Include="src\strings.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\theout.h">
+    <ClInclude Include="src\iwriter.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

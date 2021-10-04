@@ -5,7 +5,7 @@
  */
 
 /*
- * Abstract Railroad Diagram tree dump to Graphivz
+ * Abstract Railroad Diagram tree dump to Graphivz dot
  */
 
 #include <assert.h>
@@ -24,7 +24,7 @@
 
 #include "io.h"
 
-static int escputc(int c, theout* writer)
+static int escputc(int c, iwriter* writer)
 {
     assert(writer != nullptr);
 
@@ -200,27 +200,30 @@ static void rrd_print_dot(const char* prefix, const void* parent, const char* po
     }
 }
 
-WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
 {
-    const struct ast_rule *p;
+    const struct ast_rule* p;
 
     writer->printf("digraph G {\n");
     writer->printf("\tnode [ shape = record, style = rounded ];\n");
     writer->printf("\tedge [ dir = none ];\n");
 
-    for (p = grammar; p != NULL; p = p->next) {
-        struct node *rrd;
+    for (p = grammar; p != NULL; p = p->next)
+    {
+        struct node* rrd;
 
-        if (!ast_to_rrd(p, &rrd)) {
+        if (!ast_to_rrd(p, &rrd))
+        {
             perror("ast_to_rrd");
             return 0;
         }
 
-        if (prettify) {
+        if (prettify)
+        {
             rrd_pretty(&rrd);
         }
 
-        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name, (void *) p, p->name);
+        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name, (void*)p, p->name);
 
         rrd_print_dot(p->name, p, "", rrd);
 

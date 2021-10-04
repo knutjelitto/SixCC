@@ -22,13 +22,13 @@ enum ast_features
 
 enum ast_term_type
 {
-	TYPE_EMPTY,
-	TYPE_RULE,
-	TYPE_CS_LITERAL,
-	TYPE_CI_LITERAL,
-	TYPE_TOKEN,
-	TYPE_PROSE,
-	TYPE_GROUP
+    TYPE_EMPTY,
+    TYPE_RULE,
+    TYPE_CS_LITERAL,
+    TYPE_CI_LITERAL,
+    TYPE_TOKEN,
+    TYPE_PROSE,
+    TYPE_GROUP
 };
 
 /*
@@ -41,88 +41,88 @@ enum ast_term_type
  */
 struct ast_term
 {
-	ast_term(ast_term_type type, int invisible)
-		: type(type), next(nullptr), invisible(invisible)
-	{
-		min = 1;
-		max = 1;
-	}
+    ast_term(ast_term_type type, int invisible)
+        : type(type), next(nullptr), invisible(invisible)
+    {
+        min = 1;
+        max = 1;
+    }
 
-	ast_term()
-	{
-	}
+    ast_term()
+    {
+    }
 
-	enum ast_term_type type;
-	struct ast_term* next;
-	int invisible;
-	unsigned int min;
-	unsigned int max; /* false (0) for unlimited */
+    enum ast_term_type type;
+    struct ast_term* next;
+    int invisible;
+    unsigned int min;
+    unsigned int max; /* false (0) for unlimited */
 
-	union xxx
-	{
-		xxx() {}
-		const struct ast_rule *rule; /* just for sake of the name */
-		struct txt literal;
-		const char *token;
-		const char *prose;
-		struct ast_alt *group;
-	} u;
+    union xxx
+    {
+        xxx() {}
+        const struct ast_rule *rule; /* just for sake of the name */
+        struct txt literal;
+        const char *token;
+        const char *prose;
+        struct ast_alt *group;
+    } u;
 
 };
 
 struct ast_term_empty : ast_term
 {
-	ast_term_empty(int invisible) : ast_term(TYPE_EMPTY, invisible)
-	{
-	}
+    ast_term_empty(int invisible) : ast_term(TYPE_EMPTY, invisible)
+    {
+    }
 };
 
 struct ast_term_rule : ast_term
 {
-	ast_term_rule(int invisible, const struct ast_rule* rule) : ast_term(TYPE_RULE, invisible)
-	{
-		u.rule = rule;
-	}
+    ast_term_rule(int invisible, const struct ast_rule* rule) : ast_term(TYPE_RULE, invisible)
+    {
+        u.rule = rule;
+    }
 };
 
 struct ast_term_cs_literal : ast_term
 {
-	ast_term_cs_literal(int invisible, struct txt literal) : ast_term(TYPE_CS_LITERAL, invisible)
-	{
-		u.literal = literal;
-	}
+    ast_term_cs_literal(int invisible, struct txt literal) : ast_term(TYPE_CS_LITERAL, invisible)
+    {
+        u.literal = literal;
+    }
 };
 
 struct ast_term_ci_literal : ast_term
 {
-	ast_term_ci_literal(int invisible, struct txt literal) : ast_term(TYPE_CI_LITERAL, invisible)
-	{
-		u.literal = literal;
-	}
+    ast_term_ci_literal(int invisible, struct txt literal) : ast_term(TYPE_CI_LITERAL, invisible)
+    {
+        u.literal = literal;
+    }
 };
 
 struct ast_term_token : ast_term
 {
-	ast_term_token(int invisible, const char* token) : ast_term(TYPE_TOKEN, invisible)
-	{
-		u.token = token;
-	}
+    ast_term_token(int invisible, const char* token) : ast_term(TYPE_TOKEN, invisible)
+    {
+        u.token = token;
+    }
 };
 
 struct ast_term_prose : ast_term
 {
-	ast_term_prose(int invisible, const char* prose) : ast_term(TYPE_PROSE, invisible)
-	{
-		u.prose = prose;
-	}
+    ast_term_prose(int invisible, const char* prose) : ast_term(TYPE_PROSE, invisible)
+    {
+        u.prose = prose;
+    }
 };
 
 struct ast_term_group : ast_term
 {
-	ast_term_group(int invisible, struct ast_alt* group) : ast_term(TYPE_RULE, invisible)
-	{
-		u.group = group;
-	}
+    ast_term_group(int invisible, struct ast_alt* group) : ast_term(TYPE_RULE, invisible)
+    {
+        u.group = group;
+    }
 };
 
 /*
@@ -132,12 +132,12 @@ struct ast_term_group : ast_term
  */
 struct ast_alt
 {
-	struct ast_term* terms;
-	/* TODO: struct ast_term *negs; - negative terms here */
+    struct ast_term* terms;
+    /* TODO: struct ast_term *negs; - negative terms here */
 
-	int invisible;
+    int invisible;
 
-	struct ast_alt* next;
+    struct ast_alt* next;
 };
 
 /*
@@ -149,10 +149,10 @@ struct ast_alt
  */
 struct ast_rule
 {
-	const char* name;
-	struct ast_alt* alts;
+    const char* name;
+    struct ast_alt* alts;
 
-	struct ast_rule* next;
+    struct ast_rule* next;
 };
 
 struct ast_term* ast_make_empty_term(int invisible);

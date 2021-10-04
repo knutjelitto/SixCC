@@ -23,7 +23,7 @@
 
 static void output_alt(const struct ast_rule *grammar, const struct ast_alt *alt);
 
-static int escputc(int c, theout* writer)
+static int escputc(int c, iwriter* writer)
 {
     size_t i;
 
