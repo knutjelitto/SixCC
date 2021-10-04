@@ -1,0 +1,477 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{cc8abca9-f148-4a54-8c2f-5339b5c78080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\bnf">
+      <UniqueIdentifier>{5049859d-bb31-44f7-8275-7993bfdd9cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\abnf">
+      <UniqueIdentifier>{a44811c1-ec62-47ce-85ef-e9410c1af370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\json">
+      <UniqueIdentifier>{68943098-7837-42fa-bd01-c1068c880b1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\iso-ebnf">
+      <UniqueIdentifier>{529a7bb6-45ef-43c9-8212-079159144f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\svg">
+      <UniqueIdentifier>{a149aa28-7348-463b-b341-144009398dc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrd">
+      <UniqueIdentifier>{5456606f-0296-4b93-b3f2-596eae69024d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples">
+      <UniqueIdentifier>{b1478979-6e12-4b3c-9bc9-331b28ce85dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrtext">
+      <UniqueIdentifier>{acf68d4e-2a01-4aca-8eab-f5a2ad35a9e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rbnf">
+      <UniqueIdentifier>{220cc0dc-6a6d-4f7a-a2d7-39c74e1c0137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\wsn">
+      <UniqueIdentifier>{3fc59558-9ed9-47ec-9e51-ac0f99ca8020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ebnfhtml5">
+      <UniqueIdentifier>{74adffe7-a7d4-46f9-8427-7acec7c6f8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\blab">
+      <UniqueIdentifier>{83a78a4b-e328-4701-81fa-577a29bea961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dot">
+      <UniqueIdentifier>{c983c517-3c49-44ef-a635-b942a5ecb0fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\html5">
+      <UniqueIdentifier>{b82d706f-971b-41f9-bd02-3f4551432907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrdot">
+      <UniqueIdentifier>{34d7515b-fe8b-41ca-ac67-d6dc96e601ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrdump">
+      <UniqueIdentifier>{7e521d70-2062-4216-b832-2a0b941ff9fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrll">
+      <UniqueIdentifier>{1948d731-4c87-4bd1-b199-16aa53b375fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrparcon">
+      <UniqueIdentifier>{492c3937-8cb0-4f49-bec2-c642f60af5f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrta">
+      <UniqueIdentifier>{7f3b6678-34c8-4560-a827-6b5a26a91f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rrtdump">
+      <UniqueIdentifier>{0a0ffdf4-9d8a-45f9-97d1-eb4a3f9e1b88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sid">
+      <UniqueIdentifier>{f96732c6-c5a7-431e-875b-6f4114ff47f6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\rrd\list.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\node.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_affix.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_bottom.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_ci.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_collapse.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_nested.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_redundant.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_roll.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_skippable.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\rewrite_ci.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\tnode.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrd\transform.cpp">
+      <Filter>src\rrd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\svg\output.cpp">
+      <Filter>src\svg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\svg\path.cpp">
+      <Filter>src\svg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bnf\lexer.cpp">
+      <Filter>src\bnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bnf\output.cpp">
+      <Filter>src\bnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bnf\parser.cpp">
+      <Filter>src\bnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\abnf\lexer.cpp">
+      <Filter>src\abnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\abnf\output.cpp">
+      <Filter>src\abnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\abnf\parser.cpp">
+      <Filter>src\abnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ast.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ast_binary.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bitmap.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\parsing_error.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rewrite_ci.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rewrite_invisible.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\txt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xalloc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\json\output.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iso-ebnf\lexer.cpp">
+      <Filter>src\iso-ebnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iso-ebnf\output.cpp">
+      <Filter>src\iso-ebnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iso-ebnf\parser.cpp">
+      <Filter>src\iso-ebnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrtext\output.cpp">
+      <Filter>src\rrtext</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rbnf\lexer.cpp">
+      <Filter>src\rbnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rbnf\output.cpp">
+      <Filter>src\rbnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rbnf\parser.cpp">
+      <Filter>src\rbnf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wsn\lexer.cpp">
+      <Filter>src\wsn</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wsn\output.cpp">
+      <Filter>src\wsn</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wsn\parser.cpp">
+      <Filter>src\wsn</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ebnfhtml5\output.cpp">
+      <Filter>src\ebnfhtml5</Filter>
+    </ClCompile>
+    <ClCompile Include="src\blab\output.cpp">
+      <Filter>src\blab</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dot\output.cpp">
+      <Filter>src\dot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\html5\output.cpp">
+      <Filter>src\html5</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sid\output.cpp">
+      <Filter>src\sid</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrtdump\output.cpp">
+      <Filter>src\rrtdump</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrta\output.cpp">
+      <Filter>src\rrta</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrparcon\output.cpp">
+      <Filter>src\rrparcon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrll\output.cpp">
+      <Filter>src\rrll</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrdump\output.cpp">
+      <Filter>src\rrdump</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rrdot\output.cpp">
+      <Filter>src\rrdot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\strings.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\rrd\list.h">
+      <Filter>src\rrd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrd\node.h">
+      <Filter>src\rrd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrd\pretty.h">
+      <Filter>src\rrd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrd\rewrite.h">
+      <Filter>src\rrd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrd\rrd.h">
+      <Filter>src\rrd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrd\tnode.h">
+      <Filter>src\rrd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\svg\io.h">
+      <Filter>src\svg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\svg\path.h">
+      <Filter>src\svg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bnf\io.h">
+      <Filter>src\bnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bnf\lexer.h">
+      <Filter>src\bnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bnf\parser.h">
+      <Filter>src\bnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\abnf\io.h">
+      <Filter>src\abnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\abnf\lexer.h">
+      <Filter>src\abnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\abnf\parser.h">
+      <Filter>src\abnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ast.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bitmap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\compiler_specific.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="getopt.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parsing_error.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rewrite.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\txt.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xalloc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\json\io.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iso-ebnf\io.h">
+      <Filter>src\iso-ebnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iso-ebnf\lexer.h">
+      <Filter>src\iso-ebnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iso-ebnf\parser.h">
+      <Filter>src\iso-ebnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrtext\io.h">
+      <Filter>src\rrtext</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rbnf\io.h">
+      <Filter>src\rbnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rbnf\lexer.h">
+      <Filter>src\rbnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rbnf\parser.h">
+      <Filter>src\rbnf</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wsn\io.h">
+      <Filter>src\wsn</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wsn\lexer.h">
+      <Filter>src\wsn</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wsn\parser.h">
+      <Filter>src\wsn</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ebnfhtml5\io.h">
+      <Filter>src\ebnfhtml5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\blab\io.h">
+      <Filter>src\blab</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dot\io.h">
+      <Filter>src\dot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\html5\io.h">
+      <Filter>src\html5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sid\io.h">
+      <Filter>src\sid</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrtdump\io.h">
+      <Filter>src\rrtdump</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrta\io.h">
+      <Filter>src\rrta</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrparcon\io.h">
+      <Filter>src\rrparcon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrll\io.h">
+      <Filter>src\rrll</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrdump\io.h">
+      <Filter>src\rrdump</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rrdot\io.h">
+      <Filter>src\rrdot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\strings.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\bnf\lexer.lx">
+      <Filter>src\bnf</Filter>
+    </None>
+    <None Include="src\bnf\parser.sid">
+      <Filter>src\bnf</Filter>
+    </None>
+    <None Include="src\abnf\lexer.lx">
+      <Filter>src\abnf</Filter>
+    </None>
+    <None Include="src\abnf\parser.sid">
+      <Filter>src\abnf</Filter>
+    </None>
+    <None Include="cpp.hint" />
+    <None Include="src\iso-ebnf\lexer.lx">
+      <Filter>src\iso-ebnf</Filter>
+    </None>
+    <None Include="src\iso-ebnf\parser.sid">
+      <Filter>src\iso-ebnf</Filter>
+    </None>
+    <None Include="examples\abnf.abnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\bnf.bnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\bnf.wsn">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\c_syntax.lex">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\c_syntax.wsn">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\c99-grammar.iso-ebnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\datetime.abnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\ebnf2.ebnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\expr.bnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\expr.iso-ebnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\expr.rbnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\expr.svg">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\expr-minus.iso-ebnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\expr-minus.rbnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\gmpls.rbnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\irc.abnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\iso-ebnf.iso-ebnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\json.iso-ebnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\meso-lisp">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\postal.abnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\postal.bnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\textup">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\utf8.abnf">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="examples\wsn.wsn">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="src\rbnf\lexer.lx">
+      <Filter>src\rbnf</Filter>
+    </None>
+    <None Include="src\rbnf\parser.sid">
+      <Filter>src\rbnf</Filter>
+    </None>
+    <None Include="src\wsn\lexer.lx">
+      <Filter>src\wsn</Filter>
+    </None>
+    <None Include="src\wsn\parser.sid">
+      <Filter>src\wsn</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{b844aec5-3627-4378-bde2-f7df48832ef7}</ProjectGuid>
+    <RootNamespace>SixCCkgt</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\abnf\lexer.cpp" />
+    <ClCompile Include="src\abnf\output.cpp" />
+    <ClCompile Include="src\abnf\parser.cpp" />
+    <ClCompile Include="src\ast.cpp" />
+    <ClCompile Include="src\ast_binary.cpp" />
+    <ClCompile Include="src\bitmap.cpp" />
+    <ClCompile Include="src\blab\output.cpp" />
+    <ClCompile Include="src\bnf\lexer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\bnf\output.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\bnf\parser.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;FORM=bnf;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;FORM=bnf;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="src\dot\output.cpp" />
+    <ClCompile Include="src\ebnfhtml5\output.cpp" />
+    <ClCompile Include="src\html5\output.cpp" />
+    <ClCompile Include="src\iso-ebnf\lexer.cpp" />
+    <ClCompile Include="src\iso-ebnf\output.cpp" />
+    <ClCompile Include="src\iso-ebnf\parser.cpp" />
+    <ClCompile Include="src\json\output.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\parsing_error.cpp" />
+    <ClCompile Include="src\rbnf\lexer.cpp" />
+    <ClCompile Include="src\rbnf\output.cpp" />
+    <ClCompile Include="src\rbnf\parser.cpp" />
+    <ClCompile Include="src\rewrite_ci.cpp" />
+    <ClCompile Include="src\rewrite_invisible.cpp" />
+    <ClCompile Include="src\rrdot\output.cpp" />
+    <ClCompile Include="src\rrdump\output.cpp" />
+    <ClCompile Include="src\rrd\list.cpp" />
+    <ClCompile Include="src\rrd\node.cpp" />
+    <ClCompile Include="src\rrd\pretty.cpp" />
+    <ClCompile Include="src\rrd\pretty_affix.cpp" />
+    <ClCompile Include="src\rrd\pretty_bottom.cpp" />
+    <ClCompile Include="src\rrd\pretty_ci.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\rrd\pretty_collapse.cpp" />
+    <ClCompile Include="src\rrd\pretty_nested.cpp" />
+    <ClCompile Include="src\rrd\pretty_redundant.cpp" />
+    <ClCompile Include="src\rrd\pretty_roll.cpp" />
+    <ClCompile Include="src\rrd\pretty_skippable.cpp" />
+    <ClCompile Include="src\rrd\rewrite_ci.cpp" />
+    <ClCompile Include="src\rrd\tnode.cpp" />
+    <ClCompile Include="src\rrd\transform.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\rrll\output.cpp" />
+    <ClCompile Include="src\rrparcon\output.cpp" />
+    <ClCompile Include="src\rrta\output.cpp" />
+    <ClCompile Include="src\rrtdump\output.cpp" />
+    <ClCompile Include="src\rrtext\output.cpp" />
+    <ClCompile Include="src\sid\output.cpp" />
+    <ClCompile Include="src\strings.cpp" />
+    <ClCompile Include="src\svg\output.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\svg\path.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\txt.cpp" />
+    <ClCompile Include="src\wsn\lexer.cpp" />
+    <ClCompile Include="src\wsn\output.cpp" />
+    <ClCompile Include="src\wsn\parser.cpp" />
+    <ClCompile Include="src\xalloc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="getopt.h" />
+    <ClInclude Include="src\abnf\io.h" />
+    <ClInclude Include="src\abnf\lexer.h" />
+    <ClInclude Include="src\abnf\parser.h" />
+    <ClInclude Include="src\ast.h" />
+    <ClInclude Include="src\bitmap.h" />
+    <ClInclude Include="src\blab\io.h" />
+    <ClInclude Include="src\bnf\io.h" />
+    <ClInclude Include="src\bnf\lexer.h" />
+    <ClInclude Include="src\bnf\parser.h" />
+    <ClInclude Include="src\compiler_specific.h" />
+    <ClInclude Include="src\dot\io.h" />
+    <ClInclude Include="src\ebnfhtml5\io.h" />
+    <ClInclude Include="src\html5\io.h" />
+    <ClInclude Include="src\iso-ebnf\io.h" />
+    <ClInclude Include="src\iso-ebnf\lexer.h" />
+    <ClInclude Include="src\iso-ebnf\parser.h" />
+    <ClInclude Include="src\json\io.h" />
+    <ClInclude Include="src\parsing_error.h" />
+    <ClInclude Include="src\rbnf\io.h" />
+    <ClInclude Include="src\rbnf\lexer.h" />
+    <ClInclude Include="src\rbnf\parser.h" />
+    <ClInclude Include="src\rewrite.h" />
+    <ClInclude Include="src\rrdot\io.h" />
+    <ClInclude Include="src\rrdump\io.h" />
+    <ClInclude Include="src\rrd\list.h" />
+    <ClInclude Include="src\rrd\node.h" />
+    <ClInclude Include="src\rrd\pretty.h" />
+    <ClInclude Include="src\rrd\rewrite.h" />
+    <ClInclude Include="src\rrd\rrd.h" />
+    <ClInclude Include="src\rrd\tnode.h" />
+    <ClInclude Include="src\rrll\io.h" />
+    <ClInclude Include="src\rrparcon\io.h" />
+    <ClInclude Include="src\rrta\io.h" />
+    <ClInclude Include="src\rrtdump\io.h" />
+    <ClInclude Include="src\rrtext\io.h" />
+    <ClInclude Include="src\sid\io.h" />
+    <ClInclude Include="src\strings.h" />
+    <ClInclude Include="src\svg\io.h" />
+    <ClInclude Include="src\svg\path.h" />
+    <ClInclude Include="src\txt.h" />
+    <ClInclude Include="src\wsn\io.h" />
+    <ClInclude Include="src\wsn\lexer.h" />
+    <ClInclude Include="src\wsn\parser.h" />
+    <ClInclude Include="src\xalloc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+    <None Include="examples\abnf.abnf" />
+    <None Include="examples\bnf.bnf" />
+    <None Include="examples\bnf.wsn" />
+    <None Include="examples\c99-grammar.iso-ebnf" />
+    <None Include="examples\c_syntax.lex" />
+    <None Include="examples\c_syntax.wsn" />
+    <None Include="examples\datetime.abnf" />
+    <None Include="examples\ebnf2.ebnf" />
+    <None Include="examples\expr-minus.iso-ebnf" />
+    <None Include="examples\expr-minus.rbnf" />
+    <None Include="examples\expr.bnf" />
+    <None Include="examples\expr.iso-ebnf" />
+    <None Include="examples\expr.rbnf" />
+    <None Include="examples\expr.svg" />
+    <None Include="examples\gmpls.rbnf" />
+    <None Include="examples\irc.abnf" />
+    <None Include="examples\iso-ebnf.iso-ebnf" />
+    <None Include="examples\json.iso-ebnf" />
+    <None Include="examples\meso-lisp" />
+    <None Include="examples\postal.abnf" />
+    <None Include="examples\postal.bnf" />
+    <None Include="examples\textup" />
+    <None Include="examples\utf8.abnf" />
+    <None Include="examples\wsn.wsn" />
+    <None Include="src\abnf\lexer.lx" />
+    <None Include="src\abnf\parser.sid" />
+    <None Include="src\bnf\lexer.lx" />
+    <None Include="src\bnf\parser.sid" />
+    <None Include="src\iso-ebnf\lexer.lx" />
+    <None Include="src\iso-ebnf\parser.sid" />
+    <None Include="src\rbnf\lexer.lx" />
+    <None Include="src\rbnf\parser.sid" />
+    <None Include="src\wsn\lexer.lx" />
+    <None Include="src\wsn\parser.sid" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

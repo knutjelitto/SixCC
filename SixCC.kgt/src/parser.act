@@ -1,0 +1,865 @@
+/*
+ * Copyright 2014-2017 Katherine Flavel
+ *
+ * See LICENCE for the full copyright terms.
+ */
+
+/*
+ * Shared parser actions
+ */
+
+%prefixes%
+
+	terminal = TOK_;
+	function = prod_;
+
+%persistents%
+
+	lex_state :lex_state;
+	act_state :act_state;
+
+%maps%
+
+	char   -> map_char;
+	string -> map_string;
+	txt    -> map_txt;
+	count  -> map_count;
+
+	ast_term -> map_term;
+	ast_alt  -> map_alt;
+	ast_rule -> map_rule;
+
+%header% @{
+
+	#include <assert.h>
+	#include <limits.h>
+	#include <string.h>
+	#include <stdlib.h>
+	#include <stdarg.h>
+	#include <stdio.h>
+	#include <errno.h>
+	#include <ctype.h>
+
+	#include "../parsing_error.h"
+	#include "../txt.h"
+	#include "../ast.h"
+	#include "../xalloc.h"
+
+	#ifndef FORM
+	#error FORM required
+	#endif
+
+	#define PASTE(a, b) a ## b
+	#define CAT(a, b)   PASTE(a, b)
+
+	#define LX_PREFIX CAT(lx_, FORM)
+
+	#define LX_TOKEN  CAT(LX_PREFIX, _token)
+	#define LX_STATE  CAT(LX_PREFIX, _lx)
+	#define LX_NEXT   CAT(LX_PREFIX, _next)
+	#define LX_INIT   CAT(LX_PREFIX, _init)
+
+	#define FORM_INPUT CAT(FORM, _input)
+
+	/* XXX: get rid of this; use same %entry% for all grammars */
+	#define FORM_ENTRY CAT(prod_, FORM)
+
+	/* XXX: workarounds for SID's identifier escaping */
+	#define prod_iso_Hebnf FORM_ENTRY
+	#define TOK_CI__LITERAL TOK_CI_LITERAL
+	#define TOK_CS__LITERAL TOK_CS_LITERAL
+
+	#include "parser.h"
+	#include "lexer.h"
+
+	#include "io.h"
+
+	typedef char         map_char;
+	typedef const char * map_string;
+	typedef struct txt   map_txt;
+	typedef unsigned int map_count;
+
+	typedef struct ast_term * map_term;
+	typedef struct ast_alt * map_alt;
+
+	struct act_state_s {
+		enum LX_TOKEN lex_tok;
+		enum LX_TOKEN lex_tok_save;
+		int invisible;
+	};
+
+	struct lex_state {
+		struct LX_STATE lx;
+		struct lx_dynbuf buf;
+
+		int (*f)(void *opaque);
+		void *opaque;
+
+		/* TODO: use lx's generated conveniences for the pattern buffer */
+		char a[512];
+		char *p;
+
+		parsing_error_queue errors;
+	};
+
+	#define CURRENT_TERMINAL (act_state->lex_tok)
+	#define ERROR_TERMINAL   @$ERROR
+	#define ADVANCE_LEXER    do { act_state->lex_tok = LX_NEXT(&lex_state->lx); } while (0)
+	#define SAVE_LEXER(tok)  do { act_state->lex_tok_save = act_state->lex_tok; \
+	                              act_state->lex_tok = tok;                     } while (0)
+	#define RESTORE_LEXER    do { act_state->lex_tok = act_state->lex_tok_save; } while (0)
+
+	extern int allow_undefined;
+
+	static const char *
+	prefix(int base)
+	{
+		switch (base) {
+		case 16: return "%x";
+		case 10: return "%d";
+		case  8: return "%o";
+		case  2: return "%b";
+		default: return "";
+		}
+	}
+
+	static int
+	string(const char *p, struct txt *t, int base)
+	{
+		char *q;
+
+		assert(p != NULL);
+		assert(t != NULL);
+		assert(t->p != NULL);
+		assert(base > 0);
+
+		{
+			const char *s;
+			size_t z;
+
+			s = prefix(base);
+			z = strlen(s);
+
+			assert(0 == strncmp(p, s, z));
+
+			p += z;
+		}
+
+		q = (void *) t->p;
+
+		for (;;) {
+			unsigned long n;
+			char *e;
+
+			n = strtoul(p, &e, base);
+			if (n == ULONG_MAX) {
+				return -1;
+			}
+
+			if (n > UCHAR_MAX) {
+				errno = ERANGE;
+				return -1;
+			}
+
+			*q++ = (unsigned char) n;
+
+			if (*e == '\0') {
+				break;
+			}
+
+			assert(*e == '.');
+
+			p = e + 1;
+		}
+
+		t->n = q - t->p;
+
+		return 0;
+	}
+
+	static int
+	range(const char *p,
+		unsigned char *a, unsigned char *b,
+		int base)
+	{
+		unsigned long m, n;
+		char *e;
+
+		assert(p != NULL);
+		assert(a != NULL);
+		assert(b != NULL);
+		assert(base > 0);
+
+		{
+			const char *s;
+			size_t z;
+
+			s = prefix(base);
+			z = strlen(s);
+
+			assert(0 == strncmp(p, s, z));
+
+			p += z;
+		}
+
+		m = strtoul(p, &e, base);
+		if (m == ULONG_MAX) {
+			return -1;
+		}
+
+		p = e;
+
+		assert(*p == '-');
+		p++;
+
+		n = strtoul(p, &e, base);
+		if (n == ULONG_MAX) {
+			return -1;
+		}
+
+		assert(*e == '\0');
+
+		if (m > UCHAR_MAX || n > UCHAR_MAX) {
+			errno = ERANGE;
+			return -1;
+		}
+
+		*a = m;
+		*b = n;
+
+		return 0;
+	}
+
+	static const char *
+	ltrim(const char *s)
+	{
+		while (isspace((unsigned char) *s)) {
+			s++;
+		}
+
+		return s;
+	}
+
+	static void
+	rtrim(char *s)
+	{
+		char *p = s + strlen(s) - 1;
+
+		assert(strlen(s) > 0);
+
+		while (p >= s && isspace((unsigned char) *p)) {
+			*p-- = '\0';
+		}
+	}
+
+	static const char *
+	trim(char *s)
+	{
+		rtrim(s);
+		return ltrim(s);
+	}
+
+	static void
+	err(struct lex_state *lex_state, const char *fmt, ...)
+	{
+		parsing_error error;
+		va_list ap;
+
+		assert(lex_state != NULL);
+
+		error.line = lex_state->lx.start.line;
+		error.col  = lex_state->lx.start.col;
+
+		va_start(ap, fmt);
+		vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
+		va_end(ap);
+
+		parsing_error_queue_push(&(lex_state->errors), error);
+	}
+
+	static void
+	err_expected(struct lex_state *lex_state, const char *token)
+	{
+		err(lex_state, "Syntax error: expected %s", token);
+	}
+
+	static void
+	err_unimplemented(struct lex_state *lex_state, const char *s)
+	{
+		err(lex_state, "Unimplemented: %s", s);
+	}
+
+	static const char *
+	pattern_buffer(struct lex_state *lex_state)
+	{
+		const char *s;
+
+		assert(lex_state != NULL);
+
+		/* TODO */
+		*lex_state->p++ = '\0';
+
+		s = xstrdup(lex_state->a);
+		if (s == NULL) {
+			perror("xstrdup");
+			xexit();
+		}
+
+		lex_state->p = lex_state->a;
+
+		return s;
+	}
+
+@}, @{
+
+	typedef struct lex_state * lex_state;
+	typedef struct act_state_s * act_state;
+
+	typedef struct ast_rule * map_rule;
+
+@};
+
+%assignments%
+
+%parameter-assignments%
+
+%result-assignments%
+
+%terminals%
+
+	/*
+	 * Note we strdup() here because the grammar permits adjacent patterns,
+	 * and so the pattern buffer will be overwritten by the LL(1) one-token
+	 * lookahead.
+	 */
+
+	ESC: () -> (c :char) = @{
+		assert(strlen(lex_state->buf.a) == 2);
+
+		@c = lex_state->buf.a[0];
+	@};
+
+	CHAR: () -> (c :char) = @{
+		assert(strlen(lex_state->buf.a) == 1);
+
+		@c = lex_state->buf.a[0];
+	@};
+
+	IDENT: () -> (s :string) = @{
+		/*
+		 * This rtrim() is for EBNF, which would require n-token lookahead
+		 * in order to lex just an ident (as ident may contain whitespace).
+		 *
+		 * I'm trimming here (for all grammars) because it's simpler than
+		 * doing this for just EBNF specifically, and harmless to others.
+		 */
+		rtrim(lex_state->buf.a);
+
+		@s = xstrdup(lex_state->buf.a);
+		if (@s == NULL) {
+			perror("xstrdup");
+			xexit();
+		}
+	@};
+
+	COUNT: () -> (n :count) = @{
+		@n = strtoul(lex_state->buf.a, NULL, 10);
+		/* TODO: range check */
+	@};
+
+
+	NAME: () -> (s :string) = @{
+		@s = pattern_buffer(lex_state);
+	@};
+
+	CI_LITERAL: () -> (t :txt) = @{
+		@t.p = pattern_buffer(lex_state);
+		@t.n = strlen(@t.p);
+	@};
+
+	CS_LITERAL: () -> (t :txt) = @{
+		@t.p = pattern_buffer(lex_state);
+		@t.n = strlen(@t.p);
+	@};
+
+	PROSE: () -> (s :string) = @{
+		@s = pattern_buffer(lex_state);
+	@};
+
+
+	BINSTR: () -> (t :txt) = @{
+		@t.p = xstrdup(lex_state->buf.a);
+		if (@t.p == NULL) {
+			perror("xstrdup");
+			xexit();
+		}
+
+		if (-1 == string(lex_state->buf.a, &@t,  2)) {
+			if (errno == ERANGE) {
+				err(lex_state, "binary sequence %s out of range: expected %s0..%s%s inclusive",
+					lex_state->buf.a, prefix(2), prefix(2), "11111111");
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+
+		/* TODO: free */
+	@};
+
+	OCTSTR: () -> (t :txt) = @{
+		@t.p = xstrdup(lex_state->buf.a);
+		if (@t.p == NULL) {
+			perror("xstrdup");
+			xexit();
+		}
+
+		if (-1 == string(lex_state->buf.a, &@t,  8)) {
+			if (errno == ERANGE) {
+				err(lex_state, "octal sequence %s out of range: expected %s0..%s%o inclusive",
+					lex_state->buf.a, prefix(8), prefix(8), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+
+		/* TODO: free */
+	@};
+
+	DECSTR: () -> (t :txt) = @{
+		@t.p = xstrdup(lex_state->buf.a);
+		if (@t.p == NULL) {
+			perror("xstrdup");
+			xexit();
+		}
+
+		if (-1 == string(lex_state->buf.a, &@t, 10)) {
+			if (errno == ERANGE) {
+				err(lex_state, "decimal sequence %s out of range: expected %s0..%s%u inclusive",
+					lex_state->buf.a, prefix(10), prefix(10), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+
+		/* TODO: free */
+	@};
+
+	HEXSTR: () -> (t :txt) = @{
+		@t.p = xstrdup(lex_state->buf.a);
+		if (@t.p == NULL) {
+			perror("xstrdup");
+			xexit();
+		}
+
+		if (-1 == string(lex_state->buf.a, &@t, 16)) {
+			if (errno == ERANGE) {
+				err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
+					lex_state->buf.a, prefix(16), prefix(16), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+
+		/* TODO: free */
+	@};
+
+	BINRANGE: () -> (m :char, n :char) = @{
+		if (-1 == range(lex_state->buf.a, (unsigned char *) &@m, (unsigned char *) &@n,  2)) {
+			if (errno == ERANGE) {
+				err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
+					lex_state->buf.a, prefix(2), prefix(2), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+	@};
+
+	OCTRANGE: () -> (m :char, n :char) = @{
+		if (-1 == range(lex_state->buf.a, (unsigned char *) &@m, (unsigned char *) &@n,  8)) {
+			if (errno == ERANGE) {
+				err(lex_state, "octal sequence %s out of range: expected %s0..%s%o inclusive",
+					lex_state->buf.a, prefix(8), prefix(8), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+	@};
+
+	DECRANGE: () -> (m :char, n :char) = @{
+		if (-1 == range(lex_state->buf.a, (unsigned char *) &@m, (unsigned char *) &@n, 10)) {
+			if (errno == ERANGE) {
+				err(lex_state, "decimal sequence %s out of range: expected %s0..%s%u inclusive",
+					lex_state->buf.a, prefix(10), prefix(10), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+	@};
+
+	HEXRANGE: () -> (m :char, n :char) = @{
+		if (-1 == range(lex_state->buf.a, (unsigned char *) &@m, (unsigned char *) &@n, 16)) {
+			if (errno == ERANGE) {
+				err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
+					lex_state->buf.a, prefix(16), prefix(16), UCHAR_MAX);
+			} else {
+				err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+			}
+			@!;
+		}
+	@};
+
+%actions%
+
+	/* TODO: big pile of error messages */
+
+	<pattern-char>: (c :char) -> () = @{
+		/* TODO */
+		*lex_state->p++ = @c;
+	@};
+
+
+	<rep-one-or-more>: () -> (min :count, max :count) = @{
+		@min = 1;
+		@max = 0;
+
+		/* workaround for SID's ! = f(); */
+		(void) @min;
+		(void) @max;
+	@};
+
+	<rep-zero-or-more>: () -> (min :count, max :count) = @{
+		@min = 0;
+		@max = 0;
+
+		/* workaround for SID's ! = f(); */
+		(void) @min;
+		(void) @max;
+	@};
+
+	<rep-zero-or-one>: () -> (min :count, max :count) = @{
+		@min = 0;
+		@max = 1;
+
+		/* workaround for SID's ! = f(); */
+		(void) @min;
+		(void) @max;
+	@};
+
+	<set-repeat>: (t :ast_term, min :count, max :count) -> () = @{
+		assert(@max >= @min || !@max);
+
+		@t->min = @min;
+		@t->max = @max;
+	@};
+
+	<mul-repeat>: (t :ast_term, n :count) -> () = @{
+		assert(@n > 0);
+
+		/*
+		 * This multiplies a term's {min,max} pair as if the term were
+		 * repeated multiple times inline. Possible situations here are:
+		 *
+		 *   {0,0} * n => {0,0}
+		 *   {0,1} * n => {0,n}
+		 *   {1,0} * n => {n,0}
+		 *   {i,j} * n => {in,jn} where j >= i
+		 *
+		 * Note a max of 0 indicates no limit on the number of repetitions.
+		 */
+
+		@t->min *= @n;
+		@t->max *= @n;
+	@};
+
+
+	<make-empty-term>: () -> (t :ast_term) = @{
+		@t = ast_make_empty_term(act_state->invisible);
+	@};
+
+	<make-rule-term>: (n :string) -> (t :ast_term) = @{
+		struct ast_rule *r;
+
+		/*
+		 * Regardless of whether a rule exists (yet) by this name, we make
+		 * a placeholder rule just so that we have an ast_rule struct
+		 * at which to point. This saves passing the grammar around, which
+		 * keeps the rule-building productions simpler.
+		 */
+		r = ast_make_rule(@n, NULL);
+		if (r == NULL) {
+			perror("ast_make_rule");
+			@!;
+		}
+
+		@t = ast_make_rule_term(act_state->invisible, r);
+	@};
+
+	<make-ci-literal-term>: (x :txt) -> (t :ast_term) = @{
+		size_t i;
+
+		/* normalise case-insensitive strings for aesthetic reasons only */
+		for (i = 0; i < @x.n; i++) {
+			((char *) @x.p)[i] = tolower((unsigned char) @x.p[i]);
+		}
+
+		@t = ast_make_literal_term(act_state->invisible, &@x, 1);
+	@};
+
+	<make-cs-literal-term>: (x :txt) -> (t :ast_term) = @{
+		@t = ast_make_literal_term(act_state->invisible, &@x, 0);
+	@};
+
+	<make-token-term>: (n :string) -> (t :ast_term) = @{
+		@t = ast_make_token_term(act_state->invisible, @n);
+	@};
+
+	<make-prose-term>: (l :string) -> (t :ast_term) = @{
+		const char *s;
+
+		s = xstrdup(trim((char *) @l));
+
+		free((void *) @l);
+
+		if (!strcmp(s, "kgt:invisible")) {
+			act_state->invisible = 1;
+
+			@t = ast_make_empty_term(act_state->invisible);
+		} else if (!strcmp(s, "kgt:visible")) {
+			act_state->invisible = 0;
+
+			@t = ast_make_empty_term(act_state->invisible);
+		} else {
+			@t = ast_make_prose_term(act_state->invisible, s);
+		}
+	@};
+
+	<make-group-term>: (a :ast_alt) -> (t :ast_term) = @{
+		@t = ast_make_group_term(act_state->invisible, @a);
+	@};
+
+	<make-range-term>: (m :char, n :char) -> (t :ast_term) = @{
+		struct ast_alt *a;
+		int i;
+
+		a = NULL;
+
+		for (i = (unsigned char) @m; i <= (unsigned char) @n; i++) {
+			struct ast_alt *new;
+			struct ast_term *t;
+
+			t = ast_make_char_term(act_state->invisible, i);
+			new = ast_make_alt(act_state->invisible, t);
+
+			new->next = a;
+			a = new;
+		}
+
+		@t = ast_make_group_term(act_state->invisible, a);
+	@};
+
+
+	<make-alt>: (t :ast_term) -> (a :ast_alt) = @{
+		@a = ast_make_alt(act_state->invisible, @t);
+	@};
+
+	<make-rule>: (n :string, a :ast_alt) -> (r :ast_rule) = @{
+		@r = ast_make_rule(@n, @a);
+	@};
+
+	<make-empty-rule>: () -> (r :ast_rule) = @{
+		@r = NULL;
+	@};
+
+
+	<add-term-to-list>: (l :ast_term, t :ast_term) -> () = @{
+		assert(@t->next == NULL);
+		@t->next = @l;
+	@};
+
+	<add-alt-to-list>: (l :ast_alt, a :ast_alt) -> () = @{
+		assert(@a->next == NULL);
+		@a->next = @l;
+	@};
+
+	<add-rule-to-list>: (l :ast_rule, r :ast_rule) -> () = @{
+		if (ast_find_rule(@l, @r->name)) {
+      err(lex_state, "production rule <%s> already exists", @r->name);
+			return;
+		}
+
+		assert(@r->next == NULL);
+		@r->next = @l;
+	@};
+
+	<current-rules>: () -> (l :ast_rule) = @{
+    err(lex_state, "unimplemented");
+		@l = NULL;
+		@!;
+	@};
+
+	<find-rule>: (l :ast_rule, n :string) -> (r :ast_rule) = @{
+		assert(@n != NULL);
+
+		@r = ast_find_rule(@l, @n);
+	@};
+
+	<add-alts>: (r :ast_rule, a :ast_alt) -> () = @{
+		err(lex_state, "Unimplemented");
+		@!;
+	@};
+
+
+	<err-syntax> = @{
+		err(lex_state, "Syntax error");
+		xexit();
+	@};
+
+	<err-expected-alt> = @{
+		err_expected(lex_state, "alternative separator");
+	@};
+
+	<err-expected-sep> = @{
+		err_expected(lex_state, "production rule separator");
+	@};
+
+	<err-expected-equals> = @{
+		err_expected(lex_state, "production rule assignment");
+	@};
+
+	<err-unimplemented-except> = @{
+		err_unimplemented(lex_state, "\"except\" productions");
+	@};
+
+%trailer% @{
+
+	static int
+	lgetc(struct LX_STATE *lx)
+	{
+		const struct lex_state *lex_state;
+
+		assert(lx != NULL);
+		assert(lx->getc_opaque != NULL);
+
+		lex_state = lx->getc_opaque;
+
+		assert(lex_state->f != NULL);
+
+		return lex_state->f(lex_state->opaque);
+	}
+
+	struct ast_rule *
+	FORM_INPUT(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
+	{
+		struct act_state_s  act_state_s;
+		struct act_state_s *act_state;
+		struct lex_state  lex_state_s;
+		struct lex_state *lex_state;
+
+		struct LX_STATE *lx;
+		struct ast_rule *g;
+
+		/* for dialects which don't use these */
+		(void) string;
+		(void) range;
+		(void) ltrim;
+		(void) rtrim;
+		(void) trim;
+		(void) err_unimplemented;
+
+		assert(f != NULL);
+
+		g = NULL;
+
+		lex_state    = &lex_state_s;
+		lex_state->p = lex_state->a;
+		lex_state->errors = NULL;
+
+		lx = &lex_state->lx;
+
+		LX_INIT(lx);
+
+		lx->lgetc       = lgetc;
+		lx->getc_opaque = lex_state;
+
+		lex_state->f       = f;
+		lex_state->opaque  = opaque;
+
+		lex_state->buf.a   = NULL;
+		lex_state->buf.len = 0;
+
+		/* XXX: unneccessary since we're lexing from a string */
+		lx->buf_opaque = &lex_state->buf;
+		lx->push       = CAT(LX_PREFIX, _dynpush);
+		lx->clear      = CAT(LX_PREFIX, _dynclear);
+		lx->free       = CAT(LX_PREFIX, _dynfree);
+
+		/* XXX */
+		lx->free = NULL;
+
+		/* This is a workaround for ADVANCE_LEXER assuming a pointer */
+		act_state = &act_state_s;
+
+		act_state->invisible = 0;
+
+		ADVANCE_LEXER;
+		FORM_ENTRY(lex_state, act_state, &g);
+
+		/* TODO: handle error */
+
+		/* substitute placeholder rules for the real thing */
+		{
+			const struct ast_rule *p;
+			const struct ast_alt *q;
+			struct ast_term *t;
+			struct ast_rule *r;
+
+			for (p = g; p != NULL; p = p->next) {
+				for (q = p->alts; q != NULL; q = q->next) {
+					for (t = q->terms; t != NULL; t = t->next) {
+						if (t->type != TYPE_RULE) {
+							continue;
+						}
+
+						r = ast_find_rule(g, t->u.rule->name);
+						if (r != NULL) {
+							free((char *) t->u.rule->name);
+							ast_free_rule((void *) t->u.rule);
+							t->u.rule = r;
+							continue;
+						}
+
+						if (!allow_undefined) {
+							err(lex_state, "production rule <%s> not defined", t->u.rule->name);
+							/* XXX: would leak the ast_rule here */
+							continue;
+						}
+
+						{
+							const char *token;
+
+							token = t->u.rule->name;
+
+							ast_free_rule((void *) t->u.rule);
+
+							t->type    = TYPE_TOKEN;
+							t->u.token = token;
+						}
+					}
+				}
+			}
+		}
+
+		*errors = lex_state->errors;
+		return g;
+	}
+
+@}, @{
+
+@};
