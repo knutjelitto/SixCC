@@ -16,6 +16,7 @@
 void err_exit()
 {
 	printf("press return ... ");
+	getchar();
 	exit(EXIT_FAILURE);
 }
 

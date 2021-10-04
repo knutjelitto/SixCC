@@ -167,11 +167,10 @@ static struct io* lang(enum io_dir dir, const char* s)
 int main(int argc, char* argv[])
 {
     struct ast_rule* g;
-    struct io* in, *out;
+    struct io* in = nullptr;
+    struct io* out = nullptr;
     const char* filter;
     parsing_error_queue errors = nullptr;
-    in = lang(IO_IN, "abnf");
-    out = lang(IO_OUT, "rrdot");
     filter = nullptr;
 
     writer = new theout(stdout);
@@ -206,6 +205,15 @@ int main(int argc, char* argv[])
         {
             xusage();
         }
+    }
+
+    if (in == nullptr)
+    {
+        in = lang(IO_IN, "abnf");
+    }
+    if (out == nullptr)
+    {
+        out = lang(IO_OUT, "svg");
     }
 
     assert(io->in != nullptr);
@@ -318,31 +326,31 @@ WARN_UNUSED_RESULT int cat(const char* in, const char* indent)
 {
     FILE* f;
 
-    char buf[BUFSIZ];
+    char buf[BUFSIZ]{};
 
     f = fopen(in, "r");
-    if (f == NULL)
+    if (f == nullptr)
     {
         perror(in);
         return 0;
     }
 
-    fputs(indent, stdout);
+    writer->puts(indent);
 
     for (;;)
     {
-        buf[sizeof buf - 1] = 'x';
+        buf[sizeof(buf)-1] = 'x';
 
-        if (!fgets(buf, sizeof buf, f))
+        if (fgets(buf, sizeof(buf), f) == nullptr)
         {
             break;
         }
 
-        fputs(buf, stdout);
+        writer->puts(buf);
 
-        if (buf[sizeof buf - 1] != '\0' || buf[sizeof buf - 2] == '\n')
+        if (buf[sizeof(buf)-1] != '\0' || buf[sizeof(buf) - 2] == '\n')
         {
-            fputs(indent, stdout);
+            writer->puts(indent);
         }
     }
 
