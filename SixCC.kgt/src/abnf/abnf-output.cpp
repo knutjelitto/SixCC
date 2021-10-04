@@ -18,19 +18,16 @@
 
 #include "io.h"
 
-WARN_UNUSED_RESULT
-static int output_term(const struct ast_term *term);
+WARN_UNUSED_RESULT static int output_term(const struct ast_term *term);
 
-static void
-output_byte(char c)
+static void output_byte(char c)
 {
-	printf("%%x%02X", (unsigned char) c);
+	writer->printf("%%x%02X", (unsigned char) c);
 }
 
-static void
-output_range(char lo, char hi)
+static void output_range(char lo, char hi)
 {
-	printf("%%x%02X-%02X", (unsigned char) lo, (unsigned char) hi);
+	writer->printf("%%x%02X-%02X", (unsigned char) lo, (unsigned char) hi);
 }
 
 static bool needesc(int c)
@@ -76,19 +73,20 @@ WARN_UNUSED_RESULT static int output_string(char prefix, const struct txt* t)
 
 	if (txt_any(t, [](int c) { return isalpha(c) != 0; }))
 	{
-		printf("%%%c", prefix);
+		writer->printf("%%%c", prefix);
 	}
 
-	putc('\"', stdout);
+	writer->putc('\"');
 
 	/* TODO: bail out on non-printable characters */
 
 	for (i = 0; i < t->n; i++)
 	{
-		putc(t->p[i], stdout);
+		writer->putc(t->p[i]);
 	}
 
-	putc('\"', stdout);
+	writer->putc('\"');
+
 	return 1;
 }
 
@@ -118,19 +116,20 @@ static int char_terminal(const struct ast_term *term, unsigned char *c)
 	return 1;
 }
 
-static void
-collate_ranges(struct bm *bm, const struct ast_alt *alts)
+static void collate_ranges(struct bm* bm, const struct ast_alt* alts)
 {
-	const struct ast_alt *p;
+	const struct ast_alt* p;
 
 	assert(bm != NULL);
 
 	bm_clear(bm);
 
-	for (p = alts; p != NULL; p = p->next) {
+	for (p = alts; p != NULL; p = p->next)
+	{
 		unsigned char c;
 
-		if (!char_terminal(p->terms, &c)) {
+		if (!char_terminal(p->terms, &c))
+		{
 			continue;
 		}
 
@@ -138,26 +137,26 @@ collate_ranges(struct bm *bm, const struct ast_alt *alts)
 	}
 }
 
-WARN_UNUSED_RESULT
-static int
-output_terms(const struct ast_term *terms)
+WARN_UNUSED_RESULT static int output_terms(const struct ast_term* terms)
 {
-	const struct ast_term *term;
+	const struct ast_term* term;
 
-	for (term = terms; term != NULL; term = term->next) {
+	for (term = terms; term != NULL; term = term->next)
+	{
 		if (!output_term(term))
+		{
 			return 0;
+		}
 
-		if (term->next) {
-			putc(' ', stdout);
+		if (term->next)
+		{
+			writer->putc(' ');
 		}
 	}
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_alts(const struct ast_alt* alts)
+WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 {
 	const struct ast_alt* p;
 	struct bm bm;
@@ -180,7 +179,7 @@ output_alts(const struct ast_alt* alts)
 		{
 			if (!first)
 			{
-				printf(" / ");
+				writer->printf(" / ");
 			}
 			else
 			{
@@ -188,7 +187,9 @@ output_alts(const struct ast_alt* alts)
 			}
 
 			if (!output_terms(p->terms))
+			{
 				return 0;
+			}
 			p = p->next;
 			continue;
 		}
@@ -202,7 +203,7 @@ output_alts(const struct ast_alt* alts)
 
 		if (!first)
 		{
-			printf(" / ");
+			writer->printf(" / ");
 		}
 		else
 		{
@@ -264,19 +265,21 @@ output_alts(const struct ast_alt* alts)
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_group(const struct ast_alt *group)
+WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 {
-	if (group->next != NULL) {
-		printf("(");
+	if (group->next != NULL)
+	{
+		writer->printf("(");
 	}
 
 	if (!output_alts(group))
+	{
 		return 0;
+	}
 
-	if (group->next != NULL) {
-		printf(")");
+	if (group->next != NULL)
+	{
+		writer->printf(")");
 	}
 	return 1;
 }
@@ -297,20 +300,20 @@ static void output_repetition(unsigned int min, unsigned int max)
 
 	if (min != 0 && min == max)
 	{
-		printf("%u", min);
+		writer->printf("%u", min);
 		return;
 	}
 
 	if (min > 0)
 	{
-		printf("%u", min);
+		writer->printf("%u", min);
 	}
 
-	printf("*");
+	writer->printf("*");
 
 	if (max > 0)
 	{
-		printf("%u", max);
+		writer->printf("%u", max);
 	}
 }
 
@@ -349,7 +352,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (term->min == 0 && term->max == 1)
 	{
-		printf("[ ");
+		writer->printf("[ ");
 	}
 	else
 	{
@@ -357,18 +360,18 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		if (!a)
 		{
-			printf("( ");
+			writer->printf("( ");
 		}
 	}
 
 	switch (term->type)
 	{
 		case TYPE_EMPTY:
-			fputs("\"\"", stdout);
+			writer->puts("\"\"");
 			break;
 
 		case TYPE_RULE:
-			printf("%s", term->u.rule->name);
+			writer->printf("%s", term->u.rule->name);
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -386,12 +389,12 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_TOKEN:
-			printf("%s", term->u.token);
+			writer->printf("%s", term->u.token);
 			break;
 
 		case TYPE_PROSE:
 			/* TODO: escaping to somehow avoid > */
-			printf("< %s >", term->u.prose);
+			writer->printf("< %s >", term->u.prose);
 			break;
 
 		case TYPE_GROUP:
@@ -404,34 +407,36 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (term->min == 0 && term->max == 1)
 	{
-		printf(" ]");
+		writer->printf(" ]");
 	}
 	else if (!a)
 	{
-		printf(" )");
+		writer->printf(" )");
 	}
 	return 1;
 }
 
 WARN_UNUSED_RESULT static int output_rule(const struct ast_rule *rule)
 {
-	printf("%s = ", rule->name);
+	writer->printf("%s = ", rule->name);
 
 	if (!output_alts(rule->alts))
+	{
 		return 0;
+	}
 
-	printf("\n");
-	printf("\n");
+	writer->printf("\n");
+	writer->printf("\n");
+
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-int
-abnf_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int abnf_output(const struct ast_rule* grammar)
 {
-	const struct ast_rule *p;
+	const struct ast_rule* p;
 
-	for (p = grammar; p != NULL; p = p->next) {
+	for (p = grammar; p != NULL; p = p->next)
+	{
 		if (!output_rule(p))
 			return 0;
 	}

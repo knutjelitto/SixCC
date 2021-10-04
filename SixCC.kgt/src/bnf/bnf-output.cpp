@@ -33,36 +33,36 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
-			fputs(" \"\"", stdout);
-			break;
+	case TYPE_EMPTY:
+		writer->puts(" \"\"");
+		break;
 
-		case TYPE_RULE:
-			printf(" <%s>", term->u.rule->name);
-			break;
+	case TYPE_RULE:
+		writer->printf(" <%s>", term->u.rule->name);
+		break;
 
-		case TYPE_CI_LITERAL:
-			fprintf(stderr, "unimplemented\n");
-			return 0;
+	case TYPE_CI_LITERAL:
+		fprintf(stderr, "unimplemented\n");
+		return 0;
 
-		case TYPE_CS_LITERAL: {
-			char c;
+	case TYPE_CS_LITERAL: {
+		char c;
 
-			c = memchr(term->u.literal.p, '\"', term->u.literal.n) ? '\'' : '\"';
-			printf(" %c%.*s%c", c, (int)term->u.literal.n, term->u.literal.p, c);
-		}
-							break;
+		c = memchr(term->u.literal.p, '\"', term->u.literal.n) ? '\'' : '\"';
+		writer->printf(" %c%.*s%c", c, (int)term->u.literal.n, term->u.literal.p, c);
+	}
+						break;
 
-		case TYPE_TOKEN:
-			printf(" <%s>", term->u.token);
-			break;
+	case TYPE_TOKEN:
+		writer->printf(" <%s>", term->u.token);
+		break;
 
-		case TYPE_PROSE:
-			fprintf(stderr, "unimplemented\n");
-			return 0;
+	case TYPE_PROSE:
+		fprintf(stderr, "unimplemented\n");
+		return 0;
 
-		case TYPE_GROUP:
-			break;
+	case TYPE_GROUP:
+		break;
 	}
 	return 1;
 }
@@ -76,10 +76,13 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 	for (term = alt->terms; term != nullptr; term = term->next)
 	{
 		if (!output_term(term))
+		{
 			return 0;
+		}
 	}
 
-	printf("\n");
+	writer->printf("\n");
+
 	return 1;
 }
 
@@ -87,27 +90,27 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	printf("<%s> ::=", rule->name);
+	writer->printf("<%s> ::=", rule->name);
 
 	for (alt = rule->alts; alt != nullptr; alt = alt->next)
 	{
 		if (!output_alt(alt))
+		{
 			return 0;
+		}
 
 		if (alt->next != nullptr)
 		{
-			printf("\t|");
+			writer->printf("\t|");
 		}
 	}
 
-	printf("\n");
+	writer->printf("\n");
 	return 1;
 }
 
 WARN_UNUSED_RESULT int bnf_output(const struct ast_rule* grammar)
 {
-	printf("bnf-output\n");
-
 	const struct ast_rule* p;
 
 	for (p = grammar; p != nullptr; p = p->next)

@@ -70,28 +70,28 @@ struct io
 
 struct io io[] =
 {
-    { "bnf",        bnf_input,      bnf_output,         (ast_features)bnf_ast_unsupported, (rrd_features)0 },
+    { "abnf",       abnf_input,     abnf_output,        (ast_features)0, (rrd_features)0 },
     { "blab",       nullptr,        blab_output,        blab_ast_unsupported, (rrd_features)0 },
+    { "bnf",        bnf_input,      bnf_output,         (ast_features)bnf_ast_unsupported, (rrd_features)0 },
+    { "dot",        nullptr,        dot_output,         (ast_features)0, (rrd_features)0 },
     { "ebnfhtml5",  nullptr,        ebnf_html5_output,  ebnf_html5_ast_unsupported, (rrd_features)0 },
     { "ebnfxhtml5", nullptr,        ebnf_xhtml5_output, ebnf_html5_ast_unsupported, (rrd_features)0 },
-    { "wsn",        wsn_input,      wsn_output,         (ast_features)wsn_ast_unsupported, (rrd_features)0 },
-    { "abnf",       abnf_input,     abnf_output,        (ast_features)0, (rrd_features)0 },
+    { "html5",      nullptr,        html5_output,       (ast_features)0, (rrd_features)0 },
+    { "xhtml5",     nullptr,        xhtml5_output,      (ast_features)0, (rrd_features)0 },
     { "iso-ebnf",   iso_ebnf_input, iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported, (rrd_features)0 },
+    { "json",       nullptr,        json_output,        json_ast_unsupported, (rrd_features)0 },
     { "rbnf",       rbnf_input,     rbnf_output,        (ast_features)rbnf_ast_unsupported, (rrd_features)0 },
-    { "sid",        nullptr,        sid_output,         (ast_features)sid_ast_unsupported, (rrd_features)0 },
-    { "dot",        nullptr,        dot_output,         (ast_features)0, (rrd_features)0 },
-    { "rrdot",      nullptr,        rrdot_output,       (ast_features)0, (rrd_features)0 },
     { "rrdump",     nullptr,        rrdump_output,      (ast_features)0, (rrd_features)0 },
     { "rrtdump",    nullptr,        rrtdump_output,     (ast_features)0, (rrd_features)0 },
+    { "rrdot",      nullptr,        rrdot_output,       (ast_features)0, (rrd_features)0 },
     { "rrparcon",   nullptr,        rrparcon_output,    (ast_features)rrparcon_ast_unsupported, (rrd_features)rrparcon_rrd_unsupported },
     { "rrll",       nullptr,        rrll_output,        (ast_features)rrll_ast_unsupported, (rrd_features)rrll_rrd_unsupported     },
     { "rrta",       nullptr,        rrta_output,        (ast_features)rrta_ast_unsupported, (rrd_features)rrta_rrd_unsupported     },
     { "rrtext",     nullptr,        rrtext_output,      (ast_features)0, (rrd_features)0 },
     { "rrutf8",     nullptr,        rrutf8_output,      (ast_features)0, (rrd_features)0 },
+    { "sid",        nullptr,        sid_output,         (ast_features)sid_ast_unsupported, (rrd_features)0 },
     { "svg",        nullptr,        svg_output,         (ast_features)0, (rrd_features)0 },
-    { "html5",      nullptr,        html5_output,       (ast_features)0, (rrd_features)0 },
-    { "xhtml5",     nullptr,        xhtml5_output,      (ast_features)0, (rrd_features)0 },
-    { "json",       nullptr,        json_output,        json_ast_unsupported, (rrd_features)0 }
+    { "wsn",        wsn_input,      wsn_output,         (ast_features)wsn_ast_unsupported, (rrd_features)0 },
 };
 
 enum io_dir
@@ -164,14 +164,54 @@ static struct io* lang(enum io_dir dir, const char* s)
     assert(!"unreached");
 }
 
+void tester()
+{
+    struct io* in = nullptr;
+    struct io* out = nullptr;
+    parsing_error_queue errors = nullptr;
+    FILE* outfile = fopen("nul:", "w");
+    writer = new theout(outfile);
+
+    in = lang(IO_IN, "bnf");
+
+    assert(in->in != nullptr);
+
+    FILE* input = fopen("examples/bnf.bnf", "r");
+    ast_rule* grammar = in->in(kgt_fgetc, input, &errors);
+    fclose(input);
+
+    for (int i = 0; i < sizeof(io) / sizeof(*io); ++i)
+    {
+        out = lang(IO_OUT, io[i].name);
+
+        assert(out != nullptr);
+        assert(out->out != nullptr);
+
+        printf("out %02i %s\n", i+1, out->name);
+
+        if (i < 7)
+        {
+            out->out(grammar);
+        }
+    }
+
+    fclose(outfile);
+    ok_exit();
+}
+
 int main(int argc, char* argv[])
 {
+    tester();
+
     struct ast_rule* g;
     struct io* in = nullptr;
     struct io* out = nullptr;
     const char* filter;
     parsing_error_queue errors = nullptr;
     filter = nullptr;
+
+    in = lang(IO_IN, "bnf");
+    out = in;
 
     writer = new theout(stdout);
 
@@ -199,7 +239,6 @@ int main(int argc, char* argv[])
         }
 
         argc -= optind;
-        //argv += optind;
 
         if (argc > 0)
         {
@@ -207,28 +246,10 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (in == nullptr)
-    {
-        in = lang(IO_IN, "abnf");
-    }
-    if (out == nullptr)
-    {
-        out = lang(IO_OUT, "svg");
-    }
+    assert(in->in != nullptr);
+    assert(out->out != nullptr);
 
-    assert(io->in != nullptr);
-    assert(io->out != nullptr);
-
-    if (true)
-    {
-        FILE* input = fopen("examples/utf8.abnf", "rb");
-        g = in->in(kgt_fgetc, input, &errors);
-        fclose(input);
-    }
-    else
-    {
-        g = in->in(kgt_fgetc, stdin, &errors);
-    }
+    g = in->in(kgt_fgetc, stdin, &errors);
 
     {
         int error_count = 0;

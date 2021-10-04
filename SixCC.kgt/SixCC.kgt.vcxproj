@@ -158,17 +158,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\abnf\lexer.cpp" />
-    <ClCompile Include="src\abnf\output.cpp" />
+    <ClCompile Include="src\abnf\abnf-output.cpp" />
     <ClCompile Include="src\abnf\parser.cpp" />
     <ClCompile Include="src\ast.cpp" />
     <ClCompile Include="src\ast_binary.cpp" />
     <ClCompile Include="src\bitmap.cpp" />
-    <ClCompile Include="src\blab\output.cpp" />
+    <ClCompile Include="src\blab\blab-output.cpp" />
     <ClCompile Include="src\bnf\lexer.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="src\bnf\output.cpp">
+    <ClCompile Include="src\bnf\bnf-output.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
@@ -178,13 +178,13 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;FORM=bnf;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;FORM=bnf;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="src\dot\output.cpp" />
-    <ClCompile Include="src\ebnfhtml5\output.cpp" />
-    <ClCompile Include="src\html5\output.cpp" />
+    <ClCompile Include="src\dot\dot-output.cpp" />
+    <ClCompile Include="src\ebnfhtml5\ebnfhtml-output.cpp" />
+    <ClCompile Include="src\html5\html5-output.cpp" />
     <ClCompile Include="src\iso-ebnf\lexer.cpp" />
-    <ClCompile Include="src\iso-ebnf\output.cpp" />
+    <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp" />
     <ClCompile Include="src\iso-ebnf\parser.cpp" />
-    <ClCompile Include="src\json\output.cpp" />
+    <ClCompile Include="src\json\json-output.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\theout.cpp" />
     <ClCompile Include="src\parsing_error.cpp" />
@@ -222,7 +222,7 @@
     <ClCompile Include="src\rrtext\output.cpp" />
     <ClCompile Include="src\sid\output.cpp" />
     <ClCompile Include="src\strings.cpp" />
-    <ClCompile Include="src\svg\output.cpp">
+    <ClCompile Include="src\svg\svg-output.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>

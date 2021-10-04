@@ -25,58 +25,55 @@
 
 #include "io.h"
 
-WARN_UNUSED_RESULT
-static int output_term(const struct ast_term *term);
+WARN_UNUSED_RESULT static int output_term(const struct ast_term *term);
 
-int
-blab_escputc(FILE *f, char c)
+int blab_escputc(int c)
 {
-	assert(f != NULL);
+	switch (c)
+	{
+		case '\"': return writer->puts("\\\"");
+		case '\\': return writer->puts("\\\\");
+		case '\n': return writer->puts("\\n");
+		case '\r': return writer->puts("\\r");
+		case '\t': return writer->puts("\\t");
+		case '\'': return writer->puts("\\\'");
 
-	switch (c) {
-	case '\"': return fputs("\\\"", f);
-	case '\\': return fputs("\\\\", f);
-	case '\n': return fputs("\\n",  f);
-	case '\r': return fputs("\\r",  f);
-	case '\t': return fputs("\\t",  f);
-	case '\'': return fputs("\\\'", f);
-
-	default:
-		break;
+		default:
+			break;
 	}
 
-	if (!isprint((unsigned char) c)) {
-		return fprintf(f, "\\x%02x", (unsigned char) c);
+	if (!isprint((unsigned char)c))
+	{
+		return writer->printf("\\x%02x", (unsigned char)c);
 	}
 
-	return fprintf(f, "%c", c);
+	return writer->printf("%c", c);
 }
 
-WARN_UNUSED_RESULT
-static int
-output_group_alt(const struct ast_alt *alt)
+WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt)
 {
-	const struct ast_term *term;
+	const struct ast_term* term;
 
-	for (term = alt->terms; term != NULL; term = term->next) {
+	for (term = alt->terms; term != NULL; term = term->next)
+	{
 		if (!output_term(term))
 			return 0;
 	}
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_group(const struct ast_alt *group)
+WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 {
-	const struct ast_alt *alt;
+	const struct ast_alt* alt;
 
-	for (alt = group; alt != NULL; alt = alt->next) {
+	for (alt = group; alt != NULL; alt = alt->next)
+	{
 		if (!output_group_alt(alt))
 			return 0;
 
-		if (alt->next != NULL) {
-			printf(" |");
+		if (alt->next != NULL)
+		{
+			writer->printf(" |");
 		}
 	}
 	return 1;
@@ -86,15 +83,15 @@ static void output_repetition(unsigned int min, unsigned int max)
 {
 	if (min == 0 && max == 0)
 	{
-		printf("*");
+		writer->printf("*");
 	}
 	else if (min == 0 && max == 1)
 	{
-		printf("?");
+		writer->printf("?");
 	}
 	else if (min == 1 && max == 0)
 	{
-		printf("+");
+		writer->printf("+");
 	}
 	else if (min == 1 && max == 1)
 	{
@@ -102,15 +99,15 @@ static void output_repetition(unsigned int min, unsigned int max)
 	}
 	else if (min == max)
 	{
-		printf("{%u}", min);
+		writer->printf("{%u}", min);
 	}
 	else if (max == 0)
 	{
-		printf("{%u,}", min);
+		writer->printf("{%u,}", min);
 	}
 	else
 	{
-		printf("{%u,%u}", min, max);
+		writer->printf("{%u,%u}", min, max);
 	}
 }
 
@@ -151,23 +148,24 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (!a)
 	{
-		printf(" (");
+		writer->printf(" (");
 	}
 
 	switch (term->type)
 	{
 		case TYPE_EMPTY:
-			fputs(" \"\"", stdout);
+			writer->puts(" \"\"");
 			break;
 
 		case TYPE_RULE:
-			printf(" %s", term->u.rule->name);
+			writer->printf(" %s", term->u.rule->name);
 			break;
 
-		case TYPE_CI_LITERAL: {
+		case TYPE_CI_LITERAL:
+		{
 			size_t i;
 
-			putc(' ', stdout);
+			writer->putc(' ');
 
 			/* XXX: the tokenization here is wrong; this should be a single token */
 
@@ -180,39 +178,40 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 				if (uc == lc)
 				{
-					putc('[', stdout);
-					(void)blab_escputc(stdout, term->u.literal.p[i]);
-					putc(']', stdout);
+					writer->putc('[');
+					(void)blab_escputc(term->u.literal.p[i]);
+					writer->putc(']');
 					continue;
 				}
 
 				if (uc != lc)
 				{
-					putc('[', stdout);
-					(void)blab_escputc(stdout, lc);
-					(void)blab_escputc(stdout, uc);
-					putc(']', stdout);
+					writer->putc('[');
+					(void)blab_escputc(lc);
+					(void)blab_escputc(uc);
+					writer->putc(']');
 				}
 			}
 		}
-							break;
+		break;
 
-		case TYPE_CS_LITERAL: {
+		case TYPE_CS_LITERAL:
+		{
 			size_t i;
 
-			fputs(" \"", stdout);
+			writer->puts(" \"");
 
 			for (i = 0; i < term->u.literal.n; i++)
 			{
-				(void)blab_escputc(stdout, term->u.literal.p[i]);
+				(void)blab_escputc(term->u.literal.p[i]);
 			}
 
-			putc('\"', stdout);
+			writer->putc('\"');
 		}
-							break;
+		break;
 
 		case TYPE_TOKEN:
-			printf(" %s", term->u.token);
+			writer->printf(" %s", term->u.token);
 			break;
 
 		case TYPE_PROSE:
@@ -221,56 +220,58 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_GROUP:
 			if (!output_group(term->u.group))
+			{
 				return 0;
+			}
 			break;
 	}
 
 	if (!a)
 	{
-		printf(" )");
+		writer->printf(" )");
 	}
 
 	output_repetition(term->min, term->max);
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_alt(const struct ast_alt *alt)
+WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	const struct ast_term *term;
+	const struct ast_term* term;
 
 	assert(!alt->invisible);
 
-	for (term = alt->terms; term != NULL; term = term->next) {
+	for (term = alt->terms; term != NULL; term = term->next)
+	{
 		if (!output_term(term))
 			return 0;
 
-		if (term->next) {
-			putc(' ', stdout);
+		if (term->next)
+		{
+			writer->putc(' ');
 		}
 	}
 	return 1;
 }
 
-WARN_UNUSED_RESULT
-static int
-output_rule(const struct ast_rule *rule)
+WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
-	const struct ast_alt *alt;
+	const struct ast_alt* alt;
 
-	printf("%s =", rule->name);
-	for (alt = rule->alts; alt != NULL; alt = alt->next) {
+	writer->printf("%s =", rule->name);
+	for (alt = rule->alts; alt != NULL; alt = alt->next)
+	{
 		if (!output_alt(alt))
 			return 0;
 
-		if (alt->next != NULL) {
-			printf("\n\t|");
+		if (alt->next != NULL)
+		{
+			writer->printf("\n\t|");
 		}
 	}
 
-	printf("\n");
-	printf("\n");
+	writer->printf("\n");
+	writer->printf("\n");
 	return 1;
 }
 

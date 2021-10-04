@@ -909,10 +909,8 @@ ZL0:;
 		return lex_state->f(lex_state->opaque);
 	}
 
-	struct ast_rule *
-	bnf_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
+	struct ast_rule * bnf_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
 	{
-		printf("bnf-input\n");
 
 		struct act_state_s  act_state_s;
 		struct act_state_s *act_state;

@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include "compiler_specific.h"
+
 struct txt
 {
 	txt() : p(nullptr), n(0)
@@ -39,6 +41,8 @@ bool isalphastr(const struct txt* t);
 bool txt_any(const struct txt* t, bool (*predicate)(int c));
 int txtcasecmp(const struct txt *t1, const struct txt *t2);
 int txtcmp(const struct txt *t1, const struct txt *t2);
+
+WARN_UNUSED_RESULT int cat(const char* in, const char* indent);
 
 #include "theout.h"
 
