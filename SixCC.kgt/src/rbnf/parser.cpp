@@ -23,11 +23,11 @@
 	#include <errno.h>
 	#include <ctype.h>
 
-	#include "../parsing_error.h"
+	#include "../parsing-support.h"
 	#include "../txt.h"
 	#include "../ast.h"
 	#include "../xalloc.h"
-#include "../strings.h"
+	#include "../strings.h"
 
 	#define PASTE(a, b) a ## b
 	#define CAT(a, b)   PASTE(a, b)
@@ -38,8 +38,6 @@
 	#define LX_STATE  CAT(LX_PREFIX, _lx)
 	#define LX_NEXT   CAT(LX_PREFIX, _next)
 	#define LX_INIT   CAT(LX_PREFIX, _init)
-
-	#define FORM_INPUT CAT(FORM, _input)
 
 	/* XXX: get rid of this; use same %entry% for all grammars */
 	#define FORM_ENTRY CAT(prod_, FORM)
@@ -54,15 +52,8 @@
 
 	#include "io.h"
 
-	typedef char         map_char;
-	typedef const char * map_string;
-	typedef struct txt   map_txt;
-	typedef unsigned int map_count;
-
-	typedef struct ast_term * map_term;
-	typedef struct ast_alt * map_alt;
-
-	struct act_state_s {
+	struct act_state_s
+	{
 		enum LX_TOKEN lex_tok;
 		enum LX_TOKEN lex_tok_save;
 		int invisible;
@@ -92,8 +83,7 @@
 
 	extern int allow_undefined;
 
-	static const char *
-	prefix(int base)
+	static const char * prefix(int base)
 	{
 		switch (base) {
 		case 16: return "%x";
@@ -104,8 +94,7 @@
 		}
 	}
 
-	static int
-	string(const char *p, struct txt *t, int base)
+	static int string(const char *p, struct txt *t, int base)
 	{
 		char *q;
 
@@ -208,8 +197,7 @@
 		return 0;
 	}
 
-	static void
-	err(struct lex_state_s *lex_state, const char *fmt, ...)
+	static void err(struct lex_state_s *lex_state, const char *fmt, ...)
 	{
 		parsing_error error;
 		va_list ap;
@@ -226,20 +214,17 @@
 		parsing_error_queue_push(&(lex_state->errors), error);
 	}
 
-	static void
-	err_expected(struct lex_state_s *lex_state, const char *token)
+	static void err_expected(struct lex_state_s *lex_state, const char *token)
 	{
 		err(lex_state, "Syntax error: expected %s", token);
 	}
 
-	static void
-	err_unimplemented(struct lex_state_s *lex_state, const char *s)
+	static void err_unimplemented(struct lex_state_s *lex_state, const char *s)
 	{
 		err(lex_state, "Unimplemented: %s", s);
 	}
 
-	static const char *
-	pattern_buffer(struct lex_state_s *lex_state)
+	static const char * pattern_buffer(struct lex_state_s *lex_state)
 	{
 		const char *s;
 
@@ -957,8 +942,7 @@ ZL1:;
 		return lex_state->f(lex_state->opaque);
 	}
 
-	struct ast_rule *
-	FORM_INPUT(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
+	struct ast_rule * rbnf_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
 	{
 		struct act_state_s  act_state_s;
 		struct act_state_s *act_state;

@@ -13,51 +13,54 @@
 #include "node.h"
 #include "list.h"
 
-void
-rrd_pretty_collapse(int *changed, struct node **n)
+void rrd_pretty_collapse(int* changed, struct node** n)
 {
-	assert(n != NULL);
+    assert(n != nullptr);
 
-	if (*n == NULL) {
-		return;
-	}
+    if (*n == nullptr)
+    {
+        return;
+    }
 
-	switch ((*n)->type) {
-	case NODE_CI_LITERAL:
-	case NODE_CS_LITERAL:
-	case NODE_RULE:
-	case NODE_PROSE:
-	case NODE_LOOP:
-		break;
+    switch ((*n)->type)
+    {
+        case NODE_CI_LITERAL:
+        case NODE_CS_LITERAL:
+        case NODE_RULE:
+        case NODE_PROSE:
+        case NODE_LOOP:
+            break;
 
-	case NODE_ALT:
-		if (list_count((*n)->u.alt) == 1) {
-			struct node *dead;
+        case NODE_ALT:
+            if (list_count((*n)->u.alt) == 1)
+            {
+                struct node* dead;
 
-			dead = *n;
-			*n = (*n)->u.alt->node;
-			dead->u.alt = NULL;
-			node_free(dead);
+                dead = *n;
+                *n = (*n)->u.alt->node;
+                dead->u.alt = nullptr;
+                node_free(dead);
 
-			*changed = 1;
-		}
-		break;
+                *changed = 1;
+            }
+            break;
 
-	case NODE_ALT_SKIPPABLE:
-		break;
+        case NODE_ALT_SKIPPABLE:
+            break;
 
-	case NODE_SEQ:
-		if (list_count((*n)->u.seq) == 1) {
-			struct node *dead;
+        case NODE_SEQ:
+            if (list_count((*n)->u.seq) == 1)
+            {
+                struct node* dead;
 
-			dead = *n;
-			*n = (*n)->u.seq->node;
-			dead->u.seq = NULL;
-			node_free(dead);
+                dead = *n;
+                *n = (*n)->u.seq->node;
+                dead->u.seq = nullptr;
+                node_free(dead);
 
-			*changed = 1;
-		}
-		break;
-	}
+                *changed = 1;
+            }
+            break;
+    }
 }
 

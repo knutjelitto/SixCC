@@ -18,11 +18,10 @@
 #include "node.h"
 #include "list.h"
 
-static void
-ci_alt(int *changed, struct node *n)
+static void ci_alt(int* changed, struct node* n)
 {
-	struct list *list;
-	struct list *p;
+	struct list* list;
+	struct list* p;
 
 	/*
 	 * If every text node in an alt list is a single character,
@@ -31,7 +30,6 @@ ci_alt(int *changed, struct node *n)
 	 * The end effect is to produce an ellipsis for uppercase
 	 * and an ellipsis for lowercase.
 	 */
-
 	list = nullptr;
 
 	for (p = n->u.alt; p != nullptr; p = p->next)
@@ -45,7 +43,8 @@ ci_alt(int *changed, struct node *n)
 		{
 			case NODE_CI_LITERAL:
 			case NODE_CS_LITERAL:
-				if (p->node->u.literal.n != 1) {
+				if (p->node->u.literal.n != 1)
+				{
 					return;
 				}
 
@@ -106,7 +105,7 @@ ci_alt(int *changed, struct node *n)
 
 	/* append list */
 	{
-		struct list **tail;
+		struct list** tail;
 
 		/* TODO: centralise with list_tail() */
 		for (tail = &n->u.alt; *tail != nullptr; tail = &(*tail)->next)

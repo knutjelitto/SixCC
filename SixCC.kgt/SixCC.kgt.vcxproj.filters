@@ -147,7 +147,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\parsing_error.cpp">
+    <ClCompile Include="src\parsing-support.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\rewrite_ci.cpp">
@@ -290,7 +290,7 @@
     <ClInclude Include="getopt.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\parsing_error.h">
+    <ClInclude Include="src\parsing-support.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\rewrite.h">

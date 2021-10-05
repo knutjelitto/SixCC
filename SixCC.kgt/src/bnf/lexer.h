@@ -3,7 +3,8 @@
 #ifndef LX_H
 #define LX_H
 
-enum lx_bnf_token {
+enum lx_bnf_token
+{
 	TOK_EMPTY,
 	TOK_CS_LITERAL,
 	TOK_CHAR,
@@ -20,7 +21,8 @@ enum lx_bnf_token {
  * .byte is 0-based.
  * .line, .col, and .saved_col are 1-based; 0 means unknown.
  */
-struct lx_pos {
+struct lx_pos
+{
 	unsigned byte;
 	unsigned line;
 	unsigned col;
@@ -75,7 +77,8 @@ struct lx_bnf_lx
 #endif
 
 /* dynamic token buffer */
-struct lx_dynbuf {
+struct lx_dynbuf
+{
 	char *p;
 	size_t len;
 	char *a;

@@ -340,9 +340,7 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
     return 1;
 }
 
-WARN_UNUSED_RESULT
-int
-ebnf_html5_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int ebnf_html5_output(const struct ast_rule *grammar)
 {
     writer->printf("<!DOCTYPE html>\n");
     writer->printf("<html>\n");

@@ -11,13 +11,13 @@
 ';' .. "\n";
 
 # 2.1. Rule Naming
-# case insenstive!
+# case insensitive!
 /[a-z][\-a-z0-9]*/i -> $ident;
 
 # 2.1. says <xyz> is _typically_ prose, but could also be a rule name.
 # In this implementation, we do not support the rule form, and angled
 # brackets always mean prose.
-# case insenstive!
+# case insensitive!
 #"<" .. ">" -> $name {
 #	/[\-a-z0-9_]/i -> $char;
 #}

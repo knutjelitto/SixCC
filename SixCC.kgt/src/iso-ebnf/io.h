@@ -8,7 +8,7 @@
 #define KGT_ISO_EBNF_IO_H
 
 #include "../compiler_specific.h"
-#include "../parsing_error.h"
+#include "../parsing-support.h"
 struct ast_rule;
 
 /*

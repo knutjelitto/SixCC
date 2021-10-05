@@ -21,24 +21,24 @@
 #include "node.h"
 #include "list.h"
 
-static int
-transform_term(const struct ast_term *term, struct node **r);
+static int transform_term(const struct ast_term *term, struct node **r);
 
-static int
-transform_terms(const struct ast_alt *alt, struct node **r)
+static int transform_terms(const struct ast_alt* alt, struct node** r)
 {
-	struct list *list, **tail;
-	const struct ast_term *p;
+	struct list* list, ** tail;
+	const struct ast_term* p;
 
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	list = NULL;
+	list = nullptr;
 	tail = &list;
 
-	for (p = alt->terms; p != NULL; p = p->next) {
-		struct node *node;
+	for (p = alt->terms; p != nullptr; p = p->next)
+	{
+		struct node* node;
 
-		if (!transform_term(p, &node)) {
+		if (!transform_term(p, &node))
+		{
 			goto error;
 		}
 
@@ -57,21 +57,24 @@ error:
 	return 0;
 }
 
-static int
-transform_alts(const struct ast_alt *alts, struct node **r)
+static int transform_alts(const struct ast_alt* alts, struct node** r)
 {
-	struct list *list, **tail;
-	const struct ast_alt *p;
+	assert(r != nullptr);
+	assert(alts != nullptr);
 
-	assert(r != NULL);
+	struct list* list;
+	struct list** tail;
+	const struct ast_alt* p;
 
-	list = NULL;
+	list = nullptr;
 	tail = &list;
 
-	for (p = alts; p != NULL; p = p->next) {
-		struct node *node;
+	for (p = alts; p != nullptr; p = p->next)
+	{
+		struct node* node;
 
-		if (!transform_terms(p, &node)) {
+		if (!transform_terms(p, &node))
+		{
 			goto error;
 		}
 
@@ -90,58 +93,58 @@ error:
 	return 0;
 }
 
-static int
-single_term(const struct ast_term *term, struct node **r)
+static int single_term(const struct ast_term* term, struct node** r)
 {
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	switch (term->type) {
-	case TYPE_EMPTY:
-		*r = NULL;
-		return 1;
+	switch (term->type)
+	{
+		case TYPE_EMPTY:
+			*r = nullptr;
+			return 1;
 
-	case TYPE_RULE:
-		*r = node_create_name(term->invisible, term->u.rule->name);
-		return 1;
+		case TYPE_RULE:
+			*r = node_create_name(term->invisible, term->u.rule->name);
+			return 1;
 
-	case TYPE_CI_LITERAL:
-		/* can't create a sequence of alts; the tokenisation would be wrong */
-		*r = node_create_ci_literal(term->invisible, &term->u.literal);
-		return 1;
+		case TYPE_CI_LITERAL:
+			/* can't create a sequence of alts; the tokenisation would be wrong */
+			*r = node_create_ci_literal(term->invisible, &term->u.literal);
+			return 1;
 
-	case TYPE_CS_LITERAL:
-		*r = node_create_cs_literal(term->invisible, &term->u.literal);
-		return 1;
+		case TYPE_CS_LITERAL:
+			*r = node_create_cs_literal(term->invisible, &term->u.literal);
+			return 1;
 
-	case TYPE_TOKEN:
-		*r = node_create_name(term->invisible, term->u.token);
-		return 1;
+		case TYPE_TOKEN:
+			*r = node_create_name(term->invisible, term->u.token);
+			return 1;
 
-	case TYPE_PROSE:
-		*r = node_create_prose(term->invisible, term->u.prose);
-		return 1;
+		case TYPE_PROSE:
+			*r = node_create_prose(term->invisible, term->u.prose);
+			return 1;
 
-	case TYPE_GROUP:
-		return transform_alts(term->u.group, r);
+		case TYPE_GROUP:
+			return transform_alts(term->u.group, r);
 	}
 
 	__assume(false);
 	assert(!"unreached");
 }
 
-static int
-optional_term(const struct ast_term *term, struct node **r)
+static int optional_term(const struct ast_term* term, struct node** r)
 {
-	struct node *n;
-	struct list *list;
+	struct node* n;
+	struct list* list;
 
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	if (!single_term(term, &n)) {
+	if (!single_term(term, &n))
+	{
 		return 0;
 	}
 
-	list = NULL;
+	list = nullptr;
 
 	list_push_front(&list, n);
 
@@ -150,57 +153,60 @@ optional_term(const struct ast_term *term, struct node **r)
 	return 1;
 }
 
-static int
-oneormore_term(const struct ast_term *term, struct node **r)
+static int oneormore_term(const struct ast_term* term, struct node** r)
 {
-	struct node *n;
+	struct node* n;
 
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	if (!single_term(term, &n)) {
+	if (!single_term(term, &n))
+	{
 		return 0;
 	}
 
-	*r = node_create_loop(term->invisible, n, NULL);
+	*r = node_create_loop(term->invisible, n, nullptr);
 
 	return 1;
 }
 
-static int
-zeroormore_term(const struct ast_term *term, struct node **r)
+static int zeroormore_term(const struct ast_term* term, struct node** r)
 {
-	struct node *n;
+	struct node* n;
 
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	if (!single_term(term, &n)) {
+	if (!single_term(term, &n))
+	{
 		return 0;
 	}
 
-	*r = node_create_loop(term->invisible, NULL, n);
+	*r = node_create_loop(term->invisible, nullptr, n);
 
 	return 1;
 }
 
-static int
-finite_term(const struct ast_term *term, struct node **r)
+static int finite_term(const struct ast_term* term, struct node** r)
 {
-	struct node *loop;
-	struct node *n;
+	struct node* loop;
+	struct node* n;
 
-	assert(r != NULL);
+	assert(r != nullptr);
 	assert(term->max > 0);
 
-	if (!single_term(term, &n)) {
+	if (!single_term(term, &n))
+	{
 		return 0;
 	}
 
-	if (term->min > 0) {
-		loop = node_create_loop(term->invisible, n, NULL);
+	if (term->min > 0)
+	{
+		loop = node_create_loop(term->invisible, n, nullptr);
 		loop->u.loop.min = term->min - 1;
 		loop->u.loop.max = term->max - 1;
-	} else {
-		loop = node_create_loop(term->invisible, NULL, n);
+	}
+	else
+	{
+		loop = node_create_loop(term->invisible, nullptr, n);
 		loop->u.loop.min = term->min;
 		loop->u.loop.max = term->max;
 	}
@@ -210,58 +216,61 @@ finite_term(const struct ast_term *term, struct node **r)
 	return 1;
 }
 
-static int
-atleast_term(const struct ast_term *term, struct node **r)
+static int atleast_term(const struct ast_term* term, struct node** r)
 {
-	struct node *n;
+	struct node* n;
 
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	if (!single_term(term, &n)) {
+	if (!single_term(term, &n))
+	{
 		return 0;
 	}
 
-	*r = node_create_loop(term->invisible, NULL, n);
+	*r = node_create_loop(term->invisible, nullptr, n);
 
 	(*r)->u.loop.min = term->min;
 
 	return 1;
 }
 
-static int
-transform_term(const struct ast_term *term, struct node **r)
+static int transform_term(const struct ast_term* term, struct node** r)
 {
-	assert(r != NULL);
+	assert(r != nullptr);
 
-	if (term->min == 1 && term->max == 1) {
+	if (term->min == 1 && term->max == 1)
+	{
 		return single_term(term, r);
 	}
 
-	if (term->min == 0 && term->max == 1) {
+	if (term->min == 0 && term->max == 1)
+	{
 		return optional_term(term, r);
 	}
 
-	if (term->min == 1 && term->max == 0) {
+	if (term->min == 1 && term->max == 0)
+	{
 		return oneormore_term(term, r);
 	}
 
-	if (term->min == 0 && term->max == 0) {
+	if (term->min == 0 && term->max == 0)
+	{
 		return zeroormore_term(term, r);
 	}
 
-	if (term->max == 0) {
+	if (term->max == 0)
+	{
 		return atleast_term(term, r);
 	}
 
 	return finite_term(term, r);
 }
 
-int
-ast_to_rrd(const struct ast_rule *ast, struct node **r)
+int ast_to_rrd(const struct ast_rule *rule, struct node **r)
 {
-	assert(ast != NULL);
-	assert(r != NULL);
+	assert(rule != nullptr);
+	assert(r != nullptr);
 
-	return transform_alts(ast->alts, r);
+	return transform_alts(rule->alts, r);
 }
 

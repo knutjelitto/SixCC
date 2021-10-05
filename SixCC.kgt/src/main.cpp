@@ -17,7 +17,7 @@
 
 #include "txt.h"
 #include "ast.h"
-#include "parsing_error.h"
+#include "parsing-support.h"
 #include "rewrite.h"
 #include "xalloc.h"
 #include "rrd/node.h"
@@ -61,45 +61,62 @@ struct io
     const char* name;
     struct ast_rule* (*in)(int (*f)(void*), void*, parsing_error_queue*);
     int (*out)(const struct ast_rule*);
-    ast_features ast_unsupported;
+    enum ast_features ast_unsupported;
     enum rrd_features rrd_unsupported;
 };
 
-struct io io[] =
+struct inputable
 {
-    { "abnf",       abnf_input,     abnf_output,        (ast_features)0,                            (rrd_features)0 },
-    { "blab",       nullptr,        blab_output,        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
-    { "bnf",        bnf_input,      bnf_output,         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
-    { "dot",        nullptr,        dot_output,         (ast_features)0,                            (rrd_features)0 },
-    { "ebnfhtml5",  nullptr,        ebnf_html5_output,  (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "ebnfxhtml5", nullptr,        ebnf_xhtml5_output, (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "html5",      nullptr,        html5_output,       (ast_features)0,                            (rrd_features)0 },
-    { "xhtml5",     nullptr,        xhtml5_output,      (ast_features)0,                            (rrd_features)0 },
-    { "iso-ebnf",   iso_ebnf_input, iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
-    { "json",       nullptr,        json_output,        (ast_features)json_ast_unsupported,         (rrd_features)0 },
-    { "rbnf",       rbnf_input,     rbnf_output,        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
-    { "sid",        nullptr,        sid_output,         (ast_features)sid_ast_unsupported,          (rrd_features)0 },
-    { "svg",        nullptr,        svg_output,         (ast_features)0,                            (rrd_features)0 },
-    { "wsn",        wsn_input,      wsn_output,         (ast_features)wsn_ast_unsupported,          (rrd_features)0 },
-    { "rrdot",      nullptr,        rrdot_output,       (ast_features)0,                            (rrd_features)0 },
-    { "rrdump",     nullptr,        rrdump_output,      (ast_features)0,                            (rrd_features)0 },
-    { "rrll",       nullptr,        rrll_output,        (ast_features)rrll_ast_unsupported,         (rrd_features)rrll_rrd_unsupported     },
-    { "rrparcon",   nullptr,        rrparcon_output,    (ast_features)rrparcon_ast_unsupported,     (rrd_features)rrparcon_rrd_unsupported },
-    { "rrta",       nullptr,        rrta_output,        (ast_features)rrta_ast_unsupported,         (rrd_features)rrta_rrd_unsupported     },
-    { "rrtdump",    nullptr,        rrtdump_output,     (ast_features)0,                            (rrd_features)0 },
-    { "rrtext",     nullptr,        rrtext_output,      (ast_features)0,                            (rrd_features)0 },
-    { "rrutf8",     nullptr,        rrutf8_output,      (ast_features)0,                            (rrd_features)0 },
+    const char* name;
+    struct ast_rule* (*in)(int (*f)(void*), void*, parsing_error_queue*);
 };
 
-enum io_dir
+struct outputable
 {
-    IO_IN,
-    IO_OUT
+    const char* name;
+    int (*out)(const struct ast_rule*);
+    enum ast_features ast_unsupported;
+    enum rrd_features rrd_unsupported;
+};
+
+struct inputable inputable[] =
+{
+    { "abnf",       abnf_input     },
+    { "bnf",        bnf_input      },
+    { "iso-ebnf",   iso_ebnf_input },
+    { "rbnf",       rbnf_input     },
+    { "wsn",        wsn_input      },
+};
+
+struct outputable outputable[] =
+{
+    { "abnf",       abnf_output,        (ast_features)0,                            (rrd_features)0 },
+    { "blab",       blab_output,        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
+    { "bnf",        bnf_output,         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
+    { "dot",        dot_output,         (ast_features)0,                            (rrd_features)0 },
+    { "ebnfhtml5",  ebnf_html5_output,  (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "ebnfxhtml5", ebnf_xhtml5_output, (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "html5",      html5_output,       (ast_features)0,                            (rrd_features)0 },
+    { "xhtml5",     xhtml5_output,      (ast_features)0,                            (rrd_features)0 },
+    { "iso-ebnf",   iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
+    { "json",       json_output,        (ast_features)json_ast_unsupported,         (rrd_features)0 },
+    { "rbnf",       rbnf_output,        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
+    { "sid",        sid_output,         (ast_features)sid_ast_unsupported,          (rrd_features)0 },
+    { "svg",        svg_output,         (ast_features)0,                            (rrd_features)0 },
+    { "wsn",        wsn_output,         (ast_features)wsn_ast_unsupported,          (rrd_features)0 },
+    { "rrdot",      rrdot_output,       (ast_features)0,                            (rrd_features)0 },
+    { "rrdump",     rrdump_output,      (ast_features)0,                            (rrd_features)0 },
+    { "rrll",       rrll_output,        (ast_features)rrll_ast_unsupported,         (rrd_features)rrll_rrd_unsupported     },
+    { "rrparcon",   rrparcon_output,    (ast_features)rrparcon_ast_unsupported,     (rrd_features)rrparcon_rrd_unsupported },
+    { "rrta",       rrta_output,        (ast_features)rrta_ast_unsupported,         (rrd_features)rrta_rrd_unsupported     },
+    { "rrtdump",    rrtdump_output,     (ast_features)0,                            (rrd_features)0 },
+    { "rrtext",     rrtext_output,      (ast_features)0,                            (rrd_features)0 },
+    { "rrutf8",     rrutf8_output,      (ast_features)0,                            (rrd_features)0 },
 };
 
 static void xusage(void)
 {
-    printf("usage: kgt [-nu] [-w <whitelist>] [-l <language>] [ -e <language> ]\n");
+    printf("usage: kgt [-gnu] [-c <css-file>] [-w <whitelist>] [-l <language>] [ -e <language> ]\n");
     err_exit();
 }
 
@@ -114,43 +131,50 @@ static int kgt_fgetc(void *opaque)
     return fgetc(f);
 }
 
-static struct io* lang(enum io_dir dir, const char* s)
+static struct inputable* inlang(const char* s)
 {
-    size_t i;
+    int i;
 
-    for (i = 0; i < sizeof(io) / sizeof(*io); i++)
+    for (i = 0; i < sizeof(inputable) / sizeof(*inputable); i++)
     {
-        if (dir == IO_IN && io[i].in == nullptr)
+        if (0 == strcmp(s, inputable[i].name))
         {
-            continue;
-        }
-
-        if (dir == IO_OUT && io[i].out == nullptr)
-        {
-            continue;
-        }
-
-        if (0 == strcmp(s, io[i].name))
-        {
-            return &io[i];
+            return &inputable[i];
         }
     }
 
-    fprintf(stderr, "Unrecognised %s language \"%s\"; supported languages are:", dir == IO_IN ? "input" : "output", s);
+    fprintf(stderr, "Unrecognised input language \"%s\"; supported languages are:", s);
 
-    for (i = 0; i < sizeof(io) / sizeof(*io); i++)
+    for (i = 0; i < sizeof(inputable) / sizeof(*inputable); i++)
     {
-        if (dir == IO_IN && io[i].in == nullptr)
-        {
-            continue;
-        }
+        fprintf(stderr, " %s", inputable[i].name);
+    }
 
-        if (dir == IO_OUT && io[i].out == nullptr)
-        {
-            continue;
-        }
+    fprintf(stderr, "\n");
 
-        fprintf(stderr, " %s", io[i].name);
+    err_exit();
+
+    __assume(false);
+    assert(!"unreached");
+}
+
+static struct outputable* outlang(const char* s)
+{
+    size_t i;
+
+    for (i = 0; i < sizeof(outputable) / sizeof(*outputable); i++)
+    {
+        if (0 == strcmp(s, outputable[i].name))
+        {
+            return &outputable[i];
+        }
+    }
+
+    fprintf(stderr, "Unrecognised output language \"%s\"; supported languages are:", s);
+
+    for (i = 0; i < sizeof(outputable) / sizeof(*outputable); i++)
+    {
+        fprintf(stderr, " %s", outputable[i].name);
     }
 
     fprintf(stderr, "\n");
@@ -163,13 +187,13 @@ static struct io* lang(enum io_dir dir, const char* s)
 
 void tester()
 {
-    struct io* in = nullptr;
-    struct io* out = nullptr;
+    struct inputable* in = nullptr;
+    struct outputable* out = nullptr;
     parsing_error_queue errors = nullptr;
     FILE* outfile = fopen("nul:", "w");
     writer = new struct iwriter(outfile);
 
-    in = lang(IO_IN, "bnf");
+    in = inlang("bnf");
 
     assert(in->in != nullptr);
 
@@ -177,9 +201,9 @@ void tester()
     ast_rule* grammar = in->in(kgt_fgetc, input, &errors);
     fclose(input);
 
-    for (int i = 0; i < sizeof(io) / sizeof(*io); ++i)
+    for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
     {
-        out = lang(IO_OUT, io[i].name);
+        out = &outputable[i];
 
         assert(out != nullptr);
         assert(out->out != nullptr);
@@ -204,15 +228,15 @@ int main(int argc, char* argv[])
 {
     tester();
 
-    struct ast_rule* g;
-    struct io* in = nullptr;
-    struct io* out = nullptr;
+    struct ast_rule* grammar;
+    struct inputable* in = nullptr;
+    struct outputable* out = nullptr;
     const char* filter;
     parsing_error_queue errors = nullptr;
     filter = nullptr;
 
-    in = lang(IO_IN, "bnf");
-    out = in;
+    in = inlang("bnf");
+    out = outlang("bnf");
 
     writer = new struct iwriter(stdout);
 
@@ -223,8 +247,8 @@ int main(int argc, char* argv[])
         {
             switch (c)
             {
-                case 'l': in = lang(IO_IN, optarg); break;
-                case 'e': out = lang(IO_OUT, optarg); break;
+                case 'l': in = inlang(optarg); break;
+                case 'e': out = outlang(optarg); break;
 
                 case 'c': css_file = optarg; break;
                 case 'w': filter = optarg; break; /* comma-separated whitelist of rule names */
@@ -250,7 +274,7 @@ int main(int argc, char* argv[])
     assert(in->in != nullptr);
     assert(out->out != nullptr);
 
-    g = in->in(kgt_fgetc, stdin, &errors);
+    grammar = in->in(kgt_fgetc, stdin, &errors);
 
     {
         int error_count = 0;
@@ -281,17 +305,17 @@ int main(int argc, char* argv[])
             switch (v & -v)
             {
                 case FEATURE_AST_CI_LITERAL:
-                    if (!rewrite_ci_literals(g))
+                    if (!rewrite_ci_literals(grammar))
                     {
                         err_exit();
                     }
                     break;
                 case FEATURE_AST_INVISIBLE:
-                    rewrite_invisible(g);
+                    rewrite_invisible(grammar);
                     break;
 
                 case FEATURE_AST_BINARY:
-                    if (ast_maybe_binary(g))
+                    if (ast_maybe_binary(grammar))
                     {
                         fprintf(stderr, "Binary strings not supported for this output language\n");
                     }
@@ -308,7 +332,7 @@ int main(int argc, char* argv[])
         nuw = nullptr;
         tail = &nuw;
 
-        for (p = g; p != nullptr; p = next)
+        for (p = grammar; p != nullptr; p = next)
         {
             char* tmp, * save;
             const char* t;
@@ -332,10 +356,10 @@ int main(int argc, char* argv[])
             free(tmp);
         }
 
-        g = nuw;
+        grammar = nuw;
     }
 
-    if (!out->out(g))
+    if (!out->out(grammar))
     {
         err_exit();
     }

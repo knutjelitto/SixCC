@@ -8,7 +8,7 @@
 #define KGT_WSN_IO_H
 
 #include "../compiler_specific.h"
-#include "../parsing_error.h"
+#include "../parsing-support.h"
 struct ast_rule;
 
 #define wsn_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)

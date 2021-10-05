@@ -46,41 +46,20 @@ struct node {
 	} u;
 };
 
-void
-node_free(struct node *);
+struct node* node_create_ci_literal(int invisible, const struct txt* literal);
+struct node* node_create_cs_literal(int invisible, const struct txt* literal);
+struct node* node_create_name(int invisible, const char* name);
+struct node* node_create_prose(int invisible, const char* name);
+struct node* node_create_alt(int invisible, struct list* alt);
+struct node* node_create_alt_skippable(int invisible, struct list* alt);
+struct node* node_create_seq(int invisible, struct list* seq);
+struct node* node_create_loop(int invisible, struct node* forward, struct node* backward);
 
-struct node *
-node_create_ci_literal(int invisible, const struct txt *literal);
+void node_make_seq(int invisible, struct node **n);
+int node_compare(const struct node *a, const struct node *b);
+void loop_flip(struct node *n);
 
-struct node *
-node_create_cs_literal(int invisible, const struct txt *literal);
-
-struct node *
-node_create_name(int invisible, const char *name);
-
-struct node *
-node_create_prose(int invisible, const char *name);
-
-struct node *
-node_create_alt(int invisible, struct list *alt);
-
-struct node *
-node_create_alt_skippable(int invisible, struct list *alt);
-
-struct node *
-node_create_seq(int invisible, struct list *seq);
-
-struct node *
-node_create_loop(int invisible, struct node *forward, struct node *backward);
-
-void
-node_make_seq(int invisible, struct node **n);
-
-int
-node_compare(const struct node *a, const struct node *b);
-
-void
-loop_flip(struct node *n);
+void node_free(struct node*);
 
 #endif
 

@@ -23,11 +23,11 @@
     #include <errno.h>
     #include <ctype.h>
 
-    #include "../parsing_error.h"
+    #include "../parsing-support.h"
     #include "../txt.h"
     #include "../ast.h"
     #include "../xalloc.h"
-#include "../strings.h"
+    #include "../strings.h"
 
     #ifndef FORM
     #define FORM iso_ebnf
@@ -44,8 +44,6 @@
     #define LX_NEXT   CAT(LX_PREFIX, _next)
     #define LX_INIT   CAT(LX_PREFIX, _init)
 
-    #define FORM_INPUT CAT(FORM, _input)
-
     /* XXX: get rid of this; use same %entry% for all grammars */
     #define FORM_ENTRY CAT(prod_, FORM)
 
@@ -58,14 +56,6 @@
     #include "lexer.h"
 
     #include "io.h"
-
-    typedef char         map_char;
-    typedef const char * map_string;
-    typedef struct txt   map_txt;
-    typedef unsigned int map_count;
-
-    typedef struct ast_term * map_term;
-    typedef struct ast_alt * map_alt;
 
     struct act_state_s
     {
@@ -115,9 +105,9 @@
     {
         char *q;
 
-        assert(p != NULL);
-        assert(t != NULL);
-        assert(t->p != NULL);
+        assert(p != nullptr);
+        assert(t != nullptr);
+        assert(t->p != nullptr);
         assert(base > 0);
 
         {
@@ -169,9 +159,9 @@
         unsigned long m, n;
         char *e;
 
-        assert(p != NULL);
-        assert(a != NULL);
-        assert(b != NULL);
+        assert(p != nullptr);
+        assert(a != nullptr);
+        assert(b != nullptr);
         assert(base > 0);
 
         {
@@ -216,10 +206,10 @@
 
     static void err(struct lex_state_s *lex_state, const char *fmt, ...)
     {
-        parsing_error error;
-        va_list ap;
+        assert(lex_state != nullptr);
 
-        assert(lex_state != NULL);
+        parsing_error error{};
+        va_list ap{};
 
         error.line = lex_state->lx.start.line;
         error.col  = lex_state->lx.start.col;
@@ -231,14 +221,12 @@
         parsing_error_queue_push(&(lex_state->errors), error);
     }
 
-    static void
-    err_expected(struct lex_state_s *lex_state, const char *token)
+    static void err_expected(struct lex_state_s *lex_state, const char *token)
     {
         err(lex_state, "Syntax error: expected %s", token);
     }
 
-    static void
-    err_unimplemented(struct lex_state_s *lex_state, const char *s)
+    static void err_unimplemented(struct lex_state_s *lex_state, const char *s)
     {
         err(lex_state, "Unimplemented: %s", s);
     }
@@ -248,7 +236,7 @@
     {
         const char *s;
 
-        assert(lex_state != NULL);
+        assert(lex_state != nullptr);
 
         /* TODO */
         *lex_state->p++ = '\0';
@@ -482,7 +470,7 @@ ZL1:;
         {
 //#line 674 "src/parser.act"
 
-        (ZIl) = NULL;
+        (ZIl) = nullptr;
     
 //#line 516 "src/iso-ebnf/parser.c"
         }
@@ -677,8 +665,8 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
                  * at which to point. This saves passing the grammar around, which
                  * keeps the rule-building productions simpler.
                  */
-                r = ast_make_rule((ZIs), NULL);
-                if (r == NULL)
+                r = ast_make_rule((ZIs), nullptr);
+                if (r == nullptr)
                 {
                     perror("ast_make_rule");
                     goto ZL1;
@@ -854,7 +842,7 @@ prod_repeatable_Hfactor(lex_state lex_state, act_state act_state, map_term *ZOt)
             {
 //#line 363 "src/parser.act"
 
-        ZIn = strtoul(lex_state->buf.a, NULL, 10);
+        ZIn = strtoul(lex_state->buf.a, nullptr, 10);
         /* TODO: range check */
     
 //#line 894 "src/iso-ebnf/parser.c"
@@ -941,7 +929,7 @@ prod_95(lex_state lex_state, act_state act_state, map_rule *ZIl)
             return;
         }
 
-        assert((*ZIl)->next == NULL);
+        assert((*ZIl)->next == nullptr);
         (*ZIl)->next = (ZIr);
     
 //#line 981 "src/iso-ebnf/parser.c"
@@ -1015,7 +1003,7 @@ prod_96(lex_state lex_state, act_state act_state, map_term *ZIt, map_alt *ZOl)
             {
 //#line 684 "src/parser.act"
 
-        assert((ZIl)->next == NULL);
+        assert((ZIl)->next == nullptr);
         (ZIl)->next = (ZIa);
     
 //#line 1055 "src/iso-ebnf/parser.c"
@@ -1101,7 +1089,7 @@ prod_98(lex_state lex_state, act_state act_state, map_term *ZIl)
             {
 //#line 679 "src/parser.act"
 
-        assert((*ZIl)->next == NULL);
+        assert((*ZIl)->next == nullptr);
         (*ZIl)->next = (ZIt);
     
 //#line 1141 "src/iso-ebnf/parser.c"
@@ -1239,63 +1227,63 @@ ZL0:;
     {
         const struct lex_state_s *lex_state;
 
-        assert(lx != NULL);
-        assert(lx->getc_opaque != NULL);
+        assert(lx != nullptr);
+        assert(lx->getc_opaque != nullptr);
 
         lex_state = (lex_state_s*)(lx->getc_opaque);
 
-        assert(lex_state->f != NULL);
+        assert(lex_state->f != nullptr);
 
         return lex_state->f(lex_state->opaque);
     }
 
-    struct ast_rule * iso_ebnf_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
+    struct ast_rule* iso_ebnf_input(int (*f)(void* opaque), void* opaque, parsing_error_queue* errors)
     {
         struct act_state_s  act_state_s;
-        struct act_state_s *act_state;
+        struct act_state_s* act_state;
         struct lex_state_s  lex_state_s;
-        struct lex_state_s *lex_state;
+        struct lex_state_s* lex_state;
 
-        struct LX_STATE *lx;
-        struct ast_rule *g;
+        struct LX_STATE* lx;
+        struct ast_rule* g;
 
         /* for dialects which don't use these */
-        (void) string;
-        (void) range;
-        (void) ltrim;
-        (void) rtrim;
-        (void) trim;
-        (void) err_unimplemented;
+        (void)string;
+        (void)range;
+        (void)ltrim;
+        (void)rtrim;
+        (void)trim;
+        (void)err_unimplemented;
 
-        assert(f != NULL);
+        assert(f != nullptr);
 
-        g = NULL;
+        g = nullptr;
 
-        lex_state    = &lex_state_s;
+        lex_state = &lex_state_s;
         lex_state->p = lex_state->a;
-        lex_state->errors = NULL;
+        lex_state->errors = nullptr;
 
         lx = &lex_state->lx;
 
         LX_INIT(lx);
 
-        lx->lgetc       = lgetc;
+        lx->lgetc = lgetc;
         lx->getc_opaque = lex_state;
 
-        lex_state->f       = f;
-        lex_state->opaque  = opaque;
+        lex_state->f = f;
+        lex_state->opaque = opaque;
 
-        lex_state->buf.a   = NULL;
+        lex_state->buf.a = nullptr;
         lex_state->buf.len = 0;
 
         /* XXX: unneccessary since we're lexing from a string */
         lx->buf_opaque = &lex_state->buf;
-        lx->push       = CAT(LX_PREFIX, _dynpush);
-        lx->clear      = CAT(LX_PREFIX, _dynclear);
-        lx->free       = CAT(LX_PREFIX, _dynfree);
+        lx->push = CAT(LX_PREFIX, _dynpush);
+        lx->clear = CAT(LX_PREFIX, _dynclear);
+        lx->free = CAT(LX_PREFIX, _dynfree);
 
         /* XXX */
-        lx->free = NULL;
+        lx->free = nullptr;
 
         /* This is a workaround for ADVANCE_LEXER assuming a pointer */
         act_state = &act_state_s;
@@ -1309,39 +1297,45 @@ ZL0:;
 
         /* substitute placeholder rules for the real thing */
         {
-            const struct ast_rule *p;
-            const struct ast_alt *q;
-            struct ast_term *t;
-            struct ast_rule *r;
+            const struct ast_rule* p;
+            const struct ast_alt* q;
+            struct ast_term* t;
+            struct ast_rule* r;
 
-            for (p = g; p != NULL; p = p->next) {
-                for (q = p->alts; q != NULL; q = q->next) {
-                    for (t = q->terms; t != NULL; t = t->next) {
-                        if (t->type != TYPE_RULE) {
+            for (p = g; p != nullptr; p = p->next)
+            {
+                for (q = p->alts; q != nullptr; q = q->next)
+                {
+                    for (t = q->terms; t != nullptr; t = t->next)
+                    {
+                        if (t->type != TYPE_RULE)
+                        {
                             continue;
                         }
 
                         r = ast_find_rule(g, t->u.rule->name);
-                        if (r != NULL) {
-                            ast_free_rule((ast_rule *) t->u.rule);
+                        if (r != nullptr)
+                        {
+                            ast_free_rule((ast_rule*)t->u.rule);
                             t->u.rule = r;
                             continue;
                         }
 
-                        if (!allow_undefined) {
+                        if (!allow_undefined)
+                        {
                             err(lex_state, "production rule <%s> not defined", t->u.rule->name);
                             /* XXX: would leak the ast_rule here */
                             continue;
                         }
 
                         {
-                            const char *token;
+                            const char* token;
 
                             token = t->u.rule->name;
 
-                            ast_free_rule((struct ast_rule *) t->u.rule);
+                            ast_free_rule((struct ast_rule*)t->u.rule);
 
-                            t->type    = TYPE_TOKEN;
+                            t->type = TYPE_TOKEN;
                             t->u.token = token;
                         }
                     }

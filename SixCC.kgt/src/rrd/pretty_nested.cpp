@@ -14,20 +14,24 @@
 #include "node.h"
 #include "list.h"
 
-static void
-nested_alt(int *changed, struct node *n)
+static void nested_alt(int* changed, struct node* n)
 {
-	struct list **p;
-	struct list **next;
+	assert(n->type == NODE_ALT || n->type == NODE_ALT_SKIPPABLE);
+	
+	struct list** p;
+	struct list** next;
 
 	/* fold nested alts into this one */
-	for (p = &n->u.alt; *p != NULL; p = next) {
-		struct list **head, **tail;
-		struct list *dead;
+	for (p = &n->u.alt; *p != nullptr; p = next)
+	{
+		struct list** head;
+		struct list** tail;
+		struct list* dead;
 
 		next = &(*p)->next;
 
-		if ((*p)->node == NULL || ((*p)->node->type != NODE_ALT && (*p)->node->type != NODE_ALT_SKIPPABLE)) {
+		if ((*p)->node == nullptr || ((*p)->node->type != NODE_ALT && (*p)->node->type != NODE_ALT_SKIPPABLE))
+		{
 			continue;
 		}
 
@@ -36,14 +40,14 @@ nested_alt(int *changed, struct node *n)
 		/* incoming inner list */
 		head = &(*p)->node->u.alt;
 
-		for (tail = head; *tail != NULL; tail = &(*tail)->next)
+		for (tail = head; *tail != nullptr; tail = &(*tail)->next)
 			;
 
 		*tail = (*p)->next;
-		(*p)->next = NULL;
+		(*p)->next = nullptr;
 
 		*p = *head;
-		*head = NULL;
+		*head = nullptr;
 
 		next = p;
 
@@ -54,20 +58,21 @@ nested_alt(int *changed, struct node *n)
 	}
 }
 
-static void
-nested_seq(int *changed, struct node *n)
+static void nested_seq(int* changed, struct node* n)
 {
-	struct list **p;
-	struct list **next;
+	struct list** p;
+	struct list** next;
 
 	/* fold nested seqs into this one */
-	for (p = &n->u.alt; *p != NULL; p = next) {
-		struct list **head, **tail;
-		struct list *dead;
+	for (p = &n->u.alt; *p != nullptr; p = next)
+	{
+		struct list** head, ** tail;
+		struct list* dead;
 
 		next = &(*p)->next;
 
-		if ((*p)->node == NULL || (*p)->node->type != NODE_SEQ) {
+		if ((*p)->node == nullptr || (*p)->node->type != NODE_SEQ)
+		{
 			continue;
 		}
 
@@ -76,14 +81,14 @@ nested_seq(int *changed, struct node *n)
 		/* incoming inner list */
 		head = &(*p)->node->u.alt;
 
-		for (tail = head; *tail != NULL; tail = &(*tail)->next)
+		for (tail = head; *tail != nullptr; tail = &(*tail)->next)
 			;
 
 		*tail = (*p)->next;
-		(*p)->next = NULL;
+		(*p)->next = nullptr;
 
 		*p = *head;
-		*head = NULL;
+		*head = nullptr;
 
 		next = p;
 
@@ -94,31 +99,32 @@ nested_seq(int *changed, struct node *n)
 	}
 }
 
-void
-rrd_pretty_nested(int *changed, struct node **n)
+void rrd_pretty_nested(int* changed, struct node** n)
 {
-	assert(n != NULL);
+	assert(n != nullptr);
 
-	if (*n == NULL) {
+	if (*n == nullptr)
+	{
 		return;
 	}
 
-	switch ((*n)->type) {
-	case NODE_ALT:
-	case NODE_ALT_SKIPPABLE:
-		nested_alt(changed, *n);
-		break;
+	switch ((*n)->type)
+	{
+		case NODE_ALT:
+		case NODE_ALT_SKIPPABLE:
+			nested_alt(changed, *n);
+			break;
 
-	case NODE_SEQ:
-		nested_seq(changed, *n);
-		break;
+		case NODE_SEQ:
+			nested_seq(changed, *n);
+			break;
 
-	case NODE_CI_LITERAL:
-	case NODE_CS_LITERAL:
-	case NODE_RULE:
-	case NODE_PROSE:
-	case NODE_LOOP:
-		break;
+		case NODE_CI_LITERAL:
+		case NODE_CS_LITERAL:
+		case NODE_RULE:
+		case NODE_PROSE:
+		case NODE_LOOP:
+			break;
 	}
 }
 

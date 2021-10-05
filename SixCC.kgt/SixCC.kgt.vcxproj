@@ -187,7 +187,7 @@
     <ClCompile Include="src\json\json-output.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\iwriter.cpp" />
-    <ClCompile Include="src\parsing_error.cpp" />
+    <ClCompile Include="src\parsing-support.cpp" />
     <ClCompile Include="src\rbnf\lexer.cpp" />
     <ClCompile Include="src\rbnf\rbnf-output.cpp" />
     <ClCompile Include="src\rbnf\parser.cpp" />
@@ -256,7 +256,7 @@
     <ClInclude Include="src\iso-ebnf\parser.h" />
     <ClInclude Include="src\json\io.h" />
     <ClInclude Include="src\iwriter.h" />
-    <ClInclude Include="src\parsing_error.h" />
+    <ClInclude Include="src\parsing-support.h" />
     <ClInclude Include="src\rbnf\io.h" />
     <ClInclude Include="src\rbnf\lexer.h" />
     <ClInclude Include="src\rbnf\parser.h" />

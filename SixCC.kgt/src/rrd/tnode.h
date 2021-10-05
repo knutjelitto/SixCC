@@ -41,7 +41,8 @@ enum tline {
  *       |              |
  *       G---- node ----H
  */
-struct tnode_vlist {
+struct tnode_vlist
+{
 	struct tnode **a;
 	enum tline *b;
 	size_t n;
@@ -53,7 +54,8 @@ struct tnode_vlist {
  *
  *     -- node -- node -- node --
  */
-struct tnode_hlist {
+struct tnode_hlist
+{
 	struct tnode **a;
 	size_t n;
 };
@@ -81,12 +83,14 @@ struct tnode
 	unsigned a; /* ascender  - height including and above the line  */
 	unsigned d; /* descender - depth below the line */
 
-	union {
+	union
+	{
 		struct txt literal; /* TODO: point to ast_literal instead */
 		const char *name;   /* TODO: point to ast_rule instead */
 		const char *prose;
 
-		struct {
+		struct
+		{
 			const char *s;
 			const struct tnode *tnode;
 		} comment;
@@ -96,7 +100,8 @@ struct tnode
 	} u;
 };
 
-struct dim {
+struct dim
+{
 	void (*literal_txt)(const struct txt *t, unsigned *w, unsigned *a, unsigned *d);
 	void (*rule_string)(const char *s, unsigned *w, unsigned *a, unsigned *d);
 	unsigned literal_padding;
@@ -107,11 +112,9 @@ struct dim {
 	unsigned ellipsis_depth;
 };
 
-void
-tnode_free(struct tnode *n);
+void tnode_free(struct tnode *n);
 
-struct tnode *
-rrd_to_tnode(const struct node *node, const struct dim *dim);
+struct tnode *rrd_to_tnode(const struct node *node, const struct dim *dim);
 
 #endif
 

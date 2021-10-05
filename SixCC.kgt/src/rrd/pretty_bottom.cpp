@@ -14,41 +14,47 @@
 #include "node.h"
 #include "list.h"
 
-static int
-bottom_loop(struct node **np)
+static int bottom_loop(struct node** np)
 {
-    struct node *n;
+    assert(np != nullptr);
+    assert(*np != nullptr);
 
-    assert(np != NULL);
-    assert(*np != NULL);
+    struct node* n;
 
     n = *np;
 
-    if (n->u.loop.forward != NULL) {
+    if (n->u.loop.forward != nullptr)
+    {
         return 0;
     }
 
-    if (n->u.loop.backward == NULL || n->u.loop.backward->type == NODE_LOOP) {
+    if (n->u.loop.backward == nullptr || n->u.loop.backward->type == NODE_LOOP)
+    {
         return 0;
     }
 
-    if (n->u.loop.backward->type == NODE_CI_LITERAL || n->u.loop.backward->type == NODE_CS_LITERAL || n->u.loop.backward->type == NODE_RULE) {
+    if (n->u.loop.backward->type == NODE_CI_LITERAL || n->u.loop.backward->type == NODE_CS_LITERAL || n->u.loop.backward->type == NODE_RULE)
+    {
         return 0;
     }
 
-    if (n->u.loop.backward->type == NODE_ALT || n->u.loop.backward->type == NODE_ALT_SKIPPABLE) {
-        struct list *p;
+    if (n->u.loop.backward->type == NODE_ALT || n->u.loop.backward->type == NODE_ALT_SKIPPABLE)
+    {
+        struct list* p;
         int c;
 
         c = 0;
 
-        for (p = n->u.loop.backward->u.alt; p != NULL; p = p->next) {
-            if (p->node->type == NODE_ALT || p->node->type == NODE_ALT_SKIPPABLE || p->node->type == NODE_SEQ || p->node->type == NODE_LOOP) {
+        for (p = n->u.loop.backward->u.alt; p != nullptr; p = p->next)
+        {
+            if (p->node->type == NODE_ALT || p->node->type == NODE_ALT_SKIPPABLE || p->node->type == NODE_SEQ || p->node->type == NODE_LOOP)
+            {
                 c = 1;
             }
         }
 
-        if (!c) {
+        if (!c)
+        {
             return 0;
         }
     }
@@ -57,12 +63,10 @@ bottom_loop(struct node **np)
 
     /* short-circuit */
     {
-        struct list *nuw;
-
-        nuw  = NULL;
+        struct list* nuw = nullptr;
 
         list_push_front(&nuw, n);
-        list_push_front(&nuw, NULL);
+        list_push_front(&nuw, nullptr);
 
         *np = node_create_alt(n->invisible, nuw);
     }
@@ -76,30 +80,32 @@ bottom_loop(struct node **np)
  * this results in a bulkier diagram, but avoids reversing the contents of
  * the sequence.
  */
-void
-rrd_pretty_bottom(int *changed, struct node **n)
+void rrd_pretty_bottom(int* changed, struct node** n)
 {
-    assert(n != NULL);
+    assert(n != nullptr);
 
-    if (*n == NULL) {
+    if (*n == nullptr)
+    {
         return;
     }
 
-    switch ((*n)->type) {
-    case NODE_LOOP:
-        if (bottom_loop(n)) {
-            *changed = 1;
-        }
-        break;
+    switch ((*n)->type)
+    {
+        case NODE_LOOP:
+            if (bottom_loop(n))
+            {
+                *changed = 1;
+            }
+            break;
 
-    case NODE_CI_LITERAL:
-    case NODE_CS_LITERAL:
-    case NODE_RULE:
-    case NODE_PROSE:
-    case NODE_ALT:
-    case NODE_ALT_SKIPPABLE:
-    case NODE_SEQ:
-        break;
+        case NODE_CI_LITERAL:
+        case NODE_CS_LITERAL:
+        case NODE_RULE:
+        case NODE_PROSE:
+        case NODE_ALT:
+        case NODE_ALT_SKIPPABLE:
+        case NODE_SEQ:
+            break;
     }
 }
 

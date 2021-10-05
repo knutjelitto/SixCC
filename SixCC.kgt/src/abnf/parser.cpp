@@ -23,11 +23,11 @@
     #include <errno.h>
     #include <ctype.h>
 
-    #include "../parsing_error.h"
+    #include "../parsing-support.h"
     #include "../txt.h"
     #include "../ast.h"
     #include "../xalloc.h"
-#include "../strings.h"
+    #include "../strings.h"
 
     #define PASTE(a, b) a ## b
     #define CAT(a, b)   PASTE(a, b)
@@ -38,8 +38,6 @@
     #define LX_STATE  CAT(LX_PREFIX, _lx)
     #define LX_NEXT   CAT(LX_PREFIX, _next)
     #define LX_INIT   CAT(LX_PREFIX, _init)
-
-    #define FORM_INPUT CAT(FORM, _input)
 
     /* XXX: get rid of this; use same %entry% for all grammars */
     #define FORM_ENTRY CAT(prod_, FORM)
@@ -52,14 +50,6 @@
     #include "parser.h"
     #include "lexer.h"
     #include "io.h"
-
-    typedef char         map_char;
-    typedef const char * map_string;
-    typedef struct txt   map_txt;
-    typedef unsigned int map_count;
-
-    typedef struct ast_term * map_term;
-    typedef struct ast_alt * map_alt;
 
     struct act_state_s
     {
@@ -1592,30 +1582,29 @@ ZL0:;
         return lex_state->f(lex_state->opaque);
     }
 
-    struct ast_rule *
-    FORM_INPUT(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
+    struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_error_queue* errors)
     {
         struct act_state_s  act_state_s;
-        struct act_state_s *act_state;
+        struct act_state_s* act_state;
         struct lex_state_s  lex_state_s;
-        struct lex_state_s *lex_state;
+        struct lex_state_s* lex_state;
 
-        struct LX_STATE *lx;
-        struct ast_rule *g;
+        struct LX_STATE* lx;
+        struct ast_rule* g;
 
         /* for dialects which don't use these */
-        (void) string;
-        (void) range;
-        (void) ltrim;
-        (void) rtrim;
-        (void) trim;
-        (void) err_unimplemented;
+        (void)string;
+        (void)range;
+        (void)ltrim;
+        (void)rtrim;
+        (void)trim;
+        (void)err_unimplemented;
 
         assert(f != NULL);
 
         g = NULL;
 
-        lex_state    = &lex_state_s;
+        lex_state = &lex_state_s;
         lex_state->p = lex_state->a;
         lex_state->errors = NULL;
 
@@ -1623,20 +1612,20 @@ ZL0:;
 
         LX_INIT(lx);
 
-        lx->lgetc       = lgetc;
+        lx->lgetc = lgetc;
         lx->getc_opaque = lex_state;
 
-        lex_state->f       = f;
-        lex_state->opaque  = opaque;
+        lex_state->f = f;
+        lex_state->opaque = opaque;
 
-        lex_state->buf.a   = NULL;
+        lex_state->buf.a = NULL;
         lex_state->buf.len = 0;
 
         /* XXX: unneccessary since we're lexing from a string */
         lx->buf_opaque = &lex_state->buf;
-        lx->push       = CAT(LX_PREFIX, _dynpush);
-        lx->clear      = CAT(LX_PREFIX, _dynclear);
-        lx->free       = CAT(LX_PREFIX, _dynfree);
+        lx->push = CAT(LX_PREFIX, _dynpush);
+        lx->clear = CAT(LX_PREFIX, _dynclear);
+        lx->free = CAT(LX_PREFIX, _dynfree);
 
         /* XXX */
         lx->free = NULL;
@@ -1653,40 +1642,46 @@ ZL0:;
 
         /* substitute placeholder rules for the real thing */
         {
-            const struct ast_rule *p;
-            const struct ast_alt *q;
-            struct ast_term *t;
-            struct ast_rule *r;
+            const struct ast_rule* p;
+            const struct ast_alt* q;
+            struct ast_term* t;
+            struct ast_rule* r;
 
-            for (p = g; p != NULL; p = p->next) {
-                for (q = p->alts; q != NULL; q = q->next) {
-                    for (t = q->terms; t != NULL; t = t->next) {
-                        if (t->type != TYPE_RULE) {
+            for (p = g; p != NULL; p = p->next)
+            {
+                for (q = p->alts; q != NULL; q = q->next)
+                {
+                    for (t = q->terms; t != NULL; t = t->next)
+                    {
+                        if (t->type != TYPE_RULE)
+                        {
                             continue;
                         }
 
                         r = ast_find_rule(g, t->u.rule->name);
-                        if (r != NULL) {
-                            free((char *) t->u.rule->name);
-                            ast_free_rule((ast_rule *) t->u.rule);
+                        if (r != NULL)
+                        {
+                            free((char*)t->u.rule->name);
+                            ast_free_rule((ast_rule*)t->u.rule);
                             t->u.rule = r;
                             continue;
                         }
 
-                        if (!allow_undefined) {
+                        if (!allow_undefined)
+                        {
                             err(lex_state, "production rule <%s> not defined", t->u.rule->name);
                             /* XXX: would leak the ast_rule here */
                             continue;
                         }
 
                         {
-                            const char *token;
+                            const char* token;
 
                             token = t->u.rule->name;
 
-                            ast_free_rule((ast_rule *) t->u.rule);
+                            ast_free_rule((ast_rule*)t->u.rule);
 
-                            t->type    = TYPE_TOKEN;
+                            t->type = TYPE_TOKEN;
                             t->u.token = token;
                         }
                     }

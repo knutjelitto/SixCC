@@ -3,7 +3,8 @@
 #ifndef LX_H
 #define LX_H
 
-enum lx_abnf_token {
+enum lx_abnf_token
+{
 	TOK_ENDOPT,
 	TOK_STARTOPT,
 	TOK_COUNT,
@@ -34,14 +35,16 @@ enum lx_abnf_token {
  * .byte is 0-based.
  * .line, .col, and .saved_col are 1-based; 0 means unknown.
  */
-struct lx_pos {
+struct lx_pos
+{
 	unsigned byte;
 	unsigned line;
 	unsigned col;
 	unsigned saved_col;
 };
 
-struct lx_abnf_lx {
+struct lx_abnf_lx
+{
 	int (*lgetc)(struct lx_abnf_lx *lx);
 	void *getc_opaque;
 

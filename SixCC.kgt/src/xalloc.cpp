@@ -72,11 +72,11 @@ struct txt xtxtdup(const struct txt *t)
 
 void xerror(const char *msg, ...)
 {
-	va_list ap = nullptr;
-	va_start(ap, msg);
+	va_list ap{};
 
 	fprintf(stderr, "kgt: ");
 
+	va_start(ap, msg);
 	vfprintf(stderr, msg, ap);
 	va_end(ap);
 

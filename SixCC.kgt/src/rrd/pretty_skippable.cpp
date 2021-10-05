@@ -21,8 +21,8 @@ skippable_alt(int *changed, struct node *n)
 {
 	struct list *p;
 
-	for (p = n->u.alt; p != NULL; p = p->next) {
-		if (p->node == NULL) {
+	for (p = n->u.alt; p != nullptr; p = p->next) {
+		if (p->node == nullptr) {
 			n->type = NODE_ALT_SKIPPABLE;
 			*changed = 1;
 		}
@@ -38,20 +38,20 @@ redundant_skip(int *changed, struct list **list)
 	struct list **next;
 
 	/*
-	 * If there are skip nodes (NULL) in a seq or skippable alt,
+	 * If there are skip nodes (nullptr) in a seq or skippable alt,
 	 * just remove them - they have no semantic effect.
 	 */
 
-	for (p = list; *p != NULL; p = next) {
+	for (p = list; *p != nullptr; p = next) {
 		next = &(*p)->next;
 
-		if ((*p)->node == NULL) {
+		if ((*p)->node == nullptr) {
 			struct list *dead;
 
 			dead = *p;
 			*p = (*p)->next;
 
-			dead->next = NULL;
+			dead->next = nullptr;
 			list_free(&dead);
 
 			*changed = 1;
@@ -61,34 +61,35 @@ redundant_skip(int *changed, struct list **list)
 	}
 }
 
-void
-rrd_pretty_skippable(int *changed, struct node **n)
+void rrd_pretty_skippable(int* changed, struct node** n)
 {
-	assert(n != NULL);
+	assert(n != nullptr);
 
-	if (*n == NULL) {
+	if (*n == nullptr)
+	{
 		return;
 	}
 
-	switch ((*n)->type) {
-	case NODE_ALT:
-		skippable_alt(changed, *n);
-		break;
+	switch ((*n)->type)
+	{
+		case NODE_ALT:
+			skippable_alt(changed, *n);
+			break;
 
-	case NODE_ALT_SKIPPABLE:
-		redundant_skip(changed, &(*n)->u.alt);
-		break;
+		case NODE_ALT_SKIPPABLE:
+			redundant_skip(changed, &(*n)->u.alt);
+			break;
 
-	case NODE_SEQ:
-		redundant_skip(changed, &(*n)->u.seq);
-		break;
+		case NODE_SEQ:
+			redundant_skip(changed, &(*n)->u.seq);
+			break;
 
-	case NODE_CI_LITERAL:
-	case NODE_CS_LITERAL:
-	case NODE_RULE:
-	case NODE_PROSE:
-	case NODE_LOOP:
-		break;
+		case NODE_CI_LITERAL:
+		case NODE_CS_LITERAL:
+		case NODE_RULE:
+		case NODE_PROSE:
+		case NODE_LOOP:
+			break;
 	}
 }
 
