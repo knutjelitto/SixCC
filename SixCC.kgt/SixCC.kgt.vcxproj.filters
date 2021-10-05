@@ -234,6 +234,9 @@
     <ClCompile Include="src\iwriter.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\parsing-error.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rrd\list.h">
@@ -372,6 +375,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\iwriter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parsing-error.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

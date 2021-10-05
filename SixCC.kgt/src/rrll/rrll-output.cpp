@@ -18,6 +18,7 @@
 
 #include "../txt.h"
 #include "../ast.h"
+#include "../xalloc.h"
 
 #include "../rrd/rrd.h"
 #include "../rrd/pretty.h"
@@ -116,7 +117,7 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 		case NODE_CI_LITERAL:
 			fprintf(stderr, "unimplemented\n");
-			exit(EXIT_FAILURE);
+			err_exit();
 
 		case NODE_CS_LITERAL:
 			writer->printf("\"");

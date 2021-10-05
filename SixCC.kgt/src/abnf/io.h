@@ -9,7 +9,7 @@
 
 #include "../compiler_specific.h"
 #include "../ast.h"
-#include "../parsing-support.h"
+#include "../parsing-error.h"
 struct ast_rule;
 
 /*

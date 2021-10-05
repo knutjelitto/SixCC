@@ -14,240 +14,188 @@
 
 #if true
 
-	#include <assert.h>
-	#include <limits.h>
-	#include <string.h>
-	#include <stdlib.h>
-	#include <stdarg.h>
-	#include <stdio.h>
-	#include <errno.h>
-	#include <ctype.h>
+#include <assert.h>
+#include <limits.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <errno.h>
+#include <ctype.h>
 
-	#include "../parsing-support.h"
-	#include "../txt.h"
-	#include "../ast.h"
-	#include "../xalloc.h"
-	#include "../strings.h"
+#include "../txt.h"
+#include "../ast.h"
+#include "../xalloc.h"
+#include "../strings.h"
+#include "lexer.h"
+#include "../parsing-support.h"
+#include "parser.h"
+#include "io.h"
 
-	#define PASTE(a, b) a ## b
-	#define CAT(a, b)   PASTE(a, b)
-
-	#define LX_PREFIX CAT(lx_, FORM)
-
-	#define LX_TOKEN  CAT(LX_PREFIX, _token)
-	#define LX_STATE  CAT(LX_PREFIX, _lx)
-	#define LX_NEXT   CAT(LX_PREFIX, _next)
-	#define LX_INIT   CAT(LX_PREFIX, _init)
-
-	/* XXX: get rid of this; use same %entry% for all grammars */
-	#define FORM_ENTRY CAT(prod_, FORM)
-
-	/* XXX: workarounds for SID's identifier escaping */
-	#define prod_iso_Hebnf FORM_ENTRY
-	#define TOK_CI__LITERAL TOK_CI_LITERAL
-	#define TOK_CS__LITERAL TOK_CS_LITERAL
-
-	#include "parser.h"
-	#include "lexer.h"
-
-	#include "io.h"
-
-	struct act_state_s
+static const char* prefix(int base)
+{
+	switch (base)
 	{
-		enum LX_TOKEN lex_tok;
-		enum LX_TOKEN lex_tok_save;
-		int invisible;
-	};
-
-	struct lex_state_s
-	{
-		struct LX_STATE lx;
-		struct lx_dynbuf buf;
-
-		int (*f)(void* opaque);
-		void* opaque;
-
-		/* TODO: use lx's generated conveniences for the pattern buffer */
-		char a[512];
-		char* p;
-
-		parsing_error_queue errors;
-	};
-
-	#define CURRENT_TERMINAL (act_state->lex_tok)
-	#define ERROR_TERMINAL   (TOK_ERROR)
-	#define ADVANCE_LEXER    do { act_state->lex_tok = LX_NEXT(&lex_state->lx); } while (0)
-	#define SAVE_LEXER(tok)  do { act_state->lex_tok_save = act_state->lex_tok; \
-	                              act_state->lex_tok = tok;                     } while (0)
-	#define RESTORE_LEXER    do { act_state->lex_tok = act_state->lex_tok_save; } while (0)
-
-	extern int allow_undefined;
-
-	static const char *
-	prefix(int base)
-	{
-		switch (base) {
 		case 16: return "%x";
 		case 10: return "%d";
 		case  8: return "%o";
 		case  2: return "%b";
 		default: return "";
-		}
+	}
+}
+
+static int string(const char* p, struct txt* t, int base)
+{
+	char* q;
+
+	assert(p != NULL);
+	assert(t != NULL);
+	assert(t->p != NULL);
+	assert(base > 0);
+
+	{
+		const char* s;
+		size_t z;
+
+		s = prefix(base);
+		z = strlen(s);
+
+		assert(0 == strncmp(p, s, z));
+
+		p += z;
 	}
 
-	static int
-	string(const char *p, struct txt *t, int base)
+	q = (char*)t->p;
+
+	for (;;)
 	{
-		char *q;
-
-		assert(p != NULL);
-		assert(t != NULL);
-		assert(t->p != NULL);
-		assert(base > 0);
-
-		{
-			const char *s;
-			size_t z;
-
-			s = prefix(base);
-			z = strlen(s);
-
-			assert(0 == strncmp(p, s, z));
-
-			p += z;
-		}
-
-		q = (char *) t->p;
-
-		for (;;) {
-			unsigned long n;
-			char *e;
-
-			n = strtoul(p, &e, base);
-			if (n == ULONG_MAX) {
-				return -1;
-			}
-
-			if (n > UCHAR_MAX) {
-				errno = ERANGE;
-				return -1;
-			}
-
-			*q++ = (unsigned char) n;
-
-			if (*e == '\0') {
-				break;
-			}
-
-			assert(*e == '.');
-
-			p = e + 1;
-		}
-
-		t->n = q - t->p;
-
-		return 0;
-	}
-
-	static int
-	range(const char *p,
-		unsigned char *a, unsigned char *b,
-		int base)
-	{
-		unsigned long m, n;
-		char *e;
-
-		assert(p != NULL);
-		assert(a != NULL);
-		assert(b != NULL);
-		assert(base > 0);
-
-		{
-			const char *s;
-			size_t z;
-
-			s = prefix(base);
-			z = strlen(s);
-
-			assert(0 == strncmp(p, s, z));
-
-			p += z;
-		}
-
-		m = strtoul(p, &e, base);
-		if (m == ULONG_MAX) {
-			return -1;
-		}
-
-		p = e;
-
-		assert(*p == '-');
-		p++;
+		unsigned long n;
+		char* e;
 
 		n = strtoul(p, &e, base);
-		if (n == ULONG_MAX) {
+		if (n == ULONG_MAX)
+		{
 			return -1;
 		}
 
-		assert(*e == '\0');
-
-		if (m > UCHAR_MAX || n > UCHAR_MAX) {
+		if (n > UCHAR_MAX)
+		{
 			errno = ERANGE;
 			return -1;
 		}
 
-		*a = m;
-		*b = n;
+		*q++ = (unsigned char)n;
 
-		return 0;
+		if (*e == '\0')
+		{
+			break;
+		}
+
+		assert(*e == '.');
+
+		p = e + 1;
 	}
 
-	static void
-	err(struct lex_state_s *lex_state, const char *fmt, ...)
+	t->n = q - t->p;
+
+	return 0;
+}
+
+static int range(const char* p, unsigned char* a, unsigned char* b, int base)
+{
+	unsigned long m, n;
+	char* e;
+
+	assert(p != NULL);
+	assert(a != NULL);
+	assert(b != NULL);
+	assert(base > 0);
+
 	{
-		parsing_error error;
-		va_list ap;
+		const char* s;
+		size_t z;
 
-		assert(lex_state != NULL);
+		s = prefix(base);
+		z = strlen(s);
 
-		error.line = lex_state->lx.start.line;
-		error.col  = lex_state->lx.start.col;
+		assert(0 == strncmp(p, s, z));
 
-		va_start(ap, fmt);
-		vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
-		va_end(ap);
-
-		parsing_error_queue_push(&(lex_state->errors), error);
+		p += z;
 	}
 
-	static void
-	err_expected(struct lex_state_s *lex_state, const char *token)
+	m = strtoul(p, &e, base);
+	if (m == ULONG_MAX)
 	{
-		err(lex_state, "Syntax error: expected %s", token);
+		return -1;
 	}
 
-	static void
-	err_unimplemented(struct lex_state_s *lex_state, const char *s)
+	p = e;
+
+	assert(*p == '-');
+	p++;
+
+	n = strtoul(p, &e, base);
+	if (n == ULONG_MAX)
 	{
-		err(lex_state, "Unimplemented: %s", s);
+		return -1;
 	}
 
-	static const char *
-	pattern_buffer(struct lex_state_s *lex_state)
+	assert(*e == '\0');
+
+	if (m > UCHAR_MAX || n > UCHAR_MAX)
 	{
-		const char *s;
-
-		assert(lex_state != NULL);
-
-		/* TODO */
-		*lex_state->p++ = '\0';
-
-		s = xstrdup(lex_state->a);
-
-		lex_state->p = lex_state->a;
-
-		return s;
+		errno = ERANGE;
+		return -1;
 	}
+
+	*a = m;
+	*b = n;
+
+	return 0;
+}
+
+static void err(struct lex_state_s* lex_state, const char* fmt, ...)
+{
+	parsing_error error;
+	va_list ap;
+
+	assert(lex_state != NULL);
+
+	error.line = lex_state->lx.start.line;
+	error.col = lex_state->lx.start.col;
+
+	va_start(ap, fmt);
+	vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
+	va_end(ap);
+
+	parsing_error_queue_push(&(lex_state->errors), error);
+}
+
+static void err_expected(struct lex_state_s* lex_state, const char* token)
+{
+	err(lex_state, "Syntax error: expected %s", token);
+}
+
+static void err_unimplemented(struct lex_state_s* lex_state, const char* s)
+{
+	err(lex_state, "Unimplemented: %s", s);
+}
+
+static const char* pattern_buffer(struct lex_state_s* lex_state)
+{
+	const char* s;
+
+	assert(lex_state != NULL);
+
+	/* TODO */
+	*lex_state->p++ = '\0';
+
+	s = xstrdup(lex_state->a);
+
+	lex_state->p = lex_state->a;
+
+	return s;
+}
 
 //#line 293 "src/wsn/parser.c"
 #endif
@@ -860,7 +808,7 @@ ZL1:;
 //#line 717 "src/parser.act"
 
 		err(lex_state, "Syntax error");
-		exit(EXIT_FAILURE);
+		err_exit();
 	
 //#line 913 "src/wsn/parser.c"
 		}
@@ -871,43 +819,46 @@ ZL0:;
 }
 
 static void
-prod_93(lex_state lex_state, act_state act_state, map_rule *ZIl)
+prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
 {
-	switch (CURRENT_TERMINAL) {
-	case (TOK_IDENT):
+	switch (CURRENT_TERMINAL)
+	{
+		case (TOK_IDENT):
 		{
 			map_rule ZIr;
 
-			prod_list_Hof_Hrules (lex_state, act_state, &ZIr);
-			if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+			prod_list_Hof_Hrules(lex_state, act_state, &ZIr);
+			if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+			{
 				RESTORE_LEXER;
 				goto ZL1;
 			}
 			/* BEGINNING OF ACTION: add-rule-to-list */
 			{
-//#line 689 "src/parser.act"
+				//#line 689 "src/parser.act"
 
-		if (ast_find_rule((ZIr), (*ZIl)->name)) {
-      err(lex_state, "production rule <%s> already exists", (*ZIl)->name);
-			return;
-		}
+				if (ast_find_rule((ZIr), (*ZIl)->name))
+				{
+					err(lex_state, "production rule <%s> already exists", (*ZIl)->name);
+					return;
+				}
 
-		assert((*ZIl)->next == NULL);
-		(*ZIl)->next = (ZIr);
-	
-//#line 946 "src/wsn/parser.c"
+				assert((*ZIl)->next == NULL);
+				(*ZIl)->next = (ZIr);
+
+				//#line 946 "src/wsn/parser.c"
 			}
 			/* END OF ACTION: add-rule-to-list */
 		}
 		break;
-	case (ERROR_TERMINAL):
-		return;
-	default:
-		break;
+		case (ERROR_TERMINAL):
+			return;
+		default:
+			break;
 	}
 	return;
 ZL1:;
-	SAVE_LEXER ((ERROR_TERMINAL));
+	SAVE_LEXER((ERROR_TERMINAL));
 	return;
 }
 
@@ -1055,29 +1006,29 @@ ZL1:;
 		return lex_state->f(lex_state->opaque);
 	}
 
-	struct ast_rule * wsn_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors)
+	struct ast_rule* wsn_input(int (*f)(void* opaque), void* opaque, parsing_error_queue* errors)
 	{
 		struct act_state_s  act_state_s;
-		struct act_state_s *act_state;
+		struct act_state_s* act_state;
 		struct lex_state_s  lex_state_s;
-		struct lex_state_s *lex_state;
+		struct lex_state_s* lex_state;
 
-		struct LX_STATE *lx;
-		struct ast_rule *g;
+		struct LX_STATE* lx;
+		struct ast_rule* g;
 
 		/* for dialects which don't use these */
-		(void) string;
-		(void) range;
-		(void) ltrim;
-		(void) rtrim;
-		(void) trim;
-		(void) err_unimplemented;
+		(void)string;
+		(void)range;
+		(void)ltrim;
+		(void)rtrim;
+		(void)trim;
+		(void)err_unimplemented;
 
 		assert(f != NULL);
 
 		g = NULL;
 
-		lex_state    = &lex_state_s;
+		lex_state = &lex_state_s;
 		lex_state->p = lex_state->a;
 		lex_state->errors = NULL;
 
@@ -1085,20 +1036,20 @@ ZL1:;
 
 		LX_INIT(lx);
 
-		lx->lgetc       = lgetc;
+		lx->lgetc = lgetc;
 		lx->getc_opaque = lex_state;
 
-		lex_state->f       = f;
-		lex_state->opaque  = opaque;
+		lex_state->f = f;
+		lex_state->opaque = opaque;
 
-		lex_state->buf.a   = NULL;
+		lex_state->buf.a = NULL;
 		lex_state->buf.len = 0;
 
 		/* XXX: unneccessary since we're lexing from a string */
 		lx->buf_opaque = &lex_state->buf;
-		lx->push       = CAT(LX_PREFIX, _dynpush);
-		lx->clear      = CAT(LX_PREFIX, _dynclear);
-		lx->free       = CAT(LX_PREFIX, _dynfree);
+		lx->push = CAT(LX_PREFIX, _dynpush);
+		lx->clear = CAT(LX_PREFIX, _dynclear);
+		lx->free = CAT(LX_PREFIX, _dynfree);
 
 		/* XXX */
 		lx->free = NULL;
@@ -1115,39 +1066,45 @@ ZL1:;
 
 		/* substitute placeholder rules for the real thing */
 		{
-			const struct ast_rule *p;
-			const struct ast_alt *q;
-			struct ast_term *t;
-			struct ast_rule *r;
+			const struct ast_rule* p;
+			const struct ast_alt* q;
+			struct ast_term* t;
+			struct ast_rule* r;
 
-			for (p = g; p != NULL; p = p->next) {
-				for (q = p->alts; q != NULL; q = q->next) {
-					for (t = q->terms; t != NULL; t = t->next) {
-						if (t->type != TYPE_RULE) {
+			for (p = g; p != NULL; p = p->next)
+			{
+				for (q = p->alts; q != NULL; q = q->next)
+				{
+					for (t = q->terms; t != NULL; t = t->next)
+					{
+						if (t->type != TYPE_RULE)
+						{
 							continue;
 						}
 
 						r = ast_find_rule(g, t->u.rule->name);
-						if (r != NULL) {
-							ast_free_rule((struct ast_rule *) t->u.rule);
+						if (r != NULL)
+						{
+							ast_free_rule((struct ast_rule*)t->u.rule);
 							t->u.rule = r;
 							continue;
 						}
 
-						if (!allow_undefined) {
+						if (!allow_undefined)
+						{
 							err(lex_state, "production rule <%s> not defined", t->u.rule->name);
 							/* XXX: would leak the ast_rule here */
 							continue;
 						}
 
 						{
-							const char *token;
+							const char* token;
 
 							token = t->u.rule->name;
 
 							ast_free_rule((struct ast_rule*)t->u.rule);
 
-							t->type    = TYPE_TOKEN;
+							t->type = TYPE_TOKEN;
 							t->u.token = token;
 						}
 					}

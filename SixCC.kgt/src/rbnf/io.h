@@ -8,7 +8,7 @@
 #define KGT_RBNF_IO_H
 
 #include "../compiler_specific.h"
-#include "../parsing-support.h"
+#include "../parsing-error.h"
 struct ast_rule;
 
 #define rbnf_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)

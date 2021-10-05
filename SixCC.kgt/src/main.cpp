@@ -17,7 +17,7 @@
 
 #include "txt.h"
 #include "ast.h"
-#include "parsing-support.h"
+#include "parsing-error.h"
 #include "rewrite.h"
 #include "xalloc.h"
 #include "rrd/node.h"
