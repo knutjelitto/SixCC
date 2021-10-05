@@ -206,11 +206,12 @@ void tester()
     writer = new struct iwriter(outfile);
     ast_rule* grammar;
 
-    in = inlang("iso-ebnf");
+    in = inlang("abnf");
 
     assert(in->in != nullptr);
 
-    FILE* input = fopen("examples/c99-grammar.iso-ebnf", "r");
+    FILE* input = fopen("examples/abnf.abnf", "r");
+    //FILE* input = fopen("examples/c99-grammar.iso-ebnf", "r");
     try
     {
         grammar = in->in(kgt_fgetc, input, &errors);
