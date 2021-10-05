@@ -34,8 +34,6 @@ struct text : txt
 	}
 };
 
-int escputt(const struct txt* t, FILE* f, int (*e)(int, FILE*));
-int escputs(const char* s, FILE* f, int (*e)(int, FILE*));
 bool is_binary_literal(const struct txt* t);
 bool isalphastr(const struct txt* t);
 bool txt_any(const struct txt* t, bool (*predicate)(int c));

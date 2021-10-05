@@ -27,50 +27,6 @@ bool txt_any(const struct txt* t, bool (*predicate)(int c))
 	return false;
 }
 
-int escputs(const char* s, FILE* f, int (*e)(int, FILE*))
-{
-	const char* p;
-	int r, n;
-
-	assert(s != NULL);
-	assert(f != NULL);
-
-	n = 0;
-
-	for (p = s; *p != '\0'; p++)
-	{
-		r = e(*p, f);
-		if (r < 0)
-		{
-			return -1;
-		}
-
-		n += r;
-	}
-
-	return n;
-}
-
-int escputt(const struct txt* t, FILE* f, int (*e)(int, FILE*))
-{
-	size_t i;
-	int r;
-
-	assert(t != NULL);
-	assert(t->p != NULL);
-
-	for (i = 0; i < t->n; i++)
-	{
-		r = e(t->p[i], f);
-		if (r < 0)
-		{
-			return -1;
-		}
-	}
-
-	return 0;
-}
-
 bool is_binary_literal(const struct txt* t)
 {
 	size_t i;

@@ -12,10 +12,10 @@
 //#line 311 "src/parser.act"
 
 
-	typedef struct lex_state_s * lex_state;
-	typedef struct act_state_s * act_state;
+typedef struct lex_state_s* lex_state;
+typedef struct act_state_s* act_state;
 
-	typedef struct ast_rule * map_rule;
+typedef struct ast_rule* map_rule;
 
 //#line 21 "src/iso-ebnf/parser.h"
 
