@@ -33,36 +33,38 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-	case TYPE_EMPTY:
-		writer->puts(" \"\"");
-		break;
+		case TYPE_EMPTY:
+			writer->puts(" \"\"");
+			break;
 
-	case TYPE_RULE:
-		writer->printf(" <%s>", term->u.rule->name);
-		break;
+		case TYPE_RULE:
+			writer->printf(" <%s>", term->u.rule->name);
+			break;
 
-	case TYPE_CI_LITERAL:
-		fprintf(stderr, "unimplemented\n");
-		return 0;
+		case TYPE_CI_LITERAL:
+			fprintf(stderr, "unimplemented\n");
+			return 0;
 
-	case TYPE_CS_LITERAL: {
-		char c;
+		case TYPE_CS_LITERAL:
+		{
+			char c;
 
-		c = memchr(term->u.literal.p, '\"', term->u.literal.n) ? '\'' : '\"';
-		writer->printf(" %c%.*s%c", c, (int)term->u.literal.n, term->u.literal.p, c);
-	}
-						break;
+			c = memchr(term->u.literal.p, '\"', term->u.literal.n) ? '\'' : '\"';
+			writer->printf(" %c%.*s%c", c, (int)term->u.literal.n, term->u.literal.p, c);
+			break;
+		}
 
-	case TYPE_TOKEN:
-		writer->printf(" <%s>", term->u.token);
-		break;
+		case TYPE_TOKEN:
+			writer->printf(" <%s>", term->u.token);
+			break;
 
-	case TYPE_PROSE:
-		fprintf(stderr, "unimplemented\n");
-		return 0;
+		case TYPE_PROSE:
+			fprintf(stderr, "unimplemented\n");
+			return 0;
 
-	case TYPE_GROUP:
-		break;
+		case TYPE_GROUP:
+			fprintf(stderr, "not supported\n");
+			return 0;
 	}
 	return 1;
 }

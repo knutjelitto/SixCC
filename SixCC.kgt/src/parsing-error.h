@@ -31,12 +31,11 @@ typedef parsing_error_queue_element* parsing_error_queue;
 void parsing_error_queue_push(parsing_error_queue* queue, parsing_error error);
 int parsing_error_queue_pop(parsing_error_queue* queue, parsing_error* error);
 
-typedef char         map_char;
-typedef const char* map_string;
-typedef struct txt   map_txt;
-typedef unsigned int map_count;
-
-typedef struct ast_term* map_term;
-typedef struct ast_alt* map_alt;
+struct error_context
+{
+	unsigned int line;
+	unsigned int col;
+	parsing_error_queue* queue;
+};
 
 #endif

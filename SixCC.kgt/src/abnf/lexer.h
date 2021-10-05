@@ -91,10 +91,11 @@ struct lx_abnf_lx
 #endif
 
 /* dynamic token buffer */
-struct lx_dynbuf {
-	char *p;
+struct lx_dynbuf
+{
+	char* p;
 	size_t len;
-	char *a;
+	char* a;
 };
 
 const char *lx_abnf_name(enum lx_abnf_token t);

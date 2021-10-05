@@ -193,11 +193,11 @@ void tester()
     FILE* outfile = fopen("nul:", "w");
     writer = new struct iwriter(outfile);
 
-    in = inlang("bnf");
+    in = inlang("iso-ebnf");
 
     assert(in->in != nullptr);
 
-    FILE* input = fopen("examples/bnf.bnf", "r");
+    FILE* input = fopen("examples/c99-grammar.iso-ebnf", "r");
     ast_rule* grammar = in->in(kgt_fgetc, input, &errors);
     fclose(input);
 
@@ -208,7 +208,14 @@ void tester()
         assert(out != nullptr);
         assert(out->out != nullptr);
 
-        printf("out %02i %s\n", i+1, out->name);
+        printf("out %02i %s", i+1, out->name);
+
+        if (strcmp(out->name, "bnf") == 0)
+        {
+            printf(" - not supported\n");
+            continue;
+        }
+        printf("\n");
 
         if (i < 22)
         {

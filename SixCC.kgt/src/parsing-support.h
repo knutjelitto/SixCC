@@ -60,6 +60,11 @@ struct lex_state_s
     char* p;
 
     parsing_error_queue errors;
+
+    inline error_context err() const
+    {
+        return error_context{ lx.start.line, lx.start.col, (parsing_error_queue*)&errors };
+    }
 };
 
 #define CURRENT_TERMINAL (act_state->lex_tok)

@@ -25,10 +25,10 @@ static int transform_term(const struct ast_term *term, struct node **r);
 
 static int transform_terms(const struct ast_alt* alt, struct node** r)
 {
+	assert(r != nullptr);
+
 	struct list* list, ** tail;
 	const struct ast_term* p;
-
-	assert(r != nullptr);
 
 	list = nullptr;
 	tail = &list;

@@ -96,5 +96,7 @@ void rrd_pretty(struct node** rrd)
 		}
 		while (changed && !limit--);
 	}
+
+	assert(limit > 0);
 }
 

@@ -32,132 +32,10 @@
 #include "parser.h"
 #include "io.h"
 
-static const char* prefix(int base)
-{
-	switch (base)
-	{
-		case 16: return "%x";
-		case 10: return "%d";
-		case  8: return "%o";
-		case  2: return "%b";
-		default: return "";
-	}
-}
-
-static int string(const char* p, struct txt* t, int base)
-{
-	char* q;
-
-	assert(p != NULL);
-	assert(t != NULL);
-	assert(t->p != NULL);
-	assert(base > 0);
-
-	{
-		const char* s;
-		size_t z;
-
-		s = prefix(base);
-		z = strlen(s);
-
-		assert(0 == strncmp(p, s, z));
-
-		p += z;
-	}
-
-	q = (char*)t->p;
-
-	for (;;)
-	{
-		unsigned long n;
-		char* e;
-
-		n = strtoul(p, &e, base);
-		if (n == ULONG_MAX)
-		{
-			return -1;
-		}
-
-		if (n > UCHAR_MAX)
-		{
-			errno = ERANGE;
-			return -1;
-		}
-
-		*q++ = (unsigned char)n;
-
-		if (*e == '\0')
-		{
-			break;
-		}
-
-		assert(*e == '.');
-
-		p = e + 1;
-	}
-
-	t->n = q - t->p;
-
-	return 0;
-}
-
-static int range(const char* p, unsigned char* a, unsigned char* b, int base)
-{
-	unsigned long m, n;
-	char* e;
-
-	assert(p != NULL);
-	assert(a != NULL);
-	assert(b != NULL);
-	assert(base > 0);
-
-	{
-		const char* s;
-		size_t z;
-
-		s = prefix(base);
-		z = strlen(s);
-
-		assert(0 == strncmp(p, s, z));
-
-		p += z;
-	}
-
-	m = strtoul(p, &e, base);
-	if (m == ULONG_MAX)
-	{
-		return -1;
-	}
-
-	p = e;
-
-	assert(*p == '-');
-	p++;
-
-	n = strtoul(p, &e, base);
-	if (n == ULONG_MAX)
-	{
-		return -1;
-	}
-
-	assert(*e == '\0');
-
-	if (m > UCHAR_MAX || n > UCHAR_MAX)
-	{
-		errno = ERANGE;
-		return -1;
-	}
-
-	*a = m;
-	*b = n;
-
-	return 0;
-}
-
 static void err(struct lex_state_s* lex_state, const char* fmt, ...)
 {
-	parsing_error error;
-	va_list ap;
+	parsing_error error{};
+	va_list ap{};
 
 	assert(lex_state != NULL);
 
@@ -1017,8 +895,6 @@ ZL1:;
 		struct ast_rule* g;
 
 		/* for dialects which don't use these */
-		(void)string;
-		(void)range;
 		(void)ltrim;
 		(void)rtrim;
 		(void)trim;

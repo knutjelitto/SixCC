@@ -12,8 +12,6 @@
 #define FORM abnf
 #endif
 
-#if true
-
 #include <assert.h>
 #include <limits.h>
 #include <string.h>
@@ -32,146 +30,32 @@
 #include "parser.h"
 #include "io.h"
 
-    static const char * prefix(int base)
-    {
-        switch (base) {
-        case 16: return "%x";
-        case 10: return "%d";
-        case  8: return "%o";
-        case  2: return "%b";
-        default: return "";
-        }
-    }
+static void err(struct lex_state_s* lex_state, const char* fmt, ...)
+{
+    parsing_error error{};
+    va_list ap{};
 
-    static int string(const char *p, struct txt *t, int base)
-    {
-        char *q;
+    assert(lex_state != NULL);
 
-        assert(p != NULL);
-        assert(t != NULL);
-        assert(t->p != NULL);
-        assert(base > 0);
+    error.line = lex_state->lx.start.line;
+    error.col = lex_state->lx.start.col;
 
-        {
-            const char *s;
-            size_t z;
+    va_start(ap, fmt);
+    vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
+    va_end(ap);
 
-            s = prefix(base);
-            z = strlen(s);
+    parsing_error_queue_push(&(lex_state->errors), error);
+}
 
-            assert(0 == strncmp(p, s, z));
+static void err_expected(struct lex_state_s* lex_state, const char* token)
+{
+    err(lex_state, "Syntax error: expected %s", token);
+}
 
-            p += z;
-        }
-
-        q = (char *) t->p;
-
-        for (;;) {
-            unsigned long n;
-            char *e;
-
-            n = strtoul(p, &e, base);
-            if (n == ULONG_MAX) {
-                return -1;
-            }
-
-            if (n > UCHAR_MAX) {
-                errno = ERANGE;
-                return -1;
-            }
-
-            *q++ = (unsigned char) n;
-
-            if (*e == '\0') {
-                break;
-            }
-
-            assert(*e == '.');
-
-            p = e + 1;
-        }
-
-        t->n = q - t->p;
-
-        return 0;
-    }
-
-    static int range(const char *p, unsigned char *a, unsigned char *b, int base)
-    {
-        unsigned long m, n;
-        char *e;
-
-        assert(p != NULL);
-        assert(a != NULL);
-        assert(b != NULL);
-        assert(base > 0);
-
-        {
-            const char *s;
-            size_t z;
-
-            s = prefix(base);
-            z = strlen(s);
-
-            assert(0 == strncmp(p, s, z));
-
-            p += z;
-        }
-
-        m = strtoul(p, &e, base);
-        if (m == ULONG_MAX) {
-            return -1;
-        }
-
-        p = e;
-
-        assert(*p == '-');
-        p++;
-
-        n = strtoul(p, &e, base);
-        if (n == ULONG_MAX) {
-            return -1;
-        }
-
-        assert(*e == '\0');
-
-        if (m > UCHAR_MAX || n > UCHAR_MAX) {
-            errno = ERANGE;
-            return -1;
-        }
-
-        *a = m;
-        *b = n;
-
-        return 0;
-    }
-
-    static void err(struct lex_state_s *lex_state, const char *fmt, ...)
-    {
-        parsing_error error{};
-        va_list ap{};
-
-        assert(lex_state != NULL);
-
-        error.line = lex_state->lx.start.line;
-        error.col  = lex_state->lx.start.col;
-
-        va_start(ap, fmt);
-        vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
-        va_end(ap);
-
-        parsing_error_queue_push(&(lex_state->errors), error);
-    }
-
-    static void err_expected(struct lex_state_s *lex_state, const char *token)
-    {
-        err(lex_state, "Syntax error: expected %s", token);
-    }
-
-    static void err_unimplemented(struct lex_state_s *lex_state, const char *s)
-    {
-        err(lex_state, "Unimplemented: %s", s);
-    }
+static void err_unimplemented(struct lex_state_s* lex_state, const char* s)
+{
+    err(lex_state, "Unimplemented: %s", s);
+}
 
     static const char * pattern_buffer(struct lex_state_s *lex_state)
     {
@@ -189,8 +73,129 @@
         return s;
     }
 
-//#line 293 "src/abnf/parser.c"
-#endif
+    static const char* prefix(int base)
+    {
+        switch (base)
+        {
+            case 16: return "%x";
+            case 10: return "%d";
+            case  8: return "%o";
+            case  2: return "%b";
+            default: return "";
+        }
+    }
+
+    static int string(const char* p, struct txt* t, int base)
+    {
+        char* q;
+
+        assert(p != NULL);
+        assert(t != NULL);
+        assert(t->p != NULL);
+        assert(base > 0);
+
+        {
+            const char* s;
+            size_t z;
+
+            s = prefix(base);
+            z = strlen(s);
+
+            assert(0 == strncmp(p, s, z));
+
+            p += z;
+        }
+
+        q = (char*)t->p;
+
+        for (;;)
+        {
+            unsigned long n;
+            char* e;
+
+            n = strtoul(p, &e, base);
+            if (n == ULONG_MAX)
+            {
+                return -1;
+            }
+
+            if (n > UCHAR_MAX)
+            {
+                errno = ERANGE;
+                return -1;
+            }
+
+            *q++ = (unsigned char)n;
+
+            if (*e == '\0')
+            {
+                break;
+            }
+
+            assert(*e == '.');
+
+            p = e + 1;
+        }
+
+        t->n = q - t->p;
+
+        return 0;
+    }
+
+    static int range(const char* p, unsigned char* a, unsigned char* b, int base)
+    {
+        unsigned long m, n;
+        char* e;
+
+        assert(p != NULL);
+        assert(a != NULL);
+        assert(b != NULL);
+        assert(base > 0);
+
+        {
+            const char* s;
+            size_t z;
+
+            s = prefix(base);
+            z = strlen(s);
+
+            assert(0 == strncmp(p, s, z));
+
+            p += z;
+        }
+
+        m = strtoul(p, &e, base);
+        if (m == ULONG_MAX)
+        {
+            return -1;
+        }
+
+        p = e;
+
+        assert(*p == '-');
+        p++;
+
+        n = strtoul(p, &e, base);
+        if (n == ULONG_MAX)
+        {
+            return -1;
+        }
+
+        assert(*e == '\0');
+
+        if (m > UCHAR_MAX || n > UCHAR_MAX)
+        {
+            errno = ERANGE;
+            return -1;
+        }
+
+        *a = m;
+        *b = n;
+
+        return 0;
+    }
+
+    //#line 293 "src/abnf/parser.c"
 
 
 #ifndef ERROR_TERMINAL
@@ -221,101 +226,106 @@ static void prod_106(lex_state, act_state, map_term *);
 /* BEGINNING OF FUNCTION DEFINITIONS */
 
 static void
-prod_factor(lex_state lex_state, act_state act_state, map_term *ZOt)
+prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
 {
     map_term ZIt;
 
-    switch (CURRENT_TERMINAL) {
-    case (TOK_COUNT):
+    switch (CURRENT_TERMINAL)
+    {
+        case (TOK_COUNT):
         {
             map_count ZI104;
 
             /* BEGINNING OF EXTRACT: COUNT */
             {
-//#line 363 "src/parser.act"
+                //#line 363 "src/parser.act"
 
-        ZI104 = strtoul(lex_state->buf.a, NULL, 10);
-        /* TODO: range check */
-    
-//#line 340 "src/abnf/parser.c"
+                ZI104 = strtoul(lex_state->buf.a, NULL, 10);
+                /* TODO: range check */
+
+        //#line 340 "src/abnf/parser.c"
             }
             /* END OF EXTRACT: COUNT */
             ADVANCE_LEXER;
-            prod_105 (lex_state, act_state, &ZI104, &ZIt);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+            prod_105(lex_state, act_state, &ZI104, &ZIt);
+            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            {
                 RESTORE_LEXER;
                 goto ZL1;
             }
         }
         break;
-    case (TOK_STARTOPT):
+        case (TOK_STARTOPT):
         {
             map_alt ZIa;
             map_count ZImin;
             map_count ZImax;
 
             ADVANCE_LEXER;
-            prod_list_Hof_Halts (lex_state, act_state, &ZIa);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+            prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            {
                 RESTORE_LEXER;
                 goto ZL1;
             }
             /* BEGINNING OF ACTION: rep-zero-or-one */
             {
-//#line 544 "src/parser.act"
+                //#line 544 "src/parser.act"
 
-        (ZImin) = 0;
-        (ZImax) = 1;
+                (ZImin) = 0;
+                (ZImax) = 1;
 
-        /* workaround for SID's ! = f(); */
-        (void) (ZImin);
-        (void) (ZImax);
-    
-//#line 374 "src/abnf/parser.c"
+                /* workaround for SID's ! = f(); */
+                (void)(ZImin);
+                (void)(ZImax);
+
+                //#line 374 "src/abnf/parser.c"
             }
             /* END OF ACTION: rep-zero-or-one */
-            switch (CURRENT_TERMINAL) {
-            case (TOK_ENDOPT):
-                break;
-            default:
-                goto ZL1;
+            switch (CURRENT_TERMINAL)
+            {
+                case (TOK_ENDOPT):
+                    break;
+                default:
+                    goto ZL1;
             }
             ADVANCE_LEXER;
             /* BEGINNING OF ACTION: make-group-term */
             {
-//#line 641 "src/parser.act"
+                //#line 641 "src/parser.act"
 
-        (ZIt) = new ast_term_group(act_state->invisible, (ZIa));
-    
-//#line 390 "src/abnf/parser.c"
+                (ZIt) = new ast_term_group(act_state->invisible, (ZIa));
+
+                //#line 390 "src/abnf/parser.c"
             }
             /* END OF ACTION: make-group-term */
             /* BEGINNING OF ACTION: set-repeat */
             {
-//#line 553 "src/parser.act"
+                //#line 553 "src/parser.act"
 
-        assert((ZImax) >= (ZImin) || !(ZImax));
+                assert((ZImax) >= (ZImin) || !(ZImax));
 
-        (ZIt)->min = (ZImin);
-        (ZIt)->max = (ZImax);
-    
-//#line 402 "src/abnf/parser.c"
+                (ZIt)->min = (ZImin);
+                (ZIt)->max = (ZImax);
+
+                //#line 402 "src/abnf/parser.c"
             }
             /* END OF ACTION: set-repeat */
         }
         break;
-    case (TOK_STARTGROUP): case (TOK_CHAR): case (TOK_IDENT): case (TOK_CI__LITERAL):
-    case (TOK_CS__LITERAL): case (TOK_PROSE): case (TOK_BINSTR): case (TOK_DECSTR):
-    case (TOK_HEXSTR): case (TOK_BINRANGE): case (TOK_DECRANGE): case (TOK_HEXRANGE):
+        case (TOK_STARTGROUP): case (TOK_CHAR): case (TOK_IDENT): case (TOK_CI__LITERAL):
+        case (TOK_CS__LITERAL): case (TOK_PROSE): case (TOK_BINSTR): case (TOK_DECSTR):
+        case (TOK_HEXSTR): case (TOK_BINRANGE): case (TOK_DECRANGE): case (TOK_HEXRANGE):
         {
-            prod_factor_C_Celement (lex_state, act_state, &ZIt);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+            prod_factor_C_Celement(lex_state, act_state, &ZIt);
+            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            {
                 RESTORE_LEXER;
                 goto ZL1;
             }
         }
         break;
-    case (TOK_REP):
+        case (TOK_REP):
         {
             map_count ZImin;
             map_count ZI86;
@@ -323,143 +333,147 @@ prod_factor(lex_state lex_state, act_state act_state, map_term *ZOt)
 
             /* BEGINNING OF ACTION: rep-zero-or-more */
             {
-//#line 535 "src/parser.act"
+                //#line 535 "src/parser.act"
 
-        (ZImin) = 0;
-        (ZI86) = 0;
+                (ZImin) = 0;
+                (ZI86) = 0;
 
-        /* workaround for SID's ! = f(); */
-        (void) (ZImin);
-        (void) (ZI86);
-    
-//#line 435 "src/abnf/parser.c"
+                /* workaround for SID's ! = f(); */
+                (void)(ZImin);
+                (void)(ZI86);
+
+                //#line 435 "src/abnf/parser.c"
             }
             /* END OF ACTION: rep-zero-or-more */
             ADVANCE_LEXER;
-            prod_87 (lex_state, act_state, &ZImax);
-            prod_factor_C_Celement (lex_state, act_state, &ZIt);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+            prod_87(lex_state, act_state, &ZImax);
+            prod_factor_C_Celement(lex_state, act_state, &ZIt);
+            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            {
                 RESTORE_LEXER;
                 goto ZL1;
             }
             /* BEGINNING OF ACTION: set-repeat */
             {
-//#line 553 "src/parser.act"
+                //#line 553 "src/parser.act"
 
-        assert((ZImax) >= (ZImin) || !(ZImax));
+                assert((ZImax) >= (ZImin) || !(ZImax));
 
-        (ZIt)->min = (ZImin);
-        (ZIt)->max = (ZImax);
-    
-//#line 454 "src/abnf/parser.c"
+                (ZIt)->min = (ZImin);
+                (ZIt)->max = (ZImax);
+
+                //#line 454 "src/abnf/parser.c"
             }
             /* END OF ACTION: set-repeat */
         }
         break;
-    case (ERROR_TERMINAL):
-        return;
-    default:
-        goto ZL1;
+        case (ERROR_TERMINAL):
+            return;
+        default:
+            goto ZL1;
     }
     goto ZL0;
 ZL1:;
-    SAVE_LEXER ((ERROR_TERMINAL));
+    SAVE_LEXER((ERROR_TERMINAL));
     return;
 ZL0:;
     *ZOt = ZIt;
 }
 
-void
-prod_abnf(lex_state lex_state, act_state act_state, map_rule *ZOl)
+void prod_abnf(lex_state lex_state, act_state act_state, map_rule* ZOl)
 {
     map_rule ZIl;
 
-    if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+    if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+    {
         return;
     }
     {
-        prod_list_Hof_Hrules (lex_state, act_state, &ZIl);
-        switch (CURRENT_TERMINAL) {
-        case (TOK_EOF):
-            break;
-        case (ERROR_TERMINAL):
-            RESTORE_LEXER;
-            goto ZL1;
-        default:
-            goto ZL1;
+        prod_list_Hof_Hrules(lex_state, act_state, &ZIl);
+        switch (CURRENT_TERMINAL)
+        {
+            case (TOK_EOF):
+                break;
+            case (ERROR_TERMINAL):
+                RESTORE_LEXER;
+                goto ZL1;
+            default:
+                goto ZL1;
         }
         ADVANCE_LEXER;
     }
     goto ZL0;
 ZL1:;
+{
+    /* BEGINNING OF ACTION: make-empty-rule */
     {
-        /* BEGINNING OF ACTION: make-empty-rule */
-        {
-//#line 674 "src/parser.act"
+        //#line 674 "src/parser.act"
 
         (ZIl) = NULL;
-    
-//#line 502 "src/abnf/parser.c"
-        }
-        /* END OF ACTION: make-empty-rule */
-        /* BEGINNING OF ACTION: err-syntax */
-        {
-//#line 717 "src/parser.act"
+
+        //#line 502 "src/abnf/parser.c"
+    }
+    /* END OF ACTION: make-empty-rule */
+    /* BEGINNING OF ACTION: err-syntax */
+    {
+        //#line 717 "src/parser.act"
 
         err(lex_state, "Syntax error");
         err_exit();
-    
-//#line 512 "src/abnf/parser.c"
-        }
-        /* END OF ACTION: err-syntax */
+
+        //#line 512 "src/abnf/parser.c"
     }
+    /* END OF ACTION: err-syntax */
+}
 ZL0:;
-    *ZOl = ZIl;
+*ZOl = ZIl;
 }
 
-static void
-prod_list_Hof_Hterms(lex_state lex_state, act_state act_state, map_term *ZOl)
+static void prod_list_Hof_Hterms(lex_state lex_state, act_state act_state, map_term* ZOl)
 {
     map_term ZIl;
 
-    if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+    if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+    {
         return;
     }
     {
-        prod_factor (lex_state, act_state, &ZIl);
-        prod_103 (lex_state, act_state, &ZIl);
-        if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+        prod_factor(lex_state, act_state, &ZIl);
+        prod_103(lex_state, act_state, &ZIl);
+        if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+        {
             RESTORE_LEXER;
             goto ZL1;
         }
     }
     goto ZL0;
 ZL1:;
-    SAVE_LEXER ((ERROR_TERMINAL));
+    SAVE_LEXER((ERROR_TERMINAL));
     return;
 ZL0:;
     *ZOl = ZIl;
 }
 
-static void
-prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, map_rule *ZOl)
+static void prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, map_rule* ZOl)
 {
     map_rule ZIl;
 
-    if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+    if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+    {
         return;
     }
     {
-        prod_rule (lex_state, act_state, &ZIl);
-        prod_101 (lex_state, act_state, &ZIl);
-        if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+        prod_rule(lex_state, act_state, &ZIl);
+        prod_101(lex_state, act_state, &ZIl);
+        if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+        {
             RESTORE_LEXER;
             goto ZL1;
         }
     }
     goto ZL0;
 ZL1:;
-    SAVE_LEXER ((ERROR_TERMINAL));
+    SAVE_LEXER((ERROR_TERMINAL));
     return;
 ZL0:;
     *ZOl = ZIl;
@@ -551,284 +565,314 @@ ZL1:;
 }
 
 static void
-prod_term(lex_state lex_state, act_state act_state, map_term *ZOt)
+prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 {
     map_term ZIt;
 
-    switch (CURRENT_TERMINAL) {
-    case (TOK_IDENT):
+    switch (CURRENT_TERMINAL)
+    {
+        case (TOK_IDENT):
         {
             map_string ZIx;
 
             /* BEGINNING OF EXTRACT: IDENT */
             {
-//#line 346 "src/parser.act"
+                //#line 346 "src/parser.act"
 
-        /*
-         * This rtrim() is for EBNF, which would require n-token lookahead
-         * in order to lex just an ident (as ident may contain whitespace).
-         *
-         * I'm trimming here (for all grammars) because it's simpler than
-         * doing this for just EBNF specifically, and harmless to others.
-         */
-        rtrim(lex_state->buf.a);
+                        /*
+                         * This rtrim() is for EBNF, which would require n-token lookahead
+                         * in order to lex just an ident (as ident may contain whitespace).
+                         *
+                         * I'm trimming here (for all grammars) because it's simpler than
+                         * doing this for just EBNF specifically, and harmless to others.
+                         */
+                rtrim(lex_state->buf.a);
 
-        ZIx = xstrdup(lex_state->buf.a);
-    
-//#line 682 "src/abnf/parser.c"
+                ZIx = xstrdup(lex_state->buf.a);
+
+                //#line 682 "src/abnf/parser.c"
             }
             /* END OF EXTRACT: IDENT */
             ADVANCE_LEXER;
             /* BEGINNING OF ACTION: make-rule-term */
             {
-//#line 584 "src/parser.act"
+                //#line 584 "src/parser.act"
 
-        struct ast_rule *r;
+                struct ast_rule* r;
 
-        /*
-         * Regardless of whether a rule exists (yet) by this name, we make
-         * a placeholder rule just so that we have an ast_rule struct
-         * at which to point. This saves passing the grammar around, which
-         * keeps the rule-building productions simpler.
-         */
-        r = ast_make_rule((ZIx), NULL);
-        if (r == NULL) {
-            perror("ast_make_rule");
-            goto ZL1;
-        }
+                /*
+                 * Regardless of whether a rule exists (yet) by this name, we make
+                 * a placeholder rule just so that we have an ast_rule struct
+                 * at which to point. This saves passing the grammar around, which
+                 * keeps the rule-building productions simpler.
+                 */
+                r = ast_make_rule((ZIx), NULL);
+                if (r == NULL)
+                {
+                    perror("ast_make_rule");
+                    goto ZL1;
+                }
 
-        (ZIt) = ast_make_rule_term(act_state->invisible, r);
-    
-//#line 706 "src/abnf/parser.c"
+                (ZIt) = ast_make_rule_term(act_state->invisible, r);
+
+                //#line 706 "src/abnf/parser.c"
             }
             /* END OF ACTION: make-rule-term */
         }
         break;
-    case (TOK_CHAR): case (TOK_CI__LITERAL): case (TOK_CS__LITERAL): case (TOK_PROSE):
+        case (TOK_CHAR): case (TOK_CI__LITERAL): case (TOK_CS__LITERAL): case (TOK_PROSE):
         {
-            prod_body (lex_state, act_state);
-            prod_106 (lex_state, act_state, &ZIt);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+            prod_body(lex_state, act_state);
+            prod_106(lex_state, act_state, &ZIt);
+            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            {
                 RESTORE_LEXER;
                 goto ZL1;
             }
         }
         break;
-    case (TOK_BINRANGE): case (TOK_DECRANGE): case (TOK_HEXRANGE):
+        case (TOK_BINRANGE): case (TOK_DECRANGE): case (TOK_HEXRANGE):
         {
             map_char ZIm = 0;
             map_char ZIn = 0;
 
             /* BEGINNING OF INLINE: escrange */
             {
-                switch (CURRENT_TERMINAL) {
-                case (TOK_BINRANGE):
+                switch (CURRENT_TERMINAL)
+                {
+                    case (TOK_BINRANGE):
                     {
                         /* BEGINNING OF EXTRACT: BINRANGE */
                         {
-//#line 468 "src/parser.act"
+                            //#line 468 "src/parser.act"
 
-        if (-1 == range(lex_state->buf.a, (unsigned char *) &ZIm, (unsigned char *) &ZIn,  2)) {
-            if (errno == ERANGE) {
-                err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
-                    lex_state->buf.a, prefix(2), prefix(2), UCHAR_MAX);
-            } else {
-                err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
-            }
-            goto ZL1;
-        }
-    
-//#line 745 "src/abnf/parser.c"
+                            if (-1 == range(lex_state->buf.a, (unsigned char*)&ZIm, (unsigned char*)&ZIn, 2))
+                            {
+                                if (errno == ERANGE)
+                                {
+                                    err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
+                                        lex_state->buf.a, prefix(2), prefix(2), UCHAR_MAX);
+                                }
+                                else
+                                {
+                                    err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+                                }
+                                goto ZL1;
+                            }
+
+                            //#line 745 "src/abnf/parser.c"
                         }
                         /* END OF EXTRACT: BINRANGE */
                         ADVANCE_LEXER;
                     }
                     break;
-                case (TOK_DECRANGE):
+                    case (TOK_DECRANGE):
                     {
                         /* BEGINNING OF EXTRACT: DECRANGE */
                         {
-//#line 492 "src/parser.act"
+                            //#line 492 "src/parser.act"
 
-        if (-1 == range(lex_state->buf.a, (unsigned char *) &ZIm, (unsigned char *) &ZIn, 10)) {
-            if (errno == ERANGE) {
-                err(lex_state, "decimal sequence %s out of range: expected %s0..%s%u inclusive",
-                    lex_state->buf.a, prefix(10), prefix(10), UCHAR_MAX);
-            } else {
-                err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
-            }
-            goto ZL1;
-        }
-    
-//#line 767 "src/abnf/parser.c"
+                            if (-1 == range(lex_state->buf.a, (unsigned char*)&ZIm, (unsigned char*)&ZIn, 10))
+                            {
+                                if (errno == ERANGE)
+                                {
+                                    err(lex_state, "decimal sequence %s out of range: expected %s0..%s%u inclusive",
+                                        lex_state->buf.a, prefix(10), prefix(10), UCHAR_MAX);
+                                }
+                                else
+                                {
+                                    err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+                                }
+                                goto ZL1;
+                            }
+
+                            //#line 767 "src/abnf/parser.c"
                         }
                         /* END OF EXTRACT: DECRANGE */
                         ADVANCE_LEXER;
                     }
                     break;
-                case (TOK_HEXRANGE):
+                    case (TOK_HEXRANGE):
                     {
                         /* BEGINNING OF EXTRACT: HEXRANGE */
                         {
-//#line 504 "src/parser.act"
+                            //#line 504 "src/parser.act"
 
-        if (-1 == range(lex_state->buf.a, (unsigned char *) &ZIm, (unsigned char *) &ZIn, 16)) {
-            if (errno == ERANGE) {
-                err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
-                    lex_state->buf.a, prefix(16), prefix(16), UCHAR_MAX);
-            } else {
-                err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
-            }
-            goto ZL1;
-        }
-    
-//#line 789 "src/abnf/parser.c"
+                            if (-1 == range(lex_state->buf.a, (unsigned char*)&ZIm, (unsigned char*)&ZIn, 16))
+                            {
+                                if (errno == ERANGE)
+                                {
+                                    err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
+                                        lex_state->buf.a, prefix(16), prefix(16), UCHAR_MAX);
+                                }
+                                else
+                                {
+                                    err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+                                }
+                                goto ZL1;
+                            }
+
+                            //#line 789 "src/abnf/parser.c"
                         }
                         /* END OF EXTRACT: HEXRANGE */
                         ADVANCE_LEXER;
                     }
                     break;
-                default:
-                    goto ZL1;
+                    default:
+                        goto ZL1;
                 }
             }
             /* END OF INLINE: escrange */
             /* BEGINNING OF ACTION: make-range-term */
             {
-//#line 645 "src/parser.act"
+                //#line 645 "src/parser.act"
 
-        struct ast_alt *a;
-        int i;
+                struct ast_alt* a;
+                int i;
 
-        a = NULL;
+                a = NULL;
 
-        for (i = (unsigned char) (ZIm); i <= (unsigned char) (ZIn); i++) {
-            struct ast_alt *nuw;
-            struct ast_term *t;
+                for (i = (unsigned char)(ZIm); i <= (unsigned char)(ZIn); i++)
+                {
+                    struct ast_alt* nuw;
+                    struct ast_term* t;
 
-            t = ast_make_char_term(act_state->invisible, i);
-            nuw = ast_make_alt(act_state->invisible, t);
+                    t = ast_make_char_term(act_state->invisible, i);
+                    nuw = ast_make_alt(act_state->invisible, t);
 
-            nuw->next = a;
-            a = nuw;
-        }
+                    nuw->next = a;
+                    a = nuw;
+                }
 
-        (ZIt) = ast_make_group_term(act_state->invisible, a);
-    
-//#line 822 "src/abnf/parser.c"
+                (ZIt) = ast_make_group_term(act_state->invisible, a);
+
+                //#line 822 "src/abnf/parser.c"
             }
             /* END OF ACTION: make-range-term */
         }
         break;
-    case (TOK_BINSTR): case (TOK_DECSTR): case (TOK_HEXSTR):
+        case (TOK_BINSTR): case (TOK_DECSTR): case (TOK_HEXSTR):
         {
             map_txt ZIx;
 
             /* BEGINNING OF INLINE: escstr */
             {
-                switch (CURRENT_TERMINAL) {
-                case (TOK_BINSTR):
+                switch (CURRENT_TERMINAL)
+                {
+                    case (TOK_BINSTR):
                     {
                         /* BEGINNING OF EXTRACT: BINSTR */
                         {
-//#line 388 "src/parser.act"
+                            //#line 388 "src/parser.act"
 
-        ZIx.p = xstrdup(lex_state->buf.a);
+                            ZIx.p = xstrdup(lex_state->buf.a);
 
-        if (-1 == string(lex_state->buf.a, &ZIx,  2)) {
-            if (errno == ERANGE) {
-                err(lex_state, "binary sequence %s out of range: expected %s0..%s%s inclusive",
-                    lex_state->buf.a, prefix(2), prefix(2), "11111111");
-            } else {
-                err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
-            }
-            goto ZL1;
-        }
+                            if (-1 == string(lex_state->buf.a, &ZIx, 2))
+                            {
+                                if (errno == ERANGE)
+                                {
+                                    err(lex_state, "binary sequence %s out of range: expected %s0..%s%s inclusive",
+                                        lex_state->buf.a, prefix(2), prefix(2), "11111111");
+                                }
+                                else
+                                {
+                                    err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+                                }
+                                goto ZL1;
+                            }
 
-        /* TODO: free */
-    
-//#line 858 "src/abnf/parser.c"
+                            /* TODO: free */
+
+                    //#line 858 "src/abnf/parser.c"
                         }
                         /* END OF EXTRACT: BINSTR */
                         ADVANCE_LEXER;
                     }
                     break;
-                case (TOK_DECSTR):
+                    case (TOK_DECSTR):
                     {
                         /* BEGINNING OF EXTRACT: DECSTR */
                         {
-//#line 428 "src/parser.act"
+                            //#line 428 "src/parser.act"
 
-        ZIx.p = xstrdup(lex_state->buf.a);
+                            ZIx.p = xstrdup(lex_state->buf.a);
 
-        if (-1 == string(lex_state->buf.a, &ZIx, 10)) {
-            if (errno == ERANGE) {
-                err(lex_state, "decimal sequence %s out of range: expected %s0..%s%u inclusive",
-                    lex_state->buf.a, prefix(10), prefix(10), UCHAR_MAX);
-            } else {
-                err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
-            }
-            goto ZL1;
-        }
+                            if (-1 == string(lex_state->buf.a, &ZIx, 10))
+                            {
+                                if (errno == ERANGE)
+                                {
+                                    err(lex_state, "decimal sequence %s out of range: expected %s0..%s%u inclusive",
+                                        lex_state->buf.a, prefix(10), prefix(10), UCHAR_MAX);
+                                }
+                                else
+                                {
+                                    err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+                                }
+                                goto ZL1;
+                            }
 
-        /* TODO: free */
-    
-//#line 888 "src/abnf/parser.c"
+                            /* TODO: free */
+
+                    //#line 888 "src/abnf/parser.c"
                         }
                         /* END OF EXTRACT: DECSTR */
                         ADVANCE_LEXER;
                     }
                     break;
-                case (TOK_HEXSTR):
+                    case (TOK_HEXSTR):
                     {
                         /* BEGINNING OF EXTRACT: HEXSTR */
                         {
-//#line 448 "src/parser.act"
+                            //#line 448 "src/parser.act"
 
-        ZIx.p = xstrdup(lex_state->buf.a);
+                            ZIx.p = xstrdup(lex_state->buf.a);
 
-        if (-1 == string(lex_state->buf.a, &ZIx, 16)) {
-            if (errno == ERANGE) {
-                err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
-                    lex_state->buf.a, prefix(16), prefix(16), UCHAR_MAX);
-            } else {
-                err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
-            }
-            goto ZL1;
-        }
+                            if (-1 == string(lex_state->buf.a, &ZIx, 16))
+                            {
+                                if (errno == ERANGE)
+                                {
+                                    err(lex_state, "hex sequence %s out of range: expected %s0..%s%x inclusive",
+                                        lex_state->buf.a, prefix(16), prefix(16), UCHAR_MAX);
+                                }
+                                else
+                                {
+                                    err(lex_state, "%s: %s", lex_state->buf.a, strerror(errno));
+                                }
+                                goto ZL1;
+                            }
 
-        /* TODO: free */
-    
-//#line 918 "src/abnf/parser.c"
+                            /* TODO: free */
+
+                    //#line 918 "src/abnf/parser.c"
                         }
                         /* END OF EXTRACT: HEXSTR */
                         ADVANCE_LEXER;
                     }
                     break;
-                default:
-                    goto ZL1;
+                    default:
+                        goto ZL1;
                 }
             }
             /* END OF INLINE: escstr */
             /* BEGINNING OF ACTION: make-cs-literal-term */
             {
-//#line 613 "src/parser.act"
+                //#line 613 "src/parser.act"
 
-        (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 0);
-    
-//#line 935 "src/abnf/parser.c"
+                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 0);
+
+                //#line 935 "src/abnf/parser.c"
             }
             /* END OF ACTION: make-cs-literal-term */
         }
         break;
-    case (ERROR_TERMINAL):
-        return;
-    default:
-        goto ZL1;
+        case (ERROR_TERMINAL):
+            return;
+        default:
+            goto ZL1;
     }
     goto ZL0;
 ZL1:;
-    SAVE_LEXER ((ERROR_TERMINAL));
+    SAVE_LEXER((ERROR_TERMINAL));
     return;
 ZL0:;
     *ZOt = ZIt;
@@ -1540,8 +1584,6 @@ ZL0:;
         struct ast_rule* g;
 
         /* for dialects which don't use these */
-        (void)string;
-        (void)range;
         (void)ltrim;
         (void)rtrim;
         (void)trim;
