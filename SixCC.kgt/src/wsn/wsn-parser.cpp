@@ -32,6 +32,7 @@
 #include "parser.h"
 #include "io.h"
 
+#if false
 static void err(struct lex_state_s* lex_state, const char* fmt, ...)
 {
 	parsing_error error{};
@@ -46,7 +47,7 @@ static void err(struct lex_state_s* lex_state, const char* fmt, ...)
 	vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
 	va_end(ap);
 
-	parsing_error_queue_push(&(lex_state->errors), error);
+	lex_state->errors->add(error);
 }
 
 static void err_expected(struct lex_state_s* lex_state, const char* token)
@@ -58,6 +59,7 @@ static void err_unimplemented(struct lex_state_s* lex_state, const char* s)
 {
 	err(lex_state, "Unimplemented: %s", s);
 }
+#endif
 
 static const char* pattern_buffer(struct lex_state_s* lex_state)
 {
@@ -535,164 +537,171 @@ ZL0:;
 }
 
 static void
-prod_rule(lex_state lex_state, act_state act_state, map_rule *ZOr)
+prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 {
 	map_rule ZIr;
 
-	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+	{
 		return;
 	}
 	{
 		map_string ZIs;
 		map_alt ZIa;
 
-		switch (CURRENT_TERMINAL) {
-		case (TOK_IDENT):
-			/* BEGINNING OF EXTRACT: IDENT */
+		switch (CURRENT_TERMINAL)
+		{
+			case (TOK_IDENT):
+				/* BEGINNING OF EXTRACT: IDENT */
 			{
-//#line 346 "src/parser.act"
+				//#line 346 "src/parser.act"
 
-		/*
-		 * This rtrim() is for EBNF, which would require n-token lookahead
-		 * in order to lex just an ident (as ident may contain whitespace).
-		 *
-		 * I'm trimming here (for all grammars) because it's simpler than
-		 * doing this for just EBNF specifically, and harmless to others.
-		 */
-		rtrim(lex_state->buf.a);
+						/*
+						 * This rtrim() is for EBNF, which would require n-token lookahead
+						 * in order to lex just an ident (as ident may contain whitespace).
+						 *
+						 * I'm trimming here (for all grammars) because it's simpler than
+						 * doing this for just EBNF specifically, and harmless to others.
+						 */
+				rtrim(lex_state->buf.a);
 
-		ZIs = xstrdup(lex_state->buf.a);
-	
-//#line 788 "src/wsn/parser.c"
+				ZIs = xstrdup(lex_state->buf.a);
+
+				//#line 788 "src/wsn/parser.c"
 			}
 			/* END OF EXTRACT: IDENT */
 			break;
-		default:
-			goto ZL1;
+			default:
+				goto ZL1;
 		}
 		ADVANCE_LEXER;
 		/* BEGINNING OF INLINE: 87 */
 		{
 			{
-				switch (CURRENT_TERMINAL) {
-				case (TOK_EQUALS):
-					break;
-				default:
-					goto ZL3;
+				switch (CURRENT_TERMINAL)
+				{
+					case (TOK_EQUALS):
+						break;
+					default:
+						goto ZL3;
 				}
 				ADVANCE_LEXER;
 			}
 			goto ZL2;
 		ZL3:;
+		{
+			/* BEGINNING OF ACTION: err-expected-equals */
 			{
-				/* BEGINNING OF ACTION: err-expected-equals */
-				{
-//#line 730 "src/parser.act"
+				//#line 730 "src/parser.act"
 
-		err_expected(lex_state, "production rule assignment");
-	
-//#line 816 "src/wsn/parser.c"
-				}
-				/* END OF ACTION: err-expected-equals */
+				err_expected(*lex_state, "production rule assignment");
+
+				//#line 816 "src/wsn/parser.c"
 			}
-		ZL2:;
+			/* END OF ACTION: err-expected-equals */
+		}
+	ZL2:;
 		}
 		/* END OF INLINE: 87 */
-		prod_list_Hof_Halts (lex_state, act_state, &ZIa);
-		if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+		prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+		if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+		{
 			RESTORE_LEXER;
 			goto ZL1;
 		}
 		/* BEGINNING OF ACTION: make-rule */
 		{
-//#line 670 "src/parser.act"
+			//#line 670 "src/parser.act"
 
-		(ZIr) = ast_make_rule((ZIs), (ZIa));
-	
-//#line 834 "src/wsn/parser.c"
+			(ZIr) = ast_make_rule((ZIs), (ZIa));
+
+			//#line 834 "src/wsn/parser.c"
 		}
 		/* END OF ACTION: make-rule */
 		/* BEGINNING OF INLINE: 88 */
 		{
 			{
-				switch (CURRENT_TERMINAL) {
-				case (TOK_SEP):
-					break;
-				default:
-					goto ZL5;
+				switch (CURRENT_TERMINAL)
+				{
+					case (TOK_SEP):
+						break;
+					default:
+						goto ZL5;
 				}
 				ADVANCE_LEXER;
 			}
 			goto ZL4;
 		ZL5:;
+		{
+			/* BEGINNING OF ACTION: err-expected-sep */
 			{
-				/* BEGINNING OF ACTION: err-expected-sep */
-				{
-//#line 726 "src/parser.act"
+				//#line 726 "src/parser.act"
 
-		err_expected(lex_state, "production rule separator");
-	
-//#line 857 "src/wsn/parser.c"
-				}
-				/* END OF ACTION: err-expected-sep */
+				err_expected(*lex_state, "production rule separator");
+
+				//#line 857 "src/wsn/parser.c"
 			}
-		ZL4:;
+			/* END OF ACTION: err-expected-sep */
+		}
+	ZL4:;
 		}
 		/* END OF INLINE: 88 */
 	}
 	goto ZL0;
-ZL1:;
-	SAVE_LEXER ((ERROR_TERMINAL));
+ZL1:
+	SAVE_LEXER((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOr = ZIr;
 }
 
 void
-prod_wsn(lex_state lex_state, act_state act_state, map_rule *ZOl)
+prod_wsn(lex_state lex_state, act_state act_state, map_rule* ZOl)
 {
 	map_rule ZIl;
 
-	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+	{
 		return;
 	}
 	{
-		prod_list_Hof_Hrules (lex_state, act_state, &ZIl);
-		switch (CURRENT_TERMINAL) {
-		case (TOK_EOF):
-			break;
-		case (ERROR_TERMINAL):
-			RESTORE_LEXER;
-			goto ZL1;
-		default:
-			goto ZL1;
+		prod_list_Hof_Hrules(lex_state, act_state, &ZIl);
+		switch (CURRENT_TERMINAL)
+		{
+			case (TOK_EOF):
+				break;
+			case (ERROR_TERMINAL):
+				RESTORE_LEXER;
+				goto ZL1;
+			default:
+				goto ZL1;
 		}
 		ADVANCE_LEXER;
 	}
 	goto ZL0;
-ZL1:;
+ZL1:
 	{
 		/* BEGINNING OF ACTION: make-empty-rule */
 		{
-//#line 674 "src/parser.act"
+			//#line 674 "src/parser.act"
 
-		(ZIl) = NULL;
-	
-//#line 903 "src/wsn/parser.c"
+			(ZIl) = NULL;
+
+			//#line 903 "src/wsn/parser.c"
 		}
 		/* END OF ACTION: make-empty-rule */
 		/* BEGINNING OF ACTION: err-syntax */
 		{
-//#line 717 "src/parser.act"
+			//#line 717 "src/parser.act"
 
-		err(lex_state, "Syntax error");
-		err_exit();
-	
-//#line 913 "src/wsn/parser.c"
+			err(*lex_state, "Syntax error");
+			err_exit();
+
+			//#line 913 "src/wsn/parser.c"
 		}
 		/* END OF ACTION: err-syntax */
 	}
-ZL0:;
+ZL0:
 	*ZOl = ZIl;
 }
 
@@ -717,7 +726,7 @@ prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
 
 				if (ast_find_rule((ZIr), (*ZIl)->name))
 				{
-					err(lex_state, "production rule <%s> already exists", (*ZIl)->name);
+					err(*lex_state, "production rule <%s> already exists", (*ZIl)->name);
 					return;
 				}
 
@@ -768,7 +777,7 @@ prod_94(lex_state lex_state, act_state act_state, map_term *ZIt, map_alt *ZOl)
 					{
 //#line 722 "src/parser.act"
 
-		err_expected(lex_state, "alternative separator");
+		err_expected(*lex_state, "alternative separator");
 	
 //#line 992 "src/wsn/parser.c"
 					}
@@ -884,7 +893,7 @@ ZL1:;
 		return lex_state->f(lex_state->opaque);
 	}
 
-	struct ast_rule* wsn_input(int (*f)(void* opaque), void* opaque, parsing_error_queue* errors)
+	struct ast_rule* wsn_input(int (*f)(void* opaque), void* opaque, parsing_errors* errors)
 	{
 		struct act_state_s  act_state_s;
 		struct act_state_s* act_state;
@@ -898,7 +907,6 @@ ZL1:;
 		(void)ltrim;
 		(void)rtrim;
 		(void)trim;
-		(void)err_unimplemented;
 
 		assert(f != NULL);
 
@@ -906,7 +914,7 @@ ZL1:;
 
 		lex_state = &lex_state_s;
 		lex_state->p = lex_state->a;
-		lex_state->errors = NULL;
+		lex_state->errors = errors;
 
 		lx = &lex_state->lx;
 
@@ -968,7 +976,7 @@ ZL1:;
 
 						if (!allow_undefined)
 						{
-							err(lex_state, "production rule <%s> not defined", t->u.rule->name);
+							err(*lex_state, "production rule <%s> not defined", t->u.rule->name);
 							/* XXX: would leak the ast_rule here */
 							continue;
 						}
@@ -988,7 +996,6 @@ ZL1:;
 			}
 		}
 
-		*errors = lex_state->errors;
 		return g;
 	}
 

@@ -24,14 +24,32 @@ struct txt
 	size_t n;
 };
 
-struct text : txt
+struct text
 {
-	text(const txt t) : txt(t.p, t.n)
+	inline text() : str()
 	{
 	}
-	text(const char* chars) : txt(chars, strlen(chars))
+
+	inline text(const txt t) : str(t.p)
 	{
 	}
+
+	inline text(const char* chars) : str(chars)
+	{
+	}
+
+	inline const char* const chars() const
+	{
+		return str.c_str();
+	}
+
+	inline int length() const
+	{
+		return str.size();
+	}
+
+private:
+	std::string str;
 };
 
 bool is_binary_literal(const struct txt* t);

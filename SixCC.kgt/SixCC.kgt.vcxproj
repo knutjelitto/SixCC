@@ -159,7 +159,7 @@
   <ItemGroup>
     <ClCompile Include="src\abnf\lexer.cpp" />
     <ClCompile Include="src\abnf\abnf-output.cpp" />
-    <ClCompile Include="src\abnf\parser.cpp" />
+    <ClCompile Include="src\abnf\abnf-parser.cpp" />
     <ClCompile Include="src\ast.cpp" />
     <ClCompile Include="src\ast_binary.cpp" />
     <ClCompile Include="src\bitmap.cpp" />
@@ -172,7 +172,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="src\bnf\parser.cpp">
+    <ClCompile Include="src\bnf\bnf-parser.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;FORM=bnf;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -183,7 +183,7 @@
     <ClCompile Include="src\html5\html5-output.cpp" />
     <ClCompile Include="src\iso-ebnf\lexer.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp" />
-    <ClCompile Include="src\iso-ebnf\parser.cpp" />
+    <ClCompile Include="src\iso-ebnf\iso-ebnf-parser.cpp" />
     <ClCompile Include="src\json\json-output.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\iwriter.cpp" />
@@ -191,7 +191,7 @@
     <ClCompile Include="src\parsing-support.cpp" />
     <ClCompile Include="src\rbnf\lexer.cpp" />
     <ClCompile Include="src\rbnf\rbnf-output.cpp" />
-    <ClCompile Include="src\rbnf\parser.cpp" />
+    <ClCompile Include="src\rbnf\rbnf-parser.cpp" />
     <ClCompile Include="src\rewrite_ci.cpp" />
     <ClCompile Include="src\rewrite_invisible.cpp" />
     <ClCompile Include="src\rrdot\rrdot_output.cpp" />
@@ -234,7 +234,7 @@
     <ClCompile Include="src\txt.cpp" />
     <ClCompile Include="src\wsn\lexer.cpp" />
     <ClCompile Include="src\wsn\wsn-output.cpp" />
-    <ClCompile Include="src\wsn\parser.cpp" />
+    <ClCompile Include="src\wsn\wsn-parser.cpp" />
     <ClCompile Include="src\xalloc.cpp" />
   </ItemGroup>
   <ItemGroup>

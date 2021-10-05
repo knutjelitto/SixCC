@@ -8,6 +8,7 @@
 #define KGT_PARSING_ERROR_H
 
 #include <string>
+#include <queue>
 
 #define PARSING_ERROR_DESCRIPTION_SIZE (1024)
 
@@ -18,24 +19,38 @@ struct parsing_error
 	char description[PARSING_ERROR_DESCRIPTION_SIZE];
 };
 
-struct parsing_error_queue_element
+struct parsing_errors
 {
-	struct parsing_error error;
-	struct parsing_error_queue_element* next;
+	inline void add(parsing_error error)
+	{
+		queue.push(error);
+	}
+
+	inline bool pop(parsing_error* error)
+	{
+		if (!queue.empty())
+		{
+			*error = queue.front();
+			queue.pop();
+			return true;
+		}
+
+		return false;
+	}
+
+private:
+	std::queue<parsing_error> queue;
 };
-
-typedef struct parsing_error parsing_error;
-typedef struct parsing_error_queue_element parsing_error_queue_element;
-typedef parsing_error_queue_element* parsing_error_queue;
-
-void parsing_error_queue_push(parsing_error_queue* queue, parsing_error error);
-int parsing_error_queue_pop(parsing_error_queue* queue, parsing_error* error);
 
 struct error_context
 {
 	unsigned int line;
 	unsigned int col;
-	parsing_error_queue* queue;
+	parsing_errors* errors;
 };
+
+void err(error_context error_context, const char* fmt, ...);
+void err_expected(error_context lex_state, const char* token);
+void err_unimplemented(error_context lex_state, const char* s);
 
 #endif

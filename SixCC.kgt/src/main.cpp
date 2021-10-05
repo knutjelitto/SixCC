@@ -8,6 +8,7 @@
 #define _POSIX_C_SOURCE 2
 #define _XOPEN_SOURCE 500
 
+#include <stdexcept>
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -56,19 +57,10 @@ const char *css_file;
 void __wait(int a, int b, int c, int d) { }
 #endif
 
-struct io
-{
-    const char* name;
-    struct ast_rule* (*in)(int (*f)(void*), void*, parsing_error_queue*);
-    int (*out)(const struct ast_rule*);
-    enum ast_features ast_unsupported;
-    enum rrd_features rrd_unsupported;
-};
-
 struct inputable
 {
     const char* name;
-    struct ast_rule* (*in)(int (*f)(void*), void*, parsing_error_queue*);
+    struct ast_rule* (*in)(int (*f)(void*), void*, parsing_errors*);
 };
 
 struct outputable
@@ -185,20 +177,50 @@ static struct outputable* outlang(const char* s)
     assert(!"unreached");
 }
 
+static bool report_parsing_errors(parsing_errors* errors)
+{
+    int error_count = 0;
+    parsing_error error;
+
+    while (errors->pop(&error))
+    {
+        fprintf(stderr, "%u:%u: %s\n", error.line, error.col, error.description);
+        error_count += 1;
+    }
+
+    if (error_count != 0)
+    {
+        fprintf(stderr, "KGT: Exiting. %d errors reported\n", error_count);
+        return true;
+    }
+
+    return false;
+}
+
 void tester()
 {
     struct inputable* in = nullptr;
     struct outputable* out = nullptr;
-    parsing_error_queue errors = nullptr;
+    parsing_errors errors;
     FILE* outfile = fopen("nul:", "w");
     writer = new struct iwriter(outfile);
+    ast_rule* grammar;
 
     in = inlang("iso-ebnf");
 
     assert(in->in != nullptr);
 
     FILE* input = fopen("examples/c99-grammar.iso-ebnf", "r");
-    ast_rule* grammar = in->in(kgt_fgetc, input, &errors);
+    try
+    {
+        grammar = in->in(kgt_fgetc, input, &errors);
+    }
+    catch (std::logic_error& e)
+    {
+        printf("%s\n", e.what());
+        report_parsing_errors(&errors);
+        err_exit();
+    }
     fclose(input);
 
     for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
@@ -239,7 +261,7 @@ int main(int argc, char* argv[])
     struct inputable* in = nullptr;
     struct outputable* out = nullptr;
     const char* filter;
-    parsing_error_queue errors = nullptr;
+    parsing_errors errors;
     filter = nullptr;
 
     in = inlang("bnf");
@@ -283,23 +305,9 @@ int main(int argc, char* argv[])
 
     grammar = in->in(kgt_fgetc, stdin, &errors);
 
+    if (report_parsing_errors(&errors))
     {
-        int error_count = 0;
-
-        while (errors)
-        {
-            parsing_error error;
-            parsing_error_queue_pop(&errors, &error);
-
-            fprintf(stderr, "%u:%u: %s\n", error.line, error.col, error.description);
-            error_count += 1;
-        }
-
-        if (error_count != 0)
-        {
-            fprintf(stderr, "KGT: Exiting. %d errors reported\n", error_count);
-            err_exit();
-        }
+        err_exit();
     }
 
     {

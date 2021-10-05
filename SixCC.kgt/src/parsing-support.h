@@ -8,6 +8,7 @@
 #define KGT_PARSING_SUPPORT_H
 
 #include <string>
+#include <stdexcept>
 #include "parsing-error.h"
 
 #ifndef FORM
@@ -52,18 +53,18 @@ struct lex_state_s
     struct LX_STATE lx;
     struct lx_dynbuf buf;
 
-    int (*f)(void* opaque);
     void* opaque;
+    int (*f)(void* opaque);
 
     /* TODO: use lx's generated conveniences for the pattern buffer */
     char a[512];
     char* p;
 
-    parsing_error_queue errors;
+    parsing_errors* errors;
 
-    inline error_context err() const
+    inline operator error_context() const
     {
-        return error_context{ lx.start.line, lx.start.col, (parsing_error_queue*)&errors };
+        return error_context{ lx.start.line, lx.start.col, errors };
     }
 };
 

@@ -4,40 +4,36 @@
  * See LICENCE for the full copyright terms.
  */
 
-#include <stddef.h>
-#include <stdlib.h>
-
-#include "xalloc.h"
+#include <assert.h>
+#include <stdarg.h>
 
 #include "parsing-error.h"
 
-void parsing_error_queue_push(parsing_error_queue* queue, parsing_error error)
+void err(error_context error_context, const char* fmt, ...)
 {
-	/* Find the end of the queue: */
-	parsing_error_queue_element** tail = queue;
-	while (*tail != NULL)
-	{
-		tail = &((*tail)->next);
-	}
+    parsing_error error{};
+    va_list ap{};
 
-	/* Allocate a parsing_error_queue and initialize it: */
-	*tail = (parsing_error_queue_element*)xmalloc(sizeof(parsing_error_queue_element));
-	(*tail)->error = error;
-	(*tail)->next = NULL;
+    assert(error_context.errors != NULL);
+
+    error.line = error_context.line;
+    error.col = error_context.col;
+
+    va_start(ap, fmt);
+    vsnprintf(error.description, PARSING_ERROR_DESCRIPTION_SIZE, fmt, ap);
+    va_end(ap);
+
+    error_context.errors->add(error);
 }
 
-int parsing_error_queue_pop(parsing_error_queue* queue, parsing_error* error)
+void err_expected(error_context lex_state, const char* token)
 {
-	if (!*queue)
-	{
-		return 0;
-	}
-
-	parsing_error_queue_element* head = *queue;
-	*error = head->error;
-	*queue = head->next;
-
-	free(head);
-
-	return 1;
+    err(lex_state, "Syntax error: expected %s", token);
 }
+
+void err_unimplemented(error_context lex_state, const char* s)
+{
+    err(lex_state, "Unimplemented: %s", s);
+}
+
+

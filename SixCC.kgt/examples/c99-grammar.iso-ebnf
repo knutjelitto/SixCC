@@ -2,7 +2,7 @@
 (* Version 0.0 *)
 (* Copyright (C) 2017 Katayama Hirofumi MZ. License: MIT *)
 (* See also http://www.quut.com/c/ANSI-C-grammar-y-2011.html *)
-;
+
 
 translation-unit = {external-declaration};
 

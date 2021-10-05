@@ -123,7 +123,7 @@
     <ClCompile Include="src\bnf\bnf-output.cpp">
       <Filter>src\bnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\bnf\parser.cpp">
+    <ClCompile Include="src\bnf\bnf-parser.cpp">
       <Filter>src\bnf</Filter>
     </ClCompile>
     <ClCompile Include="src\abnf\lexer.cpp">
@@ -132,7 +132,7 @@
     <ClCompile Include="src\abnf\abnf-output.cpp">
       <Filter>src\abnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\abnf\parser.cpp">
+    <ClCompile Include="src\abnf\abnf-parser.cpp">
       <Filter>src\abnf</Filter>
     </ClCompile>
     <ClCompile Include="src\ast.cpp">
@@ -171,7 +171,7 @@
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp">
       <Filter>src\iso-ebnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\iso-ebnf\parser.cpp">
+    <ClCompile Include="src\iso-ebnf\iso-ebnf-parser.cpp">
       <Filter>src\iso-ebnf</Filter>
     </ClCompile>
     <ClCompile Include="src\rrtext\rrtext-output.cpp">
@@ -183,7 +183,7 @@
     <ClCompile Include="src\rbnf\rbnf-output.cpp">
       <Filter>src\rbnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\rbnf\parser.cpp">
+    <ClCompile Include="src\rbnf\rbnf-parser.cpp">
       <Filter>src\rbnf</Filter>
     </ClCompile>
     <ClCompile Include="src\wsn\lexer.cpp">
@@ -192,7 +192,7 @@
     <ClCompile Include="src\wsn\wsn-output.cpp">
       <Filter>src\wsn</Filter>
     </ClCompile>
-    <ClCompile Include="src\wsn\parser.cpp">
+    <ClCompile Include="src\wsn\wsn-parser.cpp">
       <Filter>src\wsn</Filter>
     </ClCompile>
     <ClCompile Include="src\ebnfhtml5\ebnfhtml-output.cpp">

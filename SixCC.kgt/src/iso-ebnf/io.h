@@ -17,7 +17,7 @@ struct ast_rule;
  */
 #define iso_ebnf_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_PROSE | FEATURE_AST_BINARY)
 
-struct ast_rule * iso_ebnf_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors);
+struct ast_rule * iso_ebnf_input(int (*f)(void *opaque), void *opaque, parsing_errors* errors);
 
 WARN_UNUSED_RESULT int iso_ebnf_output(const struct ast_rule *grammar);
 

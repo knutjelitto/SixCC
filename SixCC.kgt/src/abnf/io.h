@@ -17,7 +17,7 @@ struct ast_rule;
  * is supposed to be a source format; it's not presentational.
  */
 
-struct ast_rule * abnf_input(int (*f)(void *opaque), void *opaque, parsing_error_queue* errors);
+struct ast_rule * abnf_input(int (*f)(void *opaque), void *opaque, parsing_errors* errors);
 
 WARN_UNUSED_RESULT int abnf_output(const struct ast_rule *grammar);
 
