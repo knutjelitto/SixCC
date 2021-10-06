@@ -64,8 +64,9 @@ struct txt xtxtdup(const struct txt *t)
 {
 	struct txt nuw;
 
-	assert(t != NULL);
-	assert(t->p != NULL);
+	assert(t != nullptr);
+	assert(t->p != nullptr);
+	assert(t->n == strnlen(t->p, 1024));
 
 	nuw.n = t->n;
 	nuw.p = (char*)xmalloc(nuw.n);

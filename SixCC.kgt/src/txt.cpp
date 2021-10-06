@@ -27,40 +27,22 @@ bool txt_any(const struct txt* t, bool (*predicate)(int c))
 	return false;
 }
 
-bool is_binary_literal(const struct txt* t)
+bool is_binary_literal(const text& t)
 {
-	size_t i;
-
-	assert(t != nullptr);
-
-	for (i = 0; i < t->n; i++)
+	return t.any(
+		[](int c)
 	{
-		if (!isprint((unsigned char)(t->p[i])))
-		{
-			return true;
-		}
-	}
-
-	return false;
+		return !isprint(c);
+	});
 }
 
-bool isalphastr(const struct txt* t)
+bool isalphastr(const text& t)
 {
-	size_t i;
-
-	assert(t != nullptr);
-	assert(t->p != nullptr);
-	assert(t->n == strlen(t->p));
-
-	for (i = 0; i < t->n; i++)
+	return t.any(
+		[](int c)
 	{
-		if (isalpha((unsigned char)t->p[i]))
-		{
-			return true;
-		}
-	}
-
-	return false;
+		return isalpha(c);
+	});
 }
 
 int txtcasecmp(const struct txt *t1, const struct txt *t2)

@@ -23,40 +23,27 @@
 
 static bool walk_alts(struct ast_alt *alts);
 
-static void add_alt(int invisible, struct ast_alt **alt, const struct txt *t)
+static void add_alt(int invisible, struct ast_alt **alt, const text& text)
 {
-	struct ast_term *term;
-	struct ast_alt *nuw;
-	struct txt q;
-
 	assert(alt != NULL);
-	assert(t != NULL);
-	assert(t->p != NULL);
 
-	/* TODO: move ownership to ast_make_*() and no need to make a nuw struct txt here */
-	q = xtxtdup(t);
+	struct ast_term* term = ast_make_literal_term(invisible, text, false);
 
-	term = ast_make_literal_term(invisible, &q, 0);
-
-	nuw = ast_make_alt(invisible, term);
+	struct ast_alt* nuw = ast_make_alt(invisible, term);
 	nuw->next = *alt;
 	*alt = nuw;
 }
 
-WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt, const struct txt* t)
+WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt, const text& text)
 {
+	assert(alt != NULL);
+
 	size_t i, j;
 	unsigned long num_alphas, perm_count;
 	unsigned long alpha_inds[CHAR_BIT * sizeof i - 1]; /* - 1 because we shift (1 << n) by this size */
-	size_t n;
-	char* p;
 
-	assert(alt != NULL);
-	assert(t != NULL);
-	assert(t->p != NULL);
-
-	p = (char*)t->p;
-	n = t->n;
+	const char* p = text.chars();
+	int n = text.length();
 
 	num_alphas = 0;
 	for (i = 0; i < n; i++)
@@ -68,9 +55,9 @@ WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt
 
 		if (num_alphas + 1 > sizeof alpha_inds / sizeof * alpha_inds)
 		{
-			fprintf(stderr, "Too many alpha characters in case-invensitive string "
+			fprintf(stderr, "Too many alpha characters in case-insensitive string "
 				"\"%.*s\", max is %u\n",
-				(int)t->n, t->p,
+				text.length(), text.chars(),
 				(unsigned)(sizeof alpha_inds / sizeof * alpha_inds));
 			return false;
 		}
@@ -88,7 +75,7 @@ WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt
 				: toupper((unsigned char)p[alpha_inds[j]]);
 		}
 
-		add_alt(invisible, alt, t);
+		add_alt(invisible, alt, text);
 	}
 	return true;
 }

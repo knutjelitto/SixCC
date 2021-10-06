@@ -180,6 +180,7 @@
     </ClCompile>
     <ClCompile Include="src\dot\dot-output.cpp" />
     <ClCompile Include="src\ebnfhtml5\ebnfhtml-output.cpp" />
+    <ClCompile Include="src\errors.cpp" />
     <ClCompile Include="src\html5\html5-output.cpp" />
     <ClCompile Include="src\iso-ebnf\lexer.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp" />
@@ -189,7 +190,7 @@
     <ClCompile Include="src\iwriter.cpp" />
     <ClCompile Include="src\parsing-error.cpp" />
     <ClCompile Include="src\parsing-support.cpp" />
-    <ClCompile Include="src\rbnf\lexer.cpp" />
+    <ClCompile Include="src\rbnf\rbnf-lexer.cpp" />
     <ClCompile Include="src\rbnf\rbnf-output.cpp" />
     <ClCompile Include="src\rbnf\rbnf-parser.cpp" />
     <ClCompile Include="src\replace_real.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="src\compiler_specific.h" />
     <ClInclude Include="src\dot\io.h" />
     <ClInclude Include="src\ebnfhtml5\io.h" />
+    <ClInclude Include="src\errors.h" />
     <ClInclude Include="src\html5\io.h" />
     <ClInclude Include="src\iso-ebnf\io.h" />
     <ClInclude Include="src\iso-ebnf\lexer.h" />
@@ -261,8 +263,8 @@
     <ClInclude Include="src\parsing-error.h" />
     <ClInclude Include="src\parsing-support.h" />
     <ClInclude Include="src\rbnf\io.h" />
-    <ClInclude Include="src\rbnf\lexer.h" />
-    <ClInclude Include="src\rbnf\parser.h" />
+    <ClInclude Include="src\rbnf\rbnf-lexer.h" />
+    <ClInclude Include="src\rbnf\rbnf-parser.h" />
     <ClInclude Include="src\rewrite.h" />
     <ClInclude Include="src\rrdot\io.h" />
     <ClInclude Include="src\rrdump\io.h" />

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include "errors.h"
 #include "txt.h"
 #include "ast.h"
 #include "rewrite.h"
@@ -64,8 +65,12 @@ void replace_real(ast_rule* g, error_context lex_state)
 
                         ast_free_rule((struct ast_rule*)t->u.rule);
 
+#if true
+                        Error::notimplemented();
+#else
                         t->type = TYPE_TOKEN;
                         t->u.token = token;
+#endif
                     }
                 }
             }

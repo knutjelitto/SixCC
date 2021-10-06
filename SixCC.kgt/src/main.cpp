@@ -59,13 +59,13 @@ const char *css_file;
 void __wait(int a, int b, int c, int d) { }
 #endif
 
-struct inputable
+struct in_able
 {
     const char* name;
     struct ast_rule* (*in)(int (*f)(void*), void*, parsing_errors*);
 };
 
-struct outputable
+struct out_able
 {
     const char* name;
     int (*out)(const struct ast_rule*);
@@ -73,7 +73,7 @@ struct outputable
     enum rrd_features rrd_unsupported;
 };
 
-struct inputable inputable[] =
+struct in_able inputable[] =
 {
     { "abnf",       abnf_input     },
     { "bnf",        bnf_input      },
@@ -82,7 +82,7 @@ struct inputable inputable[] =
     { "wsn",        wsn_input      },
 };
 
-struct outputable outputable[] =
+struct out_able outputable[] =
 {
     { "abnf",       abnf_output,        (ast_features)0,                            (rrd_features)0 },
     { "blab",       blab_output,        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
@@ -125,7 +125,7 @@ static int kgt_fgetc(void *opaque)
     return fgetc(f);
 }
 
-static struct inputable* inlang(const char* s)
+static struct in_able* inlang(const char* s)
 {
     int i;
 
@@ -152,7 +152,7 @@ static struct inputable* inlang(const char* s)
     assert(!"unreached");
 }
 
-static struct outputable* outlang(const char* s)
+static struct out_able* outlang(const char* s)
 {
     size_t i;
 
@@ -203,7 +203,7 @@ struct ast_rule* read_grammar_from_file(const char* kind, const char* filename)
 {
     parsing_errors errors;
     ast_rule* grammar;
-    struct inputable* in = nullptr;
+    struct in_able* in = nullptr;
 
     in = inlang(kind);
 
@@ -229,7 +229,7 @@ struct ast_rule* read_grammar_from_file(const char* kind, const char* filename)
 
 void tester()
 {
-    struct outputable* out = nullptr;
+    struct out_able* out = nullptr;
 
     FILE* outfile = fopen("new-out.txt", "w");
     writer = new struct iwriter(outfile);
@@ -275,7 +275,6 @@ void tester()
     assert(news.size() > 1000000);
     assert(news == olds);
 
-
     ok_exit();
 }
 
@@ -284,8 +283,8 @@ int main(int argc, char* argv[])
     tester();
 
     struct ast_rule* grammar;
-    struct inputable* in = nullptr;
-    struct outputable* out = nullptr;
+    struct in_able* in = nullptr;
+    struct out_able* out = nullptr;
     const char* filter;
     parsing_errors errors;
     filter = nullptr;

@@ -109,8 +109,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_CI_LITERAL:
 		case TYPE_CS_LITERAL:
+#if true
+			writer->printf(" unimplemented-literal<%s>", term->u.literal.p);
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case TYPE_TOKEN:
 			writer->printf(" <%s>", term->u.token);

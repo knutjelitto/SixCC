@@ -30,7 +30,7 @@ struct node {
 	int invisible;
 
 	union {
-		struct txt literal; /* TODO: point to ast_literal instead */
+		class text literal; /* TODO: point to ast_literal instead */
 		const char *name;   /* TODO: point to ast_rule instead */
 		const char *prose;
 

@@ -66,24 +66,28 @@ lx_bnf_ungetc(struct lx_bnf_lx *lx, int c)
 	}
 }
 
-int
-lx_bnf_dynpush(void *buf_opaque, char c)
+int lx_bnf_dynpush(void* buf_opaque, char c)
 {
-	struct lx_dynbuf *t = (lx_dynbuf*)buf_opaque;
+	struct lx_dynbuf* t = (lx_dynbuf*)buf_opaque;
 
 	assert(t != NULL);
 
-	if (t->p == t->a + t->len) {
+	if (t->p == t->a + t->len)
+	{
 		size_t len;
 		ptrdiff_t off;
-		char *tmp;
+		char* tmp;
 
-		if (t->len == 0) {
+		if (t->len == 0)
+		{
 			assert(LX_DYN_LOW > 0);
 			len = LX_DYN_LOW;
-		} else {
+		}
+		else
+		{
 			len = t->len * LX_DYN_FACTOR;
-			if (len < t->len) {
+			if (len < t->len)
+			{
 				errno = ERANGE;
 				return -1;
 			}
@@ -91,12 +95,13 @@ lx_bnf_dynpush(void *buf_opaque, char c)
 
 		off = t->p - t->a;
 		tmp = (char*)realloc(t->a, len);
-		if (tmp == NULL) {
+		if (tmp == NULL)
+		{
 			return -1;
 		}
 
-		t->p   = tmp + off;
-		t->a   = tmp;
+		t->p = tmp + off;
+		t->a = tmp;
 		t->len = len;
 	}
 
@@ -108,8 +113,7 @@ lx_bnf_dynpush(void *buf_opaque, char c)
 	return 0;
 }
 
-int
-lx_bnf_dynclear(void *buf_opaque)
+int lx_bnf_dynclear(void *buf_opaque)
 {
 	struct lx_dynbuf *t = (lx_dynbuf*)buf_opaque;
 
