@@ -103,7 +103,7 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
 		node_free(rrd);
 
 		writer->printf(" <section>\n");
-		writer->printf("  <h2><a name='%s'>%s:</a></h2>\n", p->name, p->name);
+		writer->printf("  <h2><a name='%s'>%s:</a></h2>\n", p->name.chars(), p->name.chars());
 
 		h = (tnode->a + tnode->d + 1) * 10 + 5;
 		w = (tnode->w + 6) * 10;

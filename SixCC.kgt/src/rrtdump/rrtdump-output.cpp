@@ -200,13 +200,13 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", p->name);
+			writer->printf("%s:\n", p->name.chars());
 			tnode_walk(writer, tnode, 1);
 			writer->printf("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", p->name);
+			writer->printf("%s: (before prettify)\n", p->name.chars());
 			tnode_walk(writer, tnode, 1);
 			writer->printf("\n");
 
@@ -216,7 +216,7 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 			tnode = rrd_to_tnode(rrd, &dim);
 
-			writer->printf("%s: (after prettify)\n", p->name);
+			writer->printf("%s: (after prettify)\n", p->name.chars());
 			tnode_walk(writer, tnode, 1);
 			writer->printf("\n");
 		}

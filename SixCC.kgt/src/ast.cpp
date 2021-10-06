@@ -15,6 +15,9 @@
 
 struct ast_term* ast_make_empty_term(int invisible)
 {
+#if true
+    return new ast_term_empty(invisible);
+#else
     struct ast_term* nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof * nuw);
@@ -27,10 +30,14 @@ struct ast_term* ast_make_empty_term(int invisible)
     nuw->invisible = invisible;
 
     return nuw;
+#endif
 }
 
 struct ast_term * ast_make_rule_term(int invisible, struct ast_rule *rule)
 {
+#if true
+    return new ast_term_rule(invisible, rule);
+#else
     assert(rule != nullptr);
 
     struct ast_term *nuw;
@@ -46,6 +53,7 @@ struct ast_term * ast_make_rule_term(int invisible, struct ast_rule *rule)
     nuw->invisible = invisible;
 
     return nuw;
+#endif
 }
 
 struct ast_term* ast_make_char_term(int invisible, char c)
@@ -70,7 +78,7 @@ struct ast_term* ast_make_char_term(int invisible, char c)
     return nuw;
 }
 
-struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal, int ci)
+struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal, bool ci)
 {
     assert(literal != nullptr);
     assert(literal->p != nullptr);
@@ -78,15 +86,9 @@ struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal,
     struct ast_term* nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof * nuw);
-    nuw->type = ci ? TYPE_CI_LITERAL : TYPE_CS_LITERAL;
+    nuw->type = (ci && isalphastr(&nuw->u.literal)) ? TYPE_CI_LITERAL : TYPE_CS_LITERAL;
     nuw->next = nullptr;
     nuw->u.literal = *literal;
-
-    /* no need for case-insensitive strings if there are no letters */
-    if (!isalphastr(&nuw->u.literal))
-    {
-        nuw->type = TYPE_CS_LITERAL;
-    }
 
     nuw->min = 1;
     nuw->max = 1;
@@ -96,9 +98,11 @@ struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal,
     return nuw;
 }
 
-struct ast_term *
-ast_make_token_term(int invisible, const char *token)
+struct ast_term * ast_make_token_term(int invisible, const char *token)
 {
+#if true
+    return new ast_term_token(invisible, token);
+#else
     assert(token != nullptr);
 
     struct ast_term *nuw;
@@ -114,6 +118,7 @@ ast_make_token_term(int invisible, const char *token)
     nuw->invisible = invisible;
 
     return nuw;
+#endif
 }
 
 struct ast_term * ast_make_prose_term(int invisible, const char *prose)
@@ -167,6 +172,14 @@ struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms)
 
 struct ast_rule* ast_make_rule(const char* name, struct ast_alt* alts)
 {
+    return ast_make_rule(text(name), alts);
+}
+
+struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts)
+{
+#if true
+    return new ast_rule(name, alts);
+#else
     assert(name != nullptr);
 
     struct ast_rule* nuw;
@@ -177,6 +190,7 @@ struct ast_rule* ast_make_rule(const char* name, struct ast_alt* alts)
     nuw->next = nullptr;
 
     return nuw;
+#endif
 }
 
 struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const char* name)
@@ -187,7 +201,22 @@ struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const char* name)
 
     for (p = grammar; p != nullptr; p = p->next)
     {
-        if (0 == strcmp(p->name, name))
+        if (0 == strcmp(p->name.chars(), name))
+        {
+            return (struct ast_rule*)p;
+        }
+    }
+
+    return nullptr;
+}
+
+struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const text& name)
+{
+    const struct ast_rule* p;
+
+    for (p = grammar; p != nullptr; p = p->next)
+    {
+        if (0 == strcmp(p->name.chars(), name.chars()))
         {
             return (struct ast_rule*)p;
         }
@@ -203,7 +232,7 @@ void ast_free_rule(struct ast_rule *rule)
     {
         ast_free_rule(rule->next);
         ast_free_alt(rule->alts);
-        free(rule);
+        delete rule;
     }
 }
 

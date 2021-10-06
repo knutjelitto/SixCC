@@ -539,7 +539,7 @@ void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
 
 		node_free(rrd);
 
-		writer->printf("%s:\n", p->name);
+		writer->printf("%s:\n", p->name.chars());
 		render_rule(tnode, utf8);
 		writer->printf("\n");
 

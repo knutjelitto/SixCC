@@ -36,4 +36,14 @@ void err_unimplemented(error_context lex_state, const char* s)
     err(lex_state, "Unimplemented: %s", s);
 }
 
+void err_already(error_context lex_state, const text& name)
+{
+    err(lex_state, "production rule <%s> already exists", name.chars());
+}
+
+void err_undefined(error_context lex_state, const text& name)
+{
+    err(lex_state, "production rule <%s> not defined", name.chars());
+}
+
 

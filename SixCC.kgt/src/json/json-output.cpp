@@ -15,7 +15,7 @@
 
 #include "io.h"
 
-int escputc(int c)
+int escputc(int c, iwriter* writer)
 {
 	/*
 		A simple way to deal with all escaped characters:
@@ -34,23 +34,21 @@ int escputc(int c)
 void output_string(const char* string)
 {
 	writer->puts("\"");
-
-	for (; *string; string++)
-	{
-		escputc(*string);
-	}
-
+	writer->escape(string, escputc);
 	writer->puts("\"");
 }
 
-void output_txt(const struct txt t)
+void output_string(const text& string)
 {
-	size_t i;
 	writer->puts("\"");
-	for (i = 0; i < t.n; i++)
-	{
-		escputc(t.p[i]);
-	}
+	writer->escape(string, escputc);
+	writer->puts("\"");
+}
+
+void output_string(const struct txt& string)
+{
+	writer->puts("\"");
+	writer->escape(string.p, escputc);
 	writer->puts("\"");
 }
 
@@ -101,7 +99,7 @@ WARN_UNUSED_RESULT static int output_term_literal(const struct txt literal)
 	writer->puts(",");
 	output_string("literal");
 	writer->puts(":");
-	output_txt(literal);
+	output_string(literal);
 	return 1;
 }
 
@@ -156,11 +154,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		case TYPE_CS_LITERAL:
 		case TYPE_CI_LITERAL:
 			if (!output_term_literal(term->u.literal))
+			{
 				return 0;
+			}
 			break;
 		case TYPE_TOKEN:
 			if (!output_term_token(term->u.token))
+			{
 				return 0;
+			}
 			break;
 		case TYPE_PROSE:
 			if (!output_term_prose(term->u.prose))
@@ -249,7 +251,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	writer->puts(":");
 	output_string("rule");
 
-	if (rule->name)
+	if (rule->name.length() > 0)
 	{
 		writer->puts(",");
 		output_string("name");

@@ -8,6 +8,8 @@
  * Abstract Railroad Diagram tree dump to Graphivz dot
  */
 
+#include <map>
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -23,6 +25,28 @@
 #include "../rrd/list.h"
 
 #include "io.h"
+
+static std::map<const void*, uint64_t> numbers;
+
+#if true
+static void* map(const void* ptr)
+{
+    return nullptr;
+}
+#else
+static void* map(const void* ptr)
+{
+    auto found = numbers.find(ptr);
+    if (found != numbers.end())
+    {
+        return (void*)found->second;
+    }
+
+    uint64_t num = numbers.size();
+    numbers.insert({ ptr, num });
+    return (void*)num;
+}
+#endif
 
 static int escputc(int c, iwriter* writer)
 {
@@ -56,7 +80,7 @@ static int escputc(int c, iwriter* writer)
     return writer->putc(c);
 }
 
-static void rrd_print_dot(const char* prefix, const void* parent, const char* port, const struct node* node)
+static void rrd_print_dot(const text& prefix, const void* parent, const char* port, const struct node* node)
 {
     if (node == NULL)
     {
@@ -72,7 +96,7 @@ static void rrd_print_dot(const char* prefix, const void* parent, const char* po
             writer->printf("\t{ rank = same;\n");
             for (p = node->u.alt; p != NULL; p = p->next)
             {
-                writer->printf("\t\t\"%s/%p\";\n", prefix, (void*)p->node);
+                writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
             writer->printf("\t};\n");
             break;
@@ -81,7 +105,7 @@ static void rrd_print_dot(const char* prefix, const void* parent, const char* po
             writer->printf("\t{ rank = same;\n");
             for (p = node->u.seq; p != NULL; p = p->next)
             {
-                writer->printf("\t\t\"%s/%p\";\n", prefix, (void*)p->node);
+                writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
             writer->printf("\t};\n");
             break;
@@ -90,14 +114,14 @@ static void rrd_print_dot(const char* prefix, const void* parent, const char* po
             break;
     }
 
-    writer->printf("\t\"%s/%p\"%s -> \"%s/%p\"", prefix, parent, port, prefix, (void*)node);
+    writer->printf("\t\"%s/%p\"%s -> \"%s/%p\"", prefix.chars(), map(parent), port, prefix.chars(), map((void*)node));
     if (node->invisible)
     {
         writer->printf(" [ color = blue, style = dashed ]");
     }
     writer->printf(";\n");
 
-    writer->printf("\t\"%s/%p\" [ ", prefix, (void*)node);
+    writer->printf("\t\"%s/%p\" [ ", prefix.chars(), map((void*)node));
     if (node->invisible)
     {
         writer->printf("color = blue, fontcolor = blue, fillcolor = aliceblue, style = \"rounded,dashed\", ");
@@ -119,7 +143,7 @@ static void rrd_print_dot(const char* prefix, const void* parent, const char* po
 
         case NODE_RULE:
             writer->printf("label = \"\\<");
-            writer->escape(node->u.name, escputc);
+                writer->escape(node->u.name, escputc);
             writer->printf("\\>\"");
             break;
 
@@ -202,6 +226,8 @@ static void rrd_print_dot(const char* prefix, const void* parent, const char* po
 
 WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
 {
+    numbers.clear();
+
     const struct ast_rule* p;
 
     writer->printf("digraph G {\n");
@@ -223,7 +249,7 @@ WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
             rrd_pretty(&rrd);
         }
 
-        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name, (void*)p, p->name);
+        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name.chars(), map((void*)p), p->name.chars());
 
         rrd_print_dot(p->name, p, "", rrd);
 

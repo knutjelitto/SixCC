@@ -134,19 +134,19 @@ WARN_UNUSED_RESULT int rrdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", p->name);
+			writer->printf("%s:\n", p->name.chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", p->name);
+			writer->printf("%s: (before prettify)\n", p->name.chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 
 			rrd_pretty(&rrd);
 
-			writer->printf("%s: (after prettify)\n", p->name);
+			writer->printf("%s: (after prettify)\n", p->name.chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 		}

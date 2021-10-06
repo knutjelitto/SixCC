@@ -10,6 +10,8 @@
  * TODO: fprintf(fout), instead of stdout
  */
 
+#include <map>
+
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -20,6 +22,28 @@
 #include "../ast.h"
 
 #include "io.h"
+
+static std::map<void*, uint64_t> numbers;
+
+#if true
+static void* map(const void* ptr)
+{
+    return nullptr;
+}
+#else
+static void* map(void* ptr)
+{
+    auto found = numbers.find(ptr);
+    if (found != numbers.end())
+    {
+        return (void*)found->second;
+    }
+
+    uint64_t num = numbers.size();
+    numbers.insert({ ptr, num });
+    return (void*)num;
+}
+#endif
 
 static void output_alt(const struct ast_rule *grammar, const struct ast_alt *alt);
 
@@ -62,7 +86,7 @@ static void output_group(const struct ast_rule* grammar, const struct ast_term* 
 
     for (alt = group; alt != NULL; alt = alt->next)
     {
-        writer->printf("\t\"t%p\" -> \"a%p\";\n", (void*)term, (void*)alt);
+        writer->printf("\t\"t%p\" -> \"a%p\";\n", map((void*)term), map((void*)alt));
 
         output_alt(grammar, alt);
     }
@@ -72,14 +96,14 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
 {
     assert(term->max >= term->min || !term->max);
 
-    writer->printf("\t\"a%p\" -> \"t%p\"", (void*)alt, (void*)term);
+    writer->printf("\t\"a%p\" -> \"t%p\"", map((void*)alt), map((void*)term));
     if (term->invisible)
     {
         writer->printf(" [ color = blue, style = dashed ]");
     }
     writer->printf(";\n");
 
-    writer->printf("\t\"t%p\" [ shape = record, ", (void*)term);
+    writer->printf("\t\"t%p\" [ shape = record, ", map((void*)term));
 
     if (term->invisible)
     {
@@ -160,7 +184,7 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
         case TYPE_TOKEN:
         case TYPE_PROSE:
             writer->printf("\t\"t%p\" [ style = filled",
-                (void*)term);
+                map((void*)term));
 
             if (term->invisible)
             {
@@ -180,7 +204,7 @@ static void output_alt(const struct ast_rule* grammar, const struct ast_alt* alt
 {
     const struct ast_term* term;
 
-    writer->printf("\t\"a%p\" [ label = \"|\"", (void*)alt);
+    writer->printf("\t\"a%p\" [ label = \"|\"", map((void*)alt));
 
     if (alt->invisible)
     {
@@ -201,7 +225,7 @@ static void output_alts(const struct ast_rule* grammar, const struct ast_rule* r
 
     for (alt = alts; alt != NULL; alt = alt->next)
     {
-        writer->printf("\t\"p%p\" -> \"a%p\";\n", (void*)rule, (void*)alt);
+        writer->printf("\t\"p%p\" -> \"a%p\";\n", map((void*)rule), map((void*)alt));
 
         output_alt(grammar, alt);
     }
@@ -209,13 +233,15 @@ static void output_alts(const struct ast_rule* grammar, const struct ast_rule* r
 
 static void output_rule(const struct ast_rule* grammar, const struct ast_rule* rule)
 {
-    writer->printf("\t\"p%p\" [ shape = record, label = \"=|%s\" ];\n", (void*)rule, rule->name);
+    writer->printf("\t\"p%p\" [ shape = record, label = \"=|%s\" ];\n", map((void*)rule), rule->name.chars());
 
     output_alts(grammar, rule, rule->alts);
 }
 
 WARN_UNUSED_RESULT int dot_output(const struct ast_rule* grammar)
 {
+    numbers.clear();
+
     const struct ast_rule* p;
 
     writer->printf("digraph G {\n");

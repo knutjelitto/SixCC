@@ -72,7 +72,8 @@ struct ast_term
 
 struct ast_term_empty : ast_term
 {
-    ast_term_empty(int invisible) : ast_term(TYPE_EMPTY, invisible)
+    ast_term_empty(int invisible)
+        : ast_term(TYPE_EMPTY, invisible)
     {
     }
 };
@@ -149,24 +150,31 @@ struct ast_alt
  */
 struct ast_rule
 {
-    const char* name;
-    struct ast_alt* alts;
+    ast_rule(const text name, ast_alt* alts)
+        : name(text(name)), alts(alts), next(nullptr)
+    {
+    }
 
+    const text name;
+
+    struct ast_alt* alts;
     struct ast_rule* next;
 };
 
 struct ast_term* ast_make_empty_term(int invisible);
 struct ast_term* ast_make_rule_term(int invisible, struct ast_rule* rule);
 struct ast_term* ast_make_char_term(int invisible, char c);
-struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal, int ci);
+struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal, bool ci);
 struct ast_term* ast_make_token_term(int invisible, const char* token);
 struct ast_term* ast_make_prose_term(int invisible, const char* prose);
 struct ast_term* ast_make_group_term(int invisible, struct ast_alt* group);
 
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms);
 struct ast_rule* ast_make_rule(const char* name, struct ast_alt* alts);
+struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 
 struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const char* name);
+struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const text& name);
 
 void ast_free_rule(struct ast_rule *rule);
 void ast_free_alt(struct ast_alt *alt);

@@ -516,7 +516,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term *ZOt)
 			{
 //#line 613 "src/parser.act"
 
-		(ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 0);
+		(ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), false);
 	
 //#line 737 "src/wsn/parser.c"
 			}
@@ -726,7 +726,7 @@ prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
 
 				if (ast_find_rule((ZIr), (*ZIl)->name))
 				{
-					err(*lex_state, "production rule <%s> already exists", (*ZIl)->name);
+					err_already(*lex_state, (*ZIl)->name);
 					return;
 				}
 
@@ -976,15 +976,13 @@ ZL1:;
 
 						if (!allow_undefined)
 						{
-							err(*lex_state, "production rule <%s> not defined", t->u.rule->name);
+							err_undefined(*lex_state, t->u.rule->name);
 							/* XXX: would leak the ast_rule here */
 							continue;
 						}
 
 						{
-							const char* token;
-
-							token = t->u.rule->name;
+							const char* token = xstrdup(t->u.rule->name);
 
 							ast_free_rule((struct ast_rule*)t->u.rule);
 

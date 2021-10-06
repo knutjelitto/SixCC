@@ -827,7 +827,7 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 //#line 613 "src/parser.act"
 
-                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 0);
+                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), false);
 
                 //#line 935 "src/abnf/parser.c"
             }
@@ -1125,7 +1125,7 @@ static void prod_101(lex_state lex_state, act_state act_state, map_rule* ZIl)
 
                 if (ast_find_rule((ZIr), (*ZIl)->name))
                 {
-                    err(*lex_state, "production rule <%s> already exists", (*ZIl)->name);
+                    err_already(*lex_state, (*ZIl)->name);
                     return;
                 }
 
@@ -1432,7 +1432,7 @@ static void prod_106(lex_state lex_state, act_state act_state, map_term* ZOt)
                     ((char*)(ZIx).p)[i] = tolower((unsigned char)(ZIx).p[i]);
                 }
 
-                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 1);
+                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), true);
 
                 //#line 1532 "src/abnf/parser.c"
             }
@@ -1458,7 +1458,7 @@ static void prod_106(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 //#line 613 "src/parser.act"
 
-                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 0);
+                (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), false);
 
                 //#line 1558 "src/abnf/parser.c"
             }
@@ -1620,7 +1620,6 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
                     r = ast_find_rule(g, t->u.rule->name);
                     if (r != nullptr)
                     {
-                        free((char*)t->u.rule->name);
                         ast_free_rule((ast_rule*)t->u.rule);
                         t->u.rule = r;
                         continue;
@@ -1628,15 +1627,13 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
 
                     if (!allow_undefined)
                     {
-                        err(*lex_state, "production rule <%s> not defined", t->u.rule->name);
+                        err_undefined(*lex_state, t->u.rule->name);
                         /* XXX: would leak the ast_rule here */
                         continue;
                     }
 
                     {
-                        const char* token;
-
-                        token = t->u.rule->name;
+                        const char* token = xstrdup(t->u.rule->name);
 
                         ast_free_rule((ast_rule*)t->u.rule);
 

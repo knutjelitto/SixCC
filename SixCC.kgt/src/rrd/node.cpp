@@ -107,6 +107,12 @@ struct node* node_create_name(int invisible, const char *name)
     return nuw;
 }
 
+struct node* node_create_name(int invisible, const text& name)
+{
+    return node_create_name(invisible, xstrdup(name));
+}
+
+
 struct node* node_create_prose(int invisible, const char* prose)
 {
     struct node* nuw;

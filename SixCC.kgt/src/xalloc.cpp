@@ -55,6 +55,11 @@ char* xstrdup(const char* s)
 	return nuw;
 }
 
+char* xstrdup(const text& s)
+{
+	return xstrdup(s.chars());
+}
+
 struct txt xtxtdup(const struct txt *t)
 {
 	struct txt nuw;

@@ -9,6 +9,7 @@
 
 #include <string>
 #include <queue>
+#include "txt.h"
 
 #define PARSING_ERROR_DESCRIPTION_SIZE (1024)
 
@@ -52,5 +53,7 @@ struct error_context
 void err(error_context error_context, const char* fmt, ...);
 void err_expected(error_context lex_state, const char* token);
 void err_unimplemented(error_context lex_state, const char* s);
+void err_already(error_context lex_state, const text& name);
+void err_undefined(error_context lex_state, const text& name);
 
 #endif

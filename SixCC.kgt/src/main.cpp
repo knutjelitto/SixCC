@@ -9,6 +9,8 @@
 #define _XOPEN_SOURCE 500
 
 #include <stdexcept>
+#include <fstream>
+
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -197,21 +199,19 @@ static bool report_parsing_errors(parsing_errors* errors)
     return false;
 }
 
-void tester()
+struct ast_rule* read_grammar_from_file(const char* kind, const char* filename)
 {
-    struct inputable* in = nullptr;
-    struct outputable* out = nullptr;
     parsing_errors errors;
-    FILE* outfile = fopen("nul:", "w");
-    writer = new struct iwriter(outfile);
     ast_rule* grammar;
+    struct inputable* in = nullptr;
 
-    in = inlang("abnf");
+    in = inlang(kind);
 
+    assert(in != nullptr);
     assert(in->in != nullptr);
 
-    FILE* input = fopen("examples/abnf.abnf", "r");
-    //FILE* input = fopen("examples/c99-grammar.iso-ebnf", "r");
+    FILE* input = fopen(filename, "r");
+    assert(input != nullptr);
     try
     {
         grammar = in->in(kgt_fgetc, input, &errors);
@@ -223,6 +223,18 @@ void tester()
         err_exit();
     }
     fclose(input);
+
+    return grammar;
+}
+
+void tester()
+{
+    struct outputable* out = nullptr;
+
+    FILE* outfile = fopen("new-out.txt", "w");
+    writer = new struct iwriter(outfile);
+
+    ast_rule* grammar = read_grammar_from_file("iso-ebnf", "examples/c99-grammar.iso-ebnf");
 
     for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
     {
@@ -251,6 +263,15 @@ void tester()
     }
 
     fclose(outfile);
+
+    std::ifstream newf("new-out.txt");
+    std::string news((std::istreambuf_iterator<char>(newf)), (std::istreambuf_iterator<char>()));
+    std::ifstream oldf("old-out.txt");
+    std::string olds((std::istreambuf_iterator<char>(oldf)), (std::istreambuf_iterator<char>()));
+    assert(news.size() > 1000000);
+    assert(news == olds);
+
+
     ok_exit();
 }
 
@@ -359,7 +380,7 @@ int main(int argc, char* argv[])
 
             for (t = strtok_s(tmp, ",", &save); t != nullptr; t = strtok_s(nullptr, ",", &save))
             {
-                if (0 == strcmp(p->name, t))
+                if (0 == strcmp(p->name.chars(), t))
                 {
                     p->next = *tail;
                     *tail = p;

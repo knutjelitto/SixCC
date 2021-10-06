@@ -11,9 +11,12 @@ struct iwriter
 	int printf(const char* fmt, ...);
 	int vprintf(const char* fmt, va_list ap);
 	int puts(const char* text);
+	int puts(const text& text);
 	int putc(int character);
 
+	int escape(const text& text, int (*esc)(int, iwriter*));
 	int escape(const char* text, int (*esc)(int, iwriter*));
+	int escape(const struct txt& text, int (*esc)(int, iwriter*));
 	int escape(const struct txt* text, int (*esc)(int, iwriter*));
 
 private:

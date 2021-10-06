@@ -160,9 +160,9 @@ static void output_term(const struct ast_term* term)
             break;
 
         case TYPE_RULE:
-            writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->u.rule->name, term->min, term->max);
-            writer->printf("%s", term->u.rule->name);
-            writer->printf("</a>");
+            writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->u.rule->name.chars(), term->min, term->max);
+            writer->puts(term->u.rule->name);
+            writer->puts("</a>");
             break;
 
         case TYPE_CI_LITERAL:
@@ -238,13 +238,13 @@ static void output_rule(const struct ast_rule* rule)
 {
     const struct ast_alt* alt;
 
-    writer->printf("  <dl class='bnf'>\n");
+    writer->puts("  <dl class='bnf'>\n");
 
-    writer->printf("    <dt>");
-    writer->printf("<a name='%s'>", rule->name);
-    writer->printf("%s", rule->name);
-    writer->printf("</a>:");
-    writer->printf("</dt>\n");
+    writer->puts("    <dt>");
+    writer->printf("<a name='%s'>", rule->name.chars());
+    writer->puts(rule->name);
+    writer->puts("</a>:");
+    writer->puts("</dt>\n");
 
     writer->printf("    <dd>");
 

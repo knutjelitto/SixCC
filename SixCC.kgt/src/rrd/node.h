@@ -49,6 +49,7 @@ struct node {
 struct node* node_create_ci_literal(int invisible, const struct txt* literal);
 struct node* node_create_cs_literal(int invisible, const struct txt* literal);
 struct node* node_create_name(int invisible, const char* name);
+struct node* node_create_name(int invisible, const text& name);
 struct node* node_create_prose(int invisible, const char* name);
 struct node* node_create_alt(int invisible, struct list* alt);
 struct node* node_create_alt_skippable(int invisible, struct list* alt);

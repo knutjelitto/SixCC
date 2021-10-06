@@ -124,10 +124,10 @@ prod_factor(lex_state lex_state, act_state act_state, map_term *ZOt)
         }
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOt = ZIt;
 }
 
@@ -148,10 +148,10 @@ prod_list_Hof_Hterms(lex_state lex_state, act_state act_state, map_term *ZOl)
         }
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOl = ZIl;
 }
 
@@ -172,10 +172,10 @@ prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, map_rule *ZOl)
         }
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOl = ZIl;
 }
 
@@ -198,17 +198,17 @@ prod_list_Hof_Halts(lex_state lex_state, act_state act_state, map_alt *ZOl)
         }
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOl = ZIl;
 }
 
 static void
 prod_body(lex_state lex_state, act_state act_state)
 {
-ZL2_body:;
+ZL2_body:
     switch (CURRENT_TERMINAL) {
     case (TOK_CHAR):
         {
@@ -259,7 +259,7 @@ ZL2_body:;
         break;
     }
     return;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
 }
@@ -280,7 +280,7 @@ prod_bnf(lex_state lex_state, act_state act_state, map_rule *ZOl)
         }
     }
     goto ZL0;
-ZL1:;
+ZL1:
     {
         /* BEGINNING OF ACTION: make-empty-rule */
         {
@@ -302,7 +302,7 @@ ZL1:;
         }
         /* END OF ACTION: err-syntax */
     }
-ZL0:;
+ZL0:
     *ZOl = ZIl;
 }
 
@@ -342,15 +342,14 @@ prod_term(lex_state lex_state, act_state act_state, map_term *ZOt)
         goto ZL1;
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOt = ZIt;
 }
 
-static void
-prod_rule(lex_state lex_state, act_state act_state, map_rule *ZOr)
+static void prod_rule(lex_state lex_state, act_state act_state, map_rule *ZOr)
 {
     map_rule ZIr;
 
@@ -393,7 +392,7 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule *ZOr)
                 ADVANCE_LEXER;
             }
             goto ZL2;
-        ZL3:;
+        ZL3:
             {
                 /* BEGINNING OF ACTION: err-expected-equals */
                 {
@@ -439,7 +438,7 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule *ZOr)
                 goto ZL5;
             }
             goto ZL4;
-        ZL5:;
+        ZL5:
             {
                 /* BEGINNING OF ACTION: err-expected-sep */
                 {
@@ -456,10 +455,10 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule *ZOr)
         /* END OF INLINE: 83 */
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOr = ZIr;
 }
 
@@ -484,7 +483,7 @@ prod_90(lex_state lex_state, act_state act_state, map_rule* ZIl)
 
                 if (ast_find_rule((ZIr), (*ZIl)->name))
                 {
-                    err(*lex_state, "production rule <%s> already exists", (*ZIl)->name);
+                    err_already(*lex_state, (*ZIl)->name);
                     return;
                 }
 
@@ -531,7 +530,7 @@ prod_91(lex_state lex_state, act_state act_state, map_term* ZIt, map_alt* ZOl)
                     ADVANCE_LEXER;
                 }
                 goto ZL2;
-            ZL3:;
+            ZL3:
             {
                 /* BEGINNING OF ACTION: err-expected-alt */
                 {
@@ -628,7 +627,7 @@ prod_92(lex_state lex_state, act_state act_state, map_term *ZIl)
         break;
     }
     return;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
 }
@@ -658,7 +657,7 @@ prod_93(lex_state lex_state, act_state act_state, map_term *ZOt)
             {
 //#line 613 "src/parser.act"
 
-        (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), 0);
+        (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), false);
     
 //#line 866 "src/bnf/parser.c"
             }
@@ -710,10 +709,10 @@ prod_93(lex_state lex_state, act_state act_state, map_term *ZOt)
         goto ZL1;
     }
     goto ZL0;
-ZL1:;
+ZL1:
     SAVE_LEXER ((ERROR_TERMINAL));
     return;
-ZL0:;
+ZL0:
     *ZOt = ZIt;
 }
 
@@ -813,7 +812,6 @@ ZL0:;
                         r = ast_find_rule(g, t->u.rule->name);
                         if (r != NULL)
                         {
-                            free((char*)t->u.rule->name);
                             ast_free_rule((ast_rule*)t->u.rule);
                             t->u.rule = r;
                             continue;
@@ -821,15 +819,13 @@ ZL0:;
 
                         if (!allow_undefined)
                         {
-                            err(*lex_state, "production rule <%s> not defined", t->u.rule->name);
+                            err_undefined(*lex_state, t->u.rule->name);
                             /* XXX: would leak the ast_rule here */
                             continue;
                         }
 
                         {
-                            const char* token;
-
-                            token = t->u.rule->name;
+                            const char* token = xstrdup(t->u.rule->name);
 
                             ast_free_rule((ast_rule*)t->u.rule);
 

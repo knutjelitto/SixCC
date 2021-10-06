@@ -968,10 +968,8 @@ WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
 
 	for (i = 0, p = grammar; p; p = p->next, i++)
 	{
-		writer->printf("  <g transform='translate(%u %u)'>\n",
-			40, z * 10 + 50);
-		writer->printf("    <text x='%d' y='%d'>%s:</text>\n",
-			-30, -10, p->name);
+		writer->printf("  <g transform='translate(%u %u)'>\n", 40, z * 10 + 50);
+		writer->printf("    <text x='%d' y='%d'>%s:</text>\n", -30, -10, p->name.chars());
 
 		svg_render_rule(a[i], nullptr, grammar);
 

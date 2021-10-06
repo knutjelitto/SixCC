@@ -33,6 +33,11 @@ int iwriter::puts(const char* text)
 	return fputs(text, file);
 }
 
+int iwriter::puts(const text& text)
+{
+	return fputs(text.chars(), file);
+}
+
 int iwriter::putc(int character)
 {
 	return fputc(character, file);
@@ -60,6 +65,16 @@ int iwriter::escape(const char* text, int (*esc)(int, iwriter*))
 	}
 
 	return n;
+}
+
+int iwriter::escape(const text& text, int (*esc)(int, iwriter*))
+{
+	return escape(text.chars(), esc);
+}
+
+int iwriter::escape(const struct txt& text, int (*esc)(int, iwriter*))
+{
+	return escape(&text, esc);
 }
 
 int iwriter::escape(const struct txt* text, int (*esc)(int, iwriter*))

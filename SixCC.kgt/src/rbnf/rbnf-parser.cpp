@@ -497,8 +497,7 @@ ZL0:
     *ZOt = ZIt;
 }
 
-static void
-prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
+static void prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 {
     map_rule ZIr;
 
@@ -638,7 +637,7 @@ prod_91(lex_state lex_state, act_state act_state, map_rule* ZIl)
 
                 if (ast_find_rule((ZIr), (*ZIl)->name))
                 {
-                    err(*lex_state, "production rule <%s> already exists", (*ZIl)->name);
+                    err_already(*lex_state, (*ZIl)->name);
                     return;
                 }
 
@@ -885,7 +884,6 @@ ZL1:
                         r = ast_find_rule(g, t->u.rule->name);
                         if (r != NULL)
                         {
-                            free((char*)t->u.rule->name);
                             ast_free_rule((struct ast_rule*)t->u.rule);
                             t->u.rule = r;
                             continue;
@@ -893,7 +891,7 @@ ZL1:
 
                         if (!allow_undefined)
                         {
-                            err(*lex_state, "production rule <%s> not defined", t->u.rule->name);
+                            err_undefined(*lex_state, t->u.rule->name);
                             /* XXX: would leak the ast_rule here */
                             continue;
                         }
@@ -901,7 +899,7 @@ ZL1:
                         {
                             const char* token;
 
-                            token = t->u.rule->name;
+                            token = xstrdup(t->u.rule->name);
 
                             ast_free_rule((struct ast_rule*)t->u.rule);
 

@@ -108,7 +108,8 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->printf(" %s", term->u.rule->name);
+			writer->putc(' ');
+			writer->puts(term->u.rule->name);
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -177,7 +178,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("%s =", rule->name);
+	writer->printf("%s =", rule->name.chars());
 	for (alt = rule->alts; alt != NULL; alt = alt->next)
 	{
 		if (!output_alt(alt))
