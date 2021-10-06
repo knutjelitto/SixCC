@@ -50,6 +50,7 @@ bool isalphastr(const struct txt* t)
 
 	assert(t != nullptr);
 	assert(t->p != nullptr);
+	assert(t->n == strlen(t->p));
 
 	for (i = 0; i < t->n; i++)
 	{

@@ -361,7 +361,7 @@ ZL1:
             //#line 717 "src/parser.act"
 
             err(*lex_state, "Syntax error");
-            err_exit();
+            throw std::logic_error("bail out");
 
             //#line 566 "src/rbnf/parser.c"
         }
@@ -859,10 +859,13 @@ ZL1:
         act_state->invisible = 0;
 
         ADVANCE_LEXER;
-        FORM_ENTRY(lex_state, act_state, &g);
+        prod_rbnf(lex_state, act_state, &g);
 
         /* TODO: handle error */
 
+#if true
+        replace_real(g, *lex_state);
+#else
         /* substitute placeholder rules for the real thing */
         {
             const struct ast_rule* p;
@@ -897,9 +900,7 @@ ZL1:
                         }
 
                         {
-                            const char* token;
-
-                            token = xstrdup(t->u.rule->name);
+                            const char* token = xstrdup(t->u.rule->name);
 
                             ast_free_rule((struct ast_rule*)t->u.rule);
 
@@ -910,6 +911,7 @@ ZL1:
                 }
             }
         }
+#endif
 
         return g;
     }

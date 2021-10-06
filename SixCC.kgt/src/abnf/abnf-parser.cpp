@@ -388,7 +388,7 @@ ZL1:
             //#line 717 "src/parser.act"
 
             err(*lex_state, "Syntax error");
-            err_exit();
+            throw std::logic_error("bail out");
 
             //#line 512 "src/abnf/parser.c"
         }
@@ -1599,18 +1599,21 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
 
     /* TODO: handle error */
 
-    /* substitute placeholder rules for the real thing */
+#if true
+    replace_real(g, *lex_state);
+#else
+        /* substitute placeholder rules for the real thing */
     {
         const struct ast_rule* p;
         const struct ast_alt* q;
         struct ast_term* t;
         struct ast_rule* r;
 
-        for (p = g; p != nullptr; p = p->next)
+        for (p = g; p != NULL; p = p->next)
         {
-            for (q = p->alts; q != nullptr; q = q->next)
+            for (q = p->alts; q != NULL; q = q->next)
             {
-                for (t = q->terms; t != nullptr; t = t->next)
+                for (t = q->terms; t != NULL; t = t->next)
                 {
                     if (t->type != TYPE_RULE)
                     {
@@ -1618,9 +1621,9 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
                     }
 
                     r = ast_find_rule(g, t->u.rule->name);
-                    if (r != nullptr)
+                    if (r != NULL)
                     {
-                        ast_free_rule((ast_rule*)t->u.rule);
+                        ast_free_rule((struct ast_rule*)t->u.rule);
                         t->u.rule = r;
                         continue;
                     }
@@ -1635,7 +1638,7 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
                     {
                         const char* token = xstrdup(t->u.rule->name);
 
-                        ast_free_rule((ast_rule*)t->u.rule);
+                        ast_free_rule((struct ast_rule*)t->u.rule);
 
                         t->type = TYPE_TOKEN;
                         t->u.token = token;
@@ -1644,6 +1647,7 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
             }
         }
     }
+#endif
 
     return g;
 }

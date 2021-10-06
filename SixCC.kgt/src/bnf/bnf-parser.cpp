@@ -296,8 +296,8 @@ ZL1:
 //#line 717 "src/parser.act"
 
         err(*lex_state, "Syntax error");
-        err_exit();
-    
+        throw std::logic_error("bail out");
+
 //#line 510 "src/bnf/parser.c"
         }
         /* END OF ACTION: err-syntax */
@@ -791,6 +791,9 @@ ZL0:
 
         /* TODO: handle error */
 
+#if true
+        replace_real(g, *lex_state);
+#else
         /* substitute placeholder rules for the real thing */
         {
             const struct ast_rule* p;
@@ -812,7 +815,7 @@ ZL0:
                         r = ast_find_rule(g, t->u.rule->name);
                         if (r != NULL)
                         {
-                            ast_free_rule((ast_rule*)t->u.rule);
+                            ast_free_rule((struct ast_rule*)t->u.rule);
                             t->u.rule = r;
                             continue;
                         }
@@ -827,7 +830,7 @@ ZL0:
                         {
                             const char* token = xstrdup(t->u.rule->name);
 
-                            ast_free_rule((ast_rule*)t->u.rule);
+                            ast_free_rule((struct ast_rule*)t->u.rule);
 
                             t->type = TYPE_TOKEN;
                             t->u.token = token;
@@ -836,6 +839,7 @@ ZL0:
                 }
             }
         }
+#endif
 
         return g;
     }

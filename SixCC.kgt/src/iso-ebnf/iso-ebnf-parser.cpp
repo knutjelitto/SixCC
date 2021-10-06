@@ -311,7 +311,6 @@ ZL1:
 
             err(*lex_state, "Syntax error");
             throw std::logic_error("bail out");
-            err_exit();
 
             //#line 526 "src/iso-ebnf/parser.c"
         }
@@ -1138,6 +1137,9 @@ ZL0:
 
         /* TODO: handle error */
 
+#if true
+        replace_real(g, *lex_state);
+#else
         /* substitute placeholder rules for the real thing */
         {
             const struct ast_rule* p;
@@ -1145,11 +1147,11 @@ ZL0:
             struct ast_term* t;
             struct ast_rule* r;
 
-            for (p = g; p != nullptr; p = p->next)
+            for (p = g; p != NULL; p = p->next)
             {
-                for (q = p->alts; q != nullptr; q = q->next)
+                for (q = p->alts; q != NULL; q = q->next)
                 {
-                    for (t = q->terms; t != nullptr; t = t->next)
+                    for (t = q->terms; t != NULL; t = t->next)
                     {
                         if (t->type != TYPE_RULE)
                         {
@@ -1157,9 +1159,9 @@ ZL0:
                         }
 
                         r = ast_find_rule(g, t->u.rule->name);
-                        if (r != nullptr)
+                        if (r != NULL)
                         {
-                            ast_free_rule((ast_rule*)t->u.rule);
+                            ast_free_rule((struct ast_rule*)t->u.rule);
                             t->u.rule = r;
                             continue;
                         }
@@ -1183,6 +1185,7 @@ ZL0:
                 }
             }
         }
+#endif
 
         return g;
     }

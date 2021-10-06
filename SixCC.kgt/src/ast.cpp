@@ -86,7 +86,7 @@ struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal,
     struct ast_term* nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof * nuw);
-    nuw->type = (ci && isalphastr(&nuw->u.literal)) ? TYPE_CI_LITERAL : TYPE_CS_LITERAL;
+    nuw->type = (ci && isalphastr(literal)) ? TYPE_CI_LITERAL : TYPE_CS_LITERAL;
     nuw->next = nullptr;
     nuw->u.literal = *literal;
 

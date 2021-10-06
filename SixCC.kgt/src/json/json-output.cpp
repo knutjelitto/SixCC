@@ -166,11 +166,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 		case TYPE_PROSE:
 			if (!output_term_prose(term->u.prose))
+			{
 				return 0;
+			}
 			break;
 		case TYPE_GROUP:
 			if (!output_term_group(term->u.group))
+			{
 				return 0;
+			}
 			break;
 	}
 

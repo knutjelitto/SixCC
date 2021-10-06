@@ -235,6 +235,10 @@ void tester()
     writer = new struct iwriter(outfile);
 
     ast_rule* grammar = read_grammar_from_file("iso-ebnf", "examples/c99-grammar.iso-ebnf");
+    //ast_rule* grammar = read_grammar_from_file("rbnf", "examples/gmpls.rbnf");
+    //ast_rule* grammar = read_grammar_from_file("wsn", "examples/c_syntax.wsn");
+    //ast_rule* grammar = read_grammar_from_file("bnf", "examples/bnf.bnf");
+    //ast_rule* grammar = read_grammar_from_file("abnf", "examples/abnf.abnf");
 
     for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
     {

@@ -192,6 +192,7 @@
     <ClCompile Include="src\rbnf\lexer.cpp" />
     <ClCompile Include="src\rbnf\rbnf-output.cpp" />
     <ClCompile Include="src\rbnf\rbnf-parser.cpp" />
+    <ClCompile Include="src\replace_real.cpp" />
     <ClCompile Include="src\rewrite_ci.cpp" />
     <ClCompile Include="src\rewrite_invisible.cpp" />
     <ClCompile Include="src\rrdot\rrdot_output.cpp" />

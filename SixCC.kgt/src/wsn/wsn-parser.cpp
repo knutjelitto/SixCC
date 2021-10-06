@@ -695,7 +695,7 @@ ZL1:
 			//#line 717 "src/parser.act"
 
 			err(*lex_state, "Syntax error");
-			err_exit();
+			throw std::logic_error("bail out");
 
 			//#line 913 "src/wsn/parser.c"
 		}
@@ -948,6 +948,9 @@ ZL1:;
 
 		/* TODO: handle error */
 
+#if true
+		replace_real(g, *lex_state);
+#else
 		/* substitute placeholder rules for the real thing */
 		{
 			const struct ast_rule* p;
@@ -993,6 +996,7 @@ ZL1:;
 				}
 			}
 		}
+#endif
 
 		return g;
 	}
