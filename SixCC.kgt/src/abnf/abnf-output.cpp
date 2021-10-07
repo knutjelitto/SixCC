@@ -156,7 +156,7 @@ WARN_UNUSED_RESULT static int output_terms(const struct ast_term* terms)
 
 WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 {
-	const struct ast_alt* p;
+	const struct ast_alt* alt;
 	struct bm bm;
 	int hi, lo;
 	int first;
@@ -165,15 +165,15 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 
 	hi = -1;
 
-	p = alts;
+	alt = alts;
 
 	first = 1;
 
-	while (p != nullptr)
+	while (alt != nullptr)
 	{
 		unsigned char c;
 
-		if (!char_terminal(p->terms, &c))
+		if (!char_terminal(alt->terms, &c))
 		{
 			if (!first)
 			{
@@ -184,18 +184,18 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 				first = 0;
 			}
 
-			if (!output_terms(p->terms))
+			if (!output_terms(alt->terms))
 			{
 				return 0;
 			}
-			p = p->next;
+			alt = alt->next;
 			continue;
 		}
 
 		if (!bm_get(&bm, c))
 		{
 			/* already output */
-			p = p->next;
+			alt = alt->next;
 			continue;
 		}
 
@@ -426,12 +426,14 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule *rule)
 
 WARN_UNUSED_RESULT int abnf_output(const struct ast_rule* grammar)
 {
-	const struct ast_rule* p;
+	const struct ast_rule* rule;
 
-	for (p = grammar; p != nullptr; p = p->next)
+	for (rule = grammar; rule != nullptr; rule = rule->next)
 	{
-		if (!output_rule(p))
+		if (!output_rule(rule))
+		{
 			return 0;
+		}
 	}
 	return 1;
 }

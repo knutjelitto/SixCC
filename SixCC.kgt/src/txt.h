@@ -30,7 +30,7 @@ public:
 	{}
 
 	inline text(const char c)
-		: std::string(c, 1)
+		: std::string(1, c)
 	{}
 
 	inline text(const std::string& chars)
@@ -110,33 +110,9 @@ public:
 		return text(data);
 	}
 
-	inline text ltrim() const
-	{
-		int offset = 0;
-		while (offset < size() && std::isspace(std::string::operator[](offset)))
-		{
-			offset += 1;
-		}
-
-		return text(c_str() + offset, size() - offset);
-	}
-
-	inline text rtrim() const
-	{
-		int offset = size();
-		while (offset >= 0 && std::isspace(std::string::operator[](offset)))
-		{
-			offset -= 1;
-		}
-
-		return text(c_str(), offset + 1);
-	}
-
-	inline text trim()
-	{
-		return rtrim().ltrim();
-	}
-
+	text ltrim() const;
+	text rtrim() const;
+	text trim() const;
 
 private:
 };

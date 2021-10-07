@@ -730,11 +730,6 @@ ZL0:
         struct LX_STATE* lx;
         struct ast_rule* g;
 
-        /* for dialects which don't use these */
-        (void)ltrim;
-        (void)rtrim;
-        (void)trim;
-
         assert(f != NULL);
 
         g = NULL;

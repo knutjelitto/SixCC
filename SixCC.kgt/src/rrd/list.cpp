@@ -19,7 +19,7 @@ void list_push_front(struct list **list, struct node *node)
 
     struct list *nuw;
 
-    nuw = (struct list*)xmalloc(sizeof *nuw);
+    nuw = new struct list();
     nuw->node = node;
     nuw->next = *list;
 

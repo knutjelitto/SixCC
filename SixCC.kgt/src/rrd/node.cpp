@@ -59,14 +59,13 @@ void node_free(node* n)
             break;
     }
 
-    free(n);
+    delete n;
 }
 
 struct node *node_create_ci_literal(int invisible, const text& literal)
 {
-    struct node *nuw;
+    struct node* nuw = new node();
 
-    nuw = (node*)xmalloc(sizeof *nuw);
 
     nuw->type = NODE_CI_LITERAL;
     nuw->invisible = invisible;
@@ -111,9 +110,7 @@ struct node* node_create_prose(int invisible, const text& prose)
 
 struct node* node_create_alt(int invisible, struct list* alt)
 {
-    struct node* nuw;
-
-    nuw = (node*)xmalloc(sizeof * nuw);
+    struct node* nuw = new node();
 
     nuw->type = NODE_ALT;
     nuw->invisible = invisible;
@@ -124,12 +121,10 @@ struct node* node_create_alt(int invisible, struct list* alt)
 
 struct node* node_create_alt_skippable(int invisible, struct list* alt)
 {
-    struct node* nuw;
+    struct node* nuw = new node();
 
-    nuw = (node*)xmalloc(sizeof * nuw);
     nuw->type = NODE_ALT_SKIPPABLE;
     nuw->invisible = invisible;
-
     nuw->u.alt = alt;
 
     return nuw;
@@ -137,14 +132,10 @@ struct node* node_create_alt_skippable(int invisible, struct list* alt)
 
 struct node* node_create_seq(int invisible, struct list* seq)
 {
-    struct node* nuw;
-
-    nuw = (node*)xmalloc(sizeof * nuw);
+    struct node* nuw = new node();
 
     nuw->type = NODE_SEQ;
-
     nuw->invisible = invisible;
-
     nuw->u.seq = seq;
 
     return nuw;
@@ -152,12 +143,9 @@ struct node* node_create_seq(int invisible, struct list* seq)
 
 struct node* node_create_loop(int invisible, struct node* forward, struct node* backward)
 {
-    struct node* nuw;
-
-    nuw = (node*)xmalloc(sizeof * nuw);
+    struct node* nuw = new node();
 
     nuw->type = NODE_LOOP;
-
     nuw->invisible = invisible;
 
     nuw->u.loop.forward = forward;

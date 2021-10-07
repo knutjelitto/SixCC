@@ -38,7 +38,7 @@ static void err(struct lex_state_s* lex_state, const char* fmt, ...)
 	parsing_error error{};
 	va_list ap{};
 
-	assert(lex_state != NULL);
+	assert(lex_state != nullptr);
 
 	error.line = lex_state->lx.start.line;
 	error.col = lex_state->lx.start.col;
@@ -65,7 +65,7 @@ static const char* pattern_buffer(struct lex_state_s* lex_state)
 {
 	const char* s;
 
-	assert(lex_state != NULL);
+	assert(lex_state != nullptr);
 
 	/* TODO */
 	*lex_state->p++ = '\0';
@@ -442,26 +442,15 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 		break;
 		case (TOK_IDENT):
 		{
-			map_string ZIs;
+			/*
+			 * This rtrim() is for EBNF, which would require n-token lookahead
+			 * in order to lex just an ident (as ident may contain whitespace).
+			 *
+			 * I'm trimming here (for all grammars) because it's simpler than
+			 * doing this for just EBNF specifically, and harmless to others.
+			 */
+			text ZIs(text(lex_state->buf.a).rtrim());
 
-			/* BEGINNING OF EXTRACT: IDENT */
-			{
-				//#line 346 "src/parser.act"
-
-						/*
-						 * This rtrim() is for EBNF, which would require n-token lookahead
-						 * in order to lex just an ident (as ident may contain whitespace).
-						 *
-						 * I'm trimming here (for all grammars) because it's simpler than
-						 * doing this for just EBNF specifically, and harmless to others.
-						 */
-				rtrim(lex_state->buf.a);
-
-				ZIs = xstrdup(lex_state->buf.a);
-
-				//#line 677 "src/wsn/parser.c"
-			}
-			/* END OF EXTRACT: IDENT */
 			ADVANCE_LEXER;
 			/* BEGINNING OF ACTION: make-rule-term */
 			{
@@ -475,8 +464,8 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 				 * at which to point. This saves passing the grammar around, which
 				 * keeps the rule-building productions simpler.
 				 */
-				r = ast_make_rule((ZIs), NULL);
-				if (r == NULL)
+				r = ast_make_rule((ZIs), nullptr);
+				if (r == nullptr)
 				{
 					perror("ast_make_rule");
 					goto ZL1;
@@ -537,16 +526,13 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 		return;
 	}
 	{
-		map_string ZIs;
+		text ZIs;
 		map_alt ZIa;
 
 		switch (CURRENT_TERMINAL)
 		{
 			case (TOK_IDENT):
-				/* BEGINNING OF EXTRACT: IDENT */
 			{
-				//#line 346 "src/parser.act"
-
 						/*
 						 * This rtrim() is for EBNF, which would require n-token lookahead
 						 * in order to lex just an ident (as ident may contain whitespace).
@@ -554,14 +540,10 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 						 * I'm trimming here (for all grammars) because it's simpler than
 						 * doing this for just EBNF specifically, and harmless to others.
 						 */
-				rtrim(lex_state->buf.a);
+				ZIs = text(lex_state->buf.a).rtrim();
 
-				ZIs = xstrdup(lex_state->buf.a);
-
-				//#line 788 "src/wsn/parser.c"
+				break;
 			}
-			/* END OF EXTRACT: IDENT */
-			break;
 			default:
 				goto ZL1;
 		}
@@ -676,7 +658,7 @@ ZL1:
 		{
 			//#line 674 "src/parser.act"
 
-			(ZIl) = NULL;
+			(ZIl) = nullptr;
 
 			//#line 903 "src/wsn/parser.c"
 		}
@@ -721,7 +703,7 @@ prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
 					return;
 				}
 
-				assert((*ZIl)->next == NULL);
+				assert((*ZIl)->next == nullptr);
 				(*ZIl)->next = (ZIr);
 
 				//#line 946 "src/wsn/parser.c"
@@ -795,7 +777,7 @@ prod_94(lex_state lex_state, act_state act_state, map_term *ZIt, map_alt *ZOl)
 			{
 //#line 684 "src/parser.act"
 
-		assert((ZIl)->next == NULL);
+		assert((ZIl)->next == nullptr);
 		(ZIl)->next = (ZIa);
 	
 //#line 1020 "src/wsn/parser.c"
@@ -845,7 +827,7 @@ prod_95(lex_state lex_state, act_state act_state, map_term *ZIl)
 			{
 //#line 679 "src/parser.act"
 
-		assert((*ZIl)->next == NULL);
+		assert((*ZIl)->next == nullptr);
 		(*ZIl)->next = (ZIt);
 	
 //#line 1070 "src/wsn/parser.c"
@@ -874,12 +856,12 @@ ZL1:
 	{
 		const struct lex_state_s *lex_state;
 
-		assert(lx != NULL);
-		assert(lx->getc_opaque != NULL);
+		assert(lx != nullptr);
+		assert(lx->getc_opaque != nullptr);
 
 		lex_state = (struct lex_state_s*)(lx->getc_opaque);
 
-		assert(lex_state->f != NULL);
+		assert(lex_state->f != nullptr);
 
 		return lex_state->f(lex_state->opaque);
 	}
@@ -894,14 +876,9 @@ ZL1:
 		struct LX_STATE* lx;
 		struct ast_rule* g;
 
-		/* for dialects which don't use these */
-		(void)ltrim;
-		(void)rtrim;
-		(void)trim;
+		assert(f != nullptr);
 
-		assert(f != NULL);
-
-		g = NULL;
+		g = nullptr;
 
 		lex_state = &lex_state_s;
 		lex_state->p = lex_state->a;
@@ -917,7 +894,7 @@ ZL1:
 		lex_state->f = f;
 		lex_state->opaque = opaque;
 
-		lex_state->buf.a = NULL;
+		lex_state->buf.a = nullptr;
 		lex_state->buf.len = 0;
 
 		/* XXX: unneccessary since we're lexing from a string */
@@ -927,7 +904,7 @@ ZL1:
 		lx->free = CAT(LX_PREFIX, _dynfree);
 
 		/* XXX */
-		lx->free = NULL;
+		lx->free = nullptr;
 
 		/* This is a workaround for ADVANCE_LEXER assuming a pointer */
 		act_state = &act_state_s;

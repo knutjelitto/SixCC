@@ -548,27 +548,16 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
     {
         case (TOK_IDENT):
         {
-            map_string ZIx;
+            /*
+             * This rtrim() is for EBNF, which would require n-token lookahead
+             * in order to lex just an ident (as ident may contain whitespace).
+             *
+             * I'm trimming here (for all grammars) because it's simpler than
+             * doing this for just EBNF specifically, and harmless to others.
+             */
+            text ZIx(text(lex_state->buf.a).rtrim());
 
-            /* BEGINNING OF EXTRACT: IDENT */
-            {
-                //#line 346 "src/parser.act"
-
-                        /*
-                         * This rtrim() is for EBNF, which would require n-token lookahead
-                         * in order to lex just an ident (as ident may contain whitespace).
-                         *
-                         * I'm trimming here (for all grammars) because it's simpler than
-                         * doing this for just EBNF specifically, and harmless to others.
-                         */
-                rtrim(lex_state->buf.a);
-
-                ZIx = xstrdup(lex_state->buf.a);
-
-                //#line 682 "src/abnf/parser.c"
-            }
-            /* END OF EXTRACT: IDENT */
-            ADVANCE_LEXER;
+             ADVANCE_LEXER;
             /* BEGINNING OF ACTION: make-rule-term */
             {
                 //#line 584 "src/parser.act"
@@ -966,23 +955,25 @@ ZL1:
     return;
 }
 
-static void prod_102(lex_state lex_state, act_state act_state, map_term *ZIt, map_alt *ZOl)
+static void prod_102(lex_state lex_state, act_state act_state, map_term* ZIt, map_alt* ZOl)
 {
     map_alt ZIl;
 
-    switch (CURRENT_TERMINAL) {
-    case (TOK_ALT):
+    switch (CURRENT_TERMINAL)
+    {
+        case (TOK_ALT):
         {
             map_alt ZIa;
 
             /* BEGINNING OF INLINE: 92 */
             {
                 {
-                    switch (CURRENT_TERMINAL) {
-                    case (TOK_ALT):
-                        break;
-                    default:
-                        goto ZL3;
+                    switch (CURRENT_TERMINAL)
+                    {
+                        case (TOK_ALT):
+                            break;
+                        default:
+                            goto ZL3;
                     }
                     ADVANCE_LEXER;
                 }
@@ -991,62 +982,63 @@ static void prod_102(lex_state lex_state, act_state act_state, map_term *ZIt, ma
                 {
                     /* BEGINNING OF ACTION: err-expected-alt */
                     {
-//#line 722 "src/parser.act"
+                        //#line 722 "src/parser.act"
 
-        err_expected(*lex_state, "alternative separator");
-    
-//#line 1278 "src/abnf/parser.c"
+                        err_expected(*lex_state, "alternative separator");
+
+                        //#line 1278 "src/abnf/parser.c"
                     }
                     /* END OF ACTION: err-expected-alt */
                 }
             ZL2:;
             }
             /* END OF INLINE: 92 */
-            prod_list_Hof_Halts (lex_state, act_state, &ZIa);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+            prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            {
                 RESTORE_LEXER;
                 goto ZL1;
             }
             /* BEGINNING OF ACTION: make-alt */
             {
-//#line 666 "src/parser.act"
+                //#line 666 "src/parser.act"
 
-        (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
-    
-//#line 1296 "src/abnf/parser.c"
+                (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+
+                //#line 1296 "src/abnf/parser.c"
             }
             /* END OF ACTION: make-alt */
             /* BEGINNING OF ACTION: add-alt-to-list */
             {
-//#line 684 "src/parser.act"
+                //#line 684 "src/parser.act"
 
-        assert((ZIl)->next == nullptr);
-        (ZIl)->next = (ZIa);
-    
-//#line 1306 "src/abnf/parser.c"
+                assert((ZIl)->next == nullptr);
+                (ZIl)->next = (ZIa);
+
+                //#line 1306 "src/abnf/parser.c"
             }
             /* END OF ACTION: add-alt-to-list */
         }
         break;
-    default:
+        default:
         {
             /* BEGINNING OF ACTION: make-alt */
             {
-//#line 666 "src/parser.act"
+                //#line 666 "src/parser.act"
 
-        (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
-    
-//#line 1319 "src/abnf/parser.c"
+                (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+
+                //#line 1319 "src/abnf/parser.c"
             }
             /* END OF ACTION: make-alt */
         }
         break;
-    case (ERROR_TERMINAL):
-        return;
+        case (ERROR_TERMINAL):
+            return;
     }
     goto ZL0;
 ZL1:
-    SAVE_LEXER ((ERROR_TERMINAL));
+    SAVE_LEXER((ERROR_TERMINAL));
     return;
 ZL0:
     *ZOl = ZIl;
@@ -1313,12 +1305,6 @@ struct ast_rule* abnf_input(int (*f)(void* opaque), void* opaque, parsing_errors
 
     struct LX_STATE* lx;
     struct ast_rule* g;
-
-    /* for dialects which don't use these */
-    (void)ltrim;
-    (void)rtrim;
-    (void)trim;
-    (void)err_unimplemented;
 
     assert(f != nullptr);
 

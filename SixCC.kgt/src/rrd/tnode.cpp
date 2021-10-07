@@ -33,7 +33,7 @@
 
 static struct tnode * tnode_create_node(const struct node *node, int rtl, const struct dim *dim);
 
-static struct tnode * tnode_create_comment(const struct tnode *tnode, const char *s, const struct dim *dim);
+static struct tnode * tnode_create_comment(const struct tnode *tnode, const text& text, const struct dim *dim);
 
 static struct tnode * tnode_create_ellipsis(const struct dim *dim);
 
@@ -41,8 +41,8 @@ static void swap(struct tnode **a, struct tnode **b)
 {
 	struct tnode *tmp;
 
-	assert(a != NULL);
-	assert(b != NULL);
+	assert(a != nullptr);
+	assert(b != nullptr);
 
 	tmp = *a;
 	*a = *b;
@@ -71,36 +71,38 @@ static int isnamed(char c)
 	}
 }
 
-static void tnode_free_vlist(struct tnode_vlist *list)
+static void tnode_free_vlist(struct tnode_vlist* list)
 {
 	size_t i;
 
-	assert(list != NULL);
+	assert(list != nullptr);
 
-	for (i = 0; i < list->n; i++) {
+	for (i = 0; i < list->n; i++)
+	{
 		tnode_free(list->a[i]);
 	}
 
-	free(list->a);
-	free(list->b);
+	delete[] list->a;
+	delete[] list->b;
 }
 
-static void tnode_free_hlist(struct tnode_hlist *list)
+static void tnode_free_hlist(struct tnode_hlist* list)
 {
 	size_t i;
 
-	assert(list != NULL);
+	assert(list != nullptr);
 
-	for (i = 0; i < list->n; i++) {
+	for (i = 0; i < list->n; i++)
+	{
 		tnode_free(list->a[i]);
 	}
 
-	free(list->a);
+	delete[]list->a;
 }
 
 void tnode_free(struct tnode *n)
 {
-	if (n == NULL)
+	if (n == nullptr)
 	{
 		return;
 	}
@@ -121,7 +123,6 @@ void tnode_free(struct tnode *n)
 		break;
 
 	case TNODE_COMMENT:
-		free((void*)n->u.comment.s);
 		tnode_free((struct tnode*)n->u.comment.tnode);
 		break;
 
@@ -134,14 +135,14 @@ void tnode_free(struct tnode *n)
 		break;
 	}
 
-	free(n);
+	delete n;
 }
 
 static int char_terminal(const struct node* node, unsigned char* c)
 {
-	assert(c != NULL);
+	assert(c != nullptr);
 
-	if (node == NULL)
+	if (node == nullptr)
 	{
 		return 0;
 	}
@@ -167,12 +168,12 @@ collate_ranges(struct bm *bm, const struct list *list)
 {
 	const struct list *p;
 
-	assert(bm != NULL);
-	assert(list != NULL);
+	assert(bm != nullptr);
+	assert(list != nullptr);
 
 	bm_clear(bm);
 
-	for (p = list; p != NULL; p = p->next) {
+	for (p = list; p != nullptr; p = p->next) {
 		unsigned char c;
 
 		if (!char_terminal(p->node, &c)) {
@@ -188,7 +189,7 @@ find_node(const struct list *list, char d)
 {
 	const struct list *p;
 
-	for (p = list; p != NULL; p = p->next) {
+	for (p = list; p != nullptr; p = p->next) {
 		unsigned char c;
 
 		if (!char_terminal(p->node, &c)) {
@@ -204,36 +205,38 @@ find_node(const struct list *list, char d)
 	assert(!"unreached");
 }
 
-static struct tnode_vlist tnode_create_alt_list(const struct list *list, int rtl, const struct dim *dim)
+static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl, const struct dim* dim)
 {
-	const struct list *p;
+	const struct list* p;
 	struct tnode_vlist nuw;
 	size_t i;
 	struct bm bm;
 	int hi, lo;
 
-	assert(dim != NULL);
+	assert(dim != nullptr);
 
 	nuw.n = list_count(list); /* worst case */
-	if (nuw.n == 0) {
-		nuw.a = NULL;
+	if (nuw.n == 0)
+	{
+		nuw.a = nullptr;
 		return nuw;
 	}
 
 	collate_ranges(&bm, list);
 
-	nuw.a = (struct tnode**)xmalloc(sizeof *nuw.a * nuw.n);
+	//nuw.a = (struct tnode**)xmalloc(sizeof *nuw.a * nuw.n);
+	nuw.a = new tnode* [nuw.n];
 
 	hi = -1;
 
 	i = 0;
 	p = list;
 
-/* TODO: how to handle invisible alts? have the corner tiles hidden?
-at the moment we render an empty line, which makes sense in seqs but not in alts
-*/
+	/* TODO: how to handle invisible alts? have the corner tiles hidden?
+	at the moment we render an empty line, which makes sense in seqs but not in alts
+	*/
 
-	while (p != NULL)
+	while (p != nullptr)
 	{
 		unsigned char c;
 
@@ -262,7 +265,7 @@ at the moment we render an empty line, which makes sense in seqs but not in alts
 		/* end of range */
 		hi = bm_next(&bm, lo, 0);
 
-		if (!isalnum((unsigned char) lo) && isalnum((unsigned char) hi))
+		if (!isalnum((unsigned char)lo) && isalnum((unsigned char)hi))
 		{
 			nuw.a[i++] = tnode_create_node(find_node(list, lo), rtl, dim);
 			bm_unset(&bm, lo);
@@ -278,7 +281,7 @@ at the moment we render an empty line, which makes sense in seqs but not in alts
 		 * evident which values are included. So we elect to render the
 		 * range as invidual elements instead.
 		 */
-		if (isnamed((unsigned char) lo) || isnamed((unsigned char) hi))
+		if (isnamed((unsigned char)lo) || isnamed((unsigned char)hi))
 		{
 			nuw.a[i++] = tnode_create_node(find_node(list, lo), rtl, dim);
 			bm_unset(&bm, lo);
@@ -289,7 +292,7 @@ at the moment we render an empty line, which makes sense in seqs but not in alts
 		}
 
 		/* bring down endpoint, if it's past the end of the class */
-		if (isalnum((unsigned char) lo))
+		if (isalnum((unsigned char)lo))
 		{
 			size_t i;
 
@@ -304,11 +307,11 @@ at the moment we render an empty line, which makes sense in seqs but not in alts
 			};
 
 			/* XXX: assumes ASCII */
-			for (i = 0; i < sizeof b / sizeof *b; i++)
+			for (i = 0; i < sizeof b / sizeof * b; i++)
 			{
-				if (b[i].is((unsigned char) lo))
+				if (b[i].is((unsigned char)lo))
 				{
-					if (!b[i].is((unsigned char) hi))
+					if (!b[i].is((unsigned char)hi))
 					{
 						hi = b[i].end + 1;
 					}
@@ -316,61 +319,63 @@ at the moment we render an empty line, which makes sense in seqs but not in alts
 				}
 			}
 
-			assert(i < sizeof b / sizeof *b);
+			assert(i < sizeof b / sizeof * b);
 		}
 
 		assert(hi > lo);
 
 		switch (hi - lo)
 		{
-		case 1:
-		case 2:
-		case 3:
-			nuw.a[i++] = tnode_create_node(find_node(list, lo), rtl, dim);
-			bm_unset(&bm, lo);
+			case 1:
+			case 2:
+			case 3:
+				nuw.a[i++] = tnode_create_node(find_node(list, lo), rtl, dim);
+				bm_unset(&bm, lo);
 
-			hi = lo;
-			break;
+				hi = lo;
+				break;
 
-		default:
-			nuw.a[i++] = tnode_create_node(find_node(list, lo), rtl, dim);
-			nuw.a[i++] = tnode_create_ellipsis(dim);
-			nuw.a[i++] = tnode_create_node(find_node(list, hi - 1), rtl, dim);
+			default:
+				nuw.a[i++] = tnode_create_node(find_node(list, lo), rtl, dim);
+				nuw.a[i++] = tnode_create_ellipsis(dim);
+				nuw.a[i++] = tnode_create_node(find_node(list, hi - 1), rtl, dim);
 
-			for (int j = lo; j <= hi - 1; j++) {
-				bm_unset(&bm, j);
-			}
+				for (int j = lo; j <= hi - 1; j++)
+				{
+					bm_unset(&bm, j);
+				}
 
-			break;
+				break;
 		}
 	}
 
 	assert(i <= nuw.n);
 	nuw.n = i;
 
-	nuw.b = (enum tline*)xmalloc(sizeof *nuw.b * nuw.n);
+	nuw.b = new enum tline[nuw.n];
 
 	return nuw;
 }
 
-static struct tnode_hlist
-tnode_create_hlist(const struct list *list, int rtl, const struct dim *dim)
+static struct tnode_hlist tnode_create_hlist(const struct list* list, int rtl, const struct dim* dim)
 {
-	const struct list *p;
+	const struct list* p;
 	struct tnode_hlist nuw;
 	size_t i;
 
-	assert(dim != NULL);
+	assert(dim != nullptr);
 
 	nuw.n = list_count(list);
-	if (nuw.n == 0) {
-		nuw.a = NULL;
+	if (nuw.n == 0)
+	{
+		nuw.a = nullptr;
 		return nuw;
 	}
 
-	nuw.a = (struct tnode**)xmalloc(sizeof *nuw.a * nuw.n);
+	nuw.a = new struct tnode* [nuw.n];
 
-	for (i = 0, p = list; p != NULL; p = p->next) {
+	for (i = 0, p = list; p != nullptr; p = p->next)
+	{
 		nuw.a[!rtl ? i : nuw.n - i - 1] = tnode_create_node(p->node, rtl, dim);
 		i++;
 	}
@@ -392,59 +397,72 @@ times(unsigned n)
 	};
 
 	if (n > sizeof a / sizeof *a - 1) {
-		return NULL;
+		return nullptr;
 	}
 
 	return a[n];
 }
 
-static size_t
-loop_label(unsigned min, unsigned max, char *s)
+static text loop_label(unsigned min, unsigned max)
 {
-	const char *h;
-
-	assert(s != NULL);
 	assert(max >= min || max == 0);
 
-	if (min == 0 && max == 0) {
+	char s[128];
+
+	const char* h;
+
+	if (min == 0 && max == 0)
+	{
 		*s = '\0';
-		return 0;
+		return text();
 	}
 
-	if (max == min) {
-		if (h = times(max), h != NULL) {
+	if (max == min)
+	{
+		if (h = times(max), h != nullptr)
+		{
 			return sprintf(s, "(%s only)", h);
-		} else {
+		}
+		else
+		{
 			return sprintf(s, "(%u times)", max);
 		}
 	}
-
-	if (min == 0) {
-		if (h = times(max), h != NULL) {
+	else  if (min == 0)
+	{
+		if (h = times(max), h != nullptr)
+		{
 			return sprintf(s, "(%s at most)", h);
-		} else {
+		}
+		else
+		{
 			return sprintf(s, "(%u times at most)", max);
 		}
 	}
-
-	if (max == 0) {
-		if (h = times(min), h != NULL) {
+	else if (max == 0)
+	{
+		if (h = times(min), h != nullptr)
+		{
 			return sprintf(s, "(at least %s)", h);
-		} else {
+		}
+		else
+		{
 			return sprintf(s, "(at least %u times)", min);
 		}
 	}
+	else
+	{
+		return sprintf(s, "(%u-%u times)", min, max);
+	}
 
-	return sprintf(s, "(%u-%u times)", min, max);
+	return text(s);
 }
 
 static struct tnode* tnode_create_ellipsis(const struct dim* dim)
 {
-	assert(dim != NULL);
+	assert(dim != nullptr);
 
-	struct tnode* nuw;
-
-	nuw = (tnode *)xmalloc(sizeof *nuw);
+	struct tnode* nuw = new tnode();
 
 	nuw->type = TNODE_ELLIPSIS;
 	nuw->w = 1;
@@ -454,50 +472,45 @@ static struct tnode* tnode_create_ellipsis(const struct dim* dim)
 	return nuw;
 }
 
-static struct tnode *
-tnode_create_comment(const struct tnode *tnode, const char *s,
-	const struct dim *dim)
+static struct tnode* tnode_create_comment(const struct tnode* tnode, const text& text, const struct dim* dim)
 {
-	struct tnode *nuw;
+	assert(tnode != nullptr);
+	assert(dim != nullptr);
+
 	unsigned w, a, d;
 
-	assert(tnode != NULL);
-	assert(s != NULL);
-	assert(dim != NULL);
+	struct tnode* new_tnode = new struct tnode();
 
-	nuw = (struct tnode*)xmalloc(sizeof *nuw);
-
-	nuw->type = TNODE_COMMENT;
-	nuw->u.comment.s = s;
-	nuw->u.comment.tnode = tnode;
+	new_tnode->type = TNODE_COMMENT;
+	new_tnode->u.comment.s = text;
+	new_tnode->u.comment.tnode = tnode;
 
 	/* TODO: place comment above or below, depending on tnode type (or pass in);
 	 * store in .comment struct as enum */
-	nuw->w = nuw->u.comment.tnode->w;
-	nuw->a = nuw->u.comment.tnode->a;
-	nuw->d = nuw->u.comment.tnode->d + dim->comment_height;
+	new_tnode->w = new_tnode->u.comment.tnode->w;
+	new_tnode->a = new_tnode->u.comment.tnode->a;
+	new_tnode->d = new_tnode->u.comment.tnode->d + dim->comment_height;
 
-	dim->rule_string(nuw->u.comment.s, &w, &a, &d);
+	dim->rule_string(new_tnode->u.comment.s, &w, &a, &d);
 
-	if (nuw->w < w) {
-		nuw->w = w;
+	if (new_tnode->w < w)
+	{
+		new_tnode->w = w;
 	}
 
-	nuw->a += a;
-	nuw->d += d;
+	new_tnode->a += a;
+	new_tnode->d += d;
 
-	return nuw;
+	return new_tnode;
 }
 
 static struct tnode* tnode_create_node(const struct node* node, int rtl, const struct dim* dim)
 {
-	struct tnode* nuw;
+	assert(dim != nullptr);
 
-	assert(dim != NULL);
+	struct tnode* nuw = new tnode();
 
-	nuw = (tnode*)xmalloc(sizeof * nuw);
-
-	if (node == NULL)
+	if (node == nullptr)
 	{
 		nuw->type = TNODE_VLIST;
 		nuw->w = 0;
@@ -506,8 +519,8 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 		nuw->u.vlist.n = 0;
 		nuw->u.vlist.o = 0;
-		nuw->u.vlist.a = NULL;
-		nuw->u.vlist.b = NULL;
+		nuw->u.vlist.a = nullptr;
+		nuw->u.vlist.b = nullptr;
 
 		return nuw;
 	}
@@ -556,7 +569,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 			{
 				struct list list;
 
-				list.node = NULL;
+				list.node = nullptr;
 				list.next = node->u.alt;
 
 				nuw->u.vlist = tnode_create_alt_list(&list, rtl, dim);
@@ -601,7 +614,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 				if (node->type == NODE_ALT_SKIPPABLE)
 				{
 					assert(nuw->u.vlist.n > i);
-					assert(nuw->u.vlist.a[i] != NULL);
+					assert(nuw->u.vlist.a[i] != nullptr);
 					assert(nuw->u.vlist.a[i]->type == TNODE_VLIST && nuw->u.vlist.a[i]->u.vlist.n == 0);
 					assert(nuw->u.vlist.a[i]->a + nuw->u.vlist.a[i]->d == 1);
 
@@ -615,7 +628,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 				if (nuw->u.vlist.n > i)
 				{
-					assert(nuw->u.vlist.a[i] != NULL);
+					assert(nuw->u.vlist.a[i] != nullptr);
 
 					a += nuw->u.vlist.a[i]->a;
 				}
@@ -756,8 +769,8 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 			nuw->type = TNODE_VLIST;
 
 			nuw->u.vlist.n = 2;
-			nuw->u.vlist.a = (struct tnode**)xmalloc(sizeof * nuw->u.vlist.a * nuw->u.vlist.n);
-			nuw->u.vlist.b = (enum tline*)xmalloc(sizeof * nuw->u.vlist.b * nuw->u.vlist.n);
+			nuw->u.vlist.a = new struct tnode* [nuw->u.vlist.n];
+			nuw->u.vlist.b = new enum tline[nuw->u.vlist.n];
 
 			nuw->u.vlist.a[0] = tnode_create_node(node->u.loop.forward, rtl, dim);
 			nuw->u.vlist.a[1] = tnode_create_node(node->u.loop.backward, !rtl, dim);
@@ -832,13 +845,9 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 			}
 
 			{
-				char s[128]; /* XXX */
-				const char* label;
+				text label = loop_label(node->u.loop.min, node->u.loop.max);
 
-				loop_label(node->u.loop.min, node->u.loop.max, s);
-				label = xstrdup(s);
-
-				if (strlen(label) != 0)
+				if (label.length() > 0)
 				{
 					nuw = tnode_create_comment(nuw, label, dim);
 				}
@@ -860,7 +869,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 		old = nuw;
 
-		nuw = (struct tnode*)xmalloc(sizeof * nuw);
+		nuw = new tnode();
 
 		nuw->type = TNODE_VLIST;
 		nuw->w = old->w;
@@ -869,8 +878,8 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 		nuw->u.vlist.n = 0;
 		nuw->u.vlist.o = 0;
-		nuw->u.vlist.a = NULL;
-		nuw->u.vlist.b = NULL;
+		nuw->u.vlist.a = nullptr;
+		nuw->u.vlist.b = nullptr;
 
 		tnode_free(old);
 	}
@@ -878,12 +887,11 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 	return nuw;
 }
 
-struct tnode *
-rrd_to_tnode(const struct node *node, const struct dim *dim)
+struct tnode * rrd_to_tnode(const struct node* node, const struct dim* dim)
 {
-	struct tnode *n;
+	struct tnode* n;
 
-	assert(dim != NULL);
+	assert(dim != nullptr);
 
 	n = tnode_create_node(node, 0, dim);
 

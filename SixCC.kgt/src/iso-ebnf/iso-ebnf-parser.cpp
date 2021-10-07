@@ -551,31 +551,24 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
         return;
     }
     {
-        map_string ZIs;
+        text ZIs;
         map_alt ZIa;
 
         switch (CURRENT_TERMINAL)
         {
             case (TOK_IDENT):
-                /* BEGINNING OF EXTRACT: IDENT */
             {
-                //#line 346 "src/parser.act"
-
-                        /*
-                         * This rtrim() is for EBNF, which would require n-token lookahead
-                         * in order to lex just an ident (as ident may contain whitespace).
-                         *
-                         * I'm trimming here (for all grammars) because it's simpler than
-                         * doing this for just EBNF specifically, and harmless to others.
-                         */
-                rtrim(lex_state->buf.a);
-
-                ZIs = xstrdup(lex_state->buf.a);
-
-                //#line 792 "src/iso-ebnf/parser.c"
+                /*
+                 * This rtrim() is for EBNF, which would require n-token lookahead
+                 * in order to lex just an ident (as ident may contain whitespace).
+                 *
+                 * I'm trimming here (for all grammars) because it's simpler than
+                 * doing this for just EBNF specifically, and harmless to others.
+                 */
+                ZIs = text(lex_state->buf.a).rtrim();
+                break;
             }
             /* END OF EXTRACT: IDENT */
-            break;
             default:
                 goto ZL1;
         }
@@ -973,40 +966,28 @@ prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
         break;
         case (TOK_PROSE):
         {
-            map_string ZIs;
+            text s = text(pattern_buffer(lex_state)).trim();
 
-            /* BEGINNING OF EXTRACT: PROSE */
-            {
-                ZIs = pattern_buffer(lex_state);
-            }
-            /* END OF EXTRACT: PROSE */
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-prose-term */
+
+            if (s.eq("kgt:invisible"))
             {
-                const char* s = xstrdup(trim((char*)(ZIs)));
+                act_state->invisible = 1;
 
-                free((void*)(ZIs));
-
-                if (0 == strcmp(s, "kgt:invisible"))
-                {
-                    act_state->invisible = 1;
-
-                    (ZIt) = ast_make_empty_term(act_state->invisible);
-                }
-                else if (0 == strcmp(s, "kgt:visible"))
-                {
-                    act_state->invisible = 0;
-
-                    (ZIt) = ast_make_empty_term(act_state->invisible);
-                }
-                else
-                {
-                    (ZIt) = ast_make_prose_term(act_state->invisible, s);
-                }
+                (ZIt) = ast_make_empty_term(act_state->invisible);
             }
-            /* END OF ACTION: make-prose-term */
+            else if (s.eq("kgt:visible"))
+            {
+                act_state->invisible = 0;
+
+                (ZIt) = ast_make_empty_term(act_state->invisible);
+            }
+            else
+            {
+                (ZIt) = ast_make_prose_term(act_state->invisible, s);
+            }
+            break;
         }
-        break;
         case (ERROR_TERMINAL):
             return;
         default:
@@ -1073,11 +1054,6 @@ struct ast_rule* iso_ebnf_input(int (*f)(void* opaque), void* opaque, parsing_er
 
     struct LX_STATE* lx;
     struct ast_rule* grammar;
-
-    /* for dialects which don't use these */
-    (void)ltrim;
-    (void)rtrim;
-    (void)trim;
 
     assert(f != nullptr);
 

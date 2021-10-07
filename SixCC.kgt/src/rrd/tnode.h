@@ -91,7 +91,7 @@ struct tnode
 
 		struct
 		{
-			const char *s;
+			text s;
 			const struct tnode *tnode;
 		} comment;
 

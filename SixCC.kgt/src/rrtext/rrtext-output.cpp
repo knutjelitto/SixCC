@@ -317,13 +317,13 @@ static void render_comment(const struct tnode* n, struct render_context* ctx)
 
 	justify(ctx, n->u.comment.tnode, n->w);
 
-	assert(strlen(n->u.comment.s) <= n->w);
-	centre(&lhs, &rhs, n->w, strlen(n->u.comment.s));
+	assert(n->u.comment.s.length() <= n->w);
+	centre(&lhs, &rhs, n->w, n->u.comment.s.length());
 
 	ctx->x = x + lhs;
 	ctx->y = y + n->d - 1;
 
-	bprintf(ctx, "%s", n->u.comment.s);
+	bprintf(ctx, "%s", n->u.comment.s.chars());
 
 	ctx->x += rhs;
 	ctx->y = y;
@@ -435,10 +435,10 @@ static void render_rule(const struct tnode* node, int utf8)
 
 	for (i = 0; i < h; i++)
 	{
-		rtrim(ctx.lines[i]);
-		writer->printf("    ");
+		ctx.lines[i] = xstrdup(text(ctx.lines[i]).rtrim().chars());
+		writer->puts("    ");
 		tile_puts(ctx.lines[i], utf8);
-		writer->printf("\n");
+		writer->puts("\n");
 		free(ctx.lines[i]);
 	}
 

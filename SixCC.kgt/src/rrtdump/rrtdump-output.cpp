@@ -96,7 +96,7 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("COMMENT");
 			print_coords(writer, n);
-			writer->printf(" \"%s\"", n->u.comment.s);
+			writer->printf(" \"%s\"", n->u.comment.s.chars());
 			writer->printf(": (\n");
 			tnode_walk(writer, n->u.comment.tnode, depth + 1);
 			print_indent(writer, depth);
