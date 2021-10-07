@@ -121,7 +121,7 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 		case NODE_CS_LITERAL:
 			writer->printf("\"");
-			writer->escape(&n->u.literal, escputc);
+			writer->escape(n->u.literal, escputc);
 			writer->printf("\"");
 
 			break;
@@ -226,7 +226,7 @@ WARN_UNUSED_RESULT int rrll_output(const struct ast_rule* grammar)
 		}
 
 		writer->printf("[`");
-		writer->escape(p->name, escputc);
+		writer->escape(p->name(), escputc);
 		writer->printf("` ");
 
 		node_walk(writer, rrd);

@@ -15,13 +15,14 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include "errors.h"
 #include "txt.h"
 #include "ast.h"
 #include "rewrite.h"
 #include "xalloc.h"
 #include "compiler_specific.h"
 
-static bool walk_alts(struct ast_alt *alts);
+static bool walk_alts(const struct ast_alt *alts);
 
 static void add_alt(int invisible, struct ast_alt **alt, const text& text)
 {
@@ -36,6 +37,9 @@ static void add_alt(int invisible, struct ast_alt **alt, const text& text)
 
 WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt, const text& text)
 {
+#if true
+	Error::notimplemented();
+#else
 	assert(alt != NULL);
 
 	size_t i, j;
@@ -78,28 +82,29 @@ WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt
 		add_alt(invisible, alt, text);
 	}
 	return true;
+#endif
 }
 
-WARN_UNUSED_RESULT static bool rewrite_ci(struct ast_term* term)
+WARN_UNUSED_RESULT static bool rewrite_ci(const struct ast_term* term)
 {
-	struct txt tmp;
-	size_t i;
-
+#if true
+	Error::notimplemented();
+#else
 	assert(term->type == TYPE_CI_LITERAL);
 
 	/* case is normalised during AST creation */
-	for (i = 0; i < term->u.literal.n; i++)
+	for (int i = 0; i < term->text().length(); i++)
 	{
-		if (!isalpha((unsigned char)term->u.literal.p[i]))
+		if (!isalpha((unsigned char)term->text(i)))
 		{
 			continue;
 		}
 
-		assert(islower((unsigned char)term->u.literal.p[i]));
+		assert(islower((unsigned char)term->text(i)));
 	}
 
-	assert(term->u.literal.p != NULL);
-	tmp = term->u.literal;
+	assert(term->text().length() > 0);
+	text tmp = term->text();
 
 	/* we repurpose the existing node, which breaks abstraction for freeing */
 	term->type = TYPE_GROUP;
@@ -108,11 +113,11 @@ WARN_UNUSED_RESULT static bool rewrite_ci(struct ast_term* term)
 	/* invisibility of nuw alts is inherited from term->invisible itself */
 	bool success = permute_cases(term->invisible, &term->u.group, &tmp);
 
-	free((void*)tmp.p);
 	return success;
+#endif
 }
 
-WARN_UNUSED_RESULT static bool walk_term(struct ast_term* term)
+WARN_UNUSED_RESULT static bool walk_term(const struct ast_term* term)
 {
 	assert(term != NULL);
 
@@ -128,7 +133,7 @@ WARN_UNUSED_RESULT static bool walk_term(struct ast_term* term)
 			break;
 
 		case TYPE_GROUP:
-			return walk_alts(term->u.group);
+			return walk_alts(term->group());
 
 		case TYPE_CI_LITERAL:
 			return rewrite_ci(term);
@@ -137,9 +142,9 @@ WARN_UNUSED_RESULT static bool walk_term(struct ast_term* term)
 	return true;
 }
 
-WARN_UNUSED_RESULT static bool walk_alts(struct ast_alt* alts)
+WARN_UNUSED_RESULT static bool walk_alts(const struct ast_alt* alts)
 {
-	struct ast_alt* alt;
+	const struct ast_alt* alt;
 	struct ast_term* term;
 
 	for (alt = alts; alt != NULL; alt = alt->next)

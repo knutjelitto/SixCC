@@ -20,7 +20,7 @@ enum ast_features
     FEATURE_AST_INVISIBLE  = 1 << 3
 };
 
-enum ast_term_type
+typedef enum ast_term_type
 {
     TYPE_EMPTY,
     TYPE_RULE,
@@ -29,7 +29,12 @@ enum ast_term_type
     TYPE_TOKEN,
     TYPE_PROSE,
     TYPE_GROUP
-};
+} ast_term_type;
+
+#ifdef min
+#undef min
+#undef max
+#endif
 
 /*
  * A term is a sequential list of items within an alt. Each item may be
@@ -42,25 +47,36 @@ enum ast_term_type
 struct ast_term
 {
     ast_term(ast_term_type type, int invisible)
-        : type(type), invisible(invisible), next(nullptr)
+        : type(type), invisible(invisible), next(nullptr), min(1), max(1)
     {
         min = 1;
         max = 1;
     }
 
-    ast_term()
+    ast_term(ast_term_type type, int invisible, const text& text)
+        : type(type), invisible(invisible), next(nullptr), min(1), max(1), xxx_characters(text)
     {
     }
 
-    enum ast_term_type type;
+    ast_term(ast_term_type type, int invisible, const struct ast_rule* rule)
+        : type(type), invisible(invisible), next(nullptr), min(1), max(1), xxx_rule(rule)
+    {
+    }
+
+    ast_term(ast_term_type type, int invisible, struct ast_alt* group)
+        : type(type), invisible(invisible), next(nullptr), min(1), max(1), xxx_group(group)
+    {
+    }
+
+    const ast_term_type type;
     int invisible;
     struct ast_term* next;
     unsigned int min;
     unsigned int max; /* false (0) for unlimited */
 
-    virtual const class text& text() const
+    const class text& text() const
     {
-        throw "fatal";
+        return xxx_characters;
     }
 
     const char text(int index) const
@@ -68,11 +84,26 @@ struct ast_term
         return text()[index];
     }
 
-    struct xxx
+    const struct ast_rule* rule() const
     {
-        const struct ast_rule *rule; /* just for sake of the name */
-        struct ast_alt* group;
-    } u;
+        return xxx_rule;
+    }
+
+    void set_rule(const struct ast_rule* new_rule)
+    {
+        assert(type == TYPE_RULE);
+        xxx_rule = new_rule;
+    }
+
+    const struct ast_alt* group() const
+    {
+        return xxx_group;
+    }
+
+private:
+    const class text xxx_characters;
+    const struct ast_rule* xxx_rule; /* just for sake of the name */
+    struct ast_alt* xxx_group;
 };
 
 struct ast_term_empty : ast_term
@@ -85,25 +116,18 @@ struct ast_term_empty : ast_term
 
 struct ast_term_rule : ast_term
 {
-    ast_term_rule(int invisible, const struct ast_rule* rule) : ast_term(TYPE_RULE, invisible)
+    ast_term_rule(int invisible, const struct ast_rule* rule)
+        : ast_term(TYPE_RULE, invisible, rule)
     {
-        u.rule = rule;
     }
 };
 
 struct ast_term_text : ast_term
 {
     ast_term_text(ast_term_type type, int invisible, const class text& text)
-        : ast_term(type, invisible), characters(text)
+        : ast_term(type, invisible, text)
     {
     }
-
-    virtual const class text& text() const
-    {
-        return characters;
-    }
-
-    const class text characters;
 };
 
 struct ast_term_cs_literal : ast_term_text
@@ -140,9 +164,9 @@ struct ast_term_prose : ast_term_text
 
 struct ast_term_group : ast_term
 {
-    ast_term_group(int invisible, struct ast_alt* group) : ast_term(TYPE_RULE, invisible)
+    ast_term_group(int invisible, struct ast_alt* group)
+        : ast_term(TYPE_GROUP, invisible, group)
     {
-        u.group = group;
     }
 };
 
@@ -174,11 +198,16 @@ struct ast_alt
 struct ast_rule
 {
     ast_rule(const text name, ast_alt* alts)
-        : name(text(name)), alts(alts), next(nullptr)
+        : xxx_name(name), alts(alts), next(nullptr)
     {
     }
 
-    const text name;
+    const text& name() const
+    {
+        return xxx_name;
+    }
+
+    const text xxx_name;
     struct ast_alt* alts;
     struct ast_rule* next;
 };
@@ -187,12 +216,11 @@ struct ast_term* ast_make_empty_term(int invisible);
 struct ast_term* ast_make_rule_term(int invisible, struct ast_rule* rule);
 struct ast_term* ast_make_char_term(int invisible, char c);
 struct ast_term* ast_make_literal_term(int invisible, const text& literal, bool ci);
-struct ast_term* ast_make_token_term(int invisible, const char* token);
+struct ast_term* ast_make_token_term(int invisible, const text& token);
 struct ast_term* ast_make_prose_term(int invisible, const text& prose);
 struct ast_term* ast_make_group_term(int invisible, struct ast_alt* group);
 
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms);
-struct ast_rule* ast_make_rule(const char* name, struct ast_alt* alts);
 struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 
 struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const char* name);

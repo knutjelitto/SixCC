@@ -121,7 +121,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 		case NODE_CS_LITERAL:
 			print_indent(f, depth);
 			f->printf("text(\"");
-			f->escape(&n->u.literal, escputc);
+			f->escape(n->u.literal, escputc);
 			f->printf("\")");
 
 			break;
@@ -284,7 +284,7 @@ WARN_UNUSED_RESULT int rrparcon_output(const struct ast_rule* grammar)
 
 		writer->printf("  (\n");
 		writer->printf("    \"");
-		writer->escape(p->name, escputc);
+		writer->escape(p->name(), escputc);
 		writer->printf("\",\n");
 		writer->printf("    Then(\n");
 		writer->printf("      Bullet(),\n");

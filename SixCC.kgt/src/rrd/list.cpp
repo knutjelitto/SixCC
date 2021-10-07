@@ -58,17 +58,20 @@ void list_cat(struct list** dst, struct list* src)
     *p = src;
 }
 
-int list_compare(const struct list *a, const struct list *b)
+int list_compare(const struct list* a, const struct list* b)
 {
-    const struct list *p, *q;
+    const struct list* p, * q;
 
-    for (p = a, q = b; p != nullptr && q != nullptr; p = p->next, q = q->next) {
-        if (!node_compare(p->node, q->node)) {
+    for (p = a, q = b; p != nullptr && q != nullptr; p = p->next, q = q->next)
+    {
+        if (!node_compare(p->node, q->node))
+        {
             return 0;
         }
     }
 
-    if (p != nullptr || q != nullptr) {
+    if (p != nullptr || q != nullptr)
+    {
         /* lists are of different length */
         return 0;
     }

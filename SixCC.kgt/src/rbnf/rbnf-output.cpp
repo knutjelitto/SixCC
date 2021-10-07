@@ -104,13 +104,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->printf(" <%s>", term->u.rule->name.chars());
+			writer->printf(" <%s>", term->rule()->name().chars());
 			break;
 
 		case TYPE_CI_LITERAL:
 		case TYPE_CS_LITERAL:
 #if true
-			writer->printf(" unimplemented-literal<%s>", term->u.literal.p);
+			writer->printf(" unimplemented-literal<%s>", term->text().chars());
 			break;
 #else
 			fprintf(stderr, "unimplemented\n");
@@ -118,7 +118,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 #endif
 
 		case TYPE_TOKEN:
-			writer->printf(" <%s>", term->u.token);
+			writer->printf(" <%s>", term->text().chars());
 			break;
 
 		case TYPE_PROSE:
@@ -126,7 +126,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			return 0;
 
 		case TYPE_GROUP:
-			if (!output_group(term->u.group))
+			if (!output_group(term->group()))
 				return 0;
 			break;
 	}
@@ -158,7 +158,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("<%s> ::=", rule->name.chars());
+	writer->printf("<%s> ::=", rule->name().chars());
 
 	for (alt = rule->alts; alt != NULL; alt = alt->next)
 	{

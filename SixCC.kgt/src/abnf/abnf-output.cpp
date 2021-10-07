@@ -364,7 +364,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->puts(term->u.rule->name);
+			writer->puts(term->rule()->name());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -391,7 +391,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_GROUP:
-			if (!output_group(term->u.group))
+			if (!output_group(term->group()))
 			{
 				return 0;
 			}
@@ -411,7 +411,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_rule(const struct ast_rule *rule)
 {
-	writer->printf("%s = ", rule->name.chars());
+	writer->printf("%s = ", rule->name().chars());
 
 	if (!output_alts(rule->alts))
 	{

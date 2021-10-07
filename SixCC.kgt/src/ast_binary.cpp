@@ -24,7 +24,7 @@ static int walk_term(const struct ast_term* term)
             return is_binary_literal(term->text());
 
         case TYPE_GROUP:
-            return walk_alts(term->u.group);
+            return walk_alts(term->group());
 
         default:
             return false;

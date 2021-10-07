@@ -83,11 +83,11 @@ struct tnode
 	unsigned a; /* ascender  - height including and above the line  */
 	unsigned d; /* descender - depth below the line */
 
-	union
+	struct
 	{
-		struct txt literal; /* TODO: point to ast_literal instead */
-		const char *name;   /* TODO: point to ast_rule instead */
-		const char *prose;
+		text literal; /* TODO: point to ast_literal instead */
+		text name;   /* TODO: point to ast_rule instead */
+		text prose;
 
 		struct
 		{
@@ -102,8 +102,8 @@ struct tnode
 
 struct dim
 {
-	void (*literal_txt)(const struct txt *t, unsigned *w, unsigned *a, unsigned *d);
-	void (*rule_string)(const char *s, unsigned *w, unsigned *a, unsigned *d);
+	void (*literal_txt)(const text& text, unsigned *w, unsigned *a, unsigned *d);
+	void (*rule_string)(const text& text, unsigned *w, unsigned *a, unsigned *d);
 	unsigned literal_padding;
 	unsigned rule_padding;
 	unsigned prose_padding;

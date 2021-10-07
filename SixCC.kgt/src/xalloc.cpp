@@ -60,22 +60,6 @@ char* xstrdup(const text& s)
 	return xstrdup(s.chars());
 }
 
-struct txt xtxtdup(const struct txt *t)
-{
-	struct txt nuw;
-
-	assert(t != nullptr);
-	assert(t->p != nullptr);
-	assert(t->n == strnlen(t->p, 1024));
-
-	nuw.n = t->n;
-	nuw.p = (char*)xmalloc(nuw.n);
-
-	memcpy((void *) nuw.p, t->p, nuw.n);
-
-	return nuw;
-}
-
 void xerror(const char *msg, ...)
 {
 	va_list ap{};

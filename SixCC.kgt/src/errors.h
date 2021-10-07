@@ -12,12 +12,12 @@
 
 struct Error
 {
-    static inline void conversion() throw(std::logic_error)
+    [[noreturn]] static inline void conversion() throw(std::logic_error)
     {
         throw std::logic_error("conversion failure");
     }
 
-    static inline void range() throw(std::logic_error)
+    [[noreturn]] static inline void range() throw(std::logic_error)
     {
         throw std::logic_error("conversion range failure");
     }

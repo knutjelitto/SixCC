@@ -331,27 +331,19 @@ static void render_comment(const struct tnode* n, struct render_context* ctx)
 	assert(ctx->x == x + n->w);
 }
 
-static void render_txt(struct render_context* ctx, const struct txt* t)
+static void render_txt(struct render_context* ctx, const text& text)
 {
 	size_t i;
 
-	assert(t != NULL);
-	assert(t->p != NULL);
-
-	for (i = 0; i < t->n; i++)
+	for (i = 0; i < text.length(); i++)
 	{
-		escputc(ctx, t->p[i]);
+		escputc(ctx, text[i]);
 	}
 }
 
-static void render_string(struct render_context *ctx, const char *s)
+static void render_string(struct render_context *ctx, const text& text)
 {
-	struct txt t;
-
-	t.p = s;
-	t.n = strlen(s);
-
-	render_txt(ctx, &t);
+	render_txt(ctx, text);
 }
 
 static void node_walk_render(const struct tnode* n, struct render_context* ctx)
@@ -374,13 +366,13 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 
 		case TNODE_CI_LITERAL:
 			bprintf(ctx, " \"");
-			render_txt(ctx, &n->u.literal);
+			render_txt(ctx, n->u.literal);
 			bprintf(ctx, "\"/i ");
 			break;
 
 		case TNODE_CS_LITERAL:
 			bprintf(ctx, " \"");
-			render_txt(ctx, &n->u.literal);
+			render_txt(ctx, n->u.literal);
 			bprintf(ctx, "\" ");
 			break;
 
@@ -454,38 +446,39 @@ static void render_rule(const struct tnode* node, int utf8)
 	free(ctx.scratch);
 }
 
-static void dim_mono_txt(const struct txt *t, unsigned *w, unsigned *a, unsigned *d)
+static void dim_mono_txt(const text& text, unsigned* w, unsigned* a, unsigned* d)
 {
 	size_t i;
 	unsigned n;
 
-	assert(t != NULL);
-	assert(t->p != NULL);
 	assert(w != NULL);
 	assert(a != NULL);
 	assert(d != NULL);
 
 	n = 0;
 
-	for (i = 0; i < t->n; i++) {
-		switch (t->p[i]) {
-		case '\\':
-		case '\"':
-		case '\a':
-		case '\b':
-		case '\f':
-		case '\n':
-		case '\r':
-		case '\t':
-		case '\v':
-			n += 2;
-			continue;
+	for (i = 0; i < text.length(); i++)
+	{
+		switch (text[i])
+		{
+			case '\\':
+			case '\"':
+			case '\a':
+			case '\b':
+			case '\f':
+			case '\n':
+			case '\r':
+			case '\t':
+			case '\v':
+				n += 2;
+				continue;
 
-		default:
-			break;
+			default:
+				break;
 		}
 
-		if (!isprint((unsigned char) t->p[i])) {
+		if (!isprint((unsigned char)text[i]))
+		{
 			n += 4;
 			continue;
 		}
@@ -498,19 +491,13 @@ static void dim_mono_txt(const struct txt *t, unsigned *w, unsigned *a, unsigned
 	*d = 1;
 }
 
-static void dim_mono_string(const char *s, unsigned *w, unsigned *a, unsigned *d)
+static void dim_mono_string(const text& text, unsigned *w, unsigned *a, unsigned *d)
 {
-	struct txt t;
-
-	assert(s != NULL);
 	assert(w != NULL);
 	assert(a != NULL);
 	assert(d != NULL);
 
-	t.p = s;
-	t.n = strlen(s);
-
-	dim_mono_txt(&t, w, a, d);
+	dim_mono_txt(text, w, a, d);
 }
 
 void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
@@ -539,7 +526,7 @@ void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
 
 		node_free(rrd);
 
-		writer->printf("%s:\n", p->name.chars());
+		writer->printf("%s:\n", p->name().chars());
 		render_rule(tnode, utf8);
 		writer->printf("\n");
 

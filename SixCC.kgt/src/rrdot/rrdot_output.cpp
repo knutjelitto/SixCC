@@ -131,13 +131,13 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
     {
         case NODE_CI_LITERAL:
             writer->printf("style = \"%s\", shape = box, label = \"\\\"", node->invisible ? "filled,dashed" : "filled");
-            writer->escape(&node->u.literal, escputc);
+            writer->escape(node->u.literal, escputc);
             writer->printf("\\\"\"/i");
             break;
 
         case NODE_CS_LITERAL:
             writer->printf("style = \"%s\", shape = box, label = \"\\\"", node->invisible ? "filled,dashed" : "filled");
-            writer->escape(&node->u.literal, escputc);
+            writer->escape(node->u.literal, escputc);
             writer->printf("\\\"\"");
             break;
 
@@ -249,9 +249,9 @@ WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
             rrd_pretty(&rrd);
         }
 
-        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name.chars(), map((void*)p), p->name.chars());
+        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name().chars(), map((void*)p), p->name().chars());
 
-        rrd_print_dot(p->name, p, "", rrd);
+        rrd_print_dot(p->name(), p, "", rrd);
 
         node_free(rrd);
     }

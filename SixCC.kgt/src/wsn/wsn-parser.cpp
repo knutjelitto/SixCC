@@ -263,10 +263,10 @@ prod_factor(lex_state lex_state, act_state act_state, map_term *ZOt)
 		goto ZL1;
 	}
 	goto ZL0;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOt = ZIt;
 }
 
@@ -287,10 +287,10 @@ prod_list_Hof_Hterms(lex_state lex_state, act_state act_state, map_term *ZOl)
 		}
 	}
 	goto ZL0;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOl = ZIl;
 }
 
@@ -311,10 +311,10 @@ prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, map_rule *ZOl)
 		}
 	}
 	goto ZL0;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOl = ZIl;
 }
 
@@ -337,17 +337,17 @@ prod_list_Hof_Halts(lex_state lex_state, act_state act_state, map_alt *ZOl)
 		}
 	}
 	goto ZL0;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOl = ZIl;
 }
 
 static void
 prod_body(lex_state lex_state, act_state act_state)
 {
-ZL2_body:;
+ZL2_body:
 	switch (CURRENT_TERMINAL) {
 	case (TOK_ESC): case (TOK_CHAR):
 		{
@@ -414,125 +414,116 @@ ZL2_body:;
 		break;
 	}
 	return;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
 }
 
 static void
-prod_term(lex_state lex_state, act_state act_state, map_term *ZOt)
+prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 {
 	map_term ZIt;
 
-	switch (CURRENT_TERMINAL) {
-	case (TOK_EMPTY):
+	switch (CURRENT_TERMINAL)
+	{
+		case (TOK_EMPTY):
 		{
 			ADVANCE_LEXER;
 			/* BEGINNING OF ACTION: make-empty-term */
 			{
-//#line 580 "src/parser.act"
+				//#line 580 "src/parser.act"
 
-		(ZIt) = ast_make_empty_term(act_state->invisible);
-	
-//#line 649 "src/wsn/parser.c"
+				(ZIt) = ast_make_empty_term(act_state->invisible);
+
+				//#line 649 "src/wsn/parser.c"
 			}
 			/* END OF ACTION: make-empty-term */
 		}
 		break;
-	case (TOK_IDENT):
+		case (TOK_IDENT):
 		{
 			map_string ZIs;
 
 			/* BEGINNING OF EXTRACT: IDENT */
 			{
-//#line 346 "src/parser.act"
+				//#line 346 "src/parser.act"
 
-		/*
-		 * This rtrim() is for EBNF, which would require n-token lookahead
-		 * in order to lex just an ident (as ident may contain whitespace).
-		 *
-		 * I'm trimming here (for all grammars) because it's simpler than
-		 * doing this for just EBNF specifically, and harmless to others.
-		 */
-		rtrim(lex_state->buf.a);
+						/*
+						 * This rtrim() is for EBNF, which would require n-token lookahead
+						 * in order to lex just an ident (as ident may contain whitespace).
+						 *
+						 * I'm trimming here (for all grammars) because it's simpler than
+						 * doing this for just EBNF specifically, and harmless to others.
+						 */
+				rtrim(lex_state->buf.a);
 
-		ZIs = xstrdup(lex_state->buf.a);
-	
-//#line 677 "src/wsn/parser.c"
+				ZIs = xstrdup(lex_state->buf.a);
+
+				//#line 677 "src/wsn/parser.c"
 			}
 			/* END OF EXTRACT: IDENT */
 			ADVANCE_LEXER;
 			/* BEGINNING OF ACTION: make-rule-term */
 			{
-//#line 584 "src/parser.act"
+				//#line 584 "src/parser.act"
 
-		struct ast_rule *r;
+				struct ast_rule* r;
 
-		/*
-		 * Regardless of whether a rule exists (yet) by this name, we make
-		 * a placeholder rule just so that we have an ast_rule struct
-		 * at which to point. This saves passing the grammar around, which
-		 * keeps the rule-building productions simpler.
-		 */
-		r = ast_make_rule((ZIs), NULL);
-		if (r == NULL) {
-			perror("ast_make_rule");
-			goto ZL1;
-		}
+				/*
+				 * Regardless of whether a rule exists (yet) by this name, we make
+				 * a placeholder rule just so that we have an ast_rule struct
+				 * at which to point. This saves passing the grammar around, which
+				 * keeps the rule-building productions simpler.
+				 */
+				r = ast_make_rule((ZIs), NULL);
+				if (r == NULL)
+				{
+					perror("ast_make_rule");
+					goto ZL1;
+				}
 
-		(ZIt) = ast_make_rule_term(act_state->invisible, r);
-	
-//#line 701 "src/wsn/parser.c"
+				(ZIt) = ast_make_rule_term(act_state->invisible, r);
+
+				//#line 701 "src/wsn/parser.c"
 			}
 			/* END OF ACTION: make-rule-term */
 		}
 		break;
-	case (TOK_ESC): case (TOK_CHAR): case (TOK_CS__LITERAL):
+		case (TOK_ESC): case (TOK_CHAR): case (TOK_CS__LITERAL):
 		{
-			map_txt ZIx;
+			text ZIx;
 
-			prod_body (lex_state, act_state);
-			switch (CURRENT_TERMINAL) {
-			case (TOK_CS__LITERAL):
-				/* BEGINNING OF EXTRACT: CS_LITERAL */
+			prod_body(lex_state, act_state);
+
+			switch (CURRENT_TERMINAL)
+			{
+				case (TOK_CS__LITERAL):
 				{
-//#line 378 "src/parser.act"
-
-		ZIx.p = pattern_buffer(lex_state);
-		ZIx.n = strlen(ZIx.p);
-	
-//#line 720 "src/wsn/parser.c"
+					ZIx = text(pattern_buffer(lex_state));
+					break;
 				}
-				/* END OF EXTRACT: CS_LITERAL */
-				break;
-			case (ERROR_TERMINAL):
-				RESTORE_LEXER;
-				goto ZL1;
-			default:
-				goto ZL1;
+				case (ERROR_TERMINAL):
+					RESTORE_LEXER;
+					goto ZL1;
+				default:
+					goto ZL1;
 			}
 			ADVANCE_LEXER;
-			/* BEGINNING OF ACTION: make-cs-literal-term */
 			{
-//#line 613 "src/parser.act"
-
-		(ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), false);
-	
-//#line 737 "src/wsn/parser.c"
+				ZIt = ast_make_literal_term(act_state->invisible, ZIx, false);
 			}
-			/* END OF ACTION: make-cs-literal-term */
 		}
 		break;
-	case (ERROR_TERMINAL):
-		return;
-	default:
-		goto ZL1;
+		case (ERROR_TERMINAL):
+			return;
+		default:
+			goto ZL1;
 	}
 	goto ZL0;
-ZL1:;
-	SAVE_LEXER ((ERROR_TERMINAL));
+ZL1:
+	SAVE_LEXER((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOt = ZIt;
 }
 
@@ -588,7 +579,7 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 				ADVANCE_LEXER;
 			}
 			goto ZL2;
-		ZL3:;
+		ZL3:
 		{
 			/* BEGINNING OF ACTION: err-expected-equals */
 			{
@@ -631,7 +622,7 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 				ADVANCE_LEXER;
 			}
 			goto ZL4;
-		ZL5:;
+		ZL5:
 		{
 			/* BEGINNING OF ACTION: err-expected-sep */
 			{
@@ -724,9 +715,9 @@ prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
 			{
 				//#line 689 "src/parser.act"
 
-				if (ast_find_rule((ZIr), (*ZIl)->name))
+				if (ast_find_rule((ZIr), (*ZIl)->name()))
 				{
-					err_already(*lex_state, (*ZIl)->name);
+					err_already(*lex_state, (*ZIl)->name());
 					return;
 				}
 
@@ -744,7 +735,7 @@ prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
 			break;
 	}
 	return;
-ZL1:;
+ZL1:
 	SAVE_LEXER((ERROR_TERMINAL));
 	return;
 }
@@ -771,7 +762,7 @@ prod_94(lex_state lex_state, act_state act_state, map_term *ZIt, map_alt *ZOl)
 					ADVANCE_LEXER;
 				}
 				goto ZL2;
-			ZL3:;
+			ZL3:
 				{
 					/* BEGINNING OF ACTION: err-expected-alt */
 					{
@@ -829,10 +820,10 @@ prod_94(lex_state lex_state, act_state act_state, map_term *ZIt, map_alt *ZOl)
 		return;
 	}
 	goto ZL0;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
-ZL0:;
+ZL0:
 	*ZOl = ZIl;
 }
 
@@ -868,7 +859,7 @@ prod_95(lex_state lex_state, act_state act_state, map_term *ZIl)
 		break;
 	}
 	return;
-ZL1:;
+ZL1:
 	SAVE_LEXER ((ERROR_TERMINAL));
 	return;
 }

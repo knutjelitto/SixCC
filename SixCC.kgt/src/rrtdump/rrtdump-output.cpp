@@ -79,7 +79,7 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("LITERAL");
 			print_coords(writer, n);
-			writer->printf(": \"%.*s\"%s\n", (int)n->u.literal.n, n->u.literal.p,
+			writer->printf(": \"%.*s\"%s\n", (int)n->u.literal.length(), n->u.literal.chars(),
 				n->type == TNODE_CI_LITERAL ? "/i" : "");
 
 			break;
@@ -88,7 +88,7 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("PROSE");
 			print_coords(writer, n);
-			writer->printf(": %s\n", n->u.prose);
+			writer->printf(": %s\n", n->u.prose.chars());
 
 			break;
 
@@ -106,9 +106,9 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 
 		case TNODE_RULE:
 			print_indent(writer, depth);
-			writer->printf("RULE");
+			writer->puts("RULE");
 			print_coords(writer, n);
-			writer->printf(": <%s>\n", n->u.name);
+			writer->printf(": <%s>\n", n->u.name.chars());
 
 			break;
 
@@ -144,28 +144,24 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 	}
 }
 
-static void
-dim_mono_txt(const struct txt *t, unsigned *w, unsigned *a, unsigned *d)
+static void dim_mono_txt(const text& text, unsigned *w, unsigned *a, unsigned *d)
 {
-	assert(t != nullptr);
 	assert(w != nullptr);
 	assert(a != nullptr);
 	assert(d != nullptr);
 
-	*w = t->n;
+	*w = text.length();
 	*a = 0;
 	*d = 1;
 }
 
-static void
-dim_mono_string(const char *s, unsigned *w, unsigned *a, unsigned *d)
+static void dim_mono_string(const text& text, unsigned *w, unsigned *a, unsigned *d)
 {
-	assert(s != nullptr);
 	assert(w != nullptr);
 	assert(a != nullptr);
 	assert(d != nullptr);
 
-	*w = strlen(s);
+	*w = text.length();
 	*a = 0;
 	*d = 1;
 }
@@ -200,15 +196,15 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", p->name.chars());
+			writer->printf("%s:\n", p->name().chars());
 			tnode_walk(writer, tnode, 1);
-			writer->printf("\n");
+			writer->puts("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", p->name.chars());
+			writer->printf("%s: (before prettify)\n", p->name().chars());
 			tnode_walk(writer, tnode, 1);
-			writer->printf("\n");
+			writer->puts("\n");
 
 			tnode_free(tnode);
 
@@ -216,7 +212,7 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 			tnode = rrd_to_tnode(rrd, &dim);
 
-			writer->printf("%s: (after prettify)\n", p->name.chars());
+			writer->printf("%s: (after prettify)\n", p->name().chars());
 			tnode_walk(writer, tnode, 1);
 			writer->printf("\n");
 		}

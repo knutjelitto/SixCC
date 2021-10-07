@@ -28,9 +28,9 @@
  *               ^-- B A ---- "|" --<
  */
 static void
-roll_prefix(int *changed, struct list **entry, struct node *loop)
+roll_prefix(int* changed, struct list** entry, struct node* loop)
 {
-	struct list **p, **q;
+	struct list** p, ** q;
 
 	assert(entry != NULL);
 	assert((*entry)->next != NULL);
@@ -49,11 +49,13 @@ roll_prefix(int *changed, struct list **entry, struct node *loop)
 
 	/* find node at tail of .backward */
 	q = list_tail(&loop->u.loop.backward->u.seq);
-	if (q == NULL) {
+	if (q == NULL)
+	{
 		return;
 	}
 
-	if (!node_compare((*p)->node, (*q)->node)) {
+	if (!node_compare((*p)->node, (*q)->node))
+	{
 		return;
 	}
 
@@ -66,7 +68,8 @@ roll_prefix(int *changed, struct list **entry, struct node *loop)
 
 	/* if destination is a skip node, destroy that node first */
 	/* TODO: centralise */
-	if (loop->u.loop.forward->u.seq->node == NULL) {
+	if (loop->u.loop.forward->u.seq->node == NULL)
+	{
 		node_free(list_pop_front(&loop->u.loop.forward->u.seq));
 	}
 
@@ -75,7 +78,7 @@ roll_prefix(int *changed, struct list **entry, struct node *loop)
 	 * remove it from its current list, and prepend to .forward
 	 * instead.
 	 */
-	/* TODO: centralise? list_transplant() */
+	 /* TODO: centralise? list_transplant() */
 	{
 		assert((*q)->next == NULL);
 
@@ -86,7 +89,8 @@ roll_prefix(int *changed, struct list **entry, struct node *loop)
 	}
 
 	/* we don't have empty lists */
-	if (loop->u.loop.backward->u.seq == NULL) {
+	if (loop->u.loop.backward->u.seq == NULL)
+	{
 		node_free(loop->u.loop.backward);
 		loop->u.loop.backward = NULL;
 	}
@@ -111,9 +115,9 @@ roll_prefix(int *changed, struct list **entry, struct node *loop)
  *      ^-- "|" ---- A B --<
  */
 static void
-roll_suffix(int *changed, struct list **exit, struct node *loop)
+roll_suffix(int* changed, struct list** exit, struct node* loop)
 {
-	struct list **p, **q;
+	struct list** p, ** q;
 
 	assert(exit != NULL);
 	assert(loop != NULL);
@@ -130,11 +134,13 @@ roll_suffix(int *changed, struct list **exit, struct node *loop)
 
 	/* find node at head of .backward */
 	q = &loop->u.loop.backward->u.seq;
-	if (*q == NULL) {
+	if (*q == NULL)
+	{
 		return;
 	}
 
-	if (!node_compare((*p)->node, (*q)->node)) {
+	if (!node_compare((*p)->node, (*q)->node))
+	{
 		return;
 	}
 
@@ -147,7 +153,8 @@ roll_suffix(int *changed, struct list **exit, struct node *loop)
 
 	/* if destination is a skip node, destroy that node first */
 	/* TODO: centralise */
-	if (loop->u.loop.forward->u.seq->node == NULL) {
+	if (loop->u.loop.forward->u.seq->node == NULL)
+	{
 		node_free(list_pop_front(&loop->u.loop.forward->u.seq));
 	}
 
@@ -156,9 +163,9 @@ roll_suffix(int *changed, struct list **exit, struct node *loop)
 	 * remove it from its current list, and append to .forward
 	 * instead.
 	 */
-	/* TODO: centralise? list_transplant() */
+	 /* TODO: centralise? list_transplant() */
 	{
-		struct list *next;
+		struct list* next;
 
 		next = (*q)->next;
 		(*q)->next = NULL;
@@ -169,7 +176,8 @@ roll_suffix(int *changed, struct list **exit, struct node *loop)
 	}
 
 	/* we don't have empty lists */
-	if (loop->u.loop.backward->u.seq == NULL) {
+	if (loop->u.loop.backward->u.seq == NULL)
+	{
 		node_free(loop->u.loop.backward);
 		loop->u.loop.backward = NULL;
 	}

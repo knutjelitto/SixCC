@@ -56,18 +56,6 @@ struct base_info bases[] =
 };
 
 
-static const base_info& prefix(int base)
-{
-    switch (base)
-    {
-        case  2: return bases[0];
-        case 10: return bases[1];
-        case 16: return bases[2];
-    }
-
-    Error::notreached();
-}
-
 static const base_info& prefix(LX_TOKEN tok)
 {
     switch (tok)
@@ -81,9 +69,9 @@ static const base_info& prefix(LX_TOKEN tok)
         case TOK_HEXSTR:
         case TOK_HEXRANGE:
             return bases[2];
+        default:
+            Error::notreached();
     }
-
-    Error::notreached();
 }
 
 static bool conversion_error(lex_state lex_state, const base_info& info)
@@ -695,29 +683,21 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
         return;
     }
     {
-        map_string ZIs;
+        text ZIs;
 
         switch (CURRENT_TERMINAL)
         {
             case (TOK_IDENT):
-                /* BEGINNING OF EXTRACT: IDENT */
             {
-                //#line 346 "src/parser.act"
-
-                        /*
-                         * This rtrim() is for EBNF, which would require n-token lookahead
-                         * in order to lex just an ident (as ident may contain whitespace).
-                         *
-                         * I'm trimming here (for all grammars) because it's simpler than
-                         * doing this for just EBNF specifically, and harmless to others.
-                         */
-                rtrim(lex_state->buf.a);
-
-                ZIs = xstrdup(lex_state->buf.a);
-
-                //#line 985 "src/abnf/parser.c"
+                /*
+                 * This rtrim() is for EBNF, which would require n-token lookahead
+                 * in order to lex just an ident (as ident may contain whitespace).
+                 *
+                 * I'm trimming here (for all grammars) because it's simpler than
+                 * doing this for just EBNF specifically, and harmless to others.
+                 */
+                ZIs = text(lex_state->buf.a).rtrim();
             }
-            /* END OF EXTRACT: IDENT */
             break;
             default:
                 goto ZL1;
@@ -830,9 +810,9 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
                     {
                         //#line 705 "src/parser.act"
 
-                        assert((ZIs) != nullptr);
+                        assert(ZIs.length() > 0);
 
-                        (ZIr) = ast_find_rule((ZIl), (ZIs));
+                        (ZIr) = ast_find_rule((ZIl), ZIs);
 
                         //#line 1099 "src/abnf/parser.c"
                     }
@@ -961,9 +941,9 @@ static void prod_101(lex_state lex_state, act_state act_state, map_rule* ZIl)
             {
                 //#line 689 "src/parser.act"
 
-                if (ast_find_rule((ZIr), (*ZIl)->name))
+                if (ast_find_rule((ZIr), (*ZIl)->name()))
                 {
-                    err_already(*lex_state, (*ZIl)->name);
+                    err_already(*lex_state, (*ZIl)->name());
                     return;
                 }
 

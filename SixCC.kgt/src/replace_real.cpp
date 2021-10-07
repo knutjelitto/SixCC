@@ -8,6 +8,8 @@
  * AST node rewriting
  */
 
+#include <vector>
+
 #include <assert.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -25,54 +27,104 @@
 
 extern int allow_undefined; 
 
-void replace_real(ast_rule* g, error_context lex_state)
+void replace_real(ast_rule* grammar, error_context lex_state)
 {
     /* substitute placeholder rules for the real thing */
     {
-        const struct ast_rule* p;
-        const struct ast_alt* q;
-        struct ast_term* t;
-        struct ast_rule* r;
+        const struct ast_rule* rule;
+        struct ast_alt* alt;
+        struct ast_term* term;
+        struct ast_rule* replacement;
 
-        for (p = g; p != NULL; p = p->next)
+        for (rule = grammar; rule != nullptr; rule = rule->next)
         {
-            for (q = p->alts; q != NULL; q = q->next)
+            for (alt = rule->alts; alt != nullptr; alt = alt->next)
             {
-                for (t = q->terms; t != NULL; t = t->next)
+                std::vector<ast_term*> vterms;
+
+                for (term = alt->terms; term != nullptr; term = term->next)
                 {
-                    if (t->type != TYPE_RULE)
+                    vterms.push_back(term);
+                }
+
+                for (int i = 0; i < vterms.size(); i += 1)
+                {
+                    ast_term* term = vterms[i];
+
+                    if (term->type != TYPE_RULE)
                     {
                         continue;
                     }
 
-                    r = ast_find_rule(g, t->u.rule->name);
-                    if (r != NULL)
+                    replacement = ast_find_rule(grammar, term->rule()->name());
+                    if (replacement != nullptr)
                     {
-                        ast_free_rule((struct ast_rule*)t->u.rule);
-                        t->u.rule = r;
+                        ast_free_rule((struct ast_rule*)term->rule());
+                        term->set_rule(replacement);
                         continue;
                     }
 
                     if (!allow_undefined)
                     {
-                        err_undefined(lex_state, t->u.rule->name);
+                        err_undefined(lex_state, term->rule()->name());
+                        /* XXX: would leak the ast_rule here */
+                        continue;
+                    }
+
+                    ast_term* new_term = ast_make_token_term(term->invisible, term->rule()->name());
+
+                    if (i > 0)
+                    {
+                        vterms[i - 1]->next = new_term;
+                    }
+                    if (i + 1 < vterms.size())
+                    {
+                        new_term->next = vterms[i + 1];
+                    }
+                    vterms[i] = new_term;
+                    term->next = nullptr;
+                    ast_free_rule((struct ast_rule*)term->rule());
+                    ast_free_term(term);
+                }
+
+                if (vterms.size() > 0)
+                {
+                    alt->terms = vterms[0];
+                }
+
+#if false
+                for (term = alt->terms; term != nullptr; term = term->next)
+                {
+                    if (term->type != TYPE_RULE)
+                    {
+                        continue;
+                    }
+
+                    replacement = ast_find_rule(grammar, term->rule()->name());
+                    if (replacement != nullptr)
+                    {
+                        ast_free_rule((struct ast_rule*)term->rule());
+                        term->set_rule(replacement);
+                        continue;
+                    }
+
+                    if (!allow_undefined)
+                    {
+                        err_undefined(lex_state, term->rule()->name());
                         /* XXX: would leak the ast_rule here */
                         continue;
                     }
 
                     {
-                        const char* token = xstrdup(t->u.rule->name);
+                        const char* token = xstrdup(term->rule()->name());
 
-                        ast_free_rule((struct ast_rule*)t->u.rule);
+                        ast_free_rule((struct ast_rule*)term->rule());
 
-#if true
-                        Error::notimplemented();
-#else
-                        t->type = TYPE_TOKEN;
-                        t->u.token = token;
-#endif
+                        term->type = TYPE_TOKEN;
+                        term->u.token = token;
                     }
                 }
+#endif
             }
         }
     }

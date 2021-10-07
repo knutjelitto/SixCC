@@ -80,14 +80,11 @@ static int svg_escputc(int c, iwriter* writer)
 	return writer->printf("&#x3008;<tspan class='esc'>%s</tspan>&#x3009;", name);
 }
 
-static void svg_text(struct render_context* ctx, unsigned w, const struct txt* t, const char* klass)
+static void svg_text(struct render_context* ctx, unsigned w, const text& t, const char* klass)
 {
 	unsigned mid;
-	size_t i;
 
 	assert(ctx != nullptr);
-	assert(t != nullptr);
-	assert(t->p != nullptr);
 
 	mid = w / 2;
 
@@ -98,28 +95,18 @@ static void svg_text(struct render_context* ctx, unsigned w, const struct txt* t
 		writer->printf(" class='%s'", klass);
 	}
 
-	writer->printf(">");
+	writer->puts(">");
 
-	for (i = 0; i < t->n; i++)
-	{
-		svg_escputc(t->p[i],writer);
-	}
+	writer->escape(t, svg_escputc);
 
-	writer->printf("</text>\n");
+	writer->puts("</text>\n");
 }
 
-static void
-svg_string(struct render_context *ctx, unsigned w, const char *s, const char * klass)
+static void svg_string(struct render_context *ctx, unsigned w, const text& text, const char * klass)
 {
-	struct txt t;
-
 	assert(ctx != nullptr);
-	assert(s != nullptr);
 
-	t.p = s;
-	t.n = strlen(s);
-
-	svg_text(ctx, w, &t, klass);
+	svg_text(ctx, w, text, klass);
 }
 
 static void
@@ -137,25 +124,19 @@ svg_rect(struct render_context *ctx, unsigned w, unsigned r, const char * klass)
 	writer->printf("/>\n");
 }
 
-static void
-svg_textbox(struct render_context *ctx, const struct txt *t, unsigned w, unsigned r, const char * klass)
+static void svg_textbox(struct render_context *ctx, const text& text, unsigned w, unsigned r, const char * klass)
 {
-	assert(t != nullptr);
-	assert(t->p != nullptr);
-
 	svg_rect(ctx, w, r, klass);
-	svg_text(ctx, w, t, klass);
+	svg_text(ctx, w, text, klass);
 
 	ctx->x += w;
 }
 
-static void
-svg_prose(struct render_context *ctx, const char *s, unsigned w)
+static void svg_prose(struct render_context *ctx, const text& text, unsigned w)
 {
 	assert(ctx != nullptr);
-	assert(s != nullptr);
 
-	svg_string(ctx, w, s, "prose");
+	svg_string(ctx, w, text, "prose");
 
 	ctx->x += w;
 }
@@ -247,58 +228,58 @@ enum tile
 	TILE_TR_N1 = 1 << 7
 };
 
-static void render_tile(struct render_context *ctx, enum tile tile)
+static void render_tile(struct render_context* ctx, enum tile tile)
 {
 	int y, dy;
 	int rx, ry;
 
-	switch (tile) {
-	case TILE_BL_N1: tile = TILE_BL; dy = -10; break;
-	case TILE_BR_N1: tile = TILE_BR; dy = -10; break;
-	case TILE_TR_N1: tile = TILE_TR; dy = -10; break;
+	switch (tile)
+	{
+		case TILE_BL_N1: tile = TILE_BL; dy = -10; break;
+		case TILE_BR_N1: tile = TILE_BR; dy = -10; break;
+		case TILE_TR_N1: tile = TILE_TR; dy = -10; break;
 
-	case TILE_TL:
-		dy = 10;
-		break;
+		case TILE_TL:
+			dy = 10;
+			break;
 
-	case TILE_BR:
-	case TILE_TR:
-	case TILE_LINE:
-		dy = 0;
-		break;
+		case TILE_BR:
+		case TILE_TR:
+		case TILE_LINE:
+			dy = 0;
+			break;
 
-	case TILE_BL:
-	default:
-		__assume(false);
-		assert(!"unreached");
-		break;
+		case TILE_BL:
+		default:
+			__assume(false);
+			assert(!"unreached");
+			break;
 	}
 
-	switch (tile) {
-	case TILE_BL: y =  10; rx =  0; ry = y; break;
-	case TILE_TL: y = -10; rx =  0; ry = y; break;
-	case TILE_BR: y = -10; rx = 10; ry = 0; break;
-	case TILE_TR: y =  10; rx = 10; ry = 0; break;
+	switch (tile)
+	{
+		case TILE_BL: y = 10; rx = 0; ry = y; break;
+		case TILE_TL: y = -10; rx = 0; ry = y; break;
+		case TILE_BR: y = -10; rx = 10; ry = 0; break;
+		case TILE_TR: y = 10; rx = 10; ry = 0; break;
 
-	case TILE_LINE:
-		svg_path_h(&ctx->paths, ctx->x, ctx->y + dy, 10);
-		ctx->x += 10;
-		return;
+		case TILE_LINE:
+			svg_path_h(&ctx->paths, ctx->x, ctx->y + dy, 10);
+			ctx->x += 10;
+			return;
 
-	default:
-		__assume(false);
-		assert(!"unreached");
+		default:
+			__assume(false);
+			assert(!"unreached");
 	}
 
-	if (debug) {
+	if (debug)
+	{
 		char s[16];
-		struct txt t;
 
 		snprintf(s, sizeof s, "%d", tile);
 
-		t.p = s;
-		t.n = strlen(s);
-		svg_textbox(ctx, &t, 10, 0, "debug tile");
+		svg_textbox(ctx, text(s), 10, 0, "debug tile");
 		ctx->x -= 10;
 	}
 
@@ -586,13 +567,13 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx, 
 			break;
 
 		case TNODE_CI_LITERAL:
-			svg_textbox(ctx, &n->u.literal, n->w * 10, 8, "literal");
+			svg_textbox(ctx, n->u.literal, n->w * 10, 8, "literal");
 			writer->printf("    <text x='%u' y='%u' text-anchor='left' class='ci'>%s</text>\n",
 				ctx->x - 20 + 5, ctx->y + 5, "&#x29f8;i");
 			break;
 
 		case TNODE_CS_LITERAL:
-			svg_textbox(ctx, &n->u.literal, n->w * 10, 8, "literal");
+			svg_textbox(ctx, n->u.literal, n->w * 10, 8, "literal");
 			break;
 
 		case TNODE_PROSE:
@@ -631,16 +612,11 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx, 
 
 			if (base != nullptr && dest_exists)
 			{
-				writer->printf("    <a href='%s#%s'>\n", base, n->u.name); /* XXX: escape */
+				writer->printf("    <a href='%s#%s'>\n", base, n->u.name.chars()); /* XXX: escape */
 			}
-			{
-				struct txt t;
-
-				t.p = n->u.name;
-				t.n = strlen(n->u.name);
-
-				svg_textbox(ctx, &t, n->w * 10, 0, "rule");
-			}
+			
+			svg_textbox(ctx, text(n->u.name), n->w * 10, 0, "rule");
+			
 			if (base != nullptr && dest_exists)
 			{
 				writer->printf("    </a>\n");
@@ -743,12 +719,10 @@ void svg_render_rule(const struct tnode *node, const char *base, const struct as
 	}
 }
 
-static void dim_prop_string(const char* s, unsigned* w, unsigned* a, unsigned* d)
+static void dim_prop_string(const text& text, unsigned* w, unsigned* a, unsigned* d)
 {
-	const char* p;
 	double n;
 
-	assert(s != nullptr);
 	assert(w != nullptr);
 	assert(a != nullptr);
 	assert(d != nullptr);
@@ -757,9 +731,9 @@ static void dim_prop_string(const char* s, unsigned* w, unsigned* a, unsigned* d
 
 	/* estimate a proportional width */
 
-	for (p = s; *p != '\0'; p++)
+	for (int i = 0; i < text.length(); i += 1)
 	{
-		switch (tolower((unsigned char)*p))
+		switch (tolower((unsigned char)text[i]))
 		{
 			case '|':
 				n += 0.3;
@@ -803,7 +777,7 @@ static void dim_prop_string(const char* s, unsigned* w, unsigned* a, unsigned* d
 				break;
 		}
 
-		if (isupper((unsigned char)*p))
+		if (isupper((unsigned char)text[i]))
 		{
 			n += 0.25;
 		}
@@ -822,28 +796,26 @@ static void dim_prop_string(const char* s, unsigned* w, unsigned* a, unsigned* d
 	*d = 1;
 }
 
-static void dim_mono_txt(const struct txt* t, unsigned* w, unsigned* a, unsigned* d)
+static void dim_mono_txt(const text& text, unsigned* w, unsigned* a, unsigned* d)
 {
 	size_t i;
 	double n;
 
-	assert(t != nullptr);
-	assert(t->p != nullptr);
 	assert(w != nullptr);
 	assert(a != nullptr);
 	assert(d != nullptr);
 
 	n = 0.0;
 
-	for (i = 0; i < t->n; i++)
+	for (i = 0; i < text.length(); i++)
 	{
-		if (t->p[i] == '\t' || t->p[i] == '\a')
+		if (text[i] == '\t' || text[i] == '\a')
 		{
 			n += 4.00;
 			continue;
 		}
 
-		if (!isprint((unsigned char)t->p[i]))
+		if (!isprint((unsigned char)text[i]))
 		{
 			n += 2.93; /* <XY> */
 			continue;
@@ -969,7 +941,7 @@ WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
 	for (i = 0, p = grammar; p; p = p->next, i++)
 	{
 		writer->printf("  <g transform='translate(%u %u)'>\n", 40, z * 10 + 50);
-		writer->printf("    <text x='%d' y='%d'>%s:</text>\n", -30, -10, p->name.chars());
+		writer->printf("    <text x='%d' y='%d'>%s:</text>\n", -30, -10, p->name().chars());
 
 		svg_render_rule(a[i], nullptr, grammar);
 

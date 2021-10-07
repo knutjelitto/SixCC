@@ -28,7 +28,7 @@ extern const char *css_file;
 
 static void output_alt(const struct ast_alt *alt);
 
-static int xml_escputc(int c)
+static int xml_escputc(int c, iwriter* writer)
 {
     const char* name;
 
@@ -73,17 +73,17 @@ static int atomic(const struct ast_term* term)
             return 1;
 
         case TYPE_GROUP:
-            if (term->u.group->next != NULL)
+            if (term->group()->next != NULL)
             {
                 return 0;
             }
 
-            if (term->u.group->terms->next != NULL)
+            if (term->group()->terms->next != NULL)
             {
                 return 0;
             }
 
-            return atomic(term->u.group->terms);
+            return atomic(term->group()->terms);
     }
 
     assert(!"unreached");
@@ -115,21 +115,11 @@ static const char * rep(unsigned min, unsigned max)
     return "()";
 }
 
-static void output_literal(const char* prefix, const struct txt* t)
+static void output_literal(const char* prefix, const text& text)
 {
-    size_t i;
-
-    assert(t != NULL);
-    assert(t->p != NULL);
-
     writer->printf("<tt class='literal %s'>&quot;", prefix);
-
-    for (i = 0; i < t->n; i++)
-    {
-        xml_escputc(t->p[i]);
-    }
-
-    writer->printf("&quot;</tt>");
+    writer->escape(text, xml_escputc);
+    writer->puts("&quot;</tt>");
 }
 
 static void output_term(const struct ast_term* term)
@@ -160,36 +150,36 @@ static void output_term(const struct ast_term* term)
             break;
 
         case TYPE_RULE:
-            writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->u.rule->name.chars(), term->min, term->max);
-            writer->puts(term->u.rule->name);
+            writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->rule()->name().chars(), term->min, term->max);
+            writer->puts(term->rule()->name());
             writer->puts("</a>");
             break;
 
         case TYPE_CI_LITERAL:
-            output_literal("ci", &term->u.literal);
+            output_literal("ci", term->text());
             break;
 
         case TYPE_CS_LITERAL:
-            output_literal("cs", &term->u.literal);
+            output_literal("cs", term->text());
             break;
 
         case TYPE_TOKEN:
-            writer->printf("<span class='token'>");
-            writer->printf("%s", term->u.token);
-            writer->printf("</span>");
+            writer->puts("<span class='token'>");
+            writer->puts(term->text());
+            writer->puts("</span>");
             break;
 
         case TYPE_PROSE:
-            writer->printf("<span class='prose'>");
-            writer->printf("%s", term->u.prose);
-            writer->printf("</span>");
+            writer->puts("<span class='prose'>");
+            writer->puts(term->text());
+            writer->puts("</span>");
             break;
 
         case TYPE_GROUP:
         {
             const struct ast_alt* alt;
 
-            for (alt = term->u.group; alt != NULL; alt = alt->next)
+            for (alt = term->group(); alt != NULL; alt = alt->next)
             {
                 output_alt(alt);
 
@@ -241,8 +231,8 @@ static void output_rule(const struct ast_rule* rule)
     writer->puts("  <dl class='bnf'>\n");
 
     writer->puts("    <dt>");
-    writer->printf("<a name='%s'>", rule->name.chars());
-    writer->puts(rule->name);
+    writer->printf("<a name='%s'>", rule->name().chars());
+    writer->puts(rule->name());
     writer->puts("</a>:");
     writer->puts("</dt>\n");
 

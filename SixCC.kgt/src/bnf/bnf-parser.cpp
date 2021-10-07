@@ -63,8 +63,7 @@
     }
 #endif
 
-    static const char *
-    pattern_buffer(struct lex_state_s *lex_state)
+    static const char * pattern_buffer(struct lex_state_s *lex_state)
     {
         const char *s;
 
@@ -481,9 +480,9 @@ prod_90(lex_state lex_state, act_state act_state, map_rule* ZIl)
             {
                 //#line 689 "src/parser.act"
 
-                if (ast_find_rule((ZIr), (*ZIl)->name))
+                if (ast_find_rule((ZIr), (*ZIl)->name()))
                 {
-                    err_already(*lex_state, (*ZIl)->name);
+                    err_already(*lex_state, (*ZIl)->name());
                     return;
                 }
 
@@ -633,84 +632,69 @@ ZL1:
 }
 
 static void
-prod_93(lex_state lex_state, act_state act_state, map_term *ZOt)
+prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
 {
     map_term ZIt;
 
-    switch (CURRENT_TERMINAL) {
-    case (TOK_CS__LITERAL):
+    switch (CURRENT_TERMINAL)
+    {
+        case (TOK_CS__LITERAL):
         {
-            map_txt ZIx;
+            text ZIx(pattern_buffer(lex_state));
 
-            /* BEGINNING OF EXTRACT: CS_LITERAL */
-            {
-//#line 378 "src/parser.act"
-
-        ZIx.p = pattern_buffer(lex_state);
-        ZIx.n = strlen(ZIx.p);
-    
-//#line 856 "src/bnf/parser.c"
-            }
-            /* END OF EXTRACT: CS_LITERAL */
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-cs-literal-term */
-            {
-//#line 613 "src/parser.act"
-
-        (ZIt) = ast_make_literal_term(act_state->invisible, &(ZIx), false);
-    
-//#line 866 "src/bnf/parser.c"
-            }
-            /* END OF ACTION: make-cs-literal-term */
+                
+            ZIt = ast_make_literal_term(act_state->invisible, ZIx, false);
         }
         break;
-    case (TOK_NAME):
+        case (TOK_NAME):
         {
             map_string ZIs;
 
             /* BEGINNING OF EXTRACT: NAME */
             {
-//#line 369 "src/parser.act"
+                //#line 369 "src/parser.act"
 
-        ZIs = pattern_buffer(lex_state);
-    
-//#line 881 "src/bnf/parser.c"
+                ZIs = pattern_buffer(lex_state);
+
+                //#line 881 "src/bnf/parser.c"
             }
             /* END OF EXTRACT: NAME */
             ADVANCE_LEXER;
             /* BEGINNING OF ACTION: make-rule-term */
             {
-//#line 584 "src/parser.act"
+                //#line 584 "src/parser.act"
 
-        struct ast_rule *r;
+                struct ast_rule* r;
 
-        /*
-         * Regardless of whether a rule exists (yet) by this name, we make
-         * a placeholder rule just so that we have an ast_rule struct
-         * at which to point. This saves passing the grammar around, which
-         * keeps the rule-building productions simpler.
-         */
-        r = ast_make_rule((ZIs), NULL);
-        if (r == NULL) {
-            perror("ast_make_rule");
-            goto ZL1;
-        }
+                /*
+                 * Regardless of whether a rule exists (yet) by this name, we make
+                 * a placeholder rule just so that we have an ast_rule struct
+                 * at which to point. This saves passing the grammar around, which
+                 * keeps the rule-building productions simpler.
+                 */
+                r = ast_make_rule((ZIs), NULL);
+                if (r == NULL)
+                {
+                    perror("ast_make_rule");
+                    goto ZL1;
+                }
 
-        (ZIt) = ast_make_rule_term(act_state->invisible, r);
-    
-//#line 905 "src/bnf/parser.c"
+                (ZIt) = ast_make_rule_term(act_state->invisible, r);
+
+                //#line 905 "src/bnf/parser.c"
             }
             /* END OF ACTION: make-rule-term */
         }
         break;
-    case (ERROR_TERMINAL):
-        return;
-    default:
-        goto ZL1;
+        case (ERROR_TERMINAL):
+            return;
+        default:
+            goto ZL1;
     }
     goto ZL0;
 ZL1:
-    SAVE_LEXER ((ERROR_TERMINAL));
+    SAVE_LEXER((ERROR_TERMINAL));
     return;
 ZL0:
     *ZOt = ZIt;

@@ -104,28 +104,28 @@ static int single_term(const struct ast_term* term, struct node** r)
 			return 1;
 
 		case TYPE_RULE:
-			*r = node_create_name(term->invisible, term->u.rule->name);
+			*r = node_create_name(term->invisible, term->rule()->name());
 			return 1;
 
 		case TYPE_CI_LITERAL:
 			/* can't create a sequence of alts; the tokenisation would be wrong */
-			*r = node_create_ci_literal(term->invisible, &term->u.literal);
+			*r = node_create_ci_literal(term->invisible, term->text());
 			return 1;
 
 		case TYPE_CS_LITERAL:
-			*r = node_create_cs_literal(term->invisible, &term->u.literal);
+			*r = node_create_cs_literal(term->invisible, term->text());
 			return 1;
 
 		case TYPE_TOKEN:
-			*r = node_create_name(term->invisible, term->u.token);
+			*r = node_create_name(term->invisible, term->text());
 			return 1;
 
 		case TYPE_PROSE:
-			*r = node_create_prose(term->invisible, term->u.prose);
+			*r = node_create_prose(term->invisible, term->text());
 			return 1;
 
 		case TYPE_GROUP:
-			return transform_alts(term->u.group, r);
+			return transform_alts(term->group(), r);
 	}
 
 	__assume(false);

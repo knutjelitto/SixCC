@@ -635,9 +635,9 @@ prod_91(lex_state lex_state, act_state act_state, map_rule* ZIl)
             {
                 //#line 689 "src/parser.act"
 
-                if (ast_find_rule((ZIr), (*ZIl)->name))
+                if (ast_find_rule((ZIr), (*ZIl)->name()))
                 {
-                    err_already(*lex_state, (*ZIl)->name);
+                    err_already(*lex_state, (*ZIl)->name());
                     return;
                 }
 

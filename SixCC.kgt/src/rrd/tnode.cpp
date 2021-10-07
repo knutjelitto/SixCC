@@ -137,24 +137,27 @@ void tnode_free(struct tnode *n)
 	free(n);
 }
 
-static int char_terminal(const struct node *node, unsigned char *c)
+static int char_terminal(const struct node* node, unsigned char* c)
 {
 	assert(c != NULL);
 
-	if (node == NULL) {
+	if (node == NULL)
+	{
 		return 0;
 	}
 
 	/* we collate ranges for case-sensitive strings only */
-	if (node->type != NODE_CS_LITERAL) {
+	if (node->type != NODE_CS_LITERAL)
+	{
 		return 0;
 	}
 
-	if (node->u.literal.n != 1) {
+	if (node->u.literal.length() != 1)
+	{
 		return 0;
 	}
 
-	*c = (unsigned) node->u.literal.p[0];
+	*c = (unsigned char)node->u.literal[0];
 
 	return 1;
 }
@@ -514,14 +517,14 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 		case NODE_CI_LITERAL:
 			nuw->type = TNODE_CI_LITERAL;
 			nuw->u.literal = node->u.literal;
-			dim->literal_txt(&nuw->u.literal, &nuw->w, &nuw->a, &nuw->d);
+			dim->literal_txt(nuw->u.literal, &nuw->w, &nuw->a, &nuw->d);
 			nuw->w += dim->literal_padding + dim->ci_marker;
 			break;
 
 		case NODE_CS_LITERAL:
 			nuw->type = TNODE_CS_LITERAL;
-			nuw->u.literal = xtxtdup(&node->u.literal);
-			dim->literal_txt(&nuw->u.literal, &nuw->w, &nuw->a, &nuw->d);
+			nuw->u.literal = node->u.literal;
+			dim->literal_txt(nuw->u.literal, &nuw->w, &nuw->a, &nuw->d);
 			nuw->w += dim->literal_padding;
 			break;
 

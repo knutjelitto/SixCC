@@ -31,20 +31,17 @@ static void output_section(const char *section)
 	writer->printf("\n%%%s%%\n\n", section);
 }
 
-static void output_literal(const struct txt* t)
+static void output_literal(const text& text)
 {
 	char c;
 
-	assert(t != NULL);
-	assert(t->p != NULL);
-
-	c = memchr(t->p, '\"', t->n) ? '\'' : '\"';
-	writer->printf("%c%.*s%c; ", c, (int)t->n, t->p, c);
+	c = memchr(text.chars(), '\"', text.length()) ? '\'' : '\"';
+	writer->printf("%c%.*s%c; ", c, text.length(), text.chars(), c);
 }
 
 WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 {
-	assert(term != NULL);
+	assert(term != nullptr);
 	assert(!term->invisible);
 
 	switch (term->type)
@@ -54,7 +51,7 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->printf("%s; ", term->u.rule->name.chars());
+			writer->printf("%s; ", term->rule()->name().chars());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -62,11 +59,11 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 			return 0;
 
 		case TYPE_CS_LITERAL:
-			output_literal(&term->u.literal);
+			output_literal(term->text());
 			break;
 
 		case TYPE_TOKEN:
-			writer->printf("%s; ", term->u.token);
+			writer->printf("%s; ", term->text().chars());
 			break;
 
 		case TYPE_PROSE:
@@ -75,7 +72,7 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 
 		case TYPE_GROUP:
 			writer->puts("{ ");
-			if (!output_alt(term->u.group))
+			if (!output_alt(term->group()))
 			{
 				return 0;
 			}
@@ -86,7 +83,7 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
-	assert(term != NULL);
+	assert(term != nullptr);
 	assert(!term->invisible);
 
 	/* SID cannot express term repetition; TODO: semantic checks for this */
@@ -115,10 +112,10 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
 	const struct ast_term* term;
 
-	assert(alt != NULL);
+	assert(alt != nullptr);
 	assert(!alt->invisible);
 
-	for (term = alt->terms; term != NULL; term = term->next)
+	for (term = alt->terms; term != nullptr; term = term->next)
 	{
 		if (!output_term(term))
 		{
@@ -132,9 +129,9 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("\t%s = {\n\t\t", rule->name.chars());
+	writer->printf("\t%s = {\n\t\t", rule->name().chars());
 
-	for (alt = rule->alts; alt != NULL; alt = alt->next)
+	for (alt = rule->alts; alt != nullptr; alt = alt->next)
 	{
 		if (!output_alt(alt))
 		{
@@ -143,7 +140,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 
 		writer->printf("\n");
 
-		if (alt->next != NULL)
+		if (alt->next != nullptr)
 		{
 			writer->printf("\t||\n\t\t");
 		}
@@ -153,7 +150,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	return 1;
 }
 
-static int is_equal(const struct ast_term* a, const struct ast_term* b)
+static bool is_equal(const struct ast_term* a, const struct ast_term* b)
 {
 	if (a->type != b->type)
 	{
@@ -162,12 +159,12 @@ static int is_equal(const struct ast_term* a, const struct ast_term* b)
 
 	switch (a->type)
 	{
-		case TYPE_EMPTY:      return 1;
-		case TYPE_RULE:       return 0 == strcmp(a->u.rule->name.chars(), b->u.rule->name.chars());
-		case TYPE_CI_LITERAL: return 0 == txtcasecmp(&a->u.literal, &b->u.literal);
-		case TYPE_CS_LITERAL: return 0 == txtcmp(&a->u.literal, &b->u.literal);
-		case TYPE_TOKEN:      return 0 == strcmp(a->u.token, b->u.token);
-		case TYPE_PROSE:      return 0 == strcmp(a->u.prose, b->u.prose);
+		case TYPE_EMPTY:      return true;
+		case TYPE_RULE:       return a->rule()->name().eq(b->rule()->name());
+		case TYPE_CI_LITERAL: return a->text().cieq(b->text());
+		case TYPE_CS_LITERAL: return a->text().eq(b->text());
+		case TYPE_TOKEN:      return a->text().eq(b->text());
+		case TYPE_PROSE:      return a->text().eq(b->text());
 
 		case TYPE_GROUP:
 			/* unimplemented */
@@ -179,25 +176,25 @@ static int is_equal(const struct ast_term* a, const struct ast_term* b)
 
 WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 {
-	const struct ast_rule* p;
-	struct ast_term* found = NULL;
+	const struct ast_rule* rule;
+	struct ast_term* found = nullptr;
 
 	/* List terminals */
-	for (p = grammar; p != NULL; p = p->next)
+	for (rule = grammar; rule != nullptr; rule = rule->next)
 	{
 		struct ast_alt* alt;
 
-		for (alt = p->alts; alt != NULL; alt = alt->next)
+		for (alt = rule->alts; alt != nullptr; alt = alt->next)
 		{
 			const struct ast_term* term;
 			struct ast_term* t;
 
-			assert(alt != NULL);
+			assert(alt != nullptr);
 			assert(!alt->invisible);
 
-			for (term = alt->terms; term != NULL; term = term->next)
+			for (term = alt->terms; term != nullptr; term = term->next)
 			{
-				assert(term != NULL);
+				assert(term != nullptr);
 				assert(!term->invisible);
 
 				switch (term->type)
@@ -216,7 +213,9 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 						break;
 				}
 
-				for (t = found; t != NULL; t = t->next)
+				assert(term->type == TYPE_CI_LITERAL || term->type == TYPE_CS_LITERAL);
+
+				for (t = found; t != nullptr; t = t->next)
 				{
 					if (is_equal(t, term))
 					{
@@ -224,15 +223,14 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 					}
 				}
 
-				if (t != NULL)
+				if (t != nullptr)
 				{
 					continue;
 				}
 
-				t = (ast_term*)xmalloc(sizeof * t);
-				t->u.literal = term->u.literal;
-				t->type = term->type;
-				t->invisible = 0;
+				t = term->type == TYPE_CI_LITERAL 
+					? (ast_term*)new ast_term_ci_literal(0, term->text())
+					: (ast_term*)new ast_term_cs_literal(0, term->text());
 				t->next = found;
 				found = t;
 			}
@@ -244,7 +242,7 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 		struct ast_term* next;
 		struct ast_term* t;
 
-		for (t = found; t != NULL; t = next)
+		for (t = found; t != nullptr; t = next)
 		{
 			next = t->next;
 			writer->printf("\t");
@@ -253,7 +251,7 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 				return 0;
 			}
 			writer->printf("\n");
-			free(t);
+			delete t;
 		}
 	}
 	return 1;
@@ -276,7 +274,7 @@ WARN_UNUSED_RESULT int sid_output(const struct ast_rule* grammar)
 
 	/* TODO list rule declartations */
 
-	for (p = grammar; p != NULL; p = p->next)
+	for (p = grammar; p != nullptr; p = p->next)
 	{
 		if (!output_rule(p))
 		{
@@ -286,6 +284,6 @@ WARN_UNUSED_RESULT int sid_output(const struct ast_rule* grammar)
 
 	output_section("entry");
 
-	writer->printf("\t%s;\n\n", grammar->name.chars());
+	writer->printf("\t%s;\n\n", grammar->name().chars());
 	return 1;
 }

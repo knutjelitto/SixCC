@@ -383,7 +383,7 @@ int main(int argc, char* argv[])
 
             for (t = strtok_s(tmp, ",", &save); t != nullptr; t = strtok_s(nullptr, ",", &save))
             {
-                if (0 == strcmp(p->name.chars(), t))
+                if (0 == strcmp(p->name().chars(), t))
                 {
                     p->next = *tail;
                     *tail = p;

@@ -45,13 +45,6 @@ void output_string(const text& string)
 	writer->puts("\"");
 }
 
-void output_string(const struct txt& string)
-{
-	writer->puts("\"");
-	writer->escape(string.p, escputc);
-	writer->puts("\"");
-}
-
 
 WARN_UNUSED_RESULT static int output_alts(const struct ast_alt *alts);
 
@@ -60,11 +53,11 @@ WARN_UNUSED_RESULT static int output_term_rule(const struct ast_rule *rule)
 	writer->puts(",");
 	output_string("rule");
 	writer->puts(":");
-	output_string(rule->name);
+	output_string(rule->name());
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_term_token(const char* token)
+WARN_UNUSED_RESULT static int output_term_token(const text& token)
 {
 	writer->puts(",");
 	output_string("token");
@@ -73,7 +66,7 @@ WARN_UNUSED_RESULT static int output_term_token(const char* token)
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_term_prose(const char* prose)
+WARN_UNUSED_RESULT static int output_term_prose(const text& prose)
 {
 	writer->puts(",");
 	output_string("prose");
@@ -94,7 +87,7 @@ WARN_UNUSED_RESULT static int output_term_group(const struct ast_alt *group)
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_term_literal(const struct txt literal)
+WARN_UNUSED_RESULT static int output_term_literal(const text& literal)
 {
 	writer->puts(",");
 	output_string("literal");
@@ -148,30 +141,32 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		case TYPE_EMPTY:
 			break;
 		case TYPE_RULE:
-			if (!output_term_rule(term->u.rule))
+			if (!output_term_rule(term->rule()))
+			{
 				return 0;
+			}
 			break;
 		case TYPE_CS_LITERAL:
 		case TYPE_CI_LITERAL:
-			if (!output_term_literal(term->u.literal))
+			if (!output_term_literal(term->text()))
 			{
 				return 0;
 			}
 			break;
 		case TYPE_TOKEN:
-			if (!output_term_token(term->u.token))
+			if (!output_term_token(term->text()))
 			{
 				return 0;
 			}
 			break;
 		case TYPE_PROSE:
-			if (!output_term_prose(term->u.prose))
+			if (!output_term_prose(term->text()))
 			{
 				return 0;
 			}
 			break;
 		case TYPE_GROUP:
-			if (!output_term_group(term->u.group))
+			if (!output_term_group(term->group()))
 			{
 				return 0;
 			}
@@ -255,12 +250,12 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	writer->puts(":");
 	output_string("rule");
 
-	if (rule->name.length() > 0)
+	if (rule->name().length() > 0)
 	{
 		writer->puts(",");
 		output_string("name");
 		writer->puts(":");
-		output_string(rule->name);
+		output_string(rule->name());
 	}
 
 	if (rule->alts)

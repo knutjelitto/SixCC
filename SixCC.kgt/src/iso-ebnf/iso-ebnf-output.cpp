@@ -23,16 +23,14 @@
 
 #include "io.h"
 
-WARN_UNUSED_RESULT
-static int output_term(const struct ast_term *term);
+WARN_UNUSED_RESULT static int output_term(const struct ast_term *term);
 
-WARN_UNUSED_RESULT
-static int
-output_group_alt(const struct ast_alt *alt)
+WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt)
 {
-	const struct ast_term *term;
+	const struct ast_term* term;
 
-	for (term = alt->terms; term != NULL; term = term->next) {
+	for (term = alt->terms; term != NULL; term = term->next)
+	{
 		if (!output_term(term))
 			return 0;
 	}
@@ -109,7 +107,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_RULE:
 			writer->putc(' ');
-			writer->puts(term->u.rule->name);
+			writer->puts(term->rule()->name());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -121,15 +119,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			size_t i;
 
 			writer->puts(" \"");
-			for (i = 0; i < term->u.literal.n; i++)
+			for (i = 0; i < term->text().length(); i++)
 			{
-				if (term->u.literal.p[i] == '\"')
+				if (term->text()[i] == '\"')
 				{
 					writer->puts("\"\"");
 				}
 				else
 				{
-					writer->putc(term->u.literal.p[i]);
+					writer->putc(term->text()[i]);
 				}
 			}
 			writer->putc('\"');
@@ -137,17 +135,20 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		break;
 
 		case TYPE_TOKEN:
-			writer->printf(" %s", term->u.token);
+			writer->putc(' ');
+			writer->puts(term->text());
 			break;
 
 		case TYPE_PROSE:
 			/* TODO: escaping to somehow avoid ? */
-			writer->printf(" ? %s ?", term->u.prose);
+			writer->printf(" ? %s ?", term->text().chars());
 			break;
 
 		case TYPE_GROUP:
-			if (!output_group(term->u.group))
+			if (!output_group(term->group()))
+			{
 				return 0;
+			}
 			break;
 	}
 
@@ -178,7 +179,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("%s =", rule->name.chars());
+	writer->printf("%s =", rule->name().chars());
 	for (alt = rule->alts; alt != NULL; alt = alt->next)
 	{
 		if (!output_alt(alt))

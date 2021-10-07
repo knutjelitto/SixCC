@@ -136,13 +136,13 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
             break;
 
         case TYPE_RULE:
-            writer->escape(term->u.rule->name, escputc);
+            writer->escape(term->rule()->name(), escputc);
             break;
 
         case TYPE_CI_LITERAL:
         case TYPE_CS_LITERAL:
             writer->puts("&quot;");
-            writer->escape(&term->u.literal, escputc);
+            writer->escape(term->text(), escputc);
             writer->puts("&quot;");
             if (term->type == TYPE_CI_LITERAL)
             {
@@ -151,12 +151,12 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
             break;
 
         case TYPE_TOKEN:
-            writer->escape(term->u.token, escputc);
+            writer->escape(term->text(), escputc);
             break;
 
         case TYPE_PROSE:
             writer->puts("?");
-            writer->escape(term->u.prose, escputc);
+            writer->escape(term->text(), escputc);
             writer->puts("?");
             break;
 
@@ -195,7 +195,7 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
             break;
 
         case TYPE_GROUP:
-            output_group(grammar, term, term->u.group);
+            output_group(grammar, term, term->group());
             break;
     }
 }
@@ -233,7 +233,7 @@ static void output_alts(const struct ast_rule* grammar, const struct ast_rule* r
 
 static void output_rule(const struct ast_rule* grammar, const struct ast_rule* rule)
 {
-    writer->printf("\t\"p%p\" [ shape = record, label = \"=|%s\" ];\n", map((void*)rule), rule->name.chars());
+    writer->printf("\t\"p%p\" [ shape = record, label = \"=|%s\" ];\n", map((void*)rule), rule->name().chars());
 
     output_alts(grammar, rule, rule->alts);
 }

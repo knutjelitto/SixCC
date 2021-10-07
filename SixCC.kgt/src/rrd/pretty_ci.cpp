@@ -43,7 +43,7 @@ static void ci_alt(int* changed, struct node* n)
 		{
 			case NODE_CI_LITERAL:
 			case NODE_CS_LITERAL:
-				if (p->node->u.literal.n != 1)
+				if (p->node->u.literal.length() != 1)
 				{
 					return;
 				}
@@ -67,24 +67,22 @@ static void ci_alt(int* changed, struct node* n)
 			continue;
 		}
 
-		struct txt t;
+		text t;
 
 		switch (p->node->type)
 		{
 			case NODE_CI_LITERAL:
 			{
 
-				if (!isalpha((unsigned char)*p->node->u.literal.p))
+				if (!isalpha((unsigned char)p->node->u.literal[0]))
 				{
 					break;
 				}
 
 				p->node->type = NODE_CS_LITERAL;
-				*(char*)p->node->u.literal.p = tolower((unsigned char)*p->node->u.literal.p);
+				p->node->u.literal = p->node->u.literal.tolower();
 
-				struct txt t = xtxtdup(&p->node->u.literal);
-				*(char*)t.p = toupper((unsigned char)*t.p);
-				struct node* nuw = node_create_cs_literal(p->node->invisible, &t);
+				struct node* nuw = node_create_cs_literal(p->node->invisible, p->node->u.literal.toupper());
 				list_push_front(&list, nuw);
 
 				*changed = 1;

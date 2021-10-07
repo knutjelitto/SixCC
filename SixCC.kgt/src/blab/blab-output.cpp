@@ -159,7 +159,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_RULE:
 			writer->putc(' ');
-			writer->puts(term->u.rule->name);
+			writer->puts(term->rule()->name());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -170,17 +170,17 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 			/* XXX: the tokenization here is wrong; this should be a single token */
 
-			for (i = 0; i < term->u.literal.n; i++)
+			for (i = 0; i < term->text().length(); i++)
 			{
 				char uc, lc;
 
-				uc = toupper((unsigned char)term->u.literal.p[i]);
-				lc = tolower((unsigned char)term->u.literal.p[i]);
+				uc = toupper((unsigned char)term->text()[i]);
+				lc = tolower((unsigned char)term->text()[i]);
 
 				if (uc == lc)
 				{
 					writer->putc('[');
-					(void)blab_escputc(term->u.literal.p[i]);
+					(void)blab_escputc(term->text()[i]);
 					writer->putc(']');
 					continue;
 				}
@@ -202,9 +202,9 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 			writer->puts(" \"");
 
-			for (i = 0; i < term->u.literal.n; i++)
+			for (i = 0; i < term->text().length(); i++)
 			{
-				(void)blab_escputc(term->u.literal.p[i]);
+				(void)blab_escputc(term->text()[i]);
 			}
 
 			writer->putc('\"');
@@ -213,7 +213,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_TOKEN:
 			writer->putc(' ');
-			writer->puts(term->u.token);
+			writer->puts(term->text());
 			break;
 
 		case TYPE_PROSE:
@@ -221,7 +221,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			return 0;
 
 		case TYPE_GROUP:
-			if (!output_group(term->u.group))
+			if (!output_group(term->group()))
 			{
 				return 0;
 			}
@@ -260,7 +260,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("%s =", rule->name.chars());
+	writer->printf("%s =", rule->name().chars());
 	for (alt = rule->alts; alt != NULL; alt = alt->next)
 	{
 		if (!output_alt(alt))

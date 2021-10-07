@@ -38,7 +38,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->printf(" <%s>", term->u.rule->name.chars());
+			writer->printf(" <%s>", term->rule()->name().chars());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -49,13 +49,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		{
 			char c;
 
-			c = memchr(term->u.literal.p, '\"', term->u.literal.n) ? '\'' : '\"';
-			writer->printf(" %c%.*s%c", c, (int)term->u.literal.n, term->u.literal.p, c);
+			c = memchr(term->text().chars(), '\"', term->text().length()) ? '\'' : '\"';
+			writer->printf(" %c%.*s%c", c, (int)term->text().length(), term->text().chars(), c);
 			break;
 		}
 
 		case TYPE_TOKEN:
-			writer->printf(" <%s>", term->u.token);
+			writer->printf(" <%s>", term->text().chars());
 			break;
 
 		case TYPE_PROSE:
@@ -92,7 +92,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("<%s> ::=", rule->name.chars());
+	writer->printf("<%s> ::=", rule->name().chars());
 
 	for (alt = rule->alts; alt != nullptr; alt = alt->next)
 	{

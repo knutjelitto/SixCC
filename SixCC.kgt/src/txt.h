@@ -70,11 +70,21 @@ public:
 		return false;
 	}
 
+	inline bool eq(const text& other) const
+	{
+		return this->compare(other) == 0;
+	}
+
+	inline bool cieq(const text& other) const
+	{
+		return tolower().eq(other.tolower());
+	}
+
 	inline text tolower() const
 	{
 		std::string data(*this);
 		std::transform(
-			data.begin(), 
+			data.begin(),
 			data.end(),
 			data.begin(),
 			[](unsigned char c)
@@ -85,12 +95,27 @@ public:
 		return text(data);
 	}
 
+	inline text toupper() const
+	{
+		std::string data(*this);
+		std::transform(
+			data.begin(),
+			data.end(),
+			data.begin(),
+			[](unsigned char c)
+		{
+			return std::toupper(c);
+		});
+
+		return text(data);
+	}
+
 	inline text ltrim() const
 	{
 		int offset = 0;
-		while (offset < size() && std::isspace(std::string::operator[](offset++)))
+		while (offset < size() && std::isspace(std::string::operator[](offset)))
 		{
-			;
+			offset += 1;
 		}
 
 		return text(c_str() + offset, size() - offset);
@@ -99,11 +124,12 @@ public:
 	inline text rtrim() const
 	{
 		int offset = size();
-		while (offset > 0 && std::isspace(std::string::operator[](--offset)))
+		while (offset >= 0 && std::isspace(std::string::operator[](offset)))
 		{
-			;
+			offset -= 1;
 		}
-		return text(c_str(), offset);
+
+		return text(c_str(), offset + 1);
 	}
 
 	inline text trim()
@@ -117,9 +143,6 @@ private:
 
 bool is_binary_literal(const text& text);
 bool isalphastr(const text& t);
-bool txt_any(const struct txt* t, bool (*predicate)(int c));
-int txtcasecmp(const struct txt *t1, const struct txt *t2);
-int txtcmp(const struct txt *t1, const struct txt *t2);
 
 WARN_UNUSED_RESULT int cat(const char* in, const char* indent);
 

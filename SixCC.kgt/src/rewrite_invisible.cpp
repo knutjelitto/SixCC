@@ -17,15 +17,19 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include "errors.h"
 #include "txt.h"
 #include "ast.h"
 #include "rewrite.h"
 #include "xalloc.h"
 
-static void walk_alts(struct ast_alt **alts);
+static void walk_alts(const struct ast_alt **alts);
 
 static void walk_term(struct ast_term* term)
 {
+#if true
+	Error::notimplemented();
+#else
 	assert(term != nullptr);
 
 	switch (term->type)
@@ -39,9 +43,10 @@ static void walk_term(struct ast_term* term)
 			break;
 
 		case TYPE_GROUP:
-			walk_alts(&term->u.group);
+			walk_alts(&term->group());
 			break;
 	}
+#endif
 }
 
 static void walk_alts(struct ast_alt** alts)

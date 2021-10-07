@@ -52,22 +52,22 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 	{
 		case NODE_CI_LITERAL:
 			print_indent(f, depth);
-			f->printf("LITERAL%s: \"%.*s\"/i\n", n->invisible ? " (invisible)" : "", (int)n->u.literal.n, n->u.literal.p);
+			f->printf("LITERAL%s: \"%.*s\"/i\n", n->invisible ? " (invisible)" : "", (int)n->u.literal.length(), n->u.literal.chars());
 			break;
 
 		case NODE_CS_LITERAL:
 			print_indent(f, depth);
-			f->printf("LITERAL%s: \"%.*s\"\n", n->invisible ? " (invisible)" : "", (int)n->u.literal.n, n->u.literal.p);
+			f->printf("LITERAL%s: \"%.*s\"\n", n->invisible ? " (invisible)" : "", (int)n->u.literal.length(), n->u.literal.chars());
 			break;
 
 		case NODE_RULE:
 			print_indent(f, depth);
-			f->printf("NAME%s: <%s>\n", n->invisible ? " (invisible)" : "", n->u.name);
+			f->printf("NAME%s: <%s>\n", n->invisible ? " (invisible)" : "", n->u.name.chars());
 			break;
 
 		case NODE_PROSE:
 			print_indent(f, depth);
-			f->printf("PROSE%s: ?%s?\n", n->invisible ? " (invisible)" : "", n->u.prose);
+			f->printf("PROSE%s: ?%s?\n", n->invisible ? " (invisible)" : "", n->u.prose.chars());
 
 			break;
 
@@ -134,19 +134,19 @@ WARN_UNUSED_RESULT int rrdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", p->name.chars());
+			writer->printf("%s:\n", p->name().chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", p->name.chars());
+			writer->printf("%s: (before prettify)\n", p->name().chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 
 			rrd_pretty(&rrd);
 
-			writer->printf("%s: (after prettify)\n", p->name.chars());
+			writer->printf("%s: (after prettify)\n", p->name().chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 		}

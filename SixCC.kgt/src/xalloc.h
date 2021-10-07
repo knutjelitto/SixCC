@@ -17,7 +17,6 @@ void err_exit();
 void *xmalloc(size_t size);
 char* xstrdup(const char* s);
 char* xstrdup(const text& s);
-struct txt xtxtdup(const struct txt *t);
 void xerror(const char *msg, ...);
 
 #endif
