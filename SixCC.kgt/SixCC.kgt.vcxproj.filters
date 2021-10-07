@@ -177,7 +177,7 @@
     <ClCompile Include="src\rrtext\rrtext-output.cpp">
       <Filter>src\rrtext</Filter>
     </ClCompile>
-    <ClCompile Include="src\rbnf\lexer.cpp">
+    <ClCompile Include="src\rbnf\rbnf-lexer.cpp">
       <Filter>src\rbnf</Filter>
     </ClCompile>
     <ClCompile Include="src\rbnf\rbnf-output.cpp">
@@ -238,6 +238,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\replace_real.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\errors.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -326,10 +329,10 @@
     <ClInclude Include="src\rbnf\io.h">
       <Filter>src\rbnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\rbnf\lexer.h">
+    <ClInclude Include="src\rbnf\rbnf-lexer.h">
       <Filter>src\rbnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\rbnf\parser.h">
+    <ClInclude Include="src\rbnf\rbnf-parser.h">
       <Filter>src\rbnf</Filter>
     </ClInclude>
     <ClInclude Include="src\wsn\io.h">
@@ -381,6 +384,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\parsing-error.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\errors.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

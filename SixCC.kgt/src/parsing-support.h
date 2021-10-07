@@ -9,6 +9,7 @@
 
 #include <string>
 #include <stdexcept>
+
 #include "parsing-error.h"
 
 #ifndef FORM

@@ -67,8 +67,7 @@ lx_abnf_ungetc(struct lx_abnf_lx *lx, int c)
 	}
 }
 
-int
-lx_abnf_dynpush(void *buf_opaque, char c)
+int lx_abnf_dynpush(void *buf_opaque, char c)
 {
 	struct lx_dynbuf *t = (struct lx_dynbuf*)buf_opaque;
 

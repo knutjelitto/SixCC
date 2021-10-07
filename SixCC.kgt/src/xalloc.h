@@ -8,9 +8,9 @@
 #define KGT_XALLOC_H
 
 #include <stddef.h>
-#include "txt.h"
 
 struct txt;
+class text;
 
 void ok_exit();
 void err_exit();

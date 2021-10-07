@@ -53,25 +53,23 @@ static bool needesc(int c)
 	}
 }
 
-WARN_UNUSED_RESULT static int output_string(char prefix, const struct txt* t)
+WARN_UNUSED_RESULT static int output_string(char prefix, const class text& t)
 {
 	size_t i;
 
-	assert(t != NULL);
-
-	if (t->n == 1 && needesc(*t->p))
+	if (t.length() == 1 && needesc(t[0]))
 	{
-		output_byte(*t->p);
+		output_byte(t[0]);
 		return 1;
 	}
 
-	if (txt_any(t, needesc))
+	if (t.any(needesc))
 	{
 		fprintf(stderr, "unsupported: escaping special characters within a literal\n");
 		return 0;
 	}
 
-	if (txt_any(t, [](int c) { return isalpha(c) != 0; }))
+	if (t.any([](int c) { return isalpha(c) != 0; }))
 	{
 		writer->printf("%%%c", prefix);
 	}
@@ -80,9 +78,9 @@ WARN_UNUSED_RESULT static int output_string(char prefix, const struct txt* t)
 
 	/* TODO: bail out on non-printable characters */
 
-	for (i = 0; i < t->n; i++)
+	for (i = 0; i < t.length(); i++)
 	{
-		writer->putc(t->p[i]);
+		writer->putc(t[i]);
 	}
 
 	writer->putc('\"');
@@ -92,10 +90,10 @@ WARN_UNUSED_RESULT static int output_string(char prefix, const struct txt* t)
 
 static int char_terminal(const struct ast_term *term, unsigned char *c)
 {
-	assert(c != NULL);
+	assert(c != nullptr);
 
 	/* one terminal only */
-	if (term == NULL || term->next != NULL)
+	if (term == nullptr || term->next != nullptr)
 	{
 		return 0;
 	}
@@ -106,12 +104,12 @@ static int char_terminal(const struct ast_term *term, unsigned char *c)
 		return 0;
 	}
 
-	if (term->u.literal.n != 1)
+	if (term->text().length() != 1)
 	{
 		return 0;
 	}
 
-	*c = (unsigned) term->u.literal.p[0];
+	*c = (unsigned) term->text(0);
 
 	return 1;
 }
@@ -120,11 +118,11 @@ static void collate_ranges(struct bm* bm, const struct ast_alt* alts)
 {
 	const struct ast_alt* p;
 
-	assert(bm != NULL);
+	assert(bm != nullptr);
 
 	bm_clear(bm);
 
-	for (p = alts; p != NULL; p = p->next)
+	for (p = alts; p != nullptr; p = p->next)
 	{
 		unsigned char c;
 
@@ -141,7 +139,7 @@ WARN_UNUSED_RESULT static int output_terms(const struct ast_term* terms)
 {
 	const struct ast_term* term;
 
-	for (term = terms; term != NULL; term = term->next)
+	for (term = terms; term != nullptr; term = term->next)
 	{
 		if (!output_term(term))
 		{
@@ -171,7 +169,7 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 
 	first = 1;
 
-	while (p != NULL)
+	while (p != nullptr)
 	{
 		unsigned char c;
 
@@ -236,12 +234,7 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 			case 2:
 			case 3:
 			{
-				char a[1];
-				a[0] = (unsigned char)lo;
-				struct txt t;
-				t.p = a;
-				t.n = sizeof a / sizeof * a;
-				if (!output_string('s', &t))
+				if (!output_string('s', text((char)lo)))
 				{
 					return 0;
 				}
@@ -267,7 +260,7 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 
 WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 {
-	if (group->next != NULL)
+	if (group->next != nullptr)
 	{
 		writer->printf("(");
 	}
@@ -277,7 +270,7 @@ WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 		return 0;
 	}
 
-	if (group->next != NULL)
+	if (group->next != nullptr)
 	{
 		writer->printf(")");
 	}
@@ -319,7 +312,7 @@ static void output_repetition(unsigned int min, unsigned int max)
 
 static int atomic(const struct ast_term* term)
 {
-	assert(term != NULL);
+	assert(term != nullptr);
 
 	if (term->min == 1 && term->max == 1)
 	{
@@ -346,7 +339,7 @@ static int atomic(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
-	assert(term != NULL);
+	assert(term != nullptr);
 
 	int a = atomic(term);
 
@@ -375,26 +368,26 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_CI_LITERAL:
-			if (!output_string('i', &term->u.literal))
+			if (!output_string('i', term->text()))
 			{
 				return 0;
 			}
 			break;
 
 		case TYPE_CS_LITERAL:
-			if (!output_string('s', &term->u.literal))
+			if (!output_string('s', term->text()))
 			{
 				return 0;
 			}
 			break;
 
 		case TYPE_TOKEN:
-			writer->printf("%s", term->u.token);
+			writer->puts(term->text());
 			break;
 
 		case TYPE_PROSE:
 			/* TODO: escaping to somehow avoid > */
-			writer->printf("< %s >", term->u.prose);
+			writer->printf("< %s >", term->text().chars());
 			break;
 
 		case TYPE_GROUP:
@@ -435,7 +428,7 @@ WARN_UNUSED_RESULT int abnf_output(const struct ast_rule* grammar)
 {
 	const struct ast_rule* p;
 
-	for (p = grammar; p != NULL; p = p->next)
+	for (p = grammar; p != nullptr; p = p->next)
 	{
 		if (!output_rule(p))
 			return 0;

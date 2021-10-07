@@ -43,55 +43,20 @@ int iwriter::putc(int character)
 	return fputc(character, file);
 }
 
-int iwriter::escape(const char* text, int (*esc)(int, iwriter*))
+int iwriter::escape(const text& text, int (*esc)(int, iwriter*))
 {
-	assert(text != nullptr);
-	assert(esc != nullptr);
+	int n = 0;
+	int r;
 
-	const char* p;
-	int r, n;
-
-	n = 0;
-
-	for (p = text; *p != '\0'; p++)
+	for (int i = 0; i < text.length(); i++)
 	{
-		r = esc(*p, this);
+		r = esc(text[i], this);
 		if (r < 0)
 		{
 			return -1;
 		}
-
 		n += r;
 	}
 
 	return n;
-}
-
-int iwriter::escape(const text& text, int (*esc)(int, iwriter*))
-{
-	return escape(text.chars(), esc);
-}
-
-int iwriter::escape(const struct txt& text, int (*esc)(int, iwriter*))
-{
-	return escape(&text, esc);
-}
-
-int iwriter::escape(const struct txt* text, int (*esc)(int, iwriter*))
-{
-	assert(text != nullptr);
-	assert(text->p != nullptr);
-
-	int r;
-
-	for (int i = 0; i < text->n; i++)
-	{
-		r = esc(text->p[i], this);
-		if (r < 0)
-		{
-			return -1;
-		}
-	}
-
-	return 0;
 }

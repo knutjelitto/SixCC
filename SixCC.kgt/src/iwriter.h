@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include "txt.h"
 
 struct iwriter
 {
@@ -15,9 +16,6 @@ struct iwriter
 	int putc(int character);
 
 	int escape(const text& text, int (*esc)(int, iwriter*));
-	int escape(const char* text, int (*esc)(int, iwriter*));
-	int escape(const struct txt& text, int (*esc)(int, iwriter*));
-	int escape(const struct txt* text, int (*esc)(int, iwriter*));
 
 private:
 	FILE* const file;

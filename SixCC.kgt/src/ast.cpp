@@ -35,11 +35,11 @@ struct ast_term* ast_make_empty_term(int invisible)
 
 struct ast_term * ast_make_rule_term(int invisible, struct ast_rule *rule)
 {
+    assert(rule != nullptr);
+
 #if true
     return new ast_term_rule(invisible, rule);
 #else
-    assert(rule != nullptr);
-
     struct ast_term *nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof *nuw);
@@ -56,37 +56,20 @@ struct ast_term * ast_make_rule_term(int invisible, struct ast_rule *rule)
 #endif
 }
 
-struct ast_term* ast_make_char_term(int invisible, char c)
+
+struct ast_term* ast_make_literal_term(int invisible, const text& literal, bool ci)
 {
-    struct ast_term* nuw;
-    char* a;
-
-    a = (char*)xmalloc(1); /* XXX: i don't like this */
-    a[0] = c;
-
-    nuw = (struct ast_term*)xmalloc(sizeof * nuw);
-    nuw->type = TYPE_CS_LITERAL;
-    nuw->next = nullptr;
-    nuw->u.literal.p = a;
-    nuw->u.literal.n = 1;
-
-    nuw->min = 1;
-    nuw->max = 1;
-
-    nuw->invisible = invisible;
-
-    return nuw;
-}
-
-struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal, bool ci)
-{
-    assert(literal != nullptr);
-    assert(literal->p != nullptr);
+    ci = ci && isalphastr(literal);
+#if true
+    return ci
+        ? (ast_term*)new ast_term_ci_literal(invisible, literal)
+        : (ast_term*)new ast_term_cs_literal(invisible, literal);
+#else
 
     struct ast_term* nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof * nuw);
-    nuw->type = (ci && isalphastr(literal)) ? TYPE_CI_LITERAL : TYPE_CS_LITERAL;
+    nuw->type = ci ? TYPE_CI_LITERAL : TYPE_CS_LITERAL;
     nuw->next = nullptr;
     nuw->u.literal = *literal;
 
@@ -96,6 +79,32 @@ struct ast_term* ast_make_literal_term(int invisible, const struct txt* literal,
     nuw->invisible = invisible;
 
     return nuw;
+#endif
+}
+
+struct ast_term* ast_make_char_term(int invisible, char c)
+{
+#if true
+    return new ast_term_cs_literal(invisible, text(c));
+#else
+    char a[2];
+    a[0] = c;
+    a[1] = '\0';
+    const char* b = xstrdup(a);
+
+    struct ast_term* nuw = (struct ast_term*)xmalloc(sizeof * nuw);
+    nuw->type = TYPE_CS_LITERAL;
+    nuw->next = nullptr;
+    nuw->u.literal.p = b;
+    nuw->u.literal.n = 1;
+
+    nuw->min = 1;
+    nuw->max = 1;
+
+    nuw->invisible = invisible;
+
+    return nuw;
+#endif
 }
 
 struct ast_term * ast_make_token_term(int invisible, const char *token)
@@ -121,10 +130,11 @@ struct ast_term * ast_make_token_term(int invisible, const char *token)
 #endif
 }
 
-struct ast_term * ast_make_prose_term(int invisible, const char *prose)
+struct ast_term * ast_make_prose_term(int invisible, const text& prose)
 {
-    assert(prose != nullptr);
-
+#if true
+    return new ast_term_prose(invisible, prose);
+#else
     struct ast_term *nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof *nuw);
@@ -138,10 +148,14 @@ struct ast_term * ast_make_prose_term(int invisible, const char *prose)
     nuw->invisible = invisible;
 
     return nuw;
+#endif
 }
 
 struct ast_term* ast_make_group_term(int invisible, struct ast_alt* group)
 {
+#if true
+    return new ast_term_group(invisible, group);
+#else
     struct ast_term* nuw;
 
     nuw = (struct ast_term*)xmalloc(sizeof * nuw);
@@ -155,10 +169,14 @@ struct ast_term* ast_make_group_term(int invisible, struct ast_alt* group)
     nuw->invisible = invisible;
 
     return nuw;
+#endif
 }
 
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms)
 {
+#if true
+    return new ast_alt(invisible, terms);
+#else
     struct ast_alt* nuw;
 
     nuw = (struct ast_alt*)xmalloc(sizeof * nuw);
@@ -168,6 +186,7 @@ struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms)
     nuw->invisible = invisible;
 
     return nuw;
+#endif
 }
 
 struct ast_rule* ast_make_rule(const char* name, struct ast_alt* alts)
@@ -243,7 +262,7 @@ void ast_free_alt(struct ast_alt *alt)
     {
         ast_free_alt(alt->next);
         ast_free_term(alt->terms);
-        free(alt);
+        delete alt;
     }
 }
 
@@ -253,6 +272,6 @@ void ast_free_term(struct ast_term *term)
     if (term != nullptr)
     {
         ast_free_term(term->next);
-        free(term);
+        delete term;
     }
 }

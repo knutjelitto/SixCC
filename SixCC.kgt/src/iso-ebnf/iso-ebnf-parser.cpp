@@ -985,31 +985,23 @@ prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
 
             /* BEGINNING OF EXTRACT: PROSE */
             {
-                //#line 383 "src/parser.act"
-
                 ZIs = pattern_buffer(lex_state);
-
-                //#line 1199 "src/iso-ebnf/parser.c"
             }
             /* END OF EXTRACT: PROSE */
             ADVANCE_LEXER;
             /* BEGINNING OF ACTION: make-prose-term */
             {
-                //#line 621 "src/parser.act"
-
-                const char* s;
-
-                s = xstrdup(trim((char*)(ZIs)));
+                const char* s = xstrdup(trim((char*)(ZIs)));
 
                 free((void*)(ZIs));
 
-                if (!strcmp(s, "kgt:invisible"))
+                if (0 == strcmp(s, "kgt:invisible"))
                 {
                     act_state->invisible = 1;
 
                     (ZIt) = ast_make_empty_term(act_state->invisible);
                 }
-                else if (!strcmp(s, "kgt:visible"))
+                else if (0 == strcmp(s, "kgt:visible"))
                 {
                     act_state->invisible = 0;
 
@@ -1019,8 +1011,6 @@ prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
                 {
                     (ZIt) = ast_make_prose_term(act_state->invisible, s);
                 }
-
-                //#line 1225 "src/iso-ebnf/parser.c"
             }
             /* END OF ACTION: make-prose-term */
         }
@@ -1137,55 +1127,7 @@ ZL0:
 
         /* TODO: handle error */
 
-#if true
         replace_real(g, *lex_state);
-#else
-        /* substitute placeholder rules for the real thing */
-        {
-            const struct ast_rule* p;
-            const struct ast_alt* q;
-            struct ast_term* t;
-            struct ast_rule* r;
-
-            for (p = g; p != NULL; p = p->next)
-            {
-                for (q = p->alts; q != NULL; q = q->next)
-                {
-                    for (t = q->terms; t != NULL; t = t->next)
-                    {
-                        if (t->type != TYPE_RULE)
-                        {
-                            continue;
-                        }
-
-                        r = ast_find_rule(g, t->u.rule->name);
-                        if (r != NULL)
-                        {
-                            ast_free_rule((struct ast_rule*)t->u.rule);
-                            t->u.rule = r;
-                            continue;
-                        }
-
-                        if (!allow_undefined)
-                        {
-                            err_undefined(*lex_state, t->u.rule->name);
-                            /* XXX: would leak the ast_rule here */
-                            continue;
-                        }
-
-                        {
-                            const char* token = xstrdup(t->u.rule->name);
-
-                            ast_free_rule((struct ast_rule*)t->u.rule);
-
-                            t->type = TYPE_TOKEN;
-                            t->u.token = token;
-                        }
-                    }
-                }
-            }
-        }
-#endif
 
         return g;
     }
