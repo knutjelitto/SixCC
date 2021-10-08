@@ -82,7 +82,7 @@ static int escputc(int c, iwriter* writer)
 
 static void rrd_print_dot(const text& prefix, const void* parent, const char* port, const struct node* node)
 {
-    if (node == NULL)
+    if (node == nullptr)
     {
         return;
     }
@@ -94,7 +94,7 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
             writer->printf("\t{ rank = same;\n");
-            for (p = node->alt(); p != NULL; p = p->next)
+            for (p = node->alt(); p != nullptr; p = p->next)
             {
                 writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
@@ -103,7 +103,7 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
 
         case NODE_SEQ:
             writer->printf("\t{ rank = same;\n");
-            for (p = node->seq(); p != NULL; p = p->next)
+            for (p = node->seq(); p != nullptr; p = p->next)
             {
                 writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
@@ -195,20 +195,18 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
 
     writer->printf(" ];\n");
 
-    const struct list* p;
-
     switch (node->type)
     {
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            for (p = node->alt(); p != NULL; p = p->next)
+            for (auto p = node->alt(); p != nullptr; p = p->next)
             {
                 rrd_print_dot(prefix, node, "", p->node);
             }
             break;
 
         case NODE_SEQ:
-            for (p = node->seq(); p != NULL; p = p->next)
+            for (auto p = node->seq(); p != nullptr; p = p->next)
             {
                 rrd_print_dot(prefix, node, "", p->node);
             }
@@ -234,7 +232,7 @@ WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
     writer->printf("\tnode [ shape = record, style = rounded ];\n");
     writer->printf("\tedge [ dir = none ];\n");
 
-    for (p = grammar; p != NULL; p = p->next)
+    for (p = grammar; p != nullptr; p = p->next)
     {
         struct node* rrd;
 
