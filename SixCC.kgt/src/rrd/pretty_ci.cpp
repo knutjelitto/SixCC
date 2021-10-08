@@ -29,7 +29,7 @@ static void ci_alt(int* changed, struct node* n)
 	 * The end effect is to produce an ellipsis for uppercase
 	 * and an ellipsis for lowercase.
 	 */
-	struct list* list = new struct list();
+	struct list list;
 
 	for (auto node : n->alt())
 	{
@@ -81,7 +81,7 @@ static void ci_alt(int* changed, struct node* n)
 				node->become_cs();
 
 				struct node* nuw = node_create_cs_literal(node->invisible, node->literal().toupper());
-				list->add(nuw);
+				list.add(nuw);
 
 				*changed = 1;
 
@@ -102,7 +102,7 @@ static void ci_alt(int* changed, struct node* n)
 
 	/* append list */
 	{
-		n->alt().add(*list);
+		n->alt().add(list);
 	}
 }
 

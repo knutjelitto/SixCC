@@ -14,9 +14,7 @@
 #include "node.h"
 #include "list.h"
 
-#if true
-#else
-static int bottom_loop(struct node** np)
+static int bottom_loop(node** np)
 {
     assert(np != nullptr);
     assert(*np != nullptr);
@@ -42,16 +40,13 @@ static int bottom_loop(struct node** np)
 
     if (n->u.loop.backward->type == NODE_ALT || n->u.loop.backward->type == NODE_ALT_SKIPPABLE)
     {
-        struct list* p;
-        int c;
+        bool c = false;
 
-        c = 0;
-
-        for (p = n->u.loop.backward->altx(); p != nullptr; p = p->next)
+        for (auto node : n->u.loop.backward->alt())
         {
-            if (p->node->type == NODE_ALT || p->node->type == NODE_ALT_SKIPPABLE || p->node->type == NODE_SEQ || p->node->type == NODE_LOOP)
+            if (node->type == NODE_ALT || node->type == NODE_ALT_SKIPPABLE || node->type == NODE_SEQ || node->type == NODE_LOOP)
             {
-                c = 1;
+                c = true;
             }
         }
 
@@ -75,7 +70,6 @@ static int bottom_loop(struct node** np)
 
     return 1;
 }
-#endif
 
 /*
  * for loops with nothing on top and more than one thing on the bottom,
@@ -85,8 +79,6 @@ static int bottom_loop(struct node** np)
  */
 void rrd_pretty_bottom(int* changed, struct node** n)
 {
-#if true
-#else
     assert(n != nullptr);
 
     if (*n == nullptr)
@@ -112,6 +104,5 @@ void rrd_pretty_bottom(int* changed, struct node** n)
         case NODE_SEQ:
             break;
     }
-#endif
 }
 

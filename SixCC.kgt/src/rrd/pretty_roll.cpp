@@ -196,18 +196,18 @@ static void roll_suffix(int* changed, struct list** exit, struct node* loop)
 }
 #endif
 
-void rrd_pretty_roll(int* changed, struct node** n)
+void rrd_pretty_roll(int* changed, struct node** np)
 {
 #if true
 #else
-	assert(n != nullptr);
+	assert(np != nullptr);
 
-	if (*n == nullptr)
+	if (*np == nullptr)
 	{
 		return;
 	}
 
-	switch ((*n)->type)
+	switch ((*np)->type)
 	{
 		struct list** p;
 
@@ -217,7 +217,7 @@ void rrd_pretty_roll(int* changed, struct node** n)
 			 * and passing the address of the subsquent loop node
 			 * rather than searching from the head each time.
 			 */
-			for (p = &(*n)->xxx_list; *p != nullptr; p = &(*p)->next)
+			for (p = &(*np)->xxx_list; *p != nullptr; p = &(*p)->next)
 			{
 				if ((*p)->next != nullptr && ((*p)->next->node != nullptr && (*p)->next->node->type == NODE_LOOP))
 				{
@@ -232,7 +232,7 @@ void rrd_pretty_roll(int* changed, struct node** n)
 			/*
 			 * The suffix is the node immediately following a loop.
 			 */
-			for (p = &(*n)->xxx_list; *p != nullptr; p = &(**p).next)
+			for (p = &(*np)->xxx_list; *p != nullptr; p = &(**p).next)
 			{
 				if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP && (*p)->next != nullptr)
 				{

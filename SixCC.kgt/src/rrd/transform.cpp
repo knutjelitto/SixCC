@@ -28,7 +28,6 @@ static int transform_terms(const struct ast_alt* alt, struct node** r)
 	assert(r != nullptr);
 
 	struct list* list;
-	struct list** tail;
 	const struct ast_term* term;
 
 	list = new struct list();
@@ -62,7 +61,6 @@ static int transform_alts(const struct ast_alt* alts, struct node** r)
 	assert(alts != nullptr);
 
 	struct list* list;
-	struct list** tail;
 	const struct ast_alt* alt;
 
 	list = new struct list();

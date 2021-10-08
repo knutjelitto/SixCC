@@ -342,7 +342,6 @@ static struct tnode_vlist tnode_create_alt_list(const list& list, int rtl, const
 
 static struct tnode_hlist tnode_create_hlist(const list& list, int rtl, const struct dim* dim)
 {
-	const struct list* p;
 	struct tnode_hlist nuw;
 
 	assert(dim != nullptr);

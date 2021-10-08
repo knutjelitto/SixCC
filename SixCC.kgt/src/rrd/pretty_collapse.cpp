@@ -15,8 +15,6 @@
 
 void rrd_pretty_collapse(int* changed, struct node** rrd_node)
 {
-#if false
-#else
     assert(rrd_node != nullptr);
 
     if (*rrd_node == nullptr)
@@ -50,19 +48,16 @@ void rrd_pretty_collapse(int* changed, struct node** rrd_node)
             break;
 
         case NODE_SEQ:
-            if ((*rrd_node)->seq().size() == 1)
-            {
-                struct node* dead;
+        {
+            node* node = (*rrd_node)->seq().single_or_default();
 
-                dead = *rrd_node;
-                *rrd_node = (*rrd_node)->seqx()->node;
-                dead->xxx_list = nullptr;
-                node_free(dead);
+            if (node != nullptr)
+            {
+                *rrd_node = node;
 
                 *changed = 1;
             }
             break;
+        }
     }
-#endif
 }
-

@@ -120,8 +120,6 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 
 	switch (n->type)
 	{
-		const struct list* p;
-
 		case NODE_CI_LITERAL:
 			if (!rewrite_ci(n))
 				return 0;
