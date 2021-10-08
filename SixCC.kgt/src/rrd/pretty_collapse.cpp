@@ -32,13 +32,13 @@ void rrd_pretty_collapse(int* changed, struct node** n)
             break;
 
         case NODE_ALT:
-            if (list_count((*n)->u.alt) == 1)
+            if (list_count((*n)->alt()) == 1)
             {
                 struct node* dead;
 
                 dead = *n;
-                *n = (*n)->u.alt->node;
-                dead->u.alt = nullptr;
+                *n = (*n)->alt()->node;
+                dead->xxx_list = nullptr;
                 node_free(dead);
 
                 *changed = 1;
@@ -49,13 +49,13 @@ void rrd_pretty_collapse(int* changed, struct node** n)
             break;
 
         case NODE_SEQ:
-            if (list_count((*n)->u.seq) == 1)
+            if (list_count((*n)->seq()) == 1)
             {
                 struct node* dead;
 
                 dead = *n;
-                *n = (*n)->u.seq->node;
-                dead->u.seq = nullptr;
+                *n = (*n)->seq()->node;
+                dead->xxx_list = nullptr;
                 node_free(dead);
 
                 *changed = 1;

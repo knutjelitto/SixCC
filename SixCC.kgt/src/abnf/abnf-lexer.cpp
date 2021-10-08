@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "lexer.h"
+#include "abnf-lexer.h"
 
 static enum lx_abnf_token z0(struct lx_abnf_lx *lx);
 static enum lx_abnf_token z1(struct lx_abnf_lx *lx);

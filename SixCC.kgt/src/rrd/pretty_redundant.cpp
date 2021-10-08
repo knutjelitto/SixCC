@@ -22,7 +22,7 @@ static void redundant_alt(int* changed, struct node* n, struct node** np, int is
 
 	loop = NULL;
 
-	for (p = &n->u.alt; *p != NULL; p = &(**p).next)
+	for (p = &n->xxx_list; *p != NULL; p = &(**p).next)
 	{
 		nc++;
 

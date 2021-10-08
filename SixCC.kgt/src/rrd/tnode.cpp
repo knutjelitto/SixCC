@@ -138,33 +138,25 @@ void tnode_free(struct tnode *n)
 	delete n;
 }
 
-static int char_terminal(const struct node* node, unsigned char* c)
+static bool char_terminal(const struct node* node, unsigned char* c)
 {
 	assert(c != nullptr);
 
-	if (node == nullptr)
-	{
-		return 0;
-	}
-
 	/* we collate ranges for case-sensitive strings only */
-	if (node->type != NODE_CS_LITERAL)
+
+	if (node == nullptr ||
+		node->type != NODE_CS_LITERAL ||
+		node->literal().length() != 1)
 	{
-		return 0;
+		return false;
 	}
 
-	if (node->u.literal.length() != 1)
-	{
-		return 0;
-	}
+	*c = (unsigned char)node->literal()[0];
 
-	*c = (unsigned char)node->u.literal[0];
-
-	return 1;
+	return true;
 }
 
-static void
-collate_ranges(struct bm *bm, const struct list *list)
+static void collate_ranges(struct bm *bm, const struct list *list)
 {
 	const struct list *p;
 
@@ -184,19 +176,21 @@ collate_ranges(struct bm *bm, const struct list *list)
 	}
 }
 
-static const struct node *
-find_node(const struct list *list, char d)
+static const struct node* find_node(const struct list* list, char d)
 {
-	const struct list *p;
+	const struct list* p;
 
-	for (p = list; p != nullptr; p = p->next) {
+	for (p = list; p != nullptr; p = p->next)
+	{
 		unsigned char c;
 
-		if (!char_terminal(p->node, &c)) {
+		if (!char_terminal(p->node, &c))
+		{
 			continue;
 		}
 
-		if (c == (unsigned char) d) {
+		if (c == (unsigned char)d)
+		{
 			return p->node;
 		}
 	}
@@ -352,7 +346,7 @@ static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl
 	assert(i <= nuw.n);
 	nuw.n = i;
 
-	nuw.b = new enum tline[nuw.n];
+	nuw.b = new tline[nuw.n];
 
 	return nuw;
 }
@@ -529,28 +523,28 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 	{
 		case NODE_CI_LITERAL:
 			nuw->type = TNODE_CI_LITERAL;
-			nuw->u.literal = node->u.literal;
+			nuw->u.literal = node->literal();
 			dim->literal_txt(nuw->u.literal, &nuw->w, &nuw->a, &nuw->d);
 			nuw->w += dim->literal_padding + dim->ci_marker;
 			break;
 
 		case NODE_CS_LITERAL:
 			nuw->type = TNODE_CS_LITERAL;
-			nuw->u.literal = node->u.literal;
+			nuw->u.literal = node->literal();
 			dim->literal_txt(nuw->u.literal, &nuw->w, &nuw->a, &nuw->d);
 			nuw->w += dim->literal_padding;
 			break;
 
 		case NODE_RULE:
 			nuw->type = TNODE_RULE;
-			nuw->u.name = node->u.name;
+			nuw->u.name = node->name();
 			dim->rule_string(nuw->u.name, &nuw->w, &nuw->a, &nuw->d);
 			nuw->w += dim->rule_padding;
 			break;
 
 		case NODE_PROSE:
 			nuw->type = TNODE_PROSE;
-			nuw->u.prose = node->u.prose;
+			nuw->u.prose = node->prose();
 			dim->rule_string(nuw->u.prose, &nuw->w, &nuw->a, &nuw->d);
 			nuw->w += dim->prose_padding;
 			break;
@@ -570,13 +564,13 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 				struct list list;
 
 				list.node = nullptr;
-				list.next = node->u.alt;
+				list.next = node->alt();
 
 				nuw->u.vlist = tnode_create_alt_list(&list, rtl, dim);
 			}
 			else
 			{
-				nuw->u.vlist = tnode_create_alt_list(node->u.alt, rtl, dim);
+				nuw->u.vlist = tnode_create_alt_list(node->alt(), rtl, dim);
 			}
 
 			{
@@ -664,7 +658,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 				for (i = 0; i < nuw->u.vlist.n; i++)
 				{
-					enum tline z;
+					tline z;
 
 					int sameline = i == nuw->u.vlist.o;
 					int aboveline = i < nuw->u.vlist.o;
@@ -713,7 +707,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 		case NODE_SEQ:
 			nuw->type = TNODE_HLIST;
-			nuw->u.hlist = tnode_create_hlist(node->u.seq, rtl, dim);
+			nuw->u.hlist = tnode_create_hlist(node->seq(), rtl, dim);
 
 			{
 				unsigned w;
@@ -770,7 +764,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 			nuw->u.vlist.n = 2;
 			nuw->u.vlist.a = new struct tnode* [nuw->u.vlist.n];
-			nuw->u.vlist.b = new enum tline[nuw->u.vlist.n];
+			nuw->u.vlist.b = new tline[nuw->u.vlist.n];
 
 			nuw->u.vlist.a[0] = tnode_create_node(node->u.loop.forward, rtl, dim);
 			nuw->u.vlist.a[1] = tnode_create_node(node->u.loop.backward, !rtl, dim);

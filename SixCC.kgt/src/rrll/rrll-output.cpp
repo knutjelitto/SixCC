@@ -32,7 +32,7 @@
 /* unknown provenance */
 static int escputc(int c, iwriter* writer)
 {
-	assert(writer != NULL);
+	assert(writer != nullptr);
 
 	const struct
 	{
@@ -70,7 +70,7 @@ static int escputc(int c, iwriter* writer)
 static size_t loop_label(unsigned min, unsigned max, char* s)
 {
 	assert(max >= min);
-	assert(s != NULL);
+	assert(s != nullptr);
 
 	if (max == 1 && min == 1)
 	{
@@ -100,9 +100,9 @@ static size_t loop_label(unsigned min, unsigned max, char* s)
 
 static void node_walk(iwriter* writer, const struct node* n)
 {
-	assert(writer != NULL);
+	assert(writer != nullptr);
 
-	if (n == NULL)
+	if (n == nullptr)
 	{
 		writer->printf("!");
 
@@ -111,24 +111,24 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 	assert(!n->invisible);
 
+	const struct list* p;
+
 	switch (n->type)
 	{
-		const struct list* p;
-
 		case NODE_CI_LITERAL:
 			fprintf(stderr, "unimplemented\n");
 			err_exit();
 
 		case NODE_CS_LITERAL:
 			writer->printf("\"");
-			writer->escape(n->u.literal, escputc);
+			writer->escape(n->literal(), escputc);
 			writer->printf("\"");
 
 			break;
 
 		case NODE_RULE:
 			writer->printf("'");
-			writer->escape(n->u.name, escputc);
+			writer->escape(n->name(), escputc);
 			writer->printf("'");
 
 			break;
@@ -136,7 +136,7 @@ static void node_walk(iwriter* writer, const struct node* n)
 		case NODE_PROSE:
 			/* TODO: escaping to somehow avoid ` */
 			writer->printf("`");
-			writer->escape(n->u.prose, escputc);
+			writer->escape(n->prose(), escputc);
 			writer->printf("`");
 
 			break;
@@ -145,10 +145,10 @@ static void node_walk(iwriter* writer, const struct node* n)
 		case NODE_ALT_SKIPPABLE:
 			writer->printf("<");
 
-			for (p = n->u.alt; p != NULL; p = p->next)
+			for (p = n->alt(); p != nullptr; p = p->next)
 			{
 				node_walk(writer, p->node);
-				if (p->next != NULL)
+				if (p->next != nullptr)
 				{
 					writer->printf(", ");
 				}
@@ -164,10 +164,10 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 		case NODE_SEQ:
 			writer->printf("[");
-			for (p = n->u.seq; p != NULL; p = p->next)
+			for (p = n->seq(); p != nullptr; p = p->next)
 			{
 				node_walk(writer, p->node);
-				if (p->next != NULL)
+				if (p->next != nullptr)
 				{
 					writer->printf(" ");
 				}
@@ -204,7 +204,7 @@ WARN_UNUSED_RESULT int rrll_output(const struct ast_rule* grammar)
 {
 	const struct ast_rule* p;
 
-	for (p = grammar; p != NULL; p = p->next)
+	for (p = grammar; p != nullptr; p = p->next)
 	{
 		struct node* rrd;
 

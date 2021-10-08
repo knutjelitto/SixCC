@@ -12,17 +12,17 @@
 struct ast_alt;
 struct txt;
 
-enum ast_features
+typedef enum
 {
     FEATURE_AST_CI_LITERAL = 1 << 0,
     FEATURE_AST_PROSE      = 1 << 1,
     FEATURE_AST_BINARY     = 1 << 2,
     FEATURE_AST_INVISIBLE  = 1 << 3
-};
+} ast_features;
 
 typedef enum ast_term_type
 {
-    TYPE_EMPTY,
+    TYPE_EMPTY = 42,
     TYPE_RULE,
     TYPE_CS_LITERAL,
     TYPE_CI_LITERAL,
@@ -103,7 +103,7 @@ struct ast_term
 private:
     const class text xxx_characters;
     const struct ast_rule* xxx_rule; /* just for sake of the name */
-    struct ast_alt* xxx_group;
+    const struct ast_alt* xxx_group;
 };
 
 struct ast_term_empty : ast_term

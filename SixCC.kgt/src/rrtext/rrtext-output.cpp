@@ -193,7 +193,7 @@ static void tile_puts(const char* s, int utf8)
 	}
 }
 
-static void render_tline(struct render_context* ctx, enum tline tline, int rhs)
+static void render_tline(struct render_context* ctx, tline tline, int rhs)
 {
 	const char* a;
 

@@ -310,7 +310,7 @@ render_tile_bm(struct render_context *ctx, unsigned u)
 	}
 }
 
-static void render_tline_inner(struct render_context* ctx, enum tline tline, int rhs)
+static void render_tline_inner(struct render_context* ctx, tline tline, int rhs)
 {
 	unsigned u[2]{};
 
@@ -375,7 +375,7 @@ static void render_tline_inner(struct render_context* ctx, enum tline tline, int
 	render_tile_bm(ctx, u[rhs]);
 }
 
-static void render_tline_outer(struct render_context* ctx, enum tline tline, int rhs)
+static void render_tline_outer(struct render_context* ctx, tline tline, int rhs)
 {
 	unsigned u[2]{};
 

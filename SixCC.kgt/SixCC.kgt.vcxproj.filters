@@ -117,7 +117,7 @@
     <ClCompile Include="src\svg\path.cpp">
       <Filter>src\svg</Filter>
     </ClCompile>
-    <ClCompile Include="src\bnf\lexer.cpp">
+    <ClCompile Include="src\bnf\bnf-lexer.cpp">
       <Filter>src\bnf</Filter>
     </ClCompile>
     <ClCompile Include="src\bnf\bnf-output.cpp">
@@ -126,7 +126,7 @@
     <ClCompile Include="src\bnf\bnf-parser.cpp">
       <Filter>src\bnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\abnf\lexer.cpp">
+    <ClCompile Include="src\abnf\abnf-lexer.cpp">
       <Filter>src\abnf</Filter>
     </ClCompile>
     <ClCompile Include="src\abnf\abnf-output.cpp">
@@ -165,7 +165,7 @@
     <ClCompile Include="src\json\json-output.cpp">
       <Filter>src\json</Filter>
     </ClCompile>
-    <ClCompile Include="src\iso-ebnf\lexer.cpp">
+    <ClCompile Include="src\iso-ebnf\iso-ebnf-lexer.cpp">
       <Filter>src\iso-ebnf</Filter>
     </ClCompile>
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp">
@@ -272,19 +272,19 @@
     <ClInclude Include="src\bnf\io.h">
       <Filter>src\bnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\bnf\lexer.h">
+    <ClInclude Include="src\bnf\bnf-lexer.h">
       <Filter>src\bnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\bnf\parser.h">
+    <ClInclude Include="src\bnf\bnf-parser.h">
       <Filter>src\bnf</Filter>
     </ClInclude>
     <ClInclude Include="src\abnf\io.h">
       <Filter>src\abnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\abnf\lexer.h">
+    <ClInclude Include="src\abnf\abnf-lexer.h">
       <Filter>src\abnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\abnf\parser.h">
+    <ClInclude Include="src\abnf\abnf-parser.h">
       <Filter>src\abnf</Filter>
     </ClInclude>
     <ClInclude Include="src\ast.h">
@@ -317,10 +317,10 @@
     <ClInclude Include="src\iso-ebnf\io.h">
       <Filter>src\iso-ebnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\iso-ebnf\lexer.h">
+    <ClInclude Include="src\iso-ebnf\iso-ebnf-lexer.h">
       <Filter>src\iso-ebnf</Filter>
     </ClInclude>
-    <ClInclude Include="src\iso-ebnf\parser.h">
+    <ClInclude Include="src\iso-ebnf\iso-ebnf-parser.h">
       <Filter>src\iso-ebnf</Filter>
     </ClInclude>
     <ClInclude Include="src\rrtext\io.h">

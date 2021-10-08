@@ -69,8 +69,8 @@ struct out_able
 {
     const char* name;
     int (*out)(const struct ast_rule*);
-    enum ast_features ast_unsupported;
-    enum rrd_features rrd_unsupported;
+    ast_features ast_unsupported;
+    rrd_features rrd_unsupported;
 };
 
 struct in_able inputable[] =

@@ -36,14 +36,14 @@ static void node_walk(void (*f)(int*, node**), int* changed, node** n)
 	{
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			for (p = &(*n)->u.alt; *p != nullptr; p = &(**p).next)
+			for (p = &(*n)->xxx_list; *p != nullptr; p = &(**p).next)
 			{
 				node_walk(f, changed, &(*p)->node);
 			}
 			break;
 
 		case NODE_SEQ:
-			for (p = &(*n)->u.seq; *p != nullptr; p = &(**p).next)
+			for (p = &(*n)->xxx_list; *p != nullptr; p = &(**p).next)
 			{
 				node_walk(f, changed, &(*p)->node);
 			}

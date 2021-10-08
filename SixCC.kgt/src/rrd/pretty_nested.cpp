@@ -22,7 +22,7 @@ static void nested_alt(int* changed, struct node* n)
 	struct list** next;
 
 	/* fold nested alts into this one */
-	for (p = &n->u.alt; *p != nullptr; p = next)
+	for (p = &n->xxx_list; *p != nullptr; p = next)
 	{
 		struct list** head;
 		struct list** tail;
@@ -38,7 +38,7 @@ static void nested_alt(int* changed, struct node* n)
 		dead = *p;
 
 		/* incoming inner list */
-		head = &(*p)->node->u.alt;
+		head = &(*p)->node->xxx_list;
 
 		for (tail = head; *tail != nullptr; tail = &(*tail)->next)
 			;
@@ -64,7 +64,7 @@ static void nested_seq(int* changed, struct node* n)
 	struct list** next;
 
 	/* fold nested seqs into this one */
-	for (p = &n->u.alt; *p != nullptr; p = next)
+	for (p = &n->xxx_list; *p != nullptr; p = next)
 	{
 		struct list** head, ** tail;
 		struct list* dead;
@@ -79,7 +79,7 @@ static void nested_seq(int* changed, struct node* n)
 		dead = *p;
 
 		/* incoming inner list */
-		head = &(*p)->node->u.alt;
+		head = &(*p)->node->xxx_list;
 
 		for (tail = head; *tail != nullptr; tail = &(*tail)->next)
 			;

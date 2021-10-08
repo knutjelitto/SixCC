@@ -42,7 +42,7 @@ static int transform_terms(const struct ast_alt* alt, struct node** r)
 			goto error;
 		}
 
-		list_push_front(tail, node);
+		list_push_back(tail, node);
 		tail = &(*tail)->next;
 	}
 
@@ -78,7 +78,7 @@ static int transform_alts(const struct ast_alt* alts, struct node** r)
 			goto error;
 		}
 
-		list_push_front(tail, node);
+		list_push_back(tail, node);
 		tail = &(*tail)->next;
 	}
 
@@ -146,7 +146,7 @@ static int optional_term(const struct ast_term* term, struct node** r)
 
 	list = nullptr;
 
-	list_push_front(&list, n);
+	list_push_back(&list, n);
 
 	*r = node_create_alt_skippable(term->invisible, list);
 

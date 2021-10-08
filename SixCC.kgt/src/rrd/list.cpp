@@ -13,7 +13,7 @@
 #include "list.h"
 #include "node.h"
 
-void list_push_front(struct list **list, struct node *node)
+void list_push_back(struct list **list, struct node *node)
 {
     assert(list != nullptr);
 
@@ -46,7 +46,7 @@ struct node* list_pop_front(struct list** list)
     return node;
 }
 
-void list_cat(struct list** dst, struct list* src)
+void list_append(struct list** dst, struct list* src)
 {
     struct list** p;
 

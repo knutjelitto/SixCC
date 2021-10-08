@@ -110,10 +110,10 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 
 	assert(!n->invisible);
 
+	const struct list* p;
+
 	switch (n->type)
 	{
-		const struct list* p;
-
 		case NODE_CI_LITERAL:
 			fprintf(stderr, "unimplemented\n");
 			return 0;
@@ -121,7 +121,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 		case NODE_CS_LITERAL:
 			print_indent(f, depth);
 			f->printf("text(\"");
-			f->escape(n->u.literal, escputc);
+			f->escape(n->literal(), escputc);
 			f->printf("\")");
 
 			break;
@@ -129,7 +129,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 		case NODE_RULE:
 			print_indent(f, depth);
 			f->printf("production(\"");
-			f->escape(n->u.name, escputc);
+			f->escape(n->name(), escputc);
 			f->printf("\")");
 
 			break;
@@ -149,7 +149,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 				f->printf("Nothing(),\n");
 			}
 
-			for (p = n->u.alt; p != nullptr; p = p->next)
+			for (p = n->alt(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(f, p->node, depth + 1))
 					return 0;
@@ -169,7 +169,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 		case NODE_SEQ:
 			print_indent(f, depth);
 			f->printf("Then(\n");
-			for (p = n->u.seq; p != nullptr; p = p->next)
+			for (p = n->seq(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(f, p->node, depth + 1))
 				{

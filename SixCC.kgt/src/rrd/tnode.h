@@ -7,8 +7,8 @@
 #ifndef KGT_RRD_TNODE_H
 #define KGT_RRD_TNODE_H
 
-struct node;
-struct txt;
+#include "node.h"
+#include "../txt.h"
 
 /*
  * Various combinations of two endpoints (corner pieces) for a line:
@@ -17,7 +17,8 @@ struct txt;
  *      -A---- node ----B-
  *       '              '
  */
-enum tline {
+typedef enum
+{
 	TLINE_A, TLINE_a,
 	TLINE_B,
 	TLINE_C, TLINE_c,
@@ -28,7 +29,7 @@ enum tline {
 	TLINE_H, TLINE_h,
 	TLINE_I, TLINE_i,
 	TLINE_J
-};
+} tline;
 
 /*
  * A list of vertical line segments:
@@ -44,7 +45,7 @@ enum tline {
 struct tnode_vlist
 {
 	struct tnode **a;
-	enum tline *b;
+	tline *b;
 	size_t n;
 	unsigned o; /* offset, in indicies */
 };
@@ -60,7 +61,7 @@ struct tnode_hlist
 	size_t n;
 };
 
-enum tnode_type
+typedef enum
 {
 	TNODE_RTL_ARROW,
 	TNODE_LTR_ARROW,
@@ -72,11 +73,11 @@ enum tnode_type
 	TNODE_RULE,
 	TNODE_VLIST,
 	TNODE_HLIST
-};
+} tnode_type;
 
 struct tnode
 {
-	enum tnode_type type;
+	tnode_type type;
 
 	/* in abstract rrd units */
 	unsigned w;

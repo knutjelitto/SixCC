@@ -16,6 +16,23 @@
 
 #include "../xalloc.h"
 
+void node::list_free()
+{
+    assert(type == NODE_SEQ || type == NODE_ALT || type == NODE_ALT_SKIPPABLE);
+
+    list* curr = xxx_list;
+
+    while (curr != nullptr)
+    {
+        list* next = curr->next;
+        curr->next = nullptr;
+        delete curr;
+        curr = next;
+    }
+
+    xxx_list = nullptr;
+}
+
 void node_free(node* n)
 {
     struct list* p;
@@ -38,19 +55,19 @@ void node_free(node* n)
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            for (p = n->u.alt; p != nullptr; p = p->next)
+            for (p = n->alt(); p != nullptr; p = p->next)
             {
                 node_free(p->node);
             }
-            list_free(&n->u.alt);
+            n->list_free();
             break;
 
         case NODE_SEQ:
-            for (p = n->u.seq; p != nullptr; p = p->next)
+            for (p = n->seq(); p != nullptr; p = p->next)
             {
                 node_free(p->node);
             }
-            list_free(&n->u.seq);
+            n->list_free();
             break;
 
         case NODE_LOOP:
@@ -64,89 +81,43 @@ void node_free(node* n)
 
 struct node *node_create_ci_literal(int invisible, const text& literal)
 {
-    struct node* nuw = new node();
-
-
-    nuw->type = NODE_CI_LITERAL;
-    nuw->invisible = invisible;
-    nuw->u.literal = literal;
-
-    return nuw;
+    return new node(NODE_CI_LITERAL, invisible, literal);
 }
 
 struct node *node_create_cs_literal(int invisible, const text& literal)
 {
-    struct node *nuw = new node();
-
-    nuw->type = NODE_CS_LITERAL;
-    nuw->invisible = invisible;
-    nuw->u.literal = literal;
-
-    return nuw;
+    return new node(NODE_CS_LITERAL, invisible, literal);
 }
 
 struct node* node_create_name(int invisible, const text& name)
 {
-    struct node* nuw = new node();
-
-    nuw->type = NODE_RULE;
-    nuw->invisible = invisible;
-    nuw->u.name = name;
-
-    return nuw;
+    return new node(NODE_RULE, invisible, name);
 }
 
 
 struct node* node_create_prose(int invisible, const text& prose)
 {
-    struct node* nuw = new node();
-
-    nuw->type = NODE_PROSE;
-    nuw->invisible = invisible;
-    nuw->u.prose = prose;
-
-    return nuw;
+    return new node(NODE_PROSE, invisible, prose);
 }
 
 struct node* node_create_alt(int invisible, struct list* alt)
 {
-    struct node* nuw = new node();
-
-    nuw->type = NODE_ALT;
-    nuw->invisible = invisible;
-    nuw->u.alt = alt;
-
-    return nuw;
+    return new node(NODE_ALT, invisible, alt);
 }
 
 struct node* node_create_alt_skippable(int invisible, struct list* alt)
 {
-    struct node* nuw = new node();
-
-    nuw->type = NODE_ALT_SKIPPABLE;
-    nuw->invisible = invisible;
-    nuw->u.alt = alt;
-
-    return nuw;
+    return new node(NODE_ALT_SKIPPABLE, invisible, alt);
 }
 
 struct node* node_create_seq(int invisible, struct list* seq)
 {
-    struct node* nuw = new node();
-
-    nuw->type = NODE_SEQ;
-    nuw->invisible = invisible;
-    nuw->u.seq = seq;
-
-    return nuw;
+    return new node(NODE_SEQ, invisible, seq);
 }
 
 struct node* node_create_loop(int invisible, struct node* forward, struct node* backward)
 {
-    struct node* nuw = new node();
-
-    nuw->type = NODE_LOOP;
-    nuw->invisible = invisible;
+    struct node* nuw = new node(NODE_LOOP, invisible);
 
     nuw->u.loop.forward = forward;
     nuw->u.loop.backward = backward;
@@ -157,22 +128,20 @@ struct node* node_create_loop(int invisible, struct node* forward, struct node* 
     return nuw;
 }
 
-void node_make_seq(int invisible, struct node** n)
+void node_make_seq(int invisible, struct node** node)
 {
-    assert(n != nullptr);
+    assert(node != nullptr);
 
-    struct list* nuw;
-
-    if (*n != nullptr && (*n)->type == NODE_SEQ)
+    if (*node != nullptr && (*node)->type == NODE_SEQ)
     {
         return;
     }
 
-    nuw = nullptr;
+    struct list* nuw = nullptr;
 
-    list_push_front(&nuw, *n);
+    list_push_back(&nuw, *node);
 
-    *n = node_create_seq(invisible, nuw);
+    *node = node_create_seq(invisible, nuw);
 }
 
 bool node_compare(const struct node* a, const struct node* b)
@@ -200,23 +169,23 @@ bool node_compare(const struct node* a, const struct node* b)
     switch (a->type)
     {
         case NODE_CI_LITERAL:
-            return a->u.literal.cieq(b->u.literal);
+            return a->literal().cieq(b->literal());
 
         case NODE_CS_LITERAL:
-            return a->u.literal.eq(b->u.literal);
+            return a->literal().eq(b->literal());
 
         case NODE_RULE:
-            return a->u.name.eq(b->u.name);
+            return a->name().eq(b->name());
 
         case NODE_PROSE:
-            return a->u.prose.eq(b->u.prose);
+            return a->prose().eq(b->prose());
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            return list_compare(a->u.alt, b->u.alt);
+            return list_compare(a->alt(), b->alt());
 
         case NODE_SEQ:
-            return list_compare(a->u.seq, b->u.seq);
+            return list_compare(a->seq(), b->seq());
 
         case NODE_LOOP:
             return node_compare(a->u.loop.forward, b->u.loop.forward)

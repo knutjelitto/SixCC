@@ -32,7 +32,7 @@ static void ci_alt(int* changed, struct node* n)
 	 */
 	list = nullptr;
 
-	for (p = n->u.alt; p != nullptr; p = p->next)
+	for (p = n->alt(); p != nullptr; p = p->next)
 	{
 		if (p->node == nullptr)
 		{
@@ -43,7 +43,7 @@ static void ci_alt(int* changed, struct node* n)
 		{
 			case NODE_CI_LITERAL:
 			case NODE_CS_LITERAL:
-				if (p->node->u.literal.length() != 1)
+				if (p->node->literal().length() != 1)
 				{
 					return;
 				}
@@ -60,7 +60,7 @@ static void ci_alt(int* changed, struct node* n)
 		}
 	}
 
-	for (p = n->u.alt; p != nullptr; p = p->next)
+	for (p = n->alt(); p != nullptr; p = p->next)
 	{
 		if (p->node == nullptr)
 		{
@@ -74,16 +74,16 @@ static void ci_alt(int* changed, struct node* n)
 			case NODE_CI_LITERAL:
 			{
 
-				if (!isalpha((unsigned char)p->node->u.literal[0]))
+				if (!isalpha((unsigned char)p->node->literal()[0]))
 				{
 					break;
 				}
 
 				p->node->type = NODE_CS_LITERAL;
-				p->node->u.literal = p->node->u.literal.tolower();
+				p->node->tolower();
 
-				struct node* nuw = node_create_cs_literal(p->node->invisible, p->node->u.literal.toupper());
-				list_push_front(&list, nuw);
+				struct node* nuw = node_create_cs_literal(p->node->invisible, p->node->literal().toupper());
+				list_push_back(&list, nuw);
 
 				*changed = 1;
 
@@ -106,7 +106,7 @@ static void ci_alt(int* changed, struct node* n)
 		struct list** tail;
 
 		/* TODO: centralise with list_tail() */
-		for (tail = &n->u.alt; *tail != nullptr; tail = &(*tail)->next)
+		for (tail = &n->xxx_list; *tail != nullptr; tail = &(*tail)->next)
 			;
 
 		assert(*tail == nullptr);

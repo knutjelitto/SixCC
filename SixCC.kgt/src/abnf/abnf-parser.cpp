@@ -28,9 +28,9 @@
 #include "../ast.h"
 #include "../xalloc.h"
 #include "../strings.h"
-#include "lexer.h"
+#include "abnf-lexer.h"
 #include "../parsing-support.h"
-#include "parser.h"
+#include "abnf-parser.h"
 #include "io.h"
 
 static text pattern_buffer(struct lex_state_s* lex_state)

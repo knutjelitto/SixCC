@@ -116,17 +116,17 @@ static int char_terminal(const struct ast_term *term, unsigned char *c)
 
 static void collate_ranges(struct bm* bm, const struct ast_alt* alts)
 {
-	const struct ast_alt* p;
+	const struct ast_alt* alt;
 
 	assert(bm != nullptr);
 
 	bm_clear(bm);
 
-	for (p = alts; p != nullptr; p = p->next)
+	for (alt = alts; alt != nullptr; alt = alt->next)
 	{
 		unsigned char c;
 
-		if (!char_terminal(p->terms, &c))
+		if (!char_terminal(alt->terms, &c))
 		{
 			continue;
 		}

@@ -27,25 +27,23 @@
 
 static void add_alt(int invisible, struct list **list, const text& text)
 {
-	assert(list != NULL);
+	assert(list != nullptr);
 
-	struct node *node;
+	struct node *node = node_create_cs_literal(invisible, text);
 
-	node = node_create_cs_literal(invisible, text);
-
-	list_push_front(list, node);
+	list_push_back(list, node);
 }
 
 /* TODO: centralise */
 WARN_UNUSED_RESULT static int permute_cases(int invisible, struct list** list, text& text)
 {
+	assert(list != nullptr);
+
 	size_t i, j;
 	unsigned long num_alphas, perm_count;
 	unsigned long alpha_inds[CHAR_BIT * sizeof i - 1]; /* - 1 because we shift (1 << n) by this size */
 	size_t n;
 	char* p;
-
-	assert(list != NULL);
 
 	p = (char*)text.chars();
 	n = text.length();
@@ -91,27 +89,27 @@ WARN_UNUSED_RESULT static int rewrite_ci(struct node* node)
 	text tmp;
 
 	assert(node->type == NODE_CI_LITERAL);
-	assert(node->u.literal.length() > 0);
+	assert(node->literal().length() > 0);
 
 	/* case is normalised during AST creation */
-	for (int i = 0; i < node->u.literal.length(); i++)
+	for (int i = 0; i < node->literal().length(); i++)
 	{
-		if (!isalpha((unsigned char)node->u.literal[i]))
+		if (!isalpha((unsigned char)node->literal()[i]))
 		{
 			continue;
 		}
 
-		assert(islower((unsigned char)node->u.literal[i]));
+		assert(islower((unsigned char)node->literal()[i]));
 	}
 
-	tmp = node->u.literal;
+	tmp = node->literal();
 
 	/* we repurpose the existing node, which breaks abstraction for freeing */
 	node->type = NODE_ALT;
-	node->u.alt = NULL;
+	node->xxx_list = nullptr;
 
 	/* invisibility of new alts is inherited from n->invisible itself */
-	if (!permute_cases(node->invisible, &node->u.alt, tmp))
+	if (!permute_cases(node->invisible, &node->xxx_list, tmp))
 	{
 		return 0;
 	}
@@ -121,7 +119,7 @@ WARN_UNUSED_RESULT static int rewrite_ci(struct node* node)
 
 WARN_UNUSED_RESULT static int node_walk(struct node* n)
 {
-	if (n == NULL)
+	if (n == nullptr)
 	{
 		return 1;
 	}
@@ -144,7 +142,7 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			for (p = n->u.alt; p != NULL; p = p->next)
+			for (p = n->alt(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(p->node))
 					return 0;
@@ -153,7 +151,7 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 			break;
 
 		case NODE_SEQ:
-			for (p = n->u.seq; p != NULL; p = p->next)
+			for (p = n->seq(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(p->node))
 					return 0;

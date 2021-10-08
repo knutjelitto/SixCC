@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "lexer.h"
+#include "bnf-lexer.h"
 
 static enum lx_bnf_token z0(struct lx_bnf_lx *lx);
 static enum lx_bnf_token z1(struct lx_bnf_lx *lx);

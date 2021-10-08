@@ -52,22 +52,22 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 	{
 		case NODE_CI_LITERAL:
 			print_indent(f, depth);
-			f->printf("LITERAL%s: \"%.*s\"/i\n", n->invisible ? " (invisible)" : "", (int)n->u.literal.length(), n->u.literal.chars());
+			f->printf("LITERAL%s: \"%.*s\"/i\n", n->invisible ? " (invisible)" : "", (int)n->literal().length(), n->literal().chars());
 			break;
 
 		case NODE_CS_LITERAL:
 			print_indent(f, depth);
-			f->printf("LITERAL%s: \"%.*s\"\n", n->invisible ? " (invisible)" : "", (int)n->u.literal.length(), n->u.literal.chars());
+			f->printf("LITERAL%s: \"%.*s\"\n", n->invisible ? " (invisible)" : "", (int)n->literal().length(), n->literal().chars());
 			break;
 
 		case NODE_RULE:
 			print_indent(f, depth);
-			f->printf("NAME%s: <%s>\n", n->invisible ? " (invisible)" : "", n->u.name.chars());
+			f->printf("NAME%s: <%s>\n", n->invisible ? " (invisible)" : "", n->name().chars());
 			break;
 
 		case NODE_PROSE:
 			print_indent(f, depth);
-			f->printf("PROSE%s: ?%s?\n", n->invisible ? " (invisible)" : "", n->u.prose.chars());
+			f->printf("PROSE%s: ?%s?\n", n->invisible ? " (invisible)" : "", n->prose().chars());
 
 			break;
 
@@ -75,7 +75,7 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 		case NODE_ALT_SKIPPABLE:
 			print_indent(f, depth);
 			f->printf("%s%s: [\n", n->invisible ? " (invisible)" : "", n->type == NODE_ALT ? "ALT" : "ALT|SKIP");
-			for (p = n->u.alt; p != nullptr; p = p->next)
+			for (p = n->alt(); p != nullptr; p = p->next)
 			{
 				node_walk(f, p->node, depth + 1);
 			}
@@ -87,7 +87,7 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 		case NODE_SEQ:
 			print_indent(f, depth);
 			f->printf("SEQ%s: [\n", n->invisible ? " (invisible)" : "");
-			for (p = n->u.seq; p != nullptr; p = p->next)
+			for (p = n->seq(); p != nullptr; p = p->next)
 			{
 				node_walk(f, p->node, depth + 1);
 			}

@@ -27,9 +27,9 @@
 #include "../ast.h"
 #include "../xalloc.h"
 #include "../strings.h"
-#include "lexer.h"
+#include "iso-ebnf-lexer.h"
 #include "../parsing-support.h"
-#include "parser.h"
+#include "iso-ebnf-parser.h"
 #include "io.h"
 
 #if false

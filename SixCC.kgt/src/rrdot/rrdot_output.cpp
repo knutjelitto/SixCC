@@ -87,14 +87,14 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
         return;
     }
 
+    const struct list* p;
+
     switch (node->type)
     {
-        const struct list* p;
-
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
             writer->printf("\t{ rank = same;\n");
-            for (p = node->u.alt; p != NULL; p = p->next)
+            for (p = node->alt(); p != NULL; p = p->next)
             {
                 writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
@@ -103,7 +103,7 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
 
         case NODE_SEQ:
             writer->printf("\t{ rank = same;\n");
-            for (p = node->u.seq; p != NULL; p = p->next)
+            for (p = node->seq(); p != NULL; p = p->next)
             {
                 writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
@@ -131,26 +131,26 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
     {
         case NODE_CI_LITERAL:
             writer->printf("style = \"%s\", shape = box, label = \"\\\"", node->invisible ? "filled,dashed" : "filled");
-            writer->escape(node->u.literal, escputc);
+            writer->escape(node->literal(), escputc);
             writer->printf("\\\"\"/i");
             break;
 
         case NODE_CS_LITERAL:
             writer->printf("style = \"%s\", shape = box, label = \"\\\"", node->invisible ? "filled,dashed" : "filled");
-            writer->escape(node->u.literal, escputc);
+            writer->escape(node->literal(), escputc);
             writer->printf("\\\"\"");
             break;
 
         case NODE_RULE:
             writer->printf("label = \"\\<");
-                writer->escape(node->u.name, escputc);
+                writer->escape(node->name(), escputc);
             writer->printf("\\>\"");
             break;
 
         case NODE_PROSE:
             /* TODO: escaping to somehow avoid ? */
             writer->printf("label = \"?");
-            writer->escape(node->u.prose, escputc);
+            writer->escape(node->prose(), escputc);
             writer->printf("?\"");
             break;
 
@@ -195,20 +195,20 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
 
     writer->printf(" ];\n");
 
+    const struct list* p;
+
     switch (node->type)
     {
-        const struct list* p;
-
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            for (p = node->u.alt; p != NULL; p = p->next)
+            for (p = node->alt(); p != NULL; p = p->next)
             {
                 rrd_print_dot(prefix, node, "", p->node);
             }
             break;
 
         case NODE_SEQ:
-            for (p = node->u.seq; p != NULL; p = p->next)
+            for (p = node->seq(); p != NULL; p = p->next)
             {
                 rrd_print_dot(prefix, node, "", p->node);
             }

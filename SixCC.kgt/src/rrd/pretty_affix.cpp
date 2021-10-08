@@ -80,24 +80,24 @@ static void collapse_suffix(int* changed, struct list** head, struct node* loop)
 
 	assert(loop->u.loop.forward != nullptr);
 	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->u.seq != nullptr);
+	assert(loop->u.loop.forward->seq() != nullptr);
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
 	node_make_seq(loop->invisible, &loop->u.loop.backward);
 
 	assert(loop->u.loop.backward != nullptr);
 	assert(loop->u.loop.backward->type == NODE_SEQ);
-	assert(loop->u.loop.backward->u.seq != nullptr);
+	assert(loop->u.loop.backward->seq() != nullptr);
 
 	/* find end of run; anchored at end of loop's seq */
 	{
 		p = *head;
 
-		if (!list_walk_upto(&p, p, loop->u.loop.backward->u.seq, nullptr))
+		if (!list_walk_upto(&p, p, loop->u.loop.backward->seq(), nullptr))
 		{
 			return;
 		}
-		if (!list_walk_upto(&p, p, loop->u.loop.forward->u.seq, nullptr))
+		if (!list_walk_upto(&p, p, loop->u.loop.forward->seq(), nullptr))
 		{
 			return;
 		}
@@ -125,14 +125,14 @@ static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 
 	assert(loop->u.loop.forward != nullptr);
 	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->u.seq != nullptr);
+	assert(loop->u.loop.forward->seq() != nullptr);
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
 	node_make_seq(loop->invisible, &loop->u.loop.backward);
 
 	assert(loop->u.loop.backward != nullptr);
 	assert(loop->u.loop.backward->type == NODE_SEQ);
-	assert(loop->u.loop.backward->u.seq != nullptr);
+	assert(loop->u.loop.backward->seq() != nullptr);
 
 	/* find start of run; anchored at loop node */
 	{
@@ -142,11 +142,11 @@ static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 
 			q = *p;
 
-			if (!list_walk_upto(&q, q, loop->u.loop.forward->u.seq, loop))
+			if (!list_walk_upto(&q, q, loop->u.loop.forward->seq(), loop))
 			{
 				continue;
 			}
-			if (!list_walk_upto(&q, q, loop->u.loop.backward->u.seq, loop))
+			if (!list_walk_upto(&q, q, loop->u.loop.backward->seq(), loop))
 			{
 				continue;
 			}
@@ -198,7 +198,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 			 *
 			 */
 
-			for (p = &(*n)->u.seq; *p != nullptr; p = &(*p)->next)
+			for (p = &(*n)->xxx_list; *p != nullptr; p = &(*p)->next)
 			{
 				if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP)
 				{
@@ -217,7 +217,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 				}
 			}
 
-			for (p = &(*n)->u.seq; *p != nullptr; p = &(*p)->next)
+			for (p = &(*n)->xxx_list; *p != nullptr; p = &(*p)->next)
 			{
 				if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP)
 				{
@@ -227,7 +227,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 					}
 					else
 					{
-						collapse_prefix(changed, &(*n)->u.seq, (*p)->node);
+						collapse_prefix(changed, &(*n)->xxx_list, (*p)->node);
 					}
 					if (*changed)
 					{

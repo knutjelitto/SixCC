@@ -157,14 +157,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\abnf\lexer.cpp" />
+    <ClCompile Include="src\abnf\abnf-lexer.cpp" />
     <ClCompile Include="src\abnf\abnf-output.cpp" />
     <ClCompile Include="src\abnf\abnf-parser.cpp" />
     <ClCompile Include="src\ast.cpp" />
     <ClCompile Include="src\ast_binary.cpp" />
     <ClCompile Include="src\bitmap.cpp" />
     <ClCompile Include="src\blab\blab-output.cpp" />
-    <ClCompile Include="src\bnf\lexer.cpp">
+    <ClCompile Include="src\bnf\bnf-lexer.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
@@ -182,7 +182,7 @@
     <ClCompile Include="src\ebnfhtml5\ebnfhtml-output.cpp" />
     <ClCompile Include="src\errors.cpp" />
     <ClCompile Include="src\html5\html5-output.cpp" />
-    <ClCompile Include="src\iso-ebnf\lexer.cpp" />
+    <ClCompile Include="src\iso-ebnf\iso-ebnf-lexer.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-parser.cpp" />
     <ClCompile Include="src\json\json-output.cpp" />
@@ -242,22 +242,22 @@
   <ItemGroup>
     <ClInclude Include="getopt.h" />
     <ClInclude Include="src\abnf\io.h" />
-    <ClInclude Include="src\abnf\lexer.h" />
-    <ClInclude Include="src\abnf\parser.h" />
+    <ClInclude Include="src\abnf\abnf-lexer.h" />
+    <ClInclude Include="src\abnf\abnf-parser.h" />
     <ClInclude Include="src\ast.h" />
     <ClInclude Include="src\bitmap.h" />
     <ClInclude Include="src\blab\io.h" />
     <ClInclude Include="src\bnf\io.h" />
-    <ClInclude Include="src\bnf\lexer.h" />
-    <ClInclude Include="src\bnf\parser.h" />
+    <ClInclude Include="src\bnf\bnf-lexer.h" />
+    <ClInclude Include="src\bnf\bnf-parser.h" />
     <ClInclude Include="src\compiler_specific.h" />
     <ClInclude Include="src\dot\io.h" />
     <ClInclude Include="src\ebnfhtml5\io.h" />
     <ClInclude Include="src\errors.h" />
     <ClInclude Include="src\html5\io.h" />
     <ClInclude Include="src\iso-ebnf\io.h" />
-    <ClInclude Include="src\iso-ebnf\lexer.h" />
-    <ClInclude Include="src\iso-ebnf\parser.h" />
+    <ClInclude Include="src\iso-ebnf\iso-ebnf-lexer.h" />
+    <ClInclude Include="src\iso-ebnf\iso-ebnf-parser.h" />
     <ClInclude Include="src\json\io.h" />
     <ClInclude Include="src\iwriter.h" />
     <ClInclude Include="src\parsing-error.h" />
