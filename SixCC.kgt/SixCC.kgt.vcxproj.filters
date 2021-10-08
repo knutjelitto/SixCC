@@ -213,7 +213,7 @@
     <ClCompile Include="src\rrtdump\rrtdump-output.cpp">
       <Filter>src\rrtdump</Filter>
     </ClCompile>
-    <ClCompile Include="src\rrta\output.cpp">
+    <ClCompile Include="src\rrta\rrta-output.cpp">
       <Filter>src\rrta</Filter>
     </ClCompile>
     <ClCompile Include="src\rrparcon\rrparcon-output.cpp">

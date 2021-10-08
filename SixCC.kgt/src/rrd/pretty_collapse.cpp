@@ -13,16 +13,18 @@
 #include "node.h"
 #include "list.h"
 
-void rrd_pretty_collapse(int* changed, struct node** n)
+void rrd_pretty_collapse(int* changed, struct node** rrd_node)
 {
-    assert(n != nullptr);
+#if false
+#else
+    assert(rrd_node != nullptr);
 
-    if (*n == nullptr)
+    if (*rrd_node == nullptr)
     {
         return;
     }
 
-    switch ((*n)->type)
+    switch ((*rrd_node)->type)
     {
         case NODE_CI_LITERAL:
         case NODE_CS_LITERAL:
@@ -32,29 +34,28 @@ void rrd_pretty_collapse(int* changed, struct node** n)
             break;
 
         case NODE_ALT:
-            if (list_count((*n)->altx()) == 1)
-            {
-                struct node* dead;
+        {
+            node* node = (*rrd_node)->alt().single_or_default();
 
-                dead = *n;
-                *n = (*n)->altx()->node;
-                dead->xxx_list = nullptr;
-                node_free(dead);
+            if (node != nullptr)
+            {
+                *rrd_node = node;
 
                 *changed = 1;
             }
             break;
+        }
 
         case NODE_ALT_SKIPPABLE:
             break;
 
         case NODE_SEQ:
-            if (list_count((*n)->seqx()) == 1)
+            if ((*rrd_node)->seq().size() == 1)
             {
                 struct node* dead;
 
-                dead = *n;
-                *n = (*n)->seqx()->node;
+                dead = *rrd_node;
+                *rrd_node = (*rrd_node)->seqx()->node;
                 dead->xxx_list = nullptr;
                 node_free(dead);
 
@@ -62,5 +63,6 @@ void rrd_pretty_collapse(int* changed, struct node** n)
             }
             break;
     }
+#endif
 }
 

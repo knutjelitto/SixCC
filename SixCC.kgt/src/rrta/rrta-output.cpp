@@ -75,17 +75,17 @@ static int escputc(int c, iwriter* writer)
 	return writer->printf("%c", c);
 }
 
-int normal(const struct list* list)
+int normal(const list& list)
 {
 	/*
 	 * This is an imperfect heuristic to guess which item in a list
 	 * is the most visually sensible default.
 	 */
 
-	if (list_count(list) == 2)
+	if (list.size() == 2)
 	{
-		const struct node* a = list->node;
-		const struct node* b = list->next->node;
+		const struct node* a = list[0];
+		const struct node* b = list[1];
 
 		if (a == nullptr && b->type == NODE_RULE)
 		{
@@ -114,8 +114,6 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 
 	switch (n->type)
 	{
-		const struct list* p;
-
 		case NODE_CI_LITERAL:
 			fprintf(stderr, "unimplemented\n");
 			return 0;
@@ -142,8 +140,11 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
+		{
+			bool more = false;
+
 			print_indent(writer, depth);
-			writer->printf("Choice(%d,\n", normal(n->altx()));
+			writer->printf("Choice(%d,\n", normal(n->alt()));
 
 			if (n->type == NODE_ALT_SKIPPABLE)
 			{
@@ -151,40 +152,47 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 				writer->printf("Skip(),\n");
 			}
 
-			for (p = n->altx(); p != nullptr; p = p->next)
+			for (auto node : n->alt())
 			{
-				if (!node_walk(writer, p->node, depth + 1))
-				{
-					return 0;
-				}
-				if (p->next != nullptr)
+				if (more)
 				{
 					writer->printf(",");
 					writer->printf("\n");
+				}
+				more = true;
+				if (!node_walk(writer, node, depth + 1))
+				{
+					return 0;
 				}
 			}
 			writer->printf(")");
 
 			break;
+		}
 
 		case NODE_SEQ:
+		{
+			bool more = false;
+			
 			print_indent(writer, depth);
-			writer->printf("Sequence(\n");
-			for (p = n->seqx(); p != nullptr; p = p->next)
+			writer->puts("Sequence(\n");
+			for (auto node : n->seq())
 			{
-				if (!node_walk(writer, p->node, depth + 1))
+				if (more)
+				{
+					writer->puts(",");
+					writer->puts("\n");
+				}
+				more = true;
+				if (!node_walk(writer, node, depth + 1))
 				{
 					return 0;
 				}
-				if (p->next != nullptr)
-				{
-					writer->printf(",");
-					writer->printf("\n");
-				}
 			}
-			writer->printf(")");
+			writer->puts(")");
 
 			break;
+		}
 
 		case NODE_LOOP:
 			print_indent(writer, depth);

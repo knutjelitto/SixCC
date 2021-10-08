@@ -17,85 +17,50 @@
 static void nested_alt(int* changed, struct node* n)
 {
 	assert(n->type == NODE_ALT || n->type == NODE_ALT_SKIPPABLE);
-	
-	struct list** p;
-	struct list** next;
 
-	/* fold nested alts into this one */
-	for (p = &n->xxx_list; *p != nullptr; p = next)
+	list replacement;
+
+	for (auto current = n->alt().begin(); current != n->alt().end(); current = current + 1)
 	{
-		struct list** head;
-		struct list** tail;
-		struct list* dead;
-
-		next = &(*p)->next;
-
-		if ((*p)->node == nullptr || ((*p)->node->type != NODE_ALT && (*p)->node->type != NODE_ALT_SKIPPABLE))
+		if (*current == nullptr || ((*current)->type != NODE_ALT && (*current)->type != NODE_ALT_SKIPPABLE))
 		{
+			replacement.add(*current);
 			continue;
 		}
 
-		dead = *p;
-
-		/* incoming inner list */
-		head = &(*p)->node->xxx_list;
-
-		for (tail = head; *tail != nullptr; tail = &(*tail)->next)
-			;
-
-		*tail = (*p)->next;
-		(*p)->next = nullptr;
-
-		*p = *head;
-		*head = nullptr;
-
-		next = p;
-
-		node_free(dead->node);
-		list_free(&dead);
+		replacement.add((*current)->alt());
 
 		*changed = 1;
+	}
+
+	if (*changed)
+	{
+		n->alt().replace(replacement);
 	}
 }
 
 static void nested_seq(int* changed, struct node* n)
 {
-	struct list** p;
-	struct list** next;
+	assert(n->type == NODE_SEQ);
 
-	/* fold nested seqs into this one */
-	for (p = &n->xxx_list; *p != nullptr; p = next)
+	list replacement;
+
+	for (auto current = n->seq().begin(); current != n->seq().end(); current = current + 1)
 	{
-		struct list** head, ** tail;
-		struct list* dead;
-
-		next = &(*p)->next;
-
-		if ((*p)->node == nullptr || (*p)->node->type != NODE_SEQ)
+		if (*current == nullptr || (*current)->type != NODE_SEQ)
 		{
+			replacement.add(*current);
 			continue;
 		}
 
-		dead = *p;
-
-		/* incoming inner list */
-		head = &(*p)->node->xxx_list;
-
-		for (tail = head; *tail != nullptr; tail = &(*tail)->next)
-			;
-
-		*tail = (*p)->next;
-		(*p)->next = nullptr;
-
-		*p = *head;
-		*head = nullptr;
-
-		next = p;
-
-		node_free(dead->node);
-		list_free(&dead);
+		replacement.add((*current)->seq());
 
 		*changed = 1;
+	}
+
+	if (*changed)
+	{
+		n->seq().replace(replacement);
 	}
 }
 

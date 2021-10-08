@@ -27,8 +27,9 @@
  *               |                  |
  *               ^-- B A ---- "|" --<
  */
-static void
-roll_prefix(int* changed, struct list** entry, struct node* loop)
+#if true
+#else
+static void roll_prefix(int* changed, struct list** entry, struct node* loop)
 {
 	struct list** p, ** q;
 
@@ -100,22 +101,28 @@ roll_prefix(int* changed, struct list** entry, struct node* loop)
 
 	*changed = 1;
 }
+#endif
 
 /*
  * This transformation combines two equivalent nodes:
  *
+ *                        loop
+ *                         #  
  *  ||-->------------------v-- C B A --||
  *      |                  |
  *      ^-- "|" -- A B C --<
  *
  * by pushing one of them to the loop's .backward list:
  *
+ *                        loop
+ *                         #
  *  ||-->------------- C --v-- B A ----||
  *      |                  |
  *      ^-- "|" ---- A B --<
  */
-static void
-roll_suffix(int* changed, struct list** exit, struct node* loop)
+#if true
+#else
+static void roll_suffix(int* changed, struct list** exit, struct node* loop)
 {
 	struct list** p, ** q;
 
@@ -187,10 +194,12 @@ roll_suffix(int* changed, struct list** exit, struct node* loop)
 
 	*changed = 1;
 }
+#endif
 
-void
-rrd_pretty_roll(int* changed, struct node** n)
+void rrd_pretty_roll(int* changed, struct node** n)
 {
+#if true
+#else
 	assert(n != nullptr);
 
 	if (*n == nullptr)
@@ -246,5 +255,6 @@ rrd_pretty_roll(int* changed, struct node** n)
 		case NODE_LOOP:
 			break;
 	}
+#endif
 }
 

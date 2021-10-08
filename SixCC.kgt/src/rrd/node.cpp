@@ -20,23 +20,33 @@ void node::list_free()
 {
     assert(type == NODE_SEQ || type == NODE_ALT || type == NODE_ALT_SKIPPABLE);
 
-    list* curr = xxx_list;
+    list().clear();
+}
 
-    while (curr != nullptr)
-    {
-        list* next = curr->next;
-        curr->next = nullptr;
-        delete curr;
-        curr = next;
-    }
+void node::become_cs()
+{
+    assert(type == NODE_CI_LITERAL);
+    type = NODE_CS_LITERAL;
+    tolower();
+}
 
-    xxx_list = nullptr;
+void node::become_alt_skippable()
+{
+    assert(type == NODE_ALT);
+    type = NODE_ALT_SKIPPABLE;
+}
+
+void node::become_alt()
+{
+    assert(type == NODE_CI_LITERAL);
+    assert(xxx_list == nullptr);
+    xxx_text.clear();
+    type = NODE_ALT;
+    xxx_list = new struct list();
 }
 
 void node_free(node* n)
 {
-    struct list* p;
-
     if (n == nullptr)
     {
         return;
@@ -55,17 +65,17 @@ void node_free(node* n)
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            for (p = n->altx(); p != nullptr; p = p->next)
+            for (auto node : n->alt())
             {
-                node_free(p->node);
+                node_free(node);
             }
             n->list_free();
             break;
 
         case NODE_SEQ:
-            for (p = n->seqx(); p != nullptr; p = p->next)
+            for (auto node : n->seq())
             {
-                node_free(p->node);
+                node_free(node);
             }
             n->list_free();
             break;
@@ -137,9 +147,8 @@ void node_make_seq(int invisible, struct node** node)
         return;
     }
 
-    struct list* nuw = nullptr;
-
-    list_push_back(&nuw, *node);
+    list* nuw = new list();
+    nuw->add(*node);
 
     *node = node_create_seq(invisible, nuw);
 }
@@ -182,10 +191,10 @@ bool node_compare(const struct node* a, const struct node* b)
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            return list_compare(a->altx(), b->altx());
+            return a->alt().eq(b->alt());
 
         case NODE_SEQ:
-            return list_compare(a->seqx(), b->seqx());
+            return a->seq().eq(b->seq());
 
         case NODE_LOOP:
             return node_compare(a->u.loop.forward, b->u.loop.forward)

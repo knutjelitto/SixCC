@@ -25,20 +25,15 @@
 #include "../rrd/list.h"
 #include "../compiler_specific.h"
 
-static void add_alt(int invisible, struct list **list, const text& text)
+static void add_alt(int invisible, list& list, const text& text)
 {
-	assert(list != nullptr);
-
 	struct node *node = node_create_cs_literal(invisible, text);
-
-	list_push_back(list, node);
+	list.add(node);
 }
 
 /* TODO: centralise */
-WARN_UNUSED_RESULT static int permute_cases(int invisible, struct list** list, text& text)
+WARN_UNUSED_RESULT static int permute_cases(int invisible, list& list, text& text)
 {
-	assert(list != nullptr);
-
 	size_t i, j;
 	unsigned long num_alphas, perm_count;
 	unsigned long alpha_inds[CHAR_BIT * sizeof i - 1]; /* - 1 because we shift (1 << n) by this size */
@@ -105,11 +100,10 @@ WARN_UNUSED_RESULT static int rewrite_ci(struct node* node)
 	tmp = node->literal();
 
 	/* we repurpose the existing node, which breaks abstraction for freeing */
-	node->type = NODE_ALT;
-	node->xxx_list = nullptr;
+	node->become_alt();
 
 	/* invisibility of new alts is inherited from n->invisible itself */
-	if (!permute_cases(node->invisible, &node->xxx_list, tmp))
+	if (!permute_cases(node->invisible, node->alt(), tmp))
 	{
 		return 0;
 	}
@@ -142,28 +136,34 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			for (p = n->altx(); p != nullptr; p = p->next)
+			for (auto node : n->alt())
 			{
-				if (!node_walk(p->node))
+				if (!node_walk(node))
+				{
 					return 0;
+				}
 			}
-
 			break;
 
 		case NODE_SEQ:
-			for (p = n->seqx(); p != nullptr; p = p->next)
+			for (auto node : n->seq())
 			{
-				if (!node_walk(p->node))
+				if (!node_walk(node))
+				{
 					return 0;
+				}
 			}
-
 			break;
 
 		case NODE_LOOP:
 			if (!node_walk(n->u.loop.forward))
+			{
 				return 0;
+			}
 			if (!node_walk(n->u.loop.backward))
+			{
 				return 0;
+			}
 
 			break;
 	}

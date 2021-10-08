@@ -27,23 +27,22 @@ static int transform_terms(const struct ast_alt* alt, struct node** r)
 {
 	assert(r != nullptr);
 
-	struct list* list, ** tail;
-	const struct ast_term* p;
+	struct list* list;
+	struct list** tail;
+	const struct ast_term* term;
 
-	list = nullptr;
-	tail = &list;
+	list = new struct list();
 
-	for (p = alt->terms; p != nullptr; p = p->next)
+	for (term = alt->terms; term != nullptr; term = term->next)
 	{
 		struct node* node;
 
-		if (!transform_term(p, &node))
+		if (!transform_term(term, &node))
 		{
 			goto error;
 		}
 
-		list_push_back(tail, node);
-		tail = &(*tail)->next;
+		list->add(node);
 	}
 
 	*r = node_create_seq(alt->invisible, list);
@@ -52,7 +51,7 @@ static int transform_terms(const struct ast_alt* alt, struct node** r)
 
 error:
 
-	list_free(&list);
+	list_free(*list);
 
 	return 0;
 }
@@ -64,22 +63,20 @@ static int transform_alts(const struct ast_alt* alts, struct node** r)
 
 	struct list* list;
 	struct list** tail;
-	const struct ast_alt* p;
+	const struct ast_alt* alt;
 
-	list = nullptr;
-	tail = &list;
+	list = new struct list();
 
-	for (p = alts; p != nullptr; p = p->next)
+	for (alt = alts; alt != nullptr; alt = alt->next)
 	{
 		struct node* node;
 
-		if (!transform_terms(p, &node))
+		if (!transform_terms(alt, &node))
 		{
 			goto error;
 		}
 
-		list_push_back(tail, node);
-		tail = &(*tail)->next;
+		list->add(node);
 	}
 
 	*r = node_create_alt(alts->invisible, list);
@@ -88,7 +85,7 @@ static int transform_alts(const struct ast_alt* alts, struct node** r)
 
 error:
 
-	list_free(&list);
+	list_free(*list);
 
 	return 0;
 }
@@ -134,19 +131,18 @@ static int single_term(const struct ast_term* term, struct node** r)
 
 static int optional_term(const struct ast_term* term, struct node** r)
 {
-	struct node* n;
-	struct list* list;
-
 	assert(r != nullptr);
+
+	struct node* n;
 
 	if (!single_term(term, &n))
 	{
 		return 0;
 	}
 
-	list = nullptr;
+	struct list* list = new struct list();
 
-	list_push_back(&list, n);
+	list->add(n);
 
 	*r = node_create_alt_skippable(term->invisible, list);
 

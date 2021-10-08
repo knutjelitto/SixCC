@@ -14,6 +14,8 @@
 #include "node.h"
 #include "list.h"
 
+#if true
+#else
 static int bottom_loop(struct node** np)
 {
     assert(np != nullptr);
@@ -63,16 +65,17 @@ static int bottom_loop(struct node** np)
 
     /* short-circuit */
     {
-        struct list* nuw = nullptr;
+        struct list* nuw = new list();
 
-        list_push_back(&nuw, n);
-        list_push_back(&nuw, nullptr);
+        nuw->add(n);
+        nuw->add(nullptr);
 
         *np = node_create_alt(n->invisible, nuw);
     }
 
     return 1;
 }
+#endif
 
 /*
  * for loops with nothing on top and more than one thing on the bottom,
@@ -82,6 +85,8 @@ static int bottom_loop(struct node** np)
  */
 void rrd_pretty_bottom(int* changed, struct node** n)
 {
+#if true
+#else
     assert(n != nullptr);
 
     if (*n == nullptr)
@@ -107,5 +112,6 @@ void rrd_pretty_bottom(int* changed, struct node** n)
         case NODE_SEQ:
             break;
     }
+#endif
 }
 

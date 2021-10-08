@@ -20,8 +20,7 @@
 
 static void ci_alt(int* changed, struct node* n)
 {
-	struct list* list;
-	struct list* p;
+	assert(n->type == NODE_ALT || n->type == NODE_ALT_SKIPPABLE);
 
 	/*
 	 * If every text node in an alt list is a single character,
@@ -30,20 +29,20 @@ static void ci_alt(int* changed, struct node* n)
 	 * The end effect is to produce an ellipsis for uppercase
 	 * and an ellipsis for lowercase.
 	 */
-	list = nullptr;
+	struct list* list = new struct list();
 
-	for (p = n->altx(); p != nullptr; p = p->next)
+	for (auto node : n->alt())
 	{
-		if (p->node == nullptr)
+		if (node == nullptr)
 		{
 			continue;
 		}
 
-		switch (p->node->type)
+		switch (node->type)
 		{
 			case NODE_CI_LITERAL:
 			case NODE_CS_LITERAL:
-				if (p->node->literal().length() != 1)
+				if (node->literal().length() != 1)
 				{
 					return;
 				}
@@ -60,30 +59,29 @@ static void ci_alt(int* changed, struct node* n)
 		}
 	}
 
-	for (p = n->altx(); p != nullptr; p = p->next)
+	for (auto node : n->alt())
 	{
-		if (p->node == nullptr)
+		if (node == nullptr)
 		{
 			continue;
 		}
 
 		text t;
 
-		switch (p->node->type)
+		switch (node->type)
 		{
 			case NODE_CI_LITERAL:
 			{
 
-				if (!isalpha((unsigned char)p->node->literal()[0]))
+				if (!isalpha((unsigned char)node->literal()[0]))
 				{
 					break;
 				}
 
-				p->node->type = NODE_CS_LITERAL;
-				p->node->tolower();
+				node->become_cs();
 
-				struct node* nuw = node_create_cs_literal(p->node->invisible, p->node->literal().toupper());
-				list_push_back(&list, nuw);
+				struct node* nuw = node_create_cs_literal(node->invisible, node->literal().toupper());
+				list->add(nuw);
 
 				*changed = 1;
 
@@ -99,18 +97,12 @@ static void ci_alt(int* changed, struct node* n)
 			case NODE_LOOP:
 				break;
 		}
+
 	}
 
 	/* append list */
 	{
-		struct list** tail;
-
-		/* TODO: centralise with list_tail() */
-		for (tail = &n->xxx_list; *tail != nullptr; tail = &(*tail)->next)
-			;
-
-		assert(*tail == nullptr);
-		*tail = list;
+		n->alt().add(*list);
 	}
 }
 

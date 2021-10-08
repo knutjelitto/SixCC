@@ -111,8 +111,6 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 	assert(!n->invisible);
 
-	const struct list* p;
-
 	switch (n->type)
 	{
 		case NODE_CI_LITERAL:
@@ -143,15 +141,17 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
+		{
+			bool more = false;
 			writer->printf("<");
-
-			for (p = n->altx(); p != nullptr; p = p->next)
+			for (auto node : n->alt())
 			{
-				node_walk(writer, p->node);
-				if (p->next != nullptr)
+				if (more)
 				{
 					writer->printf(", ");
 				}
+				more = true;
+				node_walk(writer, node);
 			}
 			writer->printf(">");
 
@@ -161,20 +161,25 @@ static void node_walk(iwriter* writer, const struct node* n)
 			}
 
 			break;
+		}
 
 		case NODE_SEQ:
-			writer->printf("[");
-			for (p = n->seqx(); p != nullptr; p = p->next)
+		{
+			bool more = false;
+			writer->puts("[");
+			for (auto node : n->seq())
 			{
-				node_walk(writer, p->node);
-				if (p->next != nullptr)
+				if (more)
 				{
 					writer->printf(" ");
 				}
+				more = true;
+				node_walk(writer, node);
 			}
-			writer->printf("]");
+			writer->puts("]");
 
 			break;
+		}
 
 		case NODE_LOOP:
 		{

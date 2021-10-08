@@ -220,7 +220,7 @@
     </ClCompile>
     <ClCompile Include="src\rrll\rrll-output.cpp" />
     <ClCompile Include="src\rrparcon\rrparcon-output.cpp" />
-    <ClCompile Include="src\rrta\output.cpp" />
+    <ClCompile Include="src\rrta\rrta-output.cpp" />
     <ClCompile Include="src\rrtdump\rrtdump-output.cpp" />
     <ClCompile Include="src\rrtext\rrtext-output.cpp" />
     <ClCompile Include="src\sid\sid-output.cpp" />

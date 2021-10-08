@@ -13,17 +13,9 @@ struct node;
 
 struct list : std::vector<struct node*>
 {
-	struct node *node;
-	struct list *next;
-
-	inline int count()
+	inline void drop(int index)
 	{
-		return size();
-	}
-
-	inline void free()
-	{
-		clear();
+		erase(begin() + index);
 	}
 
 	inline void add(struct node* node)
@@ -39,22 +31,67 @@ struct list : std::vector<struct node*>
 		}
 	}
 
-	inline struct node* pop()
+	inline void replace(const list& other)
 	{
-		struct node* node = *begin();
-		erase(begin());
-		return node;
+		clear();
+		add(other);
 	}
 
-	bool eq(const list& other);
+	inline struct node* pop()
+	{
+		if (size() > 0)
+		{
+			struct node* node = *begin();
+			erase(begin());
+			return node;
+		}
+		return nullptr;
+	}
+
+	inline node* single_or_default() const
+	{
+		if (size() == 1)
+		{
+			return *begin();
+		}
+		return nullptr;
+	}
+
+	inline struct node* last_or_default() const
+	{
+		if (size() > 0)
+		{
+			return *rbegin();
+		}
+		return nullptr;
+	}
+
+	inline struct node* first() const
+	{
+		return *begin();
+	}
+
+	inline struct node* first_or_default() const
+	{
+		if (size() > 0)
+		{
+			return *begin();
+		}
+		return nullptr;
+	}
+
+	bool eq(const list& other) const;
+
+private:
+	struct node* node;
+	struct list* next;
 };
 
-void list_push_back(list** list, node* node);
-node* list_pop_front(list** list);
-void list_append(list **dst, list *src);
-int list_compare(const list *a, const list *b);
-list** list_tail(list** head);
-void list_free(list **list);
-unsigned list_count(const list *list);
+node* list_pop_front(list& list);
+void list_append(list& dst, list& src);
+int list_compare(const list& a, const list& b);
+node* list_tail(list& list);
+void list_free(list& list);
+unsigned list_count(const list& list);
 
 #endif

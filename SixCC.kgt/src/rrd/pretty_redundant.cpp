@@ -14,45 +14,50 @@
 #include "node.h"
 #include "list.h"
 
-static void redundant_alt(int* changed, struct node* n, struct node** np, int isskippable)
+#if true
+#else
+static void redundant_alt(int* changed, struct node* n, struct node** np)
 {
+	assert(n->type == NODE_ALT || n->type == NODE_ALT_SKIPPABLE);
+
+	bool isskippable = n->type == NODE_ALT_SKIPPABLE;
 	int nc = 0;
 	struct list** p;
 	struct node** loop;
 
-	loop = NULL;
+	loop = nullptr;
 
-	for (p = &n->xxx_list; *p != NULL; p = &(**p).next)
+	for (p = &n->xxx_list; *p != nullptr; p = &(**p).next)
 	{
 		nc++;
 
-		if ((*p)->node != NULL && (*p)->node->type == NODE_LOOP)
+		if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP)
 		{
 			loop = &(*p)->node;
 		}
 	}
 
-	if (nc == 2 && isskippable && loop != NULL)
+	if (nc == 2 && isskippable && loop != nullptr)
 	{
 		struct node* l;
 
 		l = *loop;
 
 		/* special case: if an optional loop has an empty half, we can elide the NODE_ALT */
-		if (l->u.loop.forward == NULL)
+		if (l->u.loop.forward == nullptr)
 		{
 			*np = *loop;
-			*loop = NULL;
+			*loop = nullptr;
 			node_free(n);
 
 			*changed = 1;
 		}
-		else if (l->u.loop.backward == NULL)
+		else if (l->u.loop.backward == nullptr)
 		{
 			loop_flip(l);
 
 			*np = *loop;
-			*loop = NULL;
+			*loop = nullptr;
 
 			/* XXX:
 						node_free(n);
@@ -62,28 +67,31 @@ static void redundant_alt(int* changed, struct node* n, struct node** np, int is
 		}
 	}
 }
+#endif
 
+#if true
+#else
 static void redundant_loop(int* changed, struct node* n, struct node** np)
 {
-	struct node** inner = NULL;
+	struct node** inner = nullptr;
 	struct node* loop;
 
-	if (n->u.loop.forward != NULL && n->u.loop.forward->type == NODE_LOOP && n->u.loop.backward == NULL)
+	if (n->u.loop.forward != nullptr && n->u.loop.forward->type == NODE_LOOP && n->u.loop.backward == nullptr)
 	{
 		loop = n->u.loop.forward;
-		if (loop->u.loop.forward == NULL || loop->u.loop.backward == NULL)
+		if (loop->u.loop.forward == nullptr || loop->u.loop.backward == nullptr)
 		{
 			inner = &n->u.loop.forward;
 		}
 	}
-	else if (n->u.loop.backward != NULL && n->u.loop.backward->type == NODE_LOOP && n->u.loop.forward == NULL)
+	else if (n->u.loop.backward != nullptr && n->u.loop.backward->type == NODE_LOOP && n->u.loop.forward == nullptr)
 	{
 		loop = n->u.loop.backward;
-		if (loop->u.loop.forward == NULL)
+		if (loop->u.loop.forward == nullptr)
 		{
 			inner = &n->u.loop.backward;
 		}
-		else if (loop->u.loop.backward == NULL)
+		else if (loop->u.loop.backward == nullptr)
 		{
 			loop_flip(loop);
 			inner = &n->u.loop.backward;
@@ -93,17 +101,20 @@ static void redundant_loop(int* changed, struct node* n, struct node** np)
 	if (inner)
 	{
 		*np = *inner;
-		*inner = NULL;
+		*inner = nullptr;
 		node_free(n);
 		*changed = 1;
 	}
 }
+#endif
 
 void rrd_pretty_redundant(int* changed, struct node** n)
 {
-	assert(n != NULL);
+#if true
+#else
+	assert(n != nullptr);
 
-	if (*n == NULL)
+	if (*n == nullptr)
 	{
 		return;
 	}
@@ -112,7 +123,7 @@ void rrd_pretty_redundant(int* changed, struct node** n)
 	{
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			redundant_alt(changed, *n, n, (*n)->type == NODE_ALT_SKIPPABLE);
+			redundant_alt(changed, *n, n);
 			break;
 
 		case NODE_LOOP:
@@ -126,5 +137,6 @@ void rrd_pretty_redundant(int* changed, struct node** n)
 		case NODE_SEQ:
 			break;
 	}
+#endif
 }
 

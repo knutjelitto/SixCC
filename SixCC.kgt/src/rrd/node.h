@@ -54,6 +54,10 @@ struct node
 		xxx_text = xxx_text.tolower();
 	}
 
+	void become_cs();
+	void become_alt();
+	void become_alt_skippable();
+
 	const text& literal() const
 	{
 		assert(type == NODE_CI_LITERAL || type == NODE_CS_LITERAL);
@@ -75,12 +79,17 @@ struct node
 		return xxx_text;
 	}
 
-	const list& alt() const
+	list& alt() const
 	{
 		return *xxx_list;
 	}
 
-	const list& seq() const
+	list& seq() const
+	{
+		return *xxx_list;
+	}
+
+	list& list() const
 	{
 		return *xxx_list;
 	}

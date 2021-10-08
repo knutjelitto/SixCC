@@ -96,21 +96,19 @@ static void print_comment(iwriter *f, int depth, const char *fmt, ...)
 	va_end(ap);
 }
 
-WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int depth)
+WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, int depth)
 {
-	assert(f != nullptr);
+	assert(writer != nullptr);
 
 	if (n == nullptr)
 	{
-		print_indent(f, depth);
-		f->puts("Nothing()");
+		print_indent(writer, depth);
+		writer->puts("Nothing()");
 
 		return 1;
 	}
 
 	assert(!n->invisible);
-
-	const struct list* p;
 
 	switch (n->type)
 	{
@@ -119,18 +117,18 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 			return 0;
 
 		case NODE_CS_LITERAL:
-			print_indent(f, depth);
-			f->printf("text(\"");
-			f->escape(n->literal(), escputc);
-			f->printf("\")");
+			print_indent(writer, depth);
+			writer->printf("text(\"");
+			writer->escape(n->literal(), escputc);
+			writer->printf("\")");
 
 			break;
 
 		case NODE_RULE:
-			print_indent(f, depth);
-			f->printf("production(\"");
-			f->escape(n->name(), escputc);
-			f->printf("\")");
+			print_indent(writer, depth);
+			writer->printf("production(\"");
+			writer->escape(n->name(), escputc);
+			writer->printf("\")");
 
 			break;
 
@@ -140,101 +138,112 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			print_indent(f, depth);
-			f->printf("Or(\n");
+		{
+			bool more = false;
+
+			print_indent(writer, depth);
+			writer->printf("Or(\n");
 
 			if (n->type == NODE_ALT_SKIPPABLE)
 			{
-				print_indent(f, depth + 1);
-				f->printf("Nothing(),\n");
+				print_indent(writer, depth + 1);
+				writer->printf("Nothing(),\n");
 			}
 
-			for (p = n->altx(); p != nullptr; p = p->next)
+			for (auto node : n->alt())
 			{
-				if (!node_walk(f, p->node, depth + 1))
-					return 0;
-				if (p->next != nullptr)
+				if (more)
 				{
-					f->printf(",");
-					f->printf("\n");
+					writer->printf(",");
+					writer->printf("\n");
+				}
+				more = true;
+				if (!node_walk(writer, node, depth + 1))
+				{
+					return 0;
 				}
 			}
-			f->printf("\n");
+			writer->printf("\n");
 
-			print_indent(f, depth);
-			f->printf(")");
+			print_indent(writer, depth);
+			writer->printf(")");
 
 			break;
+		}
 
 		case NODE_SEQ:
-			print_indent(f, depth);
-			f->printf("Then(\n");
-			for (p = n->seqx(); p != nullptr; p = p->next)
+		{
+			bool more = false;
+			print_indent(writer, depth);
+			writer->printf("Then(\n");
+			for (auto node : n->seq())
 			{
-				if (!node_walk(f, p->node, depth + 1))
+				if (more)
+				{
+					writer->printf(",");
+					writer->printf("\n");
+				}
+				more = true;
+				if (!node_walk(writer, node, depth + 1))
 				{
 					return 0;
 				}
-				if (p->next != nullptr)
-				{
-					f->printf(",");
-					f->printf("\n");
-				}
 			}
-			f->printf("\n");
+			writer->printf("\n");
 
-			print_indent(f, depth);
-			f->printf(")");
+			print_indent(writer, depth);
+			writer->printf(")");
 
 			break;
+		}
 
 		case NODE_LOOP:
-			print_indent(f, depth);
-			f->printf("Loop(\n");
+			print_indent(writer, depth);
+			writer->printf("Loop(\n");
 
-			if (!node_walk(f, n->u.loop.forward, depth + 1))
+			if (!node_walk(writer, n->u.loop.forward, depth + 1))
 			{
 				return 0;
 			}
-			f->printf(",\n");
+			writer->printf(",\n");
 
 			if (n->u.loop.max == 1 && n->u.loop.min == 1)
 			{
-				print_comment(f, depth + 1, "(exactly once)");
+				print_comment(writer, depth + 1, "(exactly once)");
 				assert(n->u.loop.backward == nullptr);
 			}
 			else if (n->u.loop.max == 0 && n->u.loop.min > 0)
 			{
-				print_comment(f, depth + 1, "(at least %d times)", n->u.loop.min);
+				print_comment(writer, depth + 1, "(at least %d times)", n->u.loop.min);
 				assert(n->u.loop.backward == nullptr);
 			}
 			else if (n->u.loop.max > 0 && n->u.loop.min == 0)
 			{
-				print_comment(f, depth + 1, "(up to %d times)", n->u.loop.max);
+				print_comment(writer, depth + 1, "(up to %d times)", n->u.loop.max);
 				assert(n->u.loop.backward == nullptr);
 			}
 			else if (n->u.loop.max > 0 && n->u.loop.min == n->u.loop.max)
 			{
-				print_comment(f, depth + 1, "(%d times)", n->u.loop.max);
+				print_comment(writer, depth + 1, "(%d times)", n->u.loop.max);
 				assert(n->u.loop.backward == nullptr);
 			}
 			else if (n->u.loop.max > 1 && n->u.loop.min > 1)
 			{
-				print_comment(f, depth + 1, "(%d-%d times)", n->u.loop.min, n->u.loop.max);
+				print_comment(writer, depth + 1, "(%d-%d times)", n->u.loop.min, n->u.loop.max);
 				assert(n->u.loop.backward == nullptr);
 			}
 			else
 			{
-				if (!node_walk(f, n->u.loop.backward, depth))
+				if (!node_walk(writer, n->u.loop.backward, depth))
 				{
 					return 0;
 				}
 			}
 
-			f->printf("\n");
+			writer->printf("\n");
 
-			print_indent(f, depth);
-			f->printf(")");
+			print_indent(writer, depth);
+			writer->printf(")");
 			break;
 	}
 	return 1;

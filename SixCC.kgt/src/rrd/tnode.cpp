@@ -156,19 +156,18 @@ static bool char_terminal(const struct node* node, unsigned char* c)
 	return true;
 }
 
-static void collate_ranges(struct bm *bm, const struct list *list)
+static void collate_ranges(struct bm* bm, const list& list)
 {
-	const struct list *p;
-
 	assert(bm != nullptr);
-	assert(list != nullptr);
 
 	bm_clear(bm);
 
-	for (p = list; p != nullptr; p = p->next) {
+	for (auto node : list)
+	{
 		unsigned char c;
 
-		if (!char_terminal(p->node, &c)) {
+		if (!char_terminal(node, &c))
+		{
 			continue;
 		}
 
@@ -176,22 +175,20 @@ static void collate_ranges(struct bm *bm, const struct list *list)
 	}
 }
 
-static const struct node* find_node(const struct list* list, char d)
+static const struct node* find_node(const list& list, char d)
 {
-	const struct list* p;
-
-	for (p = list; p != nullptr; p = p->next)
+	for (auto node : list)
 	{
 		unsigned char c;
 
-		if (!char_terminal(p->node, &c))
+		if (!char_terminal(node, &c))
 		{
 			continue;
 		}
 
 		if (c == (unsigned char)d)
 		{
-			return p->node;
+			return node;
 		}
 	}
 
@@ -199,9 +196,8 @@ static const struct node* find_node(const struct list* list, char d)
 	assert(!"unreached");
 }
 
-static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl, const struct dim* dim)
+static struct tnode_vlist tnode_create_alt_list(const list& list, int rtl, const struct dim* dim)
 {
-	const struct list* p;
 	struct tnode_vlist nuw;
 	size_t i;
 	struct bm bm;
@@ -209,7 +205,7 @@ static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl
 
 	assert(dim != nullptr);
 
-	nuw.n = list_count(list); /* worst case */
+	nuw.n = list.size(); /* worst case */
 	if (nuw.n == 0)
 	{
 		nuw.a = nullptr;
@@ -218,33 +214,28 @@ static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl
 
 	collate_ranges(&bm, list);
 
-	//nuw.a = (struct tnode**)xmalloc(sizeof *nuw.a * nuw.n);
 	nuw.a = new tnode* [nuw.n];
 
 	hi = -1;
 
 	i = 0;
-	p = list;
 
 	/* TODO: how to handle invisible alts? have the corner tiles hidden?
 	at the moment we render an empty line, which makes sense in seqs but not in alts
 	*/
-
-	while (p != nullptr)
+	for (auto node : list)
 	{
 		unsigned char c;
 
-		if (!char_terminal(p->node, &c))
+		if (!char_terminal(node, &c))
 		{
-			nuw.a[i++] = tnode_create_node(p->node, rtl, dim);
-			p = p->next;
+			nuw.a[i++] = tnode_create_node(node, rtl, dim);
 			continue;
 		}
 
 		if (!bm_get(&bm, c))
 		{
 			/* already output */
-			p = p->next;
 			continue;
 		}
 
@@ -265,7 +256,6 @@ static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl
 			bm_unset(&bm, lo);
 
 			hi = lo;
-			p = p->next;
 			continue;
 		}
 
@@ -281,7 +271,6 @@ static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl
 			bm_unset(&bm, lo);
 
 			hi = lo;
-			p = p->next;
 			continue;
 		}
 
@@ -351,15 +340,14 @@ static struct tnode_vlist tnode_create_alt_list(const struct list* list, int rtl
 	return nuw;
 }
 
-static struct tnode_hlist tnode_create_hlist(const struct list* list, int rtl, const struct dim* dim)
+static struct tnode_hlist tnode_create_hlist(const list& list, int rtl, const struct dim* dim)
 {
 	const struct list* p;
 	struct tnode_hlist nuw;
-	size_t i;
 
 	assert(dim != nullptr);
 
-	nuw.n = list_count(list);
+	nuw.n = list.size();
 	if (nuw.n == 0)
 	{
 		nuw.a = nullptr;
@@ -368,9 +356,10 @@ static struct tnode_hlist tnode_create_hlist(const struct list* list, int rtl, c
 
 	nuw.a = new struct tnode* [nuw.n];
 
-	for (i = 0, p = list; p != nullptr; p = p->next)
+	int i = 0;
+	for (auto node : list)
 	{
-		nuw.a[!rtl ? i : nuw.n - i - 1] = tnode_create_node(p->node, rtl, dim);
+		nuw.a[!rtl ? i : nuw.n - i - 1] = tnode_create_node(node, rtl, dim);
 		i++;
 	}
 
@@ -379,10 +368,10 @@ static struct tnode_hlist tnode_create_hlist(const struct list* list, int rtl, c
 	return nuw;
 }
 
-static const char *
-times(unsigned n)
+static const char* times(unsigned n)
 {
-	const char *a[] = {
+	const char* a[] =
+	{
 		"never",
 		"once", "twice",
 		"three times", "four times", "five times", "six times",
@@ -390,7 +379,8 @@ times(unsigned n)
 		"eleven times", "twelve times"
 	};
 
-	if (n > sizeof a / sizeof *a - 1) {
+	if (n > sizeof(a) / sizeof(*a) - 1)
+	{
 		return nullptr;
 	}
 
@@ -563,14 +553,14 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 			{
 				struct list list;
 
-				list.node = nullptr;
-				list.next = node->altx();
+				list.add(nullptr);
+				list.add(node->alt());
 
-				nuw->u.vlist = tnode_create_alt_list(&list, rtl, dim);
+				nuw->u.vlist = tnode_create_alt_list(list, rtl, dim);
 			}
 			else
 			{
-				nuw->u.vlist = tnode_create_alt_list(node->altx(), rtl, dim);
+				nuw->u.vlist = tnode_create_alt_list(node->alt(), rtl, dim);
 			}
 
 			{
@@ -707,7 +697,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 		case NODE_SEQ:
 			nuw->type = TNODE_HLIST;
-			nuw->u.hlist = tnode_create_hlist(node->seqx(), rtl, dim);
+			nuw->u.hlist = tnode_create_hlist(node->seq(), rtl, dim);
 
 			{
 				unsigned w;

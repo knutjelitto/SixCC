@@ -42,6 +42,11 @@ public:
 	{
 	}
 
+	inline void clear()
+	{
+		std::string::clear();
+	}
+
 	inline char operator[](int index) const
 	{
 		return std::string::operator[](index);

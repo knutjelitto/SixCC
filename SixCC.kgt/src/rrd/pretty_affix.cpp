@@ -14,6 +14,8 @@
 #include "node.h"
 #include "list.h"
 
+#if true
+#else
 static void loop_inc(struct node* loop)
 {
 	assert(loop != nullptr);
@@ -170,9 +172,12 @@ static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 
 	*changed = 1;
 }
+#endif
 
 void rrd_pretty_affixes(int* changed, struct node** n)
 {
+#if true
+#else
 	assert(n != nullptr);
 
 	if (*n == nullptr)
@@ -247,5 +252,6 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 		case NODE_LOOP:
 			break;
 	}
+#endif
 }
 
