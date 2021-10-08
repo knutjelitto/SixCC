@@ -30,8 +30,6 @@ static void node_walk(void (*f)(int*, node**), int* changed, node** rrd_node)
 		return;
 	}
 
-	struct list** p;
-
 	switch ((*rrd_node)->type)
 	{
 		case NODE_ALT:
