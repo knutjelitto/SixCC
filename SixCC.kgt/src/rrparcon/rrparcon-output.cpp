@@ -149,7 +149,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 				f->printf("Nothing(),\n");
 			}
 
-			for (p = n->alt(); p != nullptr; p = p->next)
+			for (p = n->altx(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(f, p->node, depth + 1))
 					return 0;
@@ -169,7 +169,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* f, const struct node* n, int de
 		case NODE_SEQ:
 			print_indent(f, depth);
 			f->printf("Then(\n");
-			for (p = n->seq(); p != nullptr; p = p->next)
+			for (p = n->seqx(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(f, p->node, depth + 1))
 				{

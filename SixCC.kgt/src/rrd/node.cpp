@@ -55,7 +55,7 @@ void node_free(node* n)
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            for (p = n->alt(); p != nullptr; p = p->next)
+            for (p = n->altx(); p != nullptr; p = p->next)
             {
                 node_free(p->node);
             }
@@ -63,7 +63,7 @@ void node_free(node* n)
             break;
 
         case NODE_SEQ:
-            for (p = n->seq(); p != nullptr; p = p->next)
+            for (p = n->seqx(); p != nullptr; p = p->next)
             {
                 node_free(p->node);
             }
@@ -182,10 +182,10 @@ bool node_compare(const struct node* a, const struct node* b)
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            return list_compare(a->alt(), b->alt());
+            return list_compare(a->altx(), b->altx());
 
         case NODE_SEQ:
-            return list_compare(a->seq(), b->seq());
+            return list_compare(a->seqx(), b->seqx());
 
         case NODE_LOOP:
             return node_compare(a->u.loop.forward, b->u.loop.forward)

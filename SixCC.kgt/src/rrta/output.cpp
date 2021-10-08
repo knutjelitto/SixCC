@@ -143,7 +143,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
 			print_indent(writer, depth);
-			writer->printf("Choice(%d,\n", normal(n->alt()));
+			writer->printf("Choice(%d,\n", normal(n->altx()));
 
 			if (n->type == NODE_ALT_SKIPPABLE)
 			{
@@ -151,7 +151,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 				writer->printf("Skip(),\n");
 			}
 
-			for (p = n->alt(); p != nullptr; p = p->next)
+			for (p = n->altx(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(writer, p->node, depth + 1))
 				{
@@ -170,7 +170,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 		case NODE_SEQ:
 			print_indent(writer, depth);
 			writer->printf("Sequence(\n");
-			for (p = n->seq(); p != nullptr; p = p->next)
+			for (p = n->seqx(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(writer, p->node, depth + 1))
 				{

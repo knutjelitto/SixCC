@@ -45,7 +45,7 @@ static int bottom_loop(struct node** np)
 
         c = 0;
 
-        for (p = n->u.loop.backward->alt(); p != nullptr; p = p->next)
+        for (p = n->u.loop.backward->altx(); p != nullptr; p = p->next)
         {
             if (p->node->type == NODE_ALT || p->node->type == NODE_ALT_SKIPPABLE || p->node->type == NODE_SEQ || p->node->type == NODE_LOOP)
             {

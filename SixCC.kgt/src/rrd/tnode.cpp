@@ -564,13 +564,13 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 				struct list list;
 
 				list.node = nullptr;
-				list.next = node->alt();
+				list.next = node->altx();
 
 				nuw->u.vlist = tnode_create_alt_list(&list, rtl, dim);
 			}
 			else
 			{
-				nuw->u.vlist = tnode_create_alt_list(node->alt(), rtl, dim);
+				nuw->u.vlist = tnode_create_alt_list(node->altx(), rtl, dim);
 			}
 
 			{
@@ -707,7 +707,7 @@ static struct tnode* tnode_create_node(const struct node* node, int rtl, const s
 
 		case NODE_SEQ:
 			nuw->type = TNODE_HLIST;
-			nuw->u.hlist = tnode_create_hlist(node->seq(), rtl, dim);
+			nuw->u.hlist = tnode_create_hlist(node->seqx(), rtl, dim);
 
 			{
 				unsigned w;

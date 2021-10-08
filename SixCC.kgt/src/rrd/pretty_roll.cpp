@@ -64,11 +64,11 @@ roll_prefix(int* changed, struct list** entry, struct node* loop)
 
 	assert(loop->u.loop.forward != nullptr);
 	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->seq() != nullptr);
+	assert(loop->u.loop.forward->seqx() != nullptr);
 
 	/* if destination is a skip node, destroy that node first */
 	/* TODO: centralise */
-	if (loop->u.loop.forward->seq()->node == nullptr)
+	if (loop->u.loop.forward->seqx()->node == nullptr)
 	{
 		node_free(list_pop_front(&loop->u.loop.forward->xxx_list));
 	}
@@ -82,14 +82,14 @@ roll_prefix(int* changed, struct list** entry, struct node* loop)
 	{
 		assert((*q)->next == nullptr);
 
-		(*q)->next = loop->u.loop.forward->seq();
+		(*q)->next = loop->u.loop.forward->seqx();
 		loop->u.loop.forward->xxx_list = (*q);
 
 		*q = nullptr;
 	}
 
 	/* we don't have empty lists */
-	if (loop->u.loop.backward->seq() == nullptr)
+	if (loop->u.loop.backward->seqx() == nullptr)
 	{
 		node_free(loop->u.loop.backward);
 		loop->u.loop.backward = nullptr;
@@ -149,11 +149,11 @@ roll_suffix(int* changed, struct list** exit, struct node* loop)
 
 	assert(loop->u.loop.forward != nullptr);
 	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->seq() != nullptr);
+	assert(loop->u.loop.forward->seqx() != nullptr);
 
 	/* if destination is a skip node, destroy that node first */
 	/* TODO: centralise */
-	if (loop->u.loop.forward->seq()->node == nullptr)
+	if (loop->u.loop.forward->seqx()->node == nullptr)
 	{
 		node_free(list_pop_front(&loop->u.loop.forward->xxx_list));
 	}
@@ -176,7 +176,7 @@ roll_suffix(int* changed, struct list** exit, struct node* loop)
 	}
 
 	/* we don't have empty lists */
-	if (loop->u.loop.backward->seq() == nullptr)
+	if (loop->u.loop.backward->seqx() == nullptr)
 	{
 		node_free(loop->u.loop.backward);
 		loop->u.loop.backward = nullptr;

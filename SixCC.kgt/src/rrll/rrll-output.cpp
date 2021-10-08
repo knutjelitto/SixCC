@@ -145,7 +145,7 @@ static void node_walk(iwriter* writer, const struct node* n)
 		case NODE_ALT_SKIPPABLE:
 			writer->printf("<");
 
-			for (p = n->alt(); p != nullptr; p = p->next)
+			for (p = n->altx(); p != nullptr; p = p->next)
 			{
 				node_walk(writer, p->node);
 				if (p->next != nullptr)
@@ -164,7 +164,7 @@ static void node_walk(iwriter* writer, const struct node* n)
 
 		case NODE_SEQ:
 			writer->printf("[");
-			for (p = n->seq(); p != nullptr; p = p->next)
+			for (p = n->seqx(); p != nullptr; p = p->next)
 			{
 				node_walk(writer, p->node);
 				if (p->next != nullptr)

@@ -32,7 +32,7 @@ static void ci_alt(int* changed, struct node* n)
 	 */
 	list = nullptr;
 
-	for (p = n->alt(); p != nullptr; p = p->next)
+	for (p = n->altx(); p != nullptr; p = p->next)
 	{
 		if (p->node == nullptr)
 		{
@@ -60,7 +60,7 @@ static void ci_alt(int* changed, struct node* n)
 		}
 	}
 
-	for (p = n->alt(); p != nullptr; p = p->next)
+	for (p = n->altx(); p != nullptr; p = p->next)
 	{
 		if (p->node == nullptr)
 		{

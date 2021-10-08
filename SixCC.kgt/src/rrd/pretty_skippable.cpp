@@ -20,7 +20,7 @@ static void skippable_alt(int* changed, struct node* n)
 {
 	struct list* p;
 
-	for (p = n->alt(); p != nullptr; p = p->next)
+	for (p = n->altx(); p != nullptr; p = p->next)
 	{
 		if (p->node == nullptr)
 		{

@@ -142,7 +142,7 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			for (p = n->alt(); p != nullptr; p = p->next)
+			for (p = n->altx(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(p->node))
 					return 0;
@@ -151,7 +151,7 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 			break;
 
 		case NODE_SEQ:
-			for (p = n->seq(); p != nullptr; p = p->next)
+			for (p = n->seqx(); p != nullptr; p = p->next)
 			{
 				if (!node_walk(p->node))
 					return 0;

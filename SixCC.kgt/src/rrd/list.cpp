@@ -13,6 +13,23 @@
 #include "list.h"
 #include "node.h"
 
+
+bool list::eq(const list& other)
+{
+    if (size() == other.size())
+    {
+        for (int i = 0; i < size(); i += 1)
+        {
+            if (!node_compare((*this)[i], other[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 void list_push_back(struct list **list, struct node *node)
 {
     assert(list != nullptr);

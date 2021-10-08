@@ -75,14 +75,24 @@ struct node
 		return xxx_text;
 	}
 
-	struct list* alt() const
+	const list& alt() const
+	{
+		return *xxx_list;
+	}
+
+	const list& seq() const
+	{
+		return *xxx_list;
+	}
+
+	struct list* altx() const
 	{
 		assert(type == NODE_ALT || type == NODE_ALT_SKIPPABLE);
 
 		return xxx_list;
 	}
 
-	struct list* seq() const
+	struct list* seqx() const
 	{
 		assert(type == NODE_SEQ);
 

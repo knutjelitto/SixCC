@@ -80,24 +80,24 @@ static void collapse_suffix(int* changed, struct list** head, struct node* loop)
 
 	assert(loop->u.loop.forward != nullptr);
 	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->seq() != nullptr);
+	assert(loop->u.loop.forward->seqx() != nullptr);
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
 	node_make_seq(loop->invisible, &loop->u.loop.backward);
 
 	assert(loop->u.loop.backward != nullptr);
 	assert(loop->u.loop.backward->type == NODE_SEQ);
-	assert(loop->u.loop.backward->seq() != nullptr);
+	assert(loop->u.loop.backward->seqx() != nullptr);
 
 	/* find end of run; anchored at end of loop's seq */
 	{
 		p = *head;
 
-		if (!list_walk_upto(&p, p, loop->u.loop.backward->seq(), nullptr))
+		if (!list_walk_upto(&p, p, loop->u.loop.backward->seqx(), nullptr))
 		{
 			return;
 		}
-		if (!list_walk_upto(&p, p, loop->u.loop.forward->seq(), nullptr))
+		if (!list_walk_upto(&p, p, loop->u.loop.forward->seqx(), nullptr))
 		{
 			return;
 		}
@@ -125,14 +125,14 @@ static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 
 	assert(loop->u.loop.forward != nullptr);
 	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->seq() != nullptr);
+	assert(loop->u.loop.forward->seqx() != nullptr);
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
 	node_make_seq(loop->invisible, &loop->u.loop.backward);
 
 	assert(loop->u.loop.backward != nullptr);
 	assert(loop->u.loop.backward->type == NODE_SEQ);
-	assert(loop->u.loop.backward->seq() != nullptr);
+	assert(loop->u.loop.backward->seqx() != nullptr);
 
 	/* find start of run; anchored at loop node */
 	{
@@ -142,11 +142,11 @@ static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 
 			q = *p;
 
-			if (!list_walk_upto(&q, q, loop->u.loop.forward->seq(), loop))
+			if (!list_walk_upto(&q, q, loop->u.loop.forward->seqx(), loop))
 			{
 				continue;
 			}
-			if (!list_walk_upto(&q, q, loop->u.loop.backward->seq(), loop))
+			if (!list_walk_upto(&q, q, loop->u.loop.backward->seqx(), loop))
 			{
 				continue;
 			}

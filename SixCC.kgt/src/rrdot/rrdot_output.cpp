@@ -94,7 +94,7 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
             writer->printf("\t{ rank = same;\n");
-            for (p = node->alt(); p != nullptr; p = p->next)
+            for (p = node->altx(); p != nullptr; p = p->next)
             {
                 writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
@@ -103,7 +103,7 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
 
         case NODE_SEQ:
             writer->printf("\t{ rank = same;\n");
-            for (p = node->seq(); p != nullptr; p = p->next)
+            for (p = node->seqx(); p != nullptr; p = p->next)
             {
                 writer->printf("\t\t\"%s/%p\";\n", prefix.chars(), map((void*)p->node));
             }
@@ -199,14 +199,14 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
     {
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
-            for (auto p = node->alt(); p != nullptr; p = p->next)
+            for (auto p = node->altx(); p != nullptr; p = p->next)
             {
                 rrd_print_dot(prefix, node, "", p->node);
             }
             break;
 
         case NODE_SEQ:
-            for (auto p = node->seq(); p != nullptr; p = p->next)
+            for (auto p = node->seqx(); p != nullptr; p = p->next)
             {
                 rrd_print_dot(prefix, node, "", p->node);
             }

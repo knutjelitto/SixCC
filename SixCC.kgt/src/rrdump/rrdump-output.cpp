@@ -75,7 +75,7 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 		case NODE_ALT_SKIPPABLE:
 			print_indent(f, depth);
 			f->printf("%s%s: [\n", n->invisible ? " (invisible)" : "", n->type == NODE_ALT ? "ALT" : "ALT|SKIP");
-			for (p = n->alt(); p != nullptr; p = p->next)
+			for (p = n->altx(); p != nullptr; p = p->next)
 			{
 				node_walk(f, p->node, depth + 1);
 			}
@@ -87,7 +87,7 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 		case NODE_SEQ:
 			print_indent(f, depth);
 			f->printf("SEQ%s: [\n", n->invisible ? " (invisible)" : "");
-			for (p = n->seq(); p != nullptr; p = p->next)
+			for (p = n->seqx(); p != nullptr; p = p->next)
 			{
 				node_walk(f, p->node, depth + 1);
 			}
