@@ -58,6 +58,36 @@ static inline std::string trim_copy(std::string s)
     return s;
 }
 
+text text::tolower() const
+{
+	std::string data(*this);
+	std::transform(
+		data.begin(),
+		data.end(),
+		data.begin(),
+		[](unsigned char c)
+		{
+			return std::tolower(c);
+		});
+
+	return text(data);
+}
+
+text text::toupper() const
+{
+	std::string data(*this);
+	std::transform(
+		data.begin(),
+		data.end(),
+		data.begin(),
+		[](unsigned char c)
+		{
+			return std::toupper(c);
+		});
+
+	return text(data);
+}
+
 text text::ltrim() const
 {
     return ltrim_copy(*this);

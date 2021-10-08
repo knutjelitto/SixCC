@@ -80,36 +80,8 @@ public:
 		return tolower().eq(other.tolower());
 	}
 
-	inline text tolower() const
-	{
-		std::string data(*this);
-		std::transform(
-			data.begin(),
-			data.end(),
-			data.begin(),
-			[](unsigned char c)
-		{
-			return std::tolower(c);
-		});
-
-		return text(data);
-	}
-
-	inline text toupper() const
-	{
-		std::string data(*this);
-		std::transform(
-			data.begin(),
-			data.end(),
-			data.begin(),
-			[](unsigned char c)
-		{
-			return std::toupper(c);
-		});
-
-		return text(data);
-	}
-
+	text tolower() const;
+	text toupper() const;
 	text ltrim() const;
 	text rtrim() const;
 	text trim() const;

@@ -177,6 +177,8 @@ struct ast_term_group : ast_term
  */
 struct ast_alt
 {
+    ast_alt() = delete;
+
     ast_alt(int invisible, ast_term* terms)
         : invisible(invisible), terms(terms), next(nullptr)
     {
