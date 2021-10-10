@@ -18,38 +18,43 @@
 #include "list.h"
 #include "pretty.h"
 
-static void node_walk(void (*f)(int*, node**), int* changed, node** rrd_node)
+static void node_walk(node* (*f)(int*, node**), int* changed, node** rrd)
 {
-	assert(rrd_node != nullptr);
+	assert(rrd != nullptr);
 	assert(f != nullptr);
 
-	f(changed, rrd_node);
+	f(changed, rrd);
 
-	if (*rrd_node == nullptr)
+	if (*rrd == nullptr)
 	{
 		return;
 	}
 
-	switch ((*rrd_node)->type)
+	switch ((*rrd)->type)
 	{
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			for (auto node : (*rrd_node)->alt())
+		{
+			list& alt = (*rrd)->alt();
+			for (int i = 0; i < alt.size(); i += 1)
 			{
-				node_walk(f, changed, &node);
+				node_walk(f, changed, &alt[i]);
 			}
 			break;
-
+		}
 		case NODE_SEQ:
-			for (auto node : (*rrd_node)->seq())
+		{
+			list& seq = (*rrd)->seq();
+			for (int i = 0; i < seq.size(); i += 1)
 			{
-				node_walk(f, changed, &node);
+				node_walk(f, changed, &seq[i]);
 			}
 			break;
+		}
 
 		case NODE_LOOP:
-			node_walk(f, changed, &(*rrd_node)->u.loop.forward);
-			node_walk(f, changed, &(*rrd_node)->u.loop.backward);
+			node_walk(f, changed, &(*rrd)->loop.forward);
+			node_walk(f, changed, &(*rrd)->loop.backward);
 			break;
 
 		case NODE_RULE:
@@ -62,11 +67,11 @@ static void node_walk(void (*f)(int*, node**), int* changed, node** rrd_node)
 
 void rrd_pretty(struct node** rrd)
 {
-	int changed;
+	int changed = 0;
 	int limit;
 	size_t i;
 
-	void (*f[])(int*, struct node**) =
+	node* (*f[])(int*, node**) =
 	{
 		rrd_pretty_collapse,
 		rrd_pretty_skippable,

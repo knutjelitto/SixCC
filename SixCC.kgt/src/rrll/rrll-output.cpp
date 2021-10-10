@@ -186,15 +186,15 @@ static void node_walk(iwriter* writer, const struct node* n)
 			char s[128]; /* XXX */
 			size_t r;
 
-			r = loop_label(n->u.loop.min, n->u.loop.max, s);
+			r = loop_label(n->loop.min, n->loop.max, s);
 
-			node_walk(writer, n->u.loop.forward);
+			node_walk(writer, n->loop.forward);
 			writer->printf("*");
 			if (r > 0)
 			{
 				writer->printf("[`%s`", s);
 			}
-			node_walk(writer, n->u.loop.backward);
+			node_walk(writer, n->loop.backward);
 			if (r > 0)
 			{
 				writer->printf("]");

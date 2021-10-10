@@ -6,7 +6,6 @@
 
 #include <assert.h>
 #include <string.h>
-//#include <strings.h>
 #include <stdlib.h>
 
 #include "../txt.h"
@@ -16,9 +15,42 @@
 
 #include "../xalloc.h"
 
+int node::ccount = 0;
+int node::dcount = 0;
+
+node::node(node_type type, int invisible, node* forward, node* backward)
+    : type(type), invisible(invisible)
+{
+    assert(type == NODE_LOOP);
+
+    loop.forward = forward;
+    loop.backward = backward;
+    loop.min = 0;
+    loop.max = 0;
+
+    ccount++;
+}
+
+node::node(node_type type, int invisible, const text& text)
+    : type(type), invisible(invisible), xxx_text(text)
+{
+    ccount++;
+}
+
+node::node(node_type type, int invisible, struct list* list)
+    : type(type), invisible(invisible), xxx_list(list)
+{
+    ccount++;
+}
+
+node::~node()
+{
+    dcount++;
+}
+
 void node::list_free()
 {
-    assert(type == NODE_SEQ || type == NODE_ALT || type == NODE_ALT_SKIPPABLE);
+    assert(is_list());
 
     list().clear();
 }
@@ -81,64 +113,55 @@ void node_free(node* n)
             break;
 
         case NODE_LOOP:
-            node_free(n->u.loop.forward);
-            node_free(n->u.loop.backward);
+            node_free(n->loop.forward);
+            node_free(n->loop.backward);
             break;
     }
 
     delete n;
 }
 
-struct node *node_create_ci_literal(int invisible, const text& literal)
+node *node_create_ci_literal(int invisible, const text& literal)
 {
     return new node(NODE_CI_LITERAL, invisible, literal);
 }
 
-struct node *node_create_cs_literal(int invisible, const text& literal)
+node *node_create_cs_literal(int invisible, const text& literal)
 {
     return new node(NODE_CS_LITERAL, invisible, literal);
 }
 
-struct node* node_create_name(int invisible, const text& name)
+node* node_create_name(int invisible, const text& name)
 {
     return new node(NODE_RULE, invisible, name);
 }
 
-
-struct node* node_create_prose(int invisible, const text& prose)
+node* node_create_prose(int invisible, const text& prose)
 {
     return new node(NODE_PROSE, invisible, prose);
 }
 
-struct node* node_create_alt(int invisible, struct list* alt)
+node* node_create_alt(int invisible, list* alt)
 {
     return new node(NODE_ALT, invisible, alt);
 }
 
-struct node* node_create_alt_skippable(int invisible, struct list* alt)
+node* node_create_alt_skippable(int invisible, list* alt)
 {
     return new node(NODE_ALT_SKIPPABLE, invisible, alt);
 }
 
-struct node* node_create_seq(int invisible, struct list* seq)
+node* node_create_seq(int invisible, list* seq)
 {
     return new node(NODE_SEQ, invisible, seq);
 }
 
-struct node* node_create_loop(int invisible, struct node* forward, struct node* backward)
+node* node_create_loop(int invisible, node* forward, node* backward)
 {
-    struct node* nuw = new node(NODE_LOOP, invisible);
-
-    nuw->u.loop.forward = forward;
-    nuw->u.loop.backward = backward;
-
-    nuw->u.loop.min = 0;
-    nuw->u.loop.max = 0;
-
-    return nuw;
+    return new node(NODE_LOOP, invisible, forward, backward);
 }
 
-void node_make_seq(int invisible, struct node** node)
+void node_make_seq(int invisible, node** node)
 {
     assert(node != nullptr);
 
@@ -148,7 +171,7 @@ void node_make_seq(int invisible, struct node** node)
     }
 
     list* nuw = new list();
-    nuw->add(*node);
+    nuw->push_back(*node);
 
     *node = node_create_seq(invisible, nuw);
 }
@@ -197,8 +220,8 @@ bool node_compare(const struct node* a, const struct node* b)
             return a->seq().eq(b->seq());
 
         case NODE_LOOP:
-            return node_compare(a->u.loop.forward, b->u.loop.forward)
-                && node_compare(a->u.loop.backward, b->u.loop.backward);
+            return node_compare(a->loop.forward, b->loop.forward)
+                && node_compare(a->loop.backward, b->loop.backward);
     }
 
     return true;
@@ -211,8 +234,8 @@ void loop_flip(struct node* n)
     assert(n != nullptr);
     assert(n->type == NODE_LOOP);
 
-    tmp = n->u.loop.backward;
-    n->u.loop.backward = n->u.loop.forward;
-    n->u.loop.forward = tmp;
+    tmp = n->loop.backward;
+    n->loop.backward = n->loop.forward;
+    n->loop.forward = tmp;
 }
 

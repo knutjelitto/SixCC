@@ -13,16 +13,16 @@
 #include "node.h"
 #include "list.h"
 
-void rrd_pretty_collapse(int* changed, struct node** rrd_node)
+node* rrd_pretty_collapse(int* changed, node** rrd)
 {
-    assert(rrd_node != nullptr);
+    assert(rrd != nullptr);
 
-    if (*rrd_node == nullptr)
+    if (*rrd == nullptr)
     {
-        return;
+        return *rrd;
     }
 
-    switch ((*rrd_node)->type)
+    switch ((*rrd)->type)
     {
         case NODE_CI_LITERAL:
         case NODE_CS_LITERAL:
@@ -33,11 +33,11 @@ void rrd_pretty_collapse(int* changed, struct node** rrd_node)
 
         case NODE_ALT:
         {
-            node* node = (*rrd_node)->alt().single_or_default();
+            node* node = (*rrd)->alt().single_or_default();
 
             if (node != nullptr)
             {
-                *rrd_node = node;
+                *rrd = node;
 
                 *changed = 1;
             }
@@ -49,15 +49,17 @@ void rrd_pretty_collapse(int* changed, struct node** rrd_node)
 
         case NODE_SEQ:
         {
-            node* node = (*rrd_node)->seq().single_or_default();
+            node* node = (*rrd)->seq().single_or_default();
 
             if (node != nullptr)
             {
-                *rrd_node = node;
+                *rrd = node;
 
                 *changed = 1;
             }
             break;
         }
     }
+
+    return *rrd;
 }

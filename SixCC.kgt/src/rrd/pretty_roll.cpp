@@ -17,61 +17,74 @@
 /*
  * This transformation combines two equivalent nodes:
  *
+ *                       loop
+ *                __________________
+ *               /                  \
+ *
  *  ||-- A B C -->------------------v--||
  *               |                  |
  *               ^-- C B A -- "|" --<
  *
  * by pushing one of them to the loop's .forward list:
  *
- *  ||---- A B -->-- C -------------v--||
+ *                       loop
+ *                __________________
+ *               /                  \
+ *
+ *  ||-- A B ---->-- C -------------v--||
  *               |                  |
  *               ^-- B A ---- "|" --<
  */
-#if true
-#else
-static void roll_prefix(int* changed, struct list** entry, struct node* loop)
+static void roll_prefix(int* changed, list& list, int loop_index)
 {
-	struct list** p, ** q;
+	assert(list.size() >= 2);
+	assert(1 <= loop_index && loop_index < list.size());
+	assert(list[loop_index]->type == NODE_LOOP);
 
-	assert(entry != nullptr);
-	assert((*entry)->next != nullptr);
-	assert((*entry)->next->node == loop);
-	assert(loop != nullptr);
-	assert(loop->type == NODE_LOOP);
-
-	/* node before loop */
-	p = entry;
+	// node before loop
+	node* candidate = list[loop_index - 1];
+	// the loop itself
+	node* loop = list[loop_index];
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->u.loop.backward);
+	node_make_seq(loop->invisible, &loop->loop.backward);
 
-	assert(loop->u.loop.backward != nullptr);
-	assert(loop->u.loop.backward->type == NODE_SEQ);
+	assert(loop->loop.backward != nullptr);
+	assert(loop->loop.backward->type == NODE_SEQ);
+
+	struct list& blist = loop->loop.backward->seq();
 
 	/* find node at tail of .backward */
-	q = list_tail(&loop->u.loop.backward->xxx_list);
-	if (q == nullptr)
+	node* candidate2 = blist.last_or_default();
+	if (candidate2 == nullptr)
 	{
 		return;
 	}
 
-	if (!node_compare((*p)->node, (*q)->node))
+	if (!node_compare(candidate, candidate2))
 	{
 		return;
 	}
+
+	// remove equivalent nodes from their lists
+	blist.pop_back();
+	list.drop(loop_index - 1);
+
 
 	/* if loop .forward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->u.loop.forward);
+	node_make_seq(loop->invisible, &loop->loop.forward);
 
-	assert(loop->u.loop.forward != nullptr);
-	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->seqx() != nullptr);
+	assert(loop->loop.forward != nullptr);
+	assert(loop->loop.forward->type == NODE_SEQ);
+	assert(loop->loop.forward->seq().size() > 0);
+
+	struct list& flist = loop->loop.forward->seq();
 
 	/* if destination is a skip node, destroy that node first */
 	/* TODO: centralise */
-	if (loop->u.loop.forward->seqx()->node == nullptr)
+	if (flist.first() == nullptr)
 	{
-		node_free(list_pop_front(&loop->u.loop.forward->xxx_list));
+		flist.pop_front();
 	}
 
 	/*
@@ -81,88 +94,87 @@ static void roll_prefix(int* changed, struct list** entry, struct node* loop)
 	 */
 	 /* TODO: centralise? list_transplant() */
 	{
-		assert((*q)->next == nullptr);
-
-		(*q)->next = loop->u.loop.forward->seqx();
-		loop->u.loop.forward->xxx_list = (*q);
-
-		*q = nullptr;
+		flist.push_front(candidate);
 	}
 
 	/* we don't have empty lists */
-	if (loop->u.loop.backward->seqx() == nullptr)
+	if (blist.size() == 0)
 	{
-		node_free(loop->u.loop.backward);
-		loop->u.loop.backward = nullptr;
+		loop->loop.backward = nullptr;
 	}
-
-	/* destroy the other node */
-	node_free(list_pop_front(p));
 
 	*changed = 1;
 }
-#endif
 
 /*
  * This transformation combines two equivalent nodes:
  *
- *                        loop
- *                         #  
+ *              loop
+ *       __________________
+ *      /                  \
+ *
  *  ||-->------------------v-- C B A --||
  *      |                  |
  *      ^-- "|" -- A B C --<
  *
  * by pushing one of them to the loop's .backward list:
  *
- *                        loop
- *                         #
+ *              loop
+ *       __________________
+ *      /                  \
+ *
  *  ||-->------------- C --v-- B A ----||
  *      |                  |
  *      ^-- "|" ---- A B --<
  */
-#if true
-#else
-static void roll_suffix(int* changed, struct list** exit, struct node* loop)
+static void roll_suffix(int* changed, list& list, int loop_index)
 {
-	struct list** p, ** q;
+	assert(list.size() >= 2);
+	assert(0 <= loop_index && loop_index < list.size() - 1);
+	assert(list[loop_index]->type == NODE_LOOP);
 
-	assert(exit != nullptr);
-	assert(loop != nullptr);
-	assert(loop->type == NODE_LOOP);
-
-	/* node after loop */
-	p = exit;
+	// node after loop
+	node* candidate = list[loop_index + 1];
+	// the loop itself
+	node* loop = list[loop_index];
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->u.loop.backward);
+	node_make_seq(loop->invisible, &loop->loop.backward);
 
-	assert(loop->u.loop.backward != nullptr);
-	assert(loop->u.loop.backward->type == NODE_SEQ);
+	assert(loop->loop.backward != nullptr);
+	assert(loop->loop.backward->type == NODE_SEQ);
+
+	struct list& blist = loop->loop.backward->seq();
 
 	/* find node at head of .backward */
-	q = &loop->u.loop.backward->xxx_list;
-	if (*q == nullptr)
+	node* candidate2 = blist.first_or_default();
+	if (candidate2 == nullptr)
 	{
 		return;
 	}
 
-	if (!node_compare((*p)->node, (*q)->node))
+	if (!node_compare(candidate, candidate2))
 	{
 		return;
 	}
 
+	// remove equivalent nodes from their lists
+	blist.pop_front();
+	list.drop(loop_index + 1);
+		
 	/* if loop .forward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->u.loop.forward);
+	node_make_seq(loop->invisible, &loop->loop.forward);
 
-	assert(loop->u.loop.forward != nullptr);
-	assert(loop->u.loop.forward->type == NODE_SEQ);
-	assert(loop->u.loop.forward->seqx() != nullptr);
+	assert(loop->loop.forward != nullptr);
+	assert(loop->loop.forward->type == NODE_SEQ);
+	assert(loop->loop.forward->seq().size() > 0);
+
+	struct list& flist = loop->loop.forward->seq();
 
 	/* if destination is a skip node, destroy that node first */
-	/* TODO: centralise */
-	if (loop->u.loop.forward->seqx()->node == nullptr)
+	if (flist.first() == nullptr)
 	{
-		node_free(list_pop_front(&loop->u.loop.forward->xxx_list));
+		flist.pop_front();
 	}
 
 	/*
@@ -170,58 +182,44 @@ static void roll_suffix(int* changed, struct list** exit, struct node* loop)
 	 * remove it from its current list, and append to .forward
 	 * instead.
 	 */
-	 /* TODO: centralise? list_transplant() */
 	{
-		struct list* next;
-
-		next = (*q)->next;
-		(*q)->next = nullptr;
-
-		list_append(&loop->u.loop.forward->xxx_list, *q);
-
-		*q = next;
+		flist.push_back(candidate);
 	}
 
 	/* we don't have empty lists */
-	if (loop->u.loop.backward->seqx() == nullptr)
+	if (blist.size() == 0)
 	{
-		node_free(loop->u.loop.backward);
-		loop->u.loop.backward = nullptr;
+		loop->loop.backward = nullptr;
 	}
-
-	/* destroy the other node */
-	node_free(list_pop_front(p));
 
 	*changed = 1;
 }
-#endif
 
-void rrd_pretty_roll(int* changed, struct node** np)
+node* rrd_pretty_roll(int* changed, node** rrd)
 {
-#if true
-#else
-	assert(np != nullptr);
+	assert(rrd != nullptr);
 
-	if (*np == nullptr)
+	if (*rrd == nullptr)
 	{
-		return;
+		return *rrd;
 	}
 
-	switch ((*np)->type)
+	switch ((*rrd)->type)
 	{
-		struct list** p;
-
 		case NODE_SEQ:
+		{
+			list& seq = (*rrd)->seq();
+
 			/*
 			 * Here we're looking one node ahead for the prefix to a loop,
 			 * and passing the address of the subsquent loop node
 			 * rather than searching from the head each time.
 			 */
-			for (p = &(*np)->xxx_list; *p != nullptr; p = &(*p)->next)
+			for (int i = 1; i < seq.size(); ++i)
 			{
-				if ((*p)->next != nullptr && ((*p)->next->node != nullptr && (*p)->next->node->type == NODE_LOOP))
+				if (seq[i] != nullptr && seq[i]->type == NODE_LOOP)
 				{
-					roll_prefix(changed, p, (*p)->next->node);
+					roll_prefix(changed, seq, i);
 					if (*changed)
 					{
 						break;
@@ -232,11 +230,11 @@ void rrd_pretty_roll(int* changed, struct node** np)
 			/*
 			 * The suffix is the node immediately following a loop.
 			 */
-			for (p = &(*np)->xxx_list; *p != nullptr; p = &(**p).next)
+			for (int i = 0; i < seq.size() - 1; ++i)
 			{
-				if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP && (*p)->next != nullptr)
+				if (seq[i] != nullptr && seq[i]->type == NODE_LOOP)
 				{
-					roll_suffix(changed, &(*p)->next, (*p)->node);
+					roll_suffix(changed, seq, i);
 					if (*changed)
 					{
 						break;
@@ -245,6 +243,7 @@ void rrd_pretty_roll(int* changed, struct node** np)
 			}
 
 			break;
+		}
 
 		case NODE_CI_LITERAL:
 		case NODE_CS_LITERAL:
@@ -255,6 +254,7 @@ void rrd_pretty_roll(int* changed, struct node** np)
 		case NODE_LOOP:
 			break;
 	}
-#endif
+
+	return *rrd;
 }
 

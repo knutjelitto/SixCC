@@ -53,7 +53,7 @@ static bool needesc(int c)
 	}
 }
 
-WARN_UNUSED_RESULT static int output_string(char prefix, const class text& t)
+WARN_UNUSED_RESULT static int output_string(char prefix, const struct text& t)
 {
 	size_t i;
 
@@ -109,7 +109,7 @@ static int char_terminal(const struct ast_term *term, unsigned char *c)
 		return 0;
 	}
 
-	*c = (unsigned) term->text(0);
+	*c = (unsigned char) term->text(0);
 
 	return 1;
 }

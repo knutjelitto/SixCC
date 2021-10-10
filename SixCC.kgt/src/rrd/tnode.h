@@ -7,8 +7,11 @@
 #ifndef KGT_RRD_TNODE_H
 #define KGT_RRD_TNODE_H
 
+#include <deque>
+
 #include "node.h"
 #include "../txt.h"
+
 
 /*
  * Various combinations of two endpoints (corner pieces) for a line:
@@ -55,10 +58,8 @@ struct tnode_vlist
  *
  *     -- node -- node -- node --
  */
-struct tnode_hlist
+struct tnode_hlist : std::deque<tnode*>
 {
-	struct tnode **a;
-	size_t n;
 };
 
 typedef enum
@@ -84,21 +85,10 @@ struct tnode
 	unsigned a; /* ascender  - height including and above the line  */
 	unsigned d; /* descender - depth below the line */
 
-	struct
-	{
-		text literal; /* TODO: point to ast_literal instead */
-		text name;   /* TODO: point to ast_rule instead */
-		text prose;
-
-		struct
-		{
-			text s;
-			const struct tnode *tnode;
-		} comment;
-
-		struct tnode_vlist vlist;
-		struct tnode_hlist hlist;
-	} u;
+	struct text text;
+	struct tnode_vlist vlist;
+	struct tnode_hlist hlist;
+	const struct tnode* commented;
 };
 
 struct dim
@@ -113,9 +103,9 @@ struct dim
 	unsigned ellipsis_depth;
 };
 
-void tnode_free(struct tnode *n);
+void tnode_free(tnode *n);
 
-struct tnode *rrd_to_tnode(const struct node *node, const struct dim *dim);
+tnode *rrd_to_tnode(const node *node, const dim *dim);
 
 #endif
 

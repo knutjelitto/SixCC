@@ -23,26 +23,26 @@ static int bottom_loop(node** np)
 
     n = *np;
 
-    if (n->u.loop.forward != nullptr)
+    if (n->loop.forward != nullptr)
     {
         return 0;
     }
 
-    if (n->u.loop.backward == nullptr || n->u.loop.backward->type == NODE_LOOP)
+    if (n->loop.backward == nullptr || n->loop.backward->type == NODE_LOOP)
     {
         return 0;
     }
 
-    if (n->u.loop.backward->type == NODE_CI_LITERAL || n->u.loop.backward->type == NODE_CS_LITERAL || n->u.loop.backward->type == NODE_RULE)
+    if (n->loop.backward->type == NODE_CI_LITERAL || n->loop.backward->type == NODE_CS_LITERAL || n->loop.backward->type == NODE_RULE)
     {
         return 0;
     }
 
-    if (n->u.loop.backward->type == NODE_ALT || n->u.loop.backward->type == NODE_ALT_SKIPPABLE)
+    if (n->loop.backward->type == NODE_ALT || n->loop.backward->type == NODE_ALT_SKIPPABLE)
     {
         bool c = false;
 
-        for (auto node : n->u.loop.backward->alt())
+        for (auto node : n->loop.backward->alt())
         {
             if (node->type == NODE_ALT || node->type == NODE_ALT_SKIPPABLE || node->type == NODE_SEQ || node->type == NODE_LOOP)
             {
@@ -62,8 +62,8 @@ static int bottom_loop(node** np)
     {
         struct list* nuw = new list();
 
-        nuw->add(n);
-        nuw->add(nullptr);
+        nuw->push_back(n);
+        nuw->push_back(nullptr);
 
         *np = node_create_alt(n->invisible, nuw);
     }
@@ -77,19 +77,19 @@ static int bottom_loop(node** np)
  * this results in a bulkier diagram, but avoids reversing the contents of
  * the sequence.
  */
-void rrd_pretty_bottom(int* changed, struct node** n)
+node* rrd_pretty_bottom(int* changed, struct node** rrd)
 {
-    assert(n != nullptr);
+    assert(rrd != nullptr);
 
-    if (*n == nullptr)
+    if (*rrd == nullptr)
     {
-        return;
+        return *rrd;
     }
 
-    switch ((*n)->type)
+    switch ((*rrd)->type)
     {
         case NODE_LOOP:
-            if (bottom_loop(n))
+            if (bottom_loop(rrd))
             {
                 *changed = 1;
             }
@@ -104,5 +104,7 @@ void rrd_pretty_bottom(int* changed, struct node** n)
         case NODE_SEQ:
             break;
     }
+
+    return *rrd;
 }
 

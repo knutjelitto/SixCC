@@ -201,40 +201,40 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 			print_indent(writer, depth);
 			writer->printf("Loop(\n");
 
-			if (!node_walk(writer, n->u.loop.forward, depth + 1))
+			if (!node_walk(writer, n->loop.forward, depth + 1))
 			{
 				return 0;
 			}
 			writer->printf(",\n");
 
-			if (n->u.loop.max == 1 && n->u.loop.min == 1)
+			if (n->loop.max == 1 && n->loop.min == 1)
 			{
 				print_comment(writer, depth + 1, "(exactly once)");
-				assert(n->u.loop.backward == nullptr);
+				assert(n->loop.backward == nullptr);
 			}
-			else if (n->u.loop.max == 0 && n->u.loop.min > 0)
+			else if (n->loop.max == 0 && n->loop.min > 0)
 			{
-				print_comment(writer, depth + 1, "(at least %d times)", n->u.loop.min);
-				assert(n->u.loop.backward == nullptr);
+				print_comment(writer, depth + 1, "(at least %d times)", n->loop.min);
+				assert(n->loop.backward == nullptr);
 			}
-			else if (n->u.loop.max > 0 && n->u.loop.min == 0)
+			else if (n->loop.max > 0 && n->loop.min == 0)
 			{
-				print_comment(writer, depth + 1, "(up to %d times)", n->u.loop.max);
-				assert(n->u.loop.backward == nullptr);
+				print_comment(writer, depth + 1, "(up to %d times)", n->loop.max);
+				assert(n->loop.backward == nullptr);
 			}
-			else if (n->u.loop.max > 0 && n->u.loop.min == n->u.loop.max)
+			else if (n->loop.max > 0 && n->loop.min == n->loop.max)
 			{
-				print_comment(writer, depth + 1, "(%d times)", n->u.loop.max);
-				assert(n->u.loop.backward == nullptr);
+				print_comment(writer, depth + 1, "(%d times)", n->loop.max);
+				assert(n->loop.backward == nullptr);
 			}
-			else if (n->u.loop.max > 1 && n->u.loop.min > 1)
+			else if (n->loop.max > 1 && n->loop.min > 1)
 			{
-				print_comment(writer, depth + 1, "(%d-%d times)", n->u.loop.min, n->u.loop.max);
-				assert(n->u.loop.backward == nullptr);
+				print_comment(writer, depth + 1, "(%d-%d times)", n->loop.min, n->loop.max);
+				assert(n->loop.backward == nullptr);
 			}
 			else
 			{
-				if (!node_walk(writer, n->u.loop.backward, depth))
+				if (!node_walk(writer, n->loop.backward, depth))
 				{
 					return 0;
 				}

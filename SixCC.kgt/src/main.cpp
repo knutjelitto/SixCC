@@ -256,7 +256,7 @@ void tester()
         }
         printf("\n");
 
-        if (i < 22)
+        if (i < 30)
         {
             if (!out->out(grammar))
             {
@@ -267,6 +267,8 @@ void tester()
     }
 
     fclose(outfile);
+
+    printf("%d nodes created, %d nodes deleted\n", node::ccount, node::dcount);
 
     std::ifstream newf("new-out.txt");
     std::string news((std::istreambuf_iterator<char>(newf)), (std::istreambuf_iterator<char>()));

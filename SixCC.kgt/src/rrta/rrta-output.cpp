@@ -196,15 +196,15 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 
 		case NODE_LOOP:
 			print_indent(writer, depth);
-			writer->printf("%s(\n", n->u.loop.min == 0 ? "ZeroOrMore" : "OneOrMore");
+			writer->printf("%s(\n", n->loop.min == 0 ? "ZeroOrMore" : "OneOrMore");
 
-			if (!node_walk(writer, n->u.loop.forward, depth + 1))
+			if (!node_walk(writer, n->loop.forward, depth + 1))
 			{
 				return 0;
 			}
 			writer->printf(",\n");
 
-			if (!node_walk(writer, n->u.loop.backward, depth + 1))
+			if (!node_walk(writer, n->loop.backward, depth + 1))
 			{
 				return 0;
 			}

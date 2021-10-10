@@ -35,21 +35,6 @@ struct node* list_pop_front(struct list& list)
     return list.pop();
 }
 
-void list_append(struct list& dst, struct list& src)
-{
-    dst.add(src);
-}
-
-int list_compare(const struct list& a, const struct list& b)
-{
-    return a.eq(b);
-}
-
-struct node* list_tail(list& list)
-{
-    return list.last_or_default();
-}
-
 void list_free(list& list)
 {
     list.clear();

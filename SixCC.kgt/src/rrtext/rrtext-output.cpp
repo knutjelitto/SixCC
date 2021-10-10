@@ -48,8 +48,8 @@ static void node_walk_render(const struct tnode *n, struct render_context *ctx);
 
 static void bprintf(struct render_context* ctx, const char* fmt, ...)
 {
-	assert(ctx != NULL);
-	assert(ctx->scratch != NULL);
+	assert(ctx != nullptr);
+	assert(ctx->scratch != nullptr);
 
 	va_list ap{};
 	va_start(ap, fmt);
@@ -64,7 +64,7 @@ static void bprintf(struct render_context* ctx, const char* fmt, ...)
 /* made-up to suit text output */
 static void escputc(struct render_context* ctx, char c)
 {
-	assert(ctx != NULL);
+	assert(ctx != nullptr);
 
 	switch (c)
 	{
@@ -92,36 +92,36 @@ static void escputc(struct render_context* ctx, char c)
 	bprintf(ctx, "%c", c);
 }
 
-static void centre(unsigned *lhs, unsigned *rhs, unsigned space, unsigned w)
+static void center(unsigned *lhs, unsigned *rhs, unsigned space, unsigned w)
 {
-	assert(lhs != NULL);
-	assert(rhs != NULL);
+	assert(lhs != nullptr);
+	assert(rhs != nullptr);
 	assert(space >= w);
 
 	*lhs = (space - w) / 2;
 	*rhs = (space - w) - *lhs;
 }
 
-static void justify(struct render_context* ctx, const struct tnode* n, unsigned space)
+static void justify(render_context* ctx, const tnode* tnode, unsigned space)
 {
+	assert(tnode != nullptr);
+	assert(space >= tnode->w);
+
 	unsigned lhs, rhs;
 	unsigned i;
 
-	assert(n != NULL);
-	assert(space >= n->w);
-
-	centre(&lhs, &rhs, space, n->w);
+	center(&lhs, &rhs, space, tnode->w);
 
 	for (i = 0; i < lhs; i++)
 	{
-		bprintf(ctx, n->type == TNODE_ELLIPSIS ? " " : "\022");
+		bprintf(ctx, tnode->type == TNODE_ELLIPSIS ? " " : "\x12");
 	}
 
-	node_walk_render(n, ctx);
+	node_walk_render(tnode, ctx);
 
 	for (i = 0; i < rhs; i++)
 	{
-		bprintf(ctx, n->type == TNODE_ELLIPSIS ? " " : "\022");
+		bprintf(ctx, tnode->type == TNODE_ELLIPSIS ? " " : "\x12");
 	}
 }
 
@@ -142,9 +142,9 @@ static void bars(struct render_context* ctx, unsigned n, unsigned w)
 	}
 }
 
-static const char *tile[][2] =
+static const char* tile[][2] =
 {
-	{ NULL, NULL }, /* \000 */
+	{ nullptr, nullptr },    /* \000 */
 	{ "^", "\xe2\x95\xb0" }, /* \001 */
 	{ ",", "\xe2\x95\xad" }, /* \002 */
 	{ ".", "\xe2\x95\xae" }, /* \003 */
@@ -153,20 +153,20 @@ static const char *tile[][2] =
 	{ "`", "\xe2\x95\xb0" }, /* \006 */
 
 	/* whitespace, not used because of rtrim() */
-	{ NULL, NULL }, /* \007 */
-	{ NULL, NULL }, /* \010 */
-	{ NULL, NULL }, /* \011 */
-	{ NULL, NULL }, /* \012 */
-	{ NULL, NULL }, /* \013 */
-	{ NULL, NULL }, /* \014 */
-	{ NULL, NULL }, /* \015 */
+	{ nullptr, nullptr }, /* \007 */
+	{ nullptr, nullptr }, /* \010 */
+	{ nullptr, nullptr }, /* \011 */
+	{ nullptr, nullptr }, /* \012 */
+	{ nullptr, nullptr }, /* \013 */
+	{ nullptr, nullptr }, /* \014 */
+	{ nullptr, nullptr }, /* \015 */
 
 	{ "'", "\xe2\x95\xaf" }, /* \016 */
 	{ "|", "\xe2\x94\x82" }, /* \017 */
 	{ ">", "\xe2\x95\xad" }, /* \020 */
 	{ "<", "\xe2\x95\xaf" }, /* \021 */
 
-	{ "-", "\xe2\x94\x80" }, /* \022 */
+	{ "-", "\xe2\x94\x80" }, /* \x12 */
 	{ "|", "\xe2\x94\x9c" }, /* \023 */
 	{ "|", "\xe2\x94\xa4" }, /* \024 */
 	{ ">", "\xe2\x95\xb0" }, /* \025 */
@@ -197,7 +197,7 @@ static void render_tline(struct render_context* ctx, tline tline, int rhs)
 {
 	const char* a;
 
-	assert(ctx != NULL);
+	assert(ctx != nullptr);
 
 	switch (tline)
 	{
@@ -216,7 +216,7 @@ static void render_tline(struct render_context* ctx, tline tline, int rhs)
 		case TLINE_h: a = "\020\030"; break;
 		case TLINE_I: a = "\001\021"; break;
 		case TLINE_i: a = "\025\032"; break;
-		case TLINE_J: a = "\022\022"; break;
+		case TLINE_J: a = "\x12\x12"; break;
 
 		default:
 			a = "??";
@@ -231,9 +231,9 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx)
 	unsigned x, y;
 	size_t j;
 
-	assert(n != NULL);
+	assert(n != nullptr);
 	assert(n->type == TNODE_VLIST);
-	assert(ctx != NULL);
+	assert(ctx != nullptr);
 
 	x = ctx->x;
 	y = ctx->y;
@@ -243,8 +243,8 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx)
 	 * for each of those nodes. That'd be .a for the topmost node, plus the height
 	 * of each subsequent node and the depth of each node above it.
 	 */
-	assert(n->u.vlist.o <= 1); /* currently only implemented for one node above the line */
-	if (n->u.vlist.o == 1)
+	assert(n->vlist.o <= 1); /* currently only implemented for one node above the line */
+	if (n->vlist.o == 1)
 	{
 		ctx->y -= n->a;
 	}
@@ -253,30 +253,30 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx)
 	 * A vlist of 0 items is a special case, meaning to draw
 	 * a horizontal line only.
 	 */
-	if (n->u.vlist.n == 0)
+	if (n->vlist.n == 0)
 	{
 		size_t i;
 
 		for (i = 0; i < n->w; i++)
 		{
-			bprintf(ctx, "\022");
+			bprintf(ctx, "\x12");
 		}
 	}
 	else
 	{
-		for (j = 0; j < n->u.vlist.n; j++)
+		for (j = 0; j < n->vlist.n; j++)
 		{
 			ctx->x = x;
 
-			render_tline(ctx, n->u.vlist.b[j], 0);
-			justify(ctx, n->u.vlist.a[j], n->w - 2);
-			render_tline(ctx, n->u.vlist.b[j], 1);
+			render_tline(ctx, n->vlist.b[j], 0);
+			justify(ctx, n->vlist.a[j], n->w - 2);
+			render_tline(ctx, n->vlist.b[j], 1);
 
-			if (j + 1 < n->u.vlist.n)
+			if (j + 1 < n->vlist.n)
 			{
 				ctx->y++;
 				ctx->x = x;
-				bars(ctx, n->u.vlist.a[j]->d + n->u.vlist.a[j + 1]->a, n->w);
+				bars(ctx, n->vlist.a[j]->d + n->vlist.a[j + 1]->a, n->w);
 			}
 		}
 	}
@@ -284,51 +284,53 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx)
 	ctx->y = y;
 }
 
-static void render_hlist(const struct tnode* n, struct render_context* ctx)
+static void render_hlist(const tnode* n, render_context* ctx)
 {
-	size_t i;
-
-	assert(n != NULL);
+	assert(n != nullptr);
 	assert(n->type == TNODE_HLIST);
-	assert(ctx != NULL);
+	assert(ctx != nullptr);
 
-	for (i = 0; i < n->u.hlist.n; i++)
+	bool more = false;
+	for (auto tn : n->hlist)
 	{
-		node_walk_render(n->u.hlist.a[i], ctx);
-
-		if (i + 1 < n->u.hlist.n)
+		if (more)
 		{
-			bprintf(ctx, "\022\022");
+			bprintf(ctx, "\x12\x12");
 		}
+		else
+		{
+			more = true;
+		}
+		node_walk_render(tn, ctx);
 	}
 }
 
-static void render_comment(const struct tnode* n, struct render_context* ctx)
+static void render_comment(struct render_context* ctx, const struct tnode* tnode)
 {
+	assert(ctx != nullptr);
+	assert(tnode != nullptr);
+	assert(tnode->type == TNODE_COMMENT);
+
 	unsigned x, y;
 	unsigned lhs, rhs;
-
-	assert(n != NULL);
-	assert(n->type == TNODE_COMMENT);
-	assert(ctx != NULL);
 
 	x = ctx->x;
 	y = ctx->y;
 
-	justify(ctx, n->u.comment.tnode, n->w);
+	justify(ctx, tnode->commented, tnode->w);
 
-	assert(n->u.comment.s.length() <= n->w);
-	centre(&lhs, &rhs, n->w, n->u.comment.s.length());
+	assert(tnode->text.length() <= tnode->w);
+	center(&lhs, &rhs, tnode->w, tnode->text.length());
 
 	ctx->x = x + lhs;
-	ctx->y = y + n->d - 1;
+	ctx->y = y + tnode->d - 1;
 
-	bprintf(ctx, "%s", n->u.comment.s.chars());
+	bprintf(ctx, "%s", tnode->text.chars());
 
 	ctx->x += rhs;
 	ctx->y = y;
 
-	assert(ctx->x == x + n->w);
+	assert(ctx->x == x + tnode->w);
 }
 
 static void render_txt(struct render_context* ctx, const text& text)
@@ -348,7 +350,7 @@ static void render_string(struct render_context *ctx, const text& text)
 
 static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 {
-	assert(ctx != NULL);
+	assert(ctx != nullptr);
 
 	switch (n->type)
 	{
@@ -366,29 +368,29 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 
 		case TNODE_CI_LITERAL:
 			bprintf(ctx, " \"");
-			render_txt(ctx, n->u.literal);
+			render_txt(ctx, n->text);
 			bprintf(ctx, "\"/i ");
 			break;
 
 		case TNODE_CS_LITERAL:
 			bprintf(ctx, " \"");
-			render_txt(ctx, n->u.literal);
+			render_txt(ctx, n->text);
 			bprintf(ctx, "\" ");
 			break;
 
 		case TNODE_PROSE:
 			bprintf(ctx, "? ");
-			render_string(ctx, n->u.prose);
+			render_string(ctx, n->text);
 			bprintf(ctx, " ?");
 			break;
 
 		case TNODE_COMMENT:
-			render_comment(n, ctx);
+			render_comment(ctx, n);
 			break;
 
 		case TNODE_RULE:
 			bprintf(ctx, " ");
-			render_string(ctx, n->u.name);
+			render_string(ctx, n->text);
 			bprintf(ctx, " ");
 			break;
 
@@ -424,10 +426,10 @@ static void render_rule(const struct tnode* node, int utf8)
 	ctx.scratch = (char*)xmalloc(w + 1);
 
 	ctx.y = node->a;
-	bprintf(&ctx, "\0x0F\023\022\022");
+	bprintf(&ctx, "\x0F\023\x12\x12");
 
 	ctx.x = w - 4;
-	bprintf(&ctx, "\022\022\024\017");
+	bprintf(&ctx, "\x12\x12\024\017");
 
 	ctx.x = 4;
 	ctx.y = node->a;
@@ -451,9 +453,9 @@ static void dim_mono_txt(const text& text, unsigned* w, unsigned* a, unsigned* d
 	size_t i;
 	unsigned n;
 
-	assert(w != NULL);
-	assert(a != NULL);
-	assert(d != NULL);
+	assert(w != nullptr);
+	assert(a != nullptr);
+	assert(d != nullptr);
 
 	n = 0;
 
@@ -493,9 +495,9 @@ static void dim_mono_txt(const text& text, unsigned* w, unsigned* a, unsigned* d
 
 static void dim_mono_string(const text& text, unsigned *w, unsigned *a, unsigned *d)
 {
-	assert(w != NULL);
-	assert(a != NULL);
-	assert(d != NULL);
+	assert(w != nullptr);
+	assert(a != nullptr);
+	assert(d != nullptr);
 
 	dim_mono_txt(text, w, a, d);
 }
@@ -504,7 +506,7 @@ void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
 {
 	const struct ast_rule* p;
 
-	assert(dim != NULL);
+	assert(dim != nullptr);
 
 	for (p = grammar; p; p = p->next)
 	{

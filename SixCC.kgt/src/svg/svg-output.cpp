@@ -40,10 +40,10 @@ extern const char *css_file;
 
 struct render_context
 {
-	unsigned x, y;
+	int x, y;
 
-	struct path *paths;
-	const struct ast_rule *grammar;
+	path *paths;
+	const ast_rule *grammar;
 };
 
 static void node_walk_render(const struct tnode *n, struct render_context *ctx, const char *base);
@@ -168,8 +168,7 @@ svg_arrow(struct render_context *ctx, unsigned x, unsigned y, int rtl)
 		(int) x + (rtl ? -2 : 2), y, rtl ? 4 : -4, h / 2, -h);
 }
 
-static void
-centre(unsigned *lhs, unsigned *rhs, unsigned space, unsigned w)
+static void center(unsigned *lhs, unsigned *rhs, unsigned space, unsigned w)
 {
 	assert(lhs != nullptr);
 	assert(rhs != nullptr);
@@ -179,28 +178,30 @@ centre(unsigned *lhs, unsigned *rhs, unsigned space, unsigned w)
 	*rhs = (space - w) - *lhs;
 }
 
-static void
-justify(struct render_context *ctx, const struct tnode *n, unsigned space,
-	const char *base)
+static void justify(render_context* ctx, const tnode* n, unsigned space, const char* base)
 {
 	unsigned lhs, rhs;
 
-	centre(&lhs, &rhs, space, n->w * 10);
+	center(&lhs, &rhs, space, n->w * 10);
 
-	if (n->type != TNODE_ELLIPSIS) {
+	if (n->type != TNODE_ELLIPSIS)
+	{
 		svg_path_h(&ctx->paths, ctx->x, ctx->y, lhs);
 	}
-	if (debug) {
+	if (debug)
+	{
 		svg_rect(ctx, lhs, 5, "debug justify");
 	}
 	ctx->x += lhs;
 
 	node_walk_render(n, ctx, base);
 
-	if (n->type != TNODE_ELLIPSIS) {
+	if (n->type != TNODE_ELLIPSIS)
+	{
 		svg_path_h(&ctx->paths, ctx->x, ctx->y, rhs);
 	}
-	if (debug) {
+	if (debug)
+	{
 		svg_rect(ctx, rhs, 5, "debug justify");
 	}
 	ctx->x += rhs;
@@ -433,8 +434,8 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 
 	o = ctx->y;
 
-	assert(n->u.vlist.o <= 1); /* currently only implemented for one node above the line */
-	if (n->u.vlist.o == 1)
+	assert(n->vlist.o <= 1); /* currently only implemented for one node above the line */
+	if (n->vlist.o == 1)
 	{
 		ctx->y -= n->a * 10;
 	}
@@ -447,42 +448,42 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 	 * A vlist of 0 items is a special case, meaning to draw
 	 * a horizontal line only.
 	 */
-	if (n->u.vlist.n == 0 && n->w > 0)
+	if (n->vlist.n == 0 && n->w > 0)
 	{
 		svg_path_h(&ctx->paths, ctx->x, ctx->y, n->w * 10);
 	}
-	else for (j = 0; j < n->u.vlist.n; j++)
+	else for (j = 0; j < n->vlist.n; j++)
 	{
 		ctx->x = x;
 
-		render_tline_outer(ctx, n->u.vlist.b[j], 0);
-		render_tline_inner(ctx, n->u.vlist.b[j], 0);
+		render_tline_outer(ctx, n->vlist.b[j], 0);
+		render_tline_inner(ctx, n->vlist.b[j], 0);
 
-		justify(ctx, n->u.vlist.a[j], n->w * 10 - 40, base);
+		justify(ctx, n->vlist.a[j], n->w * 10 - 40, base);
 
-		render_tline_inner(ctx, n->u.vlist.b[j], 1);
-		render_tline_outer(ctx, n->u.vlist.b[j], 1);
+		render_tline_inner(ctx, n->vlist.b[j], 1);
+		render_tline_outer(ctx, n->vlist.b[j], 1);
 
 		ctx->y += 10;
 
-		if (j + 1 < n->u.vlist.n)
+		if (j + 1 < n->vlist.n)
 		{
-			ctx->y += (n->u.vlist.a[j]->d + n->u.vlist.a[j + 1]->a) * 10;
+			ctx->y += (n->vlist.a[j]->d + n->vlist.a[j + 1]->a) * 10;
 		}
 	}
 
 	/* bars above the line */
-	if (n->u.vlist.o > 0)
+	if (n->vlist.o > 0)
 	{
 		unsigned h;
 
 		h = 0;
 
-		for (j = 0; j < n->u.vlist.o; j++)
+		for (j = 0; j < n->vlist.o; j++)
 		{
-			if (j + 1 < n->u.vlist.n)
+			if (j + 1 < n->vlist.n)
 			{
-				h += (n->u.vlist.a[j]->d + n->u.vlist.a[j + 1]->a + 1) * 10;
+				h += (n->vlist.a[j]->d + n->vlist.a[j + 1]->a + 1) * 10;
 			}
 		}
 
@@ -494,17 +495,17 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 	}
 
 	/* bars below the line */
-	if (n->u.vlist.n > n->u.vlist.o + 1)
+	if (n->vlist.n > n->vlist.o + 1)
 	{
 		unsigned h;
 
 		h = 0;
 
-		for (j = n->u.vlist.o; j < n->u.vlist.n; j++)
+		for (j = n->vlist.o; j < n->vlist.n; j++)
 		{
-			if (j + 1 < n->u.vlist.n)
+			if (j + 1 < n->vlist.n)
 			{
-				h += (n->u.vlist.a[j]->d + n->u.vlist.a[j + 1]->a + 1) * 10;
+				h += (n->vlist.a[j]->d + n->vlist.a[j + 1]->a + 1) * 10;
 			}
 		}
 
@@ -519,7 +520,7 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 	ctx->y = o;
 }
 
-static void render_hlist(const struct tnode* n, struct render_context* ctx, const char* base)
+static void render_hlist(const tnode* n, render_context* ctx, const char* base)
 {
 	size_t i;
 
@@ -527,19 +528,23 @@ static void render_hlist(const struct tnode* n, struct render_context* ctx, cons
 	assert(n->type == TNODE_HLIST);
 	assert(ctx != nullptr);
 
-	for (i = 0; i < n->u.hlist.n; i++)
+	bool more = false;
+	for (auto tn : n->hlist)
 	{
-		node_walk_render(n->u.hlist.a[i], ctx, base);
-
-		if (i + 1 < n->u.hlist.n)
+		if (more)
 		{
 			svg_path_h(&ctx->paths, ctx->x, ctx->y, 20);
 			ctx->x += 20;
 		}
+		else
+		{
+			more = true;
+		}
+		node_walk_render(tn, ctx, base);
 	}
 }
 
-static void node_walk_render(const struct tnode* n, struct render_context* ctx, const char* base)
+static void node_walk_render(const tnode* n, render_context* ctx, const char* base)
 {
 	assert(ctx != nullptr);
 
@@ -567,17 +572,17 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx, 
 			break;
 
 		case TNODE_CI_LITERAL:
-			svg_textbox(ctx, n->u.literal, n->w * 10, 8, "literal");
+			svg_textbox(ctx, n->text, n->w * 10, 8, "literal");
 			writer->printf("    <text x='%u' y='%u' text-anchor='left' class='ci'>%s</text>\n",
 				ctx->x - 20 + 5, ctx->y + 5, "&#x29f8;i");
 			break;
 
 		case TNODE_CS_LITERAL:
-			svg_textbox(ctx, n->u.literal, n->w * 10, 8, "literal");
+			svg_textbox(ctx, n->text, n->w * 10, 8, "literal");
 			break;
 
 		case TNODE_PROSE:
-			svg_prose(ctx, n->u.prose, n->w * 10);
+			svg_prose(ctx, n->text, n->w * 10);
 			break;
 
 		case TNODE_COMMENT: {
@@ -586,37 +591,38 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx, 
 			ctx->y += n->d * 10;
 
 			/* TODO: - 5 again for loops with a backwards skip (because they're short) */
-			if (n->u.comment.tnode->type == TNODE_VLIST
-				&& n->u.comment.tnode->u.vlist.o == 0
-				&& n->u.comment.tnode->u.vlist.n == 2
-				&& ((n->u.comment.tnode->u.vlist.a[1]->type == TNODE_VLIST && n->u.comment.tnode->u.vlist.a[1]->u.vlist.n == 0) || n->u.comment.tnode->u.vlist.a[1]->type == TNODE_RTL_ARROW || n->u.comment.tnode->u.vlist.a[1]->type == TNODE_LTR_ARROW))
+			if (n->commented->type == TNODE_VLIST &&
+				n->commented->vlist.o == 0 &&
+				n->commented->vlist.n == 2 &&
+				((n->commented->vlist.a[1]->type == TNODE_VLIST && n->commented->vlist.a[1]->vlist.n == 0) || n->commented->vlist.a[1]->type == TNODE_RTL_ARROW || n->commented->vlist.a[1]->type == TNODE_LTR_ARROW))
 			{
 				offset += 10;
 			}
 
 			ctx->y -= offset; /* off-grid */
-			svg_string(ctx, n->w * 10, n->u.comment.s, "comment");
+			svg_string(ctx, n->w * 10, n->text, "comment");
 			ctx->y += offset;
 			ctx->y -= n->d * 10;
-			justify(ctx, n->u.comment.tnode, n->w * 10, base);
+			justify(ctx, n->commented, n->w * 10, base);
 			break;
 		}
 
-		case TNODE_RULE: {
+		case TNODE_RULE:
+		{
 			/*
 			 * We don't make something a link if it doesn't have a destination in
 			 * the same document. That is, rules need not be defined in the same
 			 * grammar.
 			 */
-			int dest_exists = !!ast_find_rule(ctx->grammar, n->u.name);
+			bool dest_exists = !!ast_find_rule(ctx->grammar, n->text);
 
 			if (base != nullptr && dest_exists)
 			{
-				writer->printf("    <a href='%s#%s'>\n", base, n->u.name.chars()); /* XXX: escape */
+				writer->printf("    <a href='%s#%s'>\n", base, n->text.chars()); /* XXX: escape */
 			}
-			
-			svg_textbox(ctx, text(n->u.name), n->w * 10, 0, "rule");
-			
+
+			svg_textbox(ctx, text(n->text), n->w * 10, 0, "rule");
+
 			if (base != nullptr && dest_exists)
 			{
 				writer->printf("    </a>\n");

@@ -52,27 +52,27 @@ static void redundant_skip(int* changed, list& list)
 	}
 }
 
-void rrd_pretty_skippable(int* changed, struct node** n)
+node* rrd_pretty_skippable(int* changed, node** rrd)
 {
-	assert(n != nullptr);
+	assert(rrd != nullptr);
 
-	if (*n == nullptr)
+	if (*rrd == nullptr)
 	{
-		return;
+		return *rrd;
 	}
 
-	switch ((*n)->type)
+	switch ((*rrd)->type)
 	{
 		case NODE_ALT:
-			skippable_alt(changed, *n);
+			skippable_alt(changed, *rrd);
 			break;
 
 		case NODE_ALT_SKIPPABLE:
-			redundant_skip(changed, (*n)->alt());
+			redundant_skip(changed, (*rrd)->alt());
 			break;
 
 		case NODE_SEQ:
-			redundant_skip(changed, (*n)->seq());
+			redundant_skip(changed, (*rrd)->seq());
 			break;
 
 		case NODE_CI_LITERAL:
@@ -82,5 +82,7 @@ void rrd_pretty_skippable(int* changed, struct node** n)
 		case NODE_LOOP:
 			break;
 	}
+
+	return *rrd;
 }
 

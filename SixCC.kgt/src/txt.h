@@ -14,9 +14,8 @@
 #include "compiler_specific.h"
 #include "xalloc.h"
 
-class text : private std::string
+struct text : private std::string
 {
-public:
 	inline text()
 		: std::string()
 	{}
@@ -90,8 +89,6 @@ public:
 	text ltrim() const;
 	text rtrim() const;
 	text trim() const;
-
-private:
 };
 
 bool is_binary_literal(const text& text);

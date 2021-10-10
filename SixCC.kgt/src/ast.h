@@ -70,11 +70,11 @@ struct ast_term
 
     const ast_term_type type;
     int invisible;
-    struct ast_term* next;
+    ast_term* next;
     unsigned int min;
     unsigned int max; /* false (0) for unlimited */
 
-    const class text& text() const
+    const struct text& text() const
     {
         return xxx_characters;
     }
@@ -89,19 +89,19 @@ struct ast_term
         return xxx_rule;
     }
 
-    void set_rule(const struct ast_rule* new_rule)
+    void set_rule(const ast_rule* new_rule)
     {
         assert(type == TYPE_RULE);
         xxx_rule = new_rule;
     }
 
-    const struct ast_alt* group() const
+    const ast_alt* group() const
     {
         return xxx_group;
     }
 
 private:
-    const class text xxx_characters;
+    const struct text xxx_characters;
     const struct ast_rule* xxx_rule; /* just for sake of the name */
     const struct ast_alt* xxx_group;
 };
@@ -124,7 +124,7 @@ struct ast_term_rule : ast_term
 
 struct ast_term_text : ast_term
 {
-    ast_term_text(ast_term_type type, int invisible, const class text& text)
+    ast_term_text(ast_term_type type, int invisible, const struct text& text)
         : ast_term(type, invisible, text)
     {
     }
@@ -132,7 +132,7 @@ struct ast_term_text : ast_term
 
 struct ast_term_cs_literal : ast_term_text
 {
-    ast_term_cs_literal(int invisible, const class text& text)
+    ast_term_cs_literal(int invisible, const struct text& text)
         : ast_term_text(TYPE_CS_LITERAL, invisible, text)
     {
     }
@@ -140,7 +140,7 @@ struct ast_term_cs_literal : ast_term_text
 
 struct ast_term_ci_literal : ast_term_text
 {
-    ast_term_ci_literal(int invisible, const class text& text)
+    ast_term_ci_literal(int invisible, const struct text& text)
         : ast_term_text(TYPE_CI_LITERAL, invisible, text)
     {
     }
@@ -148,7 +148,7 @@ struct ast_term_ci_literal : ast_term_text
 
 struct ast_term_token : ast_term_text
 {
-    ast_term_token(int invisible, const class text& text)
+    ast_term_token(int invisible, const struct text& text)
         : ast_term_text(TYPE_TOKEN, invisible, text)
     {
     }
@@ -156,7 +156,7 @@ struct ast_term_token : ast_term_text
 
 struct ast_term_prose : ast_term_text
 {
-    ast_term_prose(int invisible, const class text& prose)
+    ast_term_prose(int invisible, const struct text& prose)
         : ast_term_text(TYPE_PROSE, invisible, prose)
     {
     }

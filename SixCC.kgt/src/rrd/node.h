@@ -14,7 +14,7 @@ typedef enum
 	FEATURE_RRD_CI_LITERAL = 1 << 0
 } rrd_features;
 
-typedef enum
+enum node_type
 {
 	NODE_CI_LITERAL = 42,
 	NODE_CS_LITERAL,
@@ -24,30 +24,23 @@ typedef enum
 	NODE_ALT_SKIPPABLE,
 	NODE_SEQ,
 	NODE_LOOP
-} node_type;
+};
 
-struct node
+struct list;
+
+struct node final
 {
-	node(node_type type, int invisible)
-		: type(type), invisible(invisible)
-	{
-	}
+	static int ccount;
+	static int dcount;
 
-	node(node_type type, int invisible, const text& text)
-		: type(type), invisible(invisible), xxx_text(text)
-	{
-	}
+	node(node_type type, int invisible, node* forward, node* backward);
+	node(node_type type, int invisible, const text& text);
+	node(node_type type, int invisible, list* list);
 
-	node(node_type type, int invisible, struct list* list)
-		: type(type), invisible(invisible), xxx_list(list)
-	{
-	}
+	~node();
 
 	node_type type;
 	int invisible;
-
-	text xxx_text;
-	struct list* xxx_list;
 
 	void tolower()
 	{
@@ -81,16 +74,22 @@ struct node
 
 	list& alt() const
 	{
+		assert(type == NODE_ALT || type == NODE_ALT_SKIPPABLE);
+
 		return *xxx_list;
 	}
 
 	list& seq() const
 	{
+		assert(type == NODE_SEQ);
+
 		return *xxx_list;
 	}
 
 	list& list() const
 	{
+		assert(type == NODE_SEQ || type == NODE_ALT || type == NODE_ALT_SKIPPABLE);
+
 		return *xxx_list;
 	}
 
@@ -110,29 +109,42 @@ struct node
 
 	void list_free();
 
+	bool is_list() const
+	{
+		return type == NODE_SEQ || type == NODE_ALT || type == NODE_ALT_SKIPPABLE;
+	}
+	bool is_literal() const
+	{
+		return type == NODE_CI_LITERAL || type == NODE_CS_LITERAL;
+	}
+	bool is_text() const
+	{
+		return is_literal() || type == NODE_RULE || type == NODE_PROSE;
+	}
+
 	struct
 	{
-		struct
-		{
-			struct node* forward;
-			struct node* backward;
-			unsigned int min;
-			unsigned int max;
-		} loop;
-	} u;
+		struct node* forward;
+		struct node* backward;
+		unsigned int min;
+		unsigned int max;
+	} loop;
 
 private:
+
+	text xxx_text;
+	struct list* xxx_list;
+
 };
 
-struct node* node_create_ci_literal(int invisible, const text& literal);
-struct node* node_create_cs_literal(int invisible, const text& literal);
-struct node* node_create_name(int invisible, const text& name);
-struct node* node_create_name(int invisible, const text& name);
-struct node* node_create_prose(int invisible, const text& name);
-struct node* node_create_alt(int invisible, struct list* alt);
-struct node* node_create_alt_skippable(int invisible, struct list* alt);
-struct node* node_create_seq(int invisible, struct list* seq);
-struct node* node_create_loop(int invisible, struct node* forward, struct node* backward);
+node* node_create_ci_literal(int invisible, const text& literal);
+node* node_create_cs_literal(int invisible, const text& literal);
+node* node_create_name(int invisible, const text& name);
+node* node_create_prose(int invisible, const text& name);
+node* node_create_alt(int invisible, list* alt);
+node* node_create_alt_skippable(int invisible, struct list* alt);
+node* node_create_seq(int invisible, list* seq);
+node* node_create_loop(int invisible, node* forward, node* backward);
 
 void node_make_seq(int invisible, struct node **n);
 bool node_compare(const struct node *a, const struct node *b);

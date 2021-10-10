@@ -167,21 +167,21 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
         case NODE_LOOP:
             writer->printf("label = \"<b> &larr;|LOOP "); /* TODO: utf8 */
 
-            if (node->u.loop.min == 1 && node->u.loop.max == 1)
+            if (node->loop.min == 1 && node->loop.max == 1)
             {
                 /* nothing */
             }
-            else if (!node->u.loop.max)
+            else if (!node->loop.max)
             {
-                writer->printf("\\{%u,""\\}&times;", node->u.loop.min);
+                writer->printf("\\{%u,""\\}&times;", node->loop.min);
             }
-            else if (node->u.loop.min == node->u.loop.max)
+            else if (node->loop.min == node->loop.max)
             {
-                writer->printf("%u&times;", node->u.loop.min);
+                writer->printf("%u&times;", node->loop.min);
             }
             else
             {
-                writer->printf("\\{%u,%u\\}&times;", node->u.loop.min, node->u.loop.max);
+                writer->printf("\\{%u,%u\\}&times;", node->loop.min, node->loop.max);
             }
 
             writer->printf("|<f> &rarr;\"");
@@ -211,8 +211,8 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
             break;
 
         case NODE_LOOP:
-            rrd_print_dot(prefix, node, ":f", node->u.loop.forward);
-            rrd_print_dot(prefix, node, ":b", node->u.loop.backward);
+            rrd_print_dot(prefix, node, ":f", node->loop.forward);
+            rrd_print_dot(prefix, node, ":b", node->loop.backward);
             break;
 
         default:

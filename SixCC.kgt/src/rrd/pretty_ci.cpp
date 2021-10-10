@@ -81,7 +81,7 @@ static void ci_alt(int* changed, struct node* n)
 				node->become_cs();
 
 				struct node* nuw = node_create_cs_literal(node->invisible, node->literal().toupper());
-				list.add(nuw);
+				list.push_back(nuw);
 
 				*changed = 1;
 
@@ -102,20 +102,20 @@ static void ci_alt(int* changed, struct node* n)
 
 	/* append list */
 	{
-		n->alt().add(list);
+		n->alt().append(list);
 	}
 }
 
-void rrd_pretty_ci(int* changed, struct node** n)
+node* rrd_pretty_ci(int* changed, node** rrd)
 {
-	assert(n != nullptr);
+	assert(rrd != nullptr);
 
-	if (*n == nullptr)
+	if (*rrd == nullptr)
 	{
-		return;
+		return *rrd;
 	}
 
-	switch ((*n)->type)
+	switch ((*rrd)->type)
 	{
 		case NODE_CI_LITERAL:
 		case NODE_CS_LITERAL:
@@ -127,8 +127,10 @@ void rrd_pretty_ci(int* changed, struct node** n)
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			ci_alt(changed, *n);
+			ci_alt(changed, *rrd);
 			break;
 	}
+
+	return *rrd;
 }
 

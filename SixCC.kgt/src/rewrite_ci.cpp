@@ -35,24 +35,21 @@ static void add_alt(int invisible, struct ast_alt **alt, const text& text)
 	*alt = nuw;
 }
 
-WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt, const text& text)
+WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt, text& text)
 {
-#if true
-	Error::notimplemented();
-#else
 	assert(alt != NULL);
 
 	size_t i, j;
 	unsigned long num_alphas, perm_count;
 	unsigned long alpha_inds[CHAR_BIT * sizeof i - 1]; /* - 1 because we shift (1 << n) by this size */
 
-	const char* p = text.chars();
 	int n = text.length();
 
 	num_alphas = 0;
+
 	for (i = 0; i < n; i++)
 	{
-		if (!isalpha((unsigned char)p[i]))
+		if (!isalpha((unsigned char)text[i]))
 		{
 			continue;
 		}
@@ -68,21 +65,23 @@ WARN_UNUSED_RESULT static bool permute_cases(int invisible, struct ast_alt** alt
 
 		alpha_inds[num_alphas++] = i;
 	}
-
 	perm_count = (1UL << num_alphas); /* this limits us to sizeof perm_count */
 	for (i = 0; i < perm_count; i++)
 	{
 		for (j = 0; j < num_alphas; j++)
 		{
-			p[alpha_inds[j]] = ((i >> j) & 1UL)
-				? tolower((unsigned char)p[alpha_inds[j]])
-				: toupper((unsigned char)p[alpha_inds[j]]);
+#if true
+			Error::notimplemented();
+#else
+			text[alpha_inds[j]] = ((i >> j) & 1UL)
+				? tolower((unsigned char)text[alpha_inds[j]])
+				: toupper((unsigned char)text[alpha_inds[j]]);
+#endif
 		}
 
 		add_alt(invisible, alt, text);
 	}
 	return true;
-#endif
 }
 
 WARN_UNUSED_RESULT static bool rewrite_ci(const struct ast_term* term)

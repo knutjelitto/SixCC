@@ -98,18 +98,18 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 			print_indent(f, depth);
 			f->printf("LOOP%s:\n", n->invisible ? " (invisible)" : "");
 
-			if (n->u.loop.forward != nullptr)
+			if (n->loop.forward != nullptr)
 			{
 				print_indent(f, depth + 1);
 				f->puts(".forward:\n");
-				node_walk(f, n->u.loop.forward, depth + 2);
+				node_walk(f, n->loop.forward, depth + 2);
 			}
 
-			if (n->u.loop.backward != nullptr)
+			if (n->loop.backward != nullptr)
 			{
 				print_indent(f, depth + 1);
 				f->puts(".backward:\n");
-				node_walk(f, n->u.loop.backward, depth + 2);
+				node_walk(f, n->loop.backward, depth + 2);
 			}
 
 			break;

@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <errno.h>
 
+#include "../errors.h"
 #include "../txt.h"
 #include "../ast.h"
 #include "../xalloc.h"
@@ -41,7 +42,7 @@ static int transform_terms(const struct ast_alt* alt, struct node** r)
 			goto error;
 		}
 
-		list->add(node);
+		list->push_back(node);
 	}
 
 	*r = node_create_seq(alt->invisible, list);
@@ -55,13 +56,13 @@ error:
 	return 0;
 }
 
-static int transform_alts(const struct ast_alt* alts, struct node** r)
+static int transform_alts(const ast_alt* alts, struct node** r)
 {
 	assert(r != nullptr);
 	assert(alts != nullptr);
 
-	struct list* list;
-	const struct ast_alt* alt;
+	list* list;
+	const ast_alt* alt;
 
 	list = new struct list();
 
@@ -74,7 +75,7 @@ static int transform_alts(const struct ast_alt* alts, struct node** r)
 			goto error;
 		}
 
-		list->add(node);
+		list->push_back(node);
 	}
 
 	*r = node_create_alt(alts->invisible, list);
@@ -121,13 +122,13 @@ static int single_term(const struct ast_term* term, struct node** r)
 
 		case TYPE_GROUP:
 			return transform_alts(term->group(), r);
-	}
 
-	__assume(false);
-	assert(!"unreached");
+		default:
+			Error::notreached();
+	}
 }
 
-static int optional_term(const struct ast_term* term, struct node** r)
+static int optional_term(const ast_term* term, struct node** r)
 {
 	assert(r != nullptr);
 
@@ -140,18 +141,18 @@ static int optional_term(const struct ast_term* term, struct node** r)
 
 	struct list* list = new struct list();
 
-	list->add(n);
+	list->push_back(n);
 
 	*r = node_create_alt_skippable(term->invisible, list);
 
 	return 1;
 }
 
-static int oneormore_term(const struct ast_term* term, struct node** r)
+static int oneormore_term(const ast_term* term, struct node** r)
 {
-	struct node* n;
-
 	assert(r != nullptr);
+
+	struct node* n;
 
 	if (!single_term(term, &n))
 	{
@@ -195,14 +196,14 @@ static int finite_term(const struct ast_term* term, struct node** r)
 	if (term->min > 0)
 	{
 		loop = node_create_loop(term->invisible, n, nullptr);
-		loop->u.loop.min = term->min - 1;
-		loop->u.loop.max = term->max - 1;
+		loop->loop.min = term->min - 1;
+		loop->loop.max = term->max - 1;
 	}
 	else
 	{
 		loop = node_create_loop(term->invisible, nullptr, n);
-		loop->u.loop.min = term->min;
-		loop->u.loop.max = term->max;
+		loop->loop.min = term->min;
+		loop->loop.max = term->max;
 	}
 
 	*r = loop;
@@ -223,7 +224,7 @@ static int atleast_term(const struct ast_term* term, struct node** r)
 
 	*r = node_create_loop(term->invisible, nullptr, n);
 
-	(*r)->u.loop.min = term->min;
+	(*r)->loop.min = term->min;
 
 	return 1;
 }

@@ -10,7 +10,7 @@
 #include <stddef.h>
 
 struct txt;
-class text;
+struct text;
 
 void ok_exit();
 void err_exit();

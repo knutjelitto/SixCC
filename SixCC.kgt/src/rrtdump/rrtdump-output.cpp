@@ -79,7 +79,7 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("LITERAL");
 			print_coords(writer, n);
-			writer->printf(": \"%.*s\"%s\n", (int)n->u.literal.length(), n->u.literal.chars(),
+			writer->printf(": \"%.*s\"%s\n", (int)n->text.length(), n->text.chars(),
 				n->type == TNODE_CI_LITERAL ? "/i" : "");
 
 			break;
@@ -88,7 +88,7 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("PROSE");
 			print_coords(writer, n);
-			writer->printf(": %s\n", n->u.prose.chars());
+			writer->printf(": %s\n", n->text.chars());
 
 			break;
 
@@ -96,9 +96,9 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("COMMENT");
 			print_coords(writer, n);
-			writer->printf(" \"%s\"", n->u.comment.s.chars());
+			writer->printf(" \"%s\"", n->text.chars());
 			writer->printf(": (\n");
-			tnode_walk(writer, n->u.comment.tnode, depth + 1);
+			tnode_walk(writer, n->commented, depth + 1);
 			print_indent(writer, depth);
 			writer->printf(")\n");
 
@@ -108,7 +108,7 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->puts("RULE");
 			print_coords(writer, n);
-			writer->printf(": <%s>\n", n->u.name.chars());
+			writer->printf(": <%s>\n", n->text.chars());
 
 			break;
 
@@ -116,12 +116,12 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			print_indent(writer, depth);
 			writer->printf("VLIST");
 			print_coords(writer, n);
-			writer->printf(" o=%u", n->u.vlist.o); /* XXX: belongs in alt union */
+			writer->printf(" o=%u", n->vlist.o); /* XXX: belongs in alt union */
 			writer->printf(": [\n");
-			for (i = 0; i < n->u.vlist.n; i++)
+			for (i = 0; i < n->vlist.n; i++)
 			{
 				/* TODO: show tline for each alt */
-				tnode_walk(writer, n->u.vlist.a[i], depth + 1);
+				tnode_walk(writer, n->vlist.a[i], depth + 1);
 			}
 			print_indent(writer, depth);
 			writer->printf("]\n");
@@ -133,9 +133,9 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 			writer->printf("HLIST");
 			print_coords(writer, n);
 			writer->printf(": [\n");
-			for (i = 0; i < n->u.hlist.n; i++)
+			for (auto tn : n->hlist)
 			{
-				tnode_walk(writer, n->u.hlist.a[i], depth + 1);
+				tnode_walk(writer, tn, depth + 1);
 			}
 			print_indent(writer, depth);
 			writer->printf("]\n");
@@ -168,7 +168,7 @@ static void dim_mono_string(const text& text, unsigned *w, unsigned *a, unsigned
 
 WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 {
-	const struct ast_rule* p;
+	const struct ast_rule* rule;
 
 	struct dim dim = {
 		dim_mono_txt,
@@ -181,12 +181,12 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 		0
 	};
 
-	for (p = grammar; p != nullptr; p = p->next)
+	for (rule = grammar; rule != nullptr; rule = rule->next)
 	{
 		struct tnode* tnode;
 		struct node* rrd;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return 0;
@@ -196,13 +196,13 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", p->name().chars());
+			writer->printf("%s:\n", rule->name().chars());
 			tnode_walk(writer, tnode, 1);
 			writer->puts("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", p->name().chars());
+			writer->printf("%s: (before prettify)\n", rule->name().chars());
 			tnode_walk(writer, tnode, 1);
 			writer->puts("\n");
 
@@ -212,7 +212,7 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 			tnode = rrd_to_tnode(rrd, &dim);
 
-			writer->printf("%s: (after prettify)\n", p->name().chars());
+			writer->printf("%s: (after prettify)\n", rule->name().chars());
 			tnode_walk(writer, tnode, 1);
 			writer->printf("\n");
 		}

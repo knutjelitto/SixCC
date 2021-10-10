@@ -28,7 +28,7 @@
 static void add_alt(int invisible, list& list, const text& text)
 {
 	struct node *node = node_create_cs_literal(invisible, text);
-	list.add(node);
+	list.push_back(node);
 }
 
 /* TODO: centralise */
@@ -154,11 +154,11 @@ WARN_UNUSED_RESULT static int node_walk(struct node* n)
 			break;
 
 		case NODE_LOOP:
-			if (!node_walk(n->u.loop.forward))
+			if (!node_walk(n->loop.forward))
 			{
 				return 0;
 			}
-			if (!node_walk(n->u.loop.backward))
+			if (!node_walk(n->loop.backward))
 			{
 				return 0;
 			}

@@ -9,15 +9,15 @@
 
 struct node;
 
-void rrd_pretty_ci(int *changed, struct node **);
-void rrd_pretty_affixes(int *changed, struct node **);
-void rrd_pretty_bottom(int *changed, struct node **);
-void rrd_pretty_redundant(int *changed, struct node **);
-void rrd_pretty_skippable(int *changed, struct node **);
-void rrd_pretty_collapse(int *changed, struct node **);
-void rrd_pretty_nested(int *changed, struct node **);
-void rrd_pretty_roll(int *changed, struct node **);
+node* rrd_pretty_ci(int *changed, node **);
+node* rrd_pretty_affixes(int *changed, node **);
+node* rrd_pretty_bottom(int *changed, node **);
+node* rrd_pretty_redundant(int *changed, node **);
+node* rrd_pretty_skippable(int *changed, node **);
+node* rrd_pretty_collapse(int *changed, node **);
+node* rrd_pretty_nested(int *changed, node **);
+node* rrd_pretty_roll(int *changed, node **);
 
-void rrd_pretty(struct node **rrd);
+void rrd_pretty(node **);
 
 #endif

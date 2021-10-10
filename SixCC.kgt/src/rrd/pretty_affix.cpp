@@ -14,26 +14,26 @@
 #include "node.h"
 #include "list.h"
 
-#if true
-#else
 static void loop_inc(struct node* loop)
 {
 	assert(loop != nullptr);
 	assert(loop->type == NODE_LOOP);
 
-	if (loop->u.loop.min != 0)
+	if (loop->loop.min != 0)
 	{
-		loop->u.loop.min++;
+		loop->loop.min++;
 	}
 
-	if (loop->u.loop.max != 0)
+	if (loop->loop.max != 0)
 	{
-		loop->u.loop.max++;
+		loop->loop.max++;
 	}
 }
 
 static void list_free_upto(struct list** list, const struct node* end)
 {
+#if true
+#else
 	while (*list != nullptr && (*list)->node != end)
 	{
 		struct node* n;
@@ -41,10 +41,14 @@ static void list_free_upto(struct list** list, const struct node* end)
 		n = list_pop_front(list);
 		node_free(n);
 	}
+#endif
 }
 
 static int list_walk_upto(struct list** tail, struct list* head, struct list* list, const struct node* end)
 {
+#if true
+	return 0;
+#else
 	assert(tail != nullptr);
 
 	struct list* p;
@@ -66,10 +70,13 @@ static int list_walk_upto(struct list** tail, struct list* head, struct list* li
 	*tail = p;
 
 	return 1;
+#endif
 }
 
 static void collapse_suffix(int* changed, struct list** head, struct node* loop)
 {
+#if true
+#else
 	struct list* p;
 
 	assert(changed != nullptr);
@@ -111,10 +118,13 @@ static void collapse_suffix(int* changed, struct list** head, struct node* loop)
 	loop_inc(loop);
 
 	*changed = 1;
+#endif
 }
 
 static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 {
+#if true
+#else
 	struct list** p;
 
 	assert(changed != nullptr);
@@ -171,21 +181,21 @@ static void collapse_prefix(int* changed, struct list** head, struct node* loop)
 	loop_inc(loop);
 
 	*changed = 1;
-}
 #endif
+}
 
-void rrd_pretty_affixes(int* changed, struct node** n)
+node* rrd_pretty_affixes(int* changed, struct node** rrd)
 {
-#if true
-#else
-	assert(n != nullptr);
+	assert(rrd != nullptr);
 
-	if (*n == nullptr)
+	if (*rrd == nullptr)
 	{
-		return;
+		return *rrd;
 	}
 
-	switch ((*n)->type)
+#if true
+#else
+	switch ((*rrd)->type)
 	{
 		struct list** p;
 
@@ -203,7 +213,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 			 *
 			 */
 
-			for (p = &(*n)->xxx_list; *p != nullptr; p = &(*p)->next)
+			for (p = &(*rrd)->xxx_list; *p != nullptr; p = &(*p)->next)
 			{
 				if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP)
 				{
@@ -222,7 +232,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 				}
 			}
 
-			for (p = &(*n)->xxx_list; *p != nullptr; p = &(*p)->next)
+			for (p = &(*rrd)->xxx_list; *p != nullptr; p = &(*p)->next)
 			{
 				if ((*p)->node != nullptr && (*p)->node->type == NODE_LOOP)
 				{
@@ -232,7 +242,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 					}
 					else
 					{
-						collapse_prefix(changed, &(*n)->xxx_list, (*p)->node);
+						collapse_prefix(changed, &(*rrd)->xxx_list, (*p)->node);
 					}
 					if (*changed)
 					{
@@ -253,5 +263,7 @@ void rrd_pretty_affixes(int* changed, struct node** n)
 			break;
 	}
 #endif
+
+	return *rrd;
 }
 

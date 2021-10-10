@@ -20,15 +20,15 @@ static void nested_alt(int* changed, struct node* n)
 
 	list replacement;
 
-	for (auto current = n->alt().begin(); current != n->alt().end(); current = current + 1)
+	for (node* current : n->alt())
 	{
-		if (*current == nullptr || ((*current)->type != NODE_ALT && (*current)->type != NODE_ALT_SKIPPABLE))
+		if (current == nullptr || (current->type != NODE_ALT && current->type != NODE_ALT_SKIPPABLE))
 		{
-			replacement.add(*current);
+			replacement.push_back(current);
 			continue;
 		}
 
-		replacement.add((*current)->alt());
+		replacement.append(current->alt());
 
 		*changed = 1;
 	}
@@ -45,15 +45,15 @@ static void nested_seq(int* changed, struct node* n)
 
 	list replacement;
 
-	for (auto current = n->seq().begin(); current != n->seq().end(); current = current + 1)
+	for (node* current : n->seq())
 	{
-		if (*current == nullptr || (*current)->type != NODE_SEQ)
+		if (current == nullptr || current->type != NODE_SEQ)
 		{
-			replacement.add(*current);
+			replacement.push_back(current);
 			continue;
 		}
 
-		replacement.add((*current)->seq());
+		replacement.append(current->seq());
 
 		*changed = 1;
 	}
@@ -64,24 +64,24 @@ static void nested_seq(int* changed, struct node* n)
 	}
 }
 
-void rrd_pretty_nested(int* changed, struct node** n)
+node* rrd_pretty_nested(int* changed, node** rrd)
 {
-	assert(n != nullptr);
+	assert(rrd != nullptr);
 
-	if (*n == nullptr)
+	if (*rrd == nullptr)
 	{
-		return;
+		return *rrd;
 	}
 
-	switch ((*n)->type)
+	switch ((*rrd)->type)
 	{
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
-			nested_alt(changed, *n);
+			nested_alt(changed, *rrd);
 			break;
 
 		case NODE_SEQ:
-			nested_seq(changed, *n);
+			nested_seq(changed, *rrd);
 			break;
 
 		case NODE_CI_LITERAL:
@@ -91,5 +91,6 @@ void rrd_pretty_nested(int* changed, struct node** n)
 		case NODE_LOOP:
 			break;
 	}
-}
 
+	return *rrd;
+}

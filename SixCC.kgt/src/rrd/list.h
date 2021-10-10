@@ -18,12 +18,7 @@ struct list : std::vector<struct node*>
 		erase(begin() + index);
 	}
 
-	inline void add(struct node* node)
-	{
-		push_back(node);
-	}
-
-	inline void add(const list& other)
+	inline void append(const list& other)
 	{
 		for (struct node* node : other)
 		{
@@ -34,7 +29,7 @@ struct list : std::vector<struct node*>
 	inline void replace(const list& other)
 	{
 		clear();
-		add(other);
+		append(other);
 	}
 
 	inline struct node* pop()
@@ -46,6 +41,16 @@ struct list : std::vector<struct node*>
 			return node;
 		}
 		return nullptr;
+	}
+
+	inline void pop_front()
+	{
+		erase(begin());
+	}
+
+	inline void push_front(node* node)
+	{
+		insert(begin(), node);
 	}
 
 	inline node* single_or_default() const
@@ -81,16 +86,9 @@ struct list : std::vector<struct node*>
 	}
 
 	bool eq(const list& other) const;
-
-private:
-	struct node* node;
-	struct list* next;
 };
 
 node* list_pop_front(list& list);
-void list_append(list& dst, list& src);
-int list_compare(const list& a, const list& b);
-node* list_tail(list& list);
 void list_free(list& list);
 unsigned list_count(const list& list);
 
