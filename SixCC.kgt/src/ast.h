@@ -7,6 +7,7 @@
 #ifndef KGT_AST_H
 #define KGT_AST_H
 
+#include <deque>
 #include "txt.h"
 
 struct ast_alt;
@@ -177,8 +178,6 @@ struct ast_term_group : ast_term
  */
 struct ast_alt
 {
-    ast_alt() = delete;
-
     ast_alt(int invisible, ast_term* terms)
         : invisible(invisible), terms(terms), next(nullptr)
     {

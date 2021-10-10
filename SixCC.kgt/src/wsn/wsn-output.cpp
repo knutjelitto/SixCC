@@ -83,8 +83,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_CI_LITERAL:
+#if true
+			writer->printf(" unimplemented-ci-literal<%s>", term->text().chars());
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case TYPE_CS_LITERAL: {
 			size_t i;
@@ -110,8 +115,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_PROSE:
+#if true
+			writer->printf(" unimplemented-prose<%s>", term->text().chars());
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case TYPE_GROUP:
 			if (!output_alt(term->group()))

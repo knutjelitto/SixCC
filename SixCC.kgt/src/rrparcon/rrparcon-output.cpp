@@ -113,8 +113,16 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 	switch (n->type)
 	{
 		case NODE_CI_LITERAL:
+#if true
+			print_indent(writer, depth);
+			writer->printf("unimplemented-ci-text(\"");
+			writer->escape(n->literal(), escputc);
+			writer->printf("\")");
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case NODE_CS_LITERAL:
 			print_indent(writer, depth);
@@ -133,8 +141,16 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 			break;
 
 		case NODE_PROSE:
+#if true
+			print_indent(writer, depth);
+			writer->printf("unimplemented-prose(\"");
+			writer->escape(n->prose(), escputc);
+			writer->printf("\")");
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:

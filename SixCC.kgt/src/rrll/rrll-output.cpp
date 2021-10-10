@@ -114,8 +114,13 @@ static void node_walk(iwriter* writer, const struct node* n)
 	switch (n->type)
 	{
 		case NODE_CI_LITERAL:
+#if true
+			writer->printf(" unimplemented-ci-literal<%s>", n->literal().chars());
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			err_exit();
+#endif
 
 		case NODE_CS_LITERAL:
 			writer->printf("\"");

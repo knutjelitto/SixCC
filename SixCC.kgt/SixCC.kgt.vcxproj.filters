@@ -43,9 +43,6 @@
     <Filter Include="src\dot">
       <UniqueIdentifier>{c983c517-3c49-44ef-a635-b942a5ecb0fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\html5">
-      <UniqueIdentifier>{b82d706f-971b-41f9-bd02-3f4551432907}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\rrdot">
       <UniqueIdentifier>{34d7515b-fe8b-41ca-ac67-d6dc96e601ee}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,9 @@
     </Filter>
     <Filter Include="src\sid">
       <UniqueIdentifier>{f96732c6-c5a7-431e-875b-6f4114ff47f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\svghtml5">
+      <UniqueIdentifier>{b82d706f-971b-41f9-bd02-3f4551432907}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -204,9 +204,6 @@
     <ClCompile Include="src\dot\dot-output.cpp">
       <Filter>src\dot</Filter>
     </ClCompile>
-    <ClCompile Include="src\html5\html5-output.cpp">
-      <Filter>src\html5</Filter>
-    </ClCompile>
     <ClCompile Include="src\sid\sid-output.cpp">
       <Filter>src\sid</Filter>
     </ClCompile>
@@ -242,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="src\errors.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\svghtml5\svghtml5-output.cpp">
+      <Filter>src\svghtml5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,9 +353,6 @@
     <ClInclude Include="src\dot\io.h">
       <Filter>src\dot</Filter>
     </ClInclude>
-    <ClInclude Include="src\html5\io.h">
-      <Filter>src\html5</Filter>
-    </ClInclude>
     <ClInclude Include="src\sid\io.h">
       <Filter>src\sid</Filter>
     </ClInclude>
@@ -388,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="src\errors.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\svghtml5\io.h">
+      <Filter>src\svghtml5</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

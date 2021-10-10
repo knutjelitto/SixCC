@@ -83,7 +83,7 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 		}
 	}
 
-	writer->printf("\n");
+	writer->puts("\n");
 
 	return 1;
 }
@@ -103,11 +103,11 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 
 		if (alt->next != nullptr)
 		{
-			writer->printf("\t|");
+			writer->puts("\t|");
 		}
 	}
 
-	writer->printf("\n");
+	writer->puts("\n");
 	return 1;
 }
 

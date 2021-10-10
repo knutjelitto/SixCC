@@ -122,8 +122,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_PROSE:
+#if true
+			writer->printf(" unimplemented-prose<%s>", term->text().chars());
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case TYPE_GROUP:
 			if (!output_group(term->group()))

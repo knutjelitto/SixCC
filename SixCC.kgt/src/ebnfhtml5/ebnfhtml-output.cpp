@@ -89,7 +89,7 @@ static int atomic(const struct ast_term* term)
     assert(!"unreached");
 }
 
-static const char * rep(unsigned min, unsigned max)
+static const char* rep(unsigned min, unsigned max)
 {
     if (min == 1 && max == 1)
     {

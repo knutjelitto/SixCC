@@ -13,12 +13,8 @@ struct ast_rule;
 
 extern int prettify;
 
-WARN_UNUSED_RESULT
-int
-html5_output(const struct ast_rule *);
+WARN_UNUSED_RESULT int svg_html5_output(const struct ast_rule *);
 
-WARN_UNUSED_RESULT
-int
-xhtml5_output(const struct ast_rule *);
+WARN_UNUSED_RESULT int svg_xhtml5_output(const struct ast_rule *);
 
 #endif

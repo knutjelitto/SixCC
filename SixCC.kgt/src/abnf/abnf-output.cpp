@@ -177,7 +177,7 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 		{
 			if (!first)
 			{
-				writer->printf(" / ");
+				writer->puts(" / ");
 			}
 			else
 			{
@@ -201,7 +201,7 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 
 		if (!first)
 		{
-			writer->printf(" / ");
+			writer->puts(" / ");
 		}
 		else
 		{
@@ -262,7 +262,7 @@ WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 {
 	if (group->next != nullptr)
 	{
-		writer->printf("(");
+		writer->puts("(");
 	}
 
 	if (!output_alts(group))
@@ -272,7 +272,7 @@ WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 
 	if (group->next != nullptr)
 	{
-		writer->printf(")");
+		writer->puts(")");
 	}
 	return 1;
 }
@@ -302,7 +302,7 @@ static void output_repetition(unsigned int min, unsigned int max)
 		writer->printf("%u", min);
 	}
 
-	writer->printf("*");
+	writer->puts("*");
 
 	if (max > 0)
 	{
@@ -345,7 +345,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (term->min == 0 && term->max == 1)
 	{
-		writer->printf("[ ");
+		writer->puts("[ ");
 	}
 	else
 	{
@@ -353,7 +353,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		if (!a)
 		{
-			writer->printf("( ");
+			writer->puts("( ");
 		}
 	}
 
@@ -400,11 +400,11 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (term->min == 0 && term->max == 1)
 	{
-		writer->printf(" ]");
+		writer->puts(" ]");
 	}
 	else if (!a)
 	{
-		writer->printf(" )");
+		writer->puts(" )");
 	}
 	return 1;
 }
@@ -418,8 +418,8 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule *rule)
 		return 0;
 	}
 
-	writer->printf("\n");
-	writer->printf("\n");
+	writer->puts("\n");
+	writer->puts("\n");
 
 	return 1;
 }

@@ -127,7 +127,7 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int html5_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int svg_html5_output(const struct ast_rule *grammar)
 {
 	writer->printf("<!DOCTYPE html>\n");
 	writer->printf("<html>\n");
@@ -140,7 +140,7 @@ WARN_UNUSED_RESULT int html5_output(const struct ast_rule *grammar)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int xhtml5_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int svg_xhtml5_output(const struct ast_rule *grammar)
 {
 	writer->printf("<?xml version='1.0' encoding='utf-8'?>\n");
 	writer->printf("<!DOCTYPE html>\n");

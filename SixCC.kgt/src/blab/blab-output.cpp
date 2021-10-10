@@ -73,7 +73,7 @@ WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 
 		if (alt->next != NULL)
 		{
-			writer->printf(" |");
+			writer->puts(" |");
 		}
 	}
 	return 1;
@@ -83,15 +83,15 @@ static void output_repetition(unsigned int min, unsigned int max)
 {
 	if (min == 0 && max == 0)
 	{
-		writer->printf("*");
+		writer->puts("*");
 	}
 	else if (min == 0 && max == 1)
 	{
-		writer->printf("?");
+		writer->puts("?");
 	}
 	else if (min == 1 && max == 0)
 	{
-		writer->printf("+");
+		writer->puts("+");
 	}
 	else if (min == 1 && max == 1)
 	{
@@ -148,7 +148,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (!a)
 	{
-		writer->printf(" (");
+		writer->puts(" (");
 	}
 
 	switch (term->type)
@@ -217,8 +217,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_PROSE:
+#if true
+			writer->printf(" unimplemented-prose<%s>", term->text().chars());
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case TYPE_GROUP:
 			if (!output_group(term->group()))
@@ -230,7 +235,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	if (!a)
 	{
-		writer->printf(" )");
+		writer->puts(" )");
 	}
 
 	output_repetition(term->min, term->max);
@@ -268,12 +273,12 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 
 		if (alt->next != NULL)
 		{
-			writer->printf("\n\t|");
+			writer->puts("\n\t|");
 		}
 	}
 
-	writer->printf("\n");
-	writer->printf("\n");
+	writer->puts("\n");
+	writer->puts("\n");
 	return 1;
 }
 

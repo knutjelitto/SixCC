@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2014-2019 Katherine Flavel
  *
  * See LICENCE for the full copyright terms.
@@ -134,9 +134,9 @@ static void bars(struct render_context* ctx, unsigned n, unsigned w)
 
 	for (i = 0; i < n; i++)
 	{
-		bprintf(ctx, "\017");
+		bprintf(ctx, "\x0F");
 		ctx->x += w - 2;
-		bprintf(ctx, "\017");
+		bprintf(ctx, "\x0F");
 		ctx->y++;
 		ctx->x = x;
 	}
@@ -144,37 +144,37 @@ static void bars(struct render_context* ctx, unsigned n, unsigned w)
 
 static const char* tile[][2] =
 {
-	{ nullptr, nullptr },    /* \000 */
-	{ "^", "\xe2\x95\xb0" }, /* \001 */
-	{ ",", "\xe2\x95\xad" }, /* \002 */
-	{ ".", "\xe2\x95\xae" }, /* \003 */
-	{ "v", "\xe2\x95\xad" }, /* \004 */
-	{ "+", "\xe2\x94\xbc" }, /* \005 */
-	{ "`", "\xe2\x95\xb0" }, /* \006 */
+	{ nullptr, nullptr },    /* \x00 */
+	{ "^", "\xe2\x95\xb0" }, /* \x01 '╰' */
+	{ ",", "\xe2\x95\xad" }, /* \x02 '╭' */
+	{ ".", "\xe2\x95\xae" }, /* \x03 '╮' */
+	{ "v", "\xe2\x95\xad" }, /* \x04 '╭' */
+	{ "+", "\xe2\x94\xbc" }, /* \x05 '┼' */
+	{ "`", "\xe2\x95\xb0" }, /* \x06 '╰' */
 
 	/* whitespace, not used because of rtrim() */
-	{ nullptr, nullptr }, /* \007 */
-	{ nullptr, nullptr }, /* \010 */
-	{ nullptr, nullptr }, /* \011 */
-	{ nullptr, nullptr }, /* \012 */
-	{ nullptr, nullptr }, /* \013 */
-	{ nullptr, nullptr }, /* \014 */
-	{ nullptr, nullptr }, /* \015 */
+	{ nullptr, nullptr }, /* \x07 */
+	{ nullptr, nullptr }, /* \x08 */
+	{ nullptr, nullptr }, /* \x09 */
+	{ nullptr, nullptr }, /* \x0A */
+	{ nullptr, nullptr }, /* \x0B */
+	{ nullptr, nullptr }, /* \x0C */
+	{ nullptr, nullptr }, /* \x0D */
 
-	{ "'", "\xe2\x95\xaf" }, /* \016 */
-	{ "|", "\xe2\x94\x82" }, /* \017 */
-	{ ">", "\xe2\x95\xad" }, /* \020 */
-	{ "<", "\xe2\x95\xaf" }, /* \021 */
+	{ "'", "\xe2\x95\xaf" }, /* \x0E '╯' */
+	{ "|", "\xe2\x94\x82" }, /* \x0F '│' */
+	{ ">", "\xe2\x95\xad" }, /* \x10 '╭' */
+	{ "<", "\xe2\x95\xaf" }, /* \x11 '╯' */
 
-	{ "-", "\xe2\x94\x80" }, /* \x12 */
-	{ "|", "\xe2\x94\x9c" }, /* \023 */
-	{ "|", "\xe2\x94\xa4" }, /* \024 */
-	{ ">", "\xe2\x95\xb0" }, /* \025 */
-	{ "<", "\xe2\x95\xae" }, /* \026 */
-	{ "<", "\xe2\x94\xbc" }, /* \027 */
-	{ "v", "\xe2\x95\xae" }, /* \030 */
-	{ ">", "\xe2\x94\xbc" }, /* \031 */
-	{ "^", "\xe2\x95\xaf" }  /* \032 */
+	{ "-", "\xe2\x94\x80" }, /* \x12 '─' */
+	{ "|", "\xe2\x94\x9c" }, /* \x13 '├' */
+	{ "|", "\xe2\x94\xa4" }, /* \x14 '┤' */
+	{ ">", "\xe2\x95\xb0" }, /* \x15 '╰' */
+	{ "<", "\xe2\x95\xae" }, /* \x17 '╮' */
+	{ "<", "\xe2\x94\xbc" }, /* \x18 '┼' */
+	{ "v", "\xe2\x95\xae" }, /* \x19 '╮' */
+	{ ">", "\xe2\x94\xbc" }, /* \x1A '┼' */
+	{ "^", "\xe2\x95\xaf" }  /* \x1B '╯' */
 };
 
 static void tile_puts(const char* s, int utf8)
@@ -183,13 +183,13 @@ static void tile_puts(const char* s, int utf8)
 
 	for (p = s; *p != '\0'; p++)
 	{
-		if ((unsigned char)*p < sizeof tile / sizeof * tile)
+		if ((unsigned char)*p < sizeof(tile) / sizeof(*tile))
 		{
-			writer->printf("%s", tile[(unsigned char)*p][utf8]);
+			writer->puts(tile[(unsigned)*p][utf8]);
 			continue;
 		}
 
-		writer->printf("%c", *p);
+		writer->putc(*p);
 	}
 }
 
@@ -201,21 +201,21 @@ static void render_tline(struct render_context* ctx, tline tline, int rhs)
 
 	switch (tline)
 	{
-		case TLINE_A: a = "\021\001"; break;
-		case TLINE_a: a = "\032\025"; break;
-		case TLINE_B: a = "\002\003"; break;
-		case TLINE_C: a = "\026\004"; break;
-		case TLINE_c: a = "\030\020"; break;
-		case TLINE_D: a = "\027\005"; break;
-		case TLINE_d: a = "\005\031"; break;
-		case TLINE_E: a = "\006\016"; break;
-		case TLINE_F: a = "\017\017"; break;
-		case TLINE_G: a = "\001\021"; break;
-		case TLINE_g: a = "\025\032"; break;
-		case TLINE_H: a = "\004\026"; break;
-		case TLINE_h: a = "\020\030"; break;
-		case TLINE_I: a = "\001\021"; break;
-		case TLINE_i: a = "\025\032"; break;
+		case TLINE_A: a = "\x11\x01"; break;
+		case TLINE_a: a = "\x1A\x15"; break;
+		case TLINE_B: a = "\x02\x03"; break;
+		case TLINE_C: a = "\x16\x04"; break;
+		case TLINE_c: a = "\x18\x10"; break;
+		case TLINE_D: a = "\x17\x05"; break;
+		case TLINE_d: a = "\x05\x19"; break;
+		case TLINE_E: a = "\x06\x0E"; break;
+		case TLINE_F: a = "\x0F\x0F"; break;
+		case TLINE_G: a = "\x01\x11"; break;
+		case TLINE_g: a = "\x15\x1A"; break;
+		case TLINE_H: a = "\x04\x16"; break;
+		case TLINE_h: a = "\x10\x18"; break;
+		case TLINE_I: a = "\x01\x11"; break;
+		case TLINE_i: a = "\x15\x1A"; break;
 		case TLINE_J: a = "\x12\x12"; break;
 
 		default:
@@ -355,6 +355,8 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 	switch (n->type)
 	{
 		case TNODE_RTL_ARROW:
+			// '❯' "\xE2\x9D\xAF"
+			// '❮' "\xE2\x9D\xAF"
 			bprintf(ctx, "%.*s", (int)n->w, "<");
 			break;
 
@@ -426,10 +428,10 @@ static void render_rule(const struct tnode* node, int utf8)
 	ctx.scratch = (char*)xmalloc(w + 1);
 
 	ctx.y = node->a;
-	bprintf(&ctx, "\x0F\023\x12\x12");
+	bprintf(&ctx, "\x0F\x13\x12\x12");
 
 	ctx.x = w - 4;
-	bprintf(&ctx, "\x12\x12\024\017");
+	bprintf(&ctx, "\x12\x12\x14\x0F");
 
 	ctx.x = 4;
 	ctx.y = node->a;

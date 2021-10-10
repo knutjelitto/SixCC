@@ -183,7 +183,6 @@
     <ClCompile Include="src\dot\dot-output.cpp" />
     <ClCompile Include="src\ebnfhtml5\ebnfhtml-output.cpp" />
     <ClCompile Include="src\errors.cpp" />
-    <ClCompile Include="src\html5\html5-output.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-lexer.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-parser.cpp" />
@@ -227,6 +226,7 @@
     <ClCompile Include="src\rrtext\rrtext-output.cpp" />
     <ClCompile Include="src\sid\sid-output.cpp" />
     <ClCompile Include="src\strings.cpp" />
+    <ClCompile Include="src\svghtml5\svghtml5-output.cpp" />
     <ClCompile Include="src\svg\svg-output.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
@@ -256,7 +256,6 @@
     <ClInclude Include="src\dot\io.h" />
     <ClInclude Include="src\ebnfhtml5\io.h" />
     <ClInclude Include="src\errors.h" />
-    <ClInclude Include="src\html5\io.h" />
     <ClInclude Include="src\iso-ebnf\io.h" />
     <ClInclude Include="src\iso-ebnf\iso-ebnf-lexer.h" />
     <ClInclude Include="src\iso-ebnf\iso-ebnf-parser.h" />
@@ -283,6 +282,7 @@
     <ClInclude Include="src\rrtext\io.h" />
     <ClInclude Include="src\sid\io.h" />
     <ClInclude Include="src\strings.h" />
+    <ClInclude Include="src\svghtml5\io.h" />
     <ClInclude Include="src\svg\io.h" />
     <ClInclude Include="src\svg\path.h" />
     <ClInclude Include="src\txt.h" />

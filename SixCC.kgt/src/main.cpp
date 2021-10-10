@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 #include <fstream>
+#include <vector>
 
 #include <assert.h>
 #include <string.h>
@@ -42,7 +43,7 @@
 #include "rrta/io.h"
 #include "rrtext/io.h"
 #include "svg/io.h"
-#include "html5/io.h"
+#include "svghtml5/io.h"
 #include "json/io.h"
 
 int debug = 0;
@@ -61,8 +62,19 @@ void __wait(int a, int b, int c, int d) { }
 
 struct in_able
 {
-    const char* name;
-    struct ast_rule* (*in)(int (*f)(void*), void*, parsing_errors*);
+    std::string name;
+    bool enabled;
+    ast_rule* (*in)(int (*f)(void*), void*, parsing_errors*);
+    std::vector<std::string> samples;
+};
+
+struct in_able inputable[] =
+{
+    { "abnf",       false,  abnf_input,     {}},
+    { "bnf",        false,   bnf_input,      {}},
+    { "iso-ebnf",   true,   iso_ebnf_input, {"c99-grammar.iso-ebnf", "expr.iso-ebnf", "expr-minus.iso-ebnf", "iso-ebnf.iso-ebnf", "json.iso-ebnf"}},
+    { "rbnf",       false,   rbnf_input,     {}},
+    { "wsn",        false,   wsn_input,      {}},
 };
 
 struct out_able
@@ -73,25 +85,16 @@ struct out_able
     rrd_features rrd_unsupported;
 };
 
-struct in_able inputable[] =
-{
-    { "abnf",       abnf_input     },
-    { "bnf",        bnf_input      },
-    { "iso-ebnf",   iso_ebnf_input },
-    { "rbnf",       rbnf_input     },
-    { "wsn",        wsn_input      },
-};
-
 struct out_able outputable[] =
 {
     { "abnf",       abnf_output,        (ast_features)0,                            (rrd_features)0 },
     { "blab",       blab_output,        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
     { "bnf",        bnf_output,         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
     { "dot",        dot_output,         (ast_features)0,                            (rrd_features)0 },
-    { "ebnfhtml5",  ebnf_html5_output,  (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "ebnfxhtml5", ebnf_xhtml5_output, (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "html5",      html5_output,       (ast_features)0,                            (rrd_features)0 },
-    { "xhtml5",     xhtml5_output,      (ast_features)0,                            (rrd_features)0 },
+    { "ebnf-html5", ebnf_html5_output,  (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "ebnf-xhtml5",ebnf_xhtml5_output, (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "svg-html5",  svg_html5_output,   (ast_features)0,                            (rrd_features)0 },
+    { "svg-xhtml5", svg_xhtml5_output,  (ast_features)0,                            (rrd_features)0 },
     { "iso-ebnf",   iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
     { "json",       json_output,        (ast_features)json_ast_unsupported,         (rrd_features)0 },
     { "rbnf",       rbnf_output,        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
@@ -125,23 +128,23 @@ static int kgt_fgetc(void *opaque)
     return fgetc(f);
 }
 
-static struct in_able* inlang(const char* s)
+static struct in_able* inlang(std::string s)
 {
     int i;
 
     for (i = 0; i < sizeof(inputable) / sizeof(*inputable); i++)
     {
-        if (0 == strcmp(s, inputable[i].name))
+        if (s == inputable[i].name)
         {
             return &inputable[i];
         }
     }
 
-    fprintf(stderr, "Unrecognised input language \"%s\"; supported languages are:", s);
+    fprintf(stderr, "Unrecognised input language \"%s\"; supported languages are:", s.c_str());
 
     for (i = 0; i < sizeof(inputable) / sizeof(*inputable); i++)
     {
-        fprintf(stderr, " %s", inputable[i].name);
+        fprintf(stderr, " %s", inputable[i].name.c_str());
     }
 
     fprintf(stderr, "\n");
@@ -199,22 +202,18 @@ static bool report_parsing_errors(parsing_errors* errors)
     return false;
 }
 
-struct ast_rule* read_grammar_from_file(const char* kind, const char* filename)
+struct ast_rule* read_grammar(const in_able& in, const std::string filename)
 {
     parsing_errors errors;
     ast_rule* grammar;
-    struct in_able* in = nullptr;
 
-    in = inlang(kind);
+    assert(in.in != nullptr);
 
-    assert(in != nullptr);
-    assert(in->in != nullptr);
-
-    FILE* input = fopen(filename, "r");
+    FILE* input = fopen(filename.c_str(), "r");
     assert(input != nullptr);
     try
     {
-        grammar = in->in(kgt_fgetc, input, &errors);
+        grammar = in.in(kgt_fgetc, input, &errors);
     }
     catch (std::logic_error& e)
     {
@@ -227,18 +226,47 @@ struct ast_rule* read_grammar_from_file(const char* kind, const char* filename)
     return grammar;
 }
 
+std::string kout(std::string file)
+{
+    return "../../SixTmp/kgt/" + file;
+}
+
+std::string exin(std::string file)
+{
+    return "examples/" + file;
+}
+
+void tester(const in_able& in, std::string file);
+
 void tester()
+{
+    for (auto &inable : inputable)
+    {
+        if (!inable.enabled)
+        {
+            continue;
+        }
+
+        for (auto &sample : inable.samples)
+        {
+            tester(inable, exin(sample));
+        }
+    }
+
+    ok_exit();
+}
+
+void tester(const in_able& in, std::string file)
 {
     struct out_able* out = nullptr;
 
-    FILE* outfile = fopen("new-out.txt", "w");
-    writer = new struct iwriter(outfile);
+    ast_rule* grammar = read_grammar(in, file);
 
-    ast_rule* grammar = read_grammar_from_file("iso-ebnf", "examples/c99-grammar.iso-ebnf");
-    //ast_rule* grammar = read_grammar_from_file("rbnf", "examples/gmpls.rbnf");
-    //ast_rule* grammar = read_grammar_from_file("wsn", "examples/c_syntax.wsn");
-    //ast_rule* grammar = read_grammar_from_file("bnf", "examples/bnf.bnf");
-    //ast_rule* grammar = read_grammar_from_file("abnf", "examples/abnf.abnf");
+    std::string new_out = kout(file + "." + in.name + ".new-out.txt");
+    std::string old_out = kout(file + "." + in.name + ".old-out.txt");
+
+    FILE* outfile = fopen(new_out.c_str(), "w");
+    writer = new struct iwriter(outfile);
 
     for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
     {
@@ -270,14 +298,13 @@ void tester()
 
     printf("%d nodes created, %d nodes deleted\n", node::ccount, node::dcount);
 
-    std::ifstream newf("new-out.txt");
+    std::ifstream newf(new_out);
     std::string news((std::istreambuf_iterator<char>(newf)), (std::istreambuf_iterator<char>()));
-    std::ifstream oldf("old-out.txt");
-    std::string olds((std::istreambuf_iterator<char>(oldf)), (std::istreambuf_iterator<char>()));
-    assert(news.size() > 1000000);
-    assert(news == olds);
 
-    ok_exit();
+    std::ifstream oldf(old_out);
+    std::string olds((std::istreambuf_iterator<char>(oldf)), (std::istreambuf_iterator<char>()));
+    assert(news.size() > 0);
+    assert(olds.size() == 0 || news == olds);
 }
 
 int main(int argc, char* argv[])
@@ -369,7 +396,8 @@ int main(int argc, char* argv[])
     if (filter != nullptr)
     {
         struct ast_rule* nuw, ** tail;
-        struct ast_rule* p, * next;
+        struct ast_rule* p;
+        struct ast_rule* next = nullptr;
 
         nuw = nullptr;
         tail = &nuw;

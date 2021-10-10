@@ -887,15 +887,8 @@ prod_97(lex_state lex_state, act_state act_state)
                 RESTORE_LEXER;
                 goto ZL1;
             }
-            /* BEGINNING OF ACTION: err-unimplemented-except */
-            {
-                //#line 734 "src/parser.act"
-
-                err_unimplemented(*lex_state, "\"except\" productions");
-
-                //#line 1104 "src/iso-ebnf/parser.c"
-            }
-            /* END OF ACTION: err-unimplemented-except */
+            
+            err_unimplemented(*lex_state, "\"except\" productions");
         }
         break;
         case (ERROR_TERMINAL):
