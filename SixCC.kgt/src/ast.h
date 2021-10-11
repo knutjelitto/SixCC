@@ -11,7 +11,6 @@
 #include "txt.h"
 
 struct ast_alt;
-struct txt;
 
 typedef enum
 {
@@ -34,6 +33,8 @@ typedef enum ast_term_type
 
 #ifdef min
 #undef min
+#endif
+#ifdef max
 #undef max
 #endif
 
@@ -45,35 +46,85 @@ typedef enum ast_term_type
  *
  * a + b + c ;
  */
-struct ast_term
+struct ast_term final
 {
     ast_term(ast_term_type type, int invisible)
-        : type(type), invisible(invisible), next(nullptr), min(1), max(1)
+        : type(type), invisible(invisible)
     {
-        min = 1;
-        max = 1;
     }
 
     ast_term(ast_term_type type, int invisible, const text& text)
-        : type(type), invisible(invisible), next(nullptr), min(1), max(1), xxx_characters(text)
+        : type(type), invisible(invisible), xxx_characters(text)
     {
     }
 
     ast_term(ast_term_type type, int invisible, const struct ast_rule* rule)
-        : type(type), invisible(invisible), next(nullptr), min(1), max(1), xxx_rule(rule)
+        : type(type), invisible(invisible), xxx_rule(rule)
     {
     }
 
     ast_term(ast_term_type type, int invisible, struct ast_alt* group)
-        : type(type), invisible(invisible), next(nullptr), min(1), max(1), xxx_group(group)
+        : type(type), invisible(invisible), xxx_group(group)
     {
+    }
+
+    static ast_term* make_empty(int invisible)
+    {
+        return new ast_term(TYPE_EMPTY, invisible);
+    }
+
+    static ast_term* make_rule(int invisible, struct ast_rule* rule)
+    {
+        assert(rule != nullptr);
+
+        return new ast_term(TYPE_RULE, invisible, rule);
+    }
+
+    static ast_term* make_ci_literal(int invisible, const struct text& text)
+    {
+        return new ast_term(TYPE_CI_LITERAL, invisible, text);
+    }
+
+    static ast_term* make_cs_literal(int invisible, const struct text& text)
+    {
+        return new ast_term(TYPE_CS_LITERAL, invisible, text);
+    }
+
+    static ast_term* make_literal(int invisible, const text& literal, bool ci)
+    {
+        ci = ci && isalphastr(literal);
+
+        return ci
+            ? make_ci_literal(invisible, literal)
+            : make_cs_literal(invisible, literal);
+    }
+
+    static ast_term* make_char(int invisible, char c)
+    {
+        struct text t(c);
+        return make_cs_literal(invisible, t);
+    }
+
+    static ast_term* make_token(int invisible, const struct text& text)
+    {
+        return new ast_term(TYPE_TOKEN, invisible, text);
+    }
+
+    static ast_term* make_prose(int invisible, const struct text& text)
+    {
+        return new ast_term(TYPE_PROSE, invisible, text);
+    }
+
+    static ast_term* make_group(int invisible, struct ast_alt* group)
+    {
+        return new ast_term(TYPE_GROUP, invisible, group);
     }
 
     const ast_term_type type;
     int invisible;
-    ast_term* next;
-    unsigned int min;
-    unsigned int max; /* false (0) for unlimited */
+    ast_term* next = nullptr;
+    unsigned int min = 1;
+    unsigned int max = 1; /* false (0) for unlimited */
 
     const struct text& text() const
     {
@@ -107,68 +158,8 @@ private:
     const struct ast_alt* xxx_group;
 };
 
-struct ast_term_empty : ast_term
+struct ast_terms : std::deque<ast_term*>
 {
-    ast_term_empty(int invisible)
-        : ast_term(TYPE_EMPTY, invisible)
-    {
-    }
-};
-
-struct ast_term_rule : ast_term
-{
-    ast_term_rule(int invisible, const struct ast_rule* rule)
-        : ast_term(TYPE_RULE, invisible, rule)
-    {
-    }
-};
-
-struct ast_term_text : ast_term
-{
-    ast_term_text(ast_term_type type, int invisible, const struct text& text)
-        : ast_term(type, invisible, text)
-    {
-    }
-};
-
-struct ast_term_cs_literal : ast_term_text
-{
-    ast_term_cs_literal(int invisible, const struct text& text)
-        : ast_term_text(TYPE_CS_LITERAL, invisible, text)
-    {
-    }
-};
-
-struct ast_term_ci_literal : ast_term_text
-{
-    ast_term_ci_literal(int invisible, const struct text& text)
-        : ast_term_text(TYPE_CI_LITERAL, invisible, text)
-    {
-    }
-};
-
-struct ast_term_token : ast_term_text
-{
-    ast_term_token(int invisible, const struct text& text)
-        : ast_term_text(TYPE_TOKEN, invisible, text)
-    {
-    }
-};
-
-struct ast_term_prose : ast_term_text
-{
-    ast_term_prose(int invisible, const struct text& prose)
-        : ast_term_text(TYPE_PROSE, invisible, prose)
-    {
-    }
-};
-
-struct ast_term_group : ast_term
-{
-    ast_term_group(int invisible, struct ast_alt* group)
-        : ast_term(TYPE_GROUP, invisible, group)
-    {
-    }
 };
 
 /*
@@ -178,6 +169,8 @@ struct ast_term_group : ast_term
  */
 struct ast_alt
 {
+    ast_alt() = delete;
+
     ast_alt(int invisible, ast_term* terms)
         : invisible(invisible), terms(terms), next(nullptr)
     {
@@ -199,7 +192,7 @@ struct ast_alt
 struct ast_rule
 {
     ast_rule(const text name, ast_alt* alts)
-        : xxx_name(name), alts(alts), next(nullptr)
+        : alts(alts), xxx_name(name)
     {
     }
 
@@ -208,23 +201,19 @@ struct ast_rule
         return xxx_name;
     }
 
-    const text xxx_name;
     struct ast_alt* alts;
-    struct ast_rule* next;
+    struct ast_rule* next = nullptr;
+private:
+    const text xxx_name;
 };
 
-struct ast_term* ast_make_empty_term(int invisible);
-struct ast_term* ast_make_rule_term(int invisible, struct ast_rule* rule);
-struct ast_term* ast_make_char_term(int invisible, char c);
-struct ast_term* ast_make_literal_term(int invisible, const text& literal, bool ci);
-struct ast_term* ast_make_token_term(int invisible, const text& token);
-struct ast_term* ast_make_prose_term(int invisible, const text& prose);
-struct ast_term* ast_make_group_term(int invisible, struct ast_alt* group);
+struct ast_grammar : std::deque<ast_rule*>
+{
+};
 
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms);
 struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 
-struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const char* name);
 struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const text& name);
 
 void ast_free_rule(struct ast_rule *rule);

@@ -70,11 +70,11 @@ struct in_able
 
 struct in_able inputable[] =
 {
-    { "abnf",       false,  abnf_input,     {}},
-    { "bnf",        false,   bnf_input,      {}},
-    { "iso-ebnf",   true,   iso_ebnf_input, {"c99-grammar.iso-ebnf", "expr.iso-ebnf", "expr-minus.iso-ebnf", "iso-ebnf.iso-ebnf", "json.iso-ebnf"}},
-    { "rbnf",       false,   rbnf_input,     {}},
-    { "wsn",        false,   wsn_input,      {}},
+    { "bnf",        true,   bnf_input,      { "bnf.bnf", "expr.bnf", "postal.bnf" } },
+    { "iso-ebnf",   true,   iso_ebnf_input, { "c99-grammar.iso-ebnf", "expr.iso-ebnf", "expr-minus.iso-ebnf", "iso-ebnf.iso-ebnf", "json.iso-ebnf" } },
+    { "rbnf",       true,   rbnf_input,     { "expr.rbnf", "expr-minus.rbnf", "gmpls.rbnf" } },
+    { "wsn",        true,   wsn_input,      { "bnf.wsn", "c_syntax.wsn", "wsn.wsn" } },
+    { "abnf",       false,  abnf_input,     { "abnf.abnf", "datetime.abnf", "irc.abnf", "postal.abnf", "utf8.abnf" } },
 };
 
 struct out_able
@@ -268,6 +268,8 @@ void tester(const in_able& in, std::string file)
     FILE* outfile = fopen(new_out.c_str(), "w");
     writer = new struct iwriter(outfile);
 
+    printf("%s:\n", file.c_str());
+
     for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
     {
         out = &outputable[i];
@@ -275,14 +277,17 @@ void tester(const in_able& in, std::string file)
         assert(out != nullptr);
         assert(out->out != nullptr);
 
-        printf("out %02i %s", i+1, out->name);
+        if (i > 0)
+        {
+            printf(" ");
+        }
+        printf("%s", out->name);
 
         if (strcmp(out->name, "bnf") == 0)
         {
-            printf(" - not supported\n");
+            printf("(skip)");
             continue;
         }
-        printf("\n");
 
         if (i < 30)
         {
@@ -293,6 +298,7 @@ void tester(const in_able& in, std::string file)
             }
         }
     }
+    printf("\n");
 
     fclose(outfile);
 

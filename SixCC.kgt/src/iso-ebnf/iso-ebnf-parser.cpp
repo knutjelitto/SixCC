@@ -132,17 +132,10 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
             }
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-group-term */
-            {
-                //#line 641 "src/parser.act"
 
-                (ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
-
-                //#line 351 "src/iso-ebnf/parser.c"
-            }
-            /* END OF ACTION: make-group-term */
+            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+            break;
         }
-        break;
         case (TOK_STARTOPT):
         {
             map_alt ZIa;
@@ -162,15 +155,9 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
             }
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-group-term */
-            {
-                //#line 641 "src/parser.act"
 
-                (ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
+            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
 
-                //#line 380 "src/iso-ebnf/parser.c"
-            }
-            /* END OF ACTION: make-group-term */
             /* BEGINNING OF ACTION: rep-zero-or-one */
             {
                 //#line 544 "src/parser.act"
@@ -218,15 +205,9 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
             }
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-group-term */
-            {
-                //#line 641 "src/parser.act"
 
-                (ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
+            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
 
-                //#line 435 "src/iso-ebnf/parser.c"
-            }
-            /* END OF ACTION: make-group-term */
             /* BEGINNING OF ACTION: rep-zero-or-more */
             {
                 //#line 535 "src/parser.act"
@@ -502,7 +483,7 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
                 }
 
-                ZIt = ast_make_rule_term(act_state->invisible, r);
+                ZIt = ast_term::make_rule(act_state->invisible, r);
             }
         }
         break;
@@ -523,7 +504,7 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 //#line 580 "src/parser.act"
 
-                (ZIt) = ast_make_empty_term(act_state->invisible);
+                (ZIt) = ast_term::make_empty(act_state->invisible);
 
                 //#line 743 "src/iso-ebnf/parser.c"
             }
@@ -954,7 +935,7 @@ prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
 
             ADVANCE_LEXER;
 
-            ZIt = ast_make_literal_term(act_state->invisible, ZIx, false);
+            ZIt = ast_term::make_literal(act_state->invisible, ZIx, false);
         }
         break;
         case (TOK_PROSE):
@@ -967,17 +948,17 @@ prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 act_state->invisible = 1;
 
-                (ZIt) = ast_make_empty_term(act_state->invisible);
+                (ZIt) = ast_term::make_empty(act_state->invisible);
             }
             else if (s.eq("kgt:visible"))
             {
                 act_state->invisible = 0;
 
-                (ZIt) = ast_make_empty_term(act_state->invisible);
+                (ZIt) = ast_term::make_empty(act_state->invisible);
             }
             else
             {
-                (ZIt) = ast_make_prose_term(act_state->invisible, s);
+                (ZIt) = ast_term::make_prose(act_state->invisible, s);
             }
             break;
         }

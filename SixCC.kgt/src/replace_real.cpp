@@ -71,7 +71,7 @@ void replace_real(ast_rule* grammar, error_context lex_state)
                         continue;
                     }
 
-                    ast_term* new_term = ast_make_token_term(term->invisible, term->rule()->name());
+                    ast_term* new_term = ast_term::make_token(term->invisible, term->rule()->name());
 
                     if (i > 0)
                     {

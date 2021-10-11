@@ -230,11 +230,11 @@ node* rrd_pretty_roll(int* changed, node** rrd)
 			/*
 			 * The suffix is the node immediately following a loop.
 			 */
-			for (int i = 0; i < seq.size() - 1; ++i)
+			for (int i = 1; i < seq.size(); ++i)
 			{
-				if (seq[i] != nullptr && seq[i]->type == NODE_LOOP)
+				if (seq[i-1] != nullptr && seq[i-1]->type == NODE_LOOP)
 				{
-					roll_suffix(changed, seq, i);
+					roll_suffix(changed, seq, i-1);
 					if (*changed)
 					{
 						break;

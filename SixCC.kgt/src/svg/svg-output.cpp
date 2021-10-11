@@ -182,6 +182,10 @@ static void justify(render_context* ctx, const tnode* n, unsigned space, const c
 {
 	unsigned lhs, rhs;
 
+	if (space < n->w * 10)
+	{
+		assert(space >= n->w * 10);
+	}
 	center(&lhs, &rhs, space, n->w * 10);
 
 	if (n->type != TNODE_ELLIPSIS)
@@ -459,6 +463,7 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 		render_tline_outer(ctx, n->vlist.b[j], 0);
 		render_tline_inner(ctx, n->vlist.b[j], 0);
 
+		int space = n->w * 10 - 40;
 		justify(ctx, n->vlist.a[j], n->w * 10 - 40, base);
 
 		render_tline_inner(ctx, n->vlist.b[j], 1);
@@ -522,8 +527,6 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 
 static void render_hlist(const tnode* n, render_context* ctx, const char* base)
 {
-	size_t i;
-
 	assert(n != nullptr);
 	assert(n->type == TNODE_HLIST);
 	assert(ctx != nullptr);

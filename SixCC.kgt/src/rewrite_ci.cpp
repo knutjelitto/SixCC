@@ -28,7 +28,7 @@ static void add_alt(int invisible, struct ast_alt **alt, const text& text)
 {
 	assert(alt != NULL);
 
-	struct ast_term* term = ast_make_literal_term(invisible, text, false);
+	struct ast_term* term = ast_term::make_literal(invisible, text, false);
 
 	struct ast_alt* nuw = ast_make_alt(invisible, term);
 	nuw->next = *alt;

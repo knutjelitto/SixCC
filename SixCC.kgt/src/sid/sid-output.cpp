@@ -239,8 +239,8 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 				}
 
 				t = term->type == TYPE_CI_LITERAL 
-					? (ast_term*)new ast_term_ci_literal(0, term->text())
-					: (ast_term*)new ast_term_cs_literal(0, term->text());
+					? ast_term::make_ci_literal(0, term->text())
+					: ast_term::make_cs_literal(0, term->text());
 				t->next = found;
 				found = t;
 			}

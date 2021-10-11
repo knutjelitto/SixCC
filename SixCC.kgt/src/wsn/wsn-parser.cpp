@@ -80,7 +80,6 @@ static const char* pattern_buffer(struct lex_state_s* lex_state)
 //#line 293 "src/wsn/parser.c"
 #endif
 
-
 #ifndef ERROR_TERMINAL
 #error "-s no-numeric-terminals given and ERROR_TERMINAL is not defined"
 #endif
@@ -104,167 +103,151 @@ static void prod_95(lex_state, act_state, map_term *);
 
 /* BEGINNING OF FUNCTION DEFINITIONS */
 
-static void
-prod_factor(lex_state lex_state, act_state act_state, map_term *ZOt)
+static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
 {
 	map_term ZIt;
 
-	switch (CURRENT_TERMINAL) {
-	case (TOK_STARTGROUP):
+	switch (CURRENT_TERMINAL)
+	{
+		case (TOK_STARTGROUP):
 		{
 			map_alt ZIa;
 
 			ADVANCE_LEXER;
-			prod_list_Hof_Halts (lex_state, act_state, &ZIa);
-			switch (CURRENT_TERMINAL) {
-			case (TOK_ENDGROUP):
-				break;
-			case (ERROR_TERMINAL):
-				RESTORE_LEXER;
-				goto ZL1;
-			default:
-				goto ZL1;
+			prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+			switch (CURRENT_TERMINAL)
+			{
+				case (TOK_ENDGROUP):
+					break;
+				case (ERROR_TERMINAL):
+					RESTORE_LEXER;
+					goto ZL1;
+				default:
+					goto ZL1;
 			}
 			ADVANCE_LEXER;
-			/* BEGINNING OF ACTION: make-group-term */
-			{
-//#line 641 "src/parser.act"
 
-		(ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
-	
-//#line 347 "src/wsn/parser.c"
-			}
-			/* END OF ACTION: make-group-term */
+			ZIt = ast_term::make_group(act_state->invisible, ZIa);
+
+			break;
 		}
-		break;
-	case (TOK_STARTOPT):
+		case (TOK_STARTOPT):
 		{
 			map_alt ZIa;
 			map_count ZImin;
 			map_count ZImax;
 
 			ADVANCE_LEXER;
-			prod_list_Hof_Halts (lex_state, act_state, &ZIa);
-			switch (CURRENT_TERMINAL) {
-			case (TOK_ENDOPT):
-				break;
-			case (ERROR_TERMINAL):
-				RESTORE_LEXER;
-				goto ZL1;
-			default:
-				goto ZL1;
+			prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+			switch (CURRENT_TERMINAL)
+			{
+				case (TOK_ENDOPT):
+					break;
+				case (ERROR_TERMINAL):
+					RESTORE_LEXER;
+					goto ZL1;
+				default:
+					goto ZL1;
 			}
 			ADVANCE_LEXER;
-			/* BEGINNING OF ACTION: make-group-term */
-			{
-//#line 641 "src/parser.act"
 
-		(ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
-	
-//#line 376 "src/wsn/parser.c"
-			}
-			/* END OF ACTION: make-group-term */
+			(ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+
 			/* BEGINNING OF ACTION: rep-zero-or-one */
 			{
-//#line 544 "src/parser.act"
+				(ZImin) = 0;
+				(ZImax) = 1;
 
-		(ZImin) = 0;
-		(ZImax) = 1;
-
-		/* workaround for SID's ! = f(); */
-		(void) (ZImin);
-		(void) (ZImax);
-	
-//#line 390 "src/wsn/parser.c"
+				/* workaround for SID's ! = f(); */
+				(void)(ZImin);
+				(void)(ZImax);
 			}
 			/* END OF ACTION: rep-zero-or-one */
 			/* BEGINNING OF ACTION: set-repeat */
 			{
-//#line 553 "src/parser.act"
+				assert((ZImax) >= (ZImin) || !(ZImax));
 
-		assert((ZImax) >= (ZImin) || !(ZImax));
-
-		(ZIt)->min = (ZImin);
-		(ZIt)->max = (ZImax);
-	
-//#line 402 "src/wsn/parser.c"
+				(ZIt)->min = (ZImin);
+				(ZIt)->max = (ZImax);
 			}
 			/* END OF ACTION: set-repeat */
 		}
 		break;
-	case (TOK_STARTSTAR):
+		case (TOK_STARTSTAR):
 		{
 			map_alt ZIa;
 			map_count ZImin;
 			map_count ZImax;
 
 			ADVANCE_LEXER;
-			prod_list_Hof_Halts (lex_state, act_state, &ZIa);
-			switch (CURRENT_TERMINAL) {
-			case (TOK_ENDSTAR):
-				break;
-			case (ERROR_TERMINAL):
-				RESTORE_LEXER;
-				goto ZL1;
-			default:
-				goto ZL1;
+			prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+			switch (CURRENT_TERMINAL)
+			{
+				case (TOK_ENDSTAR):
+					break;
+				case (ERROR_TERMINAL):
+					RESTORE_LEXER;
+					goto ZL1;
+				default:
+					goto ZL1;
 			}
 			ADVANCE_LEXER;
 			/* BEGINNING OF ACTION: make-group-term */
 			{
-//#line 641 "src/parser.act"
+				//#line 641 "src/parser.act"
 
-		(ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
-	
-//#line 431 "src/wsn/parser.c"
+				(ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+
+				//#line 431 "src/wsn/parser.c"
 			}
 			/* END OF ACTION: make-group-term */
 			/* BEGINNING OF ACTION: rep-zero-or-more */
 			{
-//#line 535 "src/parser.act"
+				//#line 535 "src/parser.act"
 
-		(ZImin) = 0;
-		(ZImax) = 0;
+				(ZImin) = 0;
+				(ZImax) = 0;
 
-		/* workaround for SID's ! = f(); */
-		(void) (ZImin);
-		(void) (ZImax);
-	
-//#line 445 "src/wsn/parser.c"
+				/* workaround for SID's ! = f(); */
+				(void)(ZImin);
+				(void)(ZImax);
+
+				//#line 445 "src/wsn/parser.c"
 			}
 			/* END OF ACTION: rep-zero-or-more */
 			/* BEGINNING OF ACTION: set-repeat */
 			{
-//#line 553 "src/parser.act"
+				//#line 553 "src/parser.act"
 
-		assert((ZImax) >= (ZImin) || !(ZImax));
+				assert((ZImax) >= (ZImin) || !(ZImax));
 
-		(ZIt)->min = (ZImin);
-		(ZIt)->max = (ZImax);
-	
-//#line 457 "src/wsn/parser.c"
+				(ZIt)->min = (ZImin);
+				(ZIt)->max = (ZImax);
+
+				//#line 457 "src/wsn/parser.c"
 			}
 			/* END OF ACTION: set-repeat */
 		}
 		break;
-	case (TOK_ESC): case (TOK_CHAR): case (TOK_IDENT): case (TOK_EMPTY):
-	case (TOK_CS__LITERAL):
+		case (TOK_ESC): case (TOK_CHAR): case (TOK_IDENT): case (TOK_EMPTY):
+		case (TOK_CS__LITERAL):
 		{
-			prod_term (lex_state, act_state, &ZIt);
-			if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+			prod_term(lex_state, act_state, &ZIt);
+			if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+			{
 				RESTORE_LEXER;
 				goto ZL1;
 			}
 		}
 		break;
-	case (ERROR_TERMINAL):
-		return;
-	default:
-		goto ZL1;
+		case (ERROR_TERMINAL):
+			return;
+		default:
+			goto ZL1;
 	}
 	goto ZL0;
 ZL1:
-	SAVE_LEXER ((ERROR_TERMINAL));
+	SAVE_LEXER((ERROR_TERMINAL));
 	return;
 ZL0:
 	*ZOt = ZIt;
@@ -433,7 +416,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 			{
 				//#line 580 "src/parser.act"
 
-				(ZIt) = ast_make_empty_term(act_state->invisible);
+				(ZIt) = ast_term::make_empty(act_state->invisible);
 
 				//#line 649 "src/wsn/parser.c"
 			}
@@ -471,7 +454,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 					goto ZL1;
 				}
 
-				(ZIt) = ast_make_rule_term(act_state->invisible, r);
+				(ZIt) = ast_term::make_rule(act_state->invisible, r);
 
 				//#line 701 "src/wsn/parser.c"
 			}
@@ -499,7 +482,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 			}
 			ADVANCE_LEXER;
 			{
-				ZIt = ast_make_literal_term(act_state->invisible, ZIx, false);
+				ZIt = ast_term::make_literal(act_state->invisible, ZIx, false);
 			}
 		}
 		break;

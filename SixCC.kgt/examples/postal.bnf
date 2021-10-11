@@ -9,5 +9,5 @@
 
 <zip-part> ::= <town-name> "," <state-code> <ZIP-code> <EOL>
 
-<opt-jr-part> ::= "Sr." | "Jr." | <roman-numeral> | ""
+<opt-jr-part> ::= "Sr." | "Jr." | <roman-numeral> | "-empty-string-makes-problems-"
 

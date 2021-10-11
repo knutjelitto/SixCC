@@ -108,35 +108,53 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 	if (n == nullptr)
 	{
 		print_indent(writer, depth);
-		writer->printf("Skip()");
+		writer->puts("Skip()");
 		return 1;
 	}
 
 	switch (n->type)
 	{
 		case NODE_CI_LITERAL:
+#if true
+			print_indent(writer, depth);
+			writer->puts("unimplemented-ci-Terminal(\"");
+			writer->escape(n->literal(), escputc);
+			writer->puts("\")");
+
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case NODE_CS_LITERAL:
 			print_indent(writer, depth);
-			writer->printf("Terminal(\"");
+			writer->puts("Terminal(\"");
 			writer->escape(n->literal(), escputc);
-			writer->printf("\")");
+			writer->puts("\")");
 
 			break;
 
 		case NODE_RULE:
 			print_indent(writer, depth);
-			writer->printf("NonTerminal(\"");
+			writer->puts("NonTerminal(\"");
 			writer->escape(n->name(), escputc);
-			writer->printf("\")");
+			writer->puts("\")");
 
 			break;
 
 		case NODE_PROSE:
+#if true
+			print_indent(writer, depth);
+			writer->puts("unimplemented-Prose(\"");
+			writer->escape(n->prose(), escputc);
+			writer->puts("\")");
+
+			break;
+#else
 			fprintf(stderr, "unimplemented\n");
 			return 0;
+#endif
 
 		case NODE_ALT:
 		case NODE_ALT_SKIPPABLE:
@@ -149,15 +167,15 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 			if (n->type == NODE_ALT_SKIPPABLE)
 			{
 				print_indent(writer, depth + 1);
-				writer->printf("Skip(),\n");
+				writer->puts("Skip(),\n");
 			}
 
 			for (auto node : n->alt())
 			{
 				if (more)
 				{
-					writer->printf(",");
-					writer->printf("\n");
+					writer->puts(",");
+					writer->puts("\n");
 				}
 				more = true;
 				if (!node_walk(writer, node, depth + 1))
@@ -165,7 +183,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 					return 0;
 				}
 			}
-			writer->printf(")");
+			writer->puts(")");
 
 			break;
 		}
@@ -202,13 +220,13 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 			{
 				return 0;
 			}
-			writer->printf(",\n");
+			writer->puts(",\n");
 
 			if (!node_walk(writer, n->loop.backward, depth + 1))
 			{
 				return 0;
 			}
-			writer->printf(")");
+			writer->puts(")");
 
 			break;
 	}
@@ -240,16 +258,16 @@ WARN_UNUSED_RESULT int rrta_output(const struct ast_rule* grammar)
 			return 0;
 		}
 
-		writer->printf("add('");
+		writer->puts("add('");
 		writer->escape(p->name(), escputc);
-		writer->printf("', Diagram(\n");
+		writer->puts("', Diagram(\n");
 
 		if (!node_walk(writer, rrd, 1))
 		{
 			return 0;
 		}
-		writer->printf("));\n");
-		writer->printf("\n");
+		writer->puts("));\n");
+		writer->puts("\n");
 
 		node_free(rrd);
 	}

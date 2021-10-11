@@ -132,7 +132,7 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 //#line 641 "src/parser.act"
 
-                (ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
+                (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
 
                 //#line 347 "src/rbnf/parser.c"
             }
@@ -202,14 +202,9 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
             }
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-group-term */
-            {
-                //#line 641 "src/parser.act"
 
-                (ZIt) = ast_make_group_term(act_state->invisible, (ZIa));
+            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
 
-                //#line 419 "src/rbnf/parser.c"
-            }
             /* END OF ACTION: make-group-term */
             /* BEGINNING OF ACTION: set-repeat */
             {
@@ -483,7 +478,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
                 goto ZL1;
             }
 
-            (ZIt) = ast_make_rule_term(act_state->invisible, r);
+            (ZIt) = ast_term::make_rule(act_state->invisible, r);
 
             //#line 684 "src/rbnf/parser.c"
         }
