@@ -79,7 +79,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_RULE:
 			writer->putc(' ');
-			writer->puts(term->rule()->name());
+			writer->puts(term->rule()->name);
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -153,7 +153,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	const struct ast_alt* alt;
 
 	alt = rule->alts;
-	writer->printf("%s =", rule->name().chars());
+	writer->printf("%s =", rule->name.chars());
 	if (!output_alt(alt))
 	{
 		return 0;
@@ -172,13 +172,11 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int wsn_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int wsn_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
-	for (p = grammar; p != NULL; p = p->next)
+	for (auto rule : grammar.rules)
 	{
-		if (!output_rule(p))
+		if (!output_rule(rule))
 		{
 			return 0;
 		}

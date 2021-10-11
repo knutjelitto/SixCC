@@ -9,13 +9,11 @@
 
 #include "../compiler_specific.h"
 
-struct ast_rule;
+struct ast_grammar;
 
 #define sid_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)
 
-WARN_UNUSED_RESULT
-int
-sid_output(const struct ast_rule *grammar);
+WARN_UNUSED_RESULT int sid_output(const ast_grammar& grammar);
 
 #endif
 

@@ -38,7 +38,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->printf(" <%s>", term->rule()->name().chars());
+			writer->printf(" <%s>", term->rule()->name.chars());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -90,7 +90,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("<%s> ::=", rule->name().chars());
+	writer->printf("<%s> ::=", rule->name.chars());
 
 	for (alt = rule->alts; alt != nullptr; alt = alt->next)
 	{
@@ -109,13 +109,11 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int bnf_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int bnf_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
-	for (p = grammar; p != nullptr; p = p->next)
+	for (auto rule : grammar.rules)
 	{
-		if (!output_rule(p))
+		if (!output_rule(rule))
 		{
 			return 0;
 		}

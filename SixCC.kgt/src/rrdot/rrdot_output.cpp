@@ -8,8 +8,6 @@
  * Abstract Railroad Diagram tree dump to Graphivz dot
  */
 
-#include <map>
-
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,27 +24,14 @@
 
 #include "io.h"
 
-static std::map<const void*, uint64_t> numbers;
+extern int fakeptr;
 
-#if true
-static void* map(const void* ptr)
+static const void* map(const void* ptr)
 {
-    return nullptr;
+    if (fakeptr)
+        return nullptr;
+    return ptr;
 }
-#else
-static void* map(const void* ptr)
-{
-    auto found = numbers.find(ptr);
-    if (found != numbers.end())
-    {
-        return (void*)found->second;
-    }
-
-    uint64_t num = numbers.size();
-    numbers.insert({ ptr, num });
-    return (void*)num;
-}
-#endif
 
 static int escputc(int c, iwriter* writer)
 {
@@ -64,11 +49,11 @@ static int escputc(int c, iwriter* writer)
         { '>',  "&#x3E;" }
     };
 
-    for (int i = 0; i < sizeof(a) / sizeof(*a); i++)
+    for (auto tr : a)
     {
-        if (a[i].c == c)
+        if (tr.c == c)
         {
-            return writer->puts(a[i].s);
+            return writer->puts(tr.s);
         }
     }
 
@@ -220,21 +205,17 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
     }
 }
 
-WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrdot_output(const ast_grammar& grammar)
 {
-    numbers.clear();
-
-    const struct ast_rule* p;
-
     writer->printf("digraph G {\n");
     writer->printf("\tnode [ shape = record, style = rounded ];\n");
     writer->printf("\tedge [ dir = none ];\n");
 
-    for (p = grammar; p != nullptr; p = p->next)
+    for (auto rule : grammar.rules)
     {
         struct node* rrd;
 
-        if (!ast_to_rrd(p, &rrd))
+        if (!ast_to_rrd(rule, &rrd))
         {
             perror("ast_to_rrd");
             return 0;
@@ -245,9 +226,9 @@ WARN_UNUSED_RESULT int rrdot_output(const struct ast_rule* grammar)
             rrd_pretty(&rrd);
         }
 
-        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", p->name().chars(), map((void*)p), p->name().chars());
+        writer->printf("\t\"%s/%p\" [ shape = plaintext, label = \"%s\" ];\n", rule->name.chars(), map((void*)rule), rule->name.chars());
 
-        rrd_print_dot(p->name(), p, "", rrd);
+        rrd_print_dot(rule->name, rule, "", rrd);
 
         node_free(rrd);
     }

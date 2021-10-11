@@ -92,11 +92,9 @@ static void walk_alts(struct ast_alt** alts)
 	}
 }
 
-void rewrite_invisible(struct ast_rule* grammar)
+void rewrite_invisible(ast_grammar& grammar)
 {
-	struct ast_rule* rule;
-
-	for (rule = grammar; rule != nullptr; rule = rule->next)
+	for (auto rule : grammar.rules)
 	{
 		walk_alts(&rule->alts);
 	}

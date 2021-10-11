@@ -159,11 +159,9 @@ WARN_UNUSED_RESULT static bool walk_alts(const struct ast_alt* alts)
 	return true;
 }
 
-WARN_UNUSED_RESULT bool rewrite_ci_literals(struct ast_rule* grammar)
+WARN_UNUSED_RESULT bool rewrite_ci_literals(ast_grammar& grammar)
 {
-	struct ast_rule* rule;
-
-	for (rule = grammar; rule != NULL; rule = rule->next)
+	for (auto rule : grammar.rules)
 	{
 		if (!walk_alts(rule->alts))
 		{

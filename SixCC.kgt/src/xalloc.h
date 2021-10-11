@@ -13,7 +13,7 @@ struct txt;
 struct text;
 
 void ok_exit();
-void err_exit();
+[[noreturn]] void err_exit();
 void *xmalloc(size_t size);
 char* xstrdup(const char* s);
 char* xstrdup(const text& s);

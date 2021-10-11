@@ -40,10 +40,14 @@ extern const char *css_file;
 
 struct render_context
 {
-	int x, y;
+	render_context(const ast_grammar& grammar) : grammar(grammar)
+	{
+	}
 
-	path *paths;
-	const ast_rule *grammar;
+	int x = 0;
+	int y = 0;
+	path *paths = nullptr;
+	const ast_grammar& grammar;
 };
 
 static void node_walk_render(const struct tnode *n, struct render_context *ctx, const char *base);
@@ -653,9 +657,9 @@ void svg_render_station(unsigned x, unsigned y)
 		x, y - h / 2, h, gap, -h);
 }
 
-void svg_render_rule(const struct tnode *node, const char *base, const struct ast_rule *grammar)
+void svg_render_rule(const struct tnode *node, const char *base, const ast_grammar& grammar)
 {
-	struct render_context ctx{};
+	struct render_context ctx(grammar);
 	unsigned w;
 
 	w = (node->w + 8) * 10;
@@ -665,10 +669,6 @@ void svg_render_rule(const struct tnode *node, const char *base, const struct as
 	 * this is only used informatively, and has nothing to do
 	 * with the structure of rendering.
 	 */
-	ctx.grammar = grammar;
-
-	ctx.paths = nullptr;
-
 	ctx.x = 5;
 	ctx.y = node->a * 10 + 10;
 	svg_render_station(ctx.x, ctx.y);
@@ -851,19 +851,14 @@ struct dim svg_dim =
 	0
 };
 
-WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int svg_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
 	struct tnode** a;
 	unsigned z;
 	unsigned w, h;
-	unsigned i, n;
+	unsigned n;
 
-	n = 0;
-	for (p = grammar; p; p = p->next)
-	{
-		n++;
-	}
+	n = grammar.rules.size();
 
 	/*
 	 * We store all tnodes for sake of calculating the viewport only;
@@ -876,7 +871,10 @@ WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
 	w = 0;
 	h = 0;
 
-	for (i = 0, p = grammar; p; p = p->next, i++)
+	const struct ast_rule* p;
+	
+	unsigned i = 0;
+	for (auto p : grammar.rules)
 	{
 		struct node* rrd;
 
@@ -900,6 +898,8 @@ WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
 		h += a[i]->a + a[i]->d + 6;
 
 		node_free(rrd);
+
+		i += 1;
 	}
 
 	w += 12;
@@ -946,10 +946,11 @@ WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
 
 	z = 0;
 
-	for (i = 0, p = grammar; p; p = p->next, i++)
+	i = 0;
+	for (auto p : grammar.rules)
 	{
 		writer->printf("  <g transform='translate(%u %u)'>\n", 40, z * 10 + 50);
-		writer->printf("    <text x='%d' y='%d'>%s:</text>\n", -30, -10, p->name().chars());
+		writer->printf("    <text x='%d' y='%d'>%s:</text>\n", -30, -10, p->name.chars());
 
 		svg_render_rule(a[i], nullptr, grammar);
 
@@ -957,11 +958,16 @@ WARN_UNUSED_RESULT int svg_output(const struct ast_rule* grammar)
 		writer->printf("\n");
 
 		z += a[i]->a + a[i]->d + 6;
+
+		i += 1;
 	}
 
-	for (i = 0, p = grammar; p; p = p->next, i++)
+	i = 0;
+	for (auto p : grammar.rules)
 	{
 		tnode_free(a[i]);
+
+		i += 1;
 	}
 
 	free(a);

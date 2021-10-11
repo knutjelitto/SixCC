@@ -29,7 +29,20 @@ struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const text& name)
 
     for (rule = grammar; rule != nullptr; rule = rule->next)
     {
-        if (rule->name().eq(name))
+        if (rule->name.eq(name))
+        {
+            return (struct ast_rule*)rule;
+        }
+    }
+
+    return nullptr;
+}
+
+struct ast_rule* ast_find_rule(const ast_grammar& grammar, const text& name)
+{
+    for (auto rule : grammar.rules)
+    {
+        if (rule->name.eq(name))
         {
             return (struct ast_rule*)rule;
         }

@@ -265,10 +265,8 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 	return 1;
 }
 
-WARN_UNUSED_RESULT int rrparcon_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrparcon_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
 	writer->printf("#!/usr/bin/env python\n");
 	writer->printf("# -*- coding: utf-8 -*-\n");
 	writer->printf("\n");
@@ -288,11 +286,22 @@ WARN_UNUSED_RESULT int rrparcon_output(const struct ast_rule* grammar)
 
 	writer->printf("productions = OrderedDict([\n");
 
-	for (p = grammar; p != nullptr; p = p->next)
+	bool more = false;
+	for (auto rule : grammar.rules)
 	{
+		if (more)
+		{
+			writer->printf(",");
+			writer->printf("\n");
+		}
+		else
+		{
+			more = true;
+		}
+
 		struct node* rrd;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return 0;
@@ -309,7 +318,7 @@ WARN_UNUSED_RESULT int rrparcon_output(const struct ast_rule* grammar)
 
 		writer->printf("  (\n");
 		writer->printf("    \"");
-		writer->escape(p->name(), escputc);
+		writer->escape(rule->name, escputc);
 		writer->printf("\",\n");
 		writer->printf("    Then(\n");
 		writer->printf("      Bullet(),\n");
@@ -324,14 +333,10 @@ WARN_UNUSED_RESULT int rrparcon_output(const struct ast_rule* grammar)
 		writer->printf("      Bullet()\n");
 		writer->printf("    )\n");
 		writer->printf("  )");
-		if (p->next != nullptr)
-		{
-			writer->printf(",");
-		}
-		writer->printf("\n");
 
 		node_free(rrd);
 	}
+	writer->printf("\n");
 
 	writer->printf("])\n");
 	writer->printf("\n");

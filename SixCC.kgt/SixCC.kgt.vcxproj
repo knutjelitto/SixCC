@@ -183,6 +183,7 @@
     <ClCompile Include="src\dot\dot-output.cpp" />
     <ClCompile Include="src\ebnfhtml5\ebnfhtml-output.cpp" />
     <ClCompile Include="src\errors.cpp" />
+    <ClCompile Include="src\iospec\iospec.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-lexer.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-output.cpp" />
     <ClCompile Include="src\iso-ebnf\iso-ebnf-parser.cpp" />
@@ -236,7 +237,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <ClCompile Include="src\txt.cpp" />
-    <ClCompile Include="src\wsn\lexer.cpp" />
+    <ClCompile Include="src\wsn\wsn-lexer.cpp" />
     <ClCompile Include="src\wsn\wsn-output.cpp" />
     <ClCompile Include="src\wsn\wsn-parser.cpp" />
     <ClCompile Include="src\xalloc.cpp" />
@@ -256,6 +257,7 @@
     <ClInclude Include="src\dot\io.h" />
     <ClInclude Include="src\ebnfhtml5\io.h" />
     <ClInclude Include="src\errors.h" />
+    <ClInclude Include="src\iospec\iospec.h" />
     <ClInclude Include="src\iso-ebnf\io.h" />
     <ClInclude Include="src\iso-ebnf\iso-ebnf-lexer.h" />
     <ClInclude Include="src\iso-ebnf\iso-ebnf-parser.h" />
@@ -287,8 +289,8 @@
     <ClInclude Include="src\svg\path.h" />
     <ClInclude Include="src\txt.h" />
     <ClInclude Include="src\wsn\io.h" />
-    <ClInclude Include="src\wsn\lexer.h" />
-    <ClInclude Include="src\wsn\parser.h" />
+    <ClInclude Include="src\wsn\wsn-lexer.h" />
+    <ClInclude Include="src\wsn\wsn-parser.h" />
     <ClInclude Include="src\xalloc.h" />
   </ItemGroup>
   <ItemGroup>

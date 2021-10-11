@@ -67,6 +67,9 @@
     <Filter Include="src\svghtml5">
       <UniqueIdentifier>{b82d706f-971b-41f9-bd02-3f4551432907}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\iospec">
+      <UniqueIdentifier>{b7018ed6-8009-4d10-9df8-77c2a1907989}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rrd\list.cpp">
@@ -186,7 +189,7 @@
     <ClCompile Include="src\rbnf\rbnf-parser.cpp">
       <Filter>src\rbnf</Filter>
     </ClCompile>
-    <ClCompile Include="src\wsn\lexer.cpp">
+    <ClCompile Include="src\wsn\wsn-lexer.cpp">
       <Filter>src\wsn</Filter>
     </ClCompile>
     <ClCompile Include="src\wsn\wsn-output.cpp">
@@ -242,6 +245,9 @@
     </ClCompile>
     <ClCompile Include="src\svghtml5\svghtml5-output.cpp">
       <Filter>src\svghtml5</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iospec\iospec.cpp">
+      <Filter>src\iospec</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,10 +344,10 @@
     <ClInclude Include="src\wsn\io.h">
       <Filter>src\wsn</Filter>
     </ClInclude>
-    <ClInclude Include="src\wsn\lexer.h">
+    <ClInclude Include="src\wsn\wsn-lexer.h">
       <Filter>src\wsn</Filter>
     </ClInclude>
-    <ClInclude Include="src\wsn\parser.h">
+    <ClInclude Include="src\wsn\wsn-parser.h">
       <Filter>src\wsn</Filter>
     </ClInclude>
     <ClInclude Include="src\ebnfhtml5\io.h">
@@ -388,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="src\svghtml5\io.h">
       <Filter>src\svghtml5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iospec\iospec.h">
+      <Filter>src\iospec</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

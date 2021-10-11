@@ -53,7 +53,7 @@ WARN_UNUSED_RESULT static int output_term_rule(const struct ast_rule *rule)
 	writer->puts(",");
 	output_string("rule");
 	writer->puts(":");
-	output_string(rule->name());
+	output_string(rule->name);
 	return 1;
 }
 
@@ -253,12 +253,12 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	writer->puts(":");
 	output_string("rule");
 
-	if (rule->name().length() > 0)
+	if (rule->name.length() > 0)
 	{
 		writer->puts(",");
 		output_string("name");
 		writer->puts(":");
-		output_string(rule->name());
+		output_string(rule->name);
 	}
 
 	if (rule->alts)
@@ -275,17 +275,20 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int json_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int json_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* rule;
-
 	writer->puts("[");
 
-	for (rule = grammar; rule != NULL; rule = rule->next)
+	bool more = false;
+	for (auto rule : grammar.rules)
 	{
-		if (rule != grammar)
+		if (more)
 		{
 			writer->puts(",");
+		}
+		else
+		{
+			more = true;
 		}
 
 		if (!output_rule(rule))

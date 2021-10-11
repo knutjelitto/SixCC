@@ -210,15 +210,13 @@ static void node_walk(iwriter* writer, const struct node* n)
 	}
 }
 
-WARN_UNUSED_RESULT int rrll_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrll_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
-	for (p = grammar; p != nullptr; p = p->next)
+	for (auto rule : grammar.rules)
 	{
 		struct node* rrd;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return 0;
@@ -236,7 +234,7 @@ WARN_UNUSED_RESULT int rrll_output(const struct ast_rule* grammar)
 		}
 
 		writer->printf("[`");
-		writer->escape(p->name(), escputc);
+		writer->escape(rule->name, escputc);
 		writer->printf("` ");
 
 		node_walk(writer, rrd);

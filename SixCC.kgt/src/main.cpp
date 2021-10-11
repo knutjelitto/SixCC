@@ -46,71 +46,13 @@
 #include "svghtml5/io.h"
 #include "json/io.h"
 
+#include "iospec/iospec.h"
+
+int fakeptr = 1;
 int debug = 0;
 int prettify = 1;
 int allow_undefined = 1;
 const char *css_file;
-
-/*
- * emscripten's musl will call __wait from getopt() (via getopt_msg and
- * then flockfile), which is not present for standalone wasm because that
- * has no pthread support, and so a definition for __wait is not included.
- */
-#ifdef __EMSCRIPTEN__
-void __wait(int a, int b, int c, int d) { }
-#endif
-
-struct in_able
-{
-    std::string name;
-    bool enabled;
-    ast_rule* (*in)(int (*f)(void*), void*, parsing_errors*);
-    std::vector<std::string> samples;
-};
-
-struct in_able inputable[] =
-{
-    { "bnf",        true,   bnf_input,      { "bnf.bnf", "expr.bnf", "postal.bnf" } },
-    { "iso-ebnf",   true,   iso_ebnf_input, { "c99-grammar.iso-ebnf", "expr.iso-ebnf", "expr-minus.iso-ebnf", "iso-ebnf.iso-ebnf", "json.iso-ebnf" } },
-    { "rbnf",       true,   rbnf_input,     { "expr.rbnf", "expr-minus.rbnf", "gmpls.rbnf" } },
-    { "wsn",        true,   wsn_input,      { "bnf.wsn", "c_syntax.wsn", "wsn.wsn" } },
-    { "abnf",       false,  abnf_input,     { "abnf.abnf", "datetime.abnf", "irc.abnf", "postal.abnf", "utf8.abnf" } },
-};
-
-struct out_able
-{
-    const char* name;
-    int (*out)(const struct ast_rule*);
-    std::string ext;
-    ast_features ast_unsupported;
-    rrd_features rrd_unsupported;
-};
-
-struct out_able outputable[] =
-{
-    { "abnf",       abnf_output,        ".abnf",        (ast_features)0,                            (rrd_features)0},
-    { "blab",       blab_output,        ".blab",        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
-    { "bnf",        bnf_output,         ".bnf",         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
-    { "dot",        dot_output,         ".dot",         (ast_features)0,                            (rrd_features)0 },
-    { "ebnf-html5", ebnf_html5_output,  "-ebnf.html",   (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "ebnf-xhtml5",ebnf_xhtml5_output, "-ebnf-x.html", (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "svg-html5",  svg_html5_output,   "-svg.html",    (ast_features)0,                            (rrd_features)0 },
-    { "svg-xhtml5", svg_xhtml5_output,  "-svg-x.html",  (ast_features)0,                            (rrd_features)0 },
-    { "iso-ebnf",   iso_ebnf_output,    "-iso.ebnf",    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
-    { "json",       json_output,        ".json",        (ast_features)json_ast_unsupported,         (rrd_features)0 },
-    { "rbnf",       rbnf_output,        ".rbnf",        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
-    { "sid",        sid_output,         ".sid",         (ast_features)sid_ast_unsupported,          (rrd_features)0 },
-    { "svg",        svg_output,         ".svg",         (ast_features)0,                            (rrd_features)0 },
-    { "wsn",        wsn_output,         ".wsn",         (ast_features)wsn_ast_unsupported,          (rrd_features)0 },
-    { "rrdot",      rrdot_output,       "-rr.dot",      (ast_features)0,                            (rrd_features)0 },
-    { "rrdump",     rrdump_output,      "-rr.dump",     (ast_features)0,                            (rrd_features)0 },
-    { "rrll",       rrll_output,        "-rr.ll",       (ast_features)rrll_ast_unsupported,         (rrd_features)rrll_rrd_unsupported     },
-    { "rrparcon",   rrparcon_output,    "-rr.parcon",   (ast_features)rrparcon_ast_unsupported,     (rrd_features)rrparcon_rrd_unsupported },
-    { "rrta",       rrta_output,        "-rr.ta",       (ast_features)rrta_ast_unsupported,         (rrd_features)rrta_rrd_unsupported     },
-    { "rrtdump",    rrtdump_output,     "-rr.tdump",    (ast_features)0,                            (rrd_features)0 },
-    { "rrtext",     rrtext_output,      "-rr.text",     (ast_features)0,                            (rrd_features)0 },
-    { "rrutf8",     rrutf8_output,      "-rr.utf8",     (ast_features)0,                            (rrd_features)0 },
-};
 
 static void xusage(void)
 {
@@ -127,60 +69,6 @@ static int kgt_fgetc(void *opaque)
     assert(f != nullptr);
 
     return fgetc(f);
-}
-
-static struct in_able* inlang(std::string s)
-{
-    int i;
-
-    for (i = 0; i < sizeof(inputable) / sizeof(*inputable); i++)
-    {
-        if (s == inputable[i].name)
-        {
-            return &inputable[i];
-        }
-    }
-
-    fprintf(stderr, "Unrecognised input language \"%s\"; supported languages are:", s.c_str());
-
-    for (i = 0; i < sizeof(inputable) / sizeof(*inputable); i++)
-    {
-        fprintf(stderr, " %s", inputable[i].name.c_str());
-    }
-
-    fprintf(stderr, "\n");
-
-    err_exit();
-
-    __assume(false);
-    assert(!"unreached");
-}
-
-static struct out_able* outlang(const char* s)
-{
-    size_t i;
-
-    for (i = 0; i < sizeof(outputable) / sizeof(*outputable); i++)
-    {
-        if (0 == strcmp(s, outputable[i].name))
-        {
-            return &outputable[i];
-        }
-    }
-
-    fprintf(stderr, "Unrecognised output language \"%s\"; supported languages are:", s);
-
-    for (i = 0; i < sizeof(outputable) / sizeof(*outputable); i++)
-    {
-        fprintf(stderr, " %s", outputable[i].name);
-    }
-
-    fprintf(stderr, "\n");
-
-    err_exit();
-
-    __assume(false);
-    assert(!"unreached");
 }
 
 static bool report_parsing_errors(parsing_errors* errors)
@@ -201,30 +89,6 @@ static bool report_parsing_errors(parsing_errors* errors)
     }
 
     return false;
-}
-
-struct ast_rule* read_grammar(const in_able& in, const std::string filename)
-{
-    parsing_errors errors;
-    ast_rule* grammar;
-
-    assert(in.in != nullptr);
-
-    FILE* input = fopen(filename.c_str(), "r");
-    assert(input != nullptr);
-    try
-    {
-        grammar = in.in(kgt_fgetc, input, &errors);
-    }
-    catch (std::logic_error& e)
-    {
-        printf("%s\n", e.what());
-        report_parsing_errors(&errors);
-        err_exit();
-    }
-    fclose(input);
-
-    return grammar;
 }
 
 std::string kout(std::string file)
@@ -260,12 +124,15 @@ void tester()
 
 void tester(const in_able& in, std::string inputfile)
 {
-    ast_rule* grammar = read_grammar(in, inputfile);
+    ast_grammar grammar;
+    
+    read_grammar(grammar, in, inputfile);
 
     std::string new_out = kout(inputfile + "." + in.name + ".new-out.txt");
     std::string old_out = kout(inputfile + "." + in.name + ".old-out.txt");
 
     FILE* outfile = fopen(new_out.c_str(), "w");
+    assert(outfile != nullptr);
     writer = new iwriter(outfile);
 
     printf("%s:\n", inputfile.c_str());
@@ -283,9 +150,9 @@ void tester(const in_able& in, std::string inputfile)
         {
             more = true;
         }
-        printf("%s", out.name);
+        printf("%s", out.name.c_str());
 
-        if (strcmp(out.name, "bnf") == 0)
+        if (out.name == "bnf")
         {
             printf("(skip)");
             continue;
@@ -305,28 +172,24 @@ void tester(const in_able& in, std::string inputfile)
     std::ifstream oldf(old_out);
     std::string olds((std::istreambuf_iterator<char>(oldf)), (std::istreambuf_iterator<char>()));
 
+    printf("#news: %d, #olds: %d\n", news.size(), olds.size());
+
     assert(news.size() > 0);
     assert(olds.size() == 0 || news == olds);
 }
 
 void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
 {
-    struct out_able* out = nullptr;
-
-    ast_rule* grammar = read_grammar(in, inputfile);
+    ast_grammar grammar;
+    read_grammar(grammar, in, inputfile);
 
     ::writer = writer;
 
-    for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
+    for (auto out : outputable)
     {
-        out = &outputable[i];
-
-        assert(out != nullptr);
-        assert(out->out != nullptr);
-
-        if (strcmp(out->name, "bnf") != 0)
+        if (out.name != "bnf")
         {
-            out->out(grammar);
+            out.out(grammar);
         }
     }
 }
@@ -335,15 +198,13 @@ int main(int argc, char* argv[])
 {
     tester();
 
-    struct ast_rule* grammar;
-    struct in_able* in = nullptr;
-    struct out_able* out = nullptr;
+    ast_grammar grammar;
     const char* filter;
     parsing_errors errors;
     filter = nullptr;
 
-    in = inlang("bnf");
-    out = outlang("bnf");
+    auto in = inlang("bnf");
+    auto out = outlang("bnf");
 
     writer = new struct iwriter(stdout);
 
@@ -378,10 +239,10 @@ int main(int argc, char* argv[])
         }
     }
 
-    assert(in->in != nullptr);
-    assert(out->out != nullptr);
+    assert(in.in != nullptr);
+    assert(out.out != nullptr);
 
-    grammar = in->in(kgt_fgetc, stdin, &errors);
+    in.in(grammar, kgt_fgetc, stdin, &errors);
 
     if (report_parsing_errors(&errors))
     {
@@ -391,7 +252,7 @@ int main(int argc, char* argv[])
     {
         unsigned v;
 
-        for (v = out->ast_unsupported; v != 0; v &= v - 1)
+        for (v = out.ast_unsupported; v != 0; v &= v - 1)
         {
             /* TODO: expose these rewritings as CLI options too; set as bits in v */
             /* TODO: option to query if output is possible without rewriting */
@@ -417,43 +278,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (filter != nullptr)
-    {
-        struct ast_rule* nuw, ** tail;
-        struct ast_rule* p;
-        struct ast_rule* next = nullptr;
-
-        nuw = nullptr;
-        tail = &nuw;
-
-        for (p = grammar; p != nullptr; p = next)
-        {
-            char* tmp, * save;
-            const char* t;
-
-            next = p->next;
-
-            tmp = xstrdup(filter);
-
-            for (t = strtok_s(tmp, ",", &save); t != nullptr; t = strtok_s(nullptr, ",", &save))
-            {
-                if (0 == strcmp(p->name().chars(), t))
-                {
-                    p->next = *tail;
-                    *tail = p;
-                    break;
-                }
-
-                /* TODO: otherwise free *p */
-            }
-
-            free(tmp);
-        }
-
-        grammar = nuw;
-    }
-
-    if (!out->out(grammar))
+    if (!out.out(grammar))
     {
         err_exit();
     }

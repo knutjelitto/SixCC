@@ -99,7 +99,7 @@ static int single_term(const struct ast_term* term, struct node** r)
 			return 1;
 
 		case TYPE_RULE:
-			*r = node_create_name(term->invisible, term->rule()->name());
+			*r = node_create_name(term->invisible, term->rule()->name);
 			return 1;
 
 		case TYPE_CI_LITERAL:

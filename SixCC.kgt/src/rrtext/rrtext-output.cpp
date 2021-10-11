@@ -39,9 +39,11 @@
 
 struct render_context
 {
-	char **lines;
-	char *scratch;
-	unsigned x, y; /* in character indicies */
+	char **lines = nullptr;
+	char *scratch = nullptr;
+	/* in character indicies */
+	unsigned x = 0;
+	unsigned y = 0;
 };
 
 static void node_walk_render(const struct tnode *n, struct render_context *ctx);
@@ -50,12 +52,17 @@ static void bprintf(struct render_context* ctx, const char* fmt, ...)
 {
 	assert(ctx != nullptr);
 	assert(ctx->scratch != nullptr);
+	assert(ctx->x >= 0 && ctx->x <= 10000);
+	assert(ctx->y >= 0 && ctx->y <= 10000);
 
 	va_list ap{};
 	va_start(ap, fmt);
 	unsigned n = vsprintf(ctx->scratch, fmt, ap);
+	assert(n <= 10000);
 	va_end(ap);
 
+	assert(ctx->x >= 0 && ctx->x <= 10000);
+	assert(ctx->y >= 0 && ctx->y <= 10000);
 	memcpy(ctx->lines[ctx->y] + ctx->x, ctx->scratch, n);
 
 	ctx->x += n;
@@ -408,7 +415,7 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 
 static void render_rule(const struct tnode* node, int utf8)
 {
-	struct render_context ctx{};
+	struct render_context ctx;
 	unsigned w, h;
 	unsigned i;
 
@@ -504,18 +511,16 @@ static void dim_mono_string(const text& text, unsigned *w, unsigned *a, unsigned
 	dim_mono_txt(text, w, a, d);
 }
 
-void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
+void rr_output(const ast_grammar& grammar, struct dim* dim, int utf8)
 {
-	const struct ast_rule* p;
-
 	assert(dim != nullptr);
 
-	for (p = grammar; p; p = p->next)
+	for (auto rule : grammar.rules)
 	{
 		struct node* rrd;
 		struct tnode* tnode;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return;
@@ -530,7 +535,7 @@ void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
 
 		node_free(rrd);
 
-		writer->printf("%s:\n", p->name().chars());
+		writer->printf("%s:\n", rule->name.chars());
 		render_rule(tnode, utf8);
 		writer->printf("\n");
 
@@ -538,7 +543,7 @@ void rr_output(const struct ast_rule* grammar, struct dim* dim, int utf8)
 	}
 }
 
-WARN_UNUSED_RESULT int rrutf8_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int rrutf8_output(const ast_grammar& grammar)
 {
 	struct dim dim =
 	{
@@ -556,7 +561,7 @@ WARN_UNUSED_RESULT int rrutf8_output(const struct ast_rule *grammar)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int rrtext_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrtext_output(const ast_grammar& grammar)
 {
 	struct dim dim =
 	{

@@ -1,6 +1,6 @@
 /*
  * Automatically generated from the files:
- *	src/bnf/parser.sid
+ *	src/wsn/parser.sid
  * and
  *	src/parser.act
  * by:

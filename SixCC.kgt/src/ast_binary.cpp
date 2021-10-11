@@ -49,11 +49,9 @@ static bool walk_alts(const struct ast_alt* alts)
     return false;
 }
 
-bool ast_maybe_binary(const struct ast_rule* grammar)
+bool ast_maybe_binary(const ast_grammar& grammar)
 {
-    const struct ast_rule* rule;
-
-    for (rule = grammar; rule != nullptr; rule = rule->next)
+    for (auto rule : grammar.rules)
     {
         if (walk_alts(rule->alts))
         {

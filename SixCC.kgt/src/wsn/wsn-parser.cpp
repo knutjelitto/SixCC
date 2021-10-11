@@ -25,9 +25,9 @@
 #include "../ast.h"
 #include "../xalloc.h"
 #include "../strings.h"
-#include "lexer.h"
+#include "wsn-lexer.h"
 #include "../parsing-support.h"
-#include "parser.h"
+#include "wsn-parser.h"
 #include "io.h"
 
 static const char* pattern_buffer(struct lex_state_s* lex_state)
@@ -54,13 +54,13 @@ static const char* pattern_buffer(struct lex_state_s* lex_state)
 
 static void prod_factor(lex_state, act_state, map_term *);
 static void prod_list_Hof_Hterms(lex_state, act_state, map_term *);
-static void prod_list_Hof_Hrules(lex_state, act_state, map_rule *);
+static void prod_list_Hof_Hrules(lex_state, act_state, ast_grammar&);
 static void prod_list_Hof_Halts(lex_state, act_state, map_alt *);
 static void prod_body(lex_state, act_state);
 static void prod_term(lex_state, act_state, map_term *);
-static void prod_rule(lex_state, act_state, map_rule *);
-extern void prod_wsn(lex_state, act_state, map_rule *);
-static void prod_93(lex_state, act_state, map_rule *);
+static void prod_rule(lex_state, act_state, ast_grammar&);
+static void prod_wsn(lex_state, act_state, ast_grammar&);
+static void prod_93(lex_state, act_state, ast_grammar&);
 static void prod_94(lex_state, act_state, map_term *, map_alt *);
 static void prod_95(lex_state, act_state, map_term *);
 
@@ -237,28 +237,20 @@ ZL0:
 	*ZOl = ZIl;
 }
 
-static void
-prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, map_rule *ZOl)
+static void prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, ast_grammar& grammar)
 {
-	map_rule ZIl;
-
-	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
+	if (CURRENT_TERMINAL == ERROR_TERMINAL)
+	{
 		return;
 	}
+	prod_rule(lex_state, act_state, grammar);
+	prod_93(lex_state, act_state, grammar);
+	if (CURRENT_TERMINAL == ERROR_TERMINAL)
 	{
-		prod_rule (lex_state, act_state, &ZIl);
-		prod_93 (lex_state, act_state, &ZIl);
-		if ((CURRENT_TERMINAL) == (ERROR_TERMINAL)) {
-			RESTORE_LEXER;
-			goto ZL1;
-		}
+		RESTORE_LEXER;
+		SAVE_LEXER(ERROR_TERMINAL);
+		return;
 	}
-	goto ZL0;
-ZL1:
-	SAVE_LEXER ((ERROR_TERMINAL));
-	return;
-ZL0:
-	*ZOl = ZIl;
 }
 
 static void
@@ -437,11 +429,8 @@ ZL0:
 	*ZOt = ZIt;
 }
 
-static void
-prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
+static void prod_rule(lex_state lex_state, act_state act_state, ast_grammar& grammar)
 {
-	map_rule ZIr;
-
 	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
 	{
 		return;
@@ -507,7 +496,7 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 		{
 			//#line 670 "src/parser.act"
 
-			(ZIr) = ast_make_rule((ZIs), (ZIa));
+			grammar.rules.push_back(ast_make_rule(ZIs, ZIa));
 
 			//#line 834 "src/wsn/parser.c"
 		}
@@ -545,102 +534,51 @@ prod_rule(lex_state lex_state, act_state act_state, map_rule* ZOr)
 ZL1:
 	SAVE_LEXER((ERROR_TERMINAL));
 	return;
-ZL0:
-	*ZOr = ZIr;
+ZL0:;
 }
 
-void
-prod_wsn(lex_state lex_state, act_state act_state, map_rule* ZOl)
+void prod_wsn(lex_state lex_state, act_state act_state, ast_grammar& grammar)
 {
-	map_rule ZIl;
-
-	if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+	if (CURRENT_TERMINAL == ERROR_TERMINAL)
 	{
 		return;
 	}
+	prod_list_Hof_Hrules(lex_state, act_state, grammar);
+	switch (CURRENT_TERMINAL)
 	{
-		prod_list_Hof_Hrules(lex_state, act_state, &ZIl);
-		switch (CURRENT_TERMINAL)
-		{
-			case (TOK_EOF):
-				break;
-			case (ERROR_TERMINAL):
-				RESTORE_LEXER;
-				goto ZL1;
-			default:
-				goto ZL1;
-		}
-		ADVANCE_LEXER;
+		case (TOK_EOF):
+			ADVANCE_LEXER;
+			return;
+		case (ERROR_TERMINAL):
+			RESTORE_LEXER;
+			break;
+		default:
+			break;
 	}
-	goto ZL0;
-ZL1:
-	{
-		/* BEGINNING OF ACTION: make-empty-rule */
-		{
-			//#line 674 "src/parser.act"
-
-			(ZIl) = nullptr;
-
-			//#line 903 "src/wsn/parser.c"
-		}
-		/* END OF ACTION: make-empty-rule */
-		/* BEGINNING OF ACTION: err-syntax */
-		{
-			//#line 717 "src/parser.act"
-
-			err(*lex_state, "Syntax error");
-			throw std::logic_error("bail out");
-
-			//#line 913 "src/wsn/parser.c"
-		}
-		/* END OF ACTION: err-syntax */
-	}
-ZL0:
-	*ZOl = ZIl;
+	err(*lex_state, "Syntax error");
+	throw std::logic_error("bail out");
 }
 
-static void
-prod_93(lex_state lex_state, act_state act_state, map_rule* ZIl)
+static void prod_93(lex_state lex_state, act_state act_state, ast_grammar& grammar)
 {
 	switch (CURRENT_TERMINAL)
 	{
 		case (TOK_IDENT):
 		{
-			map_rule ZIr;
-
-			prod_list_Hof_Hrules(lex_state, act_state, &ZIr);
+			prod_list_Hof_Hrules(lex_state, act_state, grammar);
 			if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
 			{
 				RESTORE_LEXER;
-				goto ZL1;
+				SAVE_LEXER((ERROR_TERMINAL));
+				return;
 			}
-			/* BEGINNING OF ACTION: add-rule-to-list */
-			{
-				//#line 689 "src/parser.act"
-
-				if (ast_find_rule((ZIr), (*ZIl)->name()))
-				{
-					err_already(*lex_state, (*ZIl)->name());
-					return;
-				}
-
-				assert((*ZIl)->next == nullptr);
-				(*ZIl)->next = (ZIr);
-
-				//#line 946 "src/wsn/parser.c"
-			}
-			/* END OF ACTION: add-rule-to-list */
+			break;
 		}
-		break;
 		case (ERROR_TERMINAL):
-			return;
+			break;
 		default:
 			break;
 	}
-	return;
-ZL1:
-	SAVE_LEXER((ERROR_TERMINAL));
-	return;
 }
 
 static void prod_94(lex_state lex_state, act_state act_state, map_term* ZIt, map_alt* ZOl)
@@ -739,7 +677,7 @@ ZL1:
 		return lex_state->f(lex_state->opaque);
 	}
 
-	struct ast_rule* wsn_input(int (*f)(void* opaque), void* opaque, parsing_errors* errors)
+	bool wsn_input(ast_grammar& grammar, int (*f)(void* opaque), void* opaque, parsing_errors* errors)
 	{
 		struct act_state_s  act_state_s;
 		struct act_state_s* act_state;
@@ -785,13 +723,13 @@ ZL1:
 		act_state->invisible = 0;
 
 		ADVANCE_LEXER;
-		FORM_ENTRY(lex_state, act_state, &g);
+		prod_wsn(lex_state, act_state, grammar);
 
 		/* TODO: handle error */
 
-		replace_real(g, *lex_state);
+		replace_real(grammar, *lex_state);
 
-		return g;
+		return true;
 	}
 
 //#line 1212 "src/wsn/parser.c"

@@ -116,15 +116,13 @@ static void node_walk(iwriter* f, const struct node* n, int depth)
 	}
 }
 
-WARN_UNUSED_RESULT int rrdump_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrdump_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
-	for (p = grammar; p != nullptr; p = p->next)
+	for (auto rule : grammar.rules)
 	{
 		struct node* rrd;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return 0;
@@ -132,19 +130,19 @@ WARN_UNUSED_RESULT int rrdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", p->name().chars());
+			writer->printf("%s:\n", rule->name.chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", p->name().chars());
+			writer->printf("%s: (before prettify)\n", rule->name.chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 
 			rrd_pretty(&rrd);
 
-			writer->printf("%s: (after prettify)\n", p->name().chars());
+			writer->printf("%s: (after prettify)\n", rule->name.chars());
 			node_walk(writer, rrd, 1);
 			writer->printf("\n");
 		}

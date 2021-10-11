@@ -9,7 +9,7 @@
 
 #include "../compiler_specific.h"
 #include "../parsing-error.h"
-struct ast_rule;
+struct ast_grammar;
 
 /*
  * We don't mark FEATURE_AST_INVISIBLE as unsupported here, because this EBNF
@@ -17,9 +17,9 @@ struct ast_rule;
  */
 #define iso_ebnf_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_PROSE | FEATURE_AST_BINARY)
 
-struct ast_rule * iso_ebnf_input(int (*f)(void *opaque), void *opaque, parsing_errors* errors);
+bool iso_ebnf_input(ast_grammar& grammar, int (*f)(void *opaque), void *opaque, parsing_errors* errors);
 
-WARN_UNUSED_RESULT int iso_ebnf_output(const struct ast_rule *grammar);
+WARN_UNUSED_RESULT int iso_ebnf_output(const ast_grammar& grammar);
 
 #endif
 

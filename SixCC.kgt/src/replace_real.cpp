@@ -27,15 +27,14 @@
 
 extern int allow_undefined; 
 
-void replace_real(ast_rule* grammar, error_context lex_state)
+void replace_real(ast_grammar& grammar, error_context lex_state)
 {
     /* substitute placeholder rules for the real thing */
     {
-        const struct ast_rule* rule;
         struct ast_alt* alt;
         struct ast_rule* replacement;
 
-        for (rule = grammar; rule != nullptr; rule = rule->next)
+        for (auto rule : grammar.rules)
         {
             for (alt = rule->alts; alt != nullptr; alt = alt->next)
             {
@@ -55,7 +54,7 @@ void replace_real(ast_rule* grammar, error_context lex_state)
                         continue;
                     }
 
-                    replacement = ast_find_rule(grammar, term->rule()->name());
+                    replacement = ast_find_rule(grammar, term->rule()->name);
                     if (replacement != nullptr)
                     {
                         ast_free_rule((struct ast_rule*)term->rule());
@@ -65,12 +64,12 @@ void replace_real(ast_rule* grammar, error_context lex_state)
 
                     if (!allow_undefined)
                     {
-                        err_undefined(lex_state, term->rule()->name());
+                        err_undefined(lex_state, term->rule()->name);
                         /* XXX: would leak the ast_rule here */
                         continue;
                     }
 
-                    ast_term* new_term = ast_term::make_token(term->invisible, term->rule()->name());
+                    ast_term* new_term = ast_term::make_token(term->invisible, term->rule()->name);
 
                     vterms[i] = new_term;
                     ast_free_rule((struct ast_rule*)term->rule());

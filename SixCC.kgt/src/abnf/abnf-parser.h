@@ -10,4 +10,3 @@
 typedef struct lex_state_s* lex_state;
 typedef struct act_state_s* act_state;
 typedef struct ast_rule* map_rule;
-extern void prod_abnf(lex_state, act_state, map_rule *);

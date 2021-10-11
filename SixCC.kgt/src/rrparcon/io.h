@@ -7,15 +7,13 @@
 #ifndef KGT_RRPARCON_IO_H
 #define KGT_RRPARCON_IO_H
 
-struct ast_rule;
+struct ast_grammar;
 
 #define rrparcon_ast_unsupported (FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)
 #define rrparcon_rrd_unsupported FEATURE_RRD_CI_LITERAL
 
 extern int prettify;
 
-WARN_UNUSED_RESULT
-int
-rrparcon_output(const struct ast_rule *);
+WARN_UNUSED_RESULT int rrparcon_output(const ast_grammar& grammar);
 
 #endif

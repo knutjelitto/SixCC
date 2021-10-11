@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "lexer.h"
+#include "wsn-lexer.h"
 
 static enum lx_wsn_token z0(struct lx_wsn_lx *lx);
 static enum lx_wsn_token z1(struct lx_wsn_lx *lx);

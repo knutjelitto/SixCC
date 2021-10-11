@@ -10,42 +10,28 @@
  * TODO: fprintf(fout), instead of stdout
  */
 
-#include <map>
-
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 
+#include "../errors.h"
 #include "../txt.h"
 #include "../ast.h"
 
 #include "io.h"
 
-static std::map<void*, uint64_t> numbers;
+extern int fakeptr;
 
-#if true
-static void* map(const void* ptr)
+static const void* map(const void* ptr)
 {
-    return nullptr;
+    if (fakeptr)
+        return nullptr;
+    return ptr;
 }
-#else
-static void* map(void* ptr)
-{
-    auto found = numbers.find(ptr);
-    if (found != numbers.end())
-    {
-        return (void*)found->second;
-    }
 
-    uint64_t num = numbers.size();
-    numbers.insert({ ptr, num });
-    return (void*)num;
-}
-#endif
-
-static void output_alt(const struct ast_rule *grammar, const struct ast_alt *alt);
+static void output_alt(const ast_grammar& grammar, const struct ast_alt *alt);
 
 static int escputc(int c, iwriter* writer)
 {
@@ -80,7 +66,7 @@ static int escputc(int c, iwriter* writer)
     return writer->putc(c);
 }
 
-static void output_group(const struct ast_rule* grammar, const struct ast_term* term, const struct ast_alt* group)
+static void output_group(const ast_grammar& grammar, const struct ast_term* term, const struct ast_alt* group)
 {
     const struct ast_alt* alt;
 
@@ -92,7 +78,7 @@ static void output_group(const struct ast_rule* grammar, const struct ast_term* 
     }
 }
 
-static void output_term(const struct ast_rule* grammar, const struct ast_alt* alt, const struct ast_term* term)
+static void output_term(const ast_grammar& grammar, const struct ast_alt* alt, const struct ast_term* term)
 {
     assert(term->max >= term->min || !term->max);
 
@@ -136,7 +122,7 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
             break;
 
         case TYPE_RULE:
-            writer->escape(term->rule()->name(), escputc);
+            writer->escape(term->rule()->name, escputc);
             break;
 
         case TYPE_CI_LITERAL:
@@ -200,7 +186,7 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
     }
 }
 
-static void output_alt(const struct ast_rule* grammar, const struct ast_alt* alt)
+static void output_alt(const ast_grammar& grammar, const struct ast_alt* alt)
 {
     writer->printf("\t\"a%p\" [ label = \"|\"", map((void*)alt));
 
@@ -217,7 +203,7 @@ static void output_alt(const struct ast_rule* grammar, const struct ast_alt* alt
     }
 }
 
-static void output_alts(const struct ast_rule* grammar, const struct ast_rule* rule, const struct ast_alt* alts)
+static void output_alts(const ast_grammar& grammar, const struct ast_rule* rule, const struct ast_alt* alts)
 {
     const struct ast_alt* alt;
 
@@ -229,29 +215,24 @@ static void output_alts(const struct ast_rule* grammar, const struct ast_rule* r
     }
 }
 
-static void output_rule(const struct ast_rule* grammar, const struct ast_rule* rule)
+static void output_rule(const ast_grammar& grammar, const struct ast_rule* rule)
 {
-    writer->printf("\t\"p%p\" [ shape = record, label = \"=|%s\" ];\n", map((void*)rule), rule->name().chars());
+    writer->printf("\t\"p%p\" [ shape = record, label = \"=|%s\" ];\n", map((void*)rule), rule->name.chars());
 
     output_alts(grammar, rule, rule->alts);
 }
 
-WARN_UNUSED_RESULT int dot_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int dot_output(const ast_grammar& grammar)
 {
-    numbers.clear();
-
-    const struct ast_rule* p;
-
     writer->printf("digraph G {\n");
     writer->printf("\tnode [ shape = box, style = rounded ];\n");
     writer->printf("\tedge [ dir = none ];\n");
 
-    for (p = grammar; p != NULL; p = p->next)
+    for (auto rule : grammar.rules)
     {
-        output_rule(grammar, p);
+        output_rule(grammar, rule);
     }
 
     writer->printf("}\n");
     return 1;
 }
-

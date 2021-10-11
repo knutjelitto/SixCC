@@ -8,6 +8,8 @@
 #define KGT_AST_H
 
 #include <deque>
+#include <vector>
+#include <string>
 #include "txt.h"
 
 struct ast_alt;
@@ -30,13 +32,6 @@ typedef enum ast_term_type
     TYPE_PROSE,
     TYPE_GROUP
 } ast_term_type;
-
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
 
 /*
  * A term is a sequential list of items within an alt. Each item may be
@@ -169,8 +164,6 @@ struct ast_terms : std::deque<ast_term*>
  */
 struct ast_alt
 {
-    ast_alt() = delete;
-
     ast_alt(int invisible, ast_term* term_list)
         : invisible(invisible)
     {
@@ -190,6 +183,10 @@ struct ast_alt
     struct ast_alt* next = nullptr;
 };
 
+struct ast_alts : std::deque<ast_alt*>
+{
+};
+
 /*
  * A grammar is a list of production rules. Each rule maps a name onto a list
  * of alternatives:
@@ -200,34 +197,36 @@ struct ast_alt
 struct ast_rule
 {
     ast_rule(const text name, ast_alt* alts)
-        : alts(alts), xxx_name(name)
+        : name(name), alts(alts)
     {
     }
 
-    const text& name() const
-    {
-        return xxx_name;
-    }
+    const text name;
+    ast_alt* alts;
 
-    struct ast_alt* alts;
-    struct ast_rule* next = nullptr;
+    ast_rule* next = nullptr;
 private:
-    const text xxx_name;
 };
 
-struct ast_grammar : std::deque<ast_rule*>
+struct ast_rules : std::vector<ast_rule*>
 {
+};
+
+struct ast_grammar
+{
+    ast_rules rules;
 };
 
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms);
 struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 
 struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const text& name);
+struct ast_rule* ast_find_rule(const ast_grammar& grammar, const text& name);
 
 void ast_free_rule(struct ast_rule *rule);
 void ast_free_alt(struct ast_alt *alt);
 void ast_free_term(struct ast_term *term);
 
-bool ast_maybe_binary(const struct ast_rule *ast);
+bool ast_maybe_binary(const ast_grammar&);
 
 #endif

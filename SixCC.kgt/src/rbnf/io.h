@@ -9,16 +9,14 @@
 
 #include "../compiler_specific.h"
 #include "../parsing-error.h"
-struct ast_rule;
+
+struct ast_grammar;
 
 #define rbnf_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)
 
-struct ast_rule *
-rbnf_input(int (*f)(void *opaque), void *opaque, parsing_errors* errors);
+bool rbnf_input(ast_grammar& grammar, int (*f)(void *opaque), void *opaque, parsing_errors* errors);
 
-WARN_UNUSED_RESULT
-int
-rbnf_output(const struct ast_rule *grammar);
+WARN_UNUSED_RESULT int rbnf_output(const ast_grammar& grammar);
 
 #endif
 

@@ -233,15 +233,13 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 	return 1;
 }
 
-WARN_UNUSED_RESULT int rrta_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrta_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
-	for (p = grammar; p != nullptr; p = p->next)
+	for (auto rule : grammar.rules)
 	{
 		struct node* rrd;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return 0;
@@ -259,7 +257,7 @@ WARN_UNUSED_RESULT int rrta_output(const struct ast_rule* grammar)
 		}
 
 		writer->puts("add('");
-		writer->escape(p->name(), escputc);
+		writer->escape(rule->name, escputc);
 		writer->puts("', Diagram(\n");
 
 		if (!node_walk(writer, rrd, 1))

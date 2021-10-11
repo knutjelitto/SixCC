@@ -51,7 +51,7 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 			break;
 
 		case TYPE_RULE:
-			writer->printf("%s; ", term->rule()->name().chars());
+			writer->printf("%s; ", term->rule()->name.chars());
 			break;
 
 		case TYPE_CI_LITERAL:
@@ -137,7 +137,7 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	const struct ast_alt* alt;
 
-	writer->printf("\t%s = {\n\t\t", rule->name().chars());
+	writer->printf("\t%s = {\n\t\t", rule->name.chars());
 
 	for (alt = rule->alts; alt != nullptr; alt = alt->next)
 	{
@@ -168,7 +168,7 @@ static bool is_equal(const struct ast_term* a, const struct ast_term* b)
 	switch (a->type)
 	{
 		case TYPE_EMPTY:      return true;
-		case TYPE_RULE:       return a->rule()->name().eq(b->rule()->name());
+		case TYPE_RULE:       return a->rule()->name.eq(b->rule()->name);
 		case TYPE_CI_LITERAL: return a->text().cieq(b->text());
 		case TYPE_CS_LITERAL: return a->text().eq(b->text());
 		case TYPE_TOKEN:      return a->text().eq(b->text());
@@ -182,13 +182,12 @@ static bool is_equal(const struct ast_term* a, const struct ast_term* b)
 	assert(!"unreached");
 }
 
-WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT static int output_terminals(const ast_grammar& grammar)
 {
-	const struct ast_rule* rule;
 	struct ast_term* found = nullptr;
 
 	/* List terminals */
-	for (rule = grammar; rule != nullptr; rule = rule->next)
+	for (auto rule : grammar.rules)
 	{
 		struct ast_alt* alt;
 
@@ -267,7 +266,7 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int sid_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int sid_output(const ast_grammar& grammar)
 {
 	const struct ast_rule* p;
 
@@ -284,9 +283,9 @@ WARN_UNUSED_RESULT int sid_output(const struct ast_rule* grammar)
 
 	/* TODO list rule declartations */
 
-	for (p = grammar; p != nullptr; p = p->next)
+	for (auto rule : grammar.rules)
 	{
-		if (!output_rule(p))
+		if (!output_rule(rule))
 		{
 			return 0;
 		}
@@ -294,6 +293,6 @@ WARN_UNUSED_RESULT int sid_output(const struct ast_rule* grammar)
 
 	output_section("entry");
 
-	writer->printf("\t%s;\n\n", grammar->name().chars());
+	writer->printf("\t%s;\n\n", grammar.rules.front()->name.chars());
 	return 1;
 }

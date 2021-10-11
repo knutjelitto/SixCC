@@ -64,7 +64,7 @@ struct tnode_hlist : std::deque<tnode*>
 
 typedef enum
 {
-	TNODE_RTL_ARROW,
+	TNODE_RTL_ARROW = 42,
 	TNODE_LTR_ARROW,
 	TNODE_ELLIPSIS,
 	TNODE_CI_LITERAL,

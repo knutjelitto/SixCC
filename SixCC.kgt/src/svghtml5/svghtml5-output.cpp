@@ -36,13 +36,13 @@
 
 /* XXX */
 extern struct dim svg_dim;
-void svg_render_rule(const struct tnode *node, const char *base, const struct ast_rule *grammar);
+void svg_render_rule(const struct tnode *node, const char *base, const ast_grammar& grammar);
 
 extern const char *css_file;
 
 WARN_UNUSED_RESULT int cat(const char* in, const char* indent);
 
-WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
+WARN_UNUSED_RESULT static int output(const ast_grammar& grammar, int xml)
 {
 	const struct ast_rule* p;
 
@@ -81,13 +81,13 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
 
 	writer->printf(" <body>\n");
 
-	for (p = grammar; p; p = p->next)
+	for (auto rule : grammar.rules)
 	{
 		struct tnode* tnode;
 		struct node* rrd;
 		unsigned h, w;
 
-		if (!ast_to_rrd(p, &rrd))
+		if (!ast_to_rrd(rule, &rrd))
 		{
 			perror("ast_to_rrd");
 			return 0;
@@ -103,7 +103,7 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
 		node_free(rrd);
 
 		writer->printf(" <section>\n");
-		writer->printf("  <h2><a name='%s'>%s:</a></h2>\n", p->name().chars(), p->name().chars());
+		writer->printf("  <h2><a name='%s'>%s:</a></h2>\n", rule->name.chars(), rule->name.chars());
 
 		h = (tnode->a + tnode->d + 1) * 10 + 5;
 		w = (tnode->w + 6) * 10;
@@ -127,20 +127,22 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
 	return 1;
 }
 
-WARN_UNUSED_RESULT int svg_html5_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int svg_html5_output(const ast_grammar& grammar)
 {
 	writer->printf("<!DOCTYPE html>\n");
 	writer->printf("<html>\n");
 	writer->printf("\n");
 
 	if (!output(grammar, 0))
+	{
 		return 0;
+	}
 
 	writer->printf("</html>\n");
 	return 1;
 }
 
-WARN_UNUSED_RESULT int svg_xhtml5_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int svg_xhtml5_output(const ast_grammar& grammar)
 {
 	writer->printf("<?xml version='1.0' encoding='utf-8'?>\n");
 	writer->printf("<!DOCTYPE html>\n");
@@ -150,7 +152,9 @@ WARN_UNUSED_RESULT int svg_xhtml5_output(const struct ast_rule *grammar)
 	writer->printf("\n");
 
 	if (!output(grammar, 1))
+	{
 		return 0;
+	}
 
 	writer->printf("</html>\n");
 	return 1;

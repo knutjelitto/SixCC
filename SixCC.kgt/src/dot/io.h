@@ -9,11 +9,9 @@
 
 #include "../compiler_specific.h"
 
-struct ast_rule;
+struct ast_grammar;
 
-WARN_UNUSED_RESULT
-int
-dot_output(const struct ast_rule *grammar);
+WARN_UNUSED_RESULT int dot_output(const ast_grammar& grammar);
 
 #endif
 

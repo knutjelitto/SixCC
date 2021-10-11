@@ -166,10 +166,8 @@ static void dim_mono_string(const text& text, unsigned *w, unsigned *a, unsigned
 	*d = 1;
 }
 
-WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int rrtdump_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* rule;
-
 	struct dim dim = {
 		dim_mono_txt,
 		dim_mono_string,
@@ -181,7 +179,7 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 		0
 	};
 
-	for (rule = grammar; rule != nullptr; rule = rule->next)
+	for (auto rule : grammar.rules)
 	{
 		struct tnode* tnode;
 		struct node* rrd;
@@ -196,13 +194,13 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 		if (!prettify)
 		{
-			writer->printf("%s:\n", rule->name().chars());
+			writer->printf("%s:\n", rule->name.chars());
 			tnode_walk(writer, tnode, 1);
 			writer->puts("\n");
 		}
 		else
 		{
-			writer->printf("%s: (before prettify)\n", rule->name().chars());
+			writer->printf("%s: (before prettify)\n", rule->name.chars());
 			tnode_walk(writer, tnode, 1);
 			writer->puts("\n");
 
@@ -212,7 +210,7 @@ WARN_UNUSED_RESULT int rrtdump_output(const struct ast_rule* grammar)
 
 			tnode = rrd_to_tnode(rrd, &dim);
 
-			writer->printf("%s: (after prettify)\n", rule->name().chars());
+			writer->printf("%s: (after prettify)\n", rule->name.chars());
 			tnode_walk(writer, tnode, 1);
 			writer->printf("\n");
 		}

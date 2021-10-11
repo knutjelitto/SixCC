@@ -9,13 +9,13 @@
 
 #include "../compiler_specific.h"
 #include "../parsing-error.h"
-struct ast_rule;
+struct ast_grammar;
 
 #define wsn_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)
 
-struct ast_rule * wsn_input(int (*f)(void *opaque), void *opaque, parsing_errors* errors);
+bool wsn_input(ast_grammar& grammar, int (*f)(void *opaque), void *opaque, parsing_errors* errors);
 
-WARN_UNUSED_RESULT int wsn_output(const struct ast_rule *grammar);
+WARN_UNUSED_RESULT int wsn_output(const ast_grammar& grammar);
 
 #endif
 

@@ -13,7 +13,7 @@
 #include "xalloc.h"
 #include "txt.h"
 
-void err_exit()
+[[noreturn]] void err_exit()
 {
 	printf("press return ... ");
 	getchar();

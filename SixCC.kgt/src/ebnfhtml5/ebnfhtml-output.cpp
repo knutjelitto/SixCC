@@ -152,8 +152,8 @@ static void output_term(const struct ast_term* term)
             break;
 
         case TYPE_RULE:
-            writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->rule()->name().chars(), term->min, term->max);
-            writer->puts(term->rule()->name());
+            writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->rule()->name.chars(), term->min, term->max);
+            writer->puts(term->rule()->name);
             writer->puts("</a>");
             break;
 
@@ -211,7 +211,7 @@ static void output_alt(const struct ast_alt* alt)
     assert(alt != nullptr);
     assert(!alt->invisible);
 
-    bool more;
+    bool more = false;
     for (auto term : alt->terms)
     {
         if (more)
@@ -236,8 +236,8 @@ static void output_rule(const struct ast_rule* rule)
     writer->puts("  <dl class='bnf'>\n");
 
     writer->puts("    <dt>");
-    writer->printf("<a name='%s'>", rule->name().chars());
-    writer->puts(rule->name());
+    writer->printf("<a name='%s'>", rule->name.chars());
+    writer->puts(rule->name);
     writer->puts("</a>:");
     writer->puts("</dt>\n");
 
@@ -267,10 +267,8 @@ static void output_rule(const struct ast_rule* rule)
     writer->printf("\n");
 }
 
-WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
+WARN_UNUSED_RESULT static int output(const ast_grammar& grammar, int xml)
 {
-    const struct ast_rule* p;
-
     writer->printf(" <head>\n");
     if (xml)
     {
@@ -326,16 +324,16 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
     writer->printf(" </head>\n");
     writer->printf(" <body>\n");
 
-    for (p = grammar; p != nullptr; p = p->next)
+    for (auto rule : grammar.rules)
     {
-        output_rule(p);
+        output_rule(rule);
     }
 
     writer->printf(" </body>\n");
     return 1;
 }
 
-WARN_UNUSED_RESULT int ebnf_html5_output(const struct ast_rule *grammar)
+WARN_UNUSED_RESULT int ebnf_html5_output(const ast_grammar& grammar)
 {
     writer->printf("<!DOCTYPE html>\n");
     writer->printf("<html>\n");
@@ -349,7 +347,7 @@ WARN_UNUSED_RESULT int ebnf_html5_output(const struct ast_rule *grammar)
     return 1;
 }
 
-WARN_UNUSED_RESULT int ebnf_xhtml5_output(const struct ast_rule* grammar)
+WARN_UNUSED_RESULT int ebnf_xhtml5_output(const ast_grammar& grammar)
 {
     writer->printf("<?xml version='1.0' encoding='utf-8'?>\n");
     writer->printf("<!DOCTYPE html>\n");

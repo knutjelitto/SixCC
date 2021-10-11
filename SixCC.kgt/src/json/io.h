@@ -9,12 +9,10 @@
 
 #include "../compiler_specific.h"
 
-struct ast_rule;
+struct ast_GRAMMAR;
 
 #define json_ast_unsupported (FEATURE_AST_INVISIBLE)
 
-WARN_UNUSED_RESULT
-int
-json_output(const struct ast_rule *grammar);
+WARN_UNUSED_RESULT int json_output(const ast_grammar& grammar);
 
 #endif

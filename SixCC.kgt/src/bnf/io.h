@@ -12,9 +12,9 @@
 struct ast_rule;
 
 #define bnf_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)
-WARN_UNUSED_RESULT int bnf_output(const struct ast_rule* grammar);
+WARN_UNUSED_RESULT int bnf_output(const ast_grammar& grammar);
 
-struct ast_rule * bnf_input(int (*f)(void *opaque), void *opaque, parsing_errors* errors);
+bool bnf_input(ast_grammar& grammar, int (*f)(void *opaque), void *opaque, parsing_errors* errors);
 
 #endif
 

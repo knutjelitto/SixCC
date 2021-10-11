@@ -9,12 +9,10 @@
 
 #include "../compiler_specific.h"
 
-struct ast_rule;
+struct ast_grammar;
 
 extern int prettify;
 
-WARN_UNUSED_RESULT
-int
-rrtdump_output(const struct ast_rule *);
+WARN_UNUSED_RESULT int rrtdump_output(const ast_grammar& grammar);
 
 #endif

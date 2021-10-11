@@ -11,8 +11,8 @@
 
 struct ast_rule;
 
-WARN_UNUSED_RESULT bool rewrite_ci_literals(struct ast_rule *g);
-void rewrite_invisible(struct ast_rule *g);
+WARN_UNUSED_RESULT bool rewrite_ci_literals(ast_grammar& grammar);
+void rewrite_invisible(ast_grammar& grammar);
 
 #endif
 

@@ -30,7 +30,7 @@
 #define FORM_ENTRY CAT(prod_, FORM)
 
 /* XXX: workarounds for SID's identifier escaping */
-#define prod_iso_Hebnf FORM_ENTRY
+#define prod_iso_Hebnf prod_iso_ebnf
 #define TOK_CI__LITERAL TOK_CI_LITERAL
 #define TOK_CS__LITERAL TOK_CS_LITERAL
 
@@ -77,6 +77,6 @@ struct lex_state_s
 #define RESTORE_LEXER    do { act_state->lex_tok = act_state->lex_tok_save; } while (0)
 
 extern int allow_undefined;
-void replace_real(ast_rule* g, error_context lex_state);
+void replace_real(ast_grammar&, error_context lex_state);
 
 #endif

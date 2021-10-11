@@ -9,12 +9,11 @@
 
 #include "../compiler_specific.h"
 
-struct ast_rule;
+struct ast_grammar;
 
 extern int prettify;
 
-WARN_UNUSED_RESULT int svg_html5_output(const struct ast_rule *);
-
-WARN_UNUSED_RESULT int svg_xhtml5_output(const struct ast_rule *);
+WARN_UNUSED_RESULT int svg_html5_output(const ast_grammar& grammar);
+WARN_UNUSED_RESULT int svg_xhtml5_output(const ast_grammar& grammar);
 
 #endif

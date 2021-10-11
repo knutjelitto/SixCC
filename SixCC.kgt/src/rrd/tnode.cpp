@@ -485,7 +485,7 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
 
     struct tnode* nuw = new tnode();
 
-    if (node == nullptr)
+    if (node == nullptr || (node->is_list() && node->list().size() == 0))
     {
         nuw->type = TNODE_VLIST;
         nuw->w = 0;
