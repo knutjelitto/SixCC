@@ -36,10 +36,10 @@ static void walk_term(struct ast_term* term)
 	{
 		case TYPE_EMPTY:
 		case TYPE_CS_LITERAL:
-		case TYPE_TOKEN:
-		case TYPE_RULE:
-		case TYPE_PROSE:
 		case TYPE_CI_LITERAL:
+		case TYPE_RULE:
+		case TYPE_TOKEN:
+		case TYPE_PROSE:
 			break;
 
 		case TYPE_GROUP:

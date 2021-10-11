@@ -182,8 +182,6 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 
 WARN_UNUSED_RESULT int rbnf_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
 	for (auto rule : grammar.rules)
 	{
 		if (!output_rule(rule))

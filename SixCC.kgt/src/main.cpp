@@ -172,7 +172,7 @@ void tester(const in_able& in, std::string inputfile)
     std::ifstream oldf(old_out);
     std::string olds((std::istreambuf_iterator<char>(oldf)), (std::istreambuf_iterator<char>()));
 
-    printf("#news: %d, #olds: %d\n", news.size(), olds.size());
+    printf("#news: %lld, #olds: %lld\n", news.size(), olds.size());
 
     assert(news.size() > 0);
     assert(olds.size() == 0 || news == olds);
@@ -185,7 +185,7 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
 
     ::writer = writer;
 
-    for (auto out : outputable)
+    for (auto& out : outputable)
     {
         if (out.name != "bnf")
         {

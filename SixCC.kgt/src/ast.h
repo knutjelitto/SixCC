@@ -10,6 +10,7 @@
 #include <deque>
 #include <vector>
 #include <string>
+
 #include "txt.h"
 
 struct ast_alt;
@@ -100,12 +101,12 @@ struct ast_term final
         return make_cs_literal(invisible, t);
     }
 
-    static ast_term* make_token(int invisible, const struct text& text)
+    static ast_term* make_token(int invisible, const text& text)
     {
         return new ast_term(TYPE_TOKEN, invisible, text);
     }
 
-    static ast_term* make_prose(int invisible, const struct text& text)
+    static ast_term* make_prose(int invisible, const text& text)
     {
         return new ast_term(TYPE_PROSE, invisible, text);
     }
@@ -153,7 +154,7 @@ private:
     const struct ast_alt* xxx_group;
 };
 
-struct ast_terms : std::deque<ast_term*>
+struct ast_terms : std::vector<ast_term*>
 {
 };
 
@@ -183,7 +184,7 @@ struct ast_alt
     struct ast_alt* next = nullptr;
 };
 
-struct ast_alts : std::deque<ast_alt*>
+struct ast_alts : std::vector<ast_alt*>
 {
 };
 
@@ -203,9 +204,6 @@ struct ast_rule
 
     const text name;
     ast_alt* alts;
-
-    ast_rule* next = nullptr;
-private:
 };
 
 struct ast_rules : std::vector<ast_rule*>
@@ -220,7 +218,6 @@ struct ast_grammar
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms);
 struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 
-struct ast_rule* ast_find_rule(const struct ast_rule* grammar, const text& name);
 struct ast_rule* ast_find_rule(const ast_grammar& grammar, const text& name);
 
 void ast_free_rule(struct ast_rule *rule);
