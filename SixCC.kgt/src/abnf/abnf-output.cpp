@@ -88,23 +88,20 @@ WARN_UNUSED_RESULT static int output_string(char prefix, const struct text& t)
 	return 1;
 }
 
-static int char_terminal(const struct ast_term *term, unsigned char *c)
+static int char_terminal(const struct ast_terms& terms, unsigned char *c)
 {
 	assert(c != nullptr);
 
 	/* one terminal only */
-	if (term == nullptr || term->next != nullptr)
+	if (terms.size() != 1)
 	{
 		return 0;
 	}
+
+	ast_term* term = terms.front();
 
 	/* we collate ranges for case-sensitive strings only */
-	if (term->type != TYPE_CS_LITERAL)
-	{
-		return 0;
-	}
-
-	if (term->text().length() != 1)
+	if (term->type != TYPE_CS_LITERAL || term->text().length() != 1)
 	{
 		return 0;
 	}
@@ -135,20 +132,22 @@ static void collate_ranges(struct bm* bm, const struct ast_alt* alts)
 	}
 }
 
-WARN_UNUSED_RESULT static int output_terms(const struct ast_term* terms)
+WARN_UNUSED_RESULT static int output_terms(const ast_terms& terms)
 {
-	const struct ast_term* term;
-
-	for (term = terms; term != nullptr; term = term->next)
+	bool more = false;
+	for (auto term : terms)
 	{
+		if (more)
+		{
+			writer->putc(' ');
+		}
+		else
+		{
+			more = true;
+		}
 		if (!output_term(term))
 		{
 			return 0;
-		}
-
-		if (term->next)
-		{
-			writer->putc(' ');
 		}
 	}
 	return 1;

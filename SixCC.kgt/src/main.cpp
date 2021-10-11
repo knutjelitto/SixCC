@@ -81,34 +81,35 @@ struct out_able
 {
     const char* name;
     int (*out)(const struct ast_rule*);
+    std::string ext;
     ast_features ast_unsupported;
     rrd_features rrd_unsupported;
 };
 
 struct out_able outputable[] =
 {
-    { "abnf",       abnf_output,        (ast_features)0,                            (rrd_features)0 },
-    { "blab",       blab_output,        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
-    { "bnf",        bnf_output,         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
-    { "dot",        dot_output,         (ast_features)0,                            (rrd_features)0 },
-    { "ebnf-html5", ebnf_html5_output,  (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "ebnf-xhtml5",ebnf_xhtml5_output, (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
-    { "svg-html5",  svg_html5_output,   (ast_features)0,                            (rrd_features)0 },
-    { "svg-xhtml5", svg_xhtml5_output,  (ast_features)0,                            (rrd_features)0 },
-    { "iso-ebnf",   iso_ebnf_output,    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
-    { "json",       json_output,        (ast_features)json_ast_unsupported,         (rrd_features)0 },
-    { "rbnf",       rbnf_output,        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
-    { "sid",        sid_output,         (ast_features)sid_ast_unsupported,          (rrd_features)0 },
-    { "svg",        svg_output,         (ast_features)0,                            (rrd_features)0 },
-    { "wsn",        wsn_output,         (ast_features)wsn_ast_unsupported,          (rrd_features)0 },
-    { "rrdot",      rrdot_output,       (ast_features)0,                            (rrd_features)0 },
-    { "rrdump",     rrdump_output,      (ast_features)0,                            (rrd_features)0 },
-    { "rrll",       rrll_output,        (ast_features)rrll_ast_unsupported,         (rrd_features)rrll_rrd_unsupported     },
-    { "rrparcon",   rrparcon_output,    (ast_features)rrparcon_ast_unsupported,     (rrd_features)rrparcon_rrd_unsupported },
-    { "rrta",       rrta_output,        (ast_features)rrta_ast_unsupported,         (rrd_features)rrta_rrd_unsupported     },
-    { "rrtdump",    rrtdump_output,     (ast_features)0,                            (rrd_features)0 },
-    { "rrtext",     rrtext_output,      (ast_features)0,                            (rrd_features)0 },
-    { "rrutf8",     rrutf8_output,      (ast_features)0,                            (rrd_features)0 },
+    { "abnf",       abnf_output,        ".abnf",        (ast_features)0,                            (rrd_features)0},
+    { "blab",       blab_output,        ".blab",        (ast_features)blab_ast_unsupported,         (rrd_features)0 },
+    { "bnf",        bnf_output,         ".bnf",         (ast_features)bnf_ast_unsupported,          (rrd_features)0 },
+    { "dot",        dot_output,         ".dot",         (ast_features)0,                            (rrd_features)0 },
+    { "ebnf-html5", ebnf_html5_output,  "-ebnf.html",   (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "ebnf-xhtml5",ebnf_xhtml5_output, "-ebnf-x.html", (ast_features)ebnf_html5_ast_unsupported,   (rrd_features)0 },
+    { "svg-html5",  svg_html5_output,   "-svg.html",    (ast_features)0,                            (rrd_features)0 },
+    { "svg-xhtml5", svg_xhtml5_output,  "-svg-x.html",  (ast_features)0,                            (rrd_features)0 },
+    { "iso-ebnf",   iso_ebnf_output,    "-iso.ebnf",    (ast_features)iso_ebnf_ast_unsupported,     (rrd_features)0 },
+    { "json",       json_output,        ".json",        (ast_features)json_ast_unsupported,         (rrd_features)0 },
+    { "rbnf",       rbnf_output,        ".rbnf",        (ast_features)rbnf_ast_unsupported,         (rrd_features)0 },
+    { "sid",        sid_output,         ".sid",         (ast_features)sid_ast_unsupported,          (rrd_features)0 },
+    { "svg",        svg_output,         ".svg",         (ast_features)0,                            (rrd_features)0 },
+    { "wsn",        wsn_output,         ".wsn",         (ast_features)wsn_ast_unsupported,          (rrd_features)0 },
+    { "rrdot",      rrdot_output,       "-rr.dot",      (ast_features)0,                            (rrd_features)0 },
+    { "rrdump",     rrdump_output,      "-rr.dump",     (ast_features)0,                            (rrd_features)0 },
+    { "rrll",       rrll_output,        "-rr.ll",       (ast_features)rrll_ast_unsupported,         (rrd_features)rrll_rrd_unsupported     },
+    { "rrparcon",   rrparcon_output,    "-rr.parcon",   (ast_features)rrparcon_ast_unsupported,     (rrd_features)rrparcon_rrd_unsupported },
+    { "rrta",       rrta_output,        "-rr.ta",       (ast_features)rrta_ast_unsupported,         (rrd_features)rrta_rrd_unsupported     },
+    { "rrtdump",    rrtdump_output,     "-rr.tdump",    (ast_features)0,                            (rrd_features)0 },
+    { "rrtext",     rrtext_output,      "-rr.text",     (ast_features)0,                            (rrd_features)0 },
+    { "rrutf8",     rrutf8_output,      "-rr.utf8",     (ast_features)0,                            (rrd_features)0 },
 };
 
 static void xusage(void)
@@ -249,54 +250,48 @@ void tester()
 
         for (auto &sample : inable.samples)
         {
-            tester(inable, exin(sample));
+            auto inputfile = exin(sample);
+            tester(inable, inputfile);
         }
     }
 
     ok_exit();
 }
 
-void tester(const in_able& in, std::string file)
+void tester(const in_able& in, std::string inputfile)
 {
-    struct out_able* out = nullptr;
+    ast_rule* grammar = read_grammar(in, inputfile);
 
-    ast_rule* grammar = read_grammar(in, file);
-
-    std::string new_out = kout(file + "." + in.name + ".new-out.txt");
-    std::string old_out = kout(file + "." + in.name + ".old-out.txt");
+    std::string new_out = kout(inputfile + "." + in.name + ".new-out.txt");
+    std::string old_out = kout(inputfile + "." + in.name + ".old-out.txt");
 
     FILE* outfile = fopen(new_out.c_str(), "w");
-    writer = new struct iwriter(outfile);
+    writer = new iwriter(outfile);
 
-    printf("%s:\n", file.c_str());
+    printf("%s:\n", inputfile.c_str());
 
-    for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
+    bool more = false;
+    for (auto out : outputable)
     {
-        out = &outputable[i];
+        assert(out.out != nullptr);
 
-        assert(out != nullptr);
-        assert(out->out != nullptr);
-
-        if (i > 0)
+        if (more)
         {
             printf(" ");
         }
-        printf("%s", out->name);
+        else
+        {
+            more = true;
+        }
+        printf("%s", out.name);
 
-        if (strcmp(out->name, "bnf") == 0)
+        if (strcmp(out.name, "bnf") == 0)
         {
             printf("(skip)");
             continue;
         }
 
-        if (i < 30)
-        {
-            if (!out->out(grammar))
-            {
-                //fclose(outfile);
-                //err_exit();
-            }
-        }
+        out.out(grammar);
     }
     printf("\n");
 
@@ -309,8 +304,31 @@ void tester(const in_able& in, std::string file)
 
     std::ifstream oldf(old_out);
     std::string olds((std::istreambuf_iterator<char>(oldf)), (std::istreambuf_iterator<char>()));
+
     assert(news.size() > 0);
     assert(olds.size() == 0 || news == olds);
+}
+
+void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
+{
+    struct out_able* out = nullptr;
+
+    ast_rule* grammar = read_grammar(in, inputfile);
+
+    ::writer = writer;
+
+    for (int i = 0; i < sizeof(outputable) / sizeof(*outputable); ++i)
+    {
+        out = &outputable[i];
+
+        assert(out != nullptr);
+        assert(out->out != nullptr);
+
+        if (strcmp(out->name, "bnf") != 0)
+        {
+            out->out(grammar);
+        }
+    }
 }
 
 int main(int argc, char* argv[])

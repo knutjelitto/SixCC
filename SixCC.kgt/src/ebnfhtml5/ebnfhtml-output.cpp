@@ -18,6 +18,7 @@
 #include <assert.h>
 #include <ctype.h>
 
+#include "../errors.h"
 #include "../txt.h"
 #include "../ast.h"
 #include "../rrd/node.h"
@@ -60,7 +61,7 @@ static int xml_escputc(int c, iwriter* writer)
 
 static int atomic(const struct ast_term* term)
 {
-    assert(term != NULL);
+    assert(term != nullptr);
 
     switch (term->type)
     {
@@ -73,20 +74,21 @@ static int atomic(const struct ast_term* term)
             return 1;
 
         case TYPE_GROUP:
-            if (term->group()->next != NULL)
+            if (term->group()->next != nullptr)
             {
                 return 0;
             }
 
-            if (term->group()->terms->next != NULL)
+            if (term->group()->terms.size() > 1)
             {
                 return 0;
             }
 
-            return atomic(term->group()->terms);
+            return atomic(term->group()->terms.front());
+
+        default:
+            Error::notreached();
     }
-
-    assert(!"unreached");
 }
 
 static const char* rep(unsigned min, unsigned max)
@@ -126,7 +128,7 @@ static void output_term(const struct ast_term* term)
 {
     const char* r;
 
-    assert(term != NULL);
+    assert(term != nullptr);
     assert(!term->invisible);
 
     r = rep(term->min, term->max);
@@ -179,11 +181,11 @@ static void output_term(const struct ast_term* term)
         {
             const struct ast_alt* alt;
 
-            for (alt = term->group(); alt != NULL; alt = alt->next)
+            for (alt = term->group(); alt != nullptr; alt = alt->next)
             {
                 output_alt(alt);
 
-                if (alt->next != NULL)
+                if (alt->next != nullptr)
                 {
                     writer->printf("<span class='pipe'> | </span>");
                 }
@@ -206,21 +208,24 @@ static void output_term(const struct ast_term* term)
 
 static void output_alt(const struct ast_alt* alt)
 {
-    const struct ast_term* term;
-
-    assert(alt != NULL);
+    assert(alt != nullptr);
     assert(!alt->invisible);
 
-    for (term = alt->terms; term != NULL; term = term->next)
+    bool more;
+    for (auto term : alt->terms)
     {
-        writer->printf("<span class='alt'>");
-        output_term(term);
-        writer->printf("</span>\n");
-
-        if (term->next != NULL)
+        if (more)
         {
-            writer->printf("<span class='cat'> </span>");
+            writer->puts("<span class='cat'> </span>");
         }
+        else
+        {
+            more = true;
+        }
+
+        writer->puts("<span class='alt'>");
+        output_term(term);
+        writer->puts("</span>\n");
     }
 }
 
@@ -238,7 +243,7 @@ static void output_rule(const struct ast_rule* rule)
 
     writer->printf("    <dd>");
 
-    for (alt = rule->alts; alt != NULL; alt = alt->next)
+    for (alt = rule->alts; alt != nullptr; alt = alt->next)
     {
         if (alt != rule->alts)
         {
@@ -249,7 +254,7 @@ static void output_rule(const struct ast_rule* rule)
         writer->printf("      ");
         output_alt(alt);
 
-        if (alt->next != NULL)
+        if (alt->next != nullptr)
         {
             writer->printf("<br/>\n");
             writer->printf("      ");
@@ -309,7 +314,7 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
     writer->printf("    dl.bnf dt { margin: 0.25em 0; }\n");
     writer->printf("    dl.bnf dd { margin-left: 2em; }\n");
 
-    if (css_file != NULL)
+    if (css_file != nullptr)
     {
         if (!cat(css_file, "    "))
         {
@@ -321,7 +326,7 @@ WARN_UNUSED_RESULT static int output(const struct ast_rule* grammar, int xml)
     writer->printf(" </head>\n");
     writer->printf(" <body>\n");
 
-    for (p = grammar; p != NULL; p = p->next)
+    for (p = grammar; p != nullptr; p = p->next)
     {
         output_rule(p);
     }

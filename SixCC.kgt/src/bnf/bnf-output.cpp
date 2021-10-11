@@ -71,11 +71,9 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	const struct ast_term* term;
-
 	assert(!alt->invisible);
 
-	for (term = alt->terms; term != nullptr; term = term->next)
+	for (auto term : alt->terms)
 	{
 		if (!output_term(term))
 		{

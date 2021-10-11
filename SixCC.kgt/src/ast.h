@@ -171,15 +171,23 @@ struct ast_alt
 {
     ast_alt() = delete;
 
-    ast_alt(int invisible, ast_term* terms)
-        : invisible(invisible), terms(terms), next(nullptr)
+    ast_alt(int invisible, ast_term* term_list)
+        : invisible(invisible)
     {
+        for (auto term = term_list; term != nullptr; term = term->next)
+        {
+            terms.push_back(term);
+        }
+        for (auto term : terms)
+        {
+            term->next = nullptr;
+        }
     }
 
     int invisible;
-    struct ast_term* terms;
+    struct ast_terms terms;
 
-    struct ast_alt* next;
+    struct ast_alt* next = nullptr;
 };
 
 /*

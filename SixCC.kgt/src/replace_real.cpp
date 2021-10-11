@@ -33,7 +33,6 @@ void replace_real(ast_rule* grammar, error_context lex_state)
     {
         const struct ast_rule* rule;
         struct ast_alt* alt;
-        struct ast_term* term;
         struct ast_rule* replacement;
 
         for (rule = grammar; rule != nullptr; rule = rule->next)
@@ -42,7 +41,7 @@ void replace_real(ast_rule* grammar, error_context lex_state)
             {
                 std::vector<ast_term*> vterms;
 
-                for (term = alt->terms; term != nullptr; term = term->next)
+                for (auto term : alt->terms)
                 {
                     vterms.push_back(term);
                 }
@@ -73,23 +72,15 @@ void replace_real(ast_rule* grammar, error_context lex_state)
 
                     ast_term* new_term = ast_term::make_token(term->invisible, term->rule()->name());
 
-                    if (i > 0)
-                    {
-                        vterms[i - 1]->next = new_term;
-                    }
-                    if (i + 1 < vterms.size())
-                    {
-                        new_term->next = vterms[i + 1];
-                    }
                     vterms[i] = new_term;
-                    term->next = nullptr;
                     ast_free_rule((struct ast_rule*)term->rule());
-                    ast_free_term(term);
+                    delete term;
                 }
 
                 if (vterms.size() > 0)
                 {
-                    alt->terms = vterms[0];
+                    alt->terms.clear();
+                    alt->terms.insert(alt->terms.begin(), vterms.begin(), vterms.end());
                 }
 
 #if false

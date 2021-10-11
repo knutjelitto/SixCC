@@ -55,7 +55,10 @@ void ast_free_alt(struct ast_alt *alt)
     if (alt != nullptr)
     {
         ast_free_alt(alt->next);
-        ast_free_term(alt->terms);
+        for (auto term : alt->terms)
+        {
+            delete term;
+        }
         delete alt;
     }
 }

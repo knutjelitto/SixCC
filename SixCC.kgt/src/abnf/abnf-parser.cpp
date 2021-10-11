@@ -994,18 +994,12 @@ static void prod_103(lex_state lex_state, act_state act_state, map_term* ZIl)
                 RESTORE_LEXER;
                 goto ZL1;
             }
-            /* BEGINNING OF ACTION: add-term-to-list */
-            {
-                //#line 679 "src/parser.act"
 
-                assert((*ZIl)->next == nullptr);
-                (*ZIl)->next = (ZIt);
+            assert((*ZIl)->next == nullptr);
+            (*ZIl)->next = (ZIt);
 
-                //#line 1358 "src/abnf/parser.c"
-            }
-            /* END OF ACTION: add-term-to-list */
+            break;
         }
-        break;
         case (ERROR_TERMINAL):
             return;
         default:

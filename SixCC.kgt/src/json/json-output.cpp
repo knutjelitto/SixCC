@@ -179,8 +179,6 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	const struct ast_term* term;
-
 	writer->puts("{");
 	output_string("$isa");
 	writer->puts(":");
@@ -193,18 +191,23 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 		writer->puts(":true");
 	}
 
-	if (alt->terms)
+	if (alt->terms.size() > 0)
 	{
 		writer->puts(",");
 		output_string("terms");
 		writer->puts(":");
 		writer->puts("[");
 
-		for (term = alt->terms; term != NULL; term = term->next)
+		bool more = false;
+		for (auto term : alt->terms)
 		{
-			if (term != alt->terms)
+			if (more)
 			{
 				writer->puts(",");
+			}
+			else
+			{
+				more = true;
 			}
 
 			if (!output_term(term))

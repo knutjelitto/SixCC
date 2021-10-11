@@ -29,11 +29,10 @@ static int transform_terms(const struct ast_alt* alt, struct node** r)
 	assert(r != nullptr);
 
 	struct list* list;
-	const struct ast_term* term;
 
 	list = new struct list();
 
-	for (term = alt->terms; term != nullptr; term = term->next)
+	for (auto term : alt->terms)
 	{
 		struct node* node;
 

@@ -202,8 +202,6 @@ static void output_term(const struct ast_rule* grammar, const struct ast_alt* al
 
 static void output_alt(const struct ast_rule* grammar, const struct ast_alt* alt)
 {
-    const struct ast_term* term;
-
     writer->printf("\t\"a%p\" [ label = \"|\"", map((void*)alt));
 
     if (alt->invisible)
@@ -213,7 +211,7 @@ static void output_alt(const struct ast_rule* grammar, const struct ast_alt* alt
 
     writer->printf("];\n");
 
-    for (term = alt->terms; term != NULL; term = term->next)
+    for (auto term : alt->terms)
     {
         output_term(grammar, alt, term);
     }

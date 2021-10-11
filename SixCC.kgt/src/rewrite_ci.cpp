@@ -144,11 +144,10 @@ WARN_UNUSED_RESULT static bool walk_term(const struct ast_term* term)
 WARN_UNUSED_RESULT static bool walk_alts(const struct ast_alt* alts)
 {
 	const struct ast_alt* alt;
-	struct ast_term* term;
 
 	for (alt = alts; alt != NULL; alt = alt->next)
 	{
-		for (term = alt->terms; term != NULL; term = term->next)
+		for (auto term : alt->terms)
 		{
 			if (!walk_term(term))
 			{

@@ -53,8 +53,6 @@ static void walk_alts(struct ast_alt** alts)
 {
 	struct ast_alt** alt;
 	struct ast_alt** next_alt;
-	struct ast_term** term;
-	struct ast_term** next_term;
 
 	assert(alts != nullptr);
 
@@ -76,25 +74,20 @@ static void walk_alts(struct ast_alt** alts)
 			continue;
 		}
 
-		for (term = &(*alt)->terms; *term != nullptr; term = next_term)
+		ast_terms& terms = (*alt)->terms;
+		auto termp = terms.begin();
+
+		while (termp < terms.end())
 		{
-			next_term = &(*term)->next;
-
-			if ((*term)->invisible)
+			if ((*termp)->invisible)
 			{
-				struct ast_term* dead;
-
-				dead = *term;
-				*term = (*term)->next;
-
-				dead->next = nullptr;
-				ast_free_term(dead);
-
-				next_term = term;
+				delete *termp;
+				termp = terms.erase(termp);
 				continue;
 			}
+			walk_term(*termp);
 
-			walk_term(*term);
+			termp++;
 		}
 	}
 }

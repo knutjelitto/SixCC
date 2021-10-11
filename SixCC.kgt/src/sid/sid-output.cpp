@@ -120,12 +120,10 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	const struct ast_term* term;
-
 	assert(alt != nullptr);
 	assert(!alt->invisible);
 
-	for (term = alt->terms; term != nullptr; term = term->next)
+	for (auto term : alt->terms)
 	{
 		if (!output_term(term))
 		{
@@ -196,13 +194,12 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 
 		for (alt = rule->alts; alt != nullptr; alt = alt->next)
 		{
-			const struct ast_term* term;
-			struct ast_term* t;
+			struct ast_term* aterm;
 
 			assert(alt != nullptr);
 			assert(!alt->invisible);
 
-			for (term = alt->terms; term != nullptr; term = term->next)
+			for (auto term : alt->terms)
 			{
 				assert(term != nullptr);
 				assert(!term->invisible);
@@ -220,14 +217,17 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 
 					case TYPE_CI_LITERAL:
 					case TYPE_CS_LITERAL:
+						aterm = term;
 						break;
 				}
 
-				assert(term->type == TYPE_CI_LITERAL || term->type == TYPE_CS_LITERAL);
+				assert(aterm->type == TYPE_CI_LITERAL || aterm->type == TYPE_CS_LITERAL);
+
+				struct ast_term* t;
 
 				for (t = found; t != nullptr; t = t->next)
 				{
-					if (is_equal(t, term))
+					if (is_equal(t, aterm))
 					{
 						break;
 					}
@@ -238,9 +238,9 @@ WARN_UNUSED_RESULT static int output_terminals(const struct ast_rule* grammar)
 					continue;
 				}
 
-				t = term->type == TYPE_CI_LITERAL 
-					? ast_term::make_ci_literal(0, term->text())
-					: ast_term::make_cs_literal(0, term->text());
+				t = aterm->type == TYPE_CI_LITERAL 
+					? ast_term::make_ci_literal(0, aterm->text())
+					: ast_term::make_cs_literal(0, aterm->text());
 				t->next = found;
 				found = t;
 			}

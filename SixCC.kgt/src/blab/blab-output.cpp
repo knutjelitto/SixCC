@@ -52,12 +52,12 @@ int blab_escputc(int c)
 
 WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt)
 {
-	const struct ast_term* term;
-
-	for (term = alt->terms; term != NULL; term = term->next)
+	for (auto term : alt->terms)
 	{
 		if (!output_term(term))
+		{
 			return 0;
+		}
 	}
 	return 1;
 }
@@ -244,18 +244,22 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	const struct ast_term* term;
-
 	assert(!alt->invisible);
 
-	for (term = alt->terms; term != NULL; term = term->next)
+	bool more = false;
+	for (auto term : alt->terms)
 	{
-		if (!output_term(term))
-			return 0;
-
-		if (term->next)
+		if (more)
 		{
 			writer->putc(' ');
+		}
+		else
+		{
+			more = true;
+		}
+		if (!output_term(term))
+		{
+			return 0;
 		}
 	}
 	return 1;

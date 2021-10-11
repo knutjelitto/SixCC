@@ -24,12 +24,12 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term *term);
 
 WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt)
 {
-	const struct ast_term* term;
-
-	for (term = alt->terms; term != NULL; term = term->next)
+	for (auto term : alt->terms)
 	{
 		if (!output_term(term))
+		{
 			return 0;
+		}
 	}
 	return 1;
 }
@@ -145,9 +145,7 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 	assert(alt != NULL);
 	assert(!alt->invisible);
 
-	const struct ast_term* term;
-
-	for (term = alt->terms; term != NULL; term = term->next)
+	for (auto term : alt->terms)
 	{
 		if (!output_term(term))
 		{

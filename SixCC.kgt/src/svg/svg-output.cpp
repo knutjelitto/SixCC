@@ -463,7 +463,6 @@ static void render_vlist(const struct tnode* n, struct render_context* ctx, cons
 		render_tline_outer(ctx, n->vlist.b[j], 0);
 		render_tline_inner(ctx, n->vlist.b[j], 0);
 
-		int space = n->w * 10 - 40;
 		justify(ctx, n->vlist.a[j], n->w * 10 - 40, base);
 
 		render_tline_inner(ctx, n->vlist.b[j], 1);
