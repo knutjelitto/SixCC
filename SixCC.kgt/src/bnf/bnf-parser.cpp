@@ -56,7 +56,7 @@ static void prod_list_Hof_Hterms(lex_state, act_state, map_term *);
 static void prod_list_Hof_Hrules(lex_state, act_state, ast_grammar&);
 static void prod_list_Hof_Halts(lex_state, act_state, map_alt *);
 static void prod_body(lex_state, act_state);
-static void prod_bnf(lex_state, act_state, map_rule *);
+static void prod_bnf(lex_state, act_state, ast_grammar&);
 static void prod_term(lex_state, act_state, map_term *);
 static void prod_rule(lex_state, act_state, ast_grammar&);
 static void prod_90(lex_state, act_state, ast_grammar&);

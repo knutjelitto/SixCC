@@ -33,6 +33,7 @@
 #include "abnf-parser.h"
 #include "io.h"
 
+#if false
 static text pattern_buffer(struct lex_state_s* lex_state)
 {
     assert(lex_state != nullptr);
@@ -173,6 +174,7 @@ static bool range(lex_state lex_state, unsigned char* a, unsigned char* b, base_
 
     return true;
 }
+#endif
 
 #ifndef ERROR_TERMINAL
 #error "-s no-numeric-terminals given and ERROR_TERMINAL is not defined"
