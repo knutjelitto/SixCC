@@ -23,7 +23,7 @@ int escputc(int c, iwriter* writer)
 		is to convert them all to the valid '\u' hex hex hex hex format.
 	 */
 
-	if ((unsigned char)c == '\"' || (unsigned char)c == '\\' || (unsigned char)c < ' ')
+	if (c == '\"' || (unsigned char)c == '\\' || (unsigned char)c < ' ')
 	{
 		return writer->printf("\\u00%02x", (unsigned char)c);
 	}
@@ -46,7 +46,7 @@ void output_string(const text& string)
 }
 
 
-WARN_UNUSED_RESULT static int output_alts(const struct ast_alt *alts);
+WARN_UNUSED_RESULT static int output_alts(const ast_alts& alts);
 
 WARN_UNUSED_RESULT static int output_term_rule(const struct ast_rule *rule)
 {
@@ -75,7 +75,7 @@ WARN_UNUSED_RESULT static int output_term_prose(const text& prose)
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_term_group(const struct ast_alt *group)
+WARN_UNUSED_RESULT static int output_term_group(const ast_alts& group)
 {
 	writer->puts(",");
 	output_string("group");
@@ -223,17 +223,20 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
+WARN_UNUSED_RESULT static int output_alts(const ast_alts& alts)
 {
-	const struct ast_alt* alt;
-
 	writer->puts("[");
 
-	for (alt = alts; alt != NULL; alt = alt->next)
+	bool more = false;
+	for (auto alt : alts)
 	{
-		if (alt != alts)
+		if (more)
 		{
 			writer->puts(",");
+		}
+		else
+		{
+			more = true;
 		}
 
 		if (!output_alt(alt))
@@ -261,13 +264,15 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 		output_string(rule->name);
 	}
 
-	if (rule->alts)
+	if (rule->alts.size() > 0)
 	{
 		writer->puts(",");
 		output_string("alts");
 		writer->puts(":");
 		if (!output_alts(rule->alts))
+		{
 			return 0;
+		}
 	}
 
 	writer->puts("}");

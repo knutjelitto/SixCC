@@ -44,8 +44,6 @@ WARN_UNUSED_RESULT int cat(const char* in, const char* indent);
 
 WARN_UNUSED_RESULT static int output(const ast_grammar& grammar, int xml)
 {
-	const struct ast_rule* p;
-
 	writer->printf(" <head>\n");
 	if (xml)
 	{

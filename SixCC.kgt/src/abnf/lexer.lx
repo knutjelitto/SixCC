@@ -55,7 +55,7 @@ hex = /[0-9a-f]+/i; # XXX: case insensitive?
 	/[^"]/ -> $char;
 }
 
-'%s'  '"' .. '"' -> $cs_literal { # case senstive
+'%s'  '"' .. '"' -> $cs_literal { # case sensitive
 	# TODO; explicitly "printable" characters only
 	/[^"]/ -> $char;
 }

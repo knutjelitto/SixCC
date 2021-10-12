@@ -34,18 +34,22 @@ WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt)
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
+WARN_UNUSED_RESULT static int output_group(const ast_alts& group)
 {
-	const struct ast_alt* alt;
-
-	for (alt = group; alt != NULL; alt = alt->next)
+	bool more = false;
+	for (auto alt : group)
 	{
-		if (!output_group_alt(alt))
-			return 0;
-
-		if (alt->next != NULL)
+		if (more)
 		{
 			writer->printf(" |");
+		}
+		else
+		{
+			more = true;
+		}
+		if (!output_group_alt(alt))
+		{
+			return 0;
 		}
 	}
 	return 1;
@@ -132,7 +136,9 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_GROUP:
 			if (!output_group(term->group()))
+			{
 				return 0;
+			}
 			break;
 	}
 
@@ -159,20 +165,22 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 
 WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
-	const struct ast_alt* alt;
-
 	writer->printf("<%s> ::=", rule->name.chars());
 
-	for (alt = rule->alts; alt != NULL; alt = alt->next)
+	bool more = false;
+	for (auto alt : rule->alts)
 	{
+		if (more)
+		{
+			writer->printf("\t|");
+		}
+		else
+		{
+			more = true;
+		}
 		if (!output_alt(alt))
 		{
 			return 0;
-		}
-
-		if (alt->next != NULL)
-		{
-			writer->printf("\t|");
 		}
 	}
 

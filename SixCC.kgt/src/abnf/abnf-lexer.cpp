@@ -22,8 +22,8 @@ lx_getc(struct lx_abnf_lx *lx)
 {
 	int c;
 
-	assert(lx != NULL);
-	assert(lx->lgetc != NULL);
+	assert(lx != nullptr);
+	assert(lx->lgetc != nullptr);
 
 	if (lx->c != EOF) {
 		c = lx->c, lx->c = EOF;
@@ -52,7 +52,7 @@ inline
 static void
 lx_abnf_ungetc(struct lx_abnf_lx *lx, int c)
 {
-	assert(lx != NULL);
+	assert(lx != nullptr);
 	assert(lx->c == EOF);
 
 	lx->c = c;
@@ -71,7 +71,7 @@ int lx_abnf_dynpush(void *buf_opaque, char c)
 {
 	struct lx_dynbuf *t = (struct lx_dynbuf*)buf_opaque;
 
-	assert(t != NULL);
+	assert(t != nullptr);
 
 	if (t->p == t->a + t->len) {
 		size_t len;
@@ -91,7 +91,7 @@ int lx_abnf_dynpush(void *buf_opaque, char c)
 
 		off = t->p - t->a;
 		tmp = (char*)realloc(t->a, len);
-		if (tmp == NULL) {
+		if (tmp == nullptr) {
 			return -1;
 		}
 
@@ -100,8 +100,8 @@ int lx_abnf_dynpush(void *buf_opaque, char c)
 		t->len = len;
 	}
 
-	assert(t->p != NULL);
-	assert(t->a != NULL);
+	assert(t->p != nullptr);
+	assert(t->a != nullptr);
 
 	*t->p++ = c;
 
@@ -113,7 +113,7 @@ lx_abnf_dynclear(void *buf_opaque)
 {
 	struct lx_dynbuf *t = (struct lx_dynbuf*)buf_opaque;
 
-	assert(t != NULL);
+	assert(t != nullptr);
 
 	if (t->len > LX_DYN_HIGH) {
 		size_t len;
@@ -122,7 +122,7 @@ lx_abnf_dynclear(void *buf_opaque)
 		len = t->len / LX_DYN_FACTOR;
 
 		tmp = (char*)realloc(t->a, len);
-		if (tmp == NULL) {
+		if (tmp == nullptr) {
 			return -1;
 		}
 
@@ -140,7 +140,7 @@ lx_abnf_dynfree(void *buf_opaque)
 {
 	struct lx_dynbuf *t = (struct lx_dynbuf*)buf_opaque;
 
-	assert(t != NULL);
+	assert(t != nullptr);
 
 	free(t->a);
 }
@@ -153,9 +153,9 @@ z0(struct lx_abnf_lx *lx)
 		S0, S1, S2, NONE
 	} state;
 
-	assert(lx != NULL);
+	assert(lx != nullptr);
 
-	if (lx->clear != NULL) {
+	if (lx->clear != nullptr) {
 		lx->clear(lx->buf_opaque);
 	}
 
@@ -186,14 +186,14 @@ z0(struct lx_abnf_lx *lx)
 			; /* unreached */
 		}
 
-		if (lx->push != NULL) {
+		if (lx->push != nullptr) {
 			if (-1 == lx->push(lx->buf_opaque, c)) {
 				return TOK_ERROR;
 			}
 		}
 	}
 
-	lx->lgetc = NULL;
+	lx->lgetc = nullptr;
 
 	switch (state) {
 	case NONE: return TOK_EOF;
@@ -212,9 +212,9 @@ z1(struct lx_abnf_lx *lx)
 		S0, S1, S2, NONE
 	} state;
 
-	assert(lx != NULL);
+	assert(lx != nullptr);
 
-	if (lx->clear != NULL) {
+	if (lx->clear != nullptr) {
 		lx->clear(lx->buf_opaque);
 	}
 
@@ -245,14 +245,14 @@ z1(struct lx_abnf_lx *lx)
 			; /* unreached */
 		}
 
-		if (lx->push != NULL) {
+		if (lx->push != nullptr) {
 			if (-1 == lx->push(lx->buf_opaque, c)) {
 				return TOK_ERROR;
 			}
 		}
 	}
 
-	lx->lgetc = NULL;
+	lx->lgetc = nullptr;
 
 	switch (state) {
 	case NONE: return TOK_EOF;
@@ -271,9 +271,9 @@ z2(struct lx_abnf_lx *lx)
 		S0, S1, S2, NONE
 	} state;
 
-	assert(lx != NULL);
+	assert(lx != nullptr);
 
-	if (lx->clear != NULL) {
+	if (lx->clear != nullptr) {
 		lx->clear(lx->buf_opaque);
 	}
 
@@ -557,14 +557,14 @@ z2(struct lx_abnf_lx *lx)
 			; /* unreached */
 		}
 
-		if (lx->push != NULL) {
+		if (lx->push != nullptr) {
 			if (-1 == lx->push(lx->buf_opaque, c)) {
 				return TOK_ERROR;
 			}
 		}
 	}
 
-	lx->lgetc = NULL;
+	lx->lgetc = nullptr;
 
 	switch (state) {
 	case NONE: return TOK_EOF;
@@ -583,9 +583,9 @@ z3(struct lx_abnf_lx *lx)
 		S0, S1, S2, NONE
 	} state;
 
-	assert(lx != NULL);
+	assert(lx != nullptr);
 
-	if (lx->clear != NULL) {
+	if (lx->clear != nullptr) {
 		lx->clear(lx->buf_opaque);
 	}
 
@@ -623,7 +623,7 @@ z3(struct lx_abnf_lx *lx)
 			break;
 
 		default:
-			if (lx->push != NULL) {
+			if (lx->push != nullptr) {
 				if (-1 == lx->push(lx->buf_opaque, c)) {
 					return TOK_ERROR;
 				}
@@ -633,7 +633,7 @@ z3(struct lx_abnf_lx *lx)
 		}
 	}
 
-	lx->lgetc = NULL;
+	lx->lgetc = nullptr;
 
 	switch (state) {
 	case NONE: return TOK_EOF;
@@ -655,9 +655,9 @@ z4(struct lx_abnf_lx *lx)
 		S30, S31, S32, S33, S34, S35, S36, S37, S38, NONE
 	} state;
 
-	assert(lx != NULL);
+	assert(lx != nullptr);
 
-	if (lx->clear != NULL) {
+	if (lx->clear != nullptr) {
 		lx->clear(lx->buf_opaque);
 	}
 
@@ -752,7 +752,7 @@ z4(struct lx_abnf_lx *lx)
 			case '8':
 			case '9': state = S9; break;
 			case '%': state = S4; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -784,7 +784,7 @@ z4(struct lx_abnf_lx *lx)
 			case 'b': state = S18; break;
 			case 'd': state = S19; break;
 			case 'i': state = S20; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -914,7 +914,7 @@ z4(struct lx_abnf_lx *lx)
 			switch ((unsigned char) c) {
 			case '0':
 			case '1': state = S24; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -930,21 +930,21 @@ z4(struct lx_abnf_lx *lx)
 			case '7':
 			case '8':
 			case '9': state = S25; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
 		case S20: /* e.g. "%i" */
 			switch ((unsigned char) c) {
 			case '"': state = S3; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
 		case S21: /* e.g. "%s" */
 			switch ((unsigned char) c) {
 			case '"': state = S23; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -972,7 +972,7 @@ z4(struct lx_abnf_lx *lx)
 			case 'd':
 			case 'e':
 			case 'f': state = S26; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1061,7 +1061,7 @@ z4(struct lx_abnf_lx *lx)
 			case 'd':
 			case 'e':
 			case 'f': state = S30; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1089,7 +1089,7 @@ z4(struct lx_abnf_lx *lx)
 			case 'd':
 			case 'e':
 			case 'f': state = S29; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1154,7 +1154,7 @@ z4(struct lx_abnf_lx *lx)
 			switch ((unsigned char) c) {
 			case '0':
 			case '1': state = S33; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1162,7 +1162,7 @@ z4(struct lx_abnf_lx *lx)
 			switch ((unsigned char) c) {
 			case '0':
 			case '1': state = S34; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1195,7 +1195,7 @@ z4(struct lx_abnf_lx *lx)
 			case '7':
 			case '8':
 			case '9': state = S37; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1211,7 +1211,7 @@ z4(struct lx_abnf_lx *lx)
 			case '7':
 			case '8':
 			case '9': state = S38; break;
-			default:  lx->lgetc = NULL; return TOK_UNKNOWN;
+			default:  lx->lgetc = nullptr; return TOK_UNKNOWN;
 			}
 			break;
 
@@ -1263,7 +1263,7 @@ z4(struct lx_abnf_lx *lx)
 			break;
 
 		default:
-			if (lx->push != NULL) {
+			if (lx->push != nullptr) {
 				if (-1 == lx->push(lx->buf_opaque, c)) {
 					return TOK_ERROR;
 				}
@@ -1273,7 +1273,7 @@ z4(struct lx_abnf_lx *lx)
 		}
 	}
 
-	lx->lgetc = NULL;
+	lx->lgetc = nullptr;
 
 	switch (state) {
 	case NONE: return TOK_EOF;
@@ -1342,7 +1342,7 @@ lx_abnf_name(enum lx_abnf_token t)
 const char *
 lx_abnf_example(enum lx_abnf_token (*z)(struct lx_abnf_lx *), enum lx_abnf_token t)
 {
-	assert(z != NULL);
+	assert(z != nullptr);
 
 	if (z == z0) {
 		switch (t) {
@@ -1396,7 +1396,7 @@ lx_abnf_example(enum lx_abnf_token (*z)(struct lx_abnf_lx *), enum lx_abnf_token
 error:
 
 	errno = EINVAL;
-	return NULL;
+	return nullptr;
 }
 
 void
@@ -1404,7 +1404,7 @@ lx_abnf_init(struct lx_abnf_lx *lx)
 {
 	static struct lx_abnf_lx lx_default;
 
-	assert(lx != NULL);
+	assert(lx != nullptr);
 
 	*lx = lx_default;
 
@@ -1421,16 +1421,16 @@ lx_abnf_next(struct lx_abnf_lx *lx)
 {
 	enum lx_abnf_token t;
 
-	assert(lx != NULL);
-	assert(lx->z != NULL);
+	assert(lx != nullptr);
+	assert(lx->z != nullptr);
 
-	if (lx->lgetc == NULL) {
+	if (lx->lgetc == nullptr) {
 		return TOK_EOF;
 	}
 
 	t = lx->z(lx);
 
-	if (lx->push != NULL) {
+	if (lx->push != nullptr) {
 		if (-1 == lx->push(lx->buf_opaque, '\0')) {
 			return TOK_ERROR;
 		}

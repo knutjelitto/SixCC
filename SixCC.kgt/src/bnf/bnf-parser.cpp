@@ -496,22 +496,20 @@ prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
             ADVANCE_LEXER;
 
             {
-                struct ast_rule* r;
-
                 /*
                  * Regardless of whether a rule exists (yet) by this name, we make
                  * a placeholder rule just so that we have an ast_rule struct
                  * at which to point. This saves passing the grammar around, which
                  * keeps the rule-building productions simpler.
                  */
-                r = ast_make_rule((ZIs), nullptr);
+                ast_rule* r = ast_make_rule((ZIs), nullptr);
                 if (r == nullptr)
                 {
                     perror("ast_make_rule");
                     goto ZL1;
                 }
 
-                (ZIt) = ast_term::make_rule(act_state->invisible, r);
+                ZIt = ast_term::make_rule(act_state->invisible, r);
             }
         }
         break;

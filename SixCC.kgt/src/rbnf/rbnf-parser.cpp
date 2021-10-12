@@ -34,7 +34,7 @@ static const char * pattern_buffer(struct lex_state_s *lex_state)
 {
     const char *s;
 
-    assert(lex_state != NULL);
+    assert(lex_state != nullptr);
 
     /* TODO */
     *lex_state->p++ = '\0';
@@ -94,17 +94,10 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
             }
             ADVANCE_LEXER;
-            /* BEGINNING OF ACTION: make-group-term */
-            {
-                //#line 641 "src/parser.act"
 
-                (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
-
-                //#line 347 "src/rbnf/parser.c"
-            }
-            /* END OF ACTION: make-group-term */
+            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+            break;
         }
-        break;
         case (TOK_STARTOPT):
         {
             map_alt ZIa;
@@ -113,53 +106,29 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
 
             ADVANCE_LEXER;
             prod_list_Hof_Halts(lex_state, act_state, &ZIa);
-            /* BEGINNING OF INLINE: 77 */
+            switch (CURRENT_TERMINAL)
             {
-                switch (CURRENT_TERMINAL)
+                case (TOK_REP):
                 {
-                    case (TOK_REP):
-                    {
-                        ADVANCE_LEXER;
-                        /* BEGINNING OF ACTION: rep-zero-or-more */
-                        {
-                            //#line 535 "src/parser.act"
+                    ADVANCE_LEXER;
 
-                            (ZImin) = 0;
-                            (ZImax) = 0;
+                    ZImin = 0;
+                    ZImax = 0;
 
-                            /* workaround for SID's ! = f(); */
-                            (void)(ZImin);
-                            (void)(ZImax);
-
-                            //#line 377 "src/rbnf/parser.c"
-                        }
-                        /* END OF ACTION: rep-zero-or-more */
-                    }
                     break;
-                    default:
-                    {
-                        /* BEGINNING OF ACTION: rep-zero-or-one */
-                        {
-                            //#line 544 "src/parser.act"
-
-                            (ZImin) = 0;
-                            (ZImax) = 1;
-
-                            /* workaround for SID's ! = f(); */
-                            (void)(ZImin);
-                            (void)(ZImax);
-
-                            //#line 395 "src/rbnf/parser.c"
-                        }
-                        /* END OF ACTION: rep-zero-or-one */
-                    }
-                    break;
-                    case (ERROR_TERMINAL):
-                        RESTORE_LEXER;
-                        goto ZL1;
                 }
+                default:
+                {
+                    (ZImin) = 0;
+                    (ZImax) = 1;
+
+                    break;
+                }
+                case (ERROR_TERMINAL):
+                    RESTORE_LEXER;
+                    goto ZL1;
             }
-            /* END OF INLINE: 77 */
+
             switch (CURRENT_TERMINAL)
             {
                 case (TOK_ENDOPT):
@@ -169,34 +138,27 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             }
             ADVANCE_LEXER;
 
-            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+            ZIt = ast_term::make_group(act_state->invisible, ZIa);
 
-            /* END OF ACTION: make-group-term */
-            /* BEGINNING OF ACTION: set-repeat */
-            {
-                //#line 553 "src/parser.act"
+            assert(ZImax >= ZImin || ZImax != 0);
 
-                assert((ZImax) >= (ZImin) || !(ZImax));
+            ZIt->min = ZImin;
+            ZIt->max = ZImax;
 
-                (ZIt)->min = (ZImin);
-                (ZIt)->max = (ZImax);
-
-                //#line 431 "src/rbnf/parser.c"
-            }
-            /* END OF ACTION: set-repeat */
+            break;
         }
-        break;
-        case (TOK_CHAR): case (TOK_NAME):
+        case (TOK_CHAR):
+        case (TOK_NAME):
         {
             prod_term(lex_state, act_state, &ZIt);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            if (CURRENT_TERMINAL == ERROR_TERMINAL)
             {
                 RESTORE_LEXER;
                 goto ZL1;
             }
+            break;
         }
-        break;
-        case (ERROR_TERMINAL):
+        case ERROR_TERMINAL:
             return;
         default:
             goto ZL1;
@@ -399,8 +361,8 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
              * at which to point. This saves passing the grammar around, which
              * keeps the rule-building productions simpler.
              */
-            r = ast_make_rule((ZIs), NULL);
-            if (r == NULL)
+            r = ast_make_rule((ZIs), nullptr);
+            if (r == nullptr)
             {
                 perror("ast_make_rule");
                 goto ZL1;
@@ -436,26 +398,24 @@ static void prod_rule(lex_state lex_state, act_state act_state, ast_grammar& gra
         switch (CURRENT_TERMINAL)
         {
             case (TOK_NAME):
-            {
                 ZIs = pattern_buffer(lex_state);
                 break;
-            }
-            case (ERROR_TERMINAL):
+            case ERROR_TERMINAL:
                 RESTORE_LEXER;
                 goto ZL1;
             default:
                 goto ZL1;
         }
         ADVANCE_LEXER;
-                switch (CURRENT_TERMINAL)
-                {
-                    case (TOK_EQUALS):
-                        ADVANCE_LEXER;
-                        break;
-                    default:
-                        err_expected(*lex_state, "production rule assignment");
-                        break;
-                }
+        switch (CURRENT_TERMINAL)
+        {
+            case (TOK_EQUALS):
+                ADVANCE_LEXER;
+                break;
+            default:
+                err_expected(*lex_state, "production rule assignment");
+                break;
+        }
         prod_list_Hof_Halts(lex_state, act_state, &ZIa);
         if (CURRENT_TERMINAL == ERROR_TERMINAL)
         {
@@ -463,30 +423,18 @@ static void prod_rule(lex_state lex_state, act_state act_state, ast_grammar& gra
             goto ZL1;
         }
         ZIr = ast_make_rule((ZIs), (ZIa));
+        switch (CURRENT_TERMINAL)
         {
-            switch (CURRENT_TERMINAL)
-            {
-                case (TOK_EOF):
-                {
-                    ADVANCE_LEXER;
-                    break;
-                }
-                case (TOK_SEP):
-                {
-                    ADVANCE_LEXER;
-                    break;
-                }
-                default:
-                    goto ZL5;
-            }
-            goto ZL4;
-        ZL5:
-            {
-                    err_expected(*lex_state, "production rule separator");
-            }
-        ZL4:;
+            case (TOK_EOF):
+                ADVANCE_LEXER;
+                break;
+            case (TOK_SEP):
+                ADVANCE_LEXER;
+                break;
+            default:
+                err_expected(*lex_state, "production rule separator");
+                break;
         }
-        /* END OF INLINE: 85 */
     }
     goto ZL0;
 ZL1:
@@ -506,8 +454,6 @@ static void prod_91(lex_state lex_state, act_state act_state, ast_grammar& gramm
         case (TOK_CHAR):
         case (TOK_NAME):
         {
-            map_rule ZIr;
-
             prod_list_Hof_Hrules(lex_state, act_state, grammar);
             if (CURRENT_TERMINAL == ERROR_TERMINAL)
             {
@@ -524,8 +470,7 @@ static void prod_91(lex_state lex_state, act_state act_state, ast_grammar& gramm
     }
 }
 
-static void
-prod_92(lex_state lex_state, act_state act_state, map_term* ZIt, map_alt* ZOl)
+static void prod_92(lex_state lex_state, act_state act_state, map_term* ZIt, map_alt* ZOl)
 {
     map_alt ZIl;
 
@@ -535,74 +480,32 @@ prod_92(lex_state lex_state, act_state act_state, map_term* ZIt, map_alt* ZOl)
         {
             map_alt ZIa;
 
-            /* BEGINNING OF INLINE: 81 */
+            switch (CURRENT_TERMINAL)
             {
-                {
-                    switch (CURRENT_TERMINAL)
-                    {
-                        case (TOK_ALT):
-                            break;
-                        default:
-                            goto ZL3;
-                    }
+                case (TOK_ALT):
                     ADVANCE_LEXER;
-                }
-                goto ZL2;
-            ZL3:
-                {
-                    /* BEGINNING OF ACTION: err-expected-alt */
-                    {
-                        //#line 722 "src/parser.act"
-
-                        err_expected(*lex_state, "alternative separator");
-
-                        //#line 881 "src/rbnf/parser.c"
-                    }
-                    /* END OF ACTION: err-expected-alt */
-                }
-            ZL2:;
+                    break;
+                default:
+                    err_expected(*lex_state, "alternative separator");
+                    break;
             }
-            /* END OF INLINE: 81 */
+
             prod_list_Hof_Halts(lex_state, act_state, &ZIa);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            if (CURRENT_TERMINAL == ERROR_TERMINAL)
             {
                 RESTORE_LEXER;
                 goto ZL1;
             }
-            /* BEGINNING OF ACTION: make-alt */
-            {
-                //#line 666 "src/parser.act"
-
-                (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
-
-                //#line 899 "src/rbnf/parser.c"
-            }
-            /* END OF ACTION: make-alt */
-            /* BEGINNING OF ACTION: add-alt-to-list */
-            {
-                //#line 684 "src/parser.act"
-
-                assert((ZIl)->next == NULL);
-                (ZIl)->next = (ZIa);
-
-                //#line 909 "src/rbnf/parser.c"
-            }
-            /* END OF ACTION: add-alt-to-list */
+            ZIl = ast_make_alt(act_state->invisible, *ZIt);
+            assert(ZIl->next == nullptr);
+            ZIl->next = ZIa;
+            break;
         }
-        break;
         default:
         {
-            /* BEGINNING OF ACTION: make-alt */
-            {
-                //#line 666 "src/parser.act"
-
-                (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
-
-                //#line 922 "src/rbnf/parser.c"
-            }
-            /* END OF ACTION: make-alt */
+            ZIl = ast_make_alt(act_state->invisible, *ZIt);
+            break;
         }
-        break;
         case (ERROR_TERMINAL):
             return;
     }
@@ -614,59 +517,45 @@ ZL0:
     *ZOl = ZIl;
 }
 
-static void
-prod_93(lex_state lex_state, act_state act_state, map_term* ZIl)
+static void prod_93(lex_state lex_state, act_state act_state, map_term* ZIl)
 {
     switch (CURRENT_TERMINAL)
     {
-        case (TOK_STARTGROUP): case (TOK_STARTOPT): case (TOK_CHAR): case (TOK_NAME):
+        case (TOK_STARTGROUP):
+        case (TOK_STARTOPT):
+        case (TOK_CHAR):
+        case (TOK_NAME):
         {
             map_term ZIt;
 
             prod_list_Hof_Hterms(lex_state, act_state, &ZIt);
-            if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
+            if (CURRENT_TERMINAL == ERROR_TERMINAL)
             {
                 RESTORE_LEXER;
-                goto ZL1;
+                SAVE_LEXER((ERROR_TERMINAL));
+                return;
             }
-            /* BEGINNING OF ACTION: add-term-to-list */
-            {
-                //#line 679 "src/parser.act"
-
-                assert((*ZIl)->next == NULL);
-                (*ZIl)->next = (ZIt);
-
-                //#line 958 "src/rbnf/parser.c"
-            }
-            /* END OF ACTION: add-term-to-list */
+            assert((*ZIl)->next == nullptr);
+            (*ZIl)->next = (ZIt);
+            break;
         }
-        break;
         case (ERROR_TERMINAL):
             return;
         default:
             break;
     }
-    return;
-ZL1:
-    SAVE_LEXER((ERROR_TERMINAL));
-    return;
 }
-
-/* BEGINNING OF TRAILER */
-
-//#line 738 "src/parser.act"
-
 
 static int lgetc(struct LX_STATE *lx)
 {
     const struct lex_state_s *lex_state;
 
-    assert(lx != NULL);
-    assert(lx->getc_opaque != NULL);
+    assert(lx != nullptr);
+    assert(lx->getc_opaque != nullptr);
 
     lex_state = (struct lex_state_s*)(lx->getc_opaque);
 
-    assert(lex_state->f != NULL);
+    assert(lex_state->f != nullptr);
 
     return lex_state->f(lex_state->opaque);
 }
@@ -680,7 +569,7 @@ bool rbnf_input(ast_grammar& grammar, int (*f)(void* opaque), void* opaque, pars
 
     struct LX_STATE* lx;
 
-    assert(f != NULL);
+    assert(f != nullptr);
 
     lex_state = &lex_state_s;
     lex_state->p = lex_state->a;
@@ -696,7 +585,7 @@ bool rbnf_input(ast_grammar& grammar, int (*f)(void* opaque), void* opaque, pars
     lex_state->f = f;
     lex_state->opaque = opaque;
 
-    lex_state->buf.a = NULL;
+    lex_state->buf.a = nullptr;
     lex_state->buf.len = 0;
 
     /* XXX: unneccessary since we're lexing from a string */
@@ -706,7 +595,7 @@ bool rbnf_input(ast_grammar& grammar, int (*f)(void* opaque), void* opaque, pars
     lx->free = CAT(LX_PREFIX, _dynfree);
 
     /* XXX */
-    lx->free = NULL;
+    lx->free = nullptr;
 
     /* This is a workaround for ADVANCE_LEXER assuming a pointer */
     act_state = &act_state_s;

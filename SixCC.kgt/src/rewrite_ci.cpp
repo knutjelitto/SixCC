@@ -22,7 +22,7 @@
 #include "xalloc.h"
 #include "compiler_specific.h"
 
-static bool walk_alts(const struct ast_alt *alts);
+static bool walk_alts(const ast_alts& alts);
 
 static void add_alt(int invisible, struct ast_alt **alt, const text& text)
 {
@@ -141,11 +141,9 @@ WARN_UNUSED_RESULT static bool walk_term(const struct ast_term* term)
 	return true;
 }
 
-WARN_UNUSED_RESULT static bool walk_alts(const struct ast_alt* alts)
+WARN_UNUSED_RESULT static bool walk_alts(const ast_alts& alts)
 {
-	const struct ast_alt* alt;
-
-	for (alt = alts; alt != NULL; alt = alt->next)
+	for (auto alt : alts)
 	{
 		for (auto term : alt->terms)
 		{

@@ -74,17 +74,17 @@ static int atomic(const struct ast_term* term)
             return 1;
 
         case TYPE_GROUP:
-            if (term->group()->next != nullptr)
+            if (term->group().size() >= 2)
             {
                 return 0;
             }
 
-            if (term->group()->terms.size() > 1)
+            if (term->group().front()->terms.size() > 1)
             {
                 return 0;
             }
 
-            return atomic(term->group()->terms.front());
+            return atomic(term->group().front()->terms.front());
 
         default:
             Error::notreached();
@@ -179,16 +179,19 @@ static void output_term(const struct ast_term* term)
 
         case TYPE_GROUP:
         {
-            const struct ast_alt* alt;
-
-            for (alt = term->group(); alt != nullptr; alt = alt->next)
+            bool more = false;
+            for (auto alt : term->group())
             {
-                output_alt(alt);
-
-                if (alt->next != nullptr)
+                if (more)
                 {
                     writer->printf("<span class='pipe'> | </span>");
                 }
+                else
+                {
+                    more = true;
+                }
+
+                output_alt(alt);
             }
         }
 
@@ -231,8 +234,6 @@ static void output_alt(const struct ast_alt* alt)
 
 static void output_rule(const struct ast_rule* rule)
 {
-    const struct ast_alt* alt;
-
     writer->puts("  <dl class='bnf'>\n");
 
     writer->puts("    <dt>");
@@ -243,11 +244,18 @@ static void output_rule(const struct ast_rule* rule)
 
     writer->printf("    <dd>");
 
-    for (alt = rule->alts; alt != nullptr; alt = alt->next)
+    bool more = false;
+    for (auto alt : rule->alts)
     {
-        if (alt != rule->alts)
+        if (more)
         {
+            writer->printf("<br/>\n");
+            writer->printf("      ");
             writer->printf("<span class='pipe'> | </span>");
+        }
+        else
+        {
+            more = true;
         }
 
         writer->printf("\n");
@@ -256,8 +264,6 @@ static void output_rule(const struct ast_rule* rule)
 
         if (alt->next != nullptr)
         {
-            writer->printf("<br/>\n");
-            writer->printf("      ");
         }
     }
 

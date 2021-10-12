@@ -40,12 +40,26 @@ void ast_free_rule(struct ast_rule *rule)
 {
     if (rule != nullptr)
     {
-        ast_free_alt(rule->alts);
+        ast_free_alts(rule->alts);
         delete rule;
     }
 }
 
-void ast_free_alt(struct ast_alt *alt)
+void ast_free_alts(ast_alts& alts)
+{
+    for (auto alt : alts)
+    {
+        assert(alt->next == nullptr);
+        for (auto term : alt->terms)
+        {
+            delete term;
+        }
+        delete alt;
+    }
+    alts.clear();
+}
+
+void ast_free_alt(struct ast_alt* alt)
 {
     /* XXX: free contents */
     if (alt != nullptr)

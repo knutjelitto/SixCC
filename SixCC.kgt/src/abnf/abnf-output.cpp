@@ -106,20 +106,18 @@ static int char_terminal(const struct ast_terms& terms, unsigned char *c)
 		return 0;
 	}
 
-	*c = (unsigned char) term->text(0);
+	*c = (unsigned char) term->text()[0];
 
 	return 1;
 }
 
-static void collate_ranges(struct bm* bm, const struct ast_alt* alts)
+static void collate_ranges(struct bm* bm, const ast_alts& alts)
 {
-	const struct ast_alt* alt;
-
 	assert(bm != nullptr);
 
 	bm_clear(bm);
 
-	for (alt = alts; alt != nullptr; alt = alt->next)
+	for (auto alt : alts)
 	{
 		unsigned char c;
 
@@ -153,9 +151,8 @@ WARN_UNUSED_RESULT static int output_terms(const ast_terms& terms)
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
+WARN_UNUSED_RESULT static int output_alts(const ast_alts& alts)
 {
-	const struct ast_alt* alt;
 	struct bm bm;
 	int hi, lo;
 	int first;
@@ -164,15 +161,14 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 
 	hi = -1;
 
-	alt = alts;
-
 	first = 1;
 
-	while (alt != nullptr)
+	ast_alts::const_iterator altp = alts.cbegin();
+	while (altp != alts.cend())
 	{
 		unsigned char c;
 
-		if (!char_terminal(alt->terms, &c))
+		if (!char_terminal((*altp)->terms, &c) || true)
 		{
 			if (!first)
 			{
@@ -183,18 +179,18 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 				first = 0;
 			}
 
-			if (!output_terms(alt->terms))
+			if (!output_terms((*altp)->terms))
 			{
 				return 0;
 			}
-			alt = alt->next;
+			altp++;
 			continue;
 		}
 
 		if (!bm_get(&bm, c))
 		{
 			/* already output */
-			alt = alt->next;
+			altp++;
 			continue;
 		}
 
@@ -237,11 +233,11 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 				{
 					return 0;
 				}
-			}
-			bm_unset(&bm, lo);
+				bm_unset(&bm, lo);
 
-			hi = lo;
-			break;
+				hi = lo;
+				break;
+			}
 
 			default:
 				output_range(lo, hi - 1);
@@ -253,13 +249,15 @@ WARN_UNUSED_RESULT static int output_alts(const struct ast_alt* alts)
 
 				break;
 		}
+
+		altp++;
 	}
 	return 1;
 }
 
-WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
+WARN_UNUSED_RESULT static int output_group(const ast_alts& group)
 {
-	if (group->next != nullptr)
+	if (group.size() >= 2)
 	{
 		writer->puts("(");
 	}
@@ -269,10 +267,11 @@ WARN_UNUSED_RESULT static int output_group(const struct ast_alt* group)
 		return 0;
 	}
 
-	if (group->next != nullptr)
+	if (group.size() >= 2)
 	{
 		writer->puts(")");
 	}
+
 	return 1;
 }
 

@@ -5,8 +5,9 @@
  */
 #define _CRT_SECURE_NO_WARNINGS
 
-#define _POSIX_C_SOURCE 2
-#define _XOPEN_SOURCE 500
+#if !defined(__cplusplus) || __cplusplus < 201703L
+#error "Requires complete C++17 support"
+#endif
 
 #include <stdexcept>
 #include <fstream>
@@ -56,7 +57,7 @@ const char *css_file;
 
 static void xusage(void)
 {
-    printf("usage: kgt [-gnu] [-c <css-file>] [-w <whitelist>] [-l <language>] [ -e <language> ]\n");
+    printf("usage: kgt [-gnu] [-c <css-file>] [-l <language>] [ -e <language> ]\n");
     err_exit();
 }
 
@@ -158,6 +159,10 @@ void tester(const in_able& in, std::string inputfile)
             continue;
         }
 
+        writer->puts("===============\n");
+        writer->puts(out.name);
+        writer->puts("\n");
+        writer->puts("===============\n");
         out.out(grammar);
     }
     printf("\n");
@@ -199,9 +204,7 @@ int main(int argc, char* argv[])
     tester();
 
     ast_grammar grammar;
-    const char* filter;
     parsing_errors errors;
-    filter = nullptr;
 
     auto in = inlang("bnf");
     auto out = outlang("bnf");
@@ -211,7 +214,7 @@ int main(int argc, char* argv[])
     {
         int c;
 
-        while (c = getopt(argc, argv, "hw:c:gnl:e:u"), c != -1)
+        while (c = getopt(argc, argv, "hc:gnl:e:u"), c != -1)
         {
             switch (c)
             {
@@ -219,7 +222,6 @@ int main(int argc, char* argv[])
                 case 'e': out = outlang(optarg); break;
 
                 case 'c': css_file = optarg; break;
-                case 'w': filter = optarg; break; /* comma-separated whitelist of rule names */
 
                 case 'g': debug = 1; break;
                 case 'n': prettify = 0; break;

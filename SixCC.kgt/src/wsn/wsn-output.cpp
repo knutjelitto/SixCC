@@ -124,7 +124,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 #endif
 
 		case TYPE_GROUP:
-			if (!output_alt(term->group()))
+			if (!output_alt(term->group().front()))
 				return 0;
 			break;
 	}
@@ -150,18 +150,19 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 
 WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
-	const struct ast_alt* alt;
-
-	alt = rule->alts;
 	writer->printf("%s =", rule->name.chars());
-	if (!output_alt(alt))
-	{
-		return 0;
-	}
 
-	for (alt = alt->next; alt != NULL; alt = alt->next)
+	bool more = false;
+	for (auto alt : rule->alts)
 	{
-		writer->printf("\n\t|");
+		if (more)
+		{
+			writer->printf("\n\t|");
+		}
+		else
+		{
+			more = true;
+		}
 		if (!output_alt(alt))
 		{
 			return 0;

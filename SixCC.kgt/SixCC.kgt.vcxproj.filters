@@ -249,6 +249,9 @@
     <ClCompile Include="src\iospec\iospec.cpp">
       <Filter>src\iospec</Filter>
     </ClCompile>
+    <ClCompile Include="src\ast_term.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rrd\list.h">

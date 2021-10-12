@@ -630,14 +630,14 @@ static void prod_95(lex_state lex_state, act_state act_state, map_term* ZIl)
 {
 	switch (CURRENT_TERMINAL)
 	{
-		case (TOK_STARTGROUP):
-		case (TOK_STARTOPT):
-		case (TOK_STARTSTAR):
-		case (TOK_ESC):
-		case (TOK_CHAR):
-		case (TOK_IDENT):
-		case (TOK_EMPTY):
-		case (TOK_CS__LITERAL):
+		case TOK_STARTGROUP:
+		case TOK_STARTOPT:
+		case TOK_STARTSTAR:
+		case TOK_ESC:
+		case TOK_CHAR:
+		case TOK_IDENT:
+		case TOK_EMPTY:
+		case TOK_CS__LITERAL:
 		{
 			map_term ZIt;
 
@@ -663,75 +663,71 @@ ZL1:
 	return;
 }
 
-	static int lgetc(struct LX_STATE *lx)
-	{
-		const struct lex_state_s *lex_state;
+static int lgetc(struct LX_STATE *lx)
+{
+	const struct lex_state_s *lex_state;
 
-		assert(lx != nullptr);
-		assert(lx->getc_opaque != nullptr);
+	assert(lx != nullptr);
+	assert(lx->getc_opaque != nullptr);
 
-		lex_state = (struct lex_state_s*)(lx->getc_opaque);
+	lex_state = (struct lex_state_s*)(lx->getc_opaque);
 
-		assert(lex_state->f != nullptr);
+	assert(lex_state->f != nullptr);
 
-		return lex_state->f(lex_state->opaque);
-	}
+	return lex_state->f(lex_state->opaque);
+}
 
-	bool wsn_input(ast_grammar& grammar, int (*f)(void* opaque), void* opaque, parsing_errors* errors)
-	{
-		struct act_state_s  act_state_s;
-		struct act_state_s* act_state;
-		struct lex_state_s  lex_state_s;
-		struct lex_state_s* lex_state;
+bool wsn_input(ast_grammar& grammar, int (*f)(void* opaque), void* opaque, parsing_errors* errors)
+{
+	struct act_state_s  act_state_s;
+	struct act_state_s* act_state;
+	struct lex_state_s  lex_state_s;
+	struct lex_state_s* lex_state;
 
-		struct LX_STATE* lx;
-		struct ast_rule* g;
+	struct LX_STATE* lx;
+	struct ast_rule* g;
 
-		assert(f != nullptr);
+	assert(f != nullptr);
 
-		g = nullptr;
+	g = nullptr;
 
-		lex_state = &lex_state_s;
-		lex_state->p = lex_state->a;
-		lex_state->errors = errors;
+	lex_state = &lex_state_s;
+	lex_state->p = lex_state->a;
+	lex_state->errors = errors;
 
-		lx = &lex_state->lx;
+	lx = &lex_state->lx;
 
-		LX_INIT(lx);
+	LX_INIT(lx);
 
-		lx->lgetc = lgetc;
-		lx->getc_opaque = lex_state;
+	lx->lgetc = lgetc;
+	lx->getc_opaque = lex_state;
 
-		lex_state->f = f;
-		lex_state->opaque = opaque;
+	lex_state->f = f;
+	lex_state->opaque = opaque;
 
-		lex_state->buf.a = nullptr;
-		lex_state->buf.len = 0;
+	lex_state->buf.a = nullptr;
+	lex_state->buf.len = 0;
 
-		/* XXX: unneccessary since we're lexing from a string */
-		lx->buf_opaque = &lex_state->buf;
-		lx->push = CAT(LX_PREFIX, _dynpush);
-		lx->clear = CAT(LX_PREFIX, _dynclear);
-		lx->free = CAT(LX_PREFIX, _dynfree);
+	/* XXX: unneccessary since we're lexing from a string */
+	lx->buf_opaque = &lex_state->buf;
+	lx->push = CAT(LX_PREFIX, _dynpush);
+	lx->clear = CAT(LX_PREFIX, _dynclear);
+	lx->free = CAT(LX_PREFIX, _dynfree);
 
-		/* XXX */
-		lx->free = nullptr;
+	/* XXX */
+	lx->free = nullptr;
 
-		/* This is a workaround for ADVANCE_LEXER assuming a pointer */
-		act_state = &act_state_s;
+	/* This is a workaround for ADVANCE_LEXER assuming a pointer */
+	act_state = &act_state_s;
 
-		act_state->invisible = 0;
+	act_state->invisible = 0;
 
-		ADVANCE_LEXER;
-		prod_wsn(lex_state, act_state, grammar);
+	ADVANCE_LEXER;
+	prod_wsn(lex_state, act_state, grammar);
 
-		/* TODO: handle error */
+	/* TODO: handle error */
 
-		replace_real(grammar, *lex_state);
+	replace_real(grammar, *lex_state);
 
-		return true;
-	}
-
-//#line 1212 "src/wsn/parser.c"
-
-/* END OF FILE */
+	return true;
+}

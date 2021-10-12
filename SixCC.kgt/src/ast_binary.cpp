@@ -11,7 +11,7 @@
 #include "txt.h"
 #include "ast.h"
 
-static bool walk_alts(const struct ast_alt *alts);
+static bool walk_alts(const ast_alts& alts);
 
 static int walk_term(const struct ast_term* term)
 {
@@ -31,11 +31,9 @@ static int walk_term(const struct ast_term* term)
     }
 }
 
-static bool walk_alts(const struct ast_alt* alts)
+static bool walk_alts(const ast_alts& alts)
 {
-    const struct ast_alt* alt;
-
-    for (alt = alts; alt != nullptr; alt = alt->next)
+    for (auto alt : alts)
     {
         for (auto term : alt->terms)
         {

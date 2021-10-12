@@ -88,11 +88,9 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 
 WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
-	const struct ast_alt* alt;
-
 	writer->printf("<%s> ::=", rule->name.chars());
 
-	for (alt = rule->alts; alt != nullptr; alt = alt->next)
+	for (auto alt : rule->alts)
 	{
 		if (!output_alt(alt))
 		{

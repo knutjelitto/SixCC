@@ -13,7 +13,21 @@
 
 #include "txt.h"
 
+struct ast_term;
 struct ast_alt;
+struct ast_rule;
+
+struct ast_rules : std::vector<ast_rule*>
+{
+};
+
+struct ast_terms : std::vector<ast_term*>
+{
+};
+
+struct ast_alts : std::vector<ast_alt*>
+{
+};
 
 typedef enum
 {
@@ -44,25 +58,10 @@ typedef enum ast_term_type
  */
 struct ast_term final
 {
-    ast_term(ast_term_type type, int invisible)
-        : type(type), invisible(invisible)
-    {
-    }
-
-    ast_term(ast_term_type type, int invisible, const text& text)
-        : type(type), invisible(invisible), xxx_characters(text)
-    {
-    }
-
-    ast_term(ast_term_type type, int invisible, const struct ast_rule* rule)
-        : type(type), invisible(invisible), xxx_rule(rule)
-    {
-    }
-
-    ast_term(ast_term_type type, int invisible, struct ast_alt* group)
-        : type(type), invisible(invisible), xxx_group(group)
-    {
-    }
+    ast_term(ast_term_type type, int invisible);
+    ast_term(ast_term_type type, int invisible, const text& text);
+    ast_term(ast_term_type type, int invisible, const struct ast_rule* rule);
+    ast_term(ast_term_type type, int invisible, struct ast_alt* group);
 
     static ast_term* make_empty(int invisible)
     {
@@ -127,11 +126,6 @@ struct ast_term final
         return xxx_characters;
     }
 
-    const char text(int index) const
-    {
-        return text()[index];
-    }
-
     const struct ast_rule* rule() const
     {
         return xxx_rule;
@@ -143,19 +137,16 @@ struct ast_term final
         xxx_rule = new_rule;
     }
 
-    const ast_alt* group() const
+    const ast_alts& group() const
     {
+        assert(type == TYPE_GROUP);
         return xxx_group;
     }
 
 private:
     const struct text xxx_characters;
     const struct ast_rule* xxx_rule; /* just for sake of the name */
-    const struct ast_alt* xxx_group;
-};
-
-struct ast_terms : std::vector<ast_term*>
-{
+    struct ast_alts xxx_group;
 };
 
 /*
@@ -184,10 +175,6 @@ struct ast_alt
     struct ast_alt* next = nullptr;
 };
 
-struct ast_alts : std::vector<ast_alt*>
-{
-};
-
 /*
  * A grammar is a list of production rules. Each rule maps a name onto a list
  * of alternatives:
@@ -197,17 +184,21 @@ struct ast_alts : std::vector<ast_alt*>
  */
 struct ast_rule
 {
-    ast_rule(const text name, ast_alt* alts)
-        : name(name), alts(alts)
+    ast_rule(const text name, ast_alt* group)
+        : name(name)
     {
+        for (auto alt = group; alt != nullptr; alt = alt->next)
+        {
+            alts.push_back(alt);
+        }
+        for (auto alt : alts)
+        {
+            alt->next = nullptr;
+        }
     }
 
     const text name;
-    ast_alt* alts;
-};
-
-struct ast_rules : std::vector<ast_rule*>
-{
+    ast_alts alts;
 };
 
 struct ast_grammar
@@ -221,7 +212,8 @@ struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 struct ast_rule* ast_find_rule(const ast_grammar& grammar, const text& name);
 
 void ast_free_rule(struct ast_rule *rule);
-void ast_free_alt(struct ast_alt *alt);
+void ast_free_alt(struct ast_alt* alt);
+void ast_free_alts(ast_alts& alt);
 void ast_free_term(struct ast_term *term);
 
 bool ast_maybe_binary(const ast_grammar&);

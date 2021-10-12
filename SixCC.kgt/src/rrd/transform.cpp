@@ -55,17 +55,15 @@ error:
 	return 0;
 }
 
-static int transform_alts(const ast_alt* alts, struct node** r)
+static int transform_alts(const ast_alts& alts, struct node** r)
 {
 	assert(r != nullptr);
-	assert(alts != nullptr);
 
 	list* list;
-	const ast_alt* alt;
 
 	list = new struct list();
 
-	for (alt = alts; alt != nullptr; alt = alt->next)
+	for (auto alt : alts)
 	{
 		struct node* node;
 
@@ -77,7 +75,7 @@ static int transform_alts(const ast_alt* alts, struct node** r)
 		list->push_back(node);
 	}
 
-	*r = node_create_alt(alts->invisible, list);
+	*r = node_create_alt(alts.front()->invisible, list);
 
 	return 1;
 

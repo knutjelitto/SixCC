@@ -45,7 +45,7 @@ struct lx_pos
 
 struct lx_abnf_lx
 {
-	int (*lgetc)(struct lx_abnf_lx *lx);
+	int (*lgetc)(lx_abnf_lx *lx);
 	void *getc_opaque;
 
 	int c; /* lx_abnf_ungetc buffer */
@@ -58,7 +58,7 @@ struct lx_abnf_lx
 	int  (*clear)(void *buf_opaque);
 	void (*free) (void *buf_opaque);
 
-	enum lx_abnf_token (*z)(struct lx_abnf_lx *lx);
+	enum lx_abnf_token (*z)(lx_abnf_lx *lx);
 };
 
 /*

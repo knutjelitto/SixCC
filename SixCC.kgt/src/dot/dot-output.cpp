@@ -48,7 +48,7 @@ static int escputc(int c, iwriter* writer)
         { '>',  "&#x3E;" }
     };
 
-    assert(writer != NULL);
+    assert(writer != nullptr);
 
     for (i = 0; i < sizeof(a)/sizeof(*a); i++)
     {
@@ -66,11 +66,9 @@ static int escputc(int c, iwriter* writer)
     return writer->putc(c);
 }
 
-static void output_group(const ast_grammar& grammar, const struct ast_term* term, const struct ast_alt* group)
+static void output_group(const ast_grammar& grammar, const struct ast_term* term, const ast_alts& group)
 {
-    const struct ast_alt* alt;
-
-    for (alt = group; alt != NULL; alt = alt->next)
+    for (auto alt : group)
     {
         writer->printf("\t\"t%p\" -> \"a%p\";\n", map((void*)term), map((void*)alt));
 
@@ -203,11 +201,11 @@ static void output_alt(const ast_grammar& grammar, const struct ast_alt* alt)
     }
 }
 
-static void output_alts(const ast_grammar& grammar, const struct ast_rule* rule, const struct ast_alt* alts)
+static void output_alts(const ast_grammar& grammar, const struct ast_rule* rule, const ast_alts& alts)
 {
     const struct ast_alt* alt;
 
-    for (alt = alts; alt != NULL; alt = alt->next)
+    for (auto alt : alts)
     {
         writer->printf("\t\"p%p\" -> \"a%p\";\n", map((void*)rule), map((void*)alt));
 

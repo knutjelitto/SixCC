@@ -184,8 +184,8 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
                 //#line 406 "src/iso-ebnf/parser.c"
             }
             /* END OF ACTION: set-repeat */
+            break;
         }
-        break;
         case (TOK_STARTSTAR):
         {
             map_alt ZIa;

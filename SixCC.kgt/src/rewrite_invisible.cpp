@@ -49,34 +49,21 @@ static void walk_term(struct ast_term* term)
 #endif
 }
 
-static void walk_alts(struct ast_alt** alts)
+static void walk_alts(ast_alts& alts)
 {
-	struct ast_alt** alt;
-	struct ast_alt** next_alt;
+	auto altp = alts.begin();
 
-	assert(alts != nullptr);
-
-	for (alt = alts; *alt != nullptr; alt = next_alt)
+	while (altp != alts.end())
 	{
-		next_alt = &(*alt)->next;
-
-		if ((*alt)->invisible)
+		if ((*altp)->invisible)
 		{
-			struct ast_alt* dead;
-
-			dead = *alt;
-			*alt = (*alt)->next;
-
-			dead->next = nullptr;
-			ast_free_alt(dead);
-
-			next_alt = alt;
+			delete *altp;
+			altp = alts.erase(altp);
 			continue;
 		}
 
-		ast_terms& terms = (*alt)->terms;
+		ast_terms& terms = (*altp)->terms;
 		auto termp = terms.begin();
-
 		while (termp < terms.end())
 		{
 			if ((*termp)->invisible)
@@ -96,7 +83,7 @@ void rewrite_invisible(ast_grammar& grammar)
 {
 	for (auto rule : grammar.rules)
 	{
-		walk_alts(&rule->alts);
+		walk_alts(rule->alts);
 	}
 }
 

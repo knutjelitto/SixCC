@@ -13,10 +13,9 @@
 #include <vector>
 #include <deque>
 #include <string>
+#include <filesystem>
 
 #include <assert.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 #include "../txt.h"
@@ -45,11 +44,10 @@
 
 #include "iospec.h"
 
-#include <vector>
 
 const std::vector<in_able> inputable =
 {
-    { "iso-ebnf",   true,   iso_ebnf_input, { "iso-ebnf.iso-ebnf", "c99-grammar.iso-ebnf", "json.iso-ebnf", "expr.iso-ebnf", "expr-minus.iso-ebnf"} },
+    { "iso-ebnf",   true,   iso_ebnf_input, { "c99-grammar.iso-ebnf", "iso-ebnf.iso-ebnf", "json.iso-ebnf", "expr.iso-ebnf", "expr-minus.iso-ebnf"} },
     { "bnf",        true,   bnf_input,      { "bnf.bnf", "expr.bnf", "postal.bnf" } },
     { "rbnf",       true,   rbnf_input,     { "expr.rbnf", "expr-minus.rbnf", "gmpls.rbnf" } },
     { "wsn",        true,   wsn_input,      { "bnf.wsn", "c_syntax.wsn", "wsn.wsn" } },

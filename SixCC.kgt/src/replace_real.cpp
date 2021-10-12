@@ -31,12 +31,11 @@ void replace_real(ast_grammar& grammar, error_context lex_state)
 {
     /* substitute placeholder rules for the real thing */
     {
-        struct ast_alt* alt;
         struct ast_rule* replacement;
 
         for (auto rule : grammar.rules)
         {
-            for (alt = rule->alts; alt != nullptr; alt = alt->next)
+            for (auto alt : rule->alts)
             {
                 std::vector<ast_term*> vterms;
 

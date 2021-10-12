@@ -82,7 +82,7 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 
 		case TYPE_GROUP:
 			writer->puts("{ ");
-			if (!output_alt(term->group()))
+			if (!output_alt(term->group().front()))
 			{
 				return 0;
 			}
@@ -135,23 +135,26 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 
 WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
-	const struct ast_alt* alt;
-
 	writer->printf("\t%s = {\n\t\t", rule->name.chars());
 
-	for (alt = rule->alts; alt != nullptr; alt = alt->next)
+	bool more = false;
+	for (auto alt : rule->alts)
 	{
+		if (more)
+		{
+			writer->printf("\t||\n\t\t");
+		}
+		else
+		{
+			more = true;
+		}
+
 		if (!output_alt(alt))
 		{
 			return 0;
 		}
 
 		writer->printf("\n");
-
-		if (alt->next != nullptr)
-		{
-			writer->printf("\t||\n\t\t");
-		}
 	}
 
 	writer->printf("\t};\n\n");
@@ -189,9 +192,7 @@ WARN_UNUSED_RESULT static int output_terminals(const ast_grammar& grammar)
 	/* List terminals */
 	for (auto rule : grammar.rules)
 	{
-		struct ast_alt* alt;
-
-		for (alt = rule->alts; alt != nullptr; alt = alt->next)
+		for (auto alt : rule->alts)
 		{
 			struct ast_term* aterm;
 
@@ -268,8 +269,6 @@ WARN_UNUSED_RESULT static int output_terminals(const ast_grammar& grammar)
 
 WARN_UNUSED_RESULT int sid_output(const ast_grammar& grammar)
 {
-	const struct ast_rule* p;
-
 	output_section("types");
 
 	output_section("terminals");
