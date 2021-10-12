@@ -14,26 +14,57 @@ namespace sixpeg
 {
     namespace ast
     {
-        struct term
+        class term
         {
+        public:
+            const int min = 1;
+            const int max = 1;
+
+            static term&& tokenx(const std::string& text)
+            {
+                term x;
+                x.variant.emplace<token>(token{ text });
+                return std::move(x);
+            }
+
+        private:
+            struct alt : std::vector<term>
+            {};
+
+            struct seq : std::vector<term>
+            {};
+
+            struct token : std::string
+            {
+                token(const std::string& text) : std::string(text) {}
+            };
+
+            struct literal : std::string
+            {};
+
+            struct iliteral : std::string
+            {};
+
+            struct comment : std::string
+            {};
+
+            std::variant<std::monostate, alt, seq, token, literal, iliteral, comment> variant;
         };
 
-        struct alt : term, std::vector<term>
+
+        class rule
         {
+            const std::string name;
+            const term term;
         };
 
-        struct seq : term, std::vector<term>
+        class grammar : std::vector<rule>
         {
-        };
-
-        struct token : term, std::string
-        {
+            const std::string name;
         };
     }
 
-    IMEX void check1();
     IMEX void bnf();
-
 }
 
 

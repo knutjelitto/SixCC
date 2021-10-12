@@ -2,9 +2,8 @@
 #include "SixPeg.h"
 
 using namespace peg;
-using namespace std;
 
-const char* const bnf_bnf =
+static const char* const bnf_bnf =
 R"::::::::::(
 <syntax> ::= <rule> | <rule> <syntax>
 
@@ -21,7 +20,7 @@ R"::::::::::(
 <literal> ::= '"' <text> '"' | "'" <text> "'"
 )::::::::::";
 
-const char* const bnf_expr =
+static const char* const bnf_expr =
 R"::::::::::(
 <expr>  ::=  <term> "+" <expr>
         |    <term>
@@ -36,15 +35,43 @@ R"::::::::::(
 <const> ::= <integer>
 )::::::::::";
 
+static const char* const bnf_postal =
+R"::::::::::(
+<postal-address> ::= <name-part> <street-address> <zip-part>
+
+<name-part> ::= <personal-part> <last-name> <opt-jr-part> <EOL>
+            | <personal-part> <name-part>
+
+<personal-part> ::= <first-name> | <initial> "."
+
+<street-address> ::= <opt-apt-num> <house-num> <street-name> <EOL>
+
+<zip-part> ::= <town-name> "," <state-code> <ZIP-code> <EOL>
+
+<opt-jr-part> ::= "Sr." | "Jr." | <roman-numeral> | "-empty-string-makes-problems-"
+)::::::::::";
+
+struct grammar_info
+{
+    std::string name;
+    const bool enabled;
+    std::vector<std::string> samples;
+};
+
+static grammar_info infos[] =
+{
+    { "bnf", true, {bnf_bnf, bnf_expr, bnf_postal } },
+};
+
 namespace sixpeg
 {
     void bnf(void)
     {
         parser parser;
 
-        parser.log = [](size_t line, size_t col, const string& msg)
+        parser.log = [](size_t line, size_t col, const std::string& msg)
         {
-            cerr << line << ":" << col << ": " << msg << "\n";
+            std::cerr << line << ":" << col << ": " << msg << "\n";
         };
 
         bool ok = parser.load_grammar(R"(
@@ -112,12 +139,50 @@ EOF             <- !.
             return id;
         };
 
+        parser["lhs"] = [](const SemanticValues& vs)
+        {
+            auto id = vs.token_to_string();
+
+            return id;
+        };
+
+        parser["rhs"] = [](const SemanticValues& vs)
+        {
+            auto id = vs.token_to_string();
+
+            return id;
+        };
+
+        parser["alternates"] = [](const SemanticValues& vs)
+        {
+            auto id = vs.token_to_string();
+
+            return id;
+        };
+
+        parser["sequence"] = [](const SemanticValues& vs)
+        {
+            auto id = vs.token_to_string();
+
+            return id;
+        };
+
+        parser["element"] = [](const SemanticValues& vs)
+        {
+            auto id = vs.token_to_string();
+
+            return id;
+        };
+
         parser["id"] = [](const SemanticValues& vs)
         {
-            //assert(vs.size() == 1);
+            auto name = vs.token_to_string();
 
-            auto id = vs.token_to_string();
-            return id;
+            assert(name.size() >= 2);
+
+            name = name.substr(1, name.size() - 2);
+
+            return name;
         };
 
         parser["text"] = [](const SemanticValues& vs)
@@ -134,10 +199,10 @@ EOF             <- !.
         // (4) Parse
         parser.enable_packrat_parsing(); // Enable packrat parsing.
 
-        string val;
+        std::string val;
         if (!parser.parse(bnf_bnf, val))
         {
-            cerr << "syntax error" << endl;
+            std::cerr << "syntax error" << std::endl;
         }
     }
 }
