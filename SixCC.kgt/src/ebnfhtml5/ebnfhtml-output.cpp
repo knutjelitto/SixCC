@@ -261,10 +261,6 @@ static void output_rule(const struct ast_rule* rule)
         writer->printf("\n");
         writer->printf("      ");
         output_alt(alt);
-
-        if (alt->next != nullptr)
-        {
-        }
     }
 
     writer->printf("    </dd>\n");

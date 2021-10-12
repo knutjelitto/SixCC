@@ -30,7 +30,6 @@
 #define FORM_ENTRY CAT(prod_, FORM)
 
 /* XXX: workarounds for SID's identifier escaping */
-#define prod_iso_Hebnf prod_iso_ebnf
 #define TOK_CI__LITERAL TOK_CI_LITERAL
 #define TOK_CS__LITERAL TOK_CS_LITERAL
 

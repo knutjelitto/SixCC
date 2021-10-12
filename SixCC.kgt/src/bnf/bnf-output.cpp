@@ -90,16 +90,21 @@ WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule)
 {
 	writer->printf("<%s> ::=", rule->name.chars());
 
+	bool more = false;
 	for (auto alt : rule->alts)
 	{
+		if (more)
+		{
+			writer->puts("\t|");
+		}
+		else
+		{
+			more = true;
+		}
+	
 		if (!output_alt(alt))
 		{
 			return 0;
-		}
-
-		if (alt->next != nullptr)
-		{
-			writer->puts("\t|");
 		}
 	}
 

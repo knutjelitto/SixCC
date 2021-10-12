@@ -264,6 +264,7 @@
     <ClInclude Include="src\iso-ebnf\iso-ebnf-parser.h" />
     <ClInclude Include="src\json\io.h" />
     <ClInclude Include="src\iwriter.h" />
+    <ClInclude Include="src\lexing-support.h" />
     <ClInclude Include="src\parsing-error.h" />
     <ClInclude Include="src\parsing-support.h" />
     <ClInclude Include="src\rbnf\io.h" />

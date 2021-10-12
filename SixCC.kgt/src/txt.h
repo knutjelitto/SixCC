@@ -14,7 +14,7 @@
 #include "compiler_specific.h"
 #include "xalloc.h"
 
-struct text : private std::string
+struct text : std::string
 {
 	inline text()
 		: std::string()

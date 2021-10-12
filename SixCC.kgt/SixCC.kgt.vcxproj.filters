@@ -401,6 +401,9 @@
     <ClInclude Include="src\iospec\iospec.h">
       <Filter>src\iospec</Filter>
     </ClInclude>
+    <ClInclude Include="src\lexing-support.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\bnf\lexer.lx">

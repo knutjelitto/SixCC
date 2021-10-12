@@ -54,7 +54,7 @@ static const char * pattern_buffer(struct lex_state_s *lex_state)
 static void prod_factor(lex_state, act_state, map_term *);
 static void prod_list_Hof_Hterms(lex_state, act_state, map_term *);
 static void prod_list_Hof_Hrules(lex_state, act_state, ast_grammar&);
-static void prod_list_Hof_Halts(lex_state, act_state, map_alt *);
+static void prod_list_of_alts(lex_state, act_state, map_alt *);
 static void prod_body(lex_state, act_state);
 static void prod_bnf(lex_state, act_state, ast_grammar&);
 static void prod_term(lex_state, act_state, map_term *);
@@ -120,7 +120,7 @@ static void prod_list_Hof_Hrules(lex_state lex_state, act_state act_state, ast_g
     }
 }
 
-static void prod_list_Hof_Halts(lex_state lex_state, act_state act_state, map_alt *ZOl)
+static void prod_list_of_alts(lex_state lex_state, act_state act_state, map_alt *ZOl)
 {
     map_alt ZIl;
 
@@ -299,7 +299,7 @@ static void prod_rule(lex_state lex_state, act_state act_state, ast_grammar& gra
             err_expected(*lex_state, "production rule assignment");
         ZL2:;
         }
-        prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+        prod_list_of_alts(lex_state, act_state, &ZIa);
         if (CURRENT_TERMINAL == ERROR_TERMINAL)
         {
             RESTORE_LEXER;
@@ -364,75 +364,35 @@ static void prod_91(lex_state lex_state, act_state act_state, map_term* ZIt, map
         case (TOK_ALT):
         {
             map_alt ZIa;
-
-            /* BEGINNING OF INLINE: 78 */
+            switch CURRENT_TERMINAL
             {
-                {
-                    switch CURRENT_TERMINAL
-                    {
-                        case (TOK_ALT):
-                            break;
-                        default:
-                            goto ZL3;
-                    }
+                case (TOK_ALT):
                     ADVANCE_LEXER;
-                }
-                goto ZL2;
-            ZL3:
-            {
-                /* BEGINNING OF ACTION: err-expected-alt */
-                {
-                    //#line 722 "src/parser.act"
-
+                    break;
+                default:
                     err_expected(*lex_state, "alternative separator");
-
-                    //#line 746 "src/bnf/parser.c"
-                }
-                /* END OF ACTION: err-expected-alt */
+                    break;
             }
-        ZL2:;
-            }
-            /* END OF INLINE: 78 */
-            prod_list_Hof_Halts(lex_state, act_state, &ZIa);
+            prod_list_of_alts(lex_state, act_state, &ZIa);
             if ((CURRENT_TERMINAL) == (ERROR_TERMINAL))
             {
                 RESTORE_LEXER;
                 goto ZL1;
             }
-            /* BEGINNING OF ACTION: make-alt */
             {
-                //#line 666 "src/parser.act"
-
                 (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
-
-                //#line 764 "src/bnf/parser.c"
             }
-            /* END OF ACTION: make-alt */
-            /* BEGINNING OF ACTION: add-alt-to-list */
             {
-                //#line 684 "src/parser.act"
-
                 assert((ZIl)->next == nullptr);
                 (ZIl)->next = (ZIa);
-
-                //#line 774 "src/bnf/parser.c"
             }
-            /* END OF ACTION: add-alt-to-list */
+            break;
         }
-        break;
         default:
         {
-            /* BEGINNING OF ACTION: make-alt */
-            {
-                //#line 666 "src/parser.act"
-
-                (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
-
-                //#line 787 "src/bnf/parser.c"
-            }
-            /* END OF ACTION: make-alt */
+            (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+            break;
         }
-        break;
         case (ERROR_TERMINAL):
             return;
     }
@@ -448,7 +408,10 @@ static void prod_92(lex_state lex_state, act_state act_state, map_term* ZIl)
 {
     switch (CURRENT_TERMINAL)
     {
-        case (TOK_CHAR): case (TOK_EMPTY): case (TOK_NAME): case (TOK_CS__LITERAL):
+        case (TOK_CHAR):
+        case (TOK_EMPTY):
+        case (TOK_NAME):
+        case (TOK_CS__LITERAL):
         {
             map_term ZIt;
 
@@ -473,8 +436,7 @@ ZL1:
     return;
 }
 
-static void
-prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
+static void prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
 {
     map_term ZIt;
 
@@ -485,7 +447,7 @@ prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
             text ZIx(pattern_buffer(lex_state));
 
             ADVANCE_LEXER;
-                
+
             ZIt = ast_term::make_literal(act_state->invisible, ZIx, false);
             break;
         }
@@ -495,24 +457,22 @@ prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
 
             ADVANCE_LEXER;
 
+            /*
+             * Regardless of whether a rule exists (yet) by this name, we make
+             * a placeholder rule just so that we have an ast_rule struct
+             * at which to point. This saves passing the grammar around, which
+             * keeps the rule-building productions simpler.
+             */
+            ast_rule* r = ast_make_rule((ZIs), nullptr);
+            if (r == nullptr)
             {
-                /*
-                 * Regardless of whether a rule exists (yet) by this name, we make
-                 * a placeholder rule just so that we have an ast_rule struct
-                 * at which to point. This saves passing the grammar around, which
-                 * keeps the rule-building productions simpler.
-                 */
-                ast_rule* r = ast_make_rule((ZIs), nullptr);
-                if (r == nullptr)
-                {
-                    perror("ast_make_rule");
-                    goto ZL1;
-                }
-
-                ZIt = ast_term::make_rule(act_state->invisible, r);
+                perror("ast_make_rule");
+                goto ZL1;
             }
+
+            ZIt = ast_term::make_rule(act_state->invisible, r);
+            break;
         }
-        break;
         case (ERROR_TERMINAL):
             return;
         default:

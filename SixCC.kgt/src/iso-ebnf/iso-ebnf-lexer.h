@@ -26,16 +26,7 @@ enum lx_iso_ebnf_token {
 	TOK_UNKNOWN
 };
 
-/*
- * .byte is 0-based.
- * .line, .col, and .saved_col are 1-based; 0 means unknown.
- */
-struct lx_pos {
-	unsigned byte;
-	unsigned line;
-	unsigned col;
-	unsigned saved_col;
-};
+#include "../lexing-support.h"
 
 struct lx_iso_ebnf_lx
 {
