@@ -88,48 +88,6 @@ WARN_UNUSED_RESULT static int output_string(char prefix, const struct text& t)
 	return 1;
 }
 
-static int char_terminal(const struct ast_terms& terms, unsigned char *c)
-{
-	assert(c != nullptr);
-
-	/* one terminal only */
-	if (terms.size() != 1)
-	{
-		return 0;
-	}
-
-	ast_term* term = terms.front();
-
-	/* we collate ranges for case-sensitive strings only */
-	if (term->type != TYPE_CS_LITERAL || term->text().length() != 1)
-	{
-		return 0;
-	}
-
-	*c = (unsigned char) term->text()[0];
-
-	return 1;
-}
-
-static void collate_ranges(struct bm* bm, const ast_alts& alts)
-{
-	assert(bm != nullptr);
-
-	bm_clear(bm);
-
-	for (auto alt : alts)
-	{
-		unsigned char c;
-
-		if (!char_terminal(alt->terms, &c))
-		{
-			continue;
-		}
-
-		bm_set(bm, c);
-	}
-}
-
 WARN_UNUSED_RESULT static int output_terms(const ast_terms& terms)
 {
 	bool more = false;
@@ -153,104 +111,22 @@ WARN_UNUSED_RESULT static int output_terms(const ast_terms& terms)
 
 WARN_UNUSED_RESULT static int output_alts(const ast_alts& alts)
 {
-	struct bm bm;
-	int hi, lo;
-	int first;
-
-	collate_ranges(&bm, alts);
-
-	hi = -1;
-
-	first = 1;
-
-	ast_alts::const_iterator altp = alts.cbegin();
-	while (altp != alts.cend())
+	bool more = false;
+	for (auto alt : alts)
 	{
-		unsigned char c;
-
-		if (!char_terminal((*altp)->terms, &c) || true)
-		{
-			if (!first)
-			{
-				writer->puts(" / ");
-			}
-			else
-			{
-				first = 0;
-			}
-
-			if (!output_terms((*altp)->terms))
-			{
-				return 0;
-			}
-			altp++;
-			continue;
-		}
-
-		if (!bm_get(&bm, c))
-		{
-			/* already output */
-			altp++;
-			continue;
-		}
-
-		if (!first)
+		if (more)
 		{
 			writer->puts(" / ");
 		}
 		else
 		{
-			first = 0;
+			more = true;
 		}
 
-		/* start of range */
-		lo = bm_next(&bm, hi, 1);
-		if (lo > UCHAR_MAX)
+		if (!output_terms(alt->terms))
 		{
-			/* end of list */
-			break;
+			return 0;
 		}
-
-		/* end of range */
-		hi = bm_next(&bm, lo, 0);
-
-		/*
-		 * Character classes aren't relevant for ABNF
-		 * since we can only output hex escapes.
-		 */
-
-		assert(hi > lo);
-
-		switch (hi - lo)
-		{
-			int j;
-
-			case 1:
-			case 2:
-			case 3:
-			{
-				if (!output_string('s', text((char)lo)))
-				{
-					return 0;
-				}
-				bm_unset(&bm, lo);
-
-				hi = lo;
-				break;
-			}
-
-			default:
-				output_range(lo, hi - 1);
-
-				for (j = lo; j <= hi - 1; j++)
-				{
-					bm_unset(&bm, j);
-				}
-
-				break;
-		}
-
-		altp++;
 	}
 	return 1;
 }
