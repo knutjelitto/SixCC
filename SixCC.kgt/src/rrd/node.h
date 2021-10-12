@@ -30,8 +30,8 @@ struct list;
 
 struct node final
 {
-	static int ccount;
-	static int dcount;
+	static int ctor_count;
+	static int dtor_count;
 
 	node(node_type type, int invisible, node* forward, node* backward);
 	node(node_type type, int invisible, const text& text);

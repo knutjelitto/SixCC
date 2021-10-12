@@ -19,14 +19,17 @@ struct ast_rule;
 
 struct ast_rules : std::vector<ast_rule*>
 {
+    void destroy();
 };
 
 struct ast_terms : std::vector<ast_term*>
 {
+    void destroy();
 };
 
 struct ast_alts : std::vector<ast_alt*>
 {
+    void destroy();
 };
 
 typedef enum
@@ -58,10 +61,17 @@ typedef enum ast_term_type
  */
 struct ast_term final
 {
+    static int ctor_count;
+    static int dtor_count;
+
     ast_term(ast_term_type type, int invisible);
     ast_term(ast_term_type type, int invisible, const text& text);
-    ast_term(ast_term_type type, int invisible, const struct ast_rule* rule);
+    ast_term(ast_term_type type, int invisible, struct ast_rule* rule);
     ast_term(ast_term_type type, int invisible, struct ast_alt* group);
+
+    ~ast_term();
+
+    void destroy();
 
     static ast_term* make_empty(int invisible)
     {
@@ -131,7 +141,7 @@ struct ast_term final
         return xxx_rule;
     }
 
-    void set_rule(const ast_rule* new_rule)
+    void set_rule(ast_rule* new_rule)
     {
         assert(type == TYPE_RULE);
         xxx_rule = new_rule;
@@ -145,7 +155,7 @@ struct ast_term final
 
 private:
     const struct text xxx_characters;
-    const struct ast_rule* xxx_rule; /* just for sake of the name */
+    struct ast_rule* xxx_rule = nullptr; /* just for sake of the name */
     struct ast_alts xxx_group;
 };
 
@@ -167,6 +177,13 @@ struct ast_alt
         {
             term->next = nullptr;
         }
+    }
+
+    void destroy()
+    {
+        terms.destroy();
+        assert(terms.size() == 0);
+        delete this;
     }
 
     int invisible;
@@ -197,12 +214,23 @@ struct ast_rule
         }
     }
 
+    void destroy()
+    {
+        alts.destroy();
+        delete this;
+    }
+
     const text name;
     ast_alts alts;
 };
 
 struct ast_grammar
 {
+    void destroy()
+    {
+        rules.destroy();
+    }
+
     ast_rules rules;
 };
 

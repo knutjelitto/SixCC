@@ -15,8 +15,8 @@
 
 #include "../xalloc.h"
 
-int node::ccount = 0;
-int node::dcount = 0;
+int node::ctor_count = 0;
+int node::dtor_count = 0;
 
 node::node(node_type type, int invisible, node* forward, node* backward)
     : type(type), invisible(invisible)
@@ -28,24 +28,24 @@ node::node(node_type type, int invisible, node* forward, node* backward)
     loop.min = 0;
     loop.max = 0;
 
-    ccount++;
+    ctor_count++;
 }
 
 node::node(node_type type, int invisible, const text& text)
     : type(type), invisible(invisible), xxx_text(text)
 {
-    ccount++;
+    ctor_count++;
 }
 
 node::node(node_type type, int invisible, struct list* list)
     : type(type), invisible(invisible), xxx_list(list)
 {
-    ccount++;
+    ctor_count++;
 }
 
 node::~node()
 {
-    dcount++;
+    dtor_count++;
 }
 
 void node::list_free()

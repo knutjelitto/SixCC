@@ -78,9 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <PublicIncludeDirectories>
+    </PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <PublicIncludeDirectories>
+    </PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -331,6 +335,11 @@
     <None Include="src\rbnf\parser.sid" />
     <None Include="src\wsn\lexer.lx" />
     <None Include="src\wsn\parser.sid" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SixCC.peg\SixCC.peg.vcxproj">
+      <Project>{48e7bcc4-ed49-45f5-9477-2a5568ec5409}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

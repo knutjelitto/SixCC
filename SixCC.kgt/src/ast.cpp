@@ -13,6 +13,33 @@
 #include "ast.h"
 #include "xalloc.h"
 
+void ast_rules::destroy()
+{
+    for (auto rule : *this)
+    {
+        rule->destroy();
+    }
+    clear();
+}
+
+void ast_alts::destroy()
+{
+    for (auto alt : *this)
+    {
+        alt->destroy();
+    }
+    clear();
+}
+
+void ast_terms::destroy()
+{
+    for (auto term : *this)
+    {
+        term->destroy();
+    }
+    clear();
+}
+
 struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms)
 {
     return new ast_alt(invisible, terms);

@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../../SixCC.peg/SixPeg.h"
+
 #include "getopt.h"
 
 #include "txt.h"
@@ -169,7 +171,10 @@ void tester(const in_able& in, std::string inputfile)
 
     fclose(outfile);
 
-    printf("%d nodes created, %d nodes deleted\n", node::ccount, node::dcount);
+    //grammar.destroy();
+
+    printf("    node::ctor_count=%6d,     node::dtor_count=%6d\n", node::ctor_count, node::dtor_count);
+    printf("ast_term::ctor_count=%6d, ast_term::dtor_count=%6d\n", ast_term::ctor_count, ast_term::dtor_count);
 
     std::ifstream newf(new_out);
     std::string news((std::istreambuf_iterator<char>(newf)), (std::istreambuf_iterator<char>()));
@@ -201,6 +206,10 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
 
 int main(int argc, char* argv[])
 {
+    sixpeg::bnf();
+
+    ok_exit();
+
     tester();
 
     ast_grammar grammar;
