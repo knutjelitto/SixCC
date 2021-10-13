@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SixPeg.h"
 
+using namespace std;
 using namespace peg;
 
 static const char* const bnf_bnf =
@@ -10,6 +11,8 @@ R"::::::::::(
 <rule> ::= "<" <rule-name> ">" "::=" <expression> <line-end>
 
 <expression> ::= <list> | <list> "|" <expression>
+
+<x> ::=
 
 <line-end> ::= <EOL> | <line-end>
 
@@ -93,16 +96,16 @@ rhs             <- alternates?
 
 alternates      <- sequence ('|' sequence)*
 
-sequence        <- element*
+sequence        <- element+
 
-element         <- text
-                /  !rulestart id
+element         <- !rulestart id
+                /  literal
 
 %whitespace     <- [ \t\n\r]*
 
 id              <- < '<' [a-zA-Z][a-zA-Z0-9]* ('-' [a-zA-Z0-9]+)* '>' >
 
-text            <- < ['] [^']* ['] >
+literal         <- < ['] [^']* ['] >
                 /  < ["] [^"]* ["] >
 
 EOF             <- !.
@@ -124,6 +127,8 @@ EOF             <- !.
 
         parser["rulelist"] = [](const SemanticValues& vs)
         {
+            assert(vs.size() >= 0);
+
             auto id = vs.token_to_string();
             return id;
         };
@@ -132,68 +137,77 @@ EOF             <- !.
         {
             assert(vs.size() == 2);
 
-            auto x1 = vs[0];
-            auto x2 = vs[1];
+            auto name = any_cast<ast::term*>(vs[0]);
+            auto term = any_cast<ast::term*>(vs[1]);
 
-            auto id = vs.token_to_string();
-            return id;
+            return new ast::rule(name, term);
         };
 
         parser["lhs"] = [](const SemanticValues& vs)
         {
-            auto id = vs.token_to_string();
+            assert(vs.size() == 1);
 
-            return id;
+            return any_cast<ast::term*>(vs[0]);
         };
 
         parser["rhs"] = [](const SemanticValues& vs)
         {
-            auto id = vs.token_to_string();
+            assert(vs.size() <= 1);
 
-            return id;
+            return any_cast<ast::term*>(vs[0]);
         };
 
         parser["alternates"] = [](const SemanticValues& vs)
         {
-            auto id = vs.token_to_string();
+            assert(vs.size() >= 1);
 
-            return id;
+            auto alt = ast::term::alt();
+
+            for (auto v : vs)
+            {
+                alt->push_back(any_cast<ast::term*>(v));
+            }
+
+            return alt;
         };
 
         parser["sequence"] = [](const SemanticValues& vs)
         {
-            auto id = vs.token_to_string();
+            assert(vs.size() >= 1);
 
-            return id;
+            auto seq = ast::term::seq();
+
+            for (auto v : vs)
+            {
+                seq->push_back(any_cast<ast::term*>(v));
+            }
+
+            return seq;
         };
 
         parser["element"] = [](const SemanticValues& vs)
         {
-            auto id = vs.token_to_string();
-
-            return id;
+            assert(vs.size() == 1);
+            
+            return std::any_cast<ast::term*>(vs[0]);
         };
 
         parser["id"] = [](const SemanticValues& vs)
         {
+            assert(vs.token_to_string().size() >= 2);
+
             auto name = vs.token_to_string();
 
-            assert(name.size() >= 2);
-
-            name = name.substr(1, name.size() - 2);
-
-            return name;
+            return ast::term::token(name.substr(1, name.size() - 2));
         };
 
-        parser["text"] = [](const SemanticValues& vs)
+        parser["literal"] = [](const SemanticValues& vs)
         {
+            assert(vs.token_to_string().size() >= 2);
+
             auto text = vs.token_to_string();
 
-            assert(text.size() >= 2);
-
-            text = text.substr(1, text.size() - 2);
-
-            return text;
+            return ast::term::literal(text.substr(1, text.size() - 2));
         };
 
         // (4) Parse
