@@ -181,12 +181,8 @@
     <ClCompile Include="SixPeg.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="html1.htm">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="SixCC.peg.rc" />
+    <None Include="grammar\bnf.peg" />
+    <None Include="grammar\wsn.peg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

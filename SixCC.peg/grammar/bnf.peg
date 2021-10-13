@@ -1,0 +1,34 @@
+static const char* bnfpeg =
+R"::::::::::(
+#
+# A simple BNF grammar
+#
+        
+bnf             <- rulelist EOF
+
+rulelist        <- rule*
+
+rule            <- lhs '::=' rhs
+
+rulestart       <- lhs '::='
+
+lhs             <- id
+
+rhs             <- alternates?
+
+alternates      <- sequence ('|' sequence)*
+
+sequence        <- element+
+
+element         <- !rulestart id
+                /  literal
+
+%whitespace     <- [ \t\n\r]*
+
+id              <- < '<' [a-zA-Z][a-zA-Z0-9]* ('-' [a-zA-Z0-9]+)* '>' >
+
+literal         <- < ['] [^']* ['] >
+                /  < ["] [^"]* ["] >
+
+EOF             <- !.
+)::::::::::";

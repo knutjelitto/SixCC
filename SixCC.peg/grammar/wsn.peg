@@ -1,0 +1,24 @@
+static const char* wsnpeg =
+R"::::::::::(
+#
+# A simple wsn (wirth syntax notation) grammar
+#
+SYNTAX      <-  PRODUCTION*
+
+PRODUCTION  <-  IDENTIFIER '=' EXPRESSION '.'
+
+EXPRESSION  <-  TERM ( "|" TERM )*
+
+TERM        <-  FACTOR+
+
+FACTOR      <-  IDENTIFIER
+            /   LITERAL
+            /   '[' EXPRESSION ']'
+            /   '(' EXPRESSION ')'
+            /   '{' EXPRESSION '}'
+
+IDENTIFIER  <-  letter+
+
+LITERAL     <- '"' character+ '"'
+
+)::::::::::";

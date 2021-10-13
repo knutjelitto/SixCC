@@ -12,8 +12,6 @@ R"::::::::::(
 
 <expression> ::= <list> | <list> "|" <expression>
 
-<x> ::=
-
 <line-end> ::= <EOL> | <line-end>
 
 <list> ::= <term> | <term> <list>
@@ -54,169 +52,217 @@ R"::::::::::(
 <opt-jr-part> ::= "Sr." | "Jr." | <roman-numeral> | "-empty-string-makes-problems-"
 )::::::::::";
 
-struct grammar_info
-{
-    std::string name;
-    const bool enabled;
-    std::vector<std::string> samples;
-};
 
-static grammar_info infos[] =
-{
-    { "bnf", true, {bnf_bnf, bnf_expr, bnf_postal } },
-};
+static const char* const bnf_ckecker =
+R"::::::::::(
+<aaa> ::= ::=)::::::::::";
+
+static const char* const wsn_wsn =
+R"::::::::::(
+SYNTAX     = { PRODUCTION } .
+PRODUCTION = IDENTIFIER "=" EXPRESSION "." .
+EXPRESSION = TERM { "|" TERM } .
+TERM       = FACTOR { FACTOR } .
+FACTOR     = IDENTIFIER
+           | LITERAL
+           | "[" EXPRESSION "]"
+           | "(" EXPRESSION ")"
+           | "{" EXPRESSION "}" .
+IDENTIFIER = letter { letter } .
+LITERAL    = """" character { character } """" .
+)::::::::::";
+
+
+#include "grammar/bnf.peg"
+#include "grammar/wsn.peg"
 
 namespace sixpeg
 {
-    void bnf(void)
+    namespace internal
     {
-        parser parser;
-
-        parser.log = [](size_t line, size_t col, const std::string& msg)
+        struct grammar_info
         {
-            std::cerr << line << ":" << col << ": " << msg << "\n";
+            std::string name;
+            const bool enabled;
+            const string grammar_source;
+            void (*setup)(parser& parser);
+            parser* parser;
+            std::vector<std::string> samples;
         };
 
-        bool ok = parser.load_grammar(R"(
-#
-# A simple BNF grammar
-#
-        
-bnf             <- rulelist EOF
+        static void setup_bnf(parser& parser);
+        static void setup_wsn(parser& parser);
 
-rulelist        <- rule*
-
-rule            <- lhs '::=' rhs
-
-rulestart       <- lhs '::='
-
-lhs             <- id
-
-rhs             <- alternates?
-
-alternates      <- sequence ('|' sequence)*
-
-sequence        <- element+
-
-element         <- !rulestart id
-                /  literal
-
-%whitespace     <- [ \t\n\r]*
-
-id              <- < '<' [a-zA-Z][a-zA-Z0-9]* ('-' [a-zA-Z0-9]+)* '>' >
-
-literal         <- < ['] [^']* ['] >
-                /  < ["] [^"]* ["] >
-
-EOF             <- !.
-)");
-
-        if (!ok)
+        static grammar_info infos[] =
         {
-            return;
+            { "bnf", true, bnfpeg, setup_bnf, nullptr, {bnf_bnf, bnf_expr, bnf_postal, bnf_ckecker}},
+            { "wsn", true, wsnpeg, setup_wsn, nullptr, {wsn_wsn}},
+        };
+
+        static grammar_info& find(string name)
+        {
+            for (auto& i : infos)
+            {
+                if (i.name == name)
+                {
+                    return i;
+                }
+            }
+
+            throw "";
         }
 
-        parser["bnf"] = [](const SemanticValues& vs)
+        static grammar_info& get_parser(string name)
         {
-            assert(vs.size() == 2);
-            assert(vs.choice() == 0);
+            grammar_info& info = find(name);
 
-            auto id = vs.token_to_string();
-            return id;
-        };
-
-        parser["rulelist"] = [](const SemanticValues& vs)
-        {
-            assert(vs.size() >= 0);
-
-            auto id = vs.token_to_string();
-            return id;
-        };
-
-        parser["rule"] = [](const SemanticValues& vs)
-        {
-            assert(vs.size() == 2);
-
-            auto name = any_cast<ast::term*>(vs[0]);
-            auto term = any_cast<ast::term*>(vs[1]);
-
-            return new ast::rule(name, term);
-        };
-
-        parser["lhs"] = [](const SemanticValues& vs)
-        {
-            assert(vs.size() == 1);
-
-            return any_cast<ast::term*>(vs[0]);
-        };
-
-        parser["rhs"] = [](const SemanticValues& vs)
-        {
-            assert(vs.size() <= 1);
-
-            return any_cast<ast::term*>(vs[0]);
-        };
-
-        parser["alternates"] = [](const SemanticValues& vs)
-        {
-            assert(vs.size() >= 1);
-
-            auto alt = ast::term::alt();
-
-            for (auto v : vs)
+            if (info.parser != nullptr)
             {
-                alt->push_back(any_cast<ast::term*>(v));
+                return info;
             }
 
-            return alt;
-        };
+            parser* parser = new peg::parser();
 
-        parser["sequence"] = [](const SemanticValues& vs)
-        {
-            assert(vs.size() >= 1);
-
-            auto seq = ast::term::seq();
-
-            for (auto v : vs)
+            parser->log = [](size_t line, size_t col, const std::string& msg)
             {
-                seq->push_back(any_cast<ast::term*>(v));
+                std::cerr << line << ":" << col << ": " << msg << "\n";
+            };
+
+            parser->enable_packrat_parsing(); // Enable packrat parsing.
+
+            if (!parser->load_grammar(info.grammar_source))
+            {
+                return info;
             }
 
-            return seq;
-        };
+            info.parser = parser;
 
-        parser["element"] = [](const SemanticValues& vs)
+            return info;
+        }
+
+        void setup_wsn(parser& parser)
         {
-            assert(vs.size() == 1);
-            
-            return std::any_cast<ast::term*>(vs[0]);
-        };
+        }
 
-        parser["id"] = [](const SemanticValues& vs)
+        void setup_bnf(parser& parser)
         {
-            assert(vs.token_to_string().size() >= 2);
+            parser["bnf"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() == 2);
+                assert(vs.choice() == 0);
 
-            auto name = vs.token_to_string();
+                auto id = vs.token_to_string();
+                return id;
+            };
 
-            return ast::term::token(name.substr(1, name.size() - 2));
-        };
+            parser["rulelist"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() >= 0);
 
-        parser["literal"] = [](const SemanticValues& vs)
-        {
-            assert(vs.token_to_string().size() >= 2);
+                auto id = vs.token_to_string();
+                return id;
+            };
 
-            auto text = vs.token_to_string();
+            parser["rule"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() == 2);
 
-            return ast::term::literal(text.substr(1, text.size() - 2));
-        };
+                auto name = any_cast<ast::term*>(vs[0]);
+                auto term = any_cast<ast::term*>(vs[1]);
 
-        // (4) Parse
-        parser.enable_packrat_parsing(); // Enable packrat parsing.
+                return new ast::rule(name, term);
+            };
 
-        std::string val;
-        if (!parser.parse(bnf_bnf, val))
-        {
-            std::cerr << "syntax error" << std::endl;
+            parser["lhs"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() == 1);
+
+                return any_cast<ast::term*>(vs[0]);
+            };
+
+            parser["rhs"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() <= 1);
+
+                auto x = vs.token_to_string();
+
+                if (vs.size() == 0)
+                {
+                    return ast::term::empty();
+                }
+                return any_cast<ast::term*>(vs[0]);
+            };
+
+            parser["alternates"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() >= 1);
+
+                auto alt = ast::term::alt();
+
+                for (auto v : vs)
+                {
+                    alt->push_back(any_cast<ast::term*>(v));
+                }
+
+                return alt;
+            };
+
+            parser["sequence"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() >= 1);
+
+                auto seq = ast::term::seq();
+
+                for (auto v : vs)
+                {
+                    seq->push_back(any_cast<ast::term*>(v));
+                }
+
+                return seq;
+            };
+
+            parser["element"] = [](const SemanticValues& vs)
+            {
+                assert(vs.size() == 1);
+
+                return std::any_cast<ast::term*>(vs[0]);
+            };
+
+            parser["id"] = [](const SemanticValues& vs)
+            {
+                assert(vs.token_to_string().size() >= 2);
+
+                auto name = vs.token_to_string();
+
+                return ast::term::token(name.substr(1, name.size() - 2));
+            };
+
+            parser["literal"] = [](const SemanticValues& vs)
+            {
+                assert(vs.token_to_string().size() >= 2);
+
+                auto text = vs.token_to_string();
+
+                return ast::term::literal(text.substr(1, text.size() - 2));
+            };
         }
     }
+
+    void bnf(void)
+    {
+        using namespace internal;
+
+        grammar_info& info = get_parser("bnf");
+
+        std::string val;
+
+        for (auto sample : info.samples)
+        {
+            if (!info.parser->parse(sample, val))
+            {
+                std::cerr << "syntax error" << std::endl;
+            }
+        }
+    }
+
 }

@@ -16,6 +16,9 @@
     <Filter Include="include">
       <UniqueIdentifier>{5b329109-06e3-4950-90f1-026a7780b53f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="grammar">
+      <UniqueIdentifier>{23d04732-0569-483c-9187-0bfcad364683}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -45,11 +48,11 @@
     <ClCompile Include="SixPeg.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="html1.htm" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="SixCC.peg.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <None Include="grammar\bnf.peg">
+      <Filter>grammar</Filter>
+    </None>
+    <None Include="grammar\wsn.peg">
+      <Filter>grammar</Filter>
+    </None>
   </ItemGroup>
 </Project>

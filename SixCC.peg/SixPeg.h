@@ -37,7 +37,7 @@ namespace sixpeg
         public:
             static term* empty()
             {
-                return new term();
+                return new term(termtype::empty);
             }
 
             static term* alt()
@@ -60,6 +60,11 @@ namespace sixpeg
                 return new term(termtype::literal, move(text));
             }
 
+            static term* comment(string&& text)
+            {
+                return new term(termtype::comment, move(text));
+            }
+
             void push_back(term* term)
             {
                 assert(type == termtype::alt || type == termtype::seq);
@@ -68,10 +73,6 @@ namespace sixpeg
             }
 
         private:
-            term() : type(termtype::empty)
-            {
-            }
-
             term(termtype type, string&& text) : type(type), text(text)
             {
                 assert(type == termtype::token || type == termtype::literal || type == termtype::iliteral || type == termtype::comment);
@@ -79,7 +80,7 @@ namespace sixpeg
 
             term(termtype type) : type(type)
             {
-                assert(type == termtype::alt || type == termtype::seq);
+                assert(type == termtype::empty || type == termtype::alt || type == termtype::seq);
             }
 
             term(term* group) : type(termtype::group)
