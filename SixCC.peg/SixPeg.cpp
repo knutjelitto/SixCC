@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "SixPeg.h"
 
-using namespace std;
-using namespace peg;
-
 namespace sixpeg
 {
+    using namespace std;
+    using namespace peg;
+
     namespace internal
     {
 #       include "grammar/bnf.peg"
@@ -50,8 +50,11 @@ namespace sixpeg
                 {"c-language",  true,   wsn_c_language},
             }},
             { "antlr4", true, antlr4peg, setup_antlr4, nullptr, {
+                {"antlr4-lexbasic",      true,   antlr4_antlr4_lexbasic},
                 {"checker",     true,   antlr4_checker},
-                {"antlr4",      true,   antlr4_antlr4},
+                {"bnf",         true,   antlr4_bnf},
+                {"antlr4-parser",      true,   antlr4_antlr4_parser},
+                {"antlr4-lexer",      true,   antlr4_antlr4_lexer},
             }},
         };
 
