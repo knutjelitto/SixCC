@@ -3,6 +3,7 @@ R"::::::::::(
 #
 # A simple wsn (wirth syntax notation) grammar
 #
+
 SYNTAX      <-  PRODUCTION*
 
 PRODUCTION  <-  IDENTIFIER '=' EXPRESSION '.'
@@ -17,8 +18,22 @@ FACTOR      <-  IDENTIFIER
             /   '(' EXPRESSION ')'
             /   '{' EXPRESSION '}'
 
-IDENTIFIER  <-  letter+
+IDENTIFIER  <-  < id_start id_rest* >
 
-LITERAL     <- '"' character+ '"'
+LITERAL     <-  < '"' character+ '"' >
+
+letter      <-  [a-zA-Z]
+
+digit       <-  [0-9]
+
+character   <-  !["] .
+            /   '""'
+
+id_start    <-  letter (letter / digit)*
+
+id_rest     <-  [-_] (letter / digit)+
+
+
+%whitespace <-  [ \t\n\r]*
 
 )::::::::::";

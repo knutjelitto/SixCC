@@ -9,11 +9,11 @@
 #error "Requires complete C++17 support"
 #endif
 
+#include <cassert>
 #include <stdexcept>
 #include <fstream>
 #include <vector>
 
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -141,7 +141,7 @@ void tester(const in_able& in, std::string inputfile)
     printf("%s:\n", inputfile.c_str());
 
     bool more = false;
-    for (auto out : outputable)
+    for (auto& out : outputable)
     {
         assert(out.out != nullptr);
 
@@ -206,7 +206,7 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
 
 int main(int argc, char* argv[])
 {
-    sixpeg::bnf();
+    sixpeg::checker();
 
     ok_exit();
 

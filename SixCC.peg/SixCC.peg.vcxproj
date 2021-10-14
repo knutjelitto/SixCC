@@ -172,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="grammar\antlr4.cpp" />
+    <ClCompile Include="grammar\bnf.cpp" />
+    <ClCompile Include="grammar\wsn.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -181,8 +184,13 @@
     <ClCompile Include="SixPeg.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
+    <None Include="grammar\antlr4.peg" />
+    <None Include="grammar\antlr4.samples" />
     <None Include="grammar\bnf.peg" />
+    <None Include="grammar\bnf.samples" />
     <None Include="grammar\wsn.peg" />
+    <None Include="grammar\wsn.samples" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

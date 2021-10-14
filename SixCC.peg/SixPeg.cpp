@@ -4,99 +4,55 @@
 using namespace std;
 using namespace peg;
 
-static const char* const bnf_bnf =
-R"::::::::::(
-<syntax> ::= <rule> | <rule> <syntax>
-
-<rule> ::= "<" <rule-name> ">" "::=" <expression> <line-end>
-
-<expression> ::= <list> | <list> "|" <expression>
-
-<line-end> ::= <EOL> | <line-end>
-
-<list> ::= <term> | <term> <list>
-
-<term> ::= <literal> | "<" <rule-name> ">"
-
-<literal> ::= '"' <text> '"' | "'" <text> "'"
-)::::::::::";
-
-static const char* const bnf_expr =
-R"::::::::::(
-<expr>  ::=  <term> "+" <expr>
-        |    <term>
-
-<term>  ::=  <factor> "*" <term>
-        |    <factor>
-
-<factor>
-        ::= "(" <expr> ")"
-        |   <const>
-
-<const> ::= <integer>
-)::::::::::";
-
-static const char* const bnf_postal =
-R"::::::::::(
-<postal-address> ::= <name-part> <street-address> <zip-part>
-
-<name-part> ::= <personal-part> <last-name> <opt-jr-part> <EOL>
-            | <personal-part> <name-part>
-
-<personal-part> ::= <first-name> | <initial> "."
-
-<street-address> ::= <opt-apt-num> <house-num> <street-name> <EOL>
-
-<zip-part> ::= <town-name> "," <state-code> <ZIP-code> <EOL>
-
-<opt-jr-part> ::= "Sr." | "Jr." | <roman-numeral> | "-empty-string-makes-problems-"
-)::::::::::";
-
-
-static const char* const bnf_ckecker =
-R"::::::::::(
-<aaa> ::= ::=)::::::::::";
-
-static const char* const wsn_wsn =
-R"::::::::::(
-SYNTAX     = { PRODUCTION } .
-PRODUCTION = IDENTIFIER "=" EXPRESSION "." .
-EXPRESSION = TERM { "|" TERM } .
-TERM       = FACTOR { FACTOR } .
-FACTOR     = IDENTIFIER
-           | LITERAL
-           | "[" EXPRESSION "]"
-           | "(" EXPRESSION ")"
-           | "{" EXPRESSION "}" .
-IDENTIFIER = letter { letter } .
-LITERAL    = """" character { character } """" .
-)::::::::::";
-
-
-#include "grammar/bnf.peg"
-#include "grammar/wsn.peg"
-
 namespace sixpeg
 {
     namespace internal
     {
+#       include "grammar/bnf.peg"
+#       include "grammar/bnf.samples"
+#       include "grammar/wsn.peg"
+#       include "grammar/wsn.samples"
+#       include "grammar/antlr4.peg"
+#       include "grammar/antlr4.samples"
+
+        void setup_bnf(parser& parser);
+        void setup_wsn(parser& parser);
+        void setup_antlr4(parser& parser);
+
+        struct sample_info
+        {
+            const string name;
+            const bool enabled;
+            const string text;
+        };
         struct grammar_info
         {
-            std::string name;
+            const string name;
             const bool enabled;
             const string grammar_source;
             void (*setup)(parser& parser);
             parser* parser;
-            std::vector<std::string> samples;
+            const vector<sample_info> samples;
         };
-
-        static void setup_bnf(parser& parser);
-        static void setup_wsn(parser& parser);
 
         static grammar_info infos[] =
         {
-            { "bnf", true, bnfpeg, setup_bnf, nullptr, {bnf_bnf, bnf_expr, bnf_postal, bnf_ckecker}},
-            { "wsn", true, wsnpeg, setup_wsn, nullptr, {wsn_wsn}},
+            { "bnf", true, bnfpeg, setup_bnf, nullptr, {
+                {"checker",     true,   bnf_ckecker},
+                {"bnf",         true,   bnf_bnf},
+                {"expr",        true,   bnf_expr},
+                {"postal",      true,   bnf_postal},
+            }},
+            { "wsn", true, wsnpeg, setup_wsn, nullptr, {
+                {"checker",     true,   wsn_checker},
+                {"wsn",         true,   wsn_wsn},
+                {"bnf",         true,   wsn_bnf},
+                {"c-language",  true,   wsn_c_language},
+            }},
+            { "antlr4", true, antlr4peg, setup_antlr4, nullptr, {
+                {"checker",     true,   antlr4_checker},
+                {"antlr4",      true,   antlr4_antlr4},
+            }},
         };
 
         static grammar_info& find(string name)
@@ -123,9 +79,9 @@ namespace sixpeg
 
             parser* parser = new peg::parser();
 
-            parser->log = [](size_t line, size_t col, const std::string& msg)
+            parser->log = [&](size_t line, size_t col, const std::string& msg)
             {
-                std::cerr << line << ":" << col << ": " << msg << "\n";
+                cerr << name << "(" << line << "," << col << "): " << msg << endl;
             };
 
             parser->enable_packrat_parsing(); // Enable packrat parsing.
@@ -135,134 +91,48 @@ namespace sixpeg
                 return info;
             }
 
+            info.setup(*parser);
+
             info.parser = parser;
 
             return info;
         }
-
-        void setup_wsn(parser& parser)
-        {
-        }
-
-        void setup_bnf(parser& parser)
-        {
-            parser["bnf"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() == 2);
-                assert(vs.choice() == 0);
-
-                auto id = vs.token_to_string();
-                return id;
-            };
-
-            parser["rulelist"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() >= 0);
-
-                auto id = vs.token_to_string();
-                return id;
-            };
-
-            parser["rule"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() == 2);
-
-                auto name = any_cast<ast::term*>(vs[0]);
-                auto term = any_cast<ast::term*>(vs[1]);
-
-                return new ast::rule(name, term);
-            };
-
-            parser["lhs"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() == 1);
-
-                return any_cast<ast::term*>(vs[0]);
-            };
-
-            parser["rhs"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() <= 1);
-
-                auto x = vs.token_to_string();
-
-                if (vs.size() == 0)
-                {
-                    return ast::term::empty();
-                }
-                return any_cast<ast::term*>(vs[0]);
-            };
-
-            parser["alternates"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() >= 1);
-
-                auto alt = ast::term::alt();
-
-                for (auto v : vs)
-                {
-                    alt->push_back(any_cast<ast::term*>(v));
-                }
-
-                return alt;
-            };
-
-            parser["sequence"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() >= 1);
-
-                auto seq = ast::term::seq();
-
-                for (auto v : vs)
-                {
-                    seq->push_back(any_cast<ast::term*>(v));
-                }
-
-                return seq;
-            };
-
-            parser["element"] = [](const SemanticValues& vs)
-            {
-                assert(vs.size() == 1);
-
-                return std::any_cast<ast::term*>(vs[0]);
-            };
-
-            parser["id"] = [](const SemanticValues& vs)
-            {
-                assert(vs.token_to_string().size() >= 2);
-
-                auto name = vs.token_to_string();
-
-                return ast::term::token(name.substr(1, name.size() - 2));
-            };
-
-            parser["literal"] = [](const SemanticValues& vs)
-            {
-                assert(vs.token_to_string().size() >= 2);
-
-                auto text = vs.token_to_string();
-
-                return ast::term::literal(text.substr(1, text.size() - 2));
-            };
-        }
     }
 
-    void bnf(void)
+    void checker(void)
     {
         using namespace internal;
 
-        grammar_info& info = get_parser("bnf");
-
-        std::string val;
-
-        for (auto sample : info.samples)
+        for (auto& i : infos)
         {
-            if (!info.parser->parse(sample, val))
+            auto& info = get_parser(i.name);
+
+            cout << info.name << ":";
+            if (info.parser == nullptr)
             {
-                std::cerr << "syntax error" << std::endl;
+                cerr << " -parser-defect-" << endl;
+                continue;
             }
+            for (auto sample : info.samples)
+            {
+                if (!sample.enabled)
+                {
+                    continue;
+                }
+                cout << " " << sample.name;
+
+                info.parser->log = [&](size_t line, size_t col, const std::string& msg)
+                {
+                    cerr << endl << sample.name << "(" << line << "," << col << "): " << msg << endl;
+                };
+
+                ast::grammar* grammar = nullptr;
+                if (!info.parser->parse(sample.text, grammar))
+                {
+                    std::cerr << "syntax error" << std::endl;
+                }
+            }
+            cout << endl;
         }
     }
-
 }

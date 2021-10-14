@@ -1,0 +1,214 @@
+static const char* antlr4peg =
+R"::::::::::(
+
+grammarSpec			<-	grammarDecl prequelConstruct rules modeSpec* EOF
+
+grammarDecl			<-	grammarType identifier ';'
+
+grammarType			<-	'lexer' 'grammar'
+					/	'parser' 'grammar'
+					/	'grammar'
+
+prequelConstruct	<-	optionsSpec
+					/	delegateGrammars
+					/	tokenSpec
+					/	channelsSpec
+					/	action
+
+
+
+optionsSpec			<-	< 'options' WSNLCHARS* '{' > (option ';')* '}'
+
+option				<-	identifier '=' optionValue
+
+optionValue			<-	identifier ('.' identifier)*
+					/	STRING_LITERAL
+					/	actionBlock
+					/	INT
+
+
+delegateGrammars	<-	'import' delegateGrammar (',' delegateGrammar)* ';'
+
+delegateGrammar		<-	identifier '=' identifier
+					/	identifier
+
+
+tokenSpec			<-	< 'tokens' WSNLCHARS* '{' > idList? '}'
+
+channelsSpec		<-	< 'channels' WSNLCHARS* '{' > idList? '}'
+
+idList				<-	identifier (',' identifier)* ','?
+
+action				<-  '@' (actionScopeName '::')? identifier actionBlock
+
+actionScopeName		<-	'lexer'
+					/	'parser'
+					/	identifier
+
+actionBlock			<-	'{' ACTION_CONTENT* '}'
+
+argActionBlock		<-	'[' ARGUMENT_CONTENT* ']'
+
+modeSpec			<-	'mode' identifier ';' lexerRuleSpec
+
+rules				<-	ruleSpec*
+
+ruleSpec			<-	parserRuleSpec
+					/	lexerRuleSpec
+
+parserRuleSpec		<-	ruleModifiers? RULE_REF argActionBlock? ruleReturns? throwSpec? localsSpec? rulePrequel* ':' ruleBlock ';' exceptionGroup
+
+exceptionGroup		<-	exceptionHandler* finallyClause?
+
+exceptionHandler	<-	'catch' argActionBlock actionBlock
+
+finallyClause		<-	'finally' actionBlock
+
+rulePrequel			<-	optionsSpec
+					/	ruleAction
+
+ruleReturns			<-	'returns' argActionBlock
+
+throwSpec			<-	'throws' identifier (',' identifier)*
+
+localsSpec			<-	'locals' argActionBlock
+
+ruleAction			<-	'@' identifier actionBlock
+
+ruleModifiers		<-	ruleModifier+
+
+ruleModifier		<-	'public'
+					/	'private'
+					/	'protected'
+					/	'fragment'
+
+ruleBlock			<-	ruleAltList
+
+ruleAltList			<-	labeledAlt ('|' labeledAlt)*
+
+labeledAlt			<-	alternative ('#' identifier)?
+
+lexerRuleSpec		<-	'fragment'? TOKEN_REF ':' lexerRuleBlock ';'
+
+lexerRuleBlock		<-	lexerAltList
+
+lexerAltList		<-	lexerAlt ('|' lexerAlt)*
+
+lexerAlt			<-	lexerElements lexerCommands?
+
+lexerElements		<-	lexerElement*
+
+lexerElement		<-	labeledLexerElement ebnfSuffix?
+					/	lexerAtom ebnfSuffix?
+					/	lexerBlock ebnfSuffix?
+					/	actionBlock '?'
+
+labeledLexerElement	<-	identifier ('=' / '+=') (lexerAtom / lexerBlock)
+
+lexerBlock			<-	'(' lexerAltList ')'
+
+lexerCommands		<-	'->' lexerCommand (',' lexerCommand)*
+
+lexerCommand		<-	lexerCommandName '(' lexerCommandExpr ')'
+					/	lexerCommandName
+
+lexerCommandName	<-	'mode'
+					/	identifier
+
+lexerCommandExpr	<-	identifier
+					/	INT
+
+altList				<-	alternative ('|' alternative)*
+
+alternative			<-	(elementOptions? element+)?
+
+element				<-	labeledElement ebnfSuffix?
+					/	atom ebnfSuffix?
+					/	ebnf
+					/	actionBlock '?'?
+
+labeledElement		<-	identifier ('=' / '+=') (atom / block)
+
+ebnf				<-	block blockSuffix?
+
+blockSuffix			<-	ebnfSuffix
+
+ebnfSuffix			<-	'?' '?'?
+					/	'*' '?'?
+					/	'+' '?'?
+
+lexerAtom			<-	characterRange
+					/	terminal
+					/	notSet
+					/	LEXER_CHAR_SET
+					/	'.' elementOptions?
+
+atom				<-	terminal
+					/	ruleref
+					/	notSet
+					/ '.' elementOptions?
+
+notSet				<-	'~' setElement
+					/	'~' blockSet
+
+blockSet			<-	'(' setElement ('|' setElement)* ')'
+
+setElement			<-	TOKEN_REF elementOptions?
+					/	STRING_LITERAL elementOptions?
+					/	characterRange
+					/	LEXER_CHAR_SET
+
+block				<-	'(' (optionsSpec? ruleAction* ':')? altList ')'
+
+ruleref				<-	RULE_REF argActionBlock? elementOptions?
+
+characterRange		<-	STRING_LITERAL '..' STRING_LITERAL
+
+terminal			<-	TOKEN_REF elementOptions?
+					/	STRING_LITERAL elementOptions?
+
+elementOptions		<-	'<' elementOption (',' elementOption) '>'
+
+elementOption		<-	identifier '=' (identifier / STRING_LITERAL)
+
+identifier			<-	RULE_REF
+					/	TOKEN_REF
+
+%whitespace			<-	(space / comment)*
+
+space				<-	< [ \t\n\r] >
+
+comment				<-	line_comment
+					/	block_comment
+
+line_comment		<-	< '//' (![\r\n] .)* [\r\n]* >
+
+block_comment		<-	< '/*' (!'*/' .)* '*/' >
+
+
+
+
+
+
+
+
+
+INT					<-	'TODO:'
+
+STRING_LITERAL		<-	'TODO:'
+
+LEXER_CHAR_SET		<-	'TODO:'
+
+RULE_REF			<-	'TODO:'
+
+TOKEN_REF			<-	'TODO:'
+
+WSNLCHARS			<-	[ \t\n\r]	#TODO: \f
+
+ACTION_CONTENT		<-	'TODO:'
+
+ARGUMENT_CONTENT	<-	'TODO:'
+
+EOF					<- !.
+
+)::::::::::";

@@ -6,6 +6,7 @@
 #define IMEX __declspec(dllimport)
 #endif
 
+#include <cassert>
 #include <string>
 #include <vector>
 #include <variant>
@@ -13,7 +14,7 @@
 
 namespace sixpeg
 {
-    IMEX void bnf();
+    IMEX void checker();
 
     namespace ast
     {
@@ -65,6 +66,21 @@ namespace sixpeg
                 return new term(termtype::comment, move(text));
             }
 
+            static term* option(ast::term* term)
+            {
+                return new ast::term(termtype::group, term, 0, 1);
+            }
+
+            static term* group(ast::term* term)
+            {
+                return new ast::term(termtype::group, term, 1, 1);
+            }
+
+            static term* kleene(ast::term* term)
+            {
+                return new ast::term(termtype::group, term, 0, 0);
+            }
+
             void push_back(term* term)
             {
                 assert(type == termtype::alt || type == termtype::seq);
@@ -83,23 +99,25 @@ namespace sixpeg
                 assert(type == termtype::empty || type == termtype::alt || type == termtype::seq);
             }
 
-            term(term* group) : type(termtype::group)
+            term(termtype type, term* inner, int min, int max) : type(termtype::group), min(min), max(max)
             {
-                terms.push_back(group);
+                assert(type == termtype::group);
+
+                terms.push_back(inner);
             }
 
             termtype type;
-            int min = 1;
-            int max = 1;
             vector<term*> terms;
         public:
+            int min = 1;
+            int max = 1;
             const string text;
         };
 
         struct rule
         {
-            rule(term* name, term* term)
-                : name(name->text), term(term)
+            rule(const string& name, term* term)
+                : name(name), term(term)
             {
             }
 
@@ -107,9 +125,8 @@ namespace sixpeg
             const term* const term;
         };
 
-        class grammar : std::vector<rule>
+        struct grammar : std::vector<rule*>
         {
-            const std::string name;
         };
     }
 }

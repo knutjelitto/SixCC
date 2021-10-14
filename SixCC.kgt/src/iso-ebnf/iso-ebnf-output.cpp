@@ -24,6 +24,10 @@
 #include "io.h"
 
 WARN_UNUSED_RESULT static int output_term(const struct ast_term *term);
+WARN_UNUSED_RESULT static int output_group(const ast_alts& group);
+WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt);
+WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt);
+WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule);
 
 WARN_UNUSED_RESULT static int output_group_alt(const struct ast_alt* alt)
 {
@@ -60,8 +64,8 @@ WARN_UNUSED_RESULT static int output_group(const ast_alts& group)
 
 WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
-	const char* s, * e;
-	size_t i;
+	/* EBNF cannot express minimum term repetition; TODO: semantic checks for this */
+	assert(term->min <= 1);
 
 	struct
 	{
@@ -76,10 +80,10 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		{ 0, 0, " {", " } " }
 	};
 
-	s = NULL;
-	e = NULL;
+	const char* s = nullptr;
+	const char* e = nullptr;
 
-	for (i = 0; i < sizeof a / sizeof * a; i++)
+	for (int i = 0; i < sizeof a / sizeof * a; i++)
 	{
 		if (i == 0 && term->type != TYPE_GROUP)
 		{
@@ -94,10 +98,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		}
 	}
 
-	assert(s != NULL && e != NULL);
-
-	/* EBNF cannot express minimum term repetition; TODO: semantic checks for this */
-	assert(term->min <= 1);
+	assert(s != nullptr && e != nullptr);
 
 	writer->printf("%s", s);
 
@@ -160,7 +161,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	bool more;
+	bool more = false;
 	for (auto term : alt->terms)
 	{
 		if (more)

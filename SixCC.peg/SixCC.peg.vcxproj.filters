@@ -46,12 +46,34 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SixPeg.cpp" />
+    <ClCompile Include="grammar\wsn.cpp">
+      <Filter>grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="grammar\bnf.cpp">
+      <Filter>grammar</Filter>
+    </ClCompile>
+    <ClCompile Include="grammar\antlr4.cpp">
+      <Filter>grammar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="grammar\bnf.peg">
       <Filter>grammar</Filter>
     </None>
     <None Include="grammar\wsn.peg">
+      <Filter>grammar</Filter>
+    </None>
+    <None Include="cpp.hint" />
+    <None Include="grammar\bnf.samples">
+      <Filter>grammar</Filter>
+    </None>
+    <None Include="grammar\wsn.samples">
+      <Filter>grammar</Filter>
+    </None>
+    <None Include="grammar\antlr4.peg">
+      <Filter>grammar</Filter>
+    </None>
+    <None Include="grammar\antlr4.samples">
       <Filter>grammar</Filter>
     </None>
   </ItemGroup>

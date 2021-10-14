@@ -1,0 +1,53 @@
+static const char* const bnf_bnf =
+R"::::::::::(
+<syntax> ::= <rule> | <rule> <syntax>
+
+<rule> ::= "<" <rule-name> ">" "::=" <expression> <line-end>
+
+<expression> ::= <list> | <list> "|" <expression>
+
+<line-end> ::= <EOL> | <line-end>
+
+<list> ::= <term> | <term> <list>
+
+<term> ::= <literal> | "<" <rule-name> ">"
+
+<literal> ::= '"' <text> '"' | "'" <text> "'"
+)::::::::::";
+
+static const char* const bnf_expr =
+R"::::::::::(
+<expr>  ::=  <term> "+" <expr>
+        |    <term>
+
+<term>  ::=  <factor> "*" <term>
+        |    <factor>
+
+<factor>
+        ::= "(" <expr> ")"
+        |   <const>
+
+<const> ::= <integer>
+)::::::::::";
+
+static const char* const bnf_postal =
+R"::::::::::(
+<postal-address> ::= <name-part> <street-address> <zip-part>
+
+<name-part> ::= <personal-part> <last-name> <opt-jr-part> <EOL>
+            | <personal-part> <name-part>
+
+<personal-part> ::= <first-name> | <initial> "."
+
+<street-address> ::= <opt-apt-num> <house-num> <street-name> <EOL>
+
+<zip-part> ::= <town-name> "," <state-code> <ZIP-code> <EOL>
+
+<opt-jr-part> ::= "Sr." | "Jr." | <roman-numeral> | "-empty-string-makes-problems-"
+)::::::::::";
+
+
+static const char* const bnf_ckecker =
+R"::::::::::(
+<aaa> ::= <bbb>::= <ccc> ::=)::::::::::";
+
