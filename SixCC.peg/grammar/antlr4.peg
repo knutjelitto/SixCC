@@ -186,7 +186,7 @@ xdigit              <-  [0-9a-fA-F]
 
 letter_or_digit		<-	letter / digit
 
-rule_ref			<-	< lletter letter_or_digit* ([-_] letter_or_digit+)* '_'? >
+rule_ref			<-	<  lletter letter_or_digit* ([-_] letter_or_digit+)* '_'? >
 
 token_ref			<-	< uletter letter_or_digit* ([-_] letter_or_digit+)* '_'? >
 
