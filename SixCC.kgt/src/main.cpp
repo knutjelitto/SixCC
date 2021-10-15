@@ -209,72 +209,92 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
 
 using namespace sixpeg::ast;
 
-struct wsnwriter : outvisitor
+struct astwriter : outvisitor
 {
-    void write(const grammar& grammar)
-    {
-        grammar.accept(*this);
-    }
-
-    void visit() override
-    {
-        throw std::logic_error("internal error: visit not implemented");
-    }
-
-    void visit(const grammar& grammar, int level, bool first) override
-    {
-    }
-    void visit(const rule& rule, int level, bool first) override
-    {
-    }
-    void visit(const alt_term& term, int level, bool first) override
-    {
-    }
-    void visit(const group_term& term, int level, bool first) override
+    astwriter(std::ostream& out) : outvisitor(), writer(out)
     {
     }
 
-    void enter(const rule& rule, int level, bool first) override
+    void write(grammar& grammar)
+    {
+        outvisitor::visit(grammar);
+    }
+
+    void visit(rule& rule) override
     {
         writer << rule.name << endl;
         ++writer;
+        rule.term->accept(*this);
+        --writer;
     }
 
-    void leave(const rule& rule, int level, bool first) override
+    void visit(group_term& term) override
     {
+        if (term.min == 0 && term.max == 1)
+        {
+            writer << "optional" << endl;
+        }
+        else
+        {
+            writer << "group(" << term.min << "," << term.max << ")" << endl;
+        }
+        ++writer;
+        term.term->accept(*this);
+        --writer;
+    }
+
+    void visit(seq_term& seq) override
+    {
+        writer << "seq" << endl;
+        ++writer;
+        outvisitor::visit(seq.terms);
+        --writer;
+    }
+
+    void visit(alt_term& alt) override
+    {
+        writer << "alt" << endl;
+        ++writer;
+        outvisitor::visit(alt.terms);
+        --writer;
+    }
+
+    void visit(token_term& term) override
+    {
+        writer << term.text << endl;
+    }
+
+    void visit(literal_term& term) override
+    {
+        writer << "\"" << term.text << "\"" << endl;
+    }
+
+    indenter writer;
+};
+
+struct wsnwriter : outvisitor
+{
+    wsnwriter(std::ostream& out) : outvisitor(), writer(out)
+    {
+    }
+
+    void write(grammar& grammar)
+    {
+        outvisitor::visit(grammar);
+    }
+
+    void visit(rule& rule) override
+    {
+        writer << rule.name << endl;
+        ++writer;
+        writer << "= ";
+        rule.term->accept(*this);
+        writer << endl;
         writer << "." << endl;
         --writer;
     }
 
-    void enter(const alt_term& term, int level, bool first) override
-    {
-        if (level == 1)
-        {
-            writer << (first ? "= " : "| ");
-        }
-        else
-        {
-            writer << (first ? "" : "|");
-        }
-    }
-
-    void leave(const alt_term& term, int level, bool first) override
-    {
-        if (level == 1)
-        {
-            writer << endl;
-        }
-    }
-
-    void visit(const seq_term& term, int level, bool first) override
-    {
-        if (!first)
-        {
-            writer << " ";
-        }
-    }
-
-    void enter(const group_term& term, int level, bool first) override
+    void visit(group_term& term) override
     {
         if (term.min == 1 && term.max == 1)
         {
@@ -292,9 +312,9 @@ struct wsnwriter : outvisitor
         {
             throw std::logic_error("internal error: group not implemented");
         }
-    }
-    void leave(const group_term& term, int level, bool first) override
-    {
+
+        term.term->accept(*this);
+
         if (term.min == 1 && term.max == 1)
         {
             writer << ")";
@@ -311,14 +331,15 @@ struct wsnwriter : outvisitor
         {
             throw std::logic_error("internal error: group not implemented");
         }
+
     }
 
-    void visit(const token_term& term, int level, bool first) override
+    void visit(token_term& term) override
     {
-        writer << term.text;
+        writer << " <space> " << term.text;
     }
 
-    void visit(const literal_term& term, int level, bool first) override
+    void visit(literal_term& term) override
     {
         writer << "\"" << term.text << "\"";
     }
@@ -335,11 +356,9 @@ void sixpegger()
 
     grammar* grammar = parse("wsn", example("c_syntax.wsn"));
 
-    wsnwriter writer;
+    astwriter writer(cout);
 
     writer.write(*grammar);
-
-    cout << writer.writer.str();
 
     ok_exit();
 }

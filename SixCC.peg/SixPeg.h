@@ -47,9 +47,6 @@ namespace sixpeg
             termtype type;
             int min = 1;
             int max = 1;
-
-            virtual void accept(outvisitor& visitor)
-            {}
         };
 
         class empty_term final : public core_term 
@@ -62,11 +59,11 @@ namespace sixpeg
         class group_term final : public core_term
         {
         public:
-            group_term(term* term) : core_term(termtype::group), term(term)
+            explicit group_term(term* term) : core_term(termtype::group), term(term)
             {
             }
 
-            const term* term;
+            term* term;
         };
 
         class alt_term final : public core_term
@@ -95,49 +92,52 @@ namespace sixpeg
             std::vector<term*> terms;
         };
 
-        class token_term final : public core_term
+        class with_text_term : public core_term
         {
         public:
-            token_term(const std::string& text) : core_term(termtype::token), text(text)
-            {}
+            with_text_term(termtype type, const std::string& text) : core_term(type), text(text)
+            {
+            }
 
             const std::string text;
         };
 
-        class literal_term final : public core_term
+        class token_term final : public with_text_term
         {
         public:
-            literal_term(const std::string text) : core_term(termtype::literal), text(text)
-            {}
-
-            const std::string text;
+            token_term(const std::string& text) : with_text_term(termtype::token, text)
+            {
+            }
         };
 
-        class iliteral_term final : public core_term
+        class literal_term final : public with_text_term
         {
         public:
-            iliteral_term(const std::string text) : core_term(termtype::iliteral), text(text)
-            {}
-
-            const std::string text;
+            literal_term(const std::string text) : with_text_term(termtype::literal, text)
+            {
+            }
         };
 
-        class comment_term final : public core_term
+        class iliteral_term final : public with_text_term
         {
         public:
-            comment_term(const std::string text) : core_term(termtype::comment), text(text)
-            {}
-
-            const std::string text;
+            iliteral_term(const std::string text) : with_text_term(termtype::iliteral, text)
+            {
+            }
         };
 
-        class prose_term final : public core_term
+        class comment_term final : public with_text_term
         {
         public:
-            prose_term(const std::string text) : core_term(termtype::prose), text(text)
+            comment_term(const std::string text) : with_text_term(termtype::comment, text)
             {}
+        };
 
-            const std::string text;
+        class prose_term final : public with_text_term
+        {
+        public:
+            prose_term(const std::string text) : with_text_term(termtype::prose, text)
+            {}
         };
 
         class term final
@@ -176,7 +176,7 @@ namespace sixpeg
             void loop(int min, int max)
             {
                 u.core.min = min;
-                u.core.max = min;
+                u.core.max = max;
             }
 
             static term* empty()
@@ -271,11 +271,6 @@ namespace sixpeg
                 }
             }
 
-            union
-            {
-                empty_term empty1;
-            };
-
             union terms_union
             {
                 terms_union(empty_term&& empty) : empty(empty)
@@ -312,7 +307,7 @@ namespace sixpeg
                 seq_term seq;
             } u;
 
-            void accept(outvisitor& visitor, int level, bool first) const;
+            void accept(outvisitor& visitor);
         };
 
         inline alt_term::~alt_term()
@@ -342,7 +337,7 @@ namespace sixpeg
             const std::string name;
             term* term;
 
-            void accept(outvisitor& visitor, int level, bool first) const;
+            void accept(outvisitor& visitor);
         };
 
         class grammar
@@ -350,255 +345,132 @@ namespace sixpeg
         public:
             std::vector<rule*> rules;
 
-            void accept(outvisitor& visitor) const;
+            void accept(outvisitor& visitor);
         };
     
 
         class outvisitor
         {
         public:
-            virtual void enter()
-            {
-            }
-            virtual void leave()
-            {
-            }
             virtual void visit()
             {
             }
 
-            virtual void enter(const grammar& grammar, int level, bool first)
+            virtual void visit(std::vector<term*>& terms)
             {
-                enter();
+                for (auto term : terms)
+                {
+                    term->accept(*this);
+                }
             }
-            virtual void leave(const grammar& grammar, int level, bool first)
+
+            virtual void visit(std::vector<rule*>& rules)
             {
-                leave();
+                int count = 0;
+                for (auto rule : rules)
+                {
+                    visit(*rule);
+
+                    if (++count == 2)
+                    {
+                        break;
+                    }
+                }
             }
-            virtual void visit(const grammar& grammar, int level, bool first)
+
+            virtual void visit(grammar& grammar)
+            {
+                visit(grammar.rules);
+            }
+
+            virtual void visit(rule& rule)
             {
                 visit();
             }
-
-            virtual void enter(const rule& rule, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const rule& rule, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const rule& rule, int level, bool first)
+            virtual void visit(empty_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const empty_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const empty_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const empty_term& term, int level, bool first)
+            virtual void visit(group_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const group_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const group_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const group_term& term, int level, bool first)
+            virtual void visit(alt_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const alt_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const alt_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const alt_term& term, int level, bool first)
+            virtual void visit(seq_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const seq_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const seq_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const seq_term& term, int level, bool first)
+            virtual void visit(token_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const token_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const token_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const token_term& term, int level, bool first)
+            virtual void visit(literal_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const literal_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const literal_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const literal_term& term, int level, bool first)
+            virtual void visit(iliteral_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const iliteral_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const iliteral_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const iliteral_term& term, int level, bool first)
+            virtual void visit(comment_term& term)
             {
                 visit();
             }
-
-            virtual void enter(const comment_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const comment_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const comment_term& term, int level, bool first)
-            {
-                visit();
-            }
-
-            virtual void enter(const prose_term& term, int level, bool first)
-            {
-                enter();
-            }
-            virtual void leave(const prose_term& term, int level, bool first)
-            {
-                leave();
-            }
-            virtual void visit(const prose_term& term, int level, bool first)
+            virtual void visit(prose_term& term)
             {
                 visit();
             }
         };
 
-        inline void term::accept(outvisitor& visitor, int level, bool first) const
+        inline void term::accept(outvisitor& visitor)
         {
             switch (type)
             {
                 case termtype::empty:
-                    visitor.enter(u.empty, level, first);
-                    visitor.visit(u.empty, level, first);
-                    visitor.leave(u.empty, level, first);
+                    visitor.visit(u.empty);
                     break;
                 case termtype::group:
-                    visitor.enter(u.group, level, first);
-                    visitor.visit(u.group, level, first);
-                    u.group.term->accept(visitor, level + 1, true);
-                    visitor.leave(u.group, level, first);
+                    visitor.visit(u.group);
+                    u.group.term->accept(visitor);
                     break;
                 case termtype::alt:
-                {
-                    visitor.enter(u.alt, level, first);
-                    visitor.visit(u.alt, level, first);
-                    bool afirst = true;
-                    for (auto term : u.alt.terms)
-                    {
-                        term->accept(visitor, level + 1, afirst);
-                        afirst = false;
-                    }
-                    visitor.leave(u.alt, level, first);
+                    visitor.visit(u.alt);
                     break;
-                }
                 case termtype::seq:
-                {
-                    visitor.enter(u.seq, level, first);
-                    visitor.visit(u.seq, level, first);
-                    bool sfirst = true;
-                    for (auto term : u.seq.terms)
-                    {
-                        term->accept(visitor, level + 1, sfirst);
-                        sfirst = false;
-                    }
-                    visitor.leave(u.seq, level, first);
+                    visitor.visit(u.seq);
                     break;
-                }
                 case termtype::token:
-                    visitor.enter(u.token, level, first);
-                    visitor.visit(u.token, level, first);
-                    visitor.leave(u.token, level, first);
+                    visitor.visit(u.token);
                     break;
                 case termtype::literal:
-                    visitor.enter(u.literal, level, first);
-                    visitor.visit(u.literal, level, first);
-                    visitor.leave(u.literal, level, first);
+                    visitor.visit(u.literal);
                     break;
                 case termtype::iliteral:
-                    visitor.enter(u.iliteral, level, first);
-                    visitor.visit(u.iliteral, level, first);
-                    visitor.leave(u.iliteral, level, first);
+                    visitor.visit(u.iliteral);
                     break;
                 case termtype::comment:
-                    visitor.enter(u.comment, level, first);
-                    visitor.visit(u.comment, level, first);
-                    visitor.leave(u.comment, level, first);
+                    visitor.visit(u.comment);
                     break;
                 case termtype::prose:
-                    visitor.enter(u.prose, level, first);
-                    visitor.visit(u.prose, level, first);
-                    visitor.leave(u.prose, level, first);
+                    visitor.visit(u.prose);
                     break;
             }
         }
 
-        inline void grammar::accept(outvisitor& visitor) const
+        inline void grammar::accept(outvisitor& visitor)
         {
-            visitor.enter(*this, 0, true);
-            visitor.visit(*this, 0, true);
-            bool first = true;
             for (auto rule : rules)
             {
-                rule->accept(visitor, 0, first);
-                first = false;
+                rule->accept(visitor);
             }
-            visitor.leave(*this, 0, true);
         }
 
-        inline void rule::accept(outvisitor& visitor, int level, bool first) const
+        inline void rule::accept(outvisitor& visitor)
         {
-            visitor.enter(*this, level, first);
-            visitor.visit(*this, level, first);
-            term->accept(visitor, level + 1, first);
-            visitor.leave(*this, level, first);
+            term->accept(visitor);
         }
 
         namespace internal

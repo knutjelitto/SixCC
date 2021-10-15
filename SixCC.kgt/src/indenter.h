@@ -4,15 +4,16 @@
 #define _indenter_h
 
 #include <string>
+#include <iostream>
 #include <sstream>
 #include <format>
 
-class indenter : private std::ostringstream
+class indenter
 {
 public:
-    std::string str() const
+
+    indenter(std::ostream& out) : out(out)
     {
-        return std::ostringstream::str();
     }
 
     inline indenter& operator<<(indenter& (*manip)(indenter&))
@@ -41,11 +42,12 @@ public:
         {
             for (int i = 0; i < level; i += 1)
             {
-                write(istring.c_str(), istring.size());
+                out << istring;
             }
             pending = false;
         }
-        write(s.c_str(), s.size());
+        out << s;
+        out.flush();
         return *this;
 
     }
@@ -55,13 +57,30 @@ public:
         return *this << std::string(s);
     }
 
+    indenter& operator<<(char c)
+    {
+        return *this << std::string(1, c);
+    }
+
+    indenter& operator<<(int i)
+    {
+        return *this << std::to_string(i);
+    }
+
 private:
+
+    void put(char c)
+    {
+        out.put(c);
+        out.flush();
+    }
 
     friend indenter& endl(indenter& ind);
     friend indenter& indent(indenter& ind);
     friend indenter& undent(indenter& ind);
 
-    const std::string istring = "    ";
+    std::ostream& out;
+    const std::string istring = "  ";
     int level = 0;
     bool pending = true;
 };

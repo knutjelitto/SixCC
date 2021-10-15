@@ -12,18 +12,32 @@ namespace sixpeg
     {
         namespace internal
         {
-            static bool simplify(alt_term& alt, term*& term)
-            {
-                if (alt.terms.size() == 1)
-                {
+            static void simplify(term*& term);
 
+            static void simplify(alt_term& alt, term*& term)
+            {
+                for (int i = 0; i < alt.terms.size(); i++)
+                {
+                    simplify(alt.terms[i]);
                 }
 
-                return false;
+                if (alt.terms.size() == 1)
+                {
+                    term = alt.terms[0];
+                }
             }
 
             static void simplify(seq_term& seq, term*& term)
             {
+                for (int i = 0; i < seq.terms.size(); i++)
+                {
+                    simplify(seq.terms[i]);
+                }
+
+                if (seq.terms.size() == 1)
+                {
+                    term = seq.terms[0];
+                }
             }
 
             static void simplify(term*& term)
@@ -165,7 +179,7 @@ namespace sixpeg
 
     ast::grammar* parse(string language, string name, string text)
     {
-        using namespace internal;
+        using namespace sixpeg::internal;
 
         grammar_info info;
 
@@ -184,10 +198,12 @@ namespace sixpeg
         if (!info.parser->parse(text, grammar))
         {
             cerr << "syntax error" << endl;
+            assert(grammar == nullptr);
         }
 
         info.parser->log = nullptr;
 
+        //return ast::internal::simplify(grammar);
         return grammar;
     }
 
