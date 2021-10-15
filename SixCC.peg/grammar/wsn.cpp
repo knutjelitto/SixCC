@@ -56,7 +56,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    seq->push_back(any_cast<term*>(v));
+                    seq->u.seq.terms.push_back(any_cast<term*>(v));
                 }
 
                 return seq;
@@ -70,7 +70,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    alt->push_back(any_cast<term*>(v));
+                    alt->u.alt.terms.push_back(any_cast<term*>(v));
                 }
 
                 return alt;
@@ -83,7 +83,7 @@ namespace sixpeg
                 auto id = any_cast<term*>(vs[0]);
                 auto expr = any_cast<term*>(vs[1]);
                 
-                auto rule = new ast::rule(id->text, expr);
+                auto rule = new ast::rule(id->u.token.text, expr);
 
                 return rule;
             };
@@ -96,7 +96,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    grammar->push_back(any_cast<ast::rule*>(v));
+                    grammar->rules.push_back(any_cast<ast::rule*>(v));
                 }
 
                 return grammar;

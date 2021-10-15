@@ -5,10 +5,6 @@
  */
 #define _CRT_SECURE_NO_WARNINGS
 
-#if !defined(__cplusplus) || __cplusplus < 201703L
-#error "Requires complete C++17 support"
-#endif
-
 #include <cassert>
 #include <stdexcept>
 #include <vector>
@@ -17,6 +13,7 @@
 #include <fstream>
 #include <iomanip>
 #include <algorithm>
+#include <stdexcept>
 
 #include <string.h>
 #include <stdlib.h>
@@ -210,30 +207,139 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
     }
 }
 
+using namespace sixpeg::ast;
+
+struct wsnwriter : outvisitor
+{
+    void write(const grammar& grammar)
+    {
+        grammar.accept(*this);
+    }
+
+    void visit() override
+    {
+        throw std::logic_error("internal error: visit not implemented");
+    }
+
+    void visit(const grammar& grammar, int level, bool first) override
+    {
+    }
+    void visit(const rule& rule, int level, bool first) override
+    {
+    }
+    void visit(const alt_term& term, int level, bool first) override
+    {
+    }
+    void visit(const group_term& term, int level, bool first) override
+    {
+    }
+
+    void enter(const rule& rule, int level, bool first) override
+    {
+        writer << rule.name << endl;
+        ++writer;
+    }
+
+    void leave(const rule& rule, int level, bool first) override
+    {
+        writer << "." << endl;
+        --writer;
+    }
+
+    void enter(const alt_term& term, int level, bool first) override
+    {
+        if (level == 1)
+        {
+            writer << (first ? "= " : "| ");
+        }
+        else
+        {
+            writer << (first ? "" : "|");
+        }
+    }
+
+    void leave(const alt_term& term, int level, bool first) override
+    {
+        if (level == 1)
+        {
+            writer << endl;
+        }
+    }
+
+    void visit(const seq_term& term, int level, bool first) override
+    {
+        if (!first)
+        {
+            writer << " ";
+        }
+    }
+
+    void enter(const group_term& term, int level, bool first) override
+    {
+        if (term.min == 1 && term.max == 1)
+        {
+            writer << "(";
+        }
+        else if (term.min == 0 && term.max == 1)
+        {
+            writer << "[";
+        }
+        else if (term.min == 0 && term.max == 0)
+        {
+            writer << "{";
+        }
+        else
+        {
+            throw std::logic_error("internal error: group not implemented");
+        }
+    }
+    void leave(const group_term& term, int level, bool first) override
+    {
+        if (term.min == 1 && term.max == 1)
+        {
+            writer << ")";
+        }
+        else if (term.min == 0 && term.max == 1)
+        {
+            writer << "]";
+        }
+        else if (term.min == 0 && term.max == 0)
+        {
+            writer << "}";
+        }
+        else
+        {
+            throw std::logic_error("internal error: group not implemented");
+        }
+    }
+
+    void visit(const token_term& term, int level, bool first) override
+    {
+        writer << term.text;
+    }
+
+    void visit(const literal_term& term, int level, bool first) override
+    {
+        writer << "\"" << term.text << "\"";
+    }
+
+    indenter writer;
+};
+
 void sixpegger()
 {
     using namespace std;
     using namespace sixpeg;
-    using namespace sixpeg::ast;
 
     //checker();
 
     grammar* grammar = parse("wsn", example("c_syntax.wsn"));
 
-    indenter writer;
+    wsnwriter writer;
 
-    for (grammar::iterator rule = grammar->begin(); rule < grammar->end(); rule++)
-    {
-        writer << (*rule)->name << endl;
-        writer << indent;
-        writer << "aaa" << endl;
-        writer << undent;
-        ++writer;
-        writer << "bbb" << endl;
-        --writer;
-    }
+    writer.write(*grammar);
 
-    cout << writer.str();
+    cout << writer.writer.str();
 
     ok_exit();
 }

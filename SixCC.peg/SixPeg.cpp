@@ -8,6 +8,50 @@ namespace sixpeg
     using namespace std;
     using namespace peg;
 
+    namespace ast
+    {
+        namespace internal
+        {
+            static bool simplify(alt_term& alt, term*& term)
+            {
+                if (alt.terms.size() == 1)
+                {
+
+                }
+
+                return false;
+            }
+
+            static void simplify(seq_term& seq, term*& term)
+            {
+            }
+
+            static void simplify(term*& term)
+            {
+                switch (term->type)
+                {
+                    case termtype::seq:
+                        simplify(term->u.seq, term);
+                        break;
+                    case termtype::alt:
+                        simplify(term->u.alt, term);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            grammar* simplify(grammar* grammar)
+            {
+                for (auto rule : grammar->rules)
+                {
+                    simplify(rule->term);
+                }
+                return grammar;
+            }
+        }
+    }
+
     namespace internal
     {
 #       include "grammar/bnf.peg"

@@ -1,9 +1,11 @@
 #pragma once
+
 #ifndef _indenter_h
 #define _indenter_h
 
 #include <string>
 #include <sstream>
+#include <format>
 
 class indenter : private std::ostringstream
 {
@@ -59,7 +61,7 @@ private:
     friend indenter& indent(indenter& ind);
     friend indenter& undent(indenter& ind);
 
-    const std::string istring = "__";
+    const std::string istring = "    ";
     int level = 0;
     bool pending = true;
 };
