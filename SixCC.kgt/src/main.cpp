@@ -11,14 +11,20 @@
 
 #include <cassert>
 #include <stdexcept>
-#include <fstream>
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <algorithm>
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "../../SixCC.peg/SixPeg.h"
+
+#include "indenter.h"
 
 #include "getopt.h"
 
@@ -99,7 +105,7 @@ std::string kout(std::string file)
     return "../../SixTmp/kgt/" + file;
 }
 
-std::string exin(std::string file)
+std::string example(std::string file)
 {
     return "examples/" + file;
 }
@@ -117,7 +123,7 @@ void tester()
 
         for (auto &sample : inable.samples)
         {
-            auto inputfile = exin(sample);
+            auto inputfile = example(sample);
             tester(inable, inputfile);
         }
     }
@@ -204,11 +210,37 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
     }
 }
 
-int main(int argc, char* argv[])
+void sixpegger()
 {
-    sixpeg::checker();
+    using namespace std;
+    using namespace sixpeg;
+    using namespace sixpeg::ast;
+
+    //checker();
+
+    grammar* grammar = parse("wsn", example("c_syntax.wsn"));
+
+    indenter writer;
+
+    for (grammar::iterator rule = grammar->begin(); rule < grammar->end(); rule++)
+    {
+        writer << (*rule)->name << endl;
+        writer << indent;
+        writer << "aaa" << endl;
+        writer << undent;
+        ++writer;
+        writer << "bbb" << endl;
+        --writer;
+    }
+
+    cout << writer.str();
 
     ok_exit();
+}
+
+int main(int argc, char* argv[])
+{
+    sixpegger();
 
     tester();
 

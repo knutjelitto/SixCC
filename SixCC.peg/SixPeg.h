@@ -33,6 +33,52 @@ namespace sixpeg
             seq,
         };
 
+        class term_core
+        {
+        public:
+            term_core(termtype type) : type(type)
+            {
+            }
+
+            termtype type;
+        };
+
+        class empty_term : public term_core
+        {
+        public:
+            empty_term() : term_core(termtype::empty) { }
+        };
+
+        class group_term : public term_core
+        {
+        public:
+            group_term(termx* term) : term_core(termtype::empty)
+            {
+            }
+        };
+
+        class termx final
+        {
+            termx(empty_term&& empty) : type(empty.type), u(move(empty))
+            {
+            }
+
+        public:
+            const termtype type;
+
+            static termx* empty()
+            {
+                return new termx(empty_term());
+            }
+
+            union terms_union
+            {
+                terms_union(empty_term&& empty) : empty(empty) {}
+
+                empty_term empty;
+            } u;
+        };
+
         class term final
         {
         public:
@@ -125,8 +171,12 @@ namespace sixpeg
             const term* const term;
         };
 
-        struct grammar : std::vector<rule*>
+        struct grammar : vector<rule*>
         {
+            using iterator = vector<rule*>::iterator;
         };
     }
+
+    IMEX ast::grammar* parse(std::string language, std::string name, std::string text);
+    IMEX ast::grammar* parse(std::string language, std::string filename);
 }

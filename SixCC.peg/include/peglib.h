@@ -268,6 +268,7 @@ namespace peg
                 case '\n': str += "\\n"; break;
                 case '\r': str += "\\r"; break;
                 case '\t': str += "\\t"; break;
+                case '\f': str += "\\f"; break;
                 default: str += c; break;
             }
         }
@@ -367,6 +368,10 @@ namespace peg
                         break;
                     case 't':
                         r += '\t';
+                        i++;
+                        break;
+                    case 'f':
+                        r += '\f';
                         i++;
                         break;
                     case '\'':
@@ -4394,7 +4399,7 @@ namespace peg
 
             g["Range"] <= cho(seq(g["Char"], chr('-'), g["Char"]), g["Char"]);
             g["Char"] <=
-                cho(seq(chr('\\'), cls("nrt'\"[]\\^")),
+                cho(seq(chr('\\'), cls("nrtf'\"[]\\^")),
                     seq(chr('\\'), cls("0-3"), cls("0-7"), cls("0-7")),
                     seq(chr('\\'), cls("0-7"), opt(cls("0-7"))),
                     seq(lit("\\x"), cls("0-9a-fA-F"), opt(cls("0-9a-fA-F"))),

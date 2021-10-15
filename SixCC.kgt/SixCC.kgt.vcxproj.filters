@@ -404,6 +404,9 @@
     <ClInclude Include="src\lexing-support.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\indenter.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\bnf\lexer.lx">

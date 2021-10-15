@@ -1,4 +1,6 @@
-static const char* antlr4peg = R"::::::::::(grammarSpec			<-	grammarDecl prequelConstruct* rules modeSpec* EOF
+static const char* antlr4peg = R"::::::::::(
+
+grammarSpec			<-	grammarDecl prequelConstruct* rules modeSpec* EOF
 
 grammarDecl			<-	grammarType identifier ';'
 
@@ -38,7 +40,7 @@ actionScopeName		<-	'lexer'
                     /	'parser'
                     /	identifier
 
-modeSpec			<-	'mode' identifier ';' lexerRuleSpec
+modeSpec			<-	'mode' identifier ';' lexerRuleSpec*
 
 rules				<-	ruleSpec*
 
@@ -190,32 +192,30 @@ rule_ref			<-	<  lletter letter_or_digit* ([-_] letter_or_digit+)* '_'? >
 
 token_ref			<-	< uletter letter_or_digit* ([-_] letter_or_digit+)* '_'? >
 
-string_literal		<-	< '\'' (!('\'' / '\\') string_char)* '\'' >
+string_literal		<-	< '\'' string_char* '\'' >
 
-string_char         <-  single_char / escaped_char
-
-lexer_char_set		<-	< '[' (char_range / single_char / escaped_char)+ ']' >
-
-char_range          <- single_char '-' single_char
-
-single_char         <-  ' '
-                    /   '('
-                    /   ')'
-                    /   '['
+string_char         <-  '"'
                     /   ']'
-                    /   '<'
-                    /   '>'
-                    /   '{'
-                    /   '}'
-                    /   '+'
-                    /   '-'
-                    /   '*'
-                    /   '/'
-                    /   '"'
-                    /   '\''
-                    /   [a-zA-Z0-9]
+                    /   '\\\''
+                    /   single_char
+                    /   escaped_char
 
-escaped_char        <-  '\\' ([rntf\\\'] / 'u' xdigit xdigit xdigit xdigit)
+lexer_char_set		<-	< '[' char_set_char+ ']' >
+
+char_set_char       <-  single_char_set_char '-' single_char_set_char
+                    /   single_char_set_char
+                    /   escaped_char
+
+single_char_set_char<-  single_char
+                    /   '\''
+                    /   '\"'
+
+single_char         <-  [ -!#-&(-,.-[_-~]
+                    /   '-'
+                    /   '_'
+                    /   '^'
+
+escaped_char        <-  '\\' ([rntf\\\'\"\]] / 'u' xdigit xdigit xdigit xdigit)
 
 
 action_block	    <-  '{' action_content* '}'
@@ -224,9 +224,18 @@ action_content		<-  identifier
                     /   '.'
                     /   ';'
                     /   ','
+                    /   '$'
+                    /   '!'
+                    /   '='
                     /   '(' action_content* ')'
                     /   '{' action_content* '}'
                     /   '[' action_content* ']'
+                    /   astring_literal
+                    /   anumber_literal
+
+astring_literal     <-  '"0"'
+
+anumber_literal     <-  digit+
 
 arg_action_block    <-	'[' action_content* ']'
 

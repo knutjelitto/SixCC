@@ -21,6 +21,8 @@
 #include "io.h"
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt *alt);
+WARN_UNUSED_RESULT static int output_rule(const struct ast_rule* rule);
+WARN_UNUSED_RESULT static int output_term(const struct ast_term* term);
 
 WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
@@ -125,7 +127,9 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 		case TYPE_GROUP:
 			if (!output_alt(term->group().front()))
+			{
 				return 0;
+			}
 			break;
 	}
 
@@ -184,4 +188,3 @@ WARN_UNUSED_RESULT int wsn_output(const ast_grammar& grammar)
 	}
 	return 1;
 }
-
