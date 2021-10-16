@@ -1,5 +1,5 @@
 translation_unit
-	= [translation_unit] external_decl
+	= { external_decl }
 	.
 external_decl
 	= function_definition

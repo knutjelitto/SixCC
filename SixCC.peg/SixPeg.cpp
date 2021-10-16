@@ -45,10 +45,13 @@ namespace sixpeg
                 switch (term->type)
                 {
                     case termtype::seq:
-                        simplify(term->u.seq, term);
+                        simplify(term->useq, term);
                         break;
                     case termtype::alt:
-                        simplify(term->u.alt, term);
+                        simplify(term->ualt, term);
+                        break;
+                    case termtype::group:
+                        simplify(term->ugroup.term);
                         break;
                     default:
                         break;
@@ -203,8 +206,8 @@ namespace sixpeg
 
         info.parser->log = nullptr;
 
-        //return ast::internal::simplify(grammar);
-        return grammar;
+        return ast::internal::simplify(grammar);
+        //return grammar;
     }
 
     void checker(void)

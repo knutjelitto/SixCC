@@ -7,13 +7,15 @@
 
 #include <cassert>
 #include <stdexcept>
-#include <vector>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <iomanip>
-#include <algorithm>
 #include <stdexcept>
+
+#include <vector>
+#include <stack>
+#include <algorithm>
 
 #include <string.h>
 #include <stdlib.h>
@@ -224,7 +226,7 @@ struct astwriter : outvisitor
     {
         writer << rule.name << endl;
         ++writer;
-        rule.term->accept(*this);
+        outvisitor::visit(*rule.term);
         --writer;
     }
 
@@ -234,12 +236,20 @@ struct astwriter : outvisitor
         {
             writer << "optional" << endl;
         }
+        else if (term.min == 0 && term.max == 0)
+        {
+            writer << "zero-or-more" << endl;
+        }
+        else if (term.min == 1 && term.max == 0)
+        {
+            writer << "one-or-more" << endl;
+        }
         else
         {
             writer << "group(" << term.min << "," << term.max << ")" << endl;
         }
         ++writer;
-        term.term->accept(*this);
+        outvisitor::visit(*term.term);
         --writer;
     }
 
@@ -274,74 +284,127 @@ struct astwriter : outvisitor
 
 struct wsnwriter : outvisitor
 {
+    int name_width = -1;
+    bool top = false;
+
     wsnwriter(std::ostream& out) : outvisitor(), writer(out)
     {
     }
 
     void write(grammar& grammar)
     {
+        int max_lenght = 0;
+
+        for (auto rule : grammar.rules)
+        {
+            if (rule->name.size() > max_lenght)
+            {
+                max_lenght = rule->name.size();
+            }
+        }
+
+        name_width = max_lenght;
+
         outvisitor::visit(grammar);
     }
 
     void visit(rule& rule) override
     {
-        writer << rule.name << endl;
-        ++writer;
-        writer << "= ";
-        rule.term->accept(*this);
-        writer << endl;
-        writer << "." << endl;
-        --writer;
+        writer << rule.name;
+        writer << string(name_width - rule.name.size(), ' ');
+        writer << " =";
+        if (rule.term->type == termtype::alt)
+        {
+            bool more = false;
+            for (auto term : rule.term->ualt.terms)
+            {
+                if (more)
+                {
+                    writer << endl;
+                    writer << string(name_width, ' ');
+                    writer << " |";
+                }
+                more = true;
+                outvisitor::visit(*term);
+            }
+        }
+        else
+        {
+            outvisitor::visit(*rule.term);
+        }
+        writer << " ." << endl;
     }
 
     void visit(group_term& term) override
     {
         if (term.min == 1 && term.max == 1)
         {
-            writer << "(";
+            writer << " (";
         }
         else if (term.min == 0 && term.max == 1)
         {
-            writer << "[";
+            writer << " [";
         }
         else if (term.min == 0 && term.max == 0)
         {
-            writer << "{";
+            writer << " {";
         }
         else
         {
             throw std::logic_error("internal error: group not implemented");
         }
 
-        term.term->accept(*this);
+        outvisitor::visit(*term.term);
 
         if (term.min == 1 && term.max == 1)
         {
-            writer << ")";
+            writer << " )";
         }
         else if (term.min == 0 && term.max == 1)
         {
-            writer << "]";
+            writer << " ]";
         }
         else if (term.min == 0 && term.max == 0)
         {
-            writer << "}";
+            writer << " }";
         }
         else
         {
             throw std::logic_error("internal error: group not implemented");
         }
 
+    }
+
+    void visit(seq_term& term) override
+    {
+        for (auto term : term.terms)
+        {
+            outvisitor::visit(*term);
+        }
+    }
+
+    void visit(alt_term& term) override
+    {
+        bool more = false;
+        for (auto term : term.terms)
+        {
+            if (more)
+            {
+                writer << " |";
+            }
+            more = true;
+            outvisitor::visit(*term);
+        }
     }
 
     void visit(token_term& term) override
     {
-        writer << " <space> " << term.text;
+        writer << " " << term.text;
     }
 
     void visit(literal_term& term) override
     {
-        writer << "\"" << term.text << "\"";
+        writer << " \"" << term.text << "\"";
     }
 
     indenter writer;
@@ -354,9 +417,10 @@ void sixpegger()
 
     //checker();
 
-    grammar* grammar = parse("wsn", example("c_syntax.wsn"));
+    //grammar* grammar = parse("wsn", example("c_syntax.wsn"));
+    grammar* grammar = parse("wsn", example("wsn.wsn"));
 
-    astwriter writer(cout);
+    wsnwriter writer(cout);
 
     writer.write(*grammar);
 

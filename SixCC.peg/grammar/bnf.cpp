@@ -41,7 +41,7 @@ namespace sixpeg
                 auto name = any_cast<ast::term*>(vs[0]);
                 auto term = any_cast<ast::term*>(vs[1]);
 
-                return new ast::rule(name->u.token.text, term);
+                return new ast::rule(name->utoken.text, term);
             };
 
             parser["lhs"] = [](const SemanticValues& vs)
@@ -72,7 +72,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    alt->u.alt.terms.push_back(any_cast<ast::term*>(v));
+                    alt->ualt.terms.push_back(any_cast<ast::term*>(v));
                 }
 
                 return alt;
@@ -86,7 +86,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    seq->u.seq.terms.push_back(any_cast<ast::term*>(v));
+                    seq->useq.terms.push_back(any_cast<ast::term*>(v));
                 }
 
                 return seq;

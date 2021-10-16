@@ -12,6 +12,21 @@ namespace sixpeg
 
         void setup_wsn(parser& parser)
         {
+            parser["character"] = [](const SemanticValues& vs)
+            {
+                auto text = vs.token_to_string();
+
+                switch (vs.choice())
+                {
+                    case 0:
+                        return text;
+                    case 1:
+                        return string("\"");
+                    default:
+                        throw "";
+                }
+            };
+
             parser["LITERAL"] = [](const SemanticValues& vs)
             {
                 assert(vs.token_to_string().size() >= 2);
@@ -56,7 +71,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    seq->u.seq.terms.push_back(any_cast<term*>(v));
+                    seq->useq.terms.push_back(any_cast<term*>(v));
                 }
 
                 return seq;
@@ -70,7 +85,7 @@ namespace sixpeg
 
                 for (auto& v : vs)
                 {
-                    alt->u.alt.terms.push_back(any_cast<term*>(v));
+                    alt->ualt.terms.push_back(any_cast<term*>(v));
                 }
 
                 return alt;
@@ -83,7 +98,7 @@ namespace sixpeg
                 auto id = any_cast<term*>(vs[0]);
                 auto expr = any_cast<term*>(vs[1]);
                 
-                auto rule = new ast::rule(id->u.token.text, expr);
+                auto rule = new ast::rule(id->utoken.text, expr);
 
                 return rule;
             };

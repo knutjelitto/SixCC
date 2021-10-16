@@ -143,40 +143,41 @@ namespace sixpeg
         class term final
         {
         private:
-            term(empty_term&& empty) : type(empty.type), u(move(empty))
-            {}
-
-            term(group_term&& group) : type(group.type), u(move(group))
-            {}
-
-            term(token_term&& token) : type(token.type), u(move(token))
-            {}
-
-            term(literal_term&& term) : type(term.type), u(move(term))
-            {}
-
-            term(iliteral_term&& term) : type(term.type), u(move(term))
-            {}
-
-            term(comment_term&& term) : type(term.type), u(move(term))
-            {}
-
-            term(prose_term&& term) : type(term.type), u(move(term))
-            {}
-
-            term(alt_term&& term) : type(term.type), u(move(term))
-            {}
-
-            term(seq_term&& term) : type(term.type), u(move(term))
-            {}
+            term(empty_term&& empty) : type(empty.type), uempty(move(empty))
+            {
+            }
+            term(group_term&& group) : type(group.type), ugroup(move(group))
+            {
+            }
+            term(alt_term&& term) : type(term.type), ualt(move(term))
+            {
+            }
+            term(seq_term&& term) : type(term.type), useq(move(term))
+            {
+            }
+            term(token_term&& token) : type(token.type), utoken(move(token))
+            {
+            }
+            term(literal_term&& term) : type(term.type), uliteral(move(term))
+            {
+            }
+            term(iliteral_term&& term) : type(term.type), uiliteral(move(term))
+            {
+            }
+            term(comment_term&& term) : type(term.type), ucomment(move(term))
+            {
+            }
+            term(prose_term&& term) : type(term.type), uprose(move(term))
+            {
+            }
 
         public:
             const termtype type;
 
             void loop(int min, int max)
             {
-                u.core.min = min;
-                u.core.max = max;
+                core.min = min;
+                core.max = max;
             }
 
             static term* empty()
@@ -245,69 +246,45 @@ namespace sixpeg
                     case termtype::empty:
                         break;
                     case termtype::group:
-                        u.group.~group_term();
+                        ugroup.~group_term();
                         break;
                     case termtype::alt:
-                        u.alt.~alt_term();
+                        ualt.~alt_term();
                         break;
                     case termtype::seq:
-                        u.seq.~seq_term();
+                        useq.~seq_term();
                         break;
                     case termtype::token:
-                        u.token.~token_term();
+                        utoken.~token_term();
                         break;
                     case termtype::literal:
-                        u.literal.~literal_term();
+                        uliteral.~literal_term();
                         break;
                     case termtype::iliteral:
-                        u.iliteral.~iliteral_term();
+                        uiliteral.~iliteral_term();
                         break;
                     case termtype::comment:
-                        u.comment.~comment_term();
+                        ucomment.~comment_term();
                         break;
                     case termtype::prose:
-                        u.prose.~prose_term();
+                        uprose.~prose_term();
                         break;
                 }
             }
 
-            union terms_union
+            union
             {
-                terms_union(empty_term&& empty) : empty(empty)
-                {}
-                terms_union(group_term&& group) : group(group)
-                {}
-                terms_union(token_term&& token) : token(token)
-                {}
-                terms_union(literal_term&& literal) : literal(literal)
-                {}
-                terms_union(iliteral_term&& iliteral) : iliteral(iliteral)
-                {}
-                terms_union(comment_term&& comment) : comment(comment)
-                {}
-                terms_union(prose_term&& prose) : prose(prose)
-                {}
-                terms_union(alt_term&& alt) : alt(alt)
-                {}
-                terms_union(seq_term&& seq) : seq(seq)
-                {}
-
-                ~terms_union()
-                {}
-
                 core_term core;
-                empty_term empty;
-                group_term group;
-                token_term token;
-                literal_term literal;
-                iliteral_term iliteral;
-                comment_term comment;
-                prose_term prose;
-                alt_term alt;
-                seq_term seq;
-            } u;
-
-            void accept(outvisitor& visitor);
+                empty_term uempty;
+                group_term ugroup;
+                token_term utoken;
+                literal_term uliteral;
+                iliteral_term uiliteral;
+                comment_term ucomment;
+                prose_term uprose;
+                alt_term ualt;
+                seq_term useq;
+            };
         };
 
         inline alt_term::~alt_term()
@@ -336,16 +313,12 @@ namespace sixpeg
 
             const std::string name;
             term* term;
-
-            void accept(outvisitor& visitor);
         };
 
         class grammar
         {
         public:
             std::vector<rule*> rules;
-
-            void accept(outvisitor& visitor);
         };
     
 
@@ -360,21 +333,15 @@ namespace sixpeg
             {
                 for (auto term : terms)
                 {
-                    term->accept(*this);
+                    visit(*term);
                 }
             }
 
             virtual void visit(std::vector<rule*>& rules)
             {
-                int count = 0;
                 for (auto rule : rules)
                 {
                     visit(*rule);
-
-                    if (++count == 2)
-                    {
-                        break;
-                    }
                 }
             }
 
@@ -423,55 +390,40 @@ namespace sixpeg
             {
                 visit();
             }
+            virtual void visit(term& term)
+            {
+                switch (term.type)
+                {
+                    case termtype::empty:
+                        visit(term.uempty);
+                        break;
+                    case termtype::group:
+                        visit(term.ugroup);
+                        break;
+                    case termtype::alt:
+                        visit(term.ualt);
+                        break;
+                    case termtype::seq:
+                        visit(term.useq);
+                        break;
+                    case termtype::token:
+                        visit(term.utoken);
+                        break;
+                    case termtype::literal:
+                        visit(term.uliteral);
+                        break;
+                    case termtype::iliteral:
+                        visit(term.uiliteral);
+                        break;
+                    case termtype::comment:
+                        visit(term.ucomment);
+                        break;
+                    case termtype::prose:
+                        visit(term.uprose);
+                        break;
+                }
+            }
         };
-
-        inline void term::accept(outvisitor& visitor)
-        {
-            switch (type)
-            {
-                case termtype::empty:
-                    visitor.visit(u.empty);
-                    break;
-                case termtype::group:
-                    visitor.visit(u.group);
-                    u.group.term->accept(visitor);
-                    break;
-                case termtype::alt:
-                    visitor.visit(u.alt);
-                    break;
-                case termtype::seq:
-                    visitor.visit(u.seq);
-                    break;
-                case termtype::token:
-                    visitor.visit(u.token);
-                    break;
-                case termtype::literal:
-                    visitor.visit(u.literal);
-                    break;
-                case termtype::iliteral:
-                    visitor.visit(u.iliteral);
-                    break;
-                case termtype::comment:
-                    visitor.visit(u.comment);
-                    break;
-                case termtype::prose:
-                    visitor.visit(u.prose);
-                    break;
-            }
-        }
-
-        inline void grammar::accept(outvisitor& visitor)
-        {
-            for (auto rule : rules)
-            {
-                rule->accept(visitor);
-            }
-        }
-
-        inline void rule::accept(outvisitor& visitor)
-        {
-            term->accept(visitor);
-        }
 
         namespace internal
         {
