@@ -86,13 +86,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;_DEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,7 +107,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;NDEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -126,13 +127,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_DEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,7 +148,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;NDEBUG;SIXCCPEG_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -163,34 +165,48 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
+    <ClInclude Include="ast.h" />
+    <ClInclude Include="files.h" />
     <ClInclude Include="include\peglib.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
+    <ClInclude Include="outputs\indenter.h" />
+    <ClInclude Include="outputs\outputs.h" />
+    <ClInclude Include="outputs\visitor.h" />
     <ClInclude Include="SixPeg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ast\simplifier.cpp" />
+    <ClCompile Include="ast\simplifier.h" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="grammar\antlr4.cpp" />
-    <ClCompile Include="grammar\bnf.cpp" />
-    <ClCompile Include="grammar\wsn.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="SixPeg.cpp" />
+    <ClCompile Include="files.cpp" />
+    <ClCompile Include="inputs\antlr4\antlr4.cpp" />
+    <ClCompile Include="inputs\bnf\bnf.cpp" />
+    <ClCompile Include="inputs\wsn\wsn.cpp" />
+    <ClCompile Include="outputs\ast\ast-writer.cpp" />
+    <ClCompile Include="outputs\indenter.cpp" />
+    <ClCompile Include="outputs\outputs.cpp" />
+    <ClCompile Include="outputs\visitor.cpp" />
+    <ClCompile Include="outputs\wsn\wsn-writer.cpp" />
+    <ClCompile Include="sixpeg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
-    <None Include="grammar\antlr4.peg" />
-    <None Include="grammar\antlr4.samples" />
-    <None Include="grammar\bnf.peg" />
-    <None Include="grammar\bnf.samples" />
-    <None Include="grammar\wsn.peg" />
-    <None Include="grammar\wsn.samples" />
+    <None Include="inputs\antlr4\antlr4.peg" />
+    <None Include="inputs\antlr4\samples\bnf.g4" />
+    <None Include="inputs\antlr4\samples\checker.g4" />
+    <None Include="inputs\antlr4\samples\minimal.g4" />
+    <None Include="inputs\bnf\bnf.peg" />
+    <None Include="inputs\bnf\samples\bnf.bnf" />
+    <None Include="inputs\bnf\samples\checker.bnf" />
+    <None Include="inputs\bnf\samples\expr.bnf" />
+    <None Include="inputs\bnf\samples\minimal.bnf" />
+    <None Include="inputs\bnf\samples\postal.bnf" />
+    <None Include="inputs\wsn\samples\bnf.wsn" />
+    <None Include="inputs\wsn\samples\c.wsn" />
+    <None Include="inputs\wsn\samples\checker.wsn" />
+    <None Include="inputs\wsn\samples\minimal.wsn" />
+    <None Include="inputs\wsn\samples\wsn.samples" />
+    <None Include="inputs\wsn\samples\wsn.wsn" />
+    <None Include="inputs\wsn\wsn.peg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

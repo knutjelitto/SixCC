@@ -1,47 +1,3 @@
-static const char* const wsn_checker =
-R"::::::::::(
-SYNTAX     = { PRODUCTION } .
-PRODUCTION = IDENTIFIER "=" EXPRESSION "." .
-EXPRESSION = TERM { "|" TERM } .
-TERM       = FACTOR { FACTOR } .
-FACTOR     = IDENTIFIER
-           | LITERAL
-           | "[" EXPRESSION "]"
-           | "(" EXPRESSION ")"
-           | "{" EXPRESSION "}" .
-IDENTIFIER = letter { letter } .
-LITERAL    = """" character { character } """" .
-)::::::::::";
-
-static const char* const wsn_wsn =
-R"::::::::::(
-SYNTAX     = { PRODUCTION } .
-PRODUCTION = IDENTIFIER "=" EXPRESSION "." .
-EXPRESSION = TERM { "|" TERM } .
-TERM       = FACTOR { FACTOR } .
-FACTOR     = IDENTIFIER
-           | LITERAL
-           | "[" EXPRESSION "]"
-           | "(" EXPRESSION ")"
-           | "{" EXPRESSION "}" .
-IDENTIFIER = letter { letter } .
-LITERAL    = """" character { character } """" .
-)::::::::::";
-
-static const char* const wsn_bnf =
-R"::::::::::(
-syntax         = rule [ syntax ] .
-rule           = "<" rule-name ">" "::="
-                 expression line-end .
-expression     = list [ "|" expression ] .
-line-end       = EOL | line-end line-end .
-list           = term [ list ] .
-term           = literal | "<" rule-name ">" .
-literal        = """" text """" | "'" text "'" .
-)::::::::::";
-
-static const char* const wsn_c_language =
-R"::::::::::(
 translation_unit
 	= [translation_unit] external_decl
 	.
@@ -260,4 +216,4 @@ const
 	| float_const
 	| enumeration_const
 	.
-)::::::::::";
+

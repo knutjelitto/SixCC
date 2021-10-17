@@ -29,9 +29,12 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <utility>
 
+#ifdef bullshit
 #if !defined(__cplusplus) || __cplusplus < 201703L
 #error "Requires complete C++17 support"
+#endif
 #endif
 
 namespace peg

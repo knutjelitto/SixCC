@@ -1,83 +1,20 @@
-#include "pch.h"
 #include "SixPeg.h"
 
 #include <fstream>
+
+#include "ast.h"
+#include "ast/simplifier.h"
+#include "files.h"
+#include "outputs/outputs.h"
+#include "include/peglib.h"
 
 namespace sixpeg
 {
     using namespace std;
     using namespace peg;
 
-    namespace ast
+    namespace input
     {
-        namespace internal
-        {
-            static void simplify(term*& term);
-
-            static void simplify(alt_term& alt, term*& term)
-            {
-                for (int i = 0; i < alt.terms.size(); i++)
-                {
-                    simplify(alt.terms[i]);
-                }
-
-                if (alt.terms.size() == 1)
-                {
-                    term = alt.terms[0];
-                }
-            }
-
-            static void simplify(seq_term& seq, term*& term)
-            {
-                for (int i = 0; i < seq.terms.size(); i++)
-                {
-                    simplify(seq.terms[i]);
-                }
-
-                if (seq.terms.size() == 1)
-                {
-                    term = seq.terms[0];
-                }
-            }
-
-            static void simplify(term*& term)
-            {
-                switch (term->type)
-                {
-                    case termtype::seq:
-                        simplify(term->useq, term);
-                        break;
-                    case termtype::alt:
-                        simplify(term->ualt, term);
-                        break;
-                    case termtype::group:
-                        simplify(term->ugroup.term);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            grammar* simplify(grammar* grammar)
-            {
-                for (auto rule : grammar->rules)
-                {
-                    simplify(rule->term);
-                }
-                return grammar;
-            }
-        }
-    }
-
-    namespace internal
-    {
-#       include "grammar/bnf.peg"
-#       include "grammar/bnf.samples"
-#       include "grammar/wsn.peg"
-#       include "grammar/wsn.samples"
-#       include "grammar/antlr4.peg"
-#       include "grammar/antlr4.samples"
-
         void setup_bnf(parser& parser);
         void setup_wsn(parser& parser);
         void setup_antlr4(parser& parser);
@@ -86,10 +23,10 @@ namespace sixpeg
         {
             string name;
             bool enabled;
-            string text;
+            string filename;
         };
 
-        struct grammar_info
+        struct input_info
         {
             string name;
             bool enabled;
@@ -99,33 +36,30 @@ namespace sixpeg
             vector<sample_info> samples;
         };
 
-        static grammar_info infos[] =
+        static input_info infos[] =
         {
-            { "bnf", true, bnfpeg, setup_bnf, nullptr, {
-                {"checker",         true,   bnf_ckecker},
-                {"bnf",             true,   bnf_bnf},
-                {"expr",            true,   bnf_expr},
-                {"postal",          true,   bnf_postal},
+            { "bnf", true, "bnf.peg", setup_bnf, nullptr, {
+                {"checker",         true,   "checker.bnf"},
+                {"checker",         true,   "minimal.bnf"},
+                {"bnf",             true,   "bnf.bnf"},
+                {"expr",            true,   "expr.bnf"},
+                {"postal",          true,   "postal.bnf"},
             }},
-            { "wsn", true, wsnpeg, setup_wsn, nullptr, {
-                {"checker",         true,   wsn_checker},
-                {"wsn",             true,   wsn_wsn},
-                {"bnf",             true,   wsn_bnf},
-                {"c-language",      true,   wsn_c_language},
+            { "wsn", true, "wsn.peg", setup_wsn, nullptr, {
+                {"minimal",         true,   "minimal.wsn"},
+                {"checker",         true,   "checker.wsn"},
+                {"wsn",             true,   "wsn.wsn"},
+                {"bnf",             true,   "bnf.wsn"},
+                {"c-language",      true,   "c.wsn"},
             }},
-            { "antlr4", true, antlr4peg, setup_antlr4, nullptr, {
-                {"minimal",         true,   antlr4_minimal},
-                {"checker",         true,   antlr4_checker},
-                {"bnf",             true,   antlr4_bnf},
-                {"antlr4-parser",   true,   antlr4_antlr4_parser},
-                {"antlr4-lexer",    true,   antlr4_antlr4_lexer},
-                {"antlr4-lexbasic", true,   antlr4_antlr4_lexbasic},
-                {"c++14-parser",    true,   antlr4_cpp14_parser},
-                {"c++14-lexer",     true,   antlr4_cpp14_lexer},
+            { "antlr4", true, "antlr4.peg", setup_antlr4, nullptr, {
+                {"minimal",         true,   "minimal.g4"},
+                {"checker",         true,   "checker.g4"},
+                {"bnf",             true,   "bnf.g4"},
             }},
         };
 
-        static bool find(string name, grammar_info& info)
+        static bool find(string name, input_info& info)
         {
             for (auto& i : infos)
             {
@@ -138,7 +72,7 @@ namespace sixpeg
             return false;
         }
 
-        static bool get_parser(string name, grammar_info& info)
+        static bool get_parser(string name, input_info& info)
         {
             if (!find(name, info))
             {
@@ -159,7 +93,10 @@ namespace sixpeg
 
             parser->enable_packrat_parsing(); // Enable packrat parsing.
 
-            if (!parser->load_grammar(info.grammar_source))
+            string pegfilename = "inputs/" + info.name + "/" + info.grammar_source;
+            string pegsource = read_file_content(pegfilename);
+
+            if (!parser->load_grammar(pegsource))
             {
                 return false;
             }
@@ -172,19 +109,11 @@ namespace sixpeg
         }
     }
 
-    ast::grammar* parse(string language, string filename)
+    ghandle parse(string language, string name, string text)
     {
-        ifstream newf(filename);
-        string text((istreambuf_iterator<char>(newf)), (istreambuf_iterator<char>()));
+        using namespace sixpeg::input;
 
-        return parse(language, filename, text);
-    }
-
-    ast::grammar* parse(string language, string name, string text)
-    {
-        using namespace sixpeg::internal;
-
-        grammar_info info;
+        input_info info;
 
         if (!get_parser(language, info))
         {
@@ -206,29 +135,46 @@ namespace sixpeg
 
         info.parser->log = nullptr;
 
-        return ast::internal::simplify(grammar);
-        //return grammar;
+        return sixpeg::ast::simplify(grammar);
     }
 
-    void checker(void)
+    bool unparse(std::string format, ghandle grammar)
     {
-        using namespace internal;
+        sixpeg::output::output(format, (ast::grammar*)grammar);
 
-        for (auto& i : infos)
+        return true;
+    }
+
+    void check_one()
+    {
+        string in_format = "wsn";
+        string in_file = "wsn.wsn";
+        string out_format = "wsn";
+
+        auto grammar = sixpeg::parse(in_format, in_file, read_sample(in_format, in_file));
+
+        sixpeg::unparse(out_format, grammar);
+    }
+
+    void check_all()
+    {
+        using namespace input;
+
+        for (auto& info : infos)
         {
-            grammar_info info;
-
-            if (!get_parser(i.name, info))
+            if (!info.enabled)
             {
-                cerr << "internal error" << endl;
                 continue;
             }
 
             cout << info.name << ":";
             if (info.parser == nullptr)
             {
-                cerr << " -parser-defect-" << endl;
-                continue;
+                if (!get_parser(info.name, info))
+                {
+                    cerr << " -parser-defect-" << endl;
+                    continue;
+                }
             }
             for (auto sample : info.samples)
             {
@@ -236,15 +182,20 @@ namespace sixpeg
                 {
                     continue;
                 }
-                cout << " " << sample.name;
+
+                string name = "inputs/" + info.name + "/samples/" + sample.filename;
+
+                cout << " " << sample.filename;
+
+                string text = read_sample(info.name, sample.filename);
 
                 info.parser->log = [&](size_t line, size_t col, const std::string& msg)
                 {
-                    cerr << endl << sample.name << "(" << line << "," << col << "): " << msg << endl;
+                    cerr << endl << name << "(" << line << "," << col << "): " << msg << endl;
                 };
 
                 ast::grammar* grammar = nullptr;
-                if (!info.parser->parse(sample.text, grammar))
+                if (!info.parser->parse(text, grammar))
                 {
                     std::cerr << "syntax error" << std::endl;
                 }

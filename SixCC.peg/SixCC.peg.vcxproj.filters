@@ -1,80 +1,147 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{5b329109-06e3-4950-90f1-026a7780b53f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="grammar">
-      <UniqueIdentifier>{23d04732-0569-483c-9187-0bfcad364683}</UniqueIdentifier>
+    <Filter Include="inputs">
+      <UniqueIdentifier>{5411cf7f-c4e9-4474-9e93-25e908279469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\antlr4">
+      <UniqueIdentifier>{b513e5b6-53ed-4080-8181-e80dfc9b8f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\antlr4\samples">
+      <UniqueIdentifier>{fdc973d7-b237-43ac-a677-a0377d04542d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\bnf">
+      <UniqueIdentifier>{a915e3a0-804f-45f6-bf30-e57b424d35e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\bnf\samples">
+      <UniqueIdentifier>{39cb2775-043c-4e60-b62f-6f8012fe157f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\wsn">
+      <UniqueIdentifier>{d1a857c3-dac6-4849-a03d-f77a7e924eb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\wsn\samples">
+      <UniqueIdentifier>{ba4c8597-fe14-4bc2-9dd9-e9a3155d0af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="outputs">
+      <UniqueIdentifier>{2117f438-f731-4b26-bbac-5997d712647c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="outputs\wsn">
+      <UniqueIdentifier>{f3b7f229-7833-4b7a-962e-23c9f5f5bb11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="outputs\ast">
+      <UniqueIdentifier>{7014a5b4-1ceb-49aa-bd5a-43f377f10e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ast">
+      <UniqueIdentifier>{3143f39e-551c-49ed-ba76-36de749e4d7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\peglib.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="SixPeg.h" />
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="outputs\indenter.h">
+      <Filter>outputs</Filter>
     </ClInclude>
-    <ClInclude Include="resource1.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="outputs\visitor.h">
+      <Filter>outputs</Filter>
     </ClInclude>
+    <ClInclude Include="ast.h" />
+    <ClInclude Include="outputs\outputs.h">
+      <Filter>outputs</Filter>
+    </ClInclude>
+    <ClInclude Include="files.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="sixpeg.cpp" />
+    <ClCompile Include="inputs\antlr4\antlr4.cpp">
+      <Filter>inputs\antlr4</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="inputs\bnf\bnf.cpp">
+      <Filter>inputs\bnf</Filter>
     </ClCompile>
-    <ClCompile Include="SixPeg.cpp" />
-    <ClCompile Include="grammar\wsn.cpp">
-      <Filter>grammar</Filter>
+    <ClCompile Include="inputs\wsn\wsn.cpp">
+      <Filter>inputs\wsn</Filter>
     </ClCompile>
-    <ClCompile Include="grammar\bnf.cpp">
-      <Filter>grammar</Filter>
+    <ClCompile Include="outputs\ast\ast-writer.cpp">
+      <Filter>outputs\ast</Filter>
     </ClCompile>
-    <ClCompile Include="grammar\antlr4.cpp">
-      <Filter>grammar</Filter>
+    <ClCompile Include="outputs\wsn\wsn-writer.cpp">
+      <Filter>outputs\wsn</Filter>
+    </ClCompile>
+    <ClCompile Include="outputs\indenter.cpp">
+      <Filter>outputs</Filter>
+    </ClCompile>
+    <ClCompile Include="outputs\visitor.cpp">
+      <Filter>outputs</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="files.cpp" />
+    <ClCompile Include="ast\simplifier.h">
+      <Filter>ast</Filter>
+    </ClCompile>
+    <ClCompile Include="ast\simplifier.cpp">
+      <Filter>ast</Filter>
+    </ClCompile>
+    <ClCompile Include="outputs\outputs.cpp">
+      <Filter>outputs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="grammar\bnf.peg">
-      <Filter>grammar</Filter>
-    </None>
-    <None Include="grammar\wsn.peg">
-      <Filter>grammar</Filter>
-    </None>
     <None Include="cpp.hint" />
-    <None Include="grammar\bnf.samples">
-      <Filter>grammar</Filter>
+    <None Include="inputs\antlr4\antlr4.peg">
+      <Filter>inputs\antlr4</Filter>
     </None>
-    <None Include="grammar\wsn.samples">
-      <Filter>grammar</Filter>
+    <None Include="inputs\bnf\bnf.peg">
+      <Filter>inputs\bnf</Filter>
     </None>
-    <None Include="grammar\antlr4.peg">
-      <Filter>grammar</Filter>
+    <None Include="inputs\wsn\wsn.peg">
+      <Filter>inputs\wsn</Filter>
     </None>
-    <None Include="grammar\antlr4.samples">
-      <Filter>grammar</Filter>
+    <None Include="inputs\wsn\samples\wsn.samples">
+      <Filter>inputs\wsn\samples</Filter>
+    </None>
+    <None Include="inputs\wsn\samples\wsn.wsn">
+      <Filter>inputs\wsn\samples</Filter>
+    </None>
+    <None Include="inputs\wsn\samples\bnf.wsn">
+      <Filter>inputs\wsn\samples</Filter>
+    </None>
+    <None Include="inputs\wsn\samples\c.wsn">
+      <Filter>inputs\wsn\samples</Filter>
+    </None>
+    <None Include="inputs\wsn\samples\checker.wsn">
+      <Filter>inputs\wsn\samples</Filter>
+    </None>
+    <None Include="inputs\wsn\samples\minimal.wsn">
+      <Filter>inputs\wsn\samples</Filter>
+    </None>
+    <None Include="inputs\bnf\samples\bnf.bnf">
+      <Filter>inputs\bnf\samples</Filter>
+    </None>
+    <None Include="inputs\bnf\samples\checker.bnf">
+      <Filter>inputs\bnf\samples</Filter>
+    </None>
+    <None Include="inputs\bnf\samples\expr.bnf">
+      <Filter>inputs\bnf\samples</Filter>
+    </None>
+    <None Include="inputs\bnf\samples\minimal.bnf">
+      <Filter>inputs\bnf\samples</Filter>
+    </None>
+    <None Include="inputs\bnf\samples\postal.bnf">
+      <Filter>inputs\bnf\samples</Filter>
+    </None>
+    <None Include="inputs\antlr4\samples\bnf.g4">
+      <Filter>inputs\antlr4\samples</Filter>
+    </None>
+    <None Include="inputs\antlr4\samples\checker.g4">
+      <Filter>inputs\antlr4\samples</Filter>
+    </None>
+    <None Include="inputs\antlr4\samples\minimal.g4">
+      <Filter>inputs\antlr4\samples</Filter>
     </None>
   </ItemGroup>
 </Project>
