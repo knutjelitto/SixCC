@@ -20,10 +20,15 @@ namespace sixpeg
     {
         struct Parser
         {
-            Parser(string format);
+            Parser(string format) : format(format)
+            {
+            }
             virtual void setup() = 0;
-            bool create(string format);
+            bool create();
             void* p = nullptr;
+            const string format;
+            function<void(size_t, size_t, const string& msg)> log;
+            bool parse(const string& text, grammar*& g);
         };
 
         struct SixgParser : Parser
@@ -63,7 +68,7 @@ namespace sixpeg
             bool enabled;
             std::string grammar_source;
             std::function<Parser* (void)> create;
-            parser* parser;
+            Parser* parser;
             std::vector<sample_info> samples;
         };
 
@@ -104,12 +109,7 @@ namespace sixpeg
             return false;
         }
 
-        Parser::Parser(string format)
-        {
-            create(format);
-        }
-
-        bool Parser::create(string name)
+        bool Parser::create()
         {
             if (p != nullptr)
             {
@@ -120,12 +120,12 @@ namespace sixpeg
 
             parser->log = [&](size_t line, size_t col, const std::string& msg)
             {
-                cerr << name << "(" << line << "," << col << "): " << msg << endl;
+                cerr << format << "(" << line << "," << col << "): " << msg << endl;
             };
 
             parser->enable_packrat_parsing(); // Enable packrat parsing.
 
-            std::string pegfilename = "inputs/" + name + "/" + name + ".peg";
+            std::string pegfilename = "inputs/" + format + "/" + format + ".peg";
             std::string pegsource = read_file_content(pegfilename);
 
             if (!parser->load_grammar(pegsource))
@@ -140,6 +140,11 @@ namespace sixpeg
             return true;
         }
 
+        bool Parser::parse(const string& text, grammar*& g)
+        {
+            return ((parser*)p)->parse(text, g);
+        }
+
         export bool get_parser(std::string name, input_info& info)
         {
             if (!find(name, info))
@@ -152,26 +157,10 @@ namespace sixpeg
                 return true;
             }
 
-            parser* parser = new peg::parser();
+            Parser* p = info.create();
+            p->create();
 
-            parser->log = [&](size_t line, size_t col, const std::string& msg)
-            {
-                cerr << name << "(" << line << "," << col << "): " << msg << endl;
-            };
-
-            parser->enable_packrat_parsing(); // Enable packrat parsing.
-
-            std::string pegfilename = "inputs/" + name + "/" + name + ".peg";
-            std::string pegsource = read_file_content(pegfilename);
-
-            if (!parser->load_grammar(pegsource))
-            {
-                return false;
-            }
-
-            info.create()->setup(*parser);
-
-            info.parser = parser;
+            info.parser = p;
 
             return true;
         }

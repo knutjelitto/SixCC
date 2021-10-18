@@ -13,7 +13,7 @@ namespace sixpeg::input
     using namespace std;
     using namespace peg;
     using namespace ast;
-
+        
     void setup_sixg(parser& parser);
 
     void SixgParser::setup()
