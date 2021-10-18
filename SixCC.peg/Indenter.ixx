@@ -1,15 +1,12 @@
-#pragma once
+export module Indenter;
 
-#ifndef _indenter_h
-#define _indenter_h
-
-#include <string>
-#include <iostream>
-#include <sstream>
+import <string>;
+import <iostream>;
+import <sstream>;
 
 namespace sixpeg
 {
-    class indenter
+    export class indenter
     {
     public:
 
@@ -86,9 +83,20 @@ namespace sixpeg
         bool pending = true;
     };
 
-    indenter& endl(indenter& ind);
-    indenter& indent(indenter& ind);
-    indenter& undent(indenter& ind);
-}
+    export indenter& endl(indenter& ind)
+    {
+        ind.put('\n');
+        ind.pending = true;
+        return ind;
+    }
 
-#endif
+    export indenter& indent(indenter& ind)
+    {
+        return ++ind;
+    }
+
+    export indenter& undent(indenter& ind)
+    {
+        return --ind;
+    }
+}

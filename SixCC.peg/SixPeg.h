@@ -10,12 +10,11 @@
 
 namespace sixpeg
 {
+    typedef void* ghandle;
+
     IMEX void check_all();
     IMEX void check_one();
 
-    typedef void* ghandle;
-
     IMEX ghandle parse(std::string format, std::string name, std::string text);
-
     IMEX bool unparse(std::string format, ghandle grammar);
 }

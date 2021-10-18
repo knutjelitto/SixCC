@@ -34,26 +34,12 @@
     <Filter Include="outputs\ast">
       <UniqueIdentifier>{7014a5b4-1ceb-49aa-bd5a-43f377f10e6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ast">
-      <UniqueIdentifier>{3143f39e-551c-49ed-ba76-36de749e4d7f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="sixpeg.h" />
     <ClInclude Include="include\peglib.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="SixPeg.h" />
-    <ClInclude Include="outputs\indenter.h">
-      <Filter>outputs</Filter>
-    </ClInclude>
-    <ClInclude Include="outputs\visitor.h">
-      <Filter>outputs</Filter>
-    </ClInclude>
-    <ClInclude Include="ast.h" />
-    <ClInclude Include="outputs\outputs.h">
-      <Filter>outputs</Filter>
-    </ClInclude>
-    <ClInclude Include="files.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sixpeg.cpp" />
@@ -66,29 +52,19 @@
     <ClCompile Include="inputs\wsn\wsn.cpp">
       <Filter>inputs\wsn</Filter>
     </ClCompile>
-    <ClCompile Include="outputs\ast\ast-writer.cpp">
+    <ClCompile Include="outputs\ast\OutputAst.cpp">
       <Filter>outputs\ast</Filter>
     </ClCompile>
-    <ClCompile Include="outputs\wsn\wsn-writer.cpp">
+    <ClCompile Include="outputs\wsn\OutputWsn.cpp">
       <Filter>outputs\wsn</Filter>
     </ClCompile>
-    <ClCompile Include="outputs\indenter.cpp">
-      <Filter>outputs</Filter>
-    </ClCompile>
-    <ClCompile Include="outputs\visitor.cpp">
-      <Filter>outputs</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="files.cpp" />
-    <ClCompile Include="ast\simplifier.h">
-      <Filter>ast</Filter>
-    </ClCompile>
-    <ClCompile Include="ast\simplifier.cpp">
-      <Filter>ast</Filter>
-    </ClCompile>
-    <ClCompile Include="outputs\outputs.cpp">
-      <Filter>outputs</Filter>
-    </ClCompile>
+    <ClCompile Include="Files.ixx" />
+    <ClCompile Include="Ast.ixx" />
+    <ClCompile Include="Inputs.ixx" />
+    <ClCompile Include="Indenter.ixx" />
+    <ClCompile Include="Outputs.ixx" />
+    <ClCompile Include="Visitor.ixx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

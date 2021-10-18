@@ -1,4 +1,6 @@
-#include "simplifier.h"
+#pragma warning(disable: 5201)
+
+module Ast;
 
 namespace sixpeg
 {

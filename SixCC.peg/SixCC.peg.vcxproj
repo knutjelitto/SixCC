@@ -29,7 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>ClangCL</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>ClangCL</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -94,6 +94,8 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeaderFile />
       <PrecompiledHeaderOutputFile />
+      <AdditionalIncludeDirectories>D:\Six\SixCC.peg\ast</AdditionalIncludeDirectories>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,6 +137,8 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeaderFile />
       <PrecompiledHeaderOutputFile />
+      <AdditionalIncludeDirectories>D:\Six\SixCC.peg\ast</AdditionalIncludeDirectories>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,28 +169,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ast.h" />
-    <ClInclude Include="files.h" />
-    <ClInclude Include="include\peglib.h" />
-    <ClInclude Include="outputs\indenter.h" />
-    <ClInclude Include="outputs\outputs.h" />
-    <ClInclude Include="outputs\visitor.h" />
-    <ClInclude Include="SixPeg.h" />
+    <ClInclude Include="include\peglib.h">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsHeaderUnit</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsHeaderUnit</CompileAs>
+    </ClInclude>
+    <ClInclude Include="sixpeg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ast\simplifier.cpp" />
-    <ClCompile Include="ast\simplifier.h" />
+    <ClCompile Include="Ast.ixx" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="files.cpp" />
+    <ClCompile Include="Files.ixx" />
+    <ClCompile Include="Indenter.ixx" />
     <ClCompile Include="inputs\antlr4\antlr4.cpp" />
     <ClCompile Include="inputs\bnf\bnf.cpp" />
     <ClCompile Include="inputs\wsn\wsn.cpp" />
-    <ClCompile Include="outputs\ast\ast-writer.cpp" />
-    <ClCompile Include="outputs\indenter.cpp" />
-    <ClCompile Include="outputs\outputs.cpp" />
-    <ClCompile Include="outputs\visitor.cpp" />
-    <ClCompile Include="outputs\wsn\wsn-writer.cpp" />
+    <ClCompile Include="Inputs.ixx" />
+    <ClCompile Include="Outputs.ixx" />
+    <ClCompile Include="outputs\ast\OutputAst.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCppModuleInternalPartition</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCppModuleInternalPartition</CompileAs>
+    </ClCompile>
+    <ClCompile Include="outputs\wsn\OutputWsn.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCppModuleInternalPartition</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCppModuleInternalPartition</CompileAs>
+    </ClCompile>
     <ClCompile Include="sixpeg.cpp" />
+    <ClCompile Include="Visitor.ixx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

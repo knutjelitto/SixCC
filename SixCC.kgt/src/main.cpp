@@ -211,7 +211,7 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
 
 void sixpegger()
 {
-    sixpeg::check_all();
+    //sixpeg::check_all();
 
     sixpeg::check_one();
 

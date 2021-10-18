@@ -1,5 +1,9 @@
+#pragma warning(disable : 5201)
 #include "../../include/peglib.h"
-#include "../../ast.h"
+
+module Inputs;
+
+import Ast;
 
 namespace sixpeg::input
 {

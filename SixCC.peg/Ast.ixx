@@ -1,16 +1,14 @@
-#pragma once
+export module Ast;
 
-#ifndef _ast_h
-#define _ast_h
-
-#include <string>
-#include <vector>
+import <string>;
+import <vector>;
+import <utility>;
 
 namespace sixpeg::ast
 {
     using namespace std;
 
-    enum class termtype
+    export enum class termtype
     {
         empty = 42,
         group,
@@ -23,9 +21,9 @@ namespace sixpeg::ast
         prose,
     };
 
-    class term;
+    export class term;
 
-    class core_term
+    export class core_term
     {
     public:
         core_term(termtype type) : type(type)
@@ -35,7 +33,7 @@ namespace sixpeg::ast
         termtype type;
     };
 
-    class empty_term final : public core_term
+    export class empty_term final : public core_term
     {
     public:
         empty_term() : core_term(termtype::empty)
@@ -43,7 +41,7 @@ namespace sixpeg::ast
         }
     };
 
-    class group_term final : public core_term
+    export class group_term final : public core_term
     {
     public:
         explicit group_term(term* term, int min = 1, int max = 1)
@@ -56,7 +54,7 @@ namespace sixpeg::ast
         int max;
     };
 
-    class alt_term final : public core_term
+    export class alt_term final : public core_term
     {
     public:
         alt_term(std::vector<term*> terms) : core_term(termtype::alt), terms(terms)
@@ -71,7 +69,7 @@ namespace sixpeg::ast
         std::vector<term*> terms;
     };
 
-    class seq_term final : public core_term
+    export class seq_term final : public core_term
     {
     public:
         seq_term(std::vector<term*> terms) : core_term(termtype::seq), terms(terms)
@@ -86,7 +84,7 @@ namespace sixpeg::ast
         std::vector<term*> terms;
     };
 
-    class with_text_term : public core_term
+    export class with_text_term : public core_term
     {
     public:
         with_text_term(termtype type, const std::string& text) : core_term(type), text(text)
@@ -96,7 +94,7 @@ namespace sixpeg::ast
         const std::string text;
     };
 
-    class token_term final : public with_text_term
+    export class token_term final : public with_text_term
     {
     public:
         token_term(const std::string& text) : with_text_term(termtype::token, text)
@@ -104,7 +102,7 @@ namespace sixpeg::ast
         }
     };
 
-    class literal_term final : public with_text_term
+    export class literal_term final : public with_text_term
     {
     public:
         literal_term(const std::string text) : with_text_term(termtype::literal, text)
@@ -112,7 +110,7 @@ namespace sixpeg::ast
         }
     };
 
-    class iliteral_term final : public with_text_term
+    export class iliteral_term final : public with_text_term
     {
     public:
         iliteral_term(const std::string text) : with_text_term(termtype::iliteral, text)
@@ -120,7 +118,7 @@ namespace sixpeg::ast
         }
     };
 
-    class comment_term final : public with_text_term
+    export class comment_term final : public with_text_term
     {
     public:
         comment_term(const std::string text) : with_text_term(termtype::comment, text)
@@ -128,7 +126,7 @@ namespace sixpeg::ast
         }
     };
 
-    class prose_term final : public with_text_term
+    export class prose_term final : public with_text_term
     {
     public:
         prose_term(const std::string text) : with_text_term(termtype::prose, text)
@@ -136,10 +134,10 @@ namespace sixpeg::ast
         }
     };
 
-    class term final
+    export class term final
     {
     private:
-        term(empty_term&& empty) : type(empty.type), uempty(move(empty))
+        term(empty_term&& empty) : type(empty.type), uempty(std::move(empty))
         {
         }
         term(group_term&& group) : type(group.type), ugroup(move(group))
@@ -298,7 +296,7 @@ namespace sixpeg::ast
         }
     }
 
-    class rule
+    export class rule
     {
     public:
         rule(const string& name, term* term)
@@ -310,10 +308,61 @@ namespace sixpeg::ast
         term* term;
     };
 
-    class grammar
+    export class grammar
     {
     public:
         std::vector<rule*> rules;
+
+        grammar* simplify()
+        {
+            for (auto rule : rules)
+            {
+                simplify(rule->term);
+            }
+            return this;
+        }
+
+    private:
+        void simplify(term*& term)
+        {
+            switch (term->type)
+            {
+                case termtype::seq:
+                    simplify(term->useq, term);
+                    break;
+                case termtype::alt:
+                    simplify(term->ualt, term);
+                    break;
+                case termtype::group:
+                    simplify(term->ugroup.term);
+                    break;
+                default:
+                    break;
+            }
+        }
+        void simplify(alt_term& alt, term*& term)
+        {
+            for (int i = 0; i < alt.terms.size(); i++)
+            {
+                simplify(alt.terms[i]);
+            }
+
+            if (alt.terms.size() == 1)
+            {
+                term = alt.terms[0];
+            }
+        }
+        void simplify(seq_term& seq, term*& term)
+        {
+            for (int i = 0; i < seq.terms.size(); i++)
+            {
+                simplify(seq.terms[i]);
+            }
+
+            if (seq.terms.size() == 1)
+            {
+                term = seq.terms[0];
+            }
+        }
     };
 }
-#endif
