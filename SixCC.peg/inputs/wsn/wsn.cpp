@@ -11,6 +11,13 @@ namespace sixpeg::input
     using namespace peg;
     using namespace ast;
 
+    void setup_wsn(parser& parser);
+
+    void WsnParser::setup()
+    {
+        setup_wsn(*(parser*)p);
+    }
+
     void setup_wsn(parser& parser)
     {
         parser["character"] = [](const SemanticValues& vs)

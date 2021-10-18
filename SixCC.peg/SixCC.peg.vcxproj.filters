@@ -7,12 +7,6 @@
     <Filter Include="inputs">
       <UniqueIdentifier>{5411cf7f-c4e9-4474-9e93-25e908279469}</UniqueIdentifier>
     </Filter>
-    <Filter Include="inputs\antlr4">
-      <UniqueIdentifier>{b513e5b6-53ed-4080-8181-e80dfc9b8f1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inputs\antlr4\samples">
-      <UniqueIdentifier>{fdc973d7-b237-43ac-a677-a0377d04542d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="inputs\bnf">
       <UniqueIdentifier>{a915e3a0-804f-45f6-bf30-e57b424d35e9}</UniqueIdentifier>
     </Filter>
@@ -34,6 +28,12 @@
     <Filter Include="outputs\ast">
       <UniqueIdentifier>{7014a5b4-1ceb-49aa-bd5a-43f377f10e6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inputs\sixg">
+      <UniqueIdentifier>{2e1ce0a0-ecf0-46cc-8cc9-54afeb118ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inputs\sixg\samples">
+      <UniqueIdentifier>{82a21b18-59ab-4088-91bd-465611fcd593}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sixpeg.h" />
@@ -43,9 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sixpeg.cpp" />
-    <ClCompile Include="inputs\antlr4\antlr4.cpp">
-      <Filter>inputs\antlr4</Filter>
-    </ClCompile>
     <ClCompile Include="inputs\bnf\bnf.cpp">
       <Filter>inputs\bnf</Filter>
     </ClCompile>
@@ -65,12 +62,12 @@
     <ClCompile Include="Indenter.ixx" />
     <ClCompile Include="Outputs.ixx" />
     <ClCompile Include="Visitor.ixx" />
+    <ClCompile Include="inputs\sixg\sixg.cpp">
+      <Filter>inputs\sixg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
-    <None Include="inputs\antlr4\antlr4.peg">
-      <Filter>inputs\antlr4</Filter>
-    </None>
     <None Include="inputs\bnf\bnf.peg">
       <Filter>inputs\bnf</Filter>
     </None>
@@ -110,14 +107,17 @@
     <None Include="inputs\bnf\samples\postal.bnf">
       <Filter>inputs\bnf\samples</Filter>
     </None>
-    <None Include="inputs\antlr4\samples\bnf.g4">
-      <Filter>inputs\antlr4\samples</Filter>
+    <None Include="inputs\sixg\sixg.peg">
+      <Filter>inputs\sixg</Filter>
     </None>
-    <None Include="inputs\antlr4\samples\checker.g4">
-      <Filter>inputs\antlr4\samples</Filter>
+    <None Include="inputs\sixg\samples\bnf.sixg">
+      <Filter>inputs\sixg\samples</Filter>
     </None>
-    <None Include="inputs\antlr4\samples\minimal.g4">
-      <Filter>inputs\antlr4\samples</Filter>
+    <None Include="inputs\sixg\samples\checker.sixg">
+      <Filter>inputs\sixg\samples</Filter>
+    </None>
+    <None Include="inputs\sixg\samples\minimal.sixg">
+      <Filter>inputs\sixg\samples</Filter>
     </None>
   </ItemGroup>
 </Project>

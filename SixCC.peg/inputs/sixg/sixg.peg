@@ -1,0 +1,56 @@
+grammar             <-  'grammar' identifier ';' rule_list EOF
+
+rule_list           <-  rule*
+
+rule		        <-  rule_identifier ':' expression ';'
+
+rule_identifier     <-  < identifier >
+                    /   < '%' ('skip' / 'whitespace') >
+
+expression			<-  alternatives
+
+alternatives		<-  sequence ('|' sequence)*
+
+sequence			<-  element*
+
+element				<-  atom suffix?
+
+atom				<-	identifier
+                    /   range
+                    /   string
+                    /   '(' expression ')'
+                    /	'~' atom
+
+suffix              <-  '?' '?'?
+                    /   '*' '?'?
+                    /   '+' '?'?
+
+range		        <-	string '..' string
+
+
+identifier          <-	< id_start id_continue* >
+
+id_start            <-  letter (letter / digit)*
+
+id_continue         <-  '-' (letter / digit)+
+
+letter				<-	[a-z] / [A-Z]
+
+digit				<-	[0-9]
+
+string              <-  < '\'' char* '\'' >
+
+char                <-  (!'\'' .)
+
+%whitespace         <-  (comment / space)*
+
+space				<-	< [ \t\r\n] >
+
+comment				<-	line_comment
+                    /	block_comment
+
+line_comment		<-	< '//' (![\r\n] .)* [\r\n]* >
+
+block_comment		<-	< '/*' (!'*/' .)* '*/' >
+
+EOF					<- !.

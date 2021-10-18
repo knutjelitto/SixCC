@@ -36,10 +36,13 @@ namespace sixpeg
 
         ast::grammar* g = nullptr;
 
-        if (!info.parser->parse(text, g))
+        if (!info.parser->parse(text, g) || nullptr == g)
         {
             cerr << "syntax error" << endl;
             assert(g == nullptr);
+            info.parser->log = nullptr;
+
+            return g;
         }
 
         info.parser->log = nullptr;
@@ -71,8 +74,7 @@ namespace sixpeg
 
     void check_one()
     {
-        //check_one_sample("c.wsn", "wsn", "wsn");
-        check_one_sample("bnf.g4", "antlr4", "wsn");
+        check_one_sample("bnf.sixg", "sixg", "wsn");
     }
 
     void check_all()

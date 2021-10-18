@@ -1,0 +1,57 @@
+grammar bnf;
+
+rule-list
+    : rule* EOF
+    ;
+
+rule
+    : name '::=' expression
+    ;
+
+expression
+    : alternatives
+    ;
+
+alternatives
+    : alternative ('|' alternative)*
+    ;
+
+alternative
+    : element*
+    ;
+
+element
+    : optional
+    | zero-or-more
+    | one-or-more
+    | text
+    | name
+    ;
+
+optional
+    : '[' expression ']'
+    ;
+
+zero-or-more
+    : '{' expression '}'
+    ;
+
+one-or-more
+    : '(' expression ')'
+    ;
+
+text
+    : id
+    ;
+
+name
+    : '<' id '>'
+    ;
+
+id
+    : ('a' .. 'z' | 'A' .. 'Z') ('a' .. 'z' | 'A' .. 'Z' | '0' .. '9')
+    ;
+
+%whitespace
+    : (' ' | '\r' | '\n' | '\t')*
+    ;

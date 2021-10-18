@@ -311,7 +311,10 @@ namespace sixpeg::ast
     export class grammar
     {
     public:
-        std::vector<rule*> rules;
+        void add(rule* rule)
+        {
+            rules.push_back(rule);
+        }
 
         grammar* simplify()
         {
@@ -321,6 +324,8 @@ namespace sixpeg::ast
             }
             return this;
         }
+
+        std::vector<rule*> rules;
 
     private:
         void simplify(term*& term)

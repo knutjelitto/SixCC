@@ -18,9 +18,37 @@ namespace sixpeg
 
     namespace input
     {
-        void setup_bnf(parser& parser);
-        void setup_wsn(parser& parser);
-        void setup_antlr4(parser& parser);
+        struct Parser
+        {
+            Parser(string format);
+            virtual void setup() = 0;
+            bool create(string format);
+            void* p = nullptr;
+        };
+
+        struct SixgParser : Parser
+        {
+            SixgParser() : Parser("sixg")
+            {
+            }
+            void setup() override;
+        };
+
+        struct BnfParser : Parser
+        {
+            BnfParser() : Parser("bnf")
+            {
+            }
+            void setup() override;
+        };
+
+        struct WsnParser : Parser
+        {
+            WsnParser() : Parser("wsn")
+            {
+            }
+            void setup() override;
+        };
 
         export struct sample_info
         {
@@ -34,31 +62,32 @@ namespace sixpeg
             std::string name;
             bool enabled;
             std::string grammar_source;
-            std::function<void(parser& parser)> setup;
+            std::function<Parser* (void)> create;
             parser* parser;
             std::vector<sample_info> samples;
         };
 
         export input_info infos[] =
         {
-            { "bnf", true, "bnf.peg", setup_bnf, nullptr, {
+            { "sixg", true, "sixg.peg", []() {return new SixgParser(); }, nullptr, {
+                {"minimal",         true,   "minimal.sixg"},
+                {"checker",         true,   "checker.sixg"},
+                {"bnf",             true,   "bnf.sixg"},
+                {"sixg",            true,   "sixg.sixg"},
+            }},
+            { "bnf", true, "bnf.peg", []() {return new BnfParser(); }, nullptr, {
+                {"minimal",         true,   "minimal.bnf"},
                 {"checker",         true,   "checker.bnf"},
-                {"checker",         true,   "minimal.bnf"},
                 {"bnf",             true,   "bnf.bnf"},
                 {"expr",            true,   "expr.bnf"},
                 {"postal",          true,   "postal.bnf"},
             }},
-            { "wsn", true, "wsn.peg", setup_wsn, nullptr, {
+            { "wsn", true, "wsn.peg", []() {return new WsnParser(); }, nullptr, {
                 {"minimal",         true,   "minimal.wsn"},
                 {"checker",         true,   "checker.wsn"},
                 {"wsn",             true,   "wsn.wsn"},
                 {"bnf",             true,   "bnf.wsn"},
                 {"c-language",      true,   "c.wsn"},
-            }},
-            { "antlr4", true, "antlr4.peg", setup_antlr4, nullptr, {
-                {"minimal",         true,   "minimal.g4"},
-                {"checker",         true,   "checker.g4"},
-                {"bnf",             true,   "bnf.g4"},
             }},
         };
 
@@ -73,6 +102,42 @@ namespace sixpeg
                 }
             }
             return false;
+        }
+
+        Parser::Parser(string format)
+        {
+            create(format);
+        }
+
+        bool Parser::create(string name)
+        {
+            if (p != nullptr)
+            {
+                return true;
+            }
+
+            parser* parser = new peg::parser();
+
+            parser->log = [&](size_t line, size_t col, const std::string& msg)
+            {
+                cerr << name << "(" << line << "," << col << "): " << msg << endl;
+            };
+
+            parser->enable_packrat_parsing(); // Enable packrat parsing.
+
+            std::string pegfilename = "inputs/" + name + "/" + name + ".peg";
+            std::string pegsource = read_file_content(pegfilename);
+
+            if (!parser->load_grammar(pegsource))
+            {
+                return false;
+            }
+
+            p = parser;
+
+            setup();
+
+            return true;
         }
 
         export bool get_parser(std::string name, input_info& info)
@@ -96,7 +161,7 @@ namespace sixpeg
 
             parser->enable_packrat_parsing(); // Enable packrat parsing.
 
-            std::string pegfilename = "inputs/" + info.name + "/" + info.grammar_source;
+            std::string pegfilename = "inputs/" + name + "/" + name + ".peg";
             std::string pegsource = read_file_content(pegfilename);
 
             if (!parser->load_grammar(pegsource))
@@ -104,7 +169,7 @@ namespace sixpeg
                 return false;
             }
 
-            info.setup(*parser);
+            info.create()->setup(*parser);
 
             info.parser = parser;
 

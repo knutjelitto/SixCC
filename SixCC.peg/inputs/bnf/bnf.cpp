@@ -11,6 +11,14 @@ namespace sixpeg::input
 {
     using namespace std;
     using namespace peg;
+    using namespace ast;
+
+    void setup_bnf(parser& parser);
+
+    void BnfParser::setup()
+    {
+        setup_bnf(*(parser*)p);
+    }
 
     void setup_bnf(parser& parser)
     {
