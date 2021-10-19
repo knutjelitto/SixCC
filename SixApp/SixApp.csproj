@@ -19,8 +19,4 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Six.Ceylon\Six.Ceylon.csproj" />
-  </ItemGroup>
-
 </Project>

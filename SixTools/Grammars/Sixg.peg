@@ -1,0 +1,68 @@
+﻿@namespace SixTools.Grammars
+@accessibility internal
+@classname SixgParser
+@using Ast
+
+grammar <Grammar>
+    = _ "grammar" id:identifier _ ";" rules:ruleList EOF    { new Grammar(id, rules) }
+
+ruleList <IEnumerable<Rule>>
+    = rule*
+
+rule <Rule>
+    = id:rule_identifier _ ":" ex:expression _ ";"          { new Rule(id, ex) }
+
+expression <Term>
+    = a:alternatives                                        { a }
+
+alternatives <Term>
+    = first:sequence rest:(<Term> _ "|" r:sequence { r })*  { new TermAlternatives(first, rest) }
+
+sequence <Term>
+    = es:element*                                           { new TermSequence(es) }
+
+element <Term>
+    = range
+    / a:atom _ "?"                                          { new TermOptional(a) }
+    / a:atom _ "*"                                          { new TermZeroOrMore(a) }
+    / a:atom _ "+"                                          { new TermOneOrMore(a) }
+    / a:atom                                                { a }
+
+atom <Term>
+    = identifier
+    / string
+    / _ "(" e:expression _ ")"                              { new TermGroup(e) }
+    / _ "~" a:atom                                          { new TermNot(a) }
+
+range <Term>
+    = a:string _ ".." o:string                              { new TermRange(a, o) }
+
+rule_identifier <TermIdentifier>
+    = _ id:("%" identifier)                                 { new TermIdentifier(id) }
+    / _ id:identifier                                       { id }
+
+identifier <TermIdentifier>
+    = _ id:(id_start id_continue*)                          { new TermIdentifier(id) }
+
+id_start
+    = letter (letter / digit)*
+
+id_continue
+    = "-" (letter / digit)+
+
+string <TermLiteral>
+    = _ ("\'" s:char* "\'")                                 { new TermLiteral(string.Join(string.Empty, s)) }
+
+char
+    = !"\'" .
+
+letter
+    = [a-z] / [A-Z]
+
+digit
+    = [0-9]
+
+_   = [ \t\r\n]*
+
+EOF
+    = _ !.

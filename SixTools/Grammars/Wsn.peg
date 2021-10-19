@@ -1,0 +1,53 @@
+﻿@namespace SixTools.Grammars
+@accessibility internal
+@classname WsnGrammar
+@using Ast
+
+grammar <Grammar>
+    = rules:productions EOF                         { new Grammar("<unknown-wsn>", rules) }
+
+productions <IEnumerable<Rule>>
+    = rule*
+
+rule <Rule>
+    = id:identifier _ ":" ex:expression _ ";"       { new Rule(id, ex) }
+
+expression <Term>
+    = first:term rest:(<Term> _ "|" r:term { r })*  { new TermAlternatives(first, rest) }
+
+term <Term>
+    = es:factor+                                    { new TermSequence(es) }
+
+factor <Term>
+    = identifier
+    / literal
+    / _ "[" e:expression "]"                        { new TermOptional(e) }
+    / _ "{" e:expression "}"                        { new TermZeroOrMore(e) }
+    / _ "(" e:expression ")"                        { new TermOneOrMore(e) }
+
+identifier <TermIdentifier>
+    = _ id:(id_start id_continue*)                  { new TermIdentifier(id) }
+
+id_start
+    = letter (letter / digit)*
+
+id_continue
+    = ("-" / "_") (letter / digit)+
+
+literal <Term>
+    = s:("\"" char* "\"")                           { new TermLiteral(s) }
+
+char
+    = "\"\""                                        { "\"" }
+    / !"\"" .
+
+letter
+    = [a-z] / [A-Z]
+
+digit
+    = [0-9]
+
+_   = [ \t\r\n]*
+
+EOF
+    = _ !.

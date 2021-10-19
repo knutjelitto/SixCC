@@ -7,4 +7,27 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Grammars\Sixg.peg" />
+    <None Remove="Grammars\Wsn.peg" />
+    <None Remove="Grammars\Samples\bnf.sixg" />
+    <None Remove="Grammars\Samples\checker.sixg" />
+    <None Remove="Grammars\Samples\minimal.sixg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Grammars\Samples\bnf.sixg" />
+    <EmbeddedResource Include="Grammars\Samples\checker.sixg" />
+    <EmbeddedResource Include="Grammars\Samples\minimal.sixg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pegasus" Version="4.2.0-alpha0003" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PegGrammar Include="Grammars\Wsn.peg" />
+    <PegGrammar Include="Grammars\Sixg.peg" />
+  </ItemGroup>
+
 </Project>

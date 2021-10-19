@@ -14,8 +14,4 @@
     <Folder Include="Lexing\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SixCC.Runtime\SixCC.Runtime.csproj" />
-  </ItemGroup>
-
 </Project>
