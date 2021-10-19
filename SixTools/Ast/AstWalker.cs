@@ -41,12 +41,15 @@ namespace SixTools.Ast
         {
         }
 
+        public abstract void Visit(TermGroup term);
         public abstract void Visit(TermAlternatives term);
         public abstract void Visit(TermSequence term);
-        public abstract void Visit(TermGroup term);
         public abstract void Visit(TermEmpty term);
         public abstract void Visit(TermIdentifier term);
         public abstract void Visit(TermLiteral term);
         public abstract void Visit(TermRange term);
+        public abstract void Visit(TermOptional term);
+        public abstract void Visit(TermOneOrMore term);
+        public abstract void Visit(TermZeroOrMore term);
     }
 }

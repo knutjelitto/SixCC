@@ -43,7 +43,7 @@
             else if (term is TermGroup group)
             {
                 group.Term = Shrink(group.Term);
-                if (group.Min == 1 && group.Max == 1)
+                if (group.Min == 1 && group.Max == 1 && group.Term.IsAtomic)
                 {
                     return group.Term;
                 }

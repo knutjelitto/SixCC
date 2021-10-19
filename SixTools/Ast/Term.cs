@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SixTools.Ast
+﻿namespace SixTools.Ast
 {
-    public class Term
+    public abstract class Term
     {
-    }
-
-    public class TermEmpty : Term
-    {
+        public abstract bool IsAtomic { get; }
     }
 
     public class TermGroup : Term
@@ -26,25 +17,30 @@ namespace SixTools.Ast
         public Term Term { get; set; }
         public int Min { get; }
         public int Max { get; }
+
+        public override bool IsAtomic => Min == 1 && Max == 1 && Term.IsAtomic;
     }
 
     public class TermOptional : TermGroup
     {
         public TermOptional(Term inner)
             : base(inner, 0, 1)
-        { }
+        {
+        }
     }
 
     public class TermOneOrMore : TermGroup
     {
-        public TermOneOrMore(Term inner) : base(inner, 1, 0)
+        public TermOneOrMore(Term inner)
+            : base(inner, 1, 0)
         {
         }
     }
 
     public class TermZeroOrMore : TermGroup
     {
-        public TermZeroOrMore(Term inner) : base(inner, 0, 0)
+        public TermZeroOrMore(Term inner)
+            : base(inner, 0, 0)
         {
         }
     }
@@ -58,6 +54,8 @@ namespace SixTools.Ast
         }
 
         public List<Term> Terms { get; }
+
+        public override bool IsAtomic => Terms.Count == 1 && Terms[0].IsAtomic;
     }
 
     public class TermSequence : Term
@@ -68,9 +66,20 @@ namespace SixTools.Ast
         }
 
         public List<Term> Terms { get; }
+
+        public override bool IsAtomic => Terms.Count == 1 && Terms[0].IsAtomic;
     }
 
-    public class TermIdentifier : Term
+    public class AtomicTerm : Term
+    {
+        public override bool IsAtomic => true;
+    }
+
+    public class TermEmpty : AtomicTerm
+    {
+    }
+
+    public class TermIdentifier : AtomicTerm
     {
         public TermIdentifier(string text)
         {
@@ -85,11 +94,16 @@ namespace SixTools.Ast
         }
     }
 
-    public class TermLiteral : Term
+    public class TermLiteral : AtomicTerm
     {
         public TermLiteral(string text)
         {
             Text = text;
+        }
+
+        public TermLiteral(char text)
+        {
+            Text = text.ToString();
         }
 
         public string Text { get; }
@@ -108,9 +122,11 @@ namespace SixTools.Ast
         }
 
         public Term Term { get; }
+
+        public override bool IsAtomic => Term.IsAtomic;
     }
 
-    public class TermRange : Term
+    public class TermRange : AtomicTerm
     {
         public TermRange(TermLiteral start, TermLiteral stop)
         {

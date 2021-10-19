@@ -1,0 +1,71 @@
+grammar sixg;
+
+grammar
+    : 'grammar' identifier ';' rules EOF
+    ;
+
+rules
+    : rule*
+    ;
+
+rule
+    : name ':' expression ';'
+    | name '|' sequence ('|' sequence)+
+    ;
+
+expression
+    : alternatives
+    ;
+
+alternatives
+    : sequence ('|' sequence)*
+    ;
+
+sequence
+    : element*
+    ;
+
+element
+    : primary repeat?
+    | range
+    ;
+
+primary
+    : '(' expression ')'    
+    | identifier
+    | literal
+    ;
+
+repeat
+    : '?'
+    | '*'
+    | '+'
+    ;
+
+identifier
+    : id-start id-continue*
+    ;
+
+id-start
+    : letter letter-or-digit*
+    ;
+
+id-continue
+    : '-' letter-or-digit+
+    ;
+
+letter
+    : 'a' .. 'z' | 'A' .. 'Z'
+    ;
+
+digit
+    : '0' .. '9'
+    ;
+
+letter-or-digit
+    : letter | digit
+    ;
+
+%whitespace
+    : (' ' | '\r' | '\n' | '\t')*
+    ;

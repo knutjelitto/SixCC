@@ -2,12 +2,12 @@
 
 namespace SixTools.Formats
 {
-    public class AstDump : AstWalker, IFormat
+    public class AstDumpFormat : AstWalker, IFormat
     {
         private readonly Grammar grammar;
         private readonly Writer writer;
 
-        public AstDump(Grammar grammar, Writer writer)
+        public AstDumpFormat(Grammar grammar, Writer writer)
         {
             this.grammar = grammar;
             this.writer = writer;
@@ -51,7 +51,7 @@ namespace SixTools.Formats
 
         public override void Visit(TermLiteral term)
         {
-            writer.WriteLine($"\"{Escape(term.Text)}\"");
+            writer.WriteLine($"\"{Esc.Full(term.Text)}\"");
         }
 
         public override void Visit(TermAlternatives term)
@@ -78,35 +78,38 @@ namespace SixTools.Formats
             }
         }
 
+        public override void Visit(TermOptional term)
+        {
+            writer.WriteLine("optional");
+            using (writer.Indent())
+            {
+                Walk(term.Term);
+            }
+        }
+
+        public override void Visit(TermOneOrMore term)
+        {
+            writer.WriteLine("one-or-more");
+            using (writer.Indent())
+            {
+                Walk(term.Term);
+            }
+        }
+
+        public override void Visit(TermZeroOrMore term)
+        {
+            writer.WriteLine("zero-or-more");
+            using (writer.Indent())
+            {
+                Walk(term.Term);
+            }
+        }
+
         public override void Visit(TermGroup term)
         {
             if (term.Min == 1 && term.Max == 1)
             {
                 writer.WriteLine("group");
-                using (writer.Indent())
-                {
-                    Walk(term.Term);
-                }
-            }
-            else if (term.Min == 1 && term.Max == 0)
-            {
-                writer.WriteLine("one-or-more");
-                using (writer.Indent())
-                {
-                    Walk(term.Term);
-                }
-            }
-            else if (term.Min == 0 && term.Max == 0)
-            {
-                writer.WriteLine("zero-or-more");
-                using (writer.Indent())
-                {
-                    Walk(term.Term);
-                }
-            }
-            else if (term.Min == 0 && term.Max == 1)
-            {
-                writer.WriteLine("optional");
                 using (writer.Indent())
                 {
                     Walk(term.Term);
@@ -125,48 +128,6 @@ namespace SixTools.Formats
             {
                 Walk(term.Start);
                 Walk(term.Stop);
-            }
-        }
-
-        private static string Escape(string literal)
-        {
-            return string.Join(string.Empty, literal.Select(c => esc(c)));
-
-            static string esc(char c)
-            {
-                switch(c)
-                {
-                    case '\a':
-                        return "\\a";
-                    case '\b':
-                        return "\\b";
-                    case '\x1B':
-                        return "\\e";
-                    case '\f':
-                        return "\\f";
-                    case '\t':
-                        return "\\t";
-                    case '\v':
-                        return "\\v";
-                    case '\r':
-                        return "\\r";
-                    case '\n':
-                        return "\\n";
-                    case '\"':
-                        return "\\\"";
-                    case '\'':
-                        return "\\\'";
-                    default:
-                        if (c < ' ')
-                        {
-                            return $"\\x{(int)c:X2}";
-                        }
-                        else if (char.IsAscii(c))
-                        {
-                            return c.ToString();
-                        }
-                        return $"\\u{(int)c:X4}";
-                }
             }
         }
     }

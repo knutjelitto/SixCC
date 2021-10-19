@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Grammars\Samples\sixg.sixg" />
     <None Remove="Grammars\Sixg.peg" />
     <None Remove="Grammars\Wsn.peg" />
     <None Remove="Grammars\Samples\bnf.sixg" />
@@ -16,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Grammars\Samples\sixg.sixg" />
     <EmbeddedResource Include="Grammars\Samples\bnf.sixg" />
     <EmbeddedResource Include="Grammars\Samples\checker.sixg" />
     <EmbeddedResource Include="Grammars\Samples\minimal.sixg" />

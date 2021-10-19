@@ -23,7 +23,7 @@ alternative
 element
     : optional
     | zero-or-more
-    | one-or-more
+    | grouping
     | text
     | name
     ;
@@ -36,7 +36,7 @@ zero-or-more
     : '{' expression '}'
     ;
 
-one-or-more
+grouping
     : '(' expression ')'
     ;
 

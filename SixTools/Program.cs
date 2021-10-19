@@ -3,14 +3,15 @@
 using SixTools.Formats;
 using SixTools.Grammars;
 
-var sample = new Samples().Get("bnf.sixg");
+var sample = new Samples().Get("sixg.sixg");
 
 var parser = new SixgParser();
 var grammar = parser.Parse(sample);
 
 grammar.Shrink();
 
-var format = new AstDump(grammar, new SixTools.Writer(Console.Out));
+//var format = new SixgFormat(grammar, new SixTools.Writer(Console.Out));
+var format = new HtmlFormat(grammar, new SixTools.Writer(Console.Out), true);
 format.Format();
 
 Console.Write("any (really almost any) key .. ");

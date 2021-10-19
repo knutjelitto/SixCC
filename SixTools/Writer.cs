@@ -84,6 +84,6 @@ namespace SixTools
         private readonly TextWriter sink;
         private int level;
         private bool pending = true;
-        private readonly string prefix = "__";
+        private readonly string prefix = "    ";
     }
 }
