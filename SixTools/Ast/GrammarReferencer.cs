@@ -2,13 +2,21 @@
 {
     internal class GrammarReferencer : AstWalker
     {
-        private readonly HashSet<string> rules = new();
+        private readonly Dictionary<string, Rule> rules = new();
 
         public override void Walk(Grammar grammar)
         {
             foreach (var rule in grammar.Rules)
             {
-                _ = rules.Add(rule.Name.Text);
+                if (rule.Name.Text[0] == '%')
+                {
+                    rule.InUse = true;
+                }
+                rules.Add(rule.Name.Text, rule);
+            }
+            if (grammar.Rules.Count > 0)
+            {
+                grammar.Rules[0].InUse = true;
             }
 
             base.Walk(grammar);
@@ -29,8 +37,9 @@
 
         public override void Visit(TermToken term)
         {
-            if (rules.Contains(term.Text))
+            if (rules.TryGetValue(term.Text, out var rule))
             {
+                rule.InUse = true;
                 term.IsReference = true;
             }
         }

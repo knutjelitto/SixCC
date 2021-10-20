@@ -6,10 +6,12 @@
         {
             Name = name;
             Term = term;
+            InUse = false;
         }
 
         public TermToken Name { get; }
         public Term Term { get; private set; }
+        public bool InUse { get; set; }
 
         public void Shrink()
         {

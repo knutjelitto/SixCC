@@ -8,6 +8,10 @@ namespace SixTools.Formats
         private readonly Writer writer;
         private readonly bool xhtml;
 
+        const string group_star = "*";
+        const string group_plus = "+";
+        const string group_option = "?";
+
         public HtmlFormat(Grammar grammar, Writer writer, bool xhtml)
         {
             this.grammar = grammar;
@@ -63,7 +67,9 @@ namespace SixTools.Formats
         {
             using (writer.TagIndent("dl", "bnf"))
             {
-                writer.WriteLine($"<dt><a name='{rule.Name}'>{rule.Name}</a>:</dt>");
+                var klass = rule.InUse ? "" : " class='error'";
+
+                writer.WriteLine($"<dt><span{klass}><a name='{rule.Name}'>{rule.Name}</a><span></dt>");
                 using (writer.TagIndent("dd"))
                 {
                     if (rule.Term is TermAlternatives alt)
@@ -74,7 +80,11 @@ namespace SixTools.Formats
                             if (more)
                             {
                                 writer.WriteLine("<br/>");
-                                writer.WriteLine("<span class='pipe'> | </span>");
+                                writer.WriteLine("<span class='pipe'>|</span>");
+                            }
+                            else
+                            {
+                                writer.WriteLine("<span class='pipe'>|</span>");
                             }
                             more = true;
                             Walk(term);
@@ -82,6 +92,7 @@ namespace SixTools.Formats
                     }
                     else
                     {
+                        writer.WriteLine("<span class='pipe'>:</span>");
                         Walk(rule.Term);
                     }
                 }
@@ -100,7 +111,7 @@ namespace SixTools.Formats
             {
                 if (more)
                 {
-                    writer.Write("<span class='pipe'> | </span>");
+                    writer.Write("<span class='alt'>|</span>");
                 }
                 more = true;
                 Walk(sub);
@@ -114,18 +125,16 @@ namespace SixTools.Formats
             {
                 if (more)
                 {
-                    writer.Write("<span class='cat'> </span>");
+                    writer.Write("<span class='cat'>&nbsp;</span>");
                 }
                 more = true;
-                writer.Write("<span class='alt'>");
                 Walk(sub);
-                writer.WriteLine("</span>");
             }
         }
 
         public override void Visit(TermNot term)
         {
-            writer.Write("<span class='not'>~</span> ");
+            writer.Write("<span class='not'>&not; </span>");
             Walk(term.Term);
         }
 
@@ -142,35 +151,35 @@ namespace SixTools.Formats
             }
             else
             {
-                writer.Write($"<span class='token'>{term.Text}</span>");
+                writer.Write($"<span class='token error'>{term.Text}</span>");
             }
         }
 
         public override void Visit(TermLiteral term)
         {
-            writer.Write($"<tt class='literal cs'>&OpenCurlyQuote;{Esc.Html(term.Text)}&CloseCurlyQuote;</tt>");
+            writer.Write($"&OpenCurlyQuote;<span class='literal'>{Esc.Html(term.Text)}</span>&CloseCurlyQuote;");
         }
 
         public override void Visit(TermRange term)
         {
             Walk(term.Start);
-            writer.Write(" <span class='range'>..</span> ");
+            writer.Write("<span class='range'>&mldr;</span>");
             Walk(term.Stop);
         }
 
         public override void Visit(TermOptional term)
         {
-            Repeat(term.Term, "?");
+            Repeat(term.Term, group_option);
         }
 
         public override void Visit(TermOneOrMore term)
         {
-            Repeat(term.Term, "+");
+            Repeat(term.Term, group_plus);
         }
 
         public override void Visit(TermZeroOrMore term)
         {
-            Repeat(term.Term, "*");
+            Repeat(term.Term, group_star);
         }
 
         public override void Visit(TermClamped term)
@@ -191,31 +200,67 @@ namespace SixTools.Formats
             using (writer.TagIndent("style"))
             {
                 writer.WriteLine("dl.bnf span.token {");
-                writer.WriteLine("	text-transform: uppercase;");
-                writer.WriteLine("	background-color: red;");
-                writer.WriteLine("	color: yellow;");
+                writer.WriteLine("	padding-left: 0.3em;");
+                writer.WriteLine("	padding-right: 0.3em;");
+                writer.WriteLine("}");
+                writer.WriteLine("");
+                writer.WriteLine("dl.bnf span.error {");
+                writer.WriteLine("	border-radius: 0.4em;");
+                writer.WriteLine("	border-width: 0;");
+                writer.WriteLine("	outline: 5px dotted orangered;");
+                writer.WriteLine("}");
+                writer.WriteLine("");
+                writer.WriteLine("dl.bnf span.warning {");
+                writer.WriteLine("	border-radius: 0.4em;");
+                writer.WriteLine("	border-width: 0;");
+                writer.WriteLine("	outline: 5px dotted gold;");
                 writer.WriteLine("}");
                 writer.WriteLine("");
                 writer.WriteLine("dl.bnf span.cat {");
-                writer.WriteLine("	margin-right: 0.5ex;");
+                writer.WriteLine("	margin-left: 0.0em;");
+                writer.WriteLine("	margin-right: 0.1em;");
+                writer.WriteLine("}");
+                writer.WriteLine("dl.bnf span.range {");
+                writer.WriteLine("	margin-right: 0.3em;");
+                writer.WriteLine("	margin-left: 0.3em;");
+                writer.WriteLine("}");
+                writer.WriteLine("dl.bnf span.literal {");
+                writer.WriteLine("	font-family: monospace;");
+                writer.WriteLine("	font-size: 1.2em;");
+                writer.WriteLine("}");
+                writer.WriteLine("");
+                writer.WriteLine("dl.bnf span.control {");
+                writer.WriteLine("	font-family: monospace;");
+                writer.WriteLine("	font-size: 0.55em;");
+                writer.WriteLine("	font-weight: bold;");
+                writer.WriteLine("	background-color: lightgrey;");
+                writer.WriteLine("	padding-left: 0.1em;");
+                writer.WriteLine("	padding-right: 0.1em;");
+                writer.WriteLine("	margin-left: 0.1em;");
+                writer.WriteLine("	margin-right: 0.1em;");
                 writer.WriteLine("}");
                 writer.WriteLine("");
                 writer.WriteLine("dl.bnf dd > span.pipe {");
-                writer.WriteLine("	float: left;");
-                writer.WriteLine("	width: 1ex;");
-                writer.WriteLine("	margin-left: -1.8ex;");
-                writer.WriteLine("	text-align: right;");
-                writer.WriteLine("	font-weight: bold;");
-                writer.WriteLine("	padding-right: 0.8ex; /* about the width of a space */");
+                writer.WriteLine("	margin-right: 0.3em;");
+                writer.WriteLine("}");
+                writer.WriteLine("dl.bnf dd > span.alt {");
+                writer.WriteLine("	margin-right: 0.3em;");
+                writer.WriteLine("	margin-left: 0.3em;");
+                writer.WriteLine("	text-align: center;");
                 writer.WriteLine("}");
                 writer.WriteLine("");
                 writer.WriteLine("dl.bnf dt {");
                 writer.WriteLine("	display: block;");
-                writer.WriteLine("	min-width: 8em;");
-                writer.WriteLine("	padding-right: 1em;");
+                writer.WriteLine("	background-color: aliceblue;");
                 writer.WriteLine("}");
                 writer.WriteLine("");
-                writer.WriteLine("dl.bnf a.reference {");
+                writer.WriteLine("dl.bnf a.reference:link {");
+                writer.WriteLine("	color: green;");
+                writer.WriteLine("	text-decoration: none;");
+                writer.WriteLine("}");
+                writer.WriteLine("");
+                writer.WriteLine("dl.bnf a.reference:visited {");
+                writer.WriteLine("	color: darkgreen;");
                 writer.WriteLine("	text-decoration: none;");
                 writer.WriteLine("}");
                 writer.WriteLine("");
@@ -224,9 +269,21 @@ namespace SixTools.Formats
                 writer.WriteLine("}");
                 writer.WriteLine("");
                 writer.WriteLine("/* page stuff */");
-                writer.WriteLine("dl.bnf { margin: 1em 2em; }");
+                writer.WriteLine("dl.bnf {");
+                writer.WriteLine("	margin: 1em 2em;");
+                writer.WriteLine("	font-family: sans-serif;");
+                writer.WriteLine("	padding: 0.5ex;");
+                writer.WriteLine("	background-color: aliceblue;");
+                writer.WriteLine("}");
                 writer.WriteLine("dl.bnf dt { margin: 0.25em 0; }");
                 writer.WriteLine("dl.bnf dd { margin-left: 2em; }");
+
+                writer.WriteLine("dl.bnf span.tooltip {");
+                writer.WriteLine("	margin: 1em 2em;");
+                writer.WriteLine("	font-family: sans-serif;");
+                writer.WriteLine("	padding: 0.5ex;");
+                writer.WriteLine("	background-color: aliceblue;");
+                writer.WriteLine("}");
             }
         }
     }

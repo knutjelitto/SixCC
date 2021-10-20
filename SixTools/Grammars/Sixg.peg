@@ -31,6 +31,7 @@ element <Term>
 atom <Term>
     = identifier
     / string
+    / character
     / _ "(" e:expression _ ")"                              { new TermClamped(e) }
     / _ "~" a:atom                                          { new TermNot(a) }
 
@@ -53,29 +54,71 @@ id_continue
 string <TermLiteral>
     = _ ("\'" s:single_char* "\'")                          { new TermLiteral(string.Join(string.Empty, s)) }
 
+
+character <TermLiteral>
+    = _ esc:(simple_escape / zero_escape / hex_escape / utf_escape) { new TermLiteral(esc) }
+
 single_char
     = !("'" / "\\" / eol_char) .
     / simple_escape
+    / zero_escape
+    / hex_escape
+    / utf16_escape
+    / eol_escape
 
 simple_escape
-  = "\\" !(digit / "x" / "u" / eol_char) char:. {
-        @char
-            .Replace("b", "\b")
-            .Replace("f", "\f")
-            .Replace("n", "\n")
-            .Replace("r", "\r")
-            .Replace("t", "\t")
-            .Replace("v", "\v")
-    }
+    =   "\\" char:[abefnrtv'"]
+        {
+            @char
+            .Replace("a", "\u0007")
+            .Replace("b", "\u0008")
+            .Replace("e", "\u001B")
+            .Replace("f", "\u000C")
+            .Replace("n", "\u000A")
+            .Replace("r", "\u000D")
+            .Replace("t", "\u0009")
+            .Replace("v", "\u000B")
+        }
+
+zero_escape
+    = "\\0" { "\u0000" }
+
+hex_escape
+    =   "\\x" digits:(hex_digit hex_digit)
+        {
+            ((char)Convert.ToInt32(digits, 16)).ToString()
+        }
+utf16_escape
+    =   "\\u" digits:(hex_digit hex_digit hex_digit hex_digit)
+        {
+            ((char)Convert.ToInt32(digits, 16)).ToString()
+        }
+
+utf_escape
+    =   "\\u" digits:(hex_digit hex_digit? hex_digit? hex_digit? hex_digit? hex_digit?)
+        {
+            ((char)Convert.ToInt32(digits, 16)).ToString()
+        }
+
+eol_escape
+    =   "\\" eol:eol { eol }
+
+eol
+    =   "\n"
+    /   "\r\n"
+    /   "\r"
 
 eol_char
-  = [\n\r\u2028\u2029]
+    = [\n\r]
 
 letter
     = [a-z] / [A-Z]
 
 digit
     = [0-9]
+
+hex_digit
+    = [0-9a-fA-F]
 
 _   = [ \t\r\n]*
 

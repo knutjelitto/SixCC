@@ -5,7 +5,7 @@
         public Grammar(TermToken name, IEnumerable<Rule> rules)
         {
             Name = name;
-            Rules = rules;
+            Rules = rules.ToList();
         }
 
         public Grammar(string name, IEnumerable<Rule> rules)
@@ -14,7 +14,7 @@
         }
 
         public TermToken Name { get; }
-        public IEnumerable<Rule> Rules { get; }
+        public List<Rule> Rules { get; }
 
         public void Shrink()
         {

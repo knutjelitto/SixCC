@@ -71,12 +71,12 @@ letter-or-digit
     ;
 
 literal
-    : '\'' literal-char '\''
+    : \' literal-char \'
     ;
 
 EOF : ~any
     ;
 
 %whitespace
-    : (' ' | '\r' | '\n' | '\t')*
+    : (' ' | \r | \n | \t)*
     ;

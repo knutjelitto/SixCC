@@ -25,8 +25,8 @@ factor <Term>
     / _ "{" e:expression "}"                        { new TermZeroOrMore(e) }
     / _ "(" e:expression ")"                        { new TermOneOrMore(e) }
 
-identifier <TermIdentifier>
-    = _ id:(id_start id_continue*)                  { new TermIdentifier(id) }
+identifier <TermToken>
+    = _ id:(id_start id_continue*)                  { new TermToken(id) }
 
 id_start
     = letter (letter / digit)*
