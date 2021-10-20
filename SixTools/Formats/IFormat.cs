@@ -9,5 +9,6 @@ namespace SixTools.Formats
     public interface IFormat
     {
         void Format();
+        string PreferedExtension { get; }
     }
 }

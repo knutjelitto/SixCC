@@ -17,6 +17,7 @@ namespace SixTools.Formats
         {
             Walk(grammar);
         }
+        public string PreferedExtension => ".sixg";
 
         public override void Walk(Grammar grammar)
         {
@@ -71,16 +72,7 @@ namespace SixTools.Formats
 
         public override void Visit(TermGroup term)
         {
-            if (term.Min == 1 && term.Max == 1)
-            {
-                writer.Write("(");
-                Walk(term.Term);
-                writer.Write(")");
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            throw new NotImplementedException();
         }
 
         public override void Visit(TermEmpty term)
@@ -88,7 +80,7 @@ namespace SixTools.Formats
             throw new NotImplementedException();
         }
 
-        public override void Visit(TermIdentifier term)
+        public override void Visit(TermToken term)
         {
             writer.Write($"{term.Text}");
         }
@@ -123,6 +115,13 @@ namespace SixTools.Formats
             writer.Write("*");
         }
 
+        public override void Visit(TermClamped term)
+        {
+            writer.Write("(");
+            Walk(term.Term);
+            writer.Write(")");
+        }
+
         private void Spaced(IEnumerable<Term> terms, string space)
         {
             var more = false;
@@ -137,14 +136,9 @@ namespace SixTools.Formats
             }
         }
 
-        private static string Escape(char c)
+        public override void Visit(TermNot term)
         {
-            return c == '\"' ? "\"\"" : c.ToString();
-        }
-
-        private static string Escape(string literal)
-        {
-            return string.Join(string.Empty, literal.Select(c => Escape(c)));
+            throw new NotImplementedException();
         }
     }
 }

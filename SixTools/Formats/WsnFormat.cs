@@ -19,6 +19,7 @@ namespace SixTools.Formats
         {
             Walk(grammar);
         }
+        public string PreferedExtension => ".wsn";
 
         public override void Walk(Rule rule)
         {
@@ -67,7 +68,7 @@ namespace SixTools.Formats
             throw new NotImplementedException();
         }
 
-        public override void Visit(TermIdentifier term)
+        public override void Visit(TermToken term)
         {
             writer.Write($" {term.Text}");
         }
@@ -81,6 +82,13 @@ namespace SixTools.Formats
         {
             writer.Write(" (");
             Spaced(Spread(term), "|");
+            writer.Write(" )");
+        }
+
+        public override void Visit(TermClamped term)
+        {
+            writer.Write(" (");
+            Walk(term.Term);
             writer.Write(" )");
         }
 
@@ -134,6 +142,11 @@ namespace SixTools.Formats
         private static string Escape(string literal)
         {
             return string.Join(string.Empty, literal.Select(c => Escape(c)));
+        }
+
+        public override void Visit(TermNot term)
+        {
+            throw new NotImplementedException();
         }
     }
 }

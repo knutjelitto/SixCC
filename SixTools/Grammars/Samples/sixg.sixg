@@ -9,8 +9,8 @@ rules
     ;
 
 rule
-    : name ':' expression ';'
-    | name '|' sequence ('|' sequence)+
+    : identifier ':' expression ';'
+    | identifier '|' sequence ('|' sequence)+
     ;
 
 expression
@@ -28,6 +28,10 @@ sequence
 element
     : primary repeat?
     | range
+    ;
+
+range
+    : literal '..' literal
     ;
 
 primary
@@ -64,6 +68,13 @@ digit
 
 letter-or-digit
     : letter | digit
+    ;
+
+literal
+    : '\'' literal-char '\''
+    ;
+
+EOF : ~any
     ;
 
 %whitespace

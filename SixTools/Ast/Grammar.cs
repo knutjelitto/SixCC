@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SixTools.Ast
+﻿namespace SixTools.Ast
 {
     public class Grammar
     {
-        public Grammar(TermIdentifier name, IEnumerable<Rule> rules)
+        public Grammar(TermToken name, IEnumerable<Rule> rules)
         {
             Name = name;
             Rules = rules;
         }
 
         public Grammar(string name, IEnumerable<Rule> rules)
-            : this(new TermIdentifier(name), rules)
+            : this(new TermToken(name), rules)
         {
         }
 
-        public TermIdentifier Name { get; }
+        public TermToken Name { get; }
         public IEnumerable<Rule> Rules { get; }
 
         public void Shrink()
@@ -28,6 +22,11 @@ namespace SixTools.Ast
             {
                 rule.Shrink();
             }
+        }
+
+        public void ResolveReference()
+        {
+            new GrammarReferencer().Walk(this);
         }
     }
 }

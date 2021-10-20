@@ -5,7 +5,7 @@
         public abstract bool IsAtomic { get; }
     }
 
-    public class TermGroup : Term
+    public abstract class TermGroup : Term
     {
         public TermGroup(Term term, int min = 1, int max = 1)
         {
@@ -19,6 +19,14 @@
         public int Max { get; }
 
         public override bool IsAtomic => Min == 1 && Max == 1 && Term.IsAtomic;
+    }
+
+    public class TermClamped : TermGroup
+    {
+        public TermClamped(Term inner)
+            : base(inner, 1, 1)
+        {
+        }
     }
 
     public class TermOptional : TermGroup
@@ -79,9 +87,9 @@
     {
     }
 
-    public class TermIdentifier : AtomicTerm
+    public abstract class TextTerm : AtomicTerm
     {
-        public TermIdentifier(string text)
+        public TextTerm(string text)
         {
             Text = text;
         }
@@ -94,23 +102,26 @@
         }
     }
 
-    public class TermLiteral : AtomicTerm
+    public class TermToken : TextTerm
+    {
+        public TermToken(string text)
+            : base(text)
+        {
+            IsReference = false;
+        }
+
+        public bool IsReference { get; set; }
+    }
+
+    public class TermLiteral : TextTerm
     {
         public TermLiteral(string text)
+            : base(text)
         {
-            Text = text;
         }
-
         public TermLiteral(char text)
+            : base(text.ToString())
         {
-            Text = text.ToString();
-        }
-
-        public string Text { get; }
-
-        public override string ToString()
-        {
-            return Text;
         }
     }
 

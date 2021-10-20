@@ -31,18 +31,18 @@ element <Term>
 atom <Term>
     = identifier
     / string
-    / _ "(" e:expression _ ")"                              { new TermGroup(e) }
+    / _ "(" e:expression _ ")"                              { new TermClamped(e) }
     / _ "~" a:atom                                          { new TermNot(a) }
 
 range <Term>
     = a:string _ ".." o:string                              { new TermRange(a, o) }
 
-rule_identifier <TermIdentifier>
-    = _ id:("%" identifier)                                 { new TermIdentifier(id) }
+rule_identifier <TermToken>
+    = _ id:("%" identifier)                                 { new TermToken(id) }
     / _ id:identifier                                       { id }
 
-identifier <TermIdentifier>
-    = _ id:(id_start id_continue*)                          { new TermIdentifier(id) }
+identifier <TermToken>
+    = _ id:(id_start id_continue*)                          { new TermToken(id) }
 
 id_start
     = letter (letter / digit)*
@@ -51,10 +51,25 @@ id_continue
     = "-" (letter / digit)+
 
 string <TermLiteral>
-    = _ ("\'" s:char* "\'")                                 { new TermLiteral(string.Join(string.Empty, s)) }
+    = _ ("\'" s:single_char* "\'")                          { new TermLiteral(string.Join(string.Empty, s)) }
 
-char
-    = !"\'" .
+single_char
+    = !("'" / "\\" / eol_char) .
+    / simple_escape
+
+simple_escape
+  = "\\" !(digit / "x" / "u" / eol_char) char:. {
+        @char
+            .Replace("b", "\b")
+            .Replace("f", "\f")
+            .Replace("n", "\n")
+            .Replace("r", "\r")
+            .Replace("t", "\t")
+            .Replace("v", "\v")
+    }
+
+eol_char
+  = [\n\r\u2028\u2029]
 
 letter
     = [a-z] / [A-Z]

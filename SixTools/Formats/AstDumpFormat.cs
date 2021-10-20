@@ -17,6 +17,8 @@ namespace SixTools.Formats
         {
             Walk(grammar);
         }
+        public string PreferedExtension => ".dump.txt";
+
 
         public override void Walk(Grammar grammar)
         {
@@ -44,7 +46,7 @@ namespace SixTools.Formats
             writer.WriteLine("-epsilon-");
         }
 
-        public override void Visit(TermIdentifier term)
+        public override void Visit(TermToken term)
         {
             writer.WriteLine(term.Text);
         }
@@ -105,20 +107,18 @@ namespace SixTools.Formats
             }
         }
 
+        public override void Visit(TermClamped term)
+        {
+            writer.WriteLine("group");
+            using (writer.Indent())
+            {
+                Walk(term.Term);
+            }
+        }
+
         public override void Visit(TermGroup term)
         {
-            if (term.Min == 1 && term.Max == 1)
-            {
-                writer.WriteLine("group");
-                using (writer.Indent())
-                {
-                    Walk(term.Term);
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            throw new NotImplementedException();
         }
 
         public override void Visit(TermRange term)
@@ -129,6 +129,11 @@ namespace SixTools.Formats
                 Walk(term.Start);
                 Walk(term.Stop);
             }
+        }
+
+        public override void Visit(TermNot term)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SixTools.Ast
+﻿namespace SixTools.Ast
 {
     public abstract class AstWalker
     {
@@ -21,6 +15,22 @@ namespace SixTools.Ast
         {
             Visit(rule);
             Walk(rule.Term);
+        }
+
+        protected void Walk(TermAlternatives term)
+        {
+            foreach (var sub in term.Terms)
+            {
+                Walk(sub);
+            }
+        }
+
+        protected void Walk(TermSequence term)
+        {
+            foreach (var sub in term.Terms)
+            {
+                Walk(sub);
+            }
         }
 
         public void Walk(Term term)
@@ -41,13 +51,15 @@ namespace SixTools.Ast
         {
         }
 
-        public abstract void Visit(TermGroup term);
         public abstract void Visit(TermAlternatives term);
         public abstract void Visit(TermSequence term);
         public abstract void Visit(TermEmpty term);
-        public abstract void Visit(TermIdentifier term);
+        public abstract void Visit(TermToken term);
         public abstract void Visit(TermLiteral term);
         public abstract void Visit(TermRange term);
+        public abstract void Visit(TermNot term);
+        public abstract void Visit(TermGroup term);
+        public abstract void Visit(TermClamped term);
         public abstract void Visit(TermOptional term);
         public abstract void Visit(TermOneOrMore term);
         public abstract void Visit(TermZeroOrMore term);

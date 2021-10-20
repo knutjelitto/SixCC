@@ -2,13 +2,13 @@
 {
     public class Rule
     {
-        public Rule(TermIdentifier name, Term term)
+        public Rule(TermToken name, Term term)
         {
             Name = name;
             Term = term;
         }
 
-        public TermIdentifier Name { get; }
+        public TermToken Name { get; }
         public Term Term { get; private set; }
 
         public void Shrink()
