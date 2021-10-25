@@ -22,8 +22,7 @@
 
 WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
-	assert(term->type != TYPE_GROUP);
-	assert(!term->invisible);
+	assert(term->type != AST_GROUP);
 
 	/* TODO: semantic checks ought to find if we can output to this language; groups cannot */
 	/* BNF cannot express term repetition; TODO: semantic checks for this */
@@ -33,19 +32,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			writer->puts(" \"\"");
 			break;
 
-		case TYPE_RULE:
+		case AST_RULE:
 			writer->printf(" <%s>", term->rule()->name.chars());
 			break;
 
-		case TYPE_CI_LITERAL:
-			fprintf(stderr, "unimplemented\n");
-			return 0;
-
-		case TYPE_CS_LITERAL:
+		case AST_LITERAL:
 		{
 			char c;
 
@@ -54,15 +49,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			break;
 		}
 
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			writer->printf(" <%s>", term->text().chars());
 			break;
 
-		case TYPE_PROSE:
+		case AST_PROSE:
 			fprintf(stderr, "unimplemented\n");
 			return 0;
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			fprintf(stderr, "not supported\n");
 			return 0;
 	}
@@ -71,8 +66,6 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	assert(!alt->invisible);
-
 	for (auto term : alt->terms)
 	{
 		if (!output_term(term))

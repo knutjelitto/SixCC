@@ -42,36 +42,26 @@ static void output_literal(const text& text)
 WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 {
 	assert(term != nullptr);
-	assert(!term->invisible);
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			writer->puts("$$; ");
 			break;
 
-		case TYPE_RULE:
+		case AST_RULE:
 			writer->printf("%s; ", term->rule()->name.chars());
 			break;
 
-		case TYPE_CI_LITERAL:
-#if true
-			writer->printf(" unimplemented-ci-literal<%s>", term->text().chars());
-			break;
-#else
-			fprintf(stderr, "unimplemented\n");
-			return 0;
-#endif
-
-		case TYPE_CS_LITERAL:
+		case AST_LITERAL:
 			output_literal(term->text());
 			break;
 
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			writer->printf("%s; ", term->text().chars());
 			break;
 
-		case TYPE_PROSE:
+		case AST_PROSE:
 #if true
 			writer->printf(" unimplemented-prose<%s>", term->text().chars());
 			break;
@@ -80,7 +70,7 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 			return 0;
 #endif
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			writer->puts("{ ");
 			if (!output_alt(term->group().front()))
 			{
@@ -94,7 +84,6 @@ WARN_UNUSED_RESULT static int output_basic(const struct ast_term* term)
 WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 {
 	assert(term != nullptr);
-	assert(!term->invisible);
 
 	/* SID cannot express term repetition; TODO: semantic checks for this */
 	/* TODO: can output repetition as [ ... ] local rules with a stub to call them X times? */
@@ -121,7 +110,6 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
 	assert(alt != nullptr);
-	assert(!alt->invisible);
 
 	for (auto term : alt->terms)
 	{
@@ -170,14 +158,13 @@ static bool is_equal(const struct ast_term* a, const struct ast_term* b)
 
 	switch (a->type)
 	{
-		case TYPE_EMPTY:      return true;
-		case TYPE_RULE:       return a->rule()->name.eq(b->rule()->name);
-		case TYPE_CI_LITERAL: return a->text().cieq(b->text());
-		case TYPE_CS_LITERAL: return a->text().eq(b->text());
-		case TYPE_TOKEN:      return a->text().eq(b->text());
-		case TYPE_PROSE:      return a->text().eq(b->text());
+		case AST_EMPTY:      return true;
+		case AST_RULE:       return a->rule()->name.eq(b->rule()->name);
+		case AST_LITERAL: return a->text().eq(b->text());
+		case AST_TOKEN:      return a->text().eq(b->text());
+		case AST_PROSE:      return a->text().eq(b->text());
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			/* unimplemented */
 			return 0;
 	}
@@ -197,31 +184,28 @@ WARN_UNUSED_RESULT static int output_terminals(const ast_grammar& grammar)
 			struct ast_term* aterm;
 
 			assert(alt != nullptr);
-			assert(!alt->invisible);
 
 			for (auto term : alt->terms)
 			{
 				assert(term != nullptr);
-				assert(!term->invisible);
 
 				switch (term->type)
 				{
-					case TYPE_EMPTY:
-					case TYPE_GROUP:
+					case AST_EMPTY:
+					case AST_GROUP:
 						continue;
 
-					case TYPE_RULE:
-					case TYPE_TOKEN:
-					case TYPE_PROSE:
+					case AST_RULE:
+					case AST_TOKEN:
+					case AST_PROSE:
 						continue;
 
-					case TYPE_CI_LITERAL:
-					case TYPE_CS_LITERAL:
+					case AST_LITERAL:
 						aterm = term;
 						break;
 				}
 
-				assert(aterm->type == TYPE_CI_LITERAL || aterm->type == TYPE_CS_LITERAL);
+				assert(aterm->type == AST_LITERAL);
 
 				struct ast_term* t;
 
@@ -238,9 +222,7 @@ WARN_UNUSED_RESULT static int output_terminals(const ast_grammar& grammar)
 					continue;
 				}
 
-				t = aterm->type == TYPE_CI_LITERAL 
-					? ast_term::make_ci_literal(0, aterm->text())
-					: ast_term::make_cs_literal(0, aterm->text());
+				t = ast_term::make_cs_literal(aterm->text());
 				t->next = found;
 				found = t;
 			}

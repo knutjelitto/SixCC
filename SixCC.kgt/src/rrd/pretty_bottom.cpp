@@ -33,7 +33,7 @@ static int bottom_loop(node** np)
         return 0;
     }
 
-    if (n->loop.backward->type == NODE_CI_LITERAL || n->loop.backward->type == NODE_CS_LITERAL || n->loop.backward->type == NODE_RULE)
+    if (n->loop.backward->type == NODE_LITERAL || n->loop.backward->type == NODE_RULE)
     {
         return 0;
     }
@@ -65,7 +65,7 @@ static int bottom_loop(node** np)
         nuw->push_back(n);
         nuw->push_back(nullptr);
 
-        *np = node_create_alt(n->invisible, nuw);
+        *np = node_create_alt(nuw);
     }
 
     return 1;
@@ -95,8 +95,7 @@ node* rrd_pretty_bottom(int* changed, struct node** rrd)
             }
             break;
 
-        case NODE_CI_LITERAL:
-        case NODE_CS_LITERAL:
+        case NODE_LITERAL:
         case NODE_RULE:
         case NODE_PROSE:
         case NODE_ALT:

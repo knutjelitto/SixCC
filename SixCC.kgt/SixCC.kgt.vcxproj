@@ -337,11 +337,6 @@
     <None Include="src\wsn\lexer.lx" />
     <None Include="src\wsn\parser.sid" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SixCC.peg\SixCC.peg.vcxproj">
-      <Project>{48e7bcc4-ed49-45f5-9477-2a5568ec5409}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

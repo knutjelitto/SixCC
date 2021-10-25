@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SixTools.Ast;
 
 namespace SixTools.Formats
 {
     public interface IFormat
     {
-        void Format();
+        void Format(Grammar grammar, Writer writer);
         string PreferedExtension { get; }
     }
 }

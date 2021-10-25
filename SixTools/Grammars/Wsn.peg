@@ -21,9 +21,9 @@ term <Term>
 factor <Term>
     = identifier
     / literal
-    / _ "[" e:expression "]"                        { new TermOptional(e) }
+    / _ "[" e:expression "]"                        { new TermZeroOrOne(e) }
     / _ "{" e:expression "}"                        { new TermZeroOrMore(e) }
-    / _ "(" e:expression ")"                        { new TermOneOrMore(e) }
+    / _ "(" e:expression ")"                        { new TermClamped(e) }
 
 identifier <TermToken>
     = _ id:(id_start id_continue*)                  { new TermToken(id) }

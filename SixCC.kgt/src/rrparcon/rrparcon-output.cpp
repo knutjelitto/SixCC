@@ -108,23 +108,9 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 		return 1;
 	}
 
-	assert(!n->invisible);
-
 	switch (n->type)
 	{
-		case NODE_CI_LITERAL:
-#if true
-			print_indent(writer, depth);
-			writer->printf("unimplemented-ci-text(\"");
-			writer->escape(n->literal(), escputc);
-			writer->printf("\")");
-			break;
-#else
-			fprintf(stderr, "unimplemented\n");
-			return 0;
-#endif
-
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 			print_indent(writer, depth);
 			writer->printf("text(\"");
 			writer->escape(n->literal(), escputc);
@@ -311,10 +297,6 @@ WARN_UNUSED_RESULT int rrparcon_output(const ast_grammar& grammar)
 		{
 			rrd_pretty(&rrd);
 		}
-
-		/* TODO: pass in unsupported bitmap */
-		if (!rewrite_rrd_ci_literals(rrd))
-			return 0;
 
 		writer->printf("  (\n");
 		writer->printf("    \"");

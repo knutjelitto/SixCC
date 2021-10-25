@@ -24,8 +24,7 @@ node* rrd_pretty_collapse(int* changed, node** rrd)
 
     switch ((*rrd)->type)
     {
-        case NODE_CI_LITERAL:
-        case NODE_CS_LITERAL:
+        case NODE_LITERAL:
         case NODE_RULE:
         case NODE_PROSE:
         case NODE_LOOP:

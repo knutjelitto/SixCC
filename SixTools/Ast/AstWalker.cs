@@ -53,14 +53,15 @@
 
         public abstract void Visit(TermAlternatives term);
         public abstract void Visit(TermSequence term);
-        public abstract void Visit(TermEmpty term);
+        public abstract void Visit(TermEpsilon term);
+        public abstract void Visit(TermAny term);
         public abstract void Visit(TermToken term);
         public abstract void Visit(TermLiteral term);
         public abstract void Visit(TermRange term);
         public abstract void Visit(TermNot term);
         public abstract void Visit(TermGroup term);
         public abstract void Visit(TermClamped term);
-        public abstract void Visit(TermOptional term);
+        public abstract void Visit(TermZeroOrOne term);
         public abstract void Visit(TermOneOrMore term);
         public abstract void Visit(TermZeroOrMore term);
     }

@@ -1,4 +1,4 @@
-﻿namespace SixTools.Formats
+﻿namespace SixTools.Helpers
 {
     public static class Esc
     {
@@ -75,7 +75,6 @@
                 case '\x0E': return Control("SO");
                 case '\x0F': return Control("SI");
 
-
                 case '\x10': return Control("DLE");
                 case '\x11': return Control("DC1");
                 case '\x12': return Control("DC2");
@@ -93,7 +92,7 @@
                 case '\x1E': return Control("RS");
                 case '\x1F': return Control("US");
 
-                case '\x20': return Control("SP");
+                case '\x20': return Printable("&UnderBracket;");
 
                 case '\x7F': return Control("DEL");
 
@@ -135,12 +134,17 @@
 
                 default:
 
-                    return $"{c}";
+                    return Printable($"{c}");
             }
 
             static string Control(string ctl)
             {
-                return $"<span class='control'>{ctl}</span>";
+                return $"<span class='char-control'>{ctl}<span role='explanation'>TODO:&nbsp;explain&nbsp;control&nbsp;{ctl}</span></span>";
+            }
+
+            static string Printable(string print)
+            {
+                return $"<span class='char-printable'>{print}<span role='explanation'>TODO:&nbsp;explain&nbsp;character&nbsp;'{print}'</span></span>";
             }
         }
     }

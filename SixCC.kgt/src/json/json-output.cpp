@@ -103,13 +103,12 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 	writer->puts(":");
 	switch (term->type)
 	{
-		case TYPE_EMPTY: output_string("empty"); break;
-		case TYPE_RULE: output_string("rule"); break;
-		case TYPE_CS_LITERAL: output_string("cs_literal"); break;
-		case TYPE_CI_LITERAL: output_string("ci_literal"); break;
-		case TYPE_TOKEN: output_string("token"); break;
-		case TYPE_PROSE: output_string("prose"); break;
-		case TYPE_GROUP: output_string("group"); break;
+		case AST_EMPTY: output_string("empty"); break;
+		case AST_RULE: output_string("rule"); break;
+		case AST_LITERAL: output_string("cs_literal"); break;
+		case AST_TOKEN: output_string("token"); break;
+		case AST_PROSE: output_string("prose"); break;
+		case AST_GROUP: output_string("group"); break;
 		default: writer->puts("null"); break;
 	}
 
@@ -129,43 +128,35 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		writer->printf("%d", term->max);
 	}
 
-	if (term->invisible != 0)
-	{
-		writer->puts(",");
-		output_string("invisible");
-		writer->puts(":true");
-	}
-
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			break;
-		case TYPE_RULE:
+		case AST_RULE:
 			if (!output_term_rule(term->rule()))
 			{
 				return 0;
 			}
 			break;
-		case TYPE_CS_LITERAL:
-		case TYPE_CI_LITERAL:
+		case AST_LITERAL:
 			if (!output_term_literal(term->text()))
 			{
 				return 0;
 			}
 			break;
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			if (!output_term_token(term->text()))
 			{
 				return 0;
 			}
 			break;
-		case TYPE_PROSE:
+		case AST_PROSE:
 			if (!output_term_prose(term->text()))
 			{
 				return 0;
 			}
 			break;
-		case TYPE_GROUP:
+		case AST_GROUP:
 			if (!output_term_group(term->group()))
 			{
 				return 0;
@@ -183,13 +174,6 @@ WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 	output_string("$isa");
 	writer->puts(":");
 	output_string("alt");
-
-	if (alt->invisible != 0)
-	{
-		writer->puts(",");
-		output_string("invisible");
-		writer->puts(":true");
-	}
 
 	if (alt->terms.size() > 0)
 	{

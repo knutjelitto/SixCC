@@ -1,139 +1,157 @@
 ﻿using SixTools.Ast;
+using SixTools.Helpers;
 
 namespace SixTools.Formats
 {
-    public class AstDumpFormat : AstWalker, IFormat
+    public class AstDumpFormat : IFormat
     {
-        private readonly Grammar grammar;
-        private readonly Writer writer;
+        public string PreferedExtension => ".ast-dump.txt";
 
-        public AstDumpFormat(Grammar grammar, Writer writer)
+        public void Format(Grammar grammar, Writer writer)
         {
-            this.grammar = grammar;
-            this.writer = writer;
+            new Formatter(grammar, writer).Format();
         }
 
-        public void Format()
+        private class Formatter : AstWalker
         {
-            Walk(grammar);
-        }
-        public string PreferedExtension => ".dump.txt";
+            private readonly Grammar grammar;
+            private readonly Writer writer;
 
-
-        public override void Walk(Grammar grammar)
-        {
-            writer.WriteLine(grammar.Name.Text);
-            using (writer.Indent())
+            public Formatter(Grammar grammar, Writer writer)
             {
-                foreach (var rule in grammar.Rules)
+                this.grammar = grammar;
+                this.writer = writer;
+            }
+
+            public void Format()
+            {
+                Walk(grammar);
+            }
+
+            public override void Walk(Grammar grammar)
+            {
+                writer.WriteLine(grammar.Name.Text);
+                using (writer.Indent())
                 {
-                    Walk(rule);
+                    foreach (var rule in grammar.Rules)
+                    {
+                        Walk(rule);
+                    }
                 }
             }
-        }
 
-        public override void Walk(Rule rule)
-        {
-            writer.WriteLine(rule.Name.Text);
-            using (writer.Indent())
+            public override void Walk(Rule rule)
             {
-                Walk(rule.Term);
-            }
-        }
-
-        public override void Visit(TermEmpty term)
-        {
-            writer.WriteLine("-epsilon-");
-        }
-
-        public override void Visit(TermToken term)
-        {
-            writer.WriteLine(term.Text);
-        }
-
-        public override void Visit(TermLiteral term)
-        {
-            writer.WriteLine($"\"{Esc.Full(term.Text)}\"");
-        }
-
-        public override void Visit(TermAlternatives term)
-        {
-            writer.WriteLine($"alternative");
-            using (writer.Indent())
-            {
-                foreach (var sub in term.Terms)
+                writer.WriteLine(rule.Name.Text);
+                using (writer.Indent())
                 {
-                    Walk(sub);
+                    Walk(rule.Term);
                 }
             }
-        }
 
-        public override void Visit(TermSequence term)
-        {
-            writer.WriteLine($"sequence");
-            using (writer.Indent())
+            public override void Visit(TermEpsilon term)
             {
-                foreach (var sub in term.Terms)
+                writer.WriteLine("epsilon");
+            }
+
+            public override void Visit(TermAny term)
+            {
+                writer.WriteLine("any");
+            }
+
+            public override void Visit(TermToken term)
+            {
+                writer.WriteLine($"token {term.Text}");
+            }
+
+            public override void Visit(TermLiteral term)
+            {
+                writer.WriteLine($"literal '{Esc.Full(term.Text)}'");
+            }
+
+            public override void Visit(TermAlternatives term)
+            {
+                writer.WriteLine($"alternative");
+                using (writer.Indent())
                 {
-                    Walk(sub);
+                    foreach (var sub in term.Terms)
+                    {
+                        Walk(sub);
+                    }
                 }
             }
-        }
 
-        public override void Visit(TermOptional term)
-        {
-            writer.WriteLine("optional");
-            using (writer.Indent())
+            public override void Visit(TermSequence term)
             {
-                Walk(term.Term);
+                writer.WriteLine($"sequence");
+                using (writer.Indent())
+                {
+                    foreach (var sub in term.Terms)
+                    {
+                        Walk(sub);
+                    }
+                }
             }
-        }
 
-        public override void Visit(TermOneOrMore term)
-        {
-            writer.WriteLine("one-or-more");
-            using (writer.Indent())
+            public override void Visit(TermZeroOrOne term)
             {
-                Walk(term.Term);
+                writer.WriteLine("zero-or-one");
+                using (writer.Indent())
+                {
+                    Walk(term.Term);
+                }
             }
-        }
 
-        public override void Visit(TermZeroOrMore term)
-        {
-            writer.WriteLine("zero-or-more");
-            using (writer.Indent())
+            public override void Visit(TermOneOrMore term)
             {
-                Walk(term.Term);
+                writer.WriteLine("one-or-more");
+                using (writer.Indent())
+                {
+                    Walk(term.Term);
+                }
             }
-        }
 
-        public override void Visit(TermClamped term)
-        {
-            writer.WriteLine("group");
-            using (writer.Indent())
+            public override void Visit(TermZeroOrMore term)
             {
-                Walk(term.Term);
+                writer.WriteLine("zero-or-more");
+                using (writer.Indent())
+                {
+                    Walk(term.Term);
+                }
             }
-        }
 
-        public override void Visit(TermGroup term)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(TermRange term)
-        {
-            writer.WriteLine("range");
-            using (writer.Indent())
+            public override void Visit(TermClamped term)
             {
-                Walk(term.Start);
-                Walk(term.Stop);
+                writer.WriteLine("group");
+                using (writer.Indent())
+                {
+                    Walk(term.Term);
+                }
             }
-        }
 
-        public override void Visit(TermNot term)
-        {
-            throw new NotImplementedException();
+            public override void Visit(TermGroup term)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Visit(TermRange term)
+            {
+                writer.WriteLine("range");
+                using (writer.Indent())
+                {
+                    Walk(term.Start);
+                    Walk(term.Stop);
+                }
+            }
+
+            public override void Visit(TermNot term)
+            {
+                writer.WriteLine("not");
+                using (writer.Indent())
+                {
+                    Walk(term.Term);
+                }
+            }
         }
     }
 }

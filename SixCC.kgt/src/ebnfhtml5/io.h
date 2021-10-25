@@ -11,12 +11,6 @@
 
 struct ast_grammar;
 
-/*
- * We mark FEATURE_AST_INVISIBLE as unsupported here, because this EBNF
- * is supposed to be a presentational format.
- */
-#define ebnf_html5_ast_unsupported (FEATURE_AST_INVISIBLE)
-
 WARN_UNUSED_RESULT int ebnf_html5_output(const ast_grammar& grammar);
 WARN_UNUSED_RESULT int ebnf_xhtml5_output(const ast_grammar& grammar);
 

@@ -24,7 +24,7 @@
             }
         }
 
-        public void ResolveReference()
+        public void Resolve()
         {
             new GrammarReferencer().Walk(this);
         }

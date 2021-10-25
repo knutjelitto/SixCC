@@ -109,20 +109,9 @@ static void node_walk(iwriter* writer, const struct node* n)
 		return;
 	}
 
-	assert(!n->invisible);
-
 	switch (n->type)
 	{
-		case NODE_CI_LITERAL:
-#if true
-			writer->printf(" unimplemented-ci-literal<%s>", n->literal().chars());
-			break;
-#else
-			fprintf(stderr, "unimplemented\n");
-			err_exit();
-#endif
-
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 			writer->printf("\"");
 			writer->escape(n->literal(), escputc);
 			writer->printf("\"");
@@ -225,12 +214,6 @@ WARN_UNUSED_RESULT int rrll_output(const ast_grammar& grammar)
 		if (prettify)
 		{
 			rrd_pretty(&rrd);
-		}
-
-		/* TODO: pass in unsupported bitmap */
-		if (!rewrite_rrd_ci_literals(rrd))
-		{
-			return 0;
 		}
 
 		writer->printf("[`");

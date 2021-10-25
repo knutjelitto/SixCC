@@ -74,9 +74,47 @@ literal
     : \' literal-char \'
     ;
 
-EOF : ~any
+EOF : ~.
+    ;
+
+eol-character
+    : \r | \n
+    ;
+
+eol-sequence
+    : '\r\n'
+    | '\r'
+    | '\n'
+    ;
+
+line-comment
+    : '//' (~eol-character .) eol-sequence*
+    ;
+
+block-comment
+    : '/*' (~'*/' .)* '*/'
+    ;
+
+hspace
+    : ' '
+    | '\t'
+    ;
+
+vspace
+    : '\r'
+    | '\n'
+    ;
+
+space
+    : hspace
+    | vspace
+    ;
+
+comment
+    : line-comment
+    | block-comment
     ;
 
 %whitespace
-    : (' ' | \r | \n | \t)*
+    : (space | comment)*
     ;

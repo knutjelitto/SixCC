@@ -31,7 +31,11 @@
             Walk(term);
         }
 
-        public override void Visit(TermEmpty term)
+        public override void Visit(TermEpsilon term)
+        {
+        }
+
+        public override void Visit(TermAny term)
         {
         }
 
@@ -62,7 +66,7 @@
             Walk(term.Term);
         }
 
-        public override void Visit(TermOptional term)
+        public override void Visit(TermZeroOrOne term)
         {
             Walk(term.Term);
         }

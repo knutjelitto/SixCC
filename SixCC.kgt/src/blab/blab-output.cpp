@@ -127,15 +127,14 @@ static int atomic(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
-		case TYPE_RULE:
-		case TYPE_CI_LITERAL:
-		case TYPE_CS_LITERAL:
-		case TYPE_TOKEN:
-		case TYPE_PROSE:
+		case AST_EMPTY:
+		case AST_RULE:
+		case AST_LITERAL:
+		case AST_TOKEN:
+		case AST_PROSE:
 			return 1;
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			return 0;
 	}
 
@@ -147,7 +146,6 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 	int a;
 
 	assert(term != nullptr);
-	assert(!term->invisible);
 
 	a = atomic(term);
 
@@ -158,50 +156,16 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			writer->puts(" \"\"");
 			break;
 
-		case TYPE_RULE:
+		case AST_RULE:
 			writer->putc(' ');
 			writer->puts(term->rule()->name);
 			break;
 
-		case TYPE_CI_LITERAL:
-		{
-			size_t i;
-
-			writer->putc(' ');
-
-			/* XXX: the tokenization here is wrong; this should be a single token */
-
-			for (i = 0; i < term->text().length(); i++)
-			{
-				char uc, lc;
-
-				uc = toupper((unsigned char)term->text()[i]);
-				lc = tolower((unsigned char)term->text()[i]);
-
-				if (uc == lc)
-				{
-					writer->putc('[');
-					(void)blab_escputc(term->text()[i]);
-					writer->putc(']');
-					continue;
-				}
-
-				if (uc != lc)
-				{
-					writer->putc('[');
-					(void)blab_escputc(lc);
-					(void)blab_escputc(uc);
-					writer->putc(']');
-				}
-			}
-		}
-		break;
-
-		case TYPE_CS_LITERAL:
+		case AST_LITERAL:
 		{
 			size_t i;
 
@@ -213,15 +177,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			}
 
 			writer->putc('\"');
+			break;
 		}
-		break;
 
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			writer->putc(' ');
 			writer->puts(term->text());
 			break;
 
-		case TYPE_PROSE:
+		case AST_PROSE:
 #if true
 			writer->printf(" unimplemented-prose<%s>", term->text().chars());
 			break;
@@ -230,7 +194,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			return 0;
 #endif
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			if (!output_group(term->group()))
 			{
 				return 0;
@@ -249,8 +213,6 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
-	assert(!alt->invisible);
-
 	bool more = false;
 	for (auto term : alt->terms)
 	{

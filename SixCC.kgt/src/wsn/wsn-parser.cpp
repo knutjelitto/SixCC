@@ -93,7 +93,7 @@ static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
 			}
 			ADVANCE_LEXER;
 
-			ZIt = ast_term::make_group(act_state->invisible, ZIa);
+			ZIt = ast_term::make_group(ZIa);
 
 			break;
 		}
@@ -117,7 +117,7 @@ static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
 			}
 			ADVANCE_LEXER;
 
-			(ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+			(ZIt) = ast_term::make_group(ZIa);
 
 			/* BEGINNING OF ACTION: rep-zero-or-one */
 			{
@@ -159,7 +159,7 @@ static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
 			}
 			ADVANCE_LEXER;
 
-			(ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+			(ZIt) = ast_term::make_group(ZIa);
 
 			/* END OF ACTION: make-group-term */
 			/* BEGINNING OF ACTION: rep-zero-or-more */
@@ -346,7 +346,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 			{
 				//#line 580 "src/parser.act"
 
-				(ZIt) = ast_term::make_empty(act_state->invisible);
+				(ZIt) = ast_term::make_empty();
 
 				//#line 649 "src/wsn/parser.c"
 			}
@@ -384,7 +384,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 					goto ZL1;
 				}
 
-				(ZIt) = ast_term::make_rule(act_state->invisible, r);
+				(ZIt) = ast_term::make_rule(r);
 
 				//#line 701 "src/wsn/parser.c"
 			}
@@ -412,7 +412,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
 			}
 			ADVANCE_LEXER;
 			{
-				ZIt = ast_term::make_literal(act_state->invisible, ZIx, false);
+				ZIt = ast_term::make_cs_literal(ZIx);
 			}
 		}
 		break;
@@ -606,13 +606,13 @@ static void prod_94(lex_state lex_state, act_state act_state, map_term* ZIt, map
 				RESTORE_LEXER;
 				goto ZL1;
 			}
-			(ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+			(ZIl) = ast_make_alt(*ZIt);
 			assert((ZIl)->next == nullptr);
 			(ZIl)->next = (ZIa);
 			break;
 		}
 		default:
-			(ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+			(ZIl) = ast_make_alt(*ZIt);
 			break;
 
 		case (ERROR_TERMINAL):

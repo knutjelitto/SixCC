@@ -47,7 +47,7 @@ static void roll_prefix(int* changed, list& list, int loop_index)
 	node* loop = list[loop_index];
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->loop.backward);
+	node_make_seq(&loop->loop.backward);
 
 	assert(loop->loop.backward != nullptr);
 	assert(loop->loop.backward->type == NODE_SEQ);
@@ -72,7 +72,7 @@ static void roll_prefix(int* changed, list& list, int loop_index)
 
 
 	/* if loop .forward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->loop.forward);
+	node_make_seq(&loop->loop.forward);
 
 	assert(loop->loop.forward != nullptr);
 	assert(loop->loop.forward->type == NODE_SEQ);
@@ -139,7 +139,7 @@ static void roll_suffix(int* changed, list& list, int loop_index)
 	node* loop = list[loop_index];
 
 	/* if loop .backward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->loop.backward);
+	node_make_seq(&loop->loop.backward);
 
 	assert(loop->loop.backward != nullptr);
 	assert(loop->loop.backward->type == NODE_SEQ);
@@ -163,7 +163,7 @@ static void roll_suffix(int* changed, list& list, int loop_index)
 	list.drop(loop_index + 1);
 		
 	/* if loop .forward isn't a NODE_SEQ, make it one */
-	node_make_seq(loop->invisible, &loop->loop.forward);
+	node_make_seq(&loop->loop.forward);
 
 	assert(loop->loop.forward != nullptr);
 	assert(loop->loop.forward->type == NODE_SEQ);
@@ -245,8 +245,7 @@ node* rrd_pretty_roll(int* changed, node** rrd)
 			break;
 		}
 
-		case NODE_CI_LITERAL:
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 		case NODE_RULE:
 		case NODE_PROSE:
 		case NODE_ALT:

@@ -75,8 +75,7 @@ node* rrd_pretty_skippable(int* changed, node** rrd)
 			redundant_skip(changed, (*rrd)->seq());
 			break;
 
-		case NODE_CI_LITERAL:
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 		case NODE_RULE:
 		case NODE_PROSE:
 		case NODE_LOOP:

@@ -362,8 +362,6 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 	switch (n->type)
 	{
 		case TNODE_RTL_ARROW:
-			// '❯' "\xE2\x9D\xAF"
-			// '❮' "\xE2\x9D\xAF"
 			bprintf(ctx, "%.*s", (int)n->w, "<");
 			break;
 
@@ -375,13 +373,7 @@ static void node_walk_render(const struct tnode* n, struct render_context* ctx)
 			bprintf(ctx, ":");
 			break;
 
-		case TNODE_CI_LITERAL:
-			bprintf(ctx, " \"");
-			render_txt(ctx, n->text);
-			bprintf(ctx, "\"/i ");
-			break;
-
-		case TNODE_CS_LITERAL:
+		case TNODE_LITERAL:
 			bprintf(ctx, " \"");
 			render_txt(ctx, n->text);
 			bprintf(ctx, "\" ");

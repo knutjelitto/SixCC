@@ -23,7 +23,7 @@ sequence <Term>
 
 element <Term>
     = range
-    / a:atom _ "?"                                          { new TermOptional(a) }
+    / a:atom _ "?"                                          { new TermZeroOrOne(a) }
     / a:atom _ "*"                                          { new TermZeroOrMore(a) }
     / a:atom _ "+"                                          { new TermOneOrMore(a) }
     / a:atom                                                { a }
@@ -32,6 +32,7 @@ atom <Term>
     = identifier
     / string
     / character
+    / _ '.'                                                 { new TermAny() }                                       
     / _ "(" e:expression _ ")"                              { new TermClamped(e) }
     / _ "~" a:atom                                          { new TermNot(a) }
 
@@ -120,7 +121,13 @@ digit
 hex_digit
     = [0-9a-fA-F]
 
-_   = [ \t\r\n]*
+comment
+    = '/*' (!'*/' .)* '*/'
+
+white
+    = [ \t\r\n]
+
+_   = (comment / white)*
 
 EOF
     = _ !.

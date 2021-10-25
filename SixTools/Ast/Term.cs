@@ -7,7 +7,7 @@
 
     public abstract class TermGroup : Term
     {
-        public TermGroup(Term term, int min = 1, int max = 1)
+        public TermGroup(Term term, int min, int max)
         {
             Term = term;
             Min = min;
@@ -29,9 +29,9 @@
         }
     }
 
-    public class TermOptional : TermGroup
+    public class TermZeroOrOne : TermGroup
     {
-        public TermOptional(Term inner)
+        public TermZeroOrOne(Term inner)
             : base(inner, 0, 1)
         {
         }
@@ -50,6 +50,16 @@
         public TermZeroOrMore(Term inner)
             : base(inner, 0, 0)
         {
+        }
+    }
+
+    public class TermLoop : TermGroup
+    {
+        public TermLoop(Term inner, int min, int max)
+            : base(inner, min, max)
+        {
+            Assert(Min >= 0);
+            Assert(Max > 1 && Max >= Min);
         }
     }
 
@@ -78,16 +88,17 @@
         public override bool IsAtomic => Terms.Count == 1 && Terms[0].IsAtomic;
     }
 
-    public class AtomicTerm : Term
+    public class TermEpsilon : Term
+    {
+        public override bool IsAtomic => false;
+    }
+
+    public class TermAny : Term
     {
         public override bool IsAtomic => true;
     }
 
-    public class TermEmpty : AtomicTerm
-    {
-    }
-
-    public abstract class TextTerm : AtomicTerm
+    public abstract class TextTerm : Term
     {
         public TextTerm(string text)
         {
@@ -100,6 +111,8 @@
         {
             return Text;
         }
+
+        public override bool IsAtomic => true;
     }
 
     public class TermToken : TextTerm
@@ -111,6 +124,22 @@
         }
 
         public bool IsReference { get; set; }
+    }
+
+    public class TermComment : TextTerm
+    {
+        public TermComment(string text)
+            : base(text)
+        {
+        }
+    }
+
+    public class TermProse : TextTerm
+    {
+        public TermProse(string text)
+            : base(text)
+        {
+        }
     }
 
     public class TermLiteral : TextTerm
@@ -137,7 +166,7 @@
         public override bool IsAtomic => Term.IsAtomic;
     }
 
-    public class TermRange : AtomicTerm
+    public class TermRange : Term
     {
         public TermRange(TermLiteral start, TermLiteral stop)
         {
@@ -147,5 +176,7 @@
 
         public TermLiteral Start { get; }
         public TermLiteral Stop { get; }
+
+        public override bool IsAtomic => false;
     }
 }

@@ -229,7 +229,7 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
         {
             ADVANCE_LEXER;
  
-            (ZIt) = ast_term::make_empty(act_state->invisible);
+            (ZIt) = ast_term::make_empty();
             break;
         }
         case (TOK_CHAR):
@@ -380,7 +380,7 @@ static void prod_91(lex_state lex_state, act_state act_state, map_term* ZIt, map
                 goto ZL1;
             }
             {
-                (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+                (ZIl) = ast_make_alt((*ZIt));
             }
             {
                 assert((ZIl)->next == nullptr);
@@ -390,7 +390,7 @@ static void prod_91(lex_state lex_state, act_state act_state, map_term* ZIt, map
         }
         default:
         {
-            (ZIl) = ast_make_alt(act_state->invisible, (*ZIt));
+            ZIl = ast_make_alt(*ZIt);
             break;
         }
         case (ERROR_TERMINAL):
@@ -448,7 +448,7 @@ static void prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
 
             ADVANCE_LEXER;
 
-            ZIt = ast_term::make_literal(act_state->invisible, ZIx, false);
+            ZIt = ast_term::make_cs_literal(ZIx);
             break;
         }
         case (TOK_NAME):
@@ -470,7 +470,7 @@ static void prod_93(lex_state lex_state, act_state act_state, map_term* ZOt)
                 goto ZL1;
             }
 
-            ZIt = ast_term::make_rule(act_state->invisible, r);
+            ZIt = ast_term::make_rule(r);
             break;
         }
         case (ERROR_TERMINAL):

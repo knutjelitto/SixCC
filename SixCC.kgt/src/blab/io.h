@@ -11,8 +11,6 @@
 
 struct ast_rule;
 
-#define blab_ast_unsupported (FEATURE_AST_INVISIBLE)
-
 WARN_UNUSED_RESULT int blab_output(const ast_grammar& grammar);
 
 #endif

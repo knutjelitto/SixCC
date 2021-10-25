@@ -67,8 +67,7 @@ typedef enum
 	TNODE_RTL_ARROW = 42,
 	TNODE_LTR_ARROW,
 	TNODE_ELLIPSIS,
-	TNODE_CI_LITERAL,
-	TNODE_CS_LITERAL,
+	TNODE_LITERAL,
 	TNODE_COMMENT,
 	TNODE_PROSE,
 	TNODE_RULE,
@@ -81,9 +80,9 @@ struct tnode
 	tnode_type type;
 
 	/* in abstract rrd units */
-	unsigned w;
-	unsigned a; /* ascender  - height including and above the line  */
-	unsigned d; /* descender - depth below the line */
+	unsigned w;	// width
+	unsigned a; // ascender  - height including and above the line
+	unsigned d; // descender - depth below the line
 
 	struct text text;
 	struct tnode_vlist vlist;

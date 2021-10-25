@@ -40,8 +40,7 @@ static void ci_alt(int* changed, struct node* n)
 
 		switch (node->type)
 		{
-			case NODE_CI_LITERAL:
-			case NODE_CS_LITERAL:
+			case NODE_LITERAL:
 				if (node->literal().length() != 1)
 				{
 					return;
@@ -70,25 +69,7 @@ static void ci_alt(int* changed, struct node* n)
 
 		switch (node->type)
 		{
-			case NODE_CI_LITERAL:
-			{
-
-				if (!isalpha((unsigned char)node->literal()[0]))
-				{
-					break;
-				}
-
-				node->become_cs();
-
-				struct node* nuw = node_create_cs_literal(node->invisible, node->literal().toupper());
-				list.push_back(nuw);
-
-				*changed = 1;
-
-				break;
-			}
-
-			case NODE_CS_LITERAL:
+			case NODE_LITERAL:
 			case NODE_RULE:
 			case NODE_PROSE:
 			case NODE_ALT:
@@ -117,8 +98,7 @@ node* rrd_pretty_ci(int* changed, node** rrd)
 
 	switch ((*rrd)->type)
 	{
-		case NODE_CI_LITERAL:
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 		case NODE_RULE:
 		case NODE_PROSE:
 		case NODE_SEQ:

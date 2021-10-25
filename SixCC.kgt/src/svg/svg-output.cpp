@@ -113,8 +113,7 @@ static void svg_string(struct render_context *ctx, unsigned w, const text& text,
 	svg_text(ctx, w, text, klass);
 }
 
-static void
-svg_rect(struct render_context *ctx, unsigned w, unsigned r, const char * klass)
+static void svg_rect(struct render_context *ctx, unsigned w, unsigned r, const char * klass)
 {
 	writer->printf("    <rect x='%u' y='%u' height='%u' width='%u' rx='%u' ry='%u'",
 		ctx->x, ctx->y - 10,
@@ -145,8 +144,7 @@ static void svg_prose(struct render_context *ctx, const text& text, unsigned w)
 	ctx->x += w;
 }
 
-static void
-svg_ellipsis(struct render_context *ctx, unsigned w, unsigned h)
+static void svg_ellipsis(struct render_context *ctx, unsigned w, unsigned h)
 {
 	ctx->x += 10;
 	ctx->y -= 10;
@@ -159,8 +157,7 @@ svg_ellipsis(struct render_context *ctx, unsigned w, unsigned h)
 	ctx->y += 10;
 }
 
-static void
-svg_arrow(struct render_context *ctx, unsigned x, unsigned y, int rtl)
+static void svg_arrow(struct render_context *ctx, unsigned x, unsigned y, int rtl)
 {
 	unsigned h = 6;
 
@@ -215,8 +212,7 @@ static void justify(render_context* ctx, const tnode* n, unsigned space, const c
 	ctx->x += rhs;
 }
 
-static void
-bars(struct render_context *ctx, unsigned n, unsigned w)
+static void bars(struct render_context *ctx, unsigned n, unsigned w)
 {
 	svg_path_v(&ctx->paths, ctx->x, ctx->y, n);
 	ctx->x += w;
@@ -239,8 +235,7 @@ enum tile
 
 static void render_tile(struct render_context* ctx, enum tile tile)
 {
-	int y, dy;
-	int rx, ry;
+	int dy;
 
 	switch (tile)
 	{
@@ -265,12 +260,24 @@ static void render_tile(struct render_context* ctx, enum tile tile)
 			break;
 	}
 
+	int y;
+	int rx;
+	int ry;
+
 	switch (tile)
 	{
-		case TILE_BL: y = 10; rx = 0; ry = y; break;
-		case TILE_TL: y = -10; rx = 0; ry = y; break;
-		case TILE_BR: y = -10; rx = 10; ry = 0; break;
-		case TILE_TR: y = 10; rx = 10; ry = 0; break;
+		case TILE_BL:
+			y = 10; rx = 0; ry = y;
+			break;
+		case TILE_TL:
+			y = -10; rx = 0; ry = y;
+			break;
+		case TILE_BR:
+			y = -10; rx = 10; ry = 0;
+			break;
+		case TILE_TR: 
+			y = 10; rx = 10; ry = 0;
+			break;
 
 		case TILE_LINE:
 			svg_path_h(&ctx->paths, ctx->x, ctx->y + dy, 10);
@@ -296,8 +303,7 @@ static void render_tile(struct render_context* ctx, enum tile tile)
 	ctx->x += 10;
 }
 
-static void
-render_tile_bm(struct render_context *ctx, unsigned u)
+static void render_tile_bm(struct render_context *ctx, unsigned u)
 {
 	unsigned v;
 
@@ -577,13 +583,7 @@ static void node_walk_render(const tnode* n, render_context* ctx, const char* ba
 			svg_ellipsis(ctx, 0, (n->a + n->d + 1) * 10);
 			break;
 
-		case TNODE_CI_LITERAL:
-			svg_textbox(ctx, n->text, n->w * 10, 8, "literal");
-			writer->printf("    <text x='%u' y='%u' text-anchor='left' class='ci'>%s</text>\n",
-				ctx->x - 20 + 5, ctx->y + 5, "&#x29f8;i");
-			break;
-
-		case TNODE_CS_LITERAL:
+		case TNODE_LITERAL:
 			svg_textbox(ctx, n->text, n->w * 10, 8, "literal");
 			break;
 
@@ -653,8 +653,7 @@ void svg_render_station(unsigned x, unsigned y)
 	unsigned h = 12;
 
 	/* .5 to overlap the line width */
-	writer->printf("    <path d='M%u.5 %u v%u m %u 0 v%d' class='station'/>\n",
-		x, y - h / 2, h, gap, -h);
+	writer->printf("    <path d='M%u.5 %u v%u m %u 0 v%d' class='station'/>\n", x, y - h / 2, h, gap, -h);
 }
 
 void svg_render_rule(const struct tnode *node, const char *base, const ast_grammar& grammar)
@@ -943,7 +942,6 @@ WARN_UNUSED_RESULT int svg_output(const ast_grammar& grammar)
 	writer->printf("\n");
 
 	z = 0;
-
 	i = 0;
 	for (auto rule : grammar.rules)
 	{
@@ -970,4 +968,3 @@ WARN_UNUSED_RESULT int svg_output(const ast_grammar& grammar)
 	writer->printf("</svg>\n");
 	return 1;
 }
-

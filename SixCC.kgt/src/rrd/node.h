@@ -16,8 +16,7 @@ typedef enum
 
 enum node_type
 {
-	NODE_CI_LITERAL = 42,
-	NODE_CS_LITERAL,
+	NODE_LITERAL = 42,
 	NODE_RULE,
 	NODE_PROSE,
 	NODE_ALT,
@@ -33,27 +32,24 @@ struct node final
 	static int ctor_count;
 	static int dtor_count;
 
-	node(node_type type, int invisible, node* forward, node* backward);
-	node(node_type type, int invisible, const text& text);
-	node(node_type type, int invisible, list* list);
+	node(node_type type, node* forward, node* backward);
+	node(node_type type, const text& text);
+	node(node_type type, list* list);
 
 	~node();
 
 	node_type type;
-	int invisible;
 
 	void tolower()
 	{
 		xxx_text = xxx_text.tolower();
 	}
 
-	void become_cs();
-	void become_alt();
 	void become_alt_skippable();
 
 	const text& literal() const
 	{
-		assert(type == NODE_CI_LITERAL || type == NODE_CS_LITERAL);
+		assert(type == NODE_LITERAL);
 
 		return xxx_text;
 	}
@@ -115,7 +111,7 @@ struct node final
 	}
 	bool is_literal() const
 	{
-		return type == NODE_CI_LITERAL || type == NODE_CS_LITERAL;
+		return type == NODE_LITERAL;
 	}
 	bool is_text() const
 	{
@@ -137,16 +133,15 @@ private:
 
 };
 
-node* node_create_ci_literal(int invisible, const text& literal);
-node* node_create_cs_literal(int invisible, const text& literal);
-node* node_create_name(int invisible, const text& name);
-node* node_create_prose(int invisible, const text& name);
-node* node_create_alt(int invisible, list* alt);
-node* node_create_alt_skippable(int invisible, struct list* alt);
-node* node_create_seq(int invisible, list* seq);
-node* node_create_loop(int invisible, node* forward, node* backward);
+node* node_create_literal(const text& literal);
+node* node_create_name(const text& name);
+node* node_create_prose(const text& name);
+node* node_create_alt(list* alt);
+node* node_create_alt_skippable(struct list* alt);
+node* node_create_seq(list* seq);
+node* node_create_loop(node* forward, node* backward);
 
-void node_make_seq(int invisible, struct node **n);
+void node_make_seq(struct node **n);
 bool node_compare(const struct node *a, const struct node *b);
 void loop_flip(struct node *n);
 

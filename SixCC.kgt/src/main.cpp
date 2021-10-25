@@ -21,8 +21,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../../SixCC.peg/SixPeg.h"
-
 #include "indenter.h"
 
 #include "getopt.h"
@@ -209,19 +207,8 @@ void testsoles(const in_able& in, std::string inputfile, iwriter* writer)
     }
 }
 
-void sixpegger()
-{
-    //sixpeg::check_all();
-
-    sixpeg::check_one();
-
-    ok_exit();
-}
-
 int main(int argc, char* argv[])
 {
-    sixpegger();
-
     tester();
 
     ast_grammar grammar;
@@ -270,35 +257,6 @@ int main(int argc, char* argv[])
     if (report_parsing_errors(&errors))
     {
         err_exit();
-    }
-
-    {
-        unsigned v;
-
-        for (v = out.ast_unsupported; v != 0; v &= v - 1)
-        {
-            /* TODO: expose these rewritings as CLI options too; set as bits in v */
-            /* TODO: option to query if output is possible without rewriting */
-            switch (v & -v)
-            {
-                case FEATURE_AST_CI_LITERAL:
-                    if (!rewrite_ci_literals(grammar))
-                    {
-                        err_exit();
-                    }
-                    break;
-                case FEATURE_AST_INVISIBLE:
-                    rewrite_invisible(grammar);
-                    break;
-
-                case FEATURE_AST_BINARY:
-                    if (ast_maybe_binary(grammar))
-                    {
-                        fprintf(stderr, "Binary strings not supported for this output language\n");
-                    }
-                    break;
-            }
-        }
     }
 
     if (!out.out(grammar))

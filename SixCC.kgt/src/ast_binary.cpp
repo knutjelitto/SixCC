@@ -19,11 +19,10 @@ static int walk_term(const struct ast_term* term)
 
     switch (term->type)
     {
-        case TYPE_CI_LITERAL:
-        case TYPE_CS_LITERAL:
+        case AST_LITERAL:
             return is_binary_literal(term->text());
 
-        case TYPE_GROUP:
+        case AST_GROUP:
             return walk_alts(term->group());
 
         default:

@@ -1,0 +1,75 @@
+﻿rect, line, path {
+    stroke-width: 1px;
+    stroke: black;
+    fill: transparent;
+}
+
+rect, line, path {
+    stroke-linecap: square;
+    stroke-linejoin: round;
+}
+
+rect.debug {
+    stroke: none;
+    opacity: 0.75;
+}
+
+rect.debug.tile {
+    fill: #cccccc;
+}
+
+rect.debug.node {
+    fill: transparent;
+    stroke-width: 1px;
+    stroke: #ccccff;
+    stroke-dasharray: 2 3;
+}
+
+rect.debug.justify {
+    fill: #ccccff;
+}
+
+text.debug.tile {
+    opacity: 0.3;
+    font-family: sans-serif;
+    font-weight: bold;
+    stroke: none;
+}
+
+path {
+    fill: transparent;
+}
+
+text {
+    font-family: sans-serif;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+    text.token {
+        font-family: sans-serif;
+        font-weight: normal;
+    }
+
+    text.reference {
+        font-family: sans-serif;
+        font-weight: normal;
+    }
+
+    text.literal {
+        font-family: sans-serif;
+        font-weight: bold;
+    }
+
+line.ellipsis {
+    stroke-dasharray: 1 3.5;
+}
+
+tspan.hex {
+    font-family: monospace;
+    font-size: 90%;
+}
+
+path.arrow {
+    fill: black;
+}

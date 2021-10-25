@@ -74,13 +74,11 @@ static void tnode_walk(iwriter* writer, const struct tnode* n, int depth)
 
 			break;
 
-		case TNODE_CI_LITERAL:
-		case TNODE_CS_LITERAL:
+		case TNODE_LITERAL:
 			print_indent(writer, depth);
 			writer->printf("LITERAL");
 			print_coords(writer, n);
-			writer->printf(": \"%.*s\"%s\n", (int)n->text.length(), n->text.chars(),
-				n->type == TNODE_CI_LITERAL ? "/i" : "");
+			writer->printf(": \"%.*s\"\n", (int)n->text.length(), n->text.chars());
 
 			break;
 

@@ -121,16 +121,18 @@ struct path* svg_path_find_preceding(struct path* paths, const struct path* n)
     return NULL;
 }
 
-struct path * svg_path_find_following(struct path *paths, unsigned x, unsigned y)
+struct path* svg_path_find_following(struct path* paths, unsigned x, unsigned y)
 {
-    struct path *p;
+    struct path* p;
 
     /*
      * Find any node which starts from the given position.
      */
 
-    for (p = paths; p != NULL; p = p->next) {
-        if (p->x == x && p->y == y) {
+    for (p = paths; p != NULL; p = p->next)
+    {
+        if (p->x == x && p->y == y)
+        {
             return p;
         }
     }
@@ -206,10 +208,12 @@ void svg_path_consolidate(struct path **paths)
 
     assert(paths != NULL);
 
-    for (p = *paths; p != NULL; p = p->next) {
+    for (p = *paths; p != NULL; p = p->next)
+    {
         unsigned nx, ny;
 
-        if (p->type == PATH_Q) {
+        if (p->type == PATH_Q)
+        {
             /* not implemented */
             continue;
         }
@@ -218,14 +222,17 @@ void svg_path_consolidate(struct path **paths)
 
         q = *paths;
 
-        while (q = svg_path_find_following(q, nx, ny), q != NULL) {
+        while (q = svg_path_find_following(q, nx, ny), q != NULL)
+        {
             /* XXX: can happen when n=0 */
-            if (p == q) {
+            if (p == q)
+            {
                 q = q->next;
                 continue;
             }
 
-            if (q->type != p->type) {
+            if (q->type != p->type)
+            {
                 /*
                  * Search onwards from q->next, so as to not re-visit
                  * differently-typed nodes (which remain in the list)

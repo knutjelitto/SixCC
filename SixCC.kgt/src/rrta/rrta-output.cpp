@@ -114,20 +114,7 @@ WARN_UNUSED_RESULT static int node_walk(iwriter* writer, const struct node* n, i
 
 	switch (n->type)
 	{
-		case NODE_CI_LITERAL:
-#if true
-			print_indent(writer, depth);
-			writer->puts("unimplemented-ci-Terminal(\"");
-			writer->escape(n->literal(), escputc);
-			writer->puts("\")");
-
-			break;
-#else
-			fprintf(stderr, "unimplemented\n");
-			return 0;
-#endif
-
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 			print_indent(writer, depth);
 			writer->puts("Terminal(\"");
 			writer->escape(n->literal(), escputc);
@@ -248,12 +235,6 @@ WARN_UNUSED_RESULT int rrta_output(const ast_grammar& grammar)
 		if (prettify)
 		{
 			rrd_pretty(&rrd);
-		}
-
-		/* TODO: pass in unsupported bitmap */
-		if (!rewrite_rrd_ci_literals(rrd))
-		{
-			return 0;
 		}
 
 		writer->puts("add('");

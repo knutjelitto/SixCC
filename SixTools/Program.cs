@@ -1,42 +1,37 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using SixTools;
 using SixTools.Formats;
 using SixTools.Grammars;
 
-var sampleName = "sixg.sixg";
+//EmbeddedResources.List();
 
-var sample = new Samples().Get(sampleName);
-
-var parser = new SixgParser();
-var parsed = parser.Parse(sample);
-
-parsed.Shrink();
-parsed.ResolveReference();
-
-Console.WriteLine($"X: {Environment.CurrentDirectory}");
-var outPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "../../../../..", "SixTmp", "tools"));
-Console.WriteLine($"X: {outPath}");
-if (!Directory.Exists(outPath))
+//foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg", "wsn.sixg", "bnf.sixg" })
+foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg" })
 {
-    _ = Directory.CreateDirectory(outPath);
+    var sample = EmbeddedResources.GetSample(sampleName);
+
+    var parser = new SixgParser();
+    var parsed = parser.Parse(sample);
+
+    parsed.Shrink();
+    parsed.Resolve();
+
+    var outPath = Formatter.TempPath();
+
+    foreach (var formatter in Formatter.Formatters)
+    {
+        using var writer = FFile(outPath, sampleName, formatter.PreferedExtension);
+        formatter.Format(parsed, new SixTools.Writer(writer));
+    }
 }
 
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-var format1 = new SixgFormat(parsed, new SixTools.Writer(Console.Out));
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-
-using (var writer = FFile(outPath, sampleName, "html"))
-{
-    var format = new HtmlFormat(parsed, new SixTools.Writer(writer), true);
-    format.Format();
-}
-
-Console.Write("any (really almost any) key .. ");
+Console.Write("any key .. ");
 Console.ReadKey(true);
 
 static string FName(string path, string sampleName, string extension)
 {
-    return Path.Combine(path, sampleName + "." + extension);
+    return Path.Combine(path, Path.GetFileNameWithoutExtension(sampleName) + extension);
 }
 
 static TextWriter FFile(string path, string sampleName, string extension)

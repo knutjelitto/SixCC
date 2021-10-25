@@ -40,9 +40,9 @@ void ast_terms::destroy()
     clear();
 }
 
-struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms)
+struct ast_alt* ast_make_alt(struct ast_term* terms)
 {
-    return new ast_alt(invisible, terms);
+    return new ast_alt(terms);
 }
 
 struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts)

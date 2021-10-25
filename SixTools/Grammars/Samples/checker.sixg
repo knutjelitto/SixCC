@@ -1,1 +1,40 @@
-grammar check;
+grammar checker;
+
+clutter
+	: aaaaaaaaaa
+	| wwwwwwwwww
+	| mmmmmmmmmm
+	| iiiiiiiiii
+	| AAAAAAAAAA
+	| WWWWWWWWWW
+	| MMMMMMMMMM
+	| IIIIIIIIII
+	;
+
+star
+	: (a|b|c)*
+	;
+
+optional
+	: (a|b|c)?
+	;
+
+plus
+	: (a|b|c)+
+	;
+
+ellipsis
+	: 'a' .. 'z' (a | b | c)
+	;
+
+identifier
+	: ('a' .. 'z' | 'A' .. 'Z') ('0' ..'9' | 'a' .. 'z' | 'A' .. 'Z')*
+	;
+
+sequence
+	: a b c
+	;
+
+a:;
+b:;
+c:;

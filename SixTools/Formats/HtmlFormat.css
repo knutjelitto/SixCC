@@ -1,0 +1,136 @@
+﻿dl.bnf span.token {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    white-space: nowrap;
+}
+
+dl.bnf span.error {
+    border-radius: 0.4em;
+    border-width: 0;
+    outline: 5px dotted orangered;
+}
+
+dl.bnf span.warning {
+    border-radius: 0.4em;
+    border-width: 0;
+    outline: 5px dotted gold;
+}
+
+dl.bnf span.cat {
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+}
+
+dl.bnf dd > span.pipe {
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+}
+
+dl.bnf dd > span.suffix {
+    font-family: monospace;
+    font-size: 1.3em;
+}
+
+dl.bnf span.range {
+    margin-right: 0.3em;
+    margin-left: 0.3em;
+}
+
+dl.bnf span.literal {
+    font-family: monospace;
+    font-size: 1.3em;
+}
+
+dl.bnf span.char-control {
+    font-family: monospace;
+    font-size: 0.55rem;
+    font-weight: bold;
+    background-color: lightgrey;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
+    margin-left: 0.03em;
+    margin-right: 0.03em;
+    border-radius: 0.4em;
+
+    cursor: help;
+    position: relative;
+}
+
+dl.bnf span.char-printable {
+    font-family: monospace;
+    font-size: 1rem;
+
+    cursor: help;
+    position: relative;
+}
+
+dl.bnf span span[role=explanation] {
+    display: none;
+    cursor: help;
+}
+
+dl.bnf span.char-control:hover span[role=explanation],
+dl.bnf span.char-printable:hover span[role=explanation] {
+    display: block;
+    cursor: help;
+    position: absolute;
+    font-family: sans-serif;
+    font-size: 1rem;
+    font-weight: normal;
+    bottom: 1rem;
+    left: 0;
+    width: auto;
+    padding: 0 0.5rem 0 0.5rem;
+    z-index: 100;
+    color: black;
+    background-color: lightgray;
+    border: solid 1px;
+    border-color: darkgray;
+    border-radius: 0.2em;
+}
+
+dl.bnf dd > span.toplevel {
+    margin-right: 0.3em;
+}
+
+dl.bnf dt {
+    display: block;
+    background-color: aliceblue;
+}
+
+dl.bnf a.token:link {
+    color: green;
+    text-decoration: none;
+}
+
+dl.bnf a.token:visited {
+    color: darkgreen;
+    text-decoration: none;
+}
+
+
+dl.bnf a.token:hover {
+    text-decoration: underline;
+}
+
+dl.bnf {
+    margin: 0.5rem 0 0 0;
+    font-family: sans-serif;
+    padding: 0.3rem;
+    background-color: aliceblue;
+}
+
+    dl.bnf dt {
+        margin: 0 0 0.25em 0;
+    }
+
+    dl.bnf dd {
+        margin-left: 2em;
+    }
+
+    dl.bnf span.explanation {
+        margin: 1em 2em;
+        font-family: sans-serif;
+        padding: 0.5ex;
+        background-color: aliceblue;
+    }

@@ -108,8 +108,7 @@ void tnode_free(struct tnode *n)
     case TNODE_LTR_ARROW:
     case TNODE_ELLIPSIS:
     case TNODE_RULE:
-    case TNODE_CI_LITERAL:
-    case TNODE_CS_LITERAL:
+    case TNODE_LITERAL:
     case TNODE_PROSE:
         break;
 
@@ -136,7 +135,7 @@ static bool char_terminal(const struct node* node, unsigned char* c)
     /* we collate ranges for case-sensitive strings only */
 
     if (node == nullptr ||
-        node->type != NODE_CS_LITERAL ||
+        node->type != NODE_LITERAL ||
         node->literal().length() != 1)
     {
         return false;
@@ -190,7 +189,6 @@ static const struct node* find_node(const list& list, char d)
 static struct tnode_vlist tnode_create_alt_list(const list& list, bool rtl, const struct dim* dim)
 {
     struct tnode_vlist nuw{};
-    size_t i;
     struct bm bm;
     int hi, lo;
 
@@ -209,11 +207,8 @@ static struct tnode_vlist tnode_create_alt_list(const list& list, bool rtl, cons
 
     hi = -1;
 
-    i = 0;
+    size_t i = 0;
 
-    /* TODO: how to handle invisible alts? have the corner tiles hidden?
-    at the moment we render an empty line, which makes sense in seqs but not in alts
-    */
     for (auto node : list)
     {
         unsigned char c;
@@ -485,6 +480,7 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
 
     struct tnode* nuw = new tnode();
 
+    // special case -- straight line
     if (node == nullptr || (node->is_list() && node->list().size() == 0))
     {
         nuw->type = TNODE_VLIST;
@@ -502,15 +498,8 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
 
     switch (node->type)
     {
-        case NODE_CI_LITERAL:
-            nuw->type = TNODE_CI_LITERAL;
-            nuw->text = node->literal();
-            dim->literal_txt(nuw->text, &nuw->w, &nuw->a, &nuw->d);
-            nuw->w += dim->literal_padding + dim->ci_marker;
-            break;
-
-        case NODE_CS_LITERAL:
-            nuw->type = TNODE_CS_LITERAL;
+        case NODE_LITERAL:
+            nuw->type = TNODE_LITERAL;
             nuw->text = node->literal();
             dim->literal_txt(nuw->text, &nuw->w, &nuw->a, &nuw->d);
             nuw->w += dim->literal_padding;
@@ -532,6 +521,7 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
 
         case NODE_ALT:
         case NODE_ALT_SKIPPABLE:
+        {
             nuw->type = TNODE_VLIST;
 
             /*
@@ -685,8 +675,9 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
             }
 
             break;
-
+        }
         case NODE_SEQ:
+        {
             nuw->type = TNODE_HLIST;
             nuw->hlist = tnode_create_hlist(node->seq(), rtl, dim);
 
@@ -736,8 +727,9 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
             }
 
             break;
-
+        }
         case NODE_LOOP:
+        {
             nuw->type = TNODE_VLIST;
 
             nuw->vlist.n = 2;
@@ -826,34 +818,7 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
             }
 
             break;
-    }
-
-    /* TODO:
-    we make a tnode subtree above, and then if it is invisible, replace the entire thing
-    with a regular skip or arrow or whatever
-    TODO: option to show invisible nodes
-
-    we do this after constructing the node in order to find its width
-    */
-    if (node->invisible)
-    {
-        struct tnode* old;
-
-        old = nuw;
-
-        nuw = new tnode();
-
-        nuw->type = TNODE_VLIST;
-        nuw->w = old->w;
-        nuw->a = old->a;
-        nuw->d = old->d;
-
-        nuw->vlist.n = 0;
-        nuw->vlist.o = 0;
-        nuw->vlist.a = nullptr;
-        nuw->vlist.b = nullptr;
-
-        tnode_free(old);
+        }
     }
 
     return nuw;
@@ -861,12 +826,9 @@ static tnode* tnode_create_node(const node* node, bool rtl, const dim* dim)
 
 tnode * rrd_to_tnode(const node* node, const dim* dim)
 {
-    struct tnode* n;
-
+    assert(node != nullptr);
     assert(dim != nullptr);
 
-    n = tnode_create_node(node, false, dim);
-
-    return n;
+    return tnode_create_node(node, false, dim);
 }
 

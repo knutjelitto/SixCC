@@ -85,7 +85,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	for (int i = 0; i < sizeof a / sizeof * a; i++)
 	{
-		if (i == 0 && term->type != TYPE_GROUP)
+		if (i == 0 && term->type != AST_GROUP)
 		{
 			continue;
 		}
@@ -104,20 +104,16 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			writer->puts(" \"\"");
 			break;
 
-		case TYPE_RULE:
+		case AST_RULE:
 			writer->putc(' ');
 			writer->puts(term->rule()->name);
 			break;
 
-		case TYPE_CI_LITERAL:
-			fprintf(stderr, "unimplemented\n");
-			return 0;
-
-		case TYPE_CS_LITERAL:
+		case AST_LITERAL:
 		{
 			size_t i;
 
@@ -137,17 +133,17 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 		}
 		break;
 
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			writer->putc(' ');
 			writer->puts(term->text());
 			break;
 
-		case TYPE_PROSE:
+		case AST_PROSE:
 			/* TODO: escaping to somehow avoid ? */
 			writer->printf(" ? %s ?", term->text().chars());
 			break;
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			if (!output_group(term->group()))
 			{
 				return 0;

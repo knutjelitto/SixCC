@@ -65,15 +65,14 @@ static int atomic(const struct ast_term* term)
 
     switch (term->type)
     {
-        case TYPE_EMPTY:
-        case TYPE_RULE:
-        case TYPE_CI_LITERAL:
-        case TYPE_CS_LITERAL:
-        case TYPE_TOKEN:
-        case TYPE_PROSE:
+        case AST_EMPTY:
+        case AST_RULE:
+        case AST_LITERAL:
+        case AST_TOKEN:
+        case AST_PROSE:
             return 1;
 
-        case TYPE_GROUP:
+        case AST_GROUP:
             if (term->group().size() >= 2)
             {
                 return 0;
@@ -117,9 +116,9 @@ static const char* rep(unsigned min, unsigned max)
     return "()";
 }
 
-static void output_literal(const char* prefix, const text& text)
+static void output_literal(const text& text)
 {
-    writer->printf("<tt class='literal %s'>&quot;", prefix);
+    writer->printf("<tt class='literal'>&quot;");
     writer->escape(text, xml_escputc);
     writer->puts("&quot;</tt>");
 }
@@ -129,7 +128,6 @@ static void output_term(const struct ast_term* term)
     const char* r;
 
     assert(term != nullptr);
-    assert(!term->invisible);
 
     r = rep(term->min, term->max);
 
@@ -147,37 +145,33 @@ static void output_term(const struct ast_term* term)
 
     switch (term->type)
     {
-        case TYPE_EMPTY:
+        case AST_EMPTY:
             writer->printf("<span class='empty'>&epsilon;</span>");
             break;
 
-        case TYPE_RULE:
+        case AST_RULE:
             writer->printf("<a href='#%s' class='rule' data-min='%u' data-max='%u'>", term->rule()->name.chars(), term->min, term->max);
             writer->puts(term->rule()->name);
             writer->puts("</a>");
             break;
 
-        case TYPE_CI_LITERAL:
-            output_literal("ci", term->text());
+        case AST_LITERAL:
+            output_literal(term->text());
             break;
 
-        case TYPE_CS_LITERAL:
-            output_literal("cs", term->text());
-            break;
-
-        case TYPE_TOKEN:
+        case AST_TOKEN:
             writer->puts("<span class='token'>");
             writer->puts(term->text());
             writer->puts("</span>");
             break;
 
-        case TYPE_PROSE:
+        case AST_PROSE:
             writer->puts("<span class='prose'>");
             writer->puts(term->text());
             writer->puts("</span>");
             break;
 
-        case TYPE_GROUP:
+        case AST_GROUP:
         {
             bool more = false;
             for (auto alt : term->group())
@@ -212,7 +206,6 @@ static void output_term(const struct ast_term* term)
 static void output_alt(const struct ast_alt* alt)
 {
     assert(alt != nullptr);
-    assert(!alt->invisible);
 
     bool more = false;
     for (auto term : alt->terms)

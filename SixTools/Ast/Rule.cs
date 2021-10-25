@@ -22,6 +22,7 @@
         {
             if (term is TermAlternatives alt)
             {
+                Assert(alt.Terms.Count >= 1);
                 for (var i = 0; i < alt.Terms.Count; i++)
                 {
                     alt.Terms[i] = Shrink(alt.Terms[i]);
@@ -33,9 +34,14 @@
             }
             else if (term is TermSequence seq)
             {
+                Assert(seq.Terms.Count >= 0);
                 for (var i = 0; i < seq.Terms.Count; i++)
                 {
                     seq.Terms[i] = Shrink(seq.Terms[i]);
+                }
+                if (seq.Terms.Count == 0)
+                {
+                    return new TermEpsilon();
                 }
                 if (seq.Terms.Count == 1)
                 {

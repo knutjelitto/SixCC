@@ -11,7 +11,6 @@
 #include "../parsing-error.h"
 struct ast_rule;
 
-#define bnf_ast_unsupported (FEATURE_AST_CI_LITERAL | FEATURE_AST_BINARY | FEATURE_AST_INVISIBLE)
 WARN_UNUSED_RESULT int bnf_output(const ast_grammar& grammar);
 
 bool bnf_input(ast_grammar& grammar, int (*f)(void *opaque), void *opaque, parsing_errors* errors);

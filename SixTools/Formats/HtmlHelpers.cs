@@ -1,6 +1,6 @@
 ﻿namespace SixTools.Formats
 {
-    public static class HtmlExtensions
+    public static class HtmlHelpers
     {
         public static IDisposable TagIndent(this Writer writer, string tag, string klass = "")
         {

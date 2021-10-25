@@ -81,18 +81,9 @@ static void output_term(const ast_grammar& grammar, const struct ast_alt* alt, c
     assert(term->max >= term->min || !term->max);
 
     writer->printf("\t\"a%p\" -> \"t%p\"", map((void*)alt), map((void*)term));
-    if (term->invisible)
-    {
-        writer->printf(" [ color = blue, style = dashed ]");
-    }
     writer->printf(";\n");
 
     writer->printf("\t\"t%p\" [ shape = record, ", map((void*)term));
-
-    if (term->invisible)
-    {
-        writer->printf("color = blue, fontcolor = blue, style = \"rounded,dashed\", ");
-    }
 
     writer->printf("label = \"");
 
@@ -115,36 +106,31 @@ static void output_term(const ast_grammar& grammar, const struct ast_alt* alt, c
 
     switch (term->type)
     {
-        case TYPE_EMPTY:
+        case AST_EMPTY:
             writer->puts("&#x3B5;");
             break;
 
-        case TYPE_RULE:
+        case AST_RULE:
             writer->escape(term->rule()->name, escputc);
             break;
 
-        case TYPE_CI_LITERAL:
-        case TYPE_CS_LITERAL:
+        case AST_LITERAL:
             writer->puts("&quot;");
             writer->escape(term->text(), escputc);
             writer->puts("&quot;");
-            if (term->type == TYPE_CI_LITERAL)
-            {
-                writer->puts("/i");
-            }
             break;
 
-        case TYPE_TOKEN:
+        case AST_TOKEN:
             writer->escape(term->text(), escputc);
             break;
 
-        case TYPE_PROSE:
+        case AST_PROSE:
             writer->puts("?");
             writer->escape(term->text(), escputc);
             writer->puts("?");
             break;
 
-        case TYPE_GROUP:
+        case AST_GROUP:
             writer->printf("()");
             break;
     }
@@ -153,32 +139,25 @@ static void output_term(const ast_grammar& grammar, const struct ast_alt* alt, c
 
     switch (term->type)
     {
-        case TYPE_EMPTY:
+        case AST_EMPTY:
             break;
 
-        case TYPE_RULE:
+        case AST_RULE:
             /* XXX: cross-links to rules are confusing
                     writer->printf("\t\"t%p\" -> \"p%p\" [ dir = forward, color = blue, weight = 0 ];\n",
                         (void *) term, term->u.rule);
             */
             break;
 
-        case TYPE_CI_LITERAL:
-        case TYPE_CS_LITERAL:
-        case TYPE_TOKEN:
-        case TYPE_PROSE:
-            writer->printf("\t\"t%p\" [ style = filled",
-                map((void*)term));
-
-            if (term->invisible)
-            {
-                writer->printf(", color = blue, fillcolor = aliceblue, style = \"dashed,filled\" ");
-            }
+        case AST_LITERAL:
+        case AST_TOKEN:
+        case AST_PROSE:
+            writer->printf("\t\"t%p\" [ style = filled", map((void*)term));
 
             writer->printf("];\n");
             break;
 
-        case TYPE_GROUP:
+        case AST_GROUP:
             output_group(grammar, term, term->group());
             break;
     }
@@ -187,11 +166,6 @@ static void output_term(const ast_grammar& grammar, const struct ast_alt* alt, c
 static void output_alt(const ast_grammar& grammar, const struct ast_alt* alt)
 {
     writer->printf("\t\"a%p\" [ label = \"|\"", map((void*)alt));
-
-    if (alt->invisible)
-    {
-        writer->printf(", color = blue ");
-    }
 
     writer->printf("];\n");
 
@@ -203,8 +177,6 @@ static void output_alt(const ast_grammar& grammar, const struct ast_alt* alt)
 
 static void output_alts(const ast_grammar& grammar, const struct ast_rule* rule, const ast_alts& alts)
 {
-    const struct ast_alt* alt;
-
     for (auto alt : alts)
     {
         writer->printf("\t\"p%p\" -> \"a%p\";\n", map((void*)rule), map((void*)alt));

@@ -16,26 +16,26 @@ int ast_term::ctor_count = 0;
 int ast_term::dtor_count = 0;
 
 
-ast_term::ast_term(ast_term_type type, int invisible)
-    : type(type), invisible(invisible)
+ast_term::ast_term(ast_term_type type)
+    : type(type)
 {
     ctor_count++;
 }
 
-ast_term::ast_term(ast_term_type type, int invisible, const struct text& text)
-    : type(type), invisible(invisible), xxx_characters(text)
+ast_term::ast_term(ast_term_type type, const struct text& text)
+    : type(type), xxx_characters(text)
 {
     ctor_count++;
 }
 
-ast_term::ast_term(ast_term_type type, int invisible, struct ast_rule* rule)
-    : type(type), invisible(invisible), xxx_rule(rule)
+ast_term::ast_term(ast_term_type type, struct ast_rule* rule)
+    : type(type), xxx_rule(rule)
 {
     ctor_count++;
 }
 
-ast_term::ast_term(ast_term_type type, int invisible, struct ast_alt* group)
-    : type(type), invisible(invisible)
+ast_term::ast_term(ast_term_type type, struct ast_alt* group)
+    : type(type)
 {
     for (auto alt = group; alt != nullptr; alt = alt->next)
     {
@@ -55,13 +55,13 @@ ast_term::~ast_term()
 
 void ast_term::destroy()
 {
-    if (type == TYPE_RULE)
+    if (type == AST_RULE)
     {
         assert(xxx_group.size() == 0);
         assert(xxx_characters.size() == 0);
         xxx_rule->destroy();
     }
-    else if (type == TYPE_GROUP)
+    else if (type == AST_GROUP)
     {
         assert(xxx_rule == nullptr);
         assert(xxx_characters.size() == 0);

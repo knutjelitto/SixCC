@@ -59,8 +59,7 @@ static void node_walk(node* (*f)(int*, node**), int* changed, node** rrd)
 
 		case NODE_RULE:
 		case NODE_PROSE:
-		case NODE_CI_LITERAL:
-		case NODE_CS_LITERAL:
+		case NODE_LITERAL:
 			break;
 	}
 }

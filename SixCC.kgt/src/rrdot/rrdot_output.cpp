@@ -98,28 +98,14 @@ static void rrd_print_dot(const text& prefix, const void* parent, const char* po
     }
 
     writer->printf("\t\"%s/%p\"%s -> \"%s/%p\"", prefix.chars(), map(parent), port, prefix.chars(), map((void*)node));
-    if (node->invisible)
-    {
-        writer->printf(" [ color = blue, style = dashed ]");
-    }
     writer->printf(";\n");
 
     writer->printf("\t\"%s/%p\" [ ", prefix.chars(), map((void*)node));
-    if (node->invisible)
-    {
-        writer->printf("color = blue, fontcolor = blue, fillcolor = aliceblue, style = \"rounded,dashed\", ");
-    }
 
     switch (node->type)
     {
-        case NODE_CI_LITERAL:
-            writer->printf("style = \"%s\", shape = box, label = \"\\\"", node->invisible ? "filled,dashed" : "filled");
-            writer->escape(node->literal(), escputc);
-            writer->printf("\\\"\"/i");
-            break;
-
-        case NODE_CS_LITERAL:
-            writer->printf("style = \"%s\", shape = box, label = \"\\\"", node->invisible ? "filled,dashed" : "filled");
+        case NODE_LITERAL:
+            writer->printf("style = \"filled\", shape = box, label = \"\\\"");
             writer->escape(node->literal(), escputc);
             writer->printf("\\\"\"");
             break;

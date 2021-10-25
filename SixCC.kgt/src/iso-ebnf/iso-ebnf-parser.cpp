@@ -101,7 +101,7 @@ static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             }
             ADVANCE_LEXER;
 
-            ZIt = ast_term::make_group(act_state->invisible, ZIa);
+            ZIt = ast_term::make_group(ZIa);
             break;
         }
         case (TOK_STARTOPT):
@@ -125,7 +125,7 @@ static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             }
             ADVANCE_LEXER;
 
-            ZIt = ast_term::make_group(act_state->invisible, ZIa);
+            ZIt = ast_term::make_group(ZIa);
             ZIt->min = 0;
             ZIt->max = 1;
             break;
@@ -151,7 +151,7 @@ static void prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             }
             ADVANCE_LEXER;
 
-            ZIt = ast_term::make_group(act_state->invisible, ZIa);
+            ZIt = ast_term::make_group(ZIa);
             ZIt->min = 0;
             ZIt->max = 0;
             break;
@@ -317,7 +317,7 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
                     goto ZL1;
                 }
 
-                ZIt = ast_term::make_rule(act_state->invisible, r);
+                ZIt = ast_term::make_rule(r);
             }
             break;
         }
@@ -338,7 +338,7 @@ static void prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 //#line 580 "src/parser.act"
 
-                (ZIt) = ast_term::make_empty(act_state->invisible);
+                (ZIt) = ast_term::make_empty();
 
                 //#line 743 "src/iso-ebnf/parser.c"
             }
@@ -540,13 +540,13 @@ static void prod_96(lex_state lex_state, act_state act_state, map_term* ZIt, map
                 return;
             }
             
-            ZIl = ast_make_alt(act_state->invisible, *ZIt);
+            ZIl = ast_make_alt(*ZIt);
             assert(ZIl->next == nullptr);
             ZIl->next = ZIa;
             break;
         }
         default:
-            ZIl = ast_make_alt(act_state->invisible, *ZIt);
+            ZIl = ast_make_alt(*ZIt);
             break;
         case (ERROR_TERMINAL):
             return;
@@ -629,7 +629,7 @@ static void prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
 
             ADVANCE_LEXER;
 
-            ZIt = ast_term::make_literal(act_state->invisible, ZIx, false);
+            ZIt = ast_term::make_cs_literal(ZIx);
         }
         break;
         case (TOK_PROSE):
@@ -642,17 +642,17 @@ static void prod_99(lex_state lex_state, act_state act_state, map_term* ZOt)
             {
                 act_state->invisible = 1;
 
-                (ZIt) = ast_term::make_empty(act_state->invisible);
+                (ZIt) = ast_term::make_empty();
             }
             else if (s.eq("kgt:visible"))
             {
                 act_state->invisible = 0;
 
-                (ZIt) = ast_term::make_empty(act_state->invisible);
+                (ZIt) = ast_term::make_empty();
             }
             else
             {
-                (ZIt) = ast_term::make_prose(act_state->invisible, s);
+                (ZIt) = ast_term::make_prose(s);
             }
             break;
         }

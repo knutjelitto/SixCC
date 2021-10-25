@@ -195,15 +195,14 @@ static int atomic(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
-		case TYPE_RULE:
-		case TYPE_CI_LITERAL:
-		case TYPE_CS_LITERAL:
-		case TYPE_TOKEN:
-		case TYPE_PROSE:
+		case AST_EMPTY:
+		case AST_RULE:
+		case AST_LITERAL:
+		case AST_TOKEN:
+		case AST_PROSE:
 			return 1;
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			return 0;
 	}
 
@@ -233,38 +232,31 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			writer->puts("\"\"");
 			break;
 
-		case TYPE_RULE:
+		case AST_RULE:
 			writer->puts(term->rule()->name);
 			break;
 
-		case TYPE_CI_LITERAL:
-			if (!output_string('i', term->text()))
-			{
-				return 0;
-			}
-			break;
-
-		case TYPE_CS_LITERAL:
+		case AST_LITERAL:
 			if (!output_string('s', term->text()))
 			{
 				return 0;
 			}
 			break;
 
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			writer->puts(term->text());
 			break;
 
-		case TYPE_PROSE:
+		case AST_PROSE:
 			/* TODO: escaping to somehow avoid > */
 			writer->printf("< %s >", term->text().chars());
 			break;
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			if (!output_group(term->group()))
 			{
 				return 0;

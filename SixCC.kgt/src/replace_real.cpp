@@ -48,7 +48,7 @@ void replace_real(ast_grammar& grammar, error_context lex_state)
                 {
                     ast_term* term = vterms[i];
 
-                    if (term->type != TYPE_RULE)
+                    if (term->type != AST_RULE)
                     {
                         continue;
                     }
@@ -68,7 +68,7 @@ void replace_real(ast_grammar& grammar, error_context lex_state)
                         continue;
                     }
 
-                    ast_term* new_term = ast_term::make_token(term->invisible, term->rule()->name);
+                    ast_term* new_term = ast_term::make_token(term->rule()->name);
 
                     vterms[i] = new_term;
                     ast_free_rule((struct ast_rule*)term->rule());

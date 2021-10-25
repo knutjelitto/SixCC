@@ -74,14 +74,13 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 	};
 
 	assert(term != NULL);
-	assert(!term->invisible);
 
 	s = NULL;
 	e = NULL;
 
 	for (i = 0; i < sizeof a / sizeof * a; i++)
 	{
-		if (i == 0 && term->type != TYPE_GROUP)
+		if (i == 0 && term->type != AST_GROUP)
 		{
 			continue;
 		}
@@ -103,16 +102,15 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 
 	switch (term->type)
 	{
-		case TYPE_EMPTY:
+		case AST_EMPTY:
 			writer->puts(" \"\"");
 			break;
 
-		case TYPE_RULE:
+		case AST_RULE:
 			writer->printf(" <%s>", term->rule()->name.chars());
 			break;
 
-		case TYPE_CI_LITERAL:
-		case TYPE_CS_LITERAL:
+		case AST_LITERAL:
 #if true
 			writer->printf(" unimplemented-literal<%s>", term->text().chars());
 			break;
@@ -121,11 +119,11 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			return 0;
 #endif
 
-		case TYPE_TOKEN:
+		case AST_TOKEN:
 			writer->printf(" <%s>", term->text().chars());
 			break;
 
-		case TYPE_PROSE:
+		case AST_PROSE:
 #if true
 			writer->printf(" unimplemented-prose<%s>", term->text().chars());
 			break;
@@ -134,7 +132,7 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 			return 0;
 #endif
 
-		case TYPE_GROUP:
+		case AST_GROUP:
 			if (!output_group(term->group()))
 			{
 				return 0;
@@ -149,7 +147,6 @@ WARN_UNUSED_RESULT static int output_term(const struct ast_term* term)
 WARN_UNUSED_RESULT static int output_alt(const struct ast_alt* alt)
 {
 	assert(alt != NULL);
-	assert(!alt->invisible);
 
 	for (auto term : alt->terms)
 	{

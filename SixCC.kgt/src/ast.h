@@ -34,21 +34,17 @@ struct ast_alts : std::vector<ast_alt*>
 
 typedef enum
 {
-    FEATURE_AST_CI_LITERAL = 1 << 0,
-    FEATURE_AST_PROSE      = 1 << 1,
-    FEATURE_AST_BINARY     = 1 << 2,
-    FEATURE_AST_INVISIBLE  = 1 << 3
+    FEATURE_AST_PROSE      = 1 << 0,
 } ast_features;
 
 typedef enum ast_term_type
 {
-    TYPE_EMPTY = 42,
-    TYPE_RULE,
-    TYPE_CS_LITERAL,
-    TYPE_CI_LITERAL,
-    TYPE_TOKEN,
-    TYPE_PROSE,
-    TYPE_GROUP
+    AST_EMPTY = 42,
+    AST_RULE,
+    AST_LITERAL,
+    AST_TOKEN,
+    AST_PROSE,
+    AST_GROUP
 } ast_term_type;
 
 /*
@@ -64,69 +60,54 @@ struct ast_term final
     static int ctor_count;
     static int dtor_count;
 
-    ast_term(ast_term_type type, int invisible);
-    ast_term(ast_term_type type, int invisible, const text& text);
-    ast_term(ast_term_type type, int invisible, struct ast_rule* rule);
-    ast_term(ast_term_type type, int invisible, struct ast_alt* group);
+    ast_term(ast_term_type type);
+    ast_term(ast_term_type type, const text& text);
+    ast_term(ast_term_type type, struct ast_rule* rule);
+    ast_term(ast_term_type type, struct ast_alt* group);
 
     ~ast_term();
 
     void destroy();
 
-    static ast_term* make_empty(int invisible)
+    static ast_term* make_empty()
     {
-        return new ast_term(TYPE_EMPTY, invisible);
+        return new ast_term(AST_EMPTY);
     }
 
-    static ast_term* make_rule(int invisible, struct ast_rule* rule)
+    static ast_term* make_rule(struct ast_rule* rule)
     {
         assert(rule != nullptr);
 
-        return new ast_term(TYPE_RULE, invisible, rule);
+        return new ast_term(AST_RULE, rule);
     }
 
-    static ast_term* make_ci_literal(int invisible, const struct text& text)
+    static ast_term* make_cs_literal(const struct text& text)
     {
-        return new ast_term(TYPE_CI_LITERAL, invisible, text);
+        return new ast_term(AST_LITERAL, text);
     }
 
-    static ast_term* make_cs_literal(int invisible, const struct text& text)
-    {
-        return new ast_term(TYPE_CS_LITERAL, invisible, text);
-    }
-
-    static ast_term* make_literal(int invisible, const text& literal, bool ci)
-    {
-        ci = ci && isalphastr(literal);
-
-        return ci
-            ? make_ci_literal(invisible, literal)
-            : make_cs_literal(invisible, literal);
-    }
-
-    static ast_term* make_char(int invisible, char c)
+    static ast_term* make_char(char c)
     {
         struct text t(c);
-        return make_cs_literal(invisible, t);
+        return make_cs_literal(t);
     }
 
-    static ast_term* make_token(int invisible, const text& text)
+    static ast_term* make_token(const text& text)
     {
-        return new ast_term(TYPE_TOKEN, invisible, text);
+        return new ast_term(AST_TOKEN, text);
     }
 
-    static ast_term* make_prose(int invisible, const text& text)
+    static ast_term* make_prose(const text& text)
     {
-        return new ast_term(TYPE_PROSE, invisible, text);
+        return new ast_term(AST_PROSE, text);
     }
 
-    static ast_term* make_group(int invisible, struct ast_alt* group)
+    static ast_term* make_group(struct ast_alt* group)
     {
-        return new ast_term(TYPE_GROUP, invisible, group);
+        return new ast_term(AST_GROUP, group);
     }
 
     const ast_term_type type;
-    int invisible;
     ast_term* next = nullptr;
     unsigned int min = 1;
     unsigned int max = 1; /* false (0) for unlimited */
@@ -143,13 +124,13 @@ struct ast_term final
 
     void set_rule(ast_rule* new_rule)
     {
-        assert(type == TYPE_RULE);
+        assert(type == AST_RULE);
         xxx_rule = new_rule;
     }
 
     const ast_alts& group() const
     {
-        assert(type == TYPE_GROUP);
+        assert(type == AST_GROUP);
         return xxx_group;
     }
 
@@ -166,8 +147,7 @@ private:
  */
 struct ast_alt
 {
-    ast_alt(int invisible, ast_term* term_list)
-        : invisible(invisible)
+    ast_alt(ast_term* term_list)
     {
         for (auto term = term_list; term != nullptr; term = term->next)
         {
@@ -186,7 +166,6 @@ struct ast_alt
         delete this;
     }
 
-    int invisible;
     struct ast_terms terms;
 
     struct ast_alt* next = nullptr;
@@ -234,7 +213,7 @@ struct ast_grammar
     ast_rules rules;
 };
 
-struct ast_alt* ast_make_alt(int invisible, struct ast_term* terms);
+struct ast_alt* ast_make_alt(struct ast_term* terms);
 struct ast_rule* ast_make_rule(const text& name, struct ast_alt* alts);
 
 struct ast_rule* ast_find_rule(const ast_grammar& grammar, const text& name);

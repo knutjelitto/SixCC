@@ -95,7 +95,7 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             }
             ADVANCE_LEXER;
 
-            (ZIt) = ast_term::make_group(act_state->invisible, (ZIa));
+            (ZIt) = ast_term::make_group(ZIa);
             break;
         }
         case (TOK_STARTOPT):
@@ -138,7 +138,7 @@ prod_factor(lex_state lex_state, act_state act_state, map_term* ZOt)
             }
             ADVANCE_LEXER;
 
-            ZIt = ast_term::make_group(act_state->invisible, ZIa);
+            ZIt = ast_term::make_group(ZIa);
 
             assert(ZImax >= ZImin || ZImax != 0);
 
@@ -368,7 +368,7 @@ prod_term(lex_state lex_state, act_state act_state, map_term* ZOt)
                 goto ZL1;
             }
 
-            (ZIt) = ast_term::make_rule(act_state->invisible, r);
+            (ZIt) = ast_term::make_rule(r);
 
             //#line 684 "src/rbnf/parser.c"
         }
@@ -496,14 +496,14 @@ static void prod_92(lex_state lex_state, act_state act_state, map_term* ZIt, map
                 RESTORE_LEXER;
                 goto ZL1;
             }
-            ZIl = ast_make_alt(act_state->invisible, *ZIt);
+            ZIl = ast_make_alt(*ZIt);
             assert(ZIl->next == nullptr);
             ZIl->next = ZIa;
             break;
         }
         default:
         {
-            ZIl = ast_make_alt(act_state->invisible, *ZIt);
+            ZIl = ast_make_alt(*ZIt);
             break;
         }
         case (ERROR_TERMINAL):
