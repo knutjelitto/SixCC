@@ -5,6 +5,6 @@ namespace SixTools.Formats
     public interface IFormat
     {
         void Format(Grammar grammar, Writer writer);
-        string PreferedExtension { get; }
+        string DebugExtension { get; }
     }
 }

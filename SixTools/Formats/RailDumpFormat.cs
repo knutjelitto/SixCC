@@ -6,7 +6,7 @@ namespace SixTools.Formats
 {
     public class RailDumpFormat : IFormat
     {
-        public string PreferedExtension => ".rr-dump.txt";
+        public string DebugExtension => ".rr-dump.txt";
 
         public void Format(Grammar grammar, Writer writer)
         {
@@ -89,6 +89,7 @@ namespace SixTools.Formats
                             writer.WriteLine("loop");
                             using (writer.Indent())
                             {
+                                writer.WriteLine($".skip: {loop.Skip.ToString().ToLowerInvariant()}");
                                 writer.WriteLine(".forward");
                                 Write(loop.Forward);
                                 writer.WriteLine(".backward");

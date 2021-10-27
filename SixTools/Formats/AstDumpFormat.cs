@@ -5,7 +5,7 @@ namespace SixTools.Formats
 {
     public class AstDumpFormat : IFormat
     {
-        public string PreferedExtension => ".ast-dump.txt";
+        public string DebugExtension => ".ast-dump.txt";
 
         public void Format(Grammar grammar, Writer writer)
         {

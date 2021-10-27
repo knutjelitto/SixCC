@@ -2,7 +2,7 @@
 #pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace SixTools.Formats
+namespace SixTools.Formats.RailSvg
 {
     public abstract class PathXY
     {
@@ -104,9 +104,9 @@ namespace SixTools.Formats
             }
         }
 
-        public void AddQ(int x, int y, int rx, int ry, int mx, int my)
+        public void AddQ(int x0, int y0, int rx, int ry, int x1, int y1)
         {
-            paths.Insert(0, new PathQ(x, y, rx, ry, mx, my));
+            paths.Insert(0, new PathQ(x0, y0, rx, ry, x1, y1));
         }
 
         public void Clear()

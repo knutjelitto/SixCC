@@ -95,16 +95,18 @@
     /// </summary>
     public class LoopRail : Railroad
     {
-        public LoopRail(Railroad forward, Railroad backward, int min, int max)
+        public LoopRail(Railroad forward, Railroad backward, bool skip, int min, int max)
         {
             Forward = forward;
             Backward = backward;
+            Skip = skip;
             Min = min;
             Max = max;
         }
 
         public Railroad Forward { get; }
         public Railroad Backward { get; }
+        public bool Skip { get; }
         public int Min { get; }
         public int Max { get; }
     }

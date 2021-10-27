@@ -26,9 +26,9 @@ namespace SixTools
             return string.Empty;
         }
 
-        public static TextReader? GetCss(Type type)
+        public static TextReader? GetCss(string name)
         {
-            var stream = type.Assembly.GetManifestResourceStream($"{type.FullName}.css");
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{name}.css");
             return stream != null
                 ? new StreamReader(stream)
                 : null;
@@ -36,7 +36,7 @@ namespace SixTools
 
         public static void GetCss(Writer writer, Type type)
         {
-            using (var stream = GetCss(type))
+            using (var stream = GetCss(type.FullName!))
             {
                 if (stream != null)
                 {
@@ -44,6 +44,29 @@ namespace SixTools
                     while ((line = stream.ReadLine()) != null)
                     {
                         writer.WriteLine(line);
+                    }
+                    return;
+                }
+            }
+        }
+
+        public static void GetCss(Writer writer, string name)
+        {
+            using (var stream = GetCss(name))
+            {
+                if (stream != null)
+                {
+                    string? line;
+                    while ((line = stream.ReadLine()) != null)
+                    {
+                        if (string.IsNullOrWhiteSpace(line))
+                        {
+                            writer.WriteLine();
+                        }
+                        else
+                        {
+                            writer.WriteLine(line);
+                        }
                     }
                     return;
                 }

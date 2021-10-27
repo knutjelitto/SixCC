@@ -5,7 +5,7 @@ namespace SixTools.Formats
 {
     public class SixgFormat : IFormat
     {
-        public string PreferedExtension => ".sixg";
+        public string DebugExtension => ".sixg";
 
         public void Format(Grammar grammar, Writer writer)
         {

@@ -13,14 +13,7 @@ namespace SixTools.Tiles
         public abstract Dimension Monospace(string text);
         public abstract Dimension SansSerif(string text);
 
-        public int literal_padding;
-        public int rule_padding;
-        public int prose_padding;
         public int annotation_height;
-        public int ci_marker;
-        public int ellipsis_depth;
-
-        public int comment_padding => prose_padding;
     }
 
     public class Dimension
@@ -75,15 +68,15 @@ namespace SixTools.Tiles
 
     public enum VTileType
     {
-        UNSET = 0,
-        TLINE_A, TLINE_a,
-        TLINE_B,
-        TLINE_C, TLINE_c,
-        TLINE_D, TLINE_d,
-        TLINE_E,
-        TLINE_F,
-        TLINE_G, TLINE_g,
-        TLINE_H, TLINE_h,
+        UNSET = 42,
+        A,
+        B,
+        C,
+        D,
+        E,
+        F,
+        G,
+        H, // skipable loop
     }
 
     public class Tile
@@ -142,6 +135,27 @@ namespace SixTools.Tiles
             foreach (var tile in tiles)
             {
                 Add(tile);
+            }
+        }
+
+        public void Measure()
+        {
+            Dim.Width = 6 + Items.Max(i => i.A.Width);
+
+            Dim.Ascender = 0;
+            for (var i = 0; i < Offset; i++)
+            {
+                Dim.Ascender += this[i].A.Height;
+                Dim.Ascender += 1;
+            }
+            Dim.Ascender += this[Offset].A.Ascender;
+
+            Dim.Descender = 0;
+            Dim.Descender += this[Offset].A.Descender;
+            for (var i = Offset + 1; i < Count; i++)
+            {
+                Dim.Descender += 1;
+                Dim.Descender += this[i].A.Height;
             }
         }
     }
@@ -252,9 +266,9 @@ namespace SixTools.Tiles
         }
     }
 
-    public class AnnotationTile : Tile
+    public class AnnotatedTile : Tile
     {
-        public AnnotationTile(Tile node, string text)
+        public AnnotatedTile(Tile node, string text)
         {
             Node = node;
             Text = text;
@@ -273,10 +287,6 @@ namespace SixTools.Tiles
     }
 
     public class ToLeftArrowTile : ArrowTile
-    {
-    }
-
-    public class EllipsisTile : Tile
     {
     }
 }

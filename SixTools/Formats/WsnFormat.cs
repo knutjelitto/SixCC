@@ -4,7 +4,7 @@ namespace SixTools.Formats
 {
     public class WsnFormat : IFormat
     {
-        public string PreferedExtension => ".wsn";
+        public string DebugExtension => ".wsn";
 
         public void Format(Grammar grammar, Writer writer)
         {

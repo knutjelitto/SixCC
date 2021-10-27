@@ -78,6 +78,6 @@
         private readonly TextWriter sink;
         private int level;
         private bool pending = true;
-        private readonly string prefix = "    ";
+        private readonly string prefix = "  ";
     }
 }

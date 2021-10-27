@@ -5,7 +5,7 @@ namespace SixTools.Formats
 {
     public class HtmlFormat : IFormat
     {
-        public string PreferedExtension => ".html";
+        public string DebugExtension => ".html";
 
         public void Format(Grammar grammar, Writer writer)
         {

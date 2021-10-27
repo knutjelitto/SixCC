@@ -38,7 +38,6 @@ namespace SixTools.Tiles
                     {
                         Dim = dimmer.Monospace(literal.Text)
                     };
-                    tile.Dim.Width += dimmer.literal_padding;
                     break;
                 case TokenRail token:
                     tile = MakeToken(token);
@@ -51,14 +50,12 @@ namespace SixTools.Tiles
                     {
                         Dim = dimmer.SansSerif(prose.Text)
                     };
-                    tile.Dim.Width += dimmer.prose_padding;
                     break;
                 case CommentRail comment:
                     tile = new CommentTile(comment.Text)
                     {
                         Dim = dimmer.SansSerif(comment.Text)
                     };
-                    tile.Dim.Width += dimmer.comment_padding;
                     break;
                 case RangeRail range:
                     tile = MakeRange(range, backwards);
@@ -98,7 +95,6 @@ namespace SixTools.Tiles
             {
                 Dim = dimmer.SansSerif(text)
             };
-            tile.Dim.Width += dimmer.rule_padding;
 
             return tile;
         }
@@ -114,7 +110,6 @@ namespace SixTools.Tiles
             {
                 Dim = dimmer.SansSerif(reference.Text)
             };
-            tile.Dim.Width += dimmer.rule_padding;
 
             return tile;
         }
@@ -142,15 +137,19 @@ namespace SixTools.Tiles
             return tile;
         }
 
-        private AnnotationTile MakeAnnotation(Tile node, string text)
+        private AnnotatedTile MakeAnnotation(Tile node, string text)
         {
-            var tile = new AnnotationTile(node, text);
-            tile.Dim = new Dimension()
+            var tile = new AnnotatedTile(node, text)
             {
-                Width = tile.Node.Width,
-                Ascender = tile.Node.Ascender,
-                Descender = tile.Node.Descender + dimmer.annotation_height
+                Dim = new Dimension()
+                {
+                    Width = node.Width,
+                    Ascender = node.Ascender,
+                    Descender = node.Descender + dimmer.annotation_height
+                }
             };
+
+
             var textdim = dimmer.SansSerif(tile.Text);
             tile.Dim.Width = Math.Max(tile.Dim.Width, textdim.Width);
             tile.Dim.Ascender += textdim.Ascender;
@@ -160,14 +159,23 @@ namespace SixTools.Tiles
 
         private Tile MakeLoop(LoopRail loop, bool backwards)
         {
-            var forward = new VItem(Make(loop.Forward, backwards), backwards ? VTileType.TLINE_H : VTileType.TLINE_h);
-            var backward = new VItem(Make(loop.Backward, !backwards), VTileType.TLINE_E);
+            VTile vlist;
 
-            var vlist = new VTile(0, forward, backward);
+            if (loop.Skip)
+            {
+                var skip = new VItem(Make(new PlainRail(), backwards), VTileType.B);
+                var forward = new VItem(Make(loop.Forward, backwards), VTileType.H);
+                var backward = new VItem(Make(loop.Backward, !backwards), VTileType.E);
+                vlist = new VTile(1, skip, forward, backward);
+            }
+            else
+            {
+                var forward = new VItem(Make(loop.Forward, backwards), VTileType.G);
+                var backward = new VItem(Make(loop.Backward, !backwards), VTileType.E);
+                vlist = new VTile(0, forward, backward);
+            }
 
-            vlist.Dim.Width = 6 + vlist.Items.Max(i => i.A.Width);
-            vlist.Dim.Ascender = vlist.Items[0].A.Ascender;
-            vlist.Dim.Descender = vlist.Items[0].A.Descender + vlist.Items[1].A.Height;
+            vlist.Measure();
 
             var label = LoopLabel(loop.Min, loop.Max);
             if (label.Length > 0)
@@ -204,23 +212,7 @@ namespace SixTools.Tiles
 
             tile.AddRange(tiles);
 
-            tile.Dim.Width = 6 + tile.Items.Max(i => i.A.Width);
-
-            tile.Dim.Ascender = 0;
-            for (var i = 0; i < tile.Offset; i++)
-            {
-                tile.Dim.Ascender += tile.Items[i].A.Height;
-                tile.Dim.Ascender += 1;
-            }
-            tile.Dim.Ascender += tile.Items[tile.Offset].A.Ascender;
-
-            tile.Dim.Descender = 0;
-            tile.Dim.Descender += tile.Items[tile.Offset].A.Descender;
-            for (var i = tile.Offset + 1; i < tile.Count; i++)
-            {
-                tile.Dim.Descender += 1;
-                tile.Dim.Descender += tile.Items[i].A.Height;
-            }
+            tile.Measure();
 
             var count = tile.Count;
             Assert(count >= 2);
@@ -229,42 +221,42 @@ namespace SixTools.Tiles
             {
                 VTileType z;
 
-                var sameline = i == tile.Offset;
-                var aboveline = i < tile.Offset;
-                var belowline = i > tile.Offset;
-                var firstalt = i == 0;
-                var lastalt = i == count - 1;
+                var at_offset = i == tile.Offset;
+                var above_offset = i < tile.Offset;
+                var below_offset = i > tile.Offset;
+                var first_alt = i == 0;
+                var last_alt = i == count - 1;
 
-                if (sameline && lastalt)
+                if (at_offset && last_alt)
                 {
-                    z = backwards ? VTileType.TLINE_A : VTileType.TLINE_a;
+                    //       |         |
+                    //       |         |
+                    // => ---A-- ... --A---
+                    //
+                    z = VTileType.A;
                 }
-                else if (firstalt && aboveline)
+                else if (above_offset && first_alt)
                 {
-                    z = VTileType.TLINE_B;
+                    z = VTileType.B;
                 }
-                else if (sameline && firstalt)
+                else if (at_offset && first_alt)
                 {
-                    z = backwards ? VTileType.TLINE_C : VTileType.TLINE_c;
+                    z = VTileType.C;
                 }
-                else if (sameline)
+                else if (at_offset)
                 {
-                    z = backwards ? VTileType.TLINE_D : VTileType.TLINE_d;
+                    z = VTileType.D;
                 }
-                else if (belowline && i > 0 && lastalt)
+                else if (below_offset && last_alt)
                 {
-                    z = VTileType.TLINE_E;
-                }
-                else if (tile.Items[i].A is EllipsisTile)
-                {
-                    z = VTileType.TLINE_F;
+                    z = VTileType.E;
                 }
                 else
                 {
-                    z = backwards ? VTileType.TLINE_G : VTileType.TLINE_g;
+                    z = VTileType.F;
                 }
 
-                tile.Items[i].B = z;
+                tile[i].B = z;
             }
 
             foreach (var vtile in tile.Items)
@@ -279,7 +271,7 @@ namespace SixTools.Tiles
         {
             Assert(max == 0 || max >= min);
 
-            if (min == 1 && max == 0)
+            if ((min == 0 || min == 1) && max == 0)
             {
                 return string.Empty;
             }

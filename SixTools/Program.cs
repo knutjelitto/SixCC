@@ -6,8 +6,7 @@ using SixTools.Grammars;
 
 //EmbeddedResources.List();
 
-//foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg", "wsn.sixg", "bnf.sixg" })
-foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg" })
+foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg", "wsn.sixg", "bnf.sixg" })
 {
     var sample = EmbeddedResources.GetSample(sampleName);
 
@@ -21,7 +20,7 @@ foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg" })
 
     foreach (var formatter in Formatter.Formatters)
     {
-        using var writer = FFile(outPath, sampleName, formatter.PreferedExtension);
+        using var writer = FFile(outPath, sampleName, formatter.DebugExtension);
         formatter.Format(parsed, new SixTools.Writer(writer));
     }
 }

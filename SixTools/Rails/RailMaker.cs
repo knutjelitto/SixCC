@@ -49,18 +49,15 @@ namespace SixTools.Rails
             }
             else if (term is TermZeroOrMore zeroOrMore)
             {
-                return new ChoiceRail(new PlainRail(), new LoopRail(Make(zeroOrMore.Term), new PlainRail(), 1, 0))
-                {
-                    Offset = 1
-                };
+                return new LoopRail(Make(zeroOrMore.Term), new PlainRail(), true, 0, 0);
             }
             else if (term is TermOneOrMore oneOrMore)
             {
-                return new LoopRail(Make(oneOrMore.Term), new PlainRail(), 1, 0);
+                return new LoopRail(Make(oneOrMore.Term), new PlainRail(), false, 1, 0);
             }
             else if (term is TermLoop loop)
             {
-                return new LoopRail(Make(loop.Term), new PlainRail(), loop.Min, loop.Max);
+                return new LoopRail(Make(loop.Term), new PlainRail(), loop.Min == 0, loop.Min, loop.Max);
             }
             else if (term is TermClamped clamped)
             {

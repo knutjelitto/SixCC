@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <None Remove="Formats\HtmlFormat.css" />
-    <None Remove="Formats\RailSvgFormat.css" />
     <None Remove="Grammars\Samples\sixg.sixg" />
     <None Remove="Grammars\Samples\wsn.sixg" />
     <None Remove="Grammars\Sixg.peg" />
@@ -20,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Formats\RailSvgFormat.css" />
+    <EmbeddedResource Include="Formats\RailSvg\SvgStyle.css" />
     <EmbeddedResource Include="Formats\HtmlFormat.css" />
     <EmbeddedResource Include="Grammars\Samples\wsn.sixg" />
     <EmbeddedResource Include="Grammars\Samples\sixg.sixg" />

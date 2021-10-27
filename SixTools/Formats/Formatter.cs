@@ -5,7 +5,9 @@
         public static readonly IFormat[] Formatters = new[]
         {
             (IFormat)
-            new RailSvgFormat(),
+            new RailSvg.RailHtmlFormat(),
+            new RailSvg.RailXHtmlFormat(),
+            new RailSvg.RailSvgFormat(),
             new AstDumpFormat(),
             new RailDumpFormat(),
             new SixgFormat(),
