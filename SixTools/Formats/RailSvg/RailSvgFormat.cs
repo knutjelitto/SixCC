@@ -76,12 +76,12 @@ namespace SixTools.Formats.RailSvg
                     var y = 0;
                     foreach (var (name, tile) in nodes)
                     {
-                        writer.WriteLine($"<g id='{name}' transform='translate({U.Scale(4)} {U.Scale(y + 1)})'>");
+                        writer.WriteLine($"<g id='{name}' transform='translate({U.Scale(0)} {U.Scale(y + 1)})'>");
                         using (writer.Indent())
                         {
-                            writer.WriteLine($"<text x='{U.Scale(-4)}' y='{U.Scale(0)}'>{name}:</text>");
+                            writer.WriteLine($"<text x='{U.Scale(0)}' y='{U.Scale(0)}'>{name}:</text>");
 
-                            RenderRule(tile, string.Empty);
+                            RenderRule(tile, refBase: string.Empty, down: 10);
 
                         }
                         writer.WriteLine("</g>");
@@ -92,31 +92,6 @@ namespace SixTools.Formats.RailSvg
                 }
                 writer.WriteLine("</svg>");
             }
-
-            private static class U
-            {
-                public const int Scaler = 10;
-                public const int Unit = 20;
-
-                public static int Scale(int u)
-                {
-                    return u * Scaler;
-                }
-            }
-
-            [Flags]
-            private enum Particle
-            {
-                None = 0,
-
-                BottomLeft = 1 << 0, /* `- bottom left */
-                TopLeft = 1 << 1, /* .- top left */
-                BottomRight = 1 << 2, /* -' bottom right */
-                TopRight = 1 << 3, /* -. top right */
-
-                Line = 1 << 4, /* horizontal line */
-            }
-
         }
     }
 }

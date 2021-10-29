@@ -9,13 +9,14 @@ namespace SixTools.Formats.RailSvg
         protected readonly Grammar grammar;
         protected readonly Writer writer;
         protected readonly Dimmer dim = new SvgDimmer();
-        private readonly RenderContext ctx = new();
+        private readonly RenderContext Ctx;
         private readonly SvgWriter Svg;
 
         public SvgFormatter(Grammar grammar, Writer writer)
         {
             this.grammar = grammar;
             this.writer = writer;
+            Ctx = new RenderContext();
             Svg = new SvgWriter(writer);
         }
 
@@ -53,16 +54,15 @@ namespace SixTools.Formats.RailSvg
                     ry = 0;
                     break;
                 case Particle.Line:
-                    ctx.AddH(10);
-                    ctx.x += 10;
+                    Ctx.HLineMove(U.Scale(1));
                     return;
                 case Particle.None:
                 default:
                     throw new InvalidOperationException();
             }
 
-            ctx.path.AddQ(ctx.x, ctx.y + dy, rx, ry, 10, y);
-            ctx.x += 10;
+            Ctx.path.AddQ(Ctx.x, Ctx.y + dy, rx, ry, 10, y);
+            Ctx.x += 10;
         }
 
         private void RenderParticleMap(Particle map)
@@ -70,9 +70,9 @@ namespace SixTools.Formats.RailSvg
             for (var bits = (int)map; bits != 0; bits &= bits - 1)
             {
                 RenderParticle((Particle)(bits & -bits));
-                ctx.x -= 10;
+                Ctx.x -= 10;
             }
-            ctx.x += 10;
+            Ctx.x += 10;
         }
 
         private void RenderOuter(VTileType tline, bool rhs)
@@ -162,27 +162,25 @@ namespace SixTools.Formats.RailSvg
             var lhs = (space - width) / 2;
             var rhs = space - width - lhs;
 
-            ctx.AddH(lhs);
-            ctx.x += lhs;
+            Ctx.HLineMove(lhs);
 
             RenderNode(tile);
 
-            ctx.AddH(rhs);
-            ctx.x += rhs;
+            Ctx.HLineMove(rhs);
         }
 
         private void Bars(int height, int distance)
         {
-            ctx.AddV(height);
-            ctx.x += distance;
-            ctx.AddV(height);
+            Ctx.VLine(height);
+            Ctx.x += distance;
+            Ctx.VLine(height);
         }
 
         private void RenderTextbox(string text, int width, int round, string klass)
         {
-            Svg.Textbox(text, ctx.x, ctx.y, U.Scale(width), U.Unit, round, klass);
+            Svg.Textbox(text, Ctx.x, Ctx.y, U.Scale(width), U.Unit, round, klass);
 
-            ctx.x += U.Scale(width);
+            Ctx.x += U.Scale(width);
         }
 
         private void RenderToken(TokenTile token)
@@ -192,89 +190,91 @@ namespace SixTools.Formats.RailSvg
 
         private void RenderReference(ReferenceTile reference)
         {
-            writer.WriteLine($"<a href='{ctx.RefBase}#{reference.Text}'>"); // TODO: escaping?
-            using (writer.Indent())
+            using (writer.TagIndent("a", "", $"href='{Ctx.RefBase}#{reference.Text}'")) // TODO: escaping?
             {
                 RenderTextbox(reference.Text, reference.Width, 0, "reference");
             }
-            writer.WriteLine("</a>");
         }
 
         private void RenderSingleCharacter(int utf32)
         {
-            var text = Esc.IfControl(utf32);
+            var text = Esc.SvgControl(utf32);
 
             text = text == null
                 ? char.ConvertFromUtf32(utf32)
                 : $"{text}";
 
             var reference = $"https://www.compart.com/en/unicode/U+{utf32:X4}";
-            writer.Write($"<a href='{reference}' target='_blank'><tspan class='single'>{text}</tspan></a>");
+            using (writer.TagIndent("a", "charref", $"href='{reference}' target='_blank'"))
+            {
+                writer.WriteLine($"<tspan class='single'>{text}</tspan>");
+            }
         }
 
         private void RenderRange(RangeTile range)
         {
-            var x = ctx.x;
-            var y = ctx.y;
+            var x = Ctx.x;
+            var y = Ctx.y;
 
             Svg.Diamond(x, y, U.Scale(range.Width), "diamond");
-            writer.Write($"<text x='{x + (U.Scale(range.Width) / 2)}' y='{y + 4}' text-anchor='middle'>");
-            RenderSingleCharacter(range.Start);
-            writer.Write($"<tspan>⋯</tspan>");
-            RenderSingleCharacter(range.Stop);
-            writer.WriteLine("</text>");
+            using (writer.TagIndent("text", "", $"x='{x + (U.Scale(range.Width) / 2)}' y='{y + 4}' text-anchor='middle'"))
+            {
+                RenderSingleCharacter(range.Start);
+                writer.WriteLine($"<tspan>⋯</tspan>");
+                RenderSingleCharacter(range.Stop);
+            }
 
-            ctx.x += U.Scale(range.Width);
+            Ctx.x += U.Scale(range.Width);
         }
 
         private void RenderAnnotated(AnnotatedTile annotated)
         {
             var offset = 5;
 
-            ctx.y += U.Scale(annotated.Descender);
-            ctx.y -= offset; /* off-grid */
-            Svg.Text(ctx.x, ctx.y, U.Scale(annotated.Width), annotated.Text, "annotation");
-            ctx.y += offset;
-            ctx.y -= U.Scale(annotated.Descender);
+            Ctx.y += U.Scale(annotated.Descender);
+            Ctx.y -= offset; /* off-grid */
+            Svg.Text(Ctx.x, Ctx.y, U.Scale(annotated.Width), annotated.Text, "annotation");
+            Ctx.y += offset;
+            Ctx.y -= U.Scale(annotated.Descender);
             RenderCentered(annotated.Node, U.Scale(annotated.Width));
         }
 
         private void RenderLiteral(LiteralTile literal)
         {
-            var x = ctx.x;
-            var y = ctx.y;
+            var x = Ctx.x;
+            var y = Ctx.y;
 
             Svg.Diamond(x, y, U.Scale(literal.Width), "literal");
 
             var text = literal.Text;
 
-            writer.Write($"<text x='{x + (U.Scale(literal.Width) / 2)}' y='{y + 4}' text-anchor='middle'>");
-
-            var i = 0;
-            while (i < text.Length)
+            using (writer.TagIndent("text", "", $"x='{x + (U.Scale(literal.Width) / 2)}' y='{y + 4}' text-anchor='middle'"))
             {
-                int utf32;
-                if (char.IsSurrogatePair(text, i))
+                var i = 0;
+                while (i < text.Length)
                 {
-                    utf32 = char.ConvertToUtf32(text, i);
-                    i += 2;
-                }
-                else if (char.IsSurrogate(text, i))
-                {
-                    utf32 = 0xFFFD; // replacement character
-                }
-                else
-                {
-                    utf32 = text[i];
-                    i += 1;
-                }
+                    int utf32;
+                    if (char.IsSurrogatePair(text, i))
+                    {
+                        utf32 = char.ConvertToUtf32(text, i);
+                        Assert(char.ConvertFromUtf32(utf32).Length == 2);
+                        i += 2;
+                    }
+                    else if (char.IsSurrogate(text, i))
+                    {
+                        utf32 = '�'; // replacement character
+                    }
+                    else
+                    {
+                        utf32 = text[i];
+                        i += 1;
+                    }
 
-                RenderSingleCharacter(utf32);
+                    RenderSingleCharacter(utf32);
+                }
             }
 
-            writer.Write("</text>");
-
-            ctx.x += U.Scale(literal.Width);
+            Ctx.x += U.Scale(literal.Width);
         }
 
         private void RenderVTile(VTile node)
@@ -282,19 +282,19 @@ namespace SixTools.Formats.RailSvg
             Assert(node.Count >= 2);
             Assert(node.Offset <= 1); /* currently only implemented for one node above the line */
 
-            var o = ctx.y;
+            var o = Ctx.y;
 
             if (node.Offset == 1)
             {
-                ctx.y -= U.Scale(node.Ascender - 1);
+                Ctx.y -= U.Scale(node.Ascender - 1);
             }
 
-            var x = ctx.x;
-            var y = ctx.y;
+            var x = Ctx.x;
+            var y = Ctx.y;
 
             for (var j = 0; j < node.Count; j++)
             {
-                ctx.x = x;
+                Ctx.x = x;
                 var item = node[j];
 
                 RenderOuter(item.B, false);
@@ -303,10 +303,10 @@ namespace SixTools.Formats.RailSvg
                 RenderInner(item.B, true);
                 RenderOuter(item.B, true);
 
-                ctx.y += 10;
+                Ctx.y += 10;
                 if (j + 1 < node.Count)
                 {
-                    ctx.y += (item.A.Descender + node[j + 1].A.Ascender) * 10;
+                    Ctx.y += (item.A.Descender + node[j + 1].A.Ascender) * 10;
                 }
             }
 
@@ -323,8 +323,8 @@ namespace SixTools.Formats.RailSvg
                     }
                 }
 
-                ctx.x = x + 10;
-                ctx.y = y + 10;
+                Ctx.x = x + 10;
+                Ctx.y = y + 10;
 
                 h -= 20; /* for the tline corner pieces */
                 Bars(h, (node.Width * 10) - 20);
@@ -343,15 +343,15 @@ namespace SixTools.Formats.RailSvg
                     }
                 }
 
-                ctx.x = x + 10;
-                ctx.y = o + 10;
+                Ctx.x = x + 10;
+                Ctx.y = o + 10;
 
                 h -= 20; /* for the tline corner pieces */
                 Bars(h, (node.Width * 10) - 20);
             }
 
-            ctx.x = x + (node.Width * 10);
-            ctx.y = o;
+            Ctx.x = x + (node.Width * 10);
+            Ctx.y = o;
         }
 
         private void RenderHTile(HTile hNode)
@@ -361,8 +361,7 @@ namespace SixTools.Formats.RailSvg
             {
                 if (more)
                 {
-                    ctx.AddH(U.Unit);
-                    ctx.x += U.Unit;
+                    Ctx.HLineMove(U.Unit);
                 }
                 more = true;
                 RenderNode(node);
@@ -373,30 +372,28 @@ namespace SixTools.Formats.RailSvg
         {
             var w = U.Scale(aNode.Width);
 
-            ctx.AddH(w);
-            Svg.Arrow(ctx.x + (w / 2), ctx.y, false);
-            ctx.x += w;
+            Ctx.HLineMove(w);
+            Svg.Arrow(Ctx.x - (w / 2), Ctx.y, false);
         }
 
         private void RenderRightToLeftArrow(ToLeftArrowTile aNode)
         {
             var w = U.Scale(aNode.Width);
 
-            ctx.AddH(w);
-            Svg.Arrow(ctx.x + (w / 2), ctx.y, true);
-            ctx.x += w;
+            Ctx.HLineMove(w);
+            Svg.Arrow(Ctx.x - (w / 2), Ctx.y, true);
         }
 
         private void RenderProse(ProseTile prose)
         {
-            Svg.Text(ctx.x, ctx.y, U.Scale(prose.Width), prose.Text, "prose");
-            ctx.x += U.Scale(prose.Width);
+            Svg.Text(Ctx.x, Ctx.y, U.Scale(prose.Width), prose.Text, "prose");
+            Ctx.x += U.Scale(prose.Width);
         }
 
         private void RenderComment(CommentTile comment)
         {
-            Svg.Text(ctx.x, ctx.y, U.Scale(comment.Width), comment.Text, "comment");
-            ctx.x += U.Scale(comment.Width);
+            Svg.Text(Ctx.x, Ctx.y, U.Scale(comment.Width), comment.Text, "comment");
+            Ctx.x += U.Scale(comment.Width);
         }
 
         private void RenderNode(Tile node)
@@ -441,12 +438,20 @@ namespace SixTools.Formats.RailSvg
             }
         }
 
-        private void RenderStation(int x, int y)
+        private void RenderLeftStation(int x, int y)
         {
             var gap = 4;
             var h = 14;
 
-            writer.WriteLine($"<path d='M{x},{y - (h / 2)} v{h} m{gap},0 v{-h}' class='station'/>");
+            writer.WriteLine($"<path class='station' d='M{x + 1},{y - (h / 2)} v{h} m{gap},0 v{-h} m{0},{h / 2} h{5}'/>");
+        }
+
+        private void RenderRightStation(int x, int y)
+        {
+            var gap = 4;
+            var h = 14;
+
+            writer.WriteLine($"<path class='station' d='M{x},{y} h{5} m{0},{-(h / 2)} v{h} m{gap},0 v{-h}'/>");
         }
 
         protected void ProvideStyle()
@@ -457,36 +462,36 @@ namespace SixTools.Formats.RailSvg
             }
         }
 
-        protected void RenderRule(Tile node, string refBase)
+        protected void RenderRule(Tile node, string refBase, int down = 0)
         {
-            ctx.Reset(refBase);
+            Ctx.Reset(refBase);
 
-            ctx.x = U.Scale(1) / 2;
-            ctx.y = U.Scale(node.Ascender + 1);
-            RenderStation(ctx.x, ctx.y);
+            Ctx.x = 0;
+            Ctx.y = U.Scale(node.Ascender) + down;
+            RenderLeftStation(Ctx.x, Ctx.y);
 
-            ctx.x = U.Scale(1);
-            ctx.AddH(U.Scale(2));
+            Ctx.x = U.Scale(1);
+            Ctx.HLineMove(U.Scale(2));
 
-            ctx.x = U.Scale(node.Width + 3);
-            ctx.AddH(U.Scale(2));
+            Ctx.x += U.Scale(node.Width);
 
-            ctx.x += U.Scale(2);
-            RenderStation(ctx.x, ctx.y);
+            Ctx.HLineMove(U.Scale(2));
 
-            ctx.x = U.Scale(3);
-            ctx.y = U.Scale(node.Ascender + 1);
+            RenderRightStation(Ctx.x, Ctx.y);
+
+            Ctx.x = U.Scale(3);
+            Ctx.y = U.Scale(node.Ascender) + down;
             RenderNode(node);
 
             /*
              * Consolidate adjacent nodes of the same type.
              */
-            ctx.path.Consolidate();
+            Ctx.path.Consolidate();
 
-            var p = ctx.path.ExtractOne();
+            var p = Ctx.path.ExtractOne();
             while (p != null)
             {
-                writer.Write($"<path d='M{p.x0} {p.y0}");
+                writer.Write($"<path class='rail' d='M{p.x0} {p.y0}");
                 do
                 {
                     switch (p)
@@ -504,17 +509,17 @@ namespace SixTools.Formats.RailSvg
                             throw new InvalidOperationException();
                     }
 
-                    p = ctx.path.ExtractNext(p.x1, p.y1);
+                    p = Ctx.path.ExtractNext(p.x1, p.y1);
 
                 }
                 while (p != null);
 
                 writer.WriteLine("'/>");
 
-                p = ctx.path.ExtractOne();
+                p = Ctx.path.ExtractOne();
             }
         }
-        private static class U
+        protected static class U
         {
             public const int Scaler = 10;
             public const int Unit = 20;

@@ -1,5 +1,4 @@
 ﻿using SixTools.Ast;
-using SixTools.Helpers;
 using SixTools.Rails;
 using SixTools.Tiles;
 
@@ -92,31 +91,6 @@ namespace SixTools.Formats.RailSvg
                 }
                 writer.WriteLine("</svg>");
             }
-
-            private static class U
-            {
-                public const int Scaler = 10;
-                public const int Unit = 20;
-
-                public static int Scale(int u)
-                {
-                    return u * Scaler;
-                }
-            }
-
-            [Flags]
-            private enum Particle
-            {
-                None = 0,
-
-                BottomLeft = 1 << 0, /* `- bottom left */
-                TopLeft = 1 << 1, /* .- top left */
-                BottomRight = 1 << 2, /* -' bottom right */
-                TopRight = 1 << 3, /* -. top right */
-
-                Line = 1 << 4, /* horizontal line */
-            }
-
         }
     }
 }

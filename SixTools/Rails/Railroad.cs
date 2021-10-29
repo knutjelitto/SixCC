@@ -95,18 +95,17 @@
     /// </summary>
     public class LoopRail : Railroad
     {
-        public LoopRail(Railroad forward, Railroad backward, bool skip, int min, int max)
+        public LoopRail(Railroad forward, Railroad backward, int min, int max)
         {
             Forward = forward;
             Backward = backward;
-            Skip = skip;
             Min = min;
             Max = max;
         }
 
         public Railroad Forward { get; }
         public Railroad Backward { get; }
-        public bool Skip { get; }
+        public bool Skip => Min == 0;
         public int Min { get; }
         public int Max { get; }
     }
@@ -129,14 +128,25 @@
     /// </summary>
     public class ChoiceRail : Railroad
     {
-        private readonly List<Railroad> nodes;
+        private readonly List<Railroad> nodes = new();
 
         public ChoiceRail(IEnumerable<Railroad> nodes)
         {
-            this.nodes = nodes.ToList();
+            foreach (var node in nodes)
+            {
+                if (node is ChoiceRail choices)
+                {
+                    this.nodes.AddRange(choices.Nodes);
+                }
+                else
+                {
+                    this.nodes.Add(node);
+                }
+            }
 
-            Offset = 0;
             Assert(Nodes.Count >= 2);
+
+            Offset = Nodes[0] is PlainRail ? 1 : 0;
         }
 
         public ChoiceRail(params Railroad[] nodes)

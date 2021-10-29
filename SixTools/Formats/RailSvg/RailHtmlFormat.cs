@@ -1,10 +1,6 @@
 ﻿using SixTools.Ast;
-using SixTools.Helpers;
 using SixTools.Rails;
 using SixTools.Tiles;
-
-#pragma warning disable CA1822 // Mark members as static
-//#pragma warning disable IDE0051 // Remove unused private members
 
 namespace SixTools.Formats.RailSvg
 {
@@ -69,46 +65,21 @@ namespace SixTools.Formats.RailSvg
                         {
                             using (writer.TagIndent("section"))
                             {
-                                writer.WriteLine($"<span class='rulehead'><a name='{name}'>{name}:</a></h2><br/>");
+                                writer.WriteLine($"<span class='rulehead'><a name='{name}'>{name}:</a></span>");
 
-                                var h = U.Scale(tile.Height + 2);
+                                var h = U.Scale(tile.Height);
                                 var w = U.Scale(tile.Width + 6);
-                                writer.WriteLine($"<svg width='{w}' height='{h}'>");
+                                writer.WriteLine($"<svg class='railroad' width='{w}' height='{h + 2}'>");
                                 using (writer.Indent())
                                 {
-                                    RenderRule(tile, string.Empty);
+                                    RenderRule(tile, string.Empty, 1);
                                 }
-                                writer.WriteLine("</svg>");
+                                writer.WriteLine("</svg></br></br>");
                             }
                         }
                     }
                 }
             }
-
-            private static class U
-            {
-                public const int Scaler = 10;
-                public const int Unit = 20;
-
-                public static int Scale(int u)
-                {
-                    return u * Scaler;
-                }
-            }
-
-            [Flags]
-            private enum Particle
-            {
-                None = 0,
-
-                BottomLeft = 1 << 0, /* `- bottom left */
-                TopLeft = 1 << 1, /* .- top left */
-                BottomRight = 1 << 2, /* -' bottom right */
-                TopRight = 1 << 3, /* -. top right */
-
-                Line = 1 << 4, /* horizontal line */
-            }
-
         }
     }
 }

@@ -161,7 +161,7 @@
             Term = term;
         }
 
-        public Term Term { get; }
+        public Term Term { get; set; }
 
         public override bool IsAtomic => Term.IsAtomic;
     }

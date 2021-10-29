@@ -2,9 +2,29 @@
 {
     public static class HtmlHelpers
     {
-        public static IDisposable TagIndent(this Writer writer, string tag, string klass = "")
+        public static IDisposable TagIndent(this Writer writer, string tag)
         {
-            return new Indent(writer, tag, klass);
+            return writer.TagIndent(tag, string.Empty);
+        }
+
+        public static IDisposable TagIndent(this Writer writer, string tag, string cls, params string[] attributes)
+        {
+            var attrs = new List<string>();
+            if (!string.IsNullOrWhiteSpace(cls))
+            {
+                attrs.Add($"class=\"{cls}\"");
+            }
+            attrs.AddRange(attributes);
+
+            writer.Write($"<{tag}");
+            if (attributes.Length > 0)
+            {
+                writer.Write(" ");
+                writer.Write(string.Join(" ", attrs));
+            }
+            writer.WriteLine(">");
+
+            return new Indent(writer, tag);
         }
 
         private sealed class Indent : IDisposable
@@ -12,13 +32,10 @@
             private readonly Writer writer;
             private readonly string tag;
 
-            public Indent(Writer writer, string tag, string klass)
+            public Indent(Writer writer, string tag)
             {
                 this.writer = writer;
                 this.tag = tag;
-                klass = string.IsNullOrWhiteSpace(klass) ? string.Empty : $" class='{klass}'";
-
-                writer.WriteLine($"<{tag}{klass}>");
                 writer.Plus();
             }
 

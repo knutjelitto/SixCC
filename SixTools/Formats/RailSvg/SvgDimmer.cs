@@ -37,7 +37,7 @@ namespace SixTools.Formats.RailSvg
         {
             var size = Graphics.MeasureString(text, MonoFont).Width;
 
-            var w = Math.Max(2, (int)Math.Ceiling(size / 10));
+            var w = Math.Max(3, (int)Math.Ceiling(size / 10));
 
             return new Dimension()
             {

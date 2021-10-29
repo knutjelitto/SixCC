@@ -56,6 +56,10 @@
                     return group.Term;
                 }
             }
+            else if (term is TermNot not)
+            {
+                not.Term = Shrink(not.Term);
+            }
             return term;
         }
     }

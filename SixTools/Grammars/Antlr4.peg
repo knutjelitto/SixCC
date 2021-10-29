@@ -1,6 +1,6 @@
 ﻿@namespace SixTools.Grammars
 @accessibility internal
-@classname SixgParser
+@classname Antlr4Parser
 @using Ast
 
 grammar <Grammar>
@@ -11,8 +11,10 @@ ruleList <IEnumerable<Rule>>
 
 rule <Rule>
     = id:rule_identifier _ ":" ex:expression _ ";"          { new Rule(id, ex) }
-    / id:rule_identifier                                    #error{ "rule1" }
-    / _ letter                                              #error{ "rule2" }
+    / id:rule_identifier _ ":" ex:expression                #error{ "illegal rule - expression ending fail" }
+    / id:rule_identifier _ ":"                              #error{ "illegal rule - expression fail" }
+    / id:rule_identifier                                    #error{ "illegal rule - expression identifier fail" }
+    /                                                       #error{ "rule illegal ???" }
 
 expression <Term>
     = a:alternatives                                        { a }
@@ -21,7 +23,7 @@ alternatives <Term>
     = first:sequence rest:(<Term> _ "|" r:sequence { r })*  { new TermAlternatives(first, rest) }
 
 sequence <Term>
-    = es:element*                                           { new TermSequence(es) }
+    = es:element+                                           { new TermSequence(es) }
 
 element <Term>
     = range
@@ -31,7 +33,7 @@ element <Term>
     / a:atom                                                { a }
 
 atom <Term>
-    = identifier
+    = i:identifier                                          { i }
     / string
     / character
     / _ '.'                                                 { new TermAny() }                                       
@@ -41,18 +43,22 @@ atom <Term>
 range <Term>
     = a:string _ ".." o:string                              { new TermRange(a, o) }
 
-rule_identifier <TermToken>
+rule_identifier  <TermToken>
     = _ id:("%" identifier)                                 { new TermToken(id) }
     / _ id:identifier                                       { id }
 
 identifier <TermToken>
-    = _ id:(id_start id_continue*)                          { new TermToken(id) }
+    = _ id:(id_start id_continue*)                         { new TermToken(id) }
+    / _ letter                                              #error{ "identifier fail" }
 
 id_start
-    = letter (letter / digit)*
+    = letter (letter / digit / "_")*
 
 id_continue
-    = ("-"/"_") (letter / digit)+
+    = "-" (letter / digit)+
+
+id_legacy
+    = "_"
 
 string <TermLiteral>
     = _ ("\'" s:single_char* "\'")                          { new TermLiteral(string.Join(string.Empty, s)) }
@@ -112,31 +118,28 @@ eol
     /   "\r"
 
 eol_char
-    = [\n\r]
+    =   [\n\r]
 
 letter
-    = [a-z] / [A-Z]
+    =   [a-z] / [A-Z]
 
 digit
-    = [0-9]
+    =   [0-9]
 
 hex_digit
-    = [0-9a-fA-F]
-
-block_comment
-    = '/*' (!'*/' .)* '*/'
-
-line_comment
-    = '//' (!eol_char .)*
+    =   [0-9a-fA-F]
 
 comment
-    = block_comment
-    / line_comment
+    =   '/*' (!'*/' .)* '*/'
+    /   '/*'                        #error{ "defect multiline comment" }
+    /   '//' (!eol_char .)*
+    /   '//'                        #error{ "defect singleline comment" }
+    ;
 
 white
     = [ \t\r\n]
 
-_   = (white / comment)*
+_   = (comment / white)*
 
 EOF
     = _ !.

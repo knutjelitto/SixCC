@@ -1,7 +1,7 @@
 ﻿using SixTools.Grammars;
 using System.Reflection;
 
-namespace SixTools
+namespace SixTools.Helpers
 {
     public static class EmbeddedResources
     {

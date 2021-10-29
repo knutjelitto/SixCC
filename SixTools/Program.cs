@@ -1,27 +1,47 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using SixTools;
+using Pegasus.Common;
 using SixTools.Formats;
 using SixTools.Grammars;
+using SixTools.Helpers;
 
 //EmbeddedResources.List();
 
-foreach (var sampleName in new[] { "checker.sixg", "sixg.sixg", "wsn.sixg", "bnf.sixg" })
+var samples = new[] { "abnf.sixg", "checker.sixg", "sixg.sixg", "wsn.sixg", "bnf.sixg" };
+
+foreach (var sampleName in samples)
 {
     var sample = EmbeddedResources.GetSample(sampleName);
 
-    var parser = new SixgParser();
-    var parsed = parser.Parse(sample);
-
-    parsed.Shrink();
-    parsed.Resolve();
-
-    var outPath = Formatter.TempPath();
-
-    foreach (var formatter in Formatter.Formatters)
+    var parser = ParserSched.Match(sampleName);
+    if (parser == null)
     {
-        using var writer = FFile(outPath, sampleName, formatter.DebugExtension);
-        formatter.Format(parsed, new SixTools.Writer(writer));
+        continue;
+    }
+
+    try
+    {
+        var parsed = parser.Parse(sample);
+
+        parsed.Shrink();
+        parsed.Resolve();
+
+        var outPath = Formatter.TempPath();
+
+        foreach (var formatter in Formatter.Formatters)
+        {
+            using var writer = FFile(outPath, sampleName, formatter.DebugExtension);
+            formatter.Format(parsed, new SixTools.Writer(writer));
+        }
+
+        continue;
+    }
+    catch (FormatException e)
+    {
+        var cursor = (Cursor)(e.Data["cursor"]!);
+        Console.WriteLine($"{sampleName}({cursor.Line}, {cursor.Column}): {e.Message}");
+
+        break;
     }
 }
 

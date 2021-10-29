@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <None Remove="Formats\HtmlFormat.css" />
+    <None Remove="Grammars\Antlr4.peg" />
+    <None Remove="Grammars\Samples\abnf.sixg" />
     <None Remove="Grammars\Samples\sixg.sixg" />
     <None Remove="Grammars\Samples\wsn.sixg" />
     <None Remove="Grammars\Sixg.peg" />
@@ -21,6 +23,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Formats\RailSvg\SvgStyle.css" />
     <EmbeddedResource Include="Formats\HtmlFormat.css" />
+    <EmbeddedResource Include="Grammars\Samples\abnf.sixg" />
     <EmbeddedResource Include="Grammars\Samples\wsn.sixg" />
     <EmbeddedResource Include="Grammars\Samples\sixg.sixg" />
     <EmbeddedResource Include="Grammars\Samples\bnf.sixg" />
@@ -34,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PegGrammar Include="Grammars\Antlr4.peg" />
     <PegGrammar Include="Grammars\Wsn.peg" />
     <PegGrammar Include="Grammars\Sixg.peg" />
   </ItemGroup>

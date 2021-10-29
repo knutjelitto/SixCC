@@ -1,8 +1,8 @@
-﻿using SixTools.Rails;
+﻿using SixTools.Helpers;
+using SixTools.Rails;
 
 #pragma warning disable IDE0045 // Convert to conditional expression
 #pragma warning disable CA1822 // Mark members as static
-#pragma warning disable IDE0060 // Remove unused parameter
 
 namespace SixTools.Tiles
 {
@@ -36,7 +36,7 @@ namespace SixTools.Tiles
                 case LiteralRail literal:
                     tile = new LiteralTile(literal.Text)
                     {
-                        Dim = dimmer.Monospace(literal.Text)
+                        Dim = dimmer.Monospace(literal.Text.SvgSequence())
                     };
                     break;
                 case TokenRail token:

@@ -17,16 +17,15 @@ namespace SixTools.Formats.RailSvg
             RefBase = refBase;
         }
 
-        public void AddH(int n)
+        public void HLineMove(int n)
         {
             path.AddH(x, y, n);
+            x += n;
         }
 
-        public void AddV(int n)
+        public void VLine(int n)
         {
             path.AddV(x, y, n);
         }
-
-        public int Zwanzig => 20;
     }
 }
