@@ -1,8 +1,8 @@
 ﻿namespace SixBot.Ast
 {
-    internal class Reference : Expression 
+    internal class Nonterminal : Expression
     {
-        public Reference(string name)
+        public Nonterminal(string name)
         {
             Name = name;
         }

@@ -4,7 +4,7 @@
 using SixBot.Ast;
 
 var g = new Grammar(
-        new Rule("E", new Alt(new Seq(new Reference("E"), new Literal("+"), new Reference("E")), new Literal("e")))
+        new Rule("E", new Alt(new Seq(new Nonterminal("E"), new Literal("+"), new Nonterminal("E")), new Literal("e")))
     );
 
 Console.WriteLine("Hello, World!");

@@ -35,7 +35,7 @@
                             Resolve(sExpression);
                         }
                         break;
-                    case Reference reference:
+                    case Nonterminal reference:
                         reference.Rule = Lookup[reference.Name];
                         break;
                 }
