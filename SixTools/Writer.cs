@@ -33,6 +33,7 @@
                     pending = false;
                 }
             }
+
             sink.Write(text);
         }
 

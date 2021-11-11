@@ -21,25 +21,8 @@
 
             base.Walk(grammar);
         }
-        public override void Visit(TermAlternatives term)
-        {
-            Walk(term);
-        }
 
-        public override void Visit(TermSequence term)
-        {
-            Walk(term);
-        }
-
-        public override void Visit(TermEpsilon term)
-        {
-        }
-
-        public override void Visit(TermAny term)
-        {
-        }
-
-        public override void Visit(TermToken term)
+        public override void Visit(TokenTerm term)
         {
             if (rules.TryGetValue(term.Text, out var rule))
             {
@@ -48,42 +31,8 @@
             }
         }
 
-        public override void Visit(TermLiteral term)
+        protected override void NotImplemented()
         {
-        }
-
-        public override void Visit(TermRange term)
-        {
-        }
-
-        public override void Visit(TermGroup term)
-        {
-            Walk(term.Term);
-        }
-
-        public override void Visit(TermClamped term)
-        {
-            Walk(term.Term);
-        }
-
-        public override void Visit(TermZeroOrOne term)
-        {
-            Walk(term.Term);
-        }
-
-        public override void Visit(TermOneOrMore term)
-        {
-            Walk(term.Term);
-        }
-
-        public override void Visit(TermZeroOrMore term)
-        {
-            Walk(term.Term);
-        }
-
-        public override void Visit(TermNot term)
-        {
-            Walk(term.Term);
         }
     }
 }

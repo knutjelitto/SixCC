@@ -5,6 +5,7 @@ namespace SixTools.Formats
     public class WsnFormat : IFormat
     {
         public string DebugExtension => ".wsn";
+        public string FormatName => "wsn";
 
         public void Format(Grammar grammar, Writer writer)
         {
@@ -34,10 +35,10 @@ namespace SixTools.Formats
                 writer.Write(rule.Name.Text);
                 writer.Write(new string(' ', maxLenght - rule.Name.Text.Length));
                 writer.Write(" =");
-                if (rule.Term is TermAlternatives alt)
+                if (rule.Term is AlternativesTerm alt)
                 {
                     var more = false;
-                    foreach (var term in alt.Terms)
+                    foreach (var term in alt)
                     {
                         if (more)
                         {
@@ -56,75 +57,75 @@ namespace SixTools.Formats
                 writer.WriteLine(" .");
             }
 
-            public override void Visit(TermAlternatives term)
+            public override void Visit(AlternativesTerm term)
             {
-                Spaced(term.Terms, "|");
+                Spaced(term, "|");
             }
 
-            public override void Visit(TermSequence term)
+            public override void Visit(SequenceTerm term)
             {
-                Spaced(term.Terms, "");
+                Spaced(term, "");
             }
 
-            public override void Visit(TermGroup term)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void Visit(TermEpsilon term)
+            public override void Visit(GroupTerm term)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Visit(TermToken term)
+            public override void Visit(EpsilonTerm term)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Visit(TokenTerm term)
             {
                 writer.Write($" {term.Text}");
             }
 
-            public override void Visit(TermLiteral term)
+            public override void Visit(LiteralTerm term)
             {
                 writer.Write($" \"{Escape(term.Text)}\"");
             }
 
-            public override void Visit(TermRange term)
+            public override void Visit(RangeTerm term)
             {
                 writer.Write(" (");
                 Spaced(Spread(term), "|");
                 writer.Write(" )");
             }
 
-            public override void Visit(TermClamped term)
+            public override void Visit(ClampedTerm term)
             {
                 writer.Write(" (");
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write(" )");
             }
 
-            public override void Visit(TermZeroOrOne term)
+            public override void Visit(ZeroOrOneTerm term)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Visit(TermOneOrMore term)
+            public override void Visit(OneOrMoreTerm term)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Visit(TermZeroOrMore term)
+            public override void Visit(ZeroOrMoreTerm term)
             {
                 writer.Write(" {");
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write(" }");
             }
 
-            private static IEnumerable<TermLiteral> Spread(TermRange range)
+            private static IEnumerable<LiteralTerm> Spread(RangeTerm range)
             {
                 var start = range.Start.Text.Single();
                 var stop = range.Stop.Text.Single();
 
                 for (var c = start; c <= stop; c++)
                 {
-                    yield return new TermLiteral(c);
+                    yield return new LiteralTerm(c);
                 }
             }
 
@@ -152,12 +153,12 @@ namespace SixTools.Formats
                 return string.Join(string.Empty, literal.Select(c => Escape(c)));
             }
 
-            public override void Visit(TermNot term)
+            public override void Visit(NotTerm term)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Visit(TermAny term)
+            public override void Visit(AnyTerm term)
             {
                 throw new NotImplementedException();
             }

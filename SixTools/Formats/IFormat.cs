@@ -6,5 +6,6 @@ namespace SixTools.Formats
     {
         void Format(Grammar grammar, Writer writer);
         string DebugExtension { get; }
+        string FormatName { get; }
     }
 }

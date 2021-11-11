@@ -9,6 +9,7 @@ namespace SixTools.Grammars
             return Parse(subject, null);
         }
 
-        public override string Extension => ".sixg";
+        public override string PreferedExtension => ".sixg";
+        public override string FormatName => "sixg";
     }
 }

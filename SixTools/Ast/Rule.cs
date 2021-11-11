@@ -2,14 +2,14 @@
 {
     public class Rule
     {
-        public Rule(TermToken name, Term term)
+        public Rule(TokenTerm name, Term term)
         {
             Name = name;
             Term = term;
             InUse = false;
         }
 
-        public TermToken Name { get; }
+        public TokenTerm Name { get; }
         public Term Term { get; private set; }
         public bool InUse { get; set; }
 
@@ -20,45 +20,57 @@
 
         private static Term Shrink(Term term)
         {
-            if (term is TermAlternatives alt)
+            if (term is AlternativesTerm alt)
             {
-                Assert(alt.Terms.Count >= 1);
-                for (var i = 0; i < alt.Terms.Count; i++)
+                Assert(alt.Count >= 1);
+                for (var i = 0; i < alt.Count; i++)
                 {
-                    alt.Terms[i] = Shrink(alt.Terms[i]);
+                    alt[i] = Shrink(alt[i]);
                 }
-                if (alt.Terms.Count == 1)
+                if (alt.Count == 1)
                 {
-                    return alt.Terms[0];
+                    return alt[0];
+                }
+                Assert(alt.Count >= 2);
+            }
+            else if (term is SequenceTerm seq)
+            {
+                Assert(seq.Count >= 0);
+                for (var i = 0; i < seq.Count; i++)
+                {
+                    seq[i] = Shrink(seq[i]);
+                }
+                if (seq.Count == 0)
+                {
+                    return new EpsilonTerm();
+                }
+                if (seq.Count == 1)
+                {
+                    return seq[0];
                 }
             }
-            else if (term is TermSequence seq)
+            else if (term is ClampedTerm clamped)
             {
-                Assert(seq.Terms.Count >= 0);
-                for (var i = 0; i < seq.Terms.Count; i++)
+                if (clamped.Inner.IsAtomic)
                 {
-                    seq.Terms[i] = Shrink(seq.Terms[i]);
-                }
-                if (seq.Terms.Count == 0)
-                {
-                    return new TermEpsilon();
-                }
-                if (seq.Terms.Count == 1)
-                {
-                    return seq.Terms[0];
+                    return clamped.Inner;
                 }
             }
-            else if (term is TermGroup group)
+            else if (term is GroupTerm group)
             {
-                group.Term = Shrink(group.Term);
-                if (group.Min == 1 && group.Max == 1 && group.Term.IsAtomic)
+                group.Inner = Shrink(group.Inner);
+                if (group.Min == 1 && group.Max == 1 && group.Inner.IsAtomic)
                 {
-                    return group.Term;
+                    return group.Inner;
                 }
             }
-            else if (term is TermNot not)
+            else if (term is NotTerm not)
             {
-                not.Term = Shrink(not.Term);
+                not.Inner = Shrink(not.Inner);
+            }
+            else if (term is TerminalTerm terminal)
+            {
+                terminal.Inner = Shrink(terminal.Inner);
             }
             return term;
         }

@@ -2,18 +2,18 @@
 {
     public class Grammar
     {
-        public Grammar(TermToken name, IEnumerable<Rule> rules)
+        public Grammar(TokenTerm name, IEnumerable<Rule> rules)
         {
             Name = name;
             Rules = rules.ToList();
         }
 
         public Grammar(string name, IEnumerable<Rule> rules)
-            : this(new TermToken(name), rules)
+            : this(new TokenTerm(name), rules)
         {
         }
 
-        public TermToken Name { get; }
+        public TokenTerm Name { get; }
         public List<Rule> Rules { get; }
 
         public void Shrink()

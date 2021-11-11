@@ -11,8 +11,14 @@
     <None Remove="Formats\HtmlFormat.css" />
     <None Remove="Grammars\Antlr4.peg" />
     <None Remove="Grammars\Samples\abnf.sixg" />
+    <None Remove="Grammars\Samples\ANTLRv4Lexer.g4" />
+    <None Remove="Grammars\Samples\ANTLRv4Parser.g4" />
+    <None Remove="Grammars\Samples\bnf.wsn" />
+    <None Remove="Grammars\Samples\c-syntax.wsn" />
+    <None Remove="Grammars\Samples\LexBasic.g4" />
     <None Remove="Grammars\Samples\sixg.sixg" />
     <None Remove="Grammars\Samples\wsn.sixg" />
+    <None Remove="Grammars\Samples\wsn.wsn" />
     <None Remove="Grammars\Sixg.peg" />
     <None Remove="Grammars\Wsn.peg" />
     <None Remove="Grammars\Samples\bnf.sixg" />
@@ -24,11 +30,17 @@
     <EmbeddedResource Include="Formats\RailSvg\SvgStyle.css" />
     <EmbeddedResource Include="Formats\HtmlFormat.css" />
     <EmbeddedResource Include="Grammars\Samples\abnf.sixg" />
+    <EmbeddedResource Include="Grammars\Samples\ANTLRv4Lexer.g4" />
+    <EmbeddedResource Include="Grammars\Samples\ANTLRv4Parser.g4" />
+    <EmbeddedResource Include="Grammars\Samples\bnf.wsn" />
+    <EmbeddedResource Include="Grammars\Samples\c-syntax.wsn" />
+    <EmbeddedResource Include="Grammars\Samples\LexBasic.g4" />
     <EmbeddedResource Include="Grammars\Samples\wsn.sixg" />
     <EmbeddedResource Include="Grammars\Samples\sixg.sixg" />
     <EmbeddedResource Include="Grammars\Samples\bnf.sixg" />
     <EmbeddedResource Include="Grammars\Samples\checker.sixg" />
     <EmbeddedResource Include="Grammars\Samples\minimal.sixg" />
+    <EmbeddedResource Include="Grammars\Samples\wsn.wsn" />
   </ItemGroup>
 
   <ItemGroup>

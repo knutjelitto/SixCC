@@ -1,18 +1,21 @@
 ﻿@namespace SixTools.Grammars
 @accessibility internal
-@classname WsnGrammar
+@classname WsnParser
 @using Ast
 
-grammar <Grammar>
+syntax <Grammar>
     = rules:productions EOF                         { new Grammar("<unknown-wsn>", rules) }
 
 productions <IEnumerable<Rule>>
-    = rule*
+    = production*
 
-rule <Rule>
-    = id:identifier _ ":" ex:expression _ ";"       { new Rule(id, ex) }
+production <Rule>
+    = id:identifier _ "=" ex:expression _ "."       { new Rule(id, ex) }
+    / id:identifier _ "=" ex:expression             #error{ "illegal production - expected '.'" }
+    / id:identifier _ "="                           #error{ "illegal production illegal - expected expression" }
+    / id:identifier                                 #error{ "illegal production - expected '='" }
 
-expression <Term>
+expression  <Term>
     = first:term rest:(<Term> _ "|" r:term { r })*  { new TermAlternatives(first, rest) }
 
 term <Term>
@@ -21,9 +24,9 @@ term <Term>
 factor <Term>
     = identifier
     / literal
-    / _ "[" e:expression "]"                        { new TermZeroOrOne(e) }
-    / _ "{" e:expression "}"                        { new TermZeroOrMore(e) }
-    / _ "(" e:expression ")"                        { new TermClamped(e) }
+    / _ "[" e:expression _ "]"                      { new TermZeroOrOne(e) }
+    / _ "{" e:expression _ "}"                      { new TermZeroOrMore(e) }
+    / _ "(" e:expression _ ")"                      { new TermClamped(e) }
 
 identifier <TermToken>
     = _ id:(id_start id_continue*)                  { new TermToken(id) }
@@ -35,7 +38,7 @@ id_continue
     = ("-" / "_") (letter / digit)+
 
 literal <Term>
-    = s:("\"" char* "\"")                           { new TermLiteral(s) }
+    = _ ("\"" s:char* "\"")                           { new TermLiteral(string.Join("", s)) }
 
 char
     = "\"\""                                        { "\"" }

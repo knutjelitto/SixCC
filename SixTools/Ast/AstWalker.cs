@@ -17,20 +17,25 @@
             Walk(rule.Term);
         }
 
-        protected void Walk(TermAlternatives term)
+        protected void Walk(AlternativesTerm term)
         {
-            foreach (var sub in term.Terms)
+            foreach (var sub in term)
             {
                 Walk(sub);
             }
         }
 
-        protected void Walk(TermSequence term)
+        protected void Walk(SequenceTerm term)
         {
-            foreach (var sub in term.Terms)
+            foreach (var sub in term)
             {
                 Walk(sub);
             }
+        }
+
+        protected virtual void NotImplemented()
+        {
+            throw new NotImplementedException();
         }
 
         public void Walk(Term term)
@@ -45,24 +50,82 @@
 
         public virtual void Visit(Grammar grammar)
         {
+            NotImplemented();
         }
 
         public virtual void Visit(Rule rule)
         {
+            NotImplemented();
         }
 
-        public abstract void Visit(TermAlternatives term);
-        public abstract void Visit(TermSequence term);
-        public abstract void Visit(TermEpsilon term);
-        public abstract void Visit(TermAny term);
-        public abstract void Visit(TermToken term);
-        public abstract void Visit(TermLiteral term);
-        public abstract void Visit(TermRange term);
-        public abstract void Visit(TermNot term);
-        public abstract void Visit(TermGroup term);
-        public abstract void Visit(TermClamped term);
-        public abstract void Visit(TermZeroOrOne term);
-        public abstract void Visit(TermOneOrMore term);
-        public abstract void Visit(TermZeroOrMore term);
+        public virtual void Visit(AlternativesTerm term)
+        {
+            Walk(term);
+        }
+
+        public virtual void Visit(SequenceTerm term)
+        {
+            Walk(term);
+        }
+
+        public virtual void Visit(TerminalTerm term)
+        {
+            Walk(term.Inner);
+        }
+
+        public virtual void Visit(EpsilonTerm term)
+        {
+            NotImplemented();
+        }
+
+        public virtual void Visit(AnyTerm term)
+        {
+            NotImplemented();
+        }
+
+        public virtual void Visit(TokenTerm term)
+        {
+            NotImplemented();
+        }
+
+        public virtual void Visit(LiteralTerm term)
+        {
+            NotImplemented();
+        }
+
+        public virtual void Visit(RangeTerm term)
+        {
+            NotImplemented();
+        }
+
+        public virtual void Visit(NotTerm term)
+        {
+            Walk(term.Inner);
+        }
+
+        public virtual void Visit(GroupTerm term)
+        {
+            Walk(term.Inner);
+        }
+
+        public virtual void Visit(ClampedTerm term)
+        {
+            Walk(term.Inner);
+        }
+
+        public virtual void Visit(ZeroOrOneTerm term)
+        {
+            Walk(term.Inner);
+        }
+
+        public virtual void Visit(OneOrMoreTerm term)
+        {
+            Walk(term.Inner);
+        }
+
+        public virtual void Visit(ZeroOrMoreTerm term)
+        {
+            Walk(term.Inner);
+        }
     }
 }

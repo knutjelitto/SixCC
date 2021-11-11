@@ -3,143 +3,362 @@
 @classname Antlr4Parser
 @using Ast
 
-grammar <Grammar>
-    = _ "grammar" id:identifier _ ";" rules:ruleList EOF    { new Grammar(id, rules) }
+syntax<Grammar>
+    = id:grammarDecl prequelConstruct* rules:rules modeSpec* _ !.    { new Grammar(id, rules) }
+    / grammarDecl prequelConstruct* #error{ "rules" }
+    / grammarDecl #error{ "prequel" }
 
-ruleList <IEnumerable<Rule>>
-    = rule*
+grammarDecl<TermToken>
+    = grammarType id:identifier _ ';'   { id }
 
-rule <Rule>
-    = id:rule_identifier _ ":" ex:expression _ ";"          { new Rule(id, ex) }
-    / id:rule_identifier _ ":" ex:expression                #error{ "illegal rule - expression ending fail" }
-    / id:rule_identifier _ ":"                              #error{ "illegal rule - expression fail" }
-    / id:rule_identifier                                    #error{ "illegal rule - expression identifier fail" }
-    /                                                       #error{ "rule illegal ???" }
+grammarType
+    = _ 'lexer' _ 'grammar'
+    / _ 'parser' _ 'grammar'
+    / _ 'grammar'
+    / #error{ "grammar-type" }
 
-expression <Term>
-    = a:alternatives                                        { a }
+prequelConstruct
+    = optionsSpec
+    / delegateGrammars
+    / tokensSpec
+    / channelsSpec
+    / action
 
-alternatives <Term>
-    = first:sequence rest:(<Term> _ "|" r:sequence { r })*  { new TermAlternatives(first, rest) }
+optionsSpec
+    = _ 'options' _sp '{' (option _ ';')* _ '}'
 
-sequence <Term>
-    = es:element+                                           { new TermSequence(es) }
+option
+    = identifier _ '=' optionValue
 
-element <Term>
-    = range
-    / a:atom _ "?"                                          { new TermZeroOrOne(a) }
-    / a:atom _ "*"                                          { new TermZeroOrMore(a) }
-    / a:atom _ "+"                                          { new TermOneOrMore(a) }
-    / a:atom                                                { a }
+optionValue
+    = identifier (_ '.' identifier)*    { "" }
+    / STRING_LITERAL                    { "" }
+    / actionBlock                       { "" }
+    / INT                               { "" }
 
-atom <Term>
-    = i:identifier                                          { i }
-    / string
-    / character
-    / _ '.'                                                 { new TermAny() }                                       
-    / _ "(" e:expression _ ")"                              { new TermClamped(e) }
-    / _ "~" a:atom                                          { new TermNot(a) }
+delegateGrammars
+    = _ 'import' delegateGrammar (_ ',' delegateGrammar)* _ ';'
 
-range <Term>
-    = a:string _ ".." o:string                              { new TermRange(a, o) }
+delegateGrammar
+    = identifier '=' identifier   { "" }
+    / identifier                  { "" }
 
-rule_identifier  <TermToken>
-    = _ id:("%" identifier)                                 { new TermToken(id) }
-    / _ id:identifier                                       { id }
+tokensSpec
+    = _ 'tokens' _sp '{' idList? _ '}'
 
-identifier <TermToken>
-    = _ id:(id_start id_continue*)                         { new TermToken(id) }
-    / _ letter                                              #error{ "identifier fail" }
+channelsSpec
+    = _ 'channels' _sp '{' idList? _ '}'
 
-id_start
-    = letter (letter / digit / "_")*
+idList
+    = identifier (_ ',' identifier)* (_ ',')?
+
+action
+    = '@' (actionScopeName _ '::')? identifier actionBlock
+
+actionScopeName
+    = identifier    { "" }
+    / _ 'lexer'     { "" }
+    / _ 'parser'    { "" }
+
+actionBlock
+    = _ block:('{' ACTION_CONTENT _ '}')    { block }
+
+argActionBlock
+    = _ '[' ARGUMENT_CONTENT _ ']'
+
+modeSpec
+    = _ 'mode' identifier _ ';' lexerRuleSpec*
+
+rules
+    = ruleSpec*
+
+ruleSpec<Rule>
+    = &(ruleModifiers? RULE_REF) r:parserRuleSpec   { r }
+    / r:lexerRuleSpec                               { r }
+
+parserRuleSpec<Rule>
+    = ruleModifiers? id:RULE_REF argActionBlock? ruleReturns? throwsSpec? localsSpec? rulePrequel* _ ':' e:ruleBlock _ ';' exceptionGroup
+        { new Rule(id, e) }
+
+exceptionGroup
+    = exceptionHandler* finallyClause?
+
+exceptionHandler
+    = _ 'catch' argActionBlock actionBlock
+
+finallyClause
+    = _ 'finally' actionBlock
+
+rulePrequel
+    = optionsSpec
+    / ruleAction
+
+ruleReturns
+    = _ 'returns' argActionBlock
+
+throwsSpec
+    = _ 'throws' identifier (_ ',' identifier)*
+
+localsSpec
+    = _ 'locals' argActionBlock
+
+ruleAction
+    = _ '@' _ identifier actionBlock
+
+ruleModifiers
+    = ruleModifier+
+
+ruleModifier
+    = _ 'public'
+    / _ 'private'
+    / _ 'protected'
+    / _ 'fragment'
+
+ruleBlock<Term>
+    = ruleAltList
+
+ruleAltList<Term>
+    = first:labeledAlt rest:(<Term> _ '|' r:labeledAlt { r })* { new TermAlternatives(first, rest) }
+
+labeledAlt<Term>
+    = term:alternative (_ '#' identifier)? { term }
+
+lexerRuleSpec<Rule>
+    = (_ 'fragment')? id:TOKEN_REF _ ':' ex:lexerRuleBlock _ ';' { new Rule(id, ex) }
+
+lexerRuleBlock<Term>
+    = lexerAltList
+
+lexerAltList<Term>
+    = first:lexerAlt rest:(<Term>_ '|' r:lexerAlt { r })* { new TermAlternatives(first, rest) }
+
+lexerAlt<Term>
+    = e:(<Term> ei:lexerElements lexerCommands? { ei })? { TermBuilder.Optional(e) }
+
+lexerElements<Term>
+    = elements:lexerElement* { new TermSequence(elements) }
+
+lexerElement<Term>
+    = e:labeledLexerElement s:ebnfSuffix        { TermBuilder.Group(e, s) }
+    / e:lexerAtom s:ebnfSuffix                  { TermBuilder.Group(e, s) }
+    / e:lexerBlock s:ebnfSuffix                 { TermBuilder.Group(e, s) }
+    / actionBlock (_ '?')?                      { new TermToken("--action-block--") }
+
+labeledLexerElement<Term>
+    = identifier _ ('=' / '+=') (lexerAtom / lexerBlock) #error{ "labeled-lexer-element" }
+
+lexerBlock<Term>
+    = _ '(' e:lexerAltList _ ')' { new TermClamped(e) }
+
+lexerCommands
+    = _ '->' lexerCommand (_ ',' lexerCommand)*
+
+lexerCommand
+    = lexerCommandName _ '(' lexerCommandExpr _ ')'     { "" }
+    / lexerCommandName                                  { "" }
+
+lexerCommandName
+    = identifier    { "" }
+    / _ 'mode'      { "" }
+
+lexerCommandExpr
+    = identifier    { "" }
+    / INT           { "" }
+
+altList<Term>
+    = first:alternative rest:(<Term> _ '|' r:alternative {r})* { new TermAlternatives(first, rest) }
+
+alternative<Term>
+    = elementOptions es:element+    { new TermSequence(es) }
+    / es:element*                   { new TermSequence(es) }
+
+element<Term>
+    = e:labeledElement s:ebnfSuffix { TermBuilder.Group(e,s) }
+    / e:atom s:ebnfSuffix           { TermBuilder.Group(e,s) }
+    / e:block s:ebnfSuffix          { TermBuilder.Group(e,s) }
+    / actionBlock (_ '?')?          { new TermError("element / action-block") }
+
+labeledElement<Term>
+    = identifier '_' ('=' / '+=') (atom / block) #error{ "labeled-element" }
+
+ebnfSuffix<RepetitionSuffix>
+    = _ '?' (_ '?')?    { RepetitionSuffix.ZeroOrOne }
+    / _ '*' (_ '?')?    { RepetitionSuffix.ZeroOrMore }
+    / _ '+' (_ '?')?    { RepetitionSuffix.OneOrMore }
+    /                   { RepetitionSuffix.None }
+
+lexerAtom<Term>
+    = characterRange
+    / terminal
+    / notSet
+    / LEXER_CHAR_SET
+    / _ '.' !(_ '<')            { new TermAny() }
+    / _ '.' elementOptions      { new TermError("lexer-atom / element-options") }
+
+atom<Term>
+    = e:terminal                { e }
+    / e:ruleref                 { e }
+    / e:notSet                  { e }
+    / _ '.' !(_ '<')            { new TermAny() }
+    / _ '.' elementOptions      { new TermError("atom / element-options") }
+
+notSet<TermNot>
+    = _ '~' e:setElement        { new TermNot(e) }
+    / _ '~' e:blockSet          { new TermNot(e) }
+
+blockSet<Term>
+    = _ '(' e:set_elements _ ')'    { new TermClamped(e) }
+
+set_elements<TermAlternatives>
+    = first:setElement rest:(<Term> _ '|' r:setElement { r })* { new TermAlternatives(first, rest) }
+
+setElement<Term>
+    = e:TOKEN_REF elementOptions?         { e }
+    / e:STRING_LITERAL elementOptions?    { e }
+    / characterRange
+    / LEXER_CHAR_SET
+
+block<Term>
+    = _ '(' (optionsSpec? ruleAction* _ ':')? e:altList _ ')' { new TermClamped(e) }
+
+ruleref<Term>
+    = e:RULE_REF argActionBlock? elementOptions?    { e }
+
+characterRange<TermRange>
+    = start:STRING_LITERAL _ '..' stop:STRING_LITERAL   { new TermRange(start, stop) }
+
+terminal<Term>
+    = e:TOKEN_REF elementOptions?               { e }
+    / e:STRING_LITERAL elementOptions?          { e }
+
+elementOptions
+    = _ '<' elementOption (_ ',' elementOption)* _ '>'
+
+elementOption
+    = identifier _ '=' identifier               { "" }
+    / identifier _ '=' STRING_LITERAL           { "" }
+    / identifier                                { "" }
+
+INT
+    = '0'
+    / digit1_9 digit*
+
+identifier
+    = TOKEN_REF
+    / RULE_REF
+
+TOKEN_REF<TermToken>
+    = _ id:([A-Z] letter_or_digit* id_continue* [_]?) { new TermToken(id) }
+
+RULE_REF<TermToken>
+    = _ id:([a-z] letter_or_digit* id_continue* [_]?) { new TermToken(id) }
+    / _ id:([_] letter_or_digit+ id_continue* [_]?)   { new TermToken(id) }
 
 id_continue
-    = "-" (letter / digit)+
+    = [-_] letter_or_digit+
 
-id_legacy
-    = "_"
+letter
+    = [a-zA-Z]
 
-string <TermLiteral>
-    = _ ("\'" s:single_char* "\'")                          { new TermLiteral(string.Join(string.Empty, s)) }
+digit1_9
+    = [1-9]
+
+digit
+    = [0-9]
+
+hex_digit
+    = [0-9a-fA-F]
+
+letter_or_digit
+    = letter / digit
 
 
-character <TermLiteral>
-    = _ esc:(simple_escape / zero_escape / hex_escape / utf_escape) { new TermLiteral(esc) }
+STRING_LITERAL<TermLiteral>
+    = _ ['] s:(Escape / (!['] .))* ['] { new TermLiteral(s) }
 
-single_char
-    = !("'" / "\\" / eol_char) .
-    / simple_escape
-    / zero_escape
-    / hex_escape
-    / utf16_escape
-    / eol_escape
+Escape
+    = '\\' s:(SimpleEscape / UnicodeEscape) { s }
 
-simple_escape
-    =   "\\" char:[abefnrtv'"]
-        {
+SimpleEscape
+    =   char:[bfnrt"'\\]
+        { 
             @char
-            .Replace("a", "\u0007")
             .Replace("b", "\u0008")
-            .Replace("e", "\u001B")
             .Replace("f", "\u000C")
             .Replace("n", "\u000A")
             .Replace("r", "\u000D")
             .Replace("t", "\u0009")
-            .Replace("v", "\u000B")
         }
 
-zero_escape
-    = "\\0" { "\u0000" }
-
-hex_escape
-    =   "\\x" digits:(hex_digit hex_digit)
-        {
-            ((char)Convert.ToInt32(digits, 16)).ToString()
-        }
-utf16_escape
-    =   "\\u" digits:(hex_digit hex_digit hex_digit hex_digit)
+UnicodeEscape
+    =   'u' digits:(hex_digit hex_digit? hex_digit? hex_digit?)
         {
             ((char)Convert.ToInt32(digits, 16)).ToString()
         }
 
-utf_escape
-    =   "\\u" digits:(hex_digit hex_digit? hex_digit? hex_digit? hex_digit? hex_digit?)
-        {
-            ((char)Convert.ToInt32(digits, 16)).ToString()
+LEXER_CHAR_SET<Term>
+    = _ '[' '^' e:set_members ']'       { new TermNot(e) }
+    / _ '[' e:set_members ']'           { e }
+
+set_members<TermAlternatives>
+    = es:SetMember+                    { new TermAlternatives(es) }
+
+SetMember<Term>
+    = SetRange
+    / SetSingle
+
+SetSingle<TermLiteral>
+    = e:SetEscape   { e }
+    / !']' s:.      { new TermLiteral(s[0]) }
+
+SetRange<TermRange>
+    = start:SetSingle '-' stop:SetSingle { new TermRange(start, stop) }
+
+SetEscape<TermLiteral>
+    = '\\' s:SimpleSetEscape    { new TermLiteral(s) }
+    / '\\' s:UnicodeEscape      { new TermLiteral(s) }
+
+SimpleSetEscape
+    =   char:[btnfr"'\\\]] 
+        { 
+            @char
+            .Replace("b", "\u0008")
+            .Replace("f", "\u000C")
+            .Replace("n", "\u000A")
+            .Replace("r", "\u000D")
+            .Replace("t", "\u0009")
         }
 
-eol_escape
-    =   "\\" eol:eol { eol }
+ARGUMENT_CONTENT
+    = #error{ "ARGUMENT_CONTENT" }
 
-eol
-    =   "\n"
-    /   "\r\n"
-    /   "\r"
+ACTION_CONTENT
+    = action_token* !( _ '}' ) #error{ "ACTION_CONTENT" }   { "" }
+    / action_token*                                         { "" }
 
-eol_char
-    =   [\n\r]
+action_token
+    = identifier    { "" }
+    / _ '.'         { "" }
+    / _ '('         { "" }
+    / _ ')'         { "" }
+    / _ ';'         { "" }
 
-letter
-    =   [a-z] / [A-Z]
 
-digit
-    =   [0-9]
-
-hex_digit
-    =   [0-9a-fA-F]
+space
+    = [ \t\f\r\n]
 
 comment
-    =   '/*' (!'*/' .)* '*/'
-    /   '/*'                        #error{ "defect multiline comment" }
-    /   '//' (!eol_char .)*
-    /   '//'                        #error{ "defect singleline comment" }
-    ;
+    = line_comment
+    / block_comment
 
-white
-    = [ \t\r\n]
+line_comment
+    = '//' (![\r\n] .)*
 
-_   = (comment / white)*
+block_comment
+    = '/*' (!'*/' .)* '*/'
 
-EOF
-    = _ !.
+_sp = space*
+
+_   = (space / comment)*
+
+

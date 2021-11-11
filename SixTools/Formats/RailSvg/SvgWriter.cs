@@ -1,51 +1,55 @@
-﻿namespace SixTools.Formats.RailSvg
+﻿using SixTools.Helpers;
+
+namespace SixTools.Formats.RailSvg
 {
     internal class SvgWriter
     {
-        public SvgWriter(Writer writer)
-        {
-            this.writer = writer;
-        }
-
         private readonly Writer writer;
 
-        public void Text(int x, int y, int w, string text, string cls)
+        public SvgWriter(Writer writer, SvgDimmer d)
+        {
+            this.writer = writer;
+            D = d;
+        }
+
+        public SvgDimmer D { get; }
+
+        public void Text(string cls, string text, pix x, pix y, pix w)
         {
             // SEE: https://wiki.selfhtml.org/wiki/SVG/Elemente/text
 
-            writer.WriteLine($"<text{Cls(cls)} x='{x + (w / 2)}' y='{y}' text-anchor='middle'>{text}</text>");
+            writer.WriteLine($"<text{Class(cls)} x='{x + (50 % w)}' y='{y}' text-anchor='middle'>{Esc.HtmlEntity(text)}</text>");
         }
 
-        public void Rect(int x, int y, int w, int h, int r, string cls)
+        public void Rect(string cls, pix x, pix y, pix w, pix h, pix r)
         {
             // SEE: https://wiki.selfhtml.org/wiki/SVG/Elemente/rect
 
-            writer.WriteLine($"<rect{Cls(cls)} x='{x}' y='{y}' height='{h}' width='{w}' rx='{r}' ry='{r}'/>");
+            writer.WriteLine($"<rect{Class(cls)} x='{x}' y='{y}' width='{w}' height='{h}' rx='{r}' ry='{r}'/>");
         }
 
-        public void Textbox(string text, int x, int y, int w, int h, int r, string klass)
+        public void Textbox(string cls, string text, pix x, pix y, pix w, pix h, pix r)
         {
-            Rect(x, y - 10, w, h, r, klass);
-            Text(x, y + 4, w, text, klass);
+            Rect(cls, x, y - D[1], w, h, r);
+            Text(cls, text, x, y + (50 % D[1]), w);
         }
 
-        public void Diamond(int x, int y, int w, string cls)
+        public void Literal(string cls, pix x, pix y, pix w)
         {
-            writer.WriteLine($"<path{Cls(cls)} d='M{x},{y} l{5},{-10} h{w - 10} l{5},{10} l{-5},{10} h{-(w - 10)} z'/>");
+            Rect(cls, x, y - D[1], w, D[2], 40 % D[1]);
+            writer.WriteLine($"<path{Class(cls)} d='M{x},{y - (50 % D[1])} v{D[1]} m{w},{0} v{D[-1]} z'/>");
         }
 
-        public void Arrow(int x, int y, bool rtl)
+        public void Arrow(pix x, pix y, bool rtl)
         {
-            /* XXX: should be markers, but aren't for RFC 7996 */
-            // SEE: https://datatracker.ietf.org/doc/html/rfc7996
-            /* 2 for optical correction */
+            x += 20 % (rtl ? D[-1] : D[1]);
+            var l = 40 % (rtl ? D[1] : D[-1]);
+            var h = 60 % D[1];
 
-            var h = 6;
-
-            writer.WriteLine($"<path{Cls("arrow")} d='M{x + (rtl ? -2 : 2)} {y} l{(rtl ? 4 : -4)} {h / 2} v{-h} z'/>");
+            writer.WriteLine($"<path{Class("arrow")} d='M{x},{y} l{l},{h / 2} v{-h} z'/>");
         }
 
-        private static string Cls(string cls)
+        private static string Class(string cls)
         {
             if (!string.IsNullOrWhiteSpace(cls))
             {

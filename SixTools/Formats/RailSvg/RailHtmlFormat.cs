@@ -1,4 +1,5 @@
 ﻿using SixTools.Ast;
+using SixTools.Helpers;
 using SixTools.Rails;
 using SixTools.Tiles;
 
@@ -6,7 +7,8 @@ namespace SixTools.Formats.RailSvg
 {
     public class RailHtmlFormat : IFormat
     {
-        public string DebugExtension => "-svg.html";
+        public string DebugExtension => ".html";
+        public string FormatName => "svg-html";
 
         public void Format(Grammar grammar, Writer writer)
         {
@@ -24,10 +26,10 @@ namespace SixTools.Formats.RailSvg
             {
                 List<(string, Tile)> tiles = new();
 
-                foreach (var rule in grammar.Rules)
+                foreach (var rule in Grammar.Rules)
                 {
                     var node = RailMaker.Make(rule.Term);
-                    var tile = TileMaker.Make(node, dim);
+                    var tile = TileMaker.Make(node, D);
 
                     tiles.Add((rule.Name.Text, tile));
                 }
@@ -37,44 +39,63 @@ namespace SixTools.Formats.RailSvg
 
             private void RenderHtmlDocument(List<(string name, Tile tile)> nodes)
             {
-                var width = 0;
-                var height = 0;
-
-                foreach (var tile in nodes.Select(node => node.tile))
+                Writer.WriteLine("<!DOCTYPE html>");
+                using (Writer.TagIndent("html"))
                 {
-                    if (tile.Width > width)
+                    using (Writer.TagIndent("head"))
                     {
-                        width = tile.Width;
-                    }
-                    height += tile.Ascender + tile.Descender + 6;
-                }
+                        /*
+                        */
+                        Writer.Tagged("title", $"Grammar of {Grammar.Name?.Text ?? "<unknown>"}");
+                        Writer.TagClosedLine("meta", "", "charset='utf-8'");
+                        Writer.TagClosed("meta", "", "name='viewport' content='width=device-width, initial-scale=1'");
+                        //writer.TagClosedLine("link", "", "rel='stylesheet'", "href='https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css'");
+                        //writer.TagClosedLine("link", "", "rel='stylesheet'", "href='https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css'");
+                        //writer.TagClosedLine("link", "", "rel='stylesheet'", "href='https://unpkg.com/@primer/css@^16.0.0/dist/primer.css'");
+                        //writer.TagClosedLine("link", "", "rel='stylesheet'", "href='https://unpkg.com/tachyons/css/tachyons.min.css'");
 
-                width += 10;
-                height -= 3;
+                        //writer.WriteLine("<link rel='stylesheet' href='https://unpkg.com/spectre.css/dist/spectre.min.css'/>");
+                        //writer.WriteLine("<link rel='stylesheet' href='https://unpkg.com/spectre.css/dist/spectre-exp.min.css'/>");
+                        //writer.WriteLine("<link rel='stylesheet' href='https://unpkg.com/spectre.css/dist/spectre-icons.min.css'/>");
 
-                writer.WriteLine("<!DOCTYPE html>");
-                using (writer.TagIndent("html"))
-                {
-                    using (writer.TagIndent("head"))
-                    {
+                        Writer.WriteLine("<link rel='preconnect' href='https://fonts.googleapis.com'>");
+                        Writer.WriteLine("<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>");
+                        Writer.WriteLine("<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap'>");
+                        Writer.WriteLine("<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'>");
                         ProvideStyle();
                     }
-                    using (writer.TagIndent("body"))
+                    using (Writer.TagIndent("body"))
                     {
-                        foreach (var (name, tile) in nodes)
+                        using (Writer.TagIndent("article"))
                         {
-                            using (writer.TagIndent("section"))
+                            foreach (var (name, tile) in nodes)
                             {
-                                writer.WriteLine($"<span class='rulehead'><a name='{name}'>{name}:</a></span>");
-
-                                var h = U.Scale(tile.Height);
-                                var w = U.Scale(tile.Width + 6);
-                                writer.WriteLine($"<svg class='railroad' width='{w}' height='{h + 2}'>");
-                                using (writer.Indent())
+                                using (Writer.TagIndent("div", "block"))
                                 {
-                                    RenderRule(tile, string.Empty, 1);
+                                    using (Writer.TagIndent("div", "card"))
+                                    {
+                                        using (Writer.TagIndent("header", "card-header"))
+                                        {
+                                            using (Writer.TagIndent("p", "card-title h6", $"id='{Esc.HtmlEntity(name)}'"))
+                                            {
+                                                Writer.WriteLine(Esc.HtmlEntity(name));
+                                            }
+                                        }
+
+                                        using (Writer.TagIndent("div", "card-body"))
+                                        {
+                                            var height = tile.Height;
+                                            var width = tile.Width + D[6];
+                                            using (Writer.TagIndent("svg", "railroad", $"width='{width + 2}' height='{height + 2}'"))
+                                            {
+                                                using (Writer.TagIndent("g", "railroad", "transform='translate(1,1)'"))
+                                                {
+                                                    RenderRule(tile, string.Empty);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                writer.WriteLine("</svg></br></br>");
                             }
                         }
                     }

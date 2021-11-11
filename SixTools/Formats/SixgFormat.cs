@@ -6,6 +6,7 @@ namespace SixTools.Formats
     public class SixgFormat : IFormat
     {
         public string DebugExtension => ".sixg";
+        public string FormatName => "sixg";
 
         public void Format(Grammar grammar, Writer writer)
         {
@@ -46,10 +47,10 @@ namespace SixTools.Formats
                 using (writer.Indent())
                 {
                     writer.Write(": ");
-                    if (rule.Term is TermAlternatives alt)
+                    if (rule.Term is AlternativesTerm alt)
                     {
                         var more = false;
-                        foreach (var term in alt.Terms)
+                        foreach (var term in alt)
                         {
                             if (more)
                             {
@@ -69,76 +70,76 @@ namespace SixTools.Formats
                 }
             }
 
-            public override void Visit(TermAlternatives term)
+            public override void Visit(AlternativesTerm term)
             {
-                Spaced(term.Terms, " | ");
+                Spaced(term, " | ");
             }
 
-            public override void Visit(TermSequence term)
+            public override void Visit(SequenceTerm term)
             {
-                Spaced(term.Terms, " ");
+                Spaced(term, " ");
             }
 
-            public override void Visit(TermGroup term)
+            public override void Visit(GroupTerm term)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Visit(TermEpsilon term)
+            public override void Visit(EpsilonTerm term)
             {
                 writer.Write("<< ε >>");
             }
 
-            public override void Visit(TermAny term)
+            public override void Visit(AnyTerm term)
             {
                 writer.Write($".");
             }
 
-            public override void Visit(TermNot term)
+            public override void Visit(NotTerm term)
             {
                 writer.Write($"~");
-                Walk(term.Term);
+                Walk(term.Inner);
             }
 
-            public override void Visit(TermToken term)
+            public override void Visit(TokenTerm term)
             {
                 writer.Write($"{term.Text}");
             }
 
-            public override void Visit(TermLiteral term)
+            public override void Visit(LiteralTerm term)
             {
                 writer.Write($"\'{Esc.Full(term.Text)}\'");
             }
 
-            public override void Visit(TermRange term)
+            public override void Visit(RangeTerm term)
             {
                 Walk(term.Start);
                 writer.Write($" .. ");
                 Walk(term.Stop);
             }
 
-            public override void Visit(TermZeroOrOne term)
+            public override void Visit(ZeroOrOneTerm term)
             {
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write("?");
             }
 
-            public override void Visit(TermOneOrMore term)
+            public override void Visit(OneOrMoreTerm term)
             {
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write("+");
             }
 
-            public override void Visit(TermZeroOrMore term)
+            public override void Visit(ZeroOrMoreTerm term)
             {
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write("*");
             }
 
-            public override void Visit(TermClamped term)
+            public override void Visit(ClampedTerm term)
             {
                 writer.Write("(");
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write(")");
             }
 

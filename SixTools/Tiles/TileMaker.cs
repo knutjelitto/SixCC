@@ -1,4 +1,5 @@
-﻿using SixTools.Helpers;
+﻿using SixTools.Formats.RailSvg;
+using SixTools.Helpers;
 using SixTools.Rails;
 
 #pragma warning disable IDE0045 // Convert to conditional expression
@@ -8,13 +9,13 @@ namespace SixTools.Tiles
 {
     public class TileMaker
     {
-        private readonly Dimmer dimmer;
+        private readonly SvgDimmer D;
 
-        private TileMaker(Dimmer dimmer)
+        private TileMaker(SvgDimmer dimmer)
         {
-            this.dimmer = dimmer;
+            D = dimmer;
         }
-        public static Tile Make(Railroad rail, Dimmer dimmer)
+        public static Tile Make(Railroad rail, SvgDimmer dimmer)
         {
             return new TileMaker(dimmer).Make(rail, false);
         }
@@ -26,17 +27,12 @@ namespace SixTools.Tiles
             switch (node)
             {
                 case PlainRail:
-                    tile = backwards
-                        ? new ToLeftArrowTile()
-                        : new ToRightArrowTile();
-                    tile.Dim.Width = 2;
-                    tile.Dim.Ascender = 1;
-                    tile.Dim.Descender = 1;
+                    tile = MakeArrow(backwards);
                     break;
                 case LiteralRail literal:
                     tile = new LiteralTile(literal.Text)
                     {
-                        Dim = dimmer.Monospace(literal.Text.SvgSequence())
+                        Dim = D.Monospace(literal.Text.SvgSequence())
                     };
                     break;
                 case TokenRail token:
@@ -48,17 +44,17 @@ namespace SixTools.Tiles
                 case ProseRail prose:
                     tile = new ProseTile(prose.Text)
                     {
-                        Dim = dimmer.SansSerif(prose.Text)
+                        Dim = D.SansSerif(prose.Text)
                     };
                     break;
                 case CommentRail comment:
                     tile = new CommentTile(comment.Text)
                     {
-                        Dim = dimmer.SansSerif(comment.Text)
+                        Dim = D.SansSerif(comment.Text)
                     };
                     break;
                 case RangeRail range:
-                    tile = MakeRange(range, backwards);
+                    tile = MakeRange(range);
                     break;
                 case ChoiceRail alt:
                     Assert(alt.Nodes.Count >= 2);
@@ -74,8 +70,8 @@ namespace SixTools.Tiles
                 case NotRail not:
                     tile = MakeNot(not, backwards);
                     break;
-                case AnyRail any:
-                    tile = MakeAny(any, backwards);
+                case AnyRail:
+                    tile = MakeAny();
                     break;
                 default:
                     break;
@@ -93,7 +89,7 @@ namespace SixTools.Tiles
         {
             var tile = new TokenTile(text)
             {
-                Dim = dimmer.SansSerif(text)
+                Dim = D.SansSerif(text)
             };
 
             return tile;
@@ -108,32 +104,45 @@ namespace SixTools.Tiles
         {
             var tile = new ReferenceTile(reference.Text)
             {
-                Dim = dimmer.SansSerif(reference.Text)
+                Dim = D.SansSerif(reference.Text)
             };
 
             return tile;
         }
 
-        private HTile MakeNot(NotRail not, bool backwards)
+        private Tile MakeNot(NotRail not, bool backwards)
         {
-            var list = new List<Tile>
+            var tile = new NotTile(Make(not.Node, backwards), backwards);
+
+            tile.Dim = new Dimension()
             {
-                MakeToken(backwards ? "⌐" : "¬"),
-                Make(not.Node, backwards)
+                Ascender = tile.Inner.Ascender,
+                Descender = tile.Inner.Descender,
+                Width = tile.Inner.Width + D[2],
             };
 
-            return MakeHTile(backwards, list);
+            return tile;
         }
 
-        private Tile MakeAny(AnyRail any, bool backwards)
+        private Tile MakeAny()
         {
-            return MakeToken("🞄");
+            var tile = new AnyTile
+            {
+                Dim = new Dimension()
+                {
+                    Ascender = D[1],
+                    Descender = D[1],
+                    Width = D[2],
+                }
+            };
+
+            return tile;
         }
 
-        private Tile MakeRange(RangeRail range, bool backwards)
+        private Tile MakeRange(RangeRail range)
         {
             var tile = new RangeTile(range.Start, range.Stop);
-            tile.Dim = dimmer.SansSerif($"[{char.ConvertFromUtf32(tile.Start)}-{char.ConvertFromUtf32(tile.Stop)}]");
+            tile.Dim = D.SansSerif($"[{tile.Start} {tile.Stop}]");
             return tile;
         }
 
@@ -145,15 +154,27 @@ namespace SixTools.Tiles
                 {
                     Width = node.Width,
                     Ascender = node.Ascender,
-                    Descender = node.Descender + dimmer.annotation_height
+                    Descender = node.Descender + D[1]
                 }
             };
 
 
-            var textdim = dimmer.SansSerif(tile.Text);
-            tile.Dim.Width = Math.Max(tile.Dim.Width, textdim.Width);
+            var textdim = D.SansSerif(tile.Text);
+            tile.Dim.Width = D.Max(tile.Dim.Width, textdim.Width);
             tile.Dim.Ascender += textdim.Ascender;
             tile.Dim.Descender += textdim.Descender;
+            return tile;
+        }
+
+        private Tile MakeArrow(bool backwards)
+        {
+            Tile tile = backwards
+                ? new ToLeftArrowTile()
+                : new ToRightArrowTile();
+            tile.Dim.Width = D[2];
+            tile.Dim.Ascender = D[1];
+            tile.Dim.Descender = D[1];
+
             return tile;
         }
 
@@ -163,7 +184,7 @@ namespace SixTools.Tiles
 
             if (loop.Skip)
             {
-                var skip = new VItem(Make(new PlainRail(), backwards), VTileType.B);
+                var skip = new VItem(MakeArrow(backwards), VTileType.B);
                 var forward = new VItem(Make(loop.Forward, backwards), VTileType.H);
                 var backward = new VItem(Make(loop.Backward, !backwards), VTileType.E);
                 vlist = new VTile(1, skip, forward, backward);
@@ -175,7 +196,7 @@ namespace SixTools.Tiles
                 vlist = new VTile(0, forward, backward);
             }
 
-            vlist.Measure();
+            vlist.Measure(D[1], D[1]);
 
             var label = LoopLabel(loop.Min, loop.Max);
             if (label.Length > 0)
@@ -185,34 +206,39 @@ namespace SixTools.Tiles
             return vlist;
         }
 
-        private HTile MakeHTile(SequenceRail seq, bool backwards)
+        private Tile MakeHTile(SequenceRail seq, bool backwards)
         {
             return MakeHTile(backwards, seq.Nodes.Select(n => Make(n, backwards)));
         }
 
-        private HTile MakeHTile(bool backwards, IEnumerable<Tile> tiles)
+        private Tile MakeHTile(bool backwards, IEnumerable<Tile> tiles)
         {
             var list = new HTile(backwards ? tiles.Reverse() : tiles);
 
-            list.Dim.Width = -2 + list.Nodes.Sum(n => n.Width + 2);
+            var width = D[-2];
+            foreach (var tile in list.Nodes)
+            {
+                width += tile.Width + D[2];
+            }
+            list.Dim.Width = width;
             list.Dim.Ascender = list.Nodes.Max(n => n.Ascender);
             list.Dim.Descender = list.Nodes.Max(n => n.Descender);
 
             return list;
         }
 
-        private VTile MakeVTile(ChoiceRail alt, bool backwards)
+        private Tile MakeVTile(ChoiceRail alt, bool backwards)
         {
-            return MakeVTile(alt.Offset, backwards, alt.Nodes.Select(n => Make(n, backwards)));
+            return MakeVTile(alt.Offset, alt.Nodes.Select(n => Make(n, backwards)));
         }
 
-        private VTile MakeVTile(int offset, bool backwards, IEnumerable<Tile> tiles)
+        private Tile MakeVTile(int offset, IEnumerable<Tile> tiles)
         {
             var tile = new VTile(offset);
 
             tile.AddRange(tiles);
 
-            tile.Measure();
+            tile.Measure(D[1], D[1]);
 
             var count = tile.Count;
             Assert(count >= 2);
@@ -229,10 +255,6 @@ namespace SixTools.Tiles
 
                 if (at_offset && last_alt)
                 {
-                    //       |         |
-                    //       |         |
-                    // => ---A-- ... --A---
-                    //
                     z = VTileType.A;
                 }
                 else if (above_offset && first_alt)

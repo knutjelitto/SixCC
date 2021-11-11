@@ -2,26 +2,39 @@
 using System.Drawing;
 
 #pragma warning disable CA1416 // Validate platform compatibility
+#pragma warning disable CA1822 // Mark members as static
 
 namespace SixTools.Formats.RailSvg
 {
-    public class SvgDimmer : Dimmer, IDisposable
+    public sealed class SvgDimmer : IDisposable
     {
         private readonly Graphics Graphics;
         private readonly Font MonoFont;
         private readonly Font PropFont;
         private bool disposed;
+        private readonly SvgDimmer D;
 
-        public SvgDimmer()
+        public SvgDimmer(int unit)
         {
-            annotation_height = 1;
+            Unit = new pix(unit);
+            D = this;
 
             Graphics = Graphics.FromImage(new Bitmap(1, 1));
-            MonoFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
-            PropFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular);
+            MonoFont = new Font(FontFamily.GenericMonospace, (int)(120 % D[1]), FontStyle.Regular);
+            PropFont = new Font(FontFamily.GenericSansSerif, (int)(120 % D[1]), FontStyle.Regular);
+
         }
 
-        void IDisposable.Dispose()
+        private pix Unit { get; }
+
+        public pix this[int units] => units * Unit;
+
+        public pix Max(pix p1, pix p2)
+        {
+            return p1 > p2 ? p1 : p2;
+        }
+
+        public void Dispose()
         {
             if (!disposed)
             {
@@ -33,37 +46,31 @@ namespace SixTools.Formats.RailSvg
             }
         }
 
-        public override Dimension Monospace(string text)
+        public Dimension Monospace(string text)
         {
             var size = Graphics.MeasureString(text, MonoFont).Width;
 
-            var w = Math.Max(3, (int)Math.Ceiling(size / 10));
+            var w = Max(this[2], pix.Snap(this, size));
 
             return new Dimension()
             {
                 Width = w,
-                Ascender = 1,
-                Descender = 1
+                Ascender = D[1],
+                Descender = D[1],
             };
         }
 
-        public override Dimension SansSerif(string text)
+        public Dimension SansSerif(string text)
         {
             var size = Graphics.MeasureString(text, PropFont).Width;
 
-            var w = (int)Math.Ceiling(size / 10);
-
-            /* even numbers only, for sake of visual rhythm */
-            if ((w & 1) != 0)
-            {
-                w++;
-            }
+            var w = Max(this[3], pix.Snap(this, size));
 
             return new Dimension()
             {
                 Width = w,
-                Ascender = 1,
-                Descender = 1
+                Ascender = D[1],
+                Descender = D[1],
             };
         }
     }

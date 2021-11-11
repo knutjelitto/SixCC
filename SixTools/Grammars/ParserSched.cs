@@ -6,6 +6,7 @@
         {
             (Parser)
             new SixgParser(),
+            new WsnParser(),
             new Antlr4Parser(),
         };
 
@@ -15,7 +16,7 @@
 
             foreach (var parser in Parsers)
             {
-                if (parser.Extension == ext)
+                if (parser.PreferedExtension == ext)
                 {
                     return parser;
                 }

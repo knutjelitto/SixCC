@@ -6,8 +6,6 @@
         {
             (IFormat)
             new RailSvg.RailHtmlFormat(),
-            new RailSvg.RailXHtmlFormat(),
-            new RailSvg.RailSvgFormat(),
             new AstDumpFormat(),
             new RailDumpFormat(),
             new SixgFormat(),

@@ -25,18 +25,22 @@ sequence <Term>
 
 element <Term>
     = range
-    / a:atom _ "?"                                          { new TermZeroOrOne(a) }
-    / a:atom _ "*"                                          { new TermZeroOrMore(a) }
-    / a:atom _ "+"                                          { new TermOneOrMore(a) }
-    / a:atom                                                { a }
+    / e:primary s:suffix                                    { TermBuilder.Group(e,s) }
 
-atom <Term>
+suffix <RepetitionSuffix>
+    = _ '?' (_ '?')?    { RepetitionSuffix.ZeroOrOne }
+    / _ '*' (_ '?')?    { RepetitionSuffix.ZeroOrMore }
+    / _ '+' (_ '?')?    { RepetitionSuffix.OneOrMore }
+    /                   { RepetitionSuffix.None }
+
+primary <Term>
     = identifier
     / string
     / character
-    / _ '.'                                                 { new TermAny() }                                       
+    / _ '.'                                                 { new TermAny() }
+    / _ "<" e:expression _ ">"                              { new TermTerminal(e) }
     / _ "(" e:expression _ ")"                              { new TermClamped(e) }
-    / _ "~" a:atom                                          { new TermNot(a) }
+    / _ "~" a:primary                                       { new TermNot(a) }
 
 range <Term>
     = a:string _ ".." o:string                              { new TermRange(a, o) }
@@ -55,22 +59,22 @@ id_continue
     = ("-"/"_") (letter / digit)+
 
 string <TermLiteral>
-    = _ ("\'" s:single_char* "\'")                          { new TermLiteral(string.Join(string.Empty, s)) }
+    = _ ("\'" s:single_char* "\'")                          { new TermLiteral(s) }
 
 
 character <TermLiteral>
-    = _ esc:(simple_escape / zero_escape / hex_escape / utf_escape) { new TermLiteral(esc) }
+    = _ esc:(simple_escape / zero_escape / hex_escape / unicode_escape) { new TermLiteral(esc) }
 
 single_char
     = !("'" / "\\" / eol_char) .
     / simple_escape
     / zero_escape
     / hex_escape
-    / utf16_escape
+    / unicode_escape
     / eol_escape
 
 simple_escape
-    =   "\\" char:[abefnrtv'"]
+    =   "\\" char:[abefnrtv'"\\]
         {
             @char
             .Replace("a", "\u0007")
@@ -89,18 +93,13 @@ zero_escape
 hex_escape
     =   "\\x" digits:(hex_digit hex_digit)
         {
-            ((char)Convert.ToInt32(digits, 16)).ToString()
-        }
-utf16_escape
-    =   "\\u" digits:(hex_digit hex_digit hex_digit hex_digit)
-        {
-            ((char)Convert.ToInt32(digits, 16)).ToString()
+            char.ConvertFromUtf32(Convert.ToInt32(digits, 16))
         }
 
-utf_escape
-    =   "\\u" digits:(hex_digit hex_digit? hex_digit? hex_digit? hex_digit? hex_digit?)
+unicode_escape
+    =   "\\u{" digits:(hex_digit hex_digit? hex_digit? hex_digit? hex_digit? hex_digit?) "}"
         {
-            ((char)Convert.ToInt32(digits, 16)).ToString()
+            char.ConvertFromUtf32(Convert.ToInt32(digits, 16))
         }
 
 eol_escape

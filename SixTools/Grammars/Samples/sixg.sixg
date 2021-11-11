@@ -9,7 +9,11 @@ rules
     ;
 
 rule
-    : identifier ':' expression ';'
+    : identifier ':' productions ';'
+    ;
+
+productions
+    : alternatives
     ;
 
 expression
@@ -25,7 +29,7 @@ sequence
     ;
 
 element
-    : primary repeat?
+    : primary repeat
     | range
     ;
 
@@ -34,19 +38,23 @@ range
     ;
 
 primary
-    : '(' expression ')'    
+    : '(' expression ')'
+    | '<' expression '>'
     | identifier
     | literal
     ;
 
 repeat
-    : '?'
+    :
+    | '?'
     | '*'
+    |
     | '+'
+    |
     ;
 
 identifier
-    : id-start id-continue*
+    : < id-start id-continue* >
     ;
 
 id-start
@@ -57,17 +65,9 @@ id-continue
     : '-' letter-or-digit+
     ;
 
-uppercase-letter
-    : 'A' .. 'Z'
-    ;
-
-lowercase-letter
-    : 'a' .. 'z'
-    ;
-
 letter
-    : uppercase-letter
-    | lowercase-letter
+    : 'A' .. 'Z'
+    | 'a' .. 'z'
     ;
 
 digit
@@ -78,8 +78,32 @@ letter-or-digit
     : letter | digit
     ;
 
+hex-digit
+    : '0' .. '9'
+    | 'A' .. 'F'
+    | 'a' .. 'f'
+    ;
+
 literal
-    : \' literal-char* \'
+    : '\'' (escape | ~( '\r' | '\n' | '\'' ))* '\''
+    ;
+
+escape
+    : simple-escape
+    | unicode-escape
+    | zero-escape
+    ;
+
+simple-escape
+    : '\\' ('a' | 'b' | 'e' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"')
+    ;
+
+zero-escape
+    : '\\' '0'
+    ;
+
+unicode-escape
+    : '\\u{' hex-digit (hex-digit (hex-digit (hex-digit (hex-digit hex-digit?)?)?)?)? '}'
     ;
 
 EOF : ~.
@@ -96,11 +120,11 @@ eol-sequence
     ;
 
 line-comment
-    : '//' (~eol-character .) eol-sequence*
+    : '//' ~eol-character*
     ;
 
 block-comment
-    : '/*' (~'*/' .)* '*/'
+    : '/*' ~'*/'* '*/'
     ;
 
 hspace
@@ -111,8 +135,8 @@ hspace
 vspace
     : '\r'
     | '\n'
-    | '\u2028'
-    | '\u2029'
+    | '\u{2028}'
+    | '\u{2029}'
     ;
 
 space

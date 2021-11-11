@@ -1,61 +1,94 @@
-﻿namespace SixTools.Ast
+﻿
+namespace SixTools.Ast
 {
+    public enum RepetitionSuffix
+    {
+        None,
+        ZeroOrOne,
+        ZeroOrMore,
+        OneOrMore,
+    }
+
     public abstract class Term
     {
         public abstract bool IsAtomic { get; }
     }
 
-    public abstract class TermGroup : Term
+    public class ErrorTerm : Term
     {
-        public TermGroup(Term term, int min, int max)
+        public ErrorTerm(string msg)
         {
-            Term = term;
+            Msg = msg;
+        }
+
+        public override bool IsAtomic => true;
+
+        public string Msg { get; }
+    }
+
+    public class TerminalTerm : Term
+    {
+        public TerminalTerm(Term inner)
+        {
+            Inner = inner;
+        }
+
+        public Term Inner { get; set; }
+
+        public override bool IsAtomic => true;
+    }
+
+    public abstract class GroupTerm : Term
+    {
+        public GroupTerm(Term term, int min, int max)
+        {
+            Inner = term;
             Min = min;
             Max = max;
         }
 
-        public Term Term { get; set; }
+        public Term Inner { get; set; }
         public int Min { get; }
         public int Max { get; }
 
-        public override bool IsAtomic => Min == 1 && Max == 1 && Term.IsAtomic;
+        public override bool IsAtomic => Min == 1 && Max == 1 && Inner.IsAtomic;
     }
 
-    public class TermClamped : TermGroup
+    public class ClampedTerm : GroupTerm
     {
-        public TermClamped(Term inner)
+        public ClampedTerm(Term inner)
             : base(inner, 1, 1)
         {
         }
     }
 
-    public class TermZeroOrOne : TermGroup
+    public class ZeroOrOneTerm : GroupTerm
     {
-        public TermZeroOrOne(Term inner)
+        public ZeroOrOneTerm(Term inner)
             : base(inner, 0, 1)
         {
         }
     }
 
-    public class TermOneOrMore : TermGroup
+    public class OneOrMoreTerm : GroupTerm
     {
-        public TermOneOrMore(Term inner)
+        public OneOrMoreTerm(Term inner)
             : base(inner, 1, 0)
         {
         }
     }
 
-    public class TermZeroOrMore : TermGroup
+    public class ZeroOrMoreTerm : GroupTerm
     {
-        public TermZeroOrMore(Term inner)
+        public ZeroOrMoreTerm(Term inner)
             : base(inner, 0, 0)
         {
         }
     }
 
-    public class TermLoop : TermGroup
+    public class LoopTerm : GroupTerm
     {
-        public TermLoop(Term inner, int min, int max)
+        public LoopTerm(Term inner, int min, int max)
             : base(inner, min, max)
         {
             Assert(Min >= 0);
@@ -63,37 +96,33 @@
         }
     }
 
-    public class TermAlternatives : Term
+    public class AlternativesTerm : TermList
     {
-        public TermAlternatives(Term first, IEnumerable<Term> rest)
+        public AlternativesTerm(Term first, IEnumerable<Term> rest)
+            : base(Enumerable.Repeat(first, 1).Concat(rest))
         {
-            Terms = new List<Term> { first };
-            Terms.AddRange(rest);
         }
 
-        public List<Term> Terms { get; }
-
-        public override bool IsAtomic => Terms.Count == 1 && Terms[0].IsAtomic;
-    }
-
-    public class TermSequence : Term
-    {
-        public TermSequence(IEnumerable<Term> terms)
+        public AlternativesTerm(IEnumerable<Term> terms)
+            : base(terms)
         {
-            Terms = terms.ToList();
         }
-
-        public List<Term> Terms { get; }
-
-        public override bool IsAtomic => Terms.Count == 1 && Terms[0].IsAtomic;
     }
 
-    public class TermEpsilon : Term
+    public class SequenceTerm : TermList
+    {
+        public SequenceTerm(IEnumerable<Term> terms)
+            : base(terms)
+        {
+        }
+    }
+
+    public class EpsilonTerm : Term
     {
         public override bool IsAtomic => false;
     }
 
-    public class TermAny : Term
+    public class AnyTerm : Term
     {
         public override bool IsAtomic => true;
     }
@@ -115,9 +144,9 @@
         public override bool IsAtomic => true;
     }
 
-    public class TermToken : TextTerm
+    public class TokenTerm : TextTerm
     {
-        public TermToken(string text)
+        public TokenTerm(string text)
             : base(text)
         {
             IsReference = false;
@@ -126,56 +155,68 @@
         public bool IsReference { get; set; }
     }
 
-    public class TermComment : TextTerm
+    public class CommentTerm : TextTerm
     {
-        public TermComment(string text)
+        public CommentTerm(string text)
             : base(text)
         {
         }
     }
 
-    public class TermProse : TextTerm
+    public class ProseTerm : TextTerm
     {
-        public TermProse(string text)
+        public ProseTerm(string text)
             : base(text)
         {
         }
     }
 
-    public class TermLiteral : TextTerm
+    public class LiteralTerm : TextTerm
     {
-        public TermLiteral(string text)
+        public LiteralTerm(IEnumerable<string> texts)
+            : this(string.Join(string.Empty, texts))
+        {
+            foreach (var t in texts)
+            {
+                if (t.Length > 1)
+                {
+                    Assert(true);
+                }
+            }
+        }
+
+        public LiteralTerm(string text)
             : base(text)
         {
         }
-        public TermLiteral(char text)
+        public LiteralTerm(char text)
             : base(text.ToString())
         {
         }
     }
 
-    public class TermNot : Term
+    public class NotTerm : Term
     {
-        public TermNot(Term term)
+        public NotTerm(Term term)
         {
-            Term = term;
+            Inner = term;
         }
 
-        public Term Term { get; set; }
+        public Term Inner { get; set; }
 
-        public override bool IsAtomic => Term.IsAtomic;
+        public override bool IsAtomic => Inner.IsAtomic;
     }
 
-    public class TermRange : Term
+    public class RangeTerm : Term
     {
-        public TermRange(TermLiteral start, TermLiteral stop)
+        public RangeTerm(LiteralTerm start, LiteralTerm stop)
         {
             Start = start;
             Stop = stop;
         }
 
-        public TermLiteral Start { get; }
-        public TermLiteral Stop { get; }
+        public LiteralTerm Start { get; }
+        public LiteralTerm Stop { get; }
 
         public override bool IsAtomic => false;
     }

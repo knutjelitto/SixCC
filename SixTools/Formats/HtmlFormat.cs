@@ -6,6 +6,7 @@ namespace SixTools.Formats
     public class HtmlFormat : IFormat
     {
         public string DebugExtension => ".html";
+        public string FormatName => "sixg-html";
 
         public void Format(Grammar grammar, Writer writer)
         {
@@ -34,26 +35,18 @@ namespace SixTools.Formats
 
             public void Format()
             {
+                var xml = "";
+
                 if (xhtml)
                 {
                     writer.WriteLine("<?xml version='1.0' encoding='utf-8'?>");
-                    writer.WriteLine("<!DOCTYPE html>");
-                    writer.WriteLine("<html xml:lang='en' lang='en'");
-                    writer.WriteLine("    xmlns='http://www.w3.org/1999/xhtml'");
-                    writer.WriteLine("    xmlns:xlink='http://www.w3.org/1999/xlink'>");
+                    xml = "xml:lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:xlink='http://www.w3.org/1999/xlink'";
                 }
-                else
-                {
-                    writer.WriteLine("<!DOCTYPE html>");
-                    writer.WriteLine("<html>");
-                }
-
-                using (writer.Indent())
+                writer.WriteLine("<!DOCTYPE html>");
+                using (writer.TagIndent("html", "", "lang=en", xml))
                 {
                     Walk(grammar);
                 }
-
-                writer.WriteLine("</html>");
             }
 
             public override void Walk(Grammar grammar)
@@ -84,10 +77,10 @@ namespace SixTools.Formats
                     writer.WriteLine($"<dt><span{klass}><a name='{rule.Name}'>{rule.Name}</a><span></dt>");
                     using (writer.TagIndent("dd"))
                     {
-                        if (rule.Term is TermAlternatives alt)
+                        if (rule.Term is AlternativesTerm alt)
                         {
                             var more = false;
-                            foreach (var term in alt.Terms)
+                            foreach (var term in alt)
                             {
                                 if (more)
                                 {
@@ -111,15 +104,15 @@ namespace SixTools.Formats
                 }
             }
 
-            public override void Visit(TermGroup term)
+            public override void Visit(GroupTerm term)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Visit(TermAlternatives term)
+            public override void Visit(AlternativesTerm term)
             {
                 var more = false;
-                foreach (var sub in term.Terms)
+                foreach (var sub in term)
                 {
                     if (more)
                     {
@@ -130,10 +123,10 @@ namespace SixTools.Formats
                 }
             }
 
-            public override void Visit(TermSequence term)
+            public override void Visit(SequenceTerm term)
             {
                 var more = false;
-                foreach (var sub in term.Terms)
+                foreach (var sub in term)
                 {
                     if (more)
                     {
@@ -144,23 +137,23 @@ namespace SixTools.Formats
                 }
             }
 
-            public override void Visit(TermNot term)
+            public override void Visit(NotTerm term)
             {
                 writer.Write("<span class='not'>&not;</span>");
-                Walk(term.Term);
+                Walk(term.Inner);
             }
 
-            public override void Visit(TermEpsilon term)
+            public override void Visit(EpsilonTerm term)
             {
                 writer.Write($"<span class='token'>{epsilon}</span>");
             }
 
-            public override void Visit(TermAny term)
+            public override void Visit(AnyTerm term)
             {
                 writer.Write($"<span class='any'>{any_dot}</span>");
             }
 
-            public override void Visit(TermToken term)
+            public override void Visit(TokenTerm term)
             {
                 if (term.IsReference)
                 {
@@ -172,37 +165,37 @@ namespace SixTools.Formats
                 }
             }
 
-            public override void Visit(TermLiteral term)
+            public override void Visit(LiteralTerm term)
             {
                 writer.Write($"{start_literal}<span class='literal'>{Esc.Html(term.Text)}</span>{end_literal}");
             }
 
-            public override void Visit(TermRange term)
+            public override void Visit(RangeTerm term)
             {
                 Walk(term.Start);
                 writer.Write("<span class='range'>&mldr;</span>");
                 Walk(term.Stop);
             }
 
-            public override void Visit(TermZeroOrOne term)
+            public override void Visit(ZeroOrOneTerm term)
             {
-                Repeat(term.Term, group_option);
+                Repeat(term.Inner, group_option);
             }
 
-            public override void Visit(TermOneOrMore term)
+            public override void Visit(OneOrMoreTerm term)
             {
-                Repeat(term.Term, group_plus);
+                Repeat(term.Inner, group_plus);
             }
 
-            public override void Visit(TermZeroOrMore term)
+            public override void Visit(ZeroOrMoreTerm term)
             {
-                Repeat(term.Term, group_star);
+                Repeat(term.Inner, group_star);
             }
 
-            public override void Visit(TermClamped term)
+            public override void Visit(ClampedTerm term)
             {
                 writer.Write("<span class='clamp'>(</span>");
-                Walk(term.Term);
+                Walk(term.Inner);
                 writer.Write("<span class='clamp'>)</span>");
             }
 

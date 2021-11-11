@@ -6,7 +6,8 @@ namespace SixTools.Formats
 {
     public class RailDumpFormat : IFormat
     {
-        public string DebugExtension => ".rr-dump.txt";
+        public string DebugExtension => ".txt";
+        public string FormatName => "rr-dump";
 
         public void Format(Grammar grammar, Writer writer)
         {
@@ -26,7 +27,7 @@ namespace SixTools.Formats
 
             public void Format()
             {
-                bool more = false;
+                var more = false;
                 foreach (var rule in grammar.Rules)
                 {
                     if (more)
@@ -99,14 +100,6 @@ namespace SixTools.Formats
                         default:
                             throw new NotImplementedException();
                     }
-                }
-            }
-
-            private void Indent(string text)
-            {
-                using (writer.Indent())
-                {
-                    writer.WriteLine(text);
                 }
             }
 

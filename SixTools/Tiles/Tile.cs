@@ -3,67 +3,20 @@
 #pragma warning disable CA1707 // Identifiers should not contain underscores
 #pragma warning disable IDE1006 // Naming Styles
 
+using SixTools.Formats.RailSvg;
+using SixTools.Helpers;
+
 namespace SixTools.Tiles
 {
-    public abstract class Dimmer
-    {
-        public Dimmer()
-        {
-        }
-        public abstract Dimension Monospace(string text);
-        public abstract Dimension SansSerif(string text);
-
-        public int annotation_height;
-    }
-
     public class Dimension
     {
-        private int ascender = -1;
-        private int descender = -1;
-        private int width = -1;
+        public pix Ascender { get; set; }
 
-        public int Ascender
-        {
-            get
-            {
-                Assert(ascender >= 0);
-                return ascender;
-            }
-            set
-            {
-                Assert(value >= 0);
-                ascender = value;
-            }
-        }
+        public pix Descender { get; set; }
 
-        public int Descender
-        {
-            get
-            {
-                Assert(descender >= 0);
-                return descender;
-            }
-            set
-            {
-                Assert(value >= 0);
-                descender = value;
-            }
-        }
-        public int Width
-        {
-            get
-            {
-                Assert(width >= 0);
-                return width;
-            }
-            set
-            {
-                Assert(value >= 0);
-                width = value;
-            }
-        }
+        public pix Width { get; set; }
 
-        public int Height => Ascender + Descender;
+        public pix Height => Ascender + Descender;
     }
 
     public enum VTileType
@@ -82,10 +35,10 @@ namespace SixTools.Tiles
     public class Tile
     {
         public Dimension Dim = new();
-        public int Width => Dim.Width;
-        public int Height => Dim.Height;
-        public int Ascender => Dim.Ascender;
-        public int Descender => Dim.Descender;
+        public pix Width => Dim.Width;
+        public pix Height => Dim.Height;
+        public pix Ascender => Dim.Ascender;
+        public pix Descender => Dim.Descender;
     }
 
     public class VItem
@@ -138,23 +91,23 @@ namespace SixTools.Tiles
             }
         }
 
-        public void Measure()
+        public void Measure(pix unit, pix vGap)
         {
-            Dim.Width = 6 + Items.Max(i => i.A.Width);
+            Dim.Width = (6 * unit) + Items.Max(i => i.A.Width);
 
-            Dim.Ascender = 0;
+            Dim.Ascender = pix.zero;
             for (var i = 0; i < Offset; i++)
             {
                 Dim.Ascender += this[i].A.Height;
-                Dim.Ascender += 1;
+                Dim.Ascender += vGap;
             }
             Dim.Ascender += this[Offset].A.Ascender;
 
-            Dim.Descender = 0;
+            Dim.Descender = pix.zero;
             Dim.Descender += this[Offset].A.Descender;
             for (var i = Offset + 1; i < Count; i++)
             {
-                Dim.Descender += 1;
+                Dim.Descender += vGap;
                 Dim.Descender += this[i].A.Height;
             }
         }
@@ -182,9 +135,25 @@ namespace SixTools.Tiles
     {
     }
 
+    public class NotTile : Tile
+    {
+        public NotTile(Tile inner, bool backward)
+        {
+            Inner = inner;
+            Backward = backward;
+        }
+
+        public Tile Inner { get; }
+        public bool Backward { get; }
+    }
+
+    public class AnyTile : Tile
+    {
+    }
+
     public class RangeTile : Tile
     {
-        public RangeTile(int start, int stop)
+        public RangeTile(Codepoint start, Codepoint stop)
         {
             Start = start;
             Stop = stop;
@@ -195,19 +164,19 @@ namespace SixTools.Tiles
         {
         }
 
-        public int Start { get; }
-        public int Stop { get; }
+        public Codepoint Start { get; }
+        public Codepoint Stop { get; }
 
-        private static int From(string chars)
+        private static Codepoint From(string chars)
         {
             if (chars.Length == 1)
             {
                 Assert(!char.IsSurrogate(chars[0]));
-                return chars[0];
+                return new Codepoint(chars[0]);
             }
             else if (chars.Length == 2 && char.IsSurrogatePair(chars, 0))
             {
-                return char.ConvertToUtf32(chars, 0);
+                return new Codepoint(char.ConvertToUtf32(chars, 0));
             }
             else
             {

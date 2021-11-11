@@ -1,69 +1,79 @@
-﻿span.rulehead {
-    display: block;
-    font-family: sans-serif;
-    font-weight: normal;
-    font-size: 14px;
+﻿body {
+    --sans-font: 'Roboto', sans-serif;
+    --mono-font: 'Roboto Mono', monospace;
+    font-family: var(--sans-font);
 }
 
 svg.railroad {
-    font-size: 0;
-    outline-width: 1px;
-    outline-style: dotted;
-    outline-color: darkgray;
+    display: block;
+    font-size: 1rem;
+    font-weight: normal;
+    background-color: #F4F4F4;
 }
 
-a.charref {
-    font-size: 0;
+svg.railroad:hover a {
+    text-decoration: underline;
 }
 
-rect, line, path {
-    stroke-width: 1px;
+svg.railroad :is(rect,line,path) {
+    stroke-width: 1.5px;
     stroke-linecap: square;
     stroke-linejoin: round;
     stroke: darkblue;
     fill: aliceblue;
 }
 
-path.rail {
+svg.railroad :is(path.rail, path.station) {
     fill: none;
 }
 
-path.station {
-    stroke-width: 2px;
-}
-
-path.arrow {
+svg.railroad path.arrow {
     fill: black;
 }
 
-text {
-    font-family: sans-serif;
-    font-weight: normal;
-    font-size: 12px;
-}
-
-text.token {
-    font-family: sans-serif;
-    font-weight: normal;
-}
-
-text.reference {
-    font-family: sans-serif;
-    font-weight: normal;
-}
-
-text.literal {
-    font-family: sans-serif;
+svg.railroad text.token {
+    fill: orangered;
     font-weight: bold;
 }
 
-tspan.hex {
-    font-family: monospace;
-    font-size: 90%;
+svg.railroad text.reference {
 }
 
-tspan.single {
-    font-family: sans-serif;
-    font-size: 12px;
+svg.railroad text.literal {
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
+    font-weight: bold;
+    fill: gray;
+}
+
+svg.railroad path.literal {
+    stroke-linecap: butt;
+    stroke-linejoin: bevel;
+}
+
+svg.railroad rect.literal {
+    stroke-width: 0;
+    fill: #E0E0E0;
+}
+
+svg.railroad rect.function {
+    stroke: black;
+    fill: white;
+}
+
+svg.railroad text.function {
+    font-weight: 900;
+}
+
+svg.railroad rect.frame {
+    stroke: black;
+    stroke-width: 1px;
+    stroke-dasharray: 1 4 1 5;
+    fill: none;
+}
+
+svg.railroad tspan.single {
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
     font-weight: bold;
 }

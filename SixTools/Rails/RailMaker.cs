@@ -8,42 +8,44 @@ namespace SixTools.Rails
         {
             switch (term)
             {
-                case TermToken token:
+                case TokenTerm token:
                     return token.IsReference
                         ? new ReferenceRail(token.Text)
                         : new TokenRail(token.Text);
-                case TermLiteral literal:
+                case LiteralTerm literal:
                     return new LiteralRail(literal.Text);
-                case TermComment comment:
+                case CommentTerm comment:
                     return new CommentRail(comment.Text);
-                case TermProse prose:
+                case ProseTerm prose:
                     return new ProseRail(prose.Text);
-                case TermAny any:
+                case AnyTerm any:
                     return new AnyRail();
-                case TermEpsilon:
+                case EpsilonTerm:
                     return new PlainRail();
-                case TermNot not:
-                    return new NotRail(Make(not.Term));
-                case TermRange range:
+                case NotTerm not:
+                    return new NotRail(Make(not.Inner));
+                case RangeTerm range:
                     return new RangeRail(range.Start.Text, range.Stop.Text);
-                case TermSequence seq:
-                    Assert(seq.Terms.Count >= 2);
-                    return new SequenceRail(seq.Terms.Select(t => Make(t)));
-                case TermAlternatives alternatives:
-                    Assert(alternatives.Terms.Count >= 2);
-                    return new ChoiceRail(alternatives.Terms.Select(t => Make(t)));
-                case TermZeroOrOne zeroOrOne:
-                    return new ChoiceRail(new PlainRail(), Make(zeroOrOne.Term));
-                case TermZeroOrMore zeroOrMore:
-                    return new LoopRail(Make(zeroOrMore.Term), new PlainRail(), 0, 0);
-                case TermOneOrMore oneOrMore:
-                    return new LoopRail(Make(oneOrMore.Term), new PlainRail(), 1, 0);
-                case TermLoop loop:
-                    return new LoopRail(Make(loop.Term), new PlainRail(), loop.Min, loop.Max);
-                case TermClamped clamped:
-                    Assert(!clamped.Term.IsAtomic);
+                case SequenceTerm seq:
+                    Assert(seq.Count >= 2);
+                    return new SequenceRail(seq.Select(t => Make(t)));
+                case AlternativesTerm alternatives:
+                    Assert(alternatives.Count >= 2);
+                    return new ChoiceRail(alternatives.Select(t => Make(t)));
+                case ZeroOrOneTerm zeroOrOne:
+                    return new ChoiceRail(new PlainRail(), Make(zeroOrOne.Inner));
+                case ZeroOrMoreTerm zeroOrMore:
+                    return new LoopRail(Make(zeroOrMore.Inner), new PlainRail(), 0, 0);
+                case OneOrMoreTerm oneOrMore:
+                    return new LoopRail(Make(oneOrMore.Inner), new PlainRail(), 1, 0);
+                case LoopTerm loop:
+                    return new LoopRail(Make(loop.Inner), new PlainRail(), loop.Min, loop.Max);
+                case ClampedTerm clamped:
+                    Assert(!clamped.Inner.IsAtomic);
                     // Drop clamping
-                    return Make(clamped.Term);
+                    return Make(clamped.Inner);
+                case TerminalTerm terminal:
+                    return Make(terminal.Inner);
                 default:
                     throw new InvalidOperationException();
 

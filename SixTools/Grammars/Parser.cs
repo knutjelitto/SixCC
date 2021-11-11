@@ -6,6 +6,7 @@ namespace SixTools.Grammars
     {
         public abstract Grammar Parse(string subject);
 
-        public abstract string Extension { get; }
+        public abstract string PreferedExtension { get; }
+        public abstract string FormatName { get; }
     }
 }

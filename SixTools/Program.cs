@@ -7,7 +7,7 @@ using SixTools.Helpers;
 
 //EmbeddedResources.List();
 
-var samples = new[] { "abnf.sixg", "checker.sixg", "sixg.sixg", "wsn.sixg", "bnf.sixg" };
+var samples = new[] { "sixg.sixg", "ANTLRv4Parser.g4", "ANTLRv4Lexer.g4", "LexBasic.g4", "abnf.sixg", "checker.sixg", "wsn.sixg", "bnf.sixg", "bnf.wsn", "c-syntax.wsn", "wsn.wsn" };
 
 foreach (var sampleName in samples)
 {
@@ -30,7 +30,7 @@ foreach (var sampleName in samples)
 
         foreach (var formatter in Formatter.Formatters)
         {
-            using var writer = FFile(outPath, sampleName, formatter.DebugExtension);
+            using var writer = FFile(outPath, sampleName, parser, formatter);
             formatter.Format(parsed, new SixTools.Writer(writer));
         }
 
@@ -48,12 +48,13 @@ foreach (var sampleName in samples)
 Console.Write("any key .. ");
 Console.ReadKey(true);
 
-static string FName(string path, string sampleName, string extension)
+static string FName(string sampleName, Parser informat, IFormat outformat)
 {
-    return Path.Combine(path, Path.GetFileNameWithoutExtension(sampleName) + extension);
+    var filename = $"{Path.GetFileNameWithoutExtension(sampleName)}〈{informat.FormatName}→{outformat.FormatName}〉{outformat.DebugExtension}";
+    return filename;
 }
 
-static TextWriter FFile(string path, string sampleName, string extension)
+static TextWriter FFile(string path, string sampleName, Parser informat, IFormat outformat)
 {
-    return new StreamWriter(FName(path, sampleName, extension));
+    return new StreamWriter(Path.Combine(path, FName(sampleName, informat, outformat)));
 }
