@@ -7,7 +7,7 @@ using SixTools.Helpers;
 
 //EmbeddedResources.List();
 
-var samples = new[] { "sixg.sixg", "ANTLRv4Parser.g4", "ANTLRv4Lexer.g4", "LexBasic.g4", "abnf.sixg", "checker.sixg", "wsn.sixg", "bnf.sixg", "bnf.wsn", "c-syntax.wsn", "wsn.wsn" };
+var samples = new[] { "CPP14Lexer.g4", "CPP14Parser.g4", "sixg.sixg", "ANTLRv4Parser.g4", "ANTLRv4Lexer.g4", "LexBasic.g4", "abnf.sixg", "checker.sixg", "wsn.sixg", "bnf.sixg", "bnf.wsn", "c-syntax.wsn", "wsn.wsn" };
 
 foreach (var sampleName in samples)
 {

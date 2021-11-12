@@ -9,7 +9,7 @@ rules
     ;
 
 rule
-    : identifier ':' productions ';'
+    : rule-identifier ':' productions ';'
     ;
 
 productions
@@ -45,12 +45,14 @@ primary
     ;
 
 repeat
-    :
-    | '?'
+    : '?'
     | '*'
-    |
     | '+'
-    |
+    ;
+
+rule-identifier
+    : identifier
+    | < '%' identifier >
     ;
 
 identifier

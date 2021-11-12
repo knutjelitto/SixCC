@@ -16,20 +16,20 @@ production <Rule>
     / id:identifier                                 #error{ "illegal production - expected '='" }
 
 expression  <Term>
-    = first:term rest:(<Term> _ "|" r:term { r })*  { new TermAlternatives(first, rest) }
+    = first:term rest:(<Term> _ "|" r:term { r })*  { TermBuilder.Alternatives(first, rest) }
 
 term <Term>
-    = es:factor+                                    { new TermSequence(es) }
+    = es:factor+                                    { TermBuilder.Sequence(es) }
 
 factor <Term>
     = identifier
     / literal
-    / _ "[" e:expression _ "]"                      { new TermZeroOrOne(e) }
-    / _ "{" e:expression _ "}"                      { new TermZeroOrMore(e) }
-    / _ "(" e:expression _ ")"                      { new TermClamped(e) }
+    / _ "[" e:expression _ "]"                      { new ZeroOrOneTerm(e) }
+    / _ "{" e:expression _ "}"                      { new ZeroOrMoreTerm(e) }
+    / _ "(" e:expression _ ")"                      { new ClampedTerm(e) }
 
-identifier <TermToken>
-    = _ id:(id_start id_continue*)                  { new TermToken(id) }
+identifier <TokenTerm>
+    = _ id:(id_start id_continue*)                  { new TokenTerm(id) }
 
 id_start
     = letter (letter / digit)*
@@ -38,7 +38,7 @@ id_continue
     = ("-" / "_") (letter / digit)+
 
 literal <Term>
-    = _ ("\"" s:char* "\"")                           { new TermLiteral(string.Join("", s)) }
+    = _ ("\"" s:char* "\"")                           { new LiteralTerm(string.Join("", s)) }
 
 char
     = "\"\""                                        { "\"" }

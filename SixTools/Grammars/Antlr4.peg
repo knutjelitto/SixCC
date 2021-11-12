@@ -8,7 +8,7 @@ syntax<Grammar>
     / grammarDecl prequelConstruct* #error{ "rules" }
     / grammarDecl #error{ "prequel" }
 
-grammarDecl<TermToken>
+grammarDecl<TokenTerm>
     = grammarType id:identifier _ ';'   { id }
 
 grammarType
@@ -77,8 +77,7 @@ ruleSpec<Rule>
     / r:lexerRuleSpec                               { r }
 
 parserRuleSpec<Rule>
-    = ruleModifiers? id:RULE_REF argActionBlock? ruleReturns? throwsSpec? localsSpec? rulePrequel* _ ':' e:ruleBlock _ ';' exceptionGroup
-        { new Rule(id, e) }
+    = ruleModifiers? id:RULE_REF argActionBlock? ruleReturns? throwsSpec? localsSpec? rulePrequel* _ ':' e:ruleBlock _ ';' exceptionGroup { new Rule(id, e) }
 
 exceptionGroup
     = exceptionHandler* finallyClause?
@@ -118,7 +117,7 @@ ruleBlock<Term>
     = ruleAltList
 
 ruleAltList<Term>
-    = first:labeledAlt rest:(<Term> _ '|' r:labeledAlt { r })* { new TermAlternatives(first, rest) }
+    = first:labeledAlt rest:(<Term> _ '|' r:labeledAlt { r })* { TermBuilder.Alternatives(first, rest) }
 
 labeledAlt<Term>
     = term:alternative (_ '#' identifier)? { term }
@@ -130,25 +129,25 @@ lexerRuleBlock<Term>
     = lexerAltList
 
 lexerAltList<Term>
-    = first:lexerAlt rest:(<Term>_ '|' r:lexerAlt { r })* { new TermAlternatives(first, rest) }
+    = first:lexerAlt rest:(<Term>_ '|' r:lexerAlt { r })* { TermBuilder.Alternatives(first, rest) }
 
 lexerAlt<Term>
     = e:(<Term> ei:lexerElements lexerCommands? { ei })? { TermBuilder.Optional(e) }
 
 lexerElements<Term>
-    = elements:lexerElement* { new TermSequence(elements) }
+    = elements:lexerElement* { TermBuilder.Sequence(elements) }
 
 lexerElement<Term>
     = e:labeledLexerElement s:ebnfSuffix        { TermBuilder.Group(e, s) }
     / e:lexerAtom s:ebnfSuffix                  { TermBuilder.Group(e, s) }
     / e:lexerBlock s:ebnfSuffix                 { TermBuilder.Group(e, s) }
-    / actionBlock (_ '?')?                      { new TermToken("--action-block--") }
+    / actionBlock (_ '?')?                      { new TokenTerm("--action-block--") }
 
 labeledLexerElement<Term>
     = identifier _ ('=' / '+=') (lexerAtom / lexerBlock) #error{ "labeled-lexer-element" }
 
 lexerBlock<Term>
-    = _ '(' e:lexerAltList _ ')' { new TermClamped(e) }
+    = _ '(' e:lexerAltList _ ')' { new ClampedTerm(e) }
 
 lexerCommands
     = _ '->' lexerCommand (_ ',' lexerCommand)*
@@ -166,17 +165,17 @@ lexerCommandExpr
     / INT           { "" }
 
 altList<Term>
-    = first:alternative rest:(<Term> _ '|' r:alternative {r})* { new TermAlternatives(first, rest) }
+    = first:alternative rest:(<Term> _ '|' r:alternative {r})* { TermBuilder.Alternatives(first, rest) }
 
 alternative<Term>
-    = elementOptions es:element+    { new TermSequence(es) }
-    / es:element*                   { new TermSequence(es) }
+    = elementOptions es:element+    { TermBuilder.Sequence(es) }
+    / es:element*                   { TermBuilder.Sequence(es) }
 
 element<Term>
     = e:labeledElement s:ebnfSuffix { TermBuilder.Group(e,s) }
     / e:atom s:ebnfSuffix           { TermBuilder.Group(e,s) }
     / e:block s:ebnfSuffix          { TermBuilder.Group(e,s) }
-    / actionBlock (_ '?')?          { new TermError("element / action-block") }
+    / actionBlock (_ '?')?          { new ErrorTerm("element / action-block") }
 
 labeledElement<Term>
     = identifier '_' ('=' / '+=') (atom / block) #error{ "labeled-element" }
@@ -192,25 +191,25 @@ lexerAtom<Term>
     / terminal
     / notSet
     / LEXER_CHAR_SET
-    / _ '.' !(_ '<')            { new TermAny() }
-    / _ '.' elementOptions      { new TermError("lexer-atom / element-options") }
+    / _ '.' !(_ '<')            { new AnyTerm() }
+    / _ '.' elementOptions      { new ErrorTerm("lexer-atom / element-options") }
 
 atom<Term>
     = e:terminal                { e }
     / e:ruleref                 { e }
     / e:notSet                  { e }
-    / _ '.' !(_ '<')            { new TermAny() }
-    / _ '.' elementOptions      { new TermError("atom / element-options") }
+    / _ '.' !(_ '<')            { new AnyTerm() }
+    / _ '.' elementOptions      { new ErrorTerm("atom / element-options") }
 
-notSet<TermNot>
-    = _ '~' e:setElement        { new TermNot(e) }
-    / _ '~' e:blockSet          { new TermNot(e) }
+notSet<NotTerm>
+    = _ '~' e:setElement        { new NotTerm(e) }
+    / _ '~' e:blockSet          { new NotTerm(e) }
 
 blockSet<Term>
-    = _ '(' e:set_elements _ ')'    { new TermClamped(e) }
+    = _ '(' e:set_elements _ ')'    { new ClampedTerm(e) }
 
-set_elements<TermAlternatives>
-    = first:setElement rest:(<Term> _ '|' r:setElement { r })* { new TermAlternatives(first, rest) }
+set_elements<Term>
+    = first:setElement rest:(<Term> _ '|' r:setElement { r })* { TermBuilder.Alternatives(first, rest) }
 
 setElement<Term>
     = e:TOKEN_REF elementOptions?         { e }
@@ -219,13 +218,13 @@ setElement<Term>
     / LEXER_CHAR_SET
 
 block<Term>
-    = _ '(' (optionsSpec? ruleAction* _ ':')? e:altList _ ')' { new TermClamped(e) }
+    = _ '(' (optionsSpec? ruleAction* _ ':')? e:altList _ ')' { new ClampedTerm(e) }
 
 ruleref<Term>
     = e:RULE_REF argActionBlock? elementOptions?    { e }
 
-characterRange<TermRange>
-    = start:STRING_LITERAL _ '..' stop:STRING_LITERAL   { new TermRange(start, stop) }
+characterRange<RangeTerm>
+    = start:STRING_LITERAL _ '..' stop:STRING_LITERAL   { new RangeTerm(start, stop) }
 
 terminal<Term>
     = e:TOKEN_REF elementOptions?               { e }
@@ -247,12 +246,12 @@ identifier
     = TOKEN_REF
     / RULE_REF
 
-TOKEN_REF<TermToken>
-    = _ id:([A-Z] letter_or_digit* id_continue* [_]?) { new TermToken(id) }
+TOKEN_REF<TokenTerm>
+    = _ id:([A-Z] letter_or_digit* id_continue* [_]?) { new TokenTerm(id) }
 
-RULE_REF<TermToken>
-    = _ id:([a-z] letter_or_digit* id_continue* [_]?) { new TermToken(id) }
-    / _ id:([_] letter_or_digit+ id_continue* [_]?)   { new TermToken(id) }
+RULE_REF<TokenTerm>
+    = _ id:([a-z] letter_or_digit* id_continue* [_]?) { new TokenTerm(id) }
+    / _ id:([_] letter_or_digit+ id_continue* [_]?)   { new TokenTerm(id) }
 
 id_continue
     = [-_] letter_or_digit+
@@ -273,8 +272,8 @@ letter_or_digit
     = letter / digit
 
 
-STRING_LITERAL<TermLiteral>
-    = _ ['] s:(Escape / (!['] .))* ['] { new TermLiteral(s) }
+STRING_LITERAL<LiteralTerm>
+    = _ ['] s:(Escape / (!['] .))* ['] { new LiteralTerm(s) }
 
 Escape
     = '\\' s:(SimpleEscape / UnicodeEscape) { s }
@@ -297,26 +296,26 @@ UnicodeEscape
         }
 
 LEXER_CHAR_SET<Term>
-    = _ '[' '^' e:set_members ']'       { new TermNot(e) }
+    = _ '[' '^' e:set_members ']'       { new NotTerm(e) }
     / _ '[' e:set_members ']'           { e }
 
-set_members<TermAlternatives>
-    = es:SetMember+                    { new TermAlternatives(es) }
+set_members<Term>
+    = es:SetMember+                    { TermBuilder.Alternatives(es) }
 
 SetMember<Term>
     = SetRange
     / SetSingle
 
-SetSingle<TermLiteral>
+SetSingle<LiteralTerm>
     = e:SetEscape   { e }
-    / !']' s:.      { new TermLiteral(s[0]) }
+    / !']' s:.      { new LiteralTerm(s[0]) }
 
-SetRange<TermRange>
-    = start:SetSingle '-' stop:SetSingle { new TermRange(start, stop) }
+SetRange<RangeTerm>
+    = start:SetSingle '-' stop:SetSingle { new RangeTerm(start, stop) }
 
-SetEscape<TermLiteral>
-    = '\\' s:SimpleSetEscape    { new TermLiteral(s) }
-    / '\\' s:UnicodeEscape      { new TermLiteral(s) }
+SetEscape<LiteralTerm>
+    = '\\' s:SimpleSetEscape    { new LiteralTerm(s) }
+    / '\\' s:UnicodeEscape      { new LiteralTerm(s) }
 
 SimpleSetEscape
     =   char:[btnfr"'\\\]] 

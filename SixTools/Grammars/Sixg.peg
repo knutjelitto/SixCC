@@ -18,10 +18,10 @@ expression <Term>
     = a:alternatives                                        { a }
 
 alternatives <Term>
-    = first:sequence rest:(<Term> _ "|" r:sequence { r })*  { new TermAlternatives(first, rest) }
+    = first:sequence rest:(<Term> _ "|" r:sequence { r })*  { TermBuilder.Alternatives(first, rest) }
 
 sequence <Term>
-    = es:element*                                           { new TermSequence(es) }
+    = es:element*                                           { TermBuilder.Sequence(es) }
 
 element <Term>
     = range
@@ -37,20 +37,20 @@ primary <Term>
     = identifier
     / string
     / character
-    / _ '.'                                                 { new TermAny() }
-    / _ "<" e:expression _ ">"                              { new TermTerminal(e) }
-    / _ "(" e:expression _ ")"                              { new TermClamped(e) }
-    / _ "~" a:primary                                       { new TermNot(a) }
+    / _ '.'                                                 { new AnyTerm() }
+    / _ "<" e:expression _ ">"                              { new TerminalTerm(e) }
+    / _ "(" e:expression _ ")"                              { new ClampedTerm(e) }
+    / _ "~" a:primary                                       { new NotTerm(a) }
 
 range <Term>
-    = a:string _ ".." o:string                              { new TermRange(a, o) }
+    = a:string _ ".." o:string                              { new RangeTerm(a, o) }
 
-rule_identifier <TermToken>
-    = _ id:("%" identifier)                                 { new TermToken(id) }
+rule_identifier <TokenTerm>
+    = _ id:("%" identifier)                                 { new TokenTerm(id) }
     / _ id:identifier                                       { id }
 
-identifier <TermToken>
-    = _ id:(id_start id_continue*)                          { new TermToken(id) }
+identifier <TokenTerm>
+    = _ id:(id_start id_continue*)                          { new TokenTerm(id) }
 
 id_start
     = letter (letter / digit)*
@@ -58,12 +58,12 @@ id_start
 id_continue
     = ("-"/"_") (letter / digit)+
 
-string <TermLiteral>
-    = _ ("\'" s:single_char* "\'")                          { new TermLiteral(s) }
+string <LiteralTerm>
+    = _ ("\'" s:single_char* "\'")                          { new LiteralTerm(s) }
 
 
-character <TermLiteral>
-    = _ esc:(simple_escape / zero_escape / hex_escape / unicode_escape) { new TermLiteral(esc) }
+character <LiteralTerm>
+    = _ esc:(simple_escape / zero_escape / hex_escape / unicode_escape) { new LiteralTerm(esc) }
 
 single_char
     = !("'" / "\\" / eol_char) .

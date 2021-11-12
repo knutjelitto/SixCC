@@ -27,11 +27,25 @@
                 {
                     alt[i] = Shrink(alt[i]);
                 }
+                var epsilonCount = alt.Count(a => a is EpsilonTerm);
+                if (epsilonCount > 1)
+                {
+                    for (var i = alt.Count - 1; i >= 0; i--)
+                    {
+                        if (epsilonCount > 1 && alt[i] is EpsilonTerm)
+                        {
+                            alt.RemoveAt(i);
+                            epsilonCount--;
+                        }
+                    }
+                }
+
                 if (alt.Count == 1)
                 {
                     return alt[0];
                 }
                 Assert(alt.Count >= 2);
+
             }
             else if (term is SequenceTerm seq)
             {
@@ -48,6 +62,7 @@
                 {
                     return seq[0];
                 }
+                Assert(seq.Count >= 2);
             }
             else if (term is ClampedTerm clamped)
             {

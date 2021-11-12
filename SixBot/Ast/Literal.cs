@@ -1,6 +1,6 @@
 ﻿namespace SixBot.Ast
 {
-    internal class Literal : Terminal
+    internal class Literal : Expression
     {
         public Literal(string text)
         {

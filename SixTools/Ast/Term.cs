@@ -101,11 +101,13 @@ namespace SixTools.Ast
         public AlternativesTerm(Term first, IEnumerable<Term> rest)
             : base(Enumerable.Repeat(first, 1).Concat(rest))
         {
+            Assert(Terms.Count >= 2);
         }
 
         public AlternativesTerm(IEnumerable<Term> terms)
             : base(terms)
         {
+            Assert(Terms.Count >= 2);
         }
     }
 

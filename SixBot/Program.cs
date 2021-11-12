@@ -1,11 +1,18 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using SixBot.Ast;
+using static SixBot.Ast.AstBuilder;
 
+var grammar = E1();
 
-using SixBot.Ast;
-
-var g = new Grammar(
-        new Rule("E", new Alt(new Seq(new Nonterminal("E"), new Literal("+"), new Nonterminal("E")), new Literal("e")))
-    );
-
-Console.WriteLine("Hello, World!");
+Console.Write("any key ... ");
 Console.ReadKey(true);
+
+static Grammar E1()
+{
+    return Grammar("E",
+        "E" <=
+        (
+              N("E") + T("+") + N("E")
+            | T("e")
+        )
+    );
+}

@@ -2,15 +2,18 @@
 {
     internal class Grammar
     {
-        public List<Rule> Rules { get; }
-        public Dictionary<string, Rule> Lookup { get; }
-
-        public Grammar(params Rule[] rules)
+        public Grammar(string name, params Rule[] rules)
         {
             Rules = rules.ToList();
             Lookup = Rules.ToDictionary(x => x.Name, x => x);
             Resolve();
+            Name = name;
         }
+
+        public string Name { get; }
+
+        public List<Rule> Rules { get; }
+        public Dictionary<string, Rule> Lookup { get; }
 
         private void Resolve()
         {
