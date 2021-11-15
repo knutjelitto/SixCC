@@ -1,13 +1,15 @@
-﻿namespace SixBot.Ast
+﻿using Six.Core;
+
+namespace SixBot.Ast
 {
-    internal class Terminal : Expression
+    internal class Terminal : Base
     {
         public Terminal(Expression expression)
         {
             Expression = expression;
         }
 
-        public Terminal(string literal)
+        public Terminal(CpString literal)
             : this(new Literal(literal))
         {
         }

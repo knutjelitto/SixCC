@@ -1,6 +1,6 @@
 ﻿namespace SixBot.Ast
 {
-    internal class Nonterminal : Expression
+    internal class Nonterminal : Base
     {
         public Nonterminal(string name)
         {

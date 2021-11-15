@@ -1,4 +1,6 @@
-﻿namespace SixTools.Formats.RailSvg
+﻿using Six.Core;
+
+namespace SixTools.Formats.RailSvg
 {
     internal class RenderContext
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SixBot.Ast
+﻿namespace SixBot.Ast
 {
     internal abstract class Expression
     {
@@ -32,14 +26,10 @@ namespace SixBot.Ast
             }
         }
 
-        public static Rule operator <=(string name, Expression expression)
+        public static Terminal operator -(Expression left, Expression right)
         {
-            return new Rule(name, expression);
+            return new Terminal(new Substract(left, right));
         }
 
-        public static Rule operator >=(string name, Expression expression)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

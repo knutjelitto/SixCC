@@ -1,5 +1,7 @@
 ﻿#pragma warning disable IDE0066 // Convert switch statement to expression
 
+using Six.Core;
+
 namespace SixTools.Helpers
 {
     public static class Esc

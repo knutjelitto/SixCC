@@ -1,4 +1,6 @@
-﻿namespace SixTools.Formats
+﻿using Six.Core;
+
+namespace SixTools.Formats
 {
     public static class HtmlHelpers
     {

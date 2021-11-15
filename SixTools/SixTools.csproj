@@ -58,4 +58,8 @@
     <PegGrammar Include="Grammars\Sixg.peg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Six.Core\Six.Core.csproj" />
+  </ItemGroup>
+
 </Project>

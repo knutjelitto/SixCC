@@ -3,8 +3,8 @@
 #pragma warning disable CA1707 // Identifiers should not contain underscores
 #pragma warning disable IDE1006 // Naming Styles
 
+using Six.Core;
 using SixTools.Formats.RailSvg;
-using SixTools.Helpers;
 
 namespace SixTools.Tiles
 {

@@ -1,12 +1,19 @@
-﻿namespace SixBot.Ast
+﻿using Six.Core;
+
+namespace SixBot.Ast
 {
     internal class Literal : Expression
     {
-        public Literal(string text)
+        public Literal(CpString text)
         {
             Text = text;
         }
 
-        public string Text { get; }
+        public CpString Text { get; }
+
+        public override string ToString()
+        {
+            return $"'{Text}'";
+        }
     }
 }

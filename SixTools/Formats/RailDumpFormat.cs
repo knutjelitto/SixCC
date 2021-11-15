@@ -1,4 +1,5 @@
-﻿using SixTools.Ast;
+﻿using Six.Core;
+using SixTools.Ast;
 using SixTools.Helpers;
 using SixTools.Rails;
 

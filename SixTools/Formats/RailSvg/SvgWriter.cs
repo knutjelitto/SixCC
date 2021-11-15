@@ -1,4 +1,5 @@
-﻿using SixTools.Helpers;
+﻿using Six.Core;
+using SixTools.Helpers;
 
 namespace SixTools.Formats.RailSvg
 {

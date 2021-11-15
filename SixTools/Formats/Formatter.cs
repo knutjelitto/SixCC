@@ -1,4 +1,6 @@
-﻿namespace SixTools.Formats
+﻿using Six.Core;
+
+namespace SixTools.Formats
 {
     public static class Formatter
     {
@@ -14,12 +16,7 @@
 
         public static string TempPath()
         {
-            var outPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "../../../../..", "SixTmp", "tools"));
-            if (!Directory.Exists(outPath))
-            {
-                _ = Directory.CreateDirectory(outPath);
-            }
-            return outPath;
+            return Temp.TempPath("tools");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SixTools.Grammars;
+﻿using Six.Core;
+using SixTools.Grammars;
 using System.Reflection;
 
 namespace SixTools.Helpers
@@ -36,39 +37,33 @@ namespace SixTools.Helpers
 
         public static void GetCss(Writer writer, Type type)
         {
-            using (var stream = GetCss(type.FullName!))
+            using var stream = GetCss(type.FullName!);
+            if (stream != null)
             {
-                if (stream != null)
+                string? line;
+                while ((line = stream.ReadLine()) != null)
                 {
-                    string? line;
-                    while ((line = stream.ReadLine()) != null)
-                    {
-                        writer.WriteLine(line);
-                    }
-                    return;
+                    writer.WriteLine(line);
                 }
             }
         }
 
         public static void GetCss(Writer writer, string name)
         {
-            using (var stream = GetCss(name))
+            using var stream = GetCss(name);
+            if (stream != null)
             {
-                if (stream != null)
+                string? line;
+                while ((line = stream.ReadLine()) != null)
                 {
-                    string? line;
-                    while ((line = stream.ReadLine()) != null)
+                    if (string.IsNullOrWhiteSpace(line))
                     {
-                        if (string.IsNullOrWhiteSpace(line))
-                        {
-                            writer.WriteLine();
-                        }
-                        else
-                        {
-                            writer.WriteLine(line);
-                        }
+                        writer.WriteLine();
                     }
-                    return;
+                    else
+                    {
+                        writer.WriteLine(line);
+                    }
                 }
             }
         }

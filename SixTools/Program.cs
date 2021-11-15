@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Pegasus.Common;
+using Six.Core;
 using SixTools.Formats;
 using SixTools.Grammars;
 using SixTools.Helpers;
@@ -30,8 +31,10 @@ foreach (var sampleName in samples)
 
         foreach (var formatter in Formatter.Formatters)
         {
-            using var writer = FFile(outPath, sampleName, parser, formatter);
-            formatter.Format(parsed, new SixTools.Writer(writer));
+            using (var writer = new Writer(FFile(outPath, sampleName, parser, formatter)))
+            {
+                formatter.Format(parsed, writer);
+            }
         }
 
         continue;

@@ -1,14 +1,22 @@
-﻿namespace SixTools
+﻿namespace Six.Core
 {
-    public class Writer
+    public class Writer : IDisposable
     {
-        public Writer(TextWriter sink)
+        public Writer(TextWriter sink, bool owns = false)
         {
             this.sink = sink;
+            this.owns = owns;
         }
 
-        public Writer() : this(new StringWriter())
+        public Writer()
+            : this(new StringWriter(), true)
         {
+        }
+
+        public Writer(string filename)
+            : this(new StreamWriter(filename), true)
+        {
+
         }
 
         public void WriteLine()
@@ -61,6 +69,14 @@
             return "-content-lost-in-sink-";
         }
 
+        public void Dispose()
+        {
+            if (owns && sink != null)
+            {
+                sink.Dispose();
+            }
+        }
+
         private class Undenter : IDisposable
         {
             private readonly Writer writer;
@@ -77,8 +93,9 @@
         }
 
         private readonly TextWriter sink;
+        private readonly bool owns;
         private int level;
         private bool pending = true;
-        private readonly string prefix = "  ";
+        private readonly string prefix = "    ";
     }
 }
