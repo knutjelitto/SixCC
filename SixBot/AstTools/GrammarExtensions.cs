@@ -15,7 +15,7 @@ namespace SixBot.Ast
         {
             using (var writer = new Writer(File(filename)))
             {
-                new DumpWalker(writer).Walk(grammar);
+                new SixgGrammar(writer).Walk(grammar);
             }
         }
     }

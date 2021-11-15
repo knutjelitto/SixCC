@@ -1,75 +1,68 @@
-using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-using static System.Diagnostics.Debug;
-
 namespace Six.Core
 {
-    public sealed class IntegerSet : IEnumerable<int>, IEquatable<IntegerSet>
+    public partial class Integers : IEnumerable<int>, IEquatable<Integers>
     {
-        public static IntegerSet Empty => new();
+        public static Integers Empty => new();
+        public static Integers Any => new(UnicodeSets.Any());
 
-        private readonly List<Interval> ranges;
-
-        public IntegerSet(params (int min, int max)[] ranges)
-            : this(ranges.Select(p => new Interval(p.min, p.max)))
-        {
-        }
-
-        private IntegerSet(Interval range)
+        private Integers(Interval range)
             : this(Enumerable.Repeat(range, 1))
         {
         }
 
-        private IntegerSet()
+        private Integers()
             : this(Enumerable.Empty<Interval>())
         {
         }
 
-        private IntegerSet(IntegerSet other)
+        private Integers(Integers other)
             : this(other.ranges)
+        {
+
+        }
+
+        public Integers(params (int min, int max)[] ranges)
+            : this(ranges.Select(p => new Interval(p.min, p.max)))
         {
         }
 
-        private IntegerSet(IEnumerable<Interval> ranges)
+        private Integers(IEnumerable<Interval> ranges)
         {
-            this.ranges = new List<Interval>(ranges);
+            this.ranges = new List<Interval>();
+            foreach (var range in ranges)
+            {
+                Add(range);
+            }
         }
 
         public int Cardinality => ranges.Sum(range => range.Count);
 
         public bool IsEmpty => ranges.Count == 0;
 
+        public bool IsAny => ranges.Count == 1 && Min == Any.Min && Max == Any.Max;
+
         public int Max => ranges.Last().Max;
 
         public int Min => ranges.First().Min;
 
-        public int Single
-        {
-            get
-            {
-                Assert(Min == Max);
-                return Min;
-            }
-        }
-
         public int IntervalCount => ranges.Count;
 
-        public static IntegerSet From(IntegerSet other)
+        public static Integers From(Integers other)
         {
-            return new IntegerSet(other);
+            return new Integers(other);
         }
 
-        public static IntegerSet From(int minmax)
+        public static Integers From(int minmax)
         {
-            return new IntegerSet(new Interval(minmax));
+            return new Integers(new Interval(minmax));
         }
 
-        public static IntegerSet From(int min, int max)
+        public static Integers From(int min, int max)
         {
-            return new IntegerSet(new Interval(min, max));
+            return new Integers(new Interval(min, max));
         }
 
-        public static IntegerSet? Parse(string str)
+        public static Integers? Parse(string str)
         {
             if (TryParse(str, out var set))
             {
@@ -78,7 +71,7 @@ namespace Six.Core
             return null;
         }
 
-        public static bool TryParse(string str, [MaybeNullWhen(false)] out IntegerSet? set)
+        public static bool TryParse(string str, [MaybeNullWhen(false)] out Integers? set)
         {
             if (str.Length == 0 || str[0] != '[')
             {
@@ -88,7 +81,7 @@ namespace Six.Core
 
             var start = 1;
             var end = 1;
-            set = new IntegerSet();
+            set = new Integers();
             while (end < str.Length)
             {
                 while (end < str.Length && str[end] != ',' && str[end] != ']')
@@ -125,14 +118,14 @@ namespace Six.Core
             Add(rangesToAdd.Select(range => new Interval(range.min, range.max)));
         }
 
-        public void Add(IntegerSet other)
+        public void Add(Integers other)
         {
             Add(other.ranges);
         }
 
-        public IntegerSet Clone()
+        public Integers Clone()
         {
-            return new IntegerSet(ranges);
+            return new Integers(ranges);
         }
 
         public bool Contains(int value)
@@ -142,22 +135,22 @@ namespace Six.Core
 
         public override bool Equals(object? obj)
         {
-            return obj is IntegerSet other && ranges.SequenceEqual(other.ranges);
+            return obj is Integers other && ranges.SequenceEqual(other.ranges);
         }
 
-        public bool Equals(IntegerSet? other)
+        public bool Equals(Integers? other)
         {
             return other != null && ranges.SequenceEqual(other.ranges);
         }
 
-        public IntegerSet ExceptWith(IntegerSet other)
+        public Integers ExceptWith(Integers other)
         {
             var set = Clone();
             set.Sub(other.ranges);
             return set;
         }
 
-        public IntegerSet IntersectWith(IntegerSet other)
+        public Integers IntersectWith(Integers other)
         {
             var union = UnionWith(other);
             var ex1 = ExceptWith(other);
@@ -192,17 +185,17 @@ namespace Six.Core
             return ranges.SelectMany(range => range);
         }
 
-        public bool IsProperSubsetOf(IntegerSet other)
+        public bool IsProperSubsetOf(Integers other)
         {
             return IsSubsetOf(other) && !Equals(other);
         }
 
-        public bool IsProperSupersetOf(IntegerSet other)
+        public bool IsProperSupersetOf(Integers other)
         {
             return IsSupersetOf(other) && !Equals(other);
         }
 
-        public bool IsSubsetOf(IntegerSet other)
+        public bool IsSubsetOf(Integers other)
         {
             foreach (var range in ranges)
             {
@@ -215,12 +208,12 @@ namespace Six.Core
             return true;
         }
 
-        public bool IsSupersetOf(IntegerSet other)
+        public bool IsSupersetOf(Integers other)
         {
             return other.IsSubsetOf(this);
         }
 
-        public bool Overlaps(IntegerSet other)
+        public bool Overlaps(Integers other)
         {
             var t = 0;
             var o = 0;
@@ -256,9 +249,14 @@ namespace Six.Core
             Sub(rangesToSub.Select(range => new Interval(range.min, range.max)));
         }
 
-        public IntegerSet Substract(IntegerSet other)
+        public Integers Substract(Integers other)
         {
             return Clone().Sub(other.ranges);
+        }
+
+        public Integers Not()
+        {
+            return Any.Substract(this);
         }
 
         public override string ToString()
@@ -271,25 +269,25 @@ namespace Six.Core
             return $"[{string.Join(", ", ranges.Select(r => r.ToIString()))}]";
         }
 
-        public IntegerSet UnionWith(IntegerSet other)
+        public Integers UnionWith(Integers other)
         {
             var set = Clone();
             set.Add(other.ranges);
             return set;
         }
 
-        public static IntegerSet operator +(IntegerSet set1, IntegerSet set2)
+        public static Integers operator +(Integers set1, Integers set2)
         {
             return set1.UnionWith(set2);
         }
 
-        public static IntegerSet operator /(IntegerSet set1, IntegerSet set2)
+        public static Integers operator /(Integers set1, Integers set2)
         {
             return set1.ExceptWith(set2);
         }
 
 
-        public static explicit operator IntegerSet(char ch)
+        public static explicit operator Integers(char ch)
         {
             return From(ch);
         }
@@ -317,11 +315,11 @@ namespace Six.Core
                 if (add.Max <= current.Max)
                 {
                     // combine with current
-                    ranges[i] = new Interval((char)Math.Min(add.Min, current.Min), current.Max);
+                    ranges[i] = new Interval((char) Math.Min(add.Min, current.Min), current.Max);
                     return;
                 }
 
-                add = new Interval((char)Math.Min(add.Min, current.Min), add.Max);
+                add = new Interval((char) Math.Min(add.Min, current.Min), add.Max);
                 ranges.RemoveAt(i);
             }
 
@@ -437,7 +435,7 @@ namespace Six.Core
             }
         }
 
-        private IntegerSet Sub(IEnumerable<Interval> rangesToSub)
+        private Integers Sub(IEnumerable<Interval> rangesToSub)
         {
             foreach (var range in rangesToSub)
             {
@@ -447,128 +445,6 @@ namespace Six.Core
             return this;
         }
 
-        private struct Interval : IEnumerable<int>
-        {
-            public Interval(int minmax)
-            {
-                Min = minmax;
-                Max = minmax;
-            }
-
-            public Interval(int min, int max)
-            {
-                Assert(min <= max);
-                Min = min;
-                Max = max;
-            }
-
-            public int Min { get; private set; }
-            public int Max { get; private set; }
-            public int Count => Max - Min + 1;
-
-            public bool Contains(int value)
-            {
-                return Min <= value && value <= Max;
-            }
-
-            public bool Overlaps(Interval other)
-            {
-                return Contains(other.Min) || Contains(other.Max) || other.Contains(Min) || other.Contains(Max);
-            }
-
-            public IEnumerator<int> GetEnumerator() => Enumerable.Range(Min, Count).GetEnumerator();
-
-            public string ToIString()
-            {
-                if (Min == Max)
-                {
-                    return $"{Min}";
-                }
-                if (Min == Max - 1)
-                {
-                    return $"{Min}, {Max}";
-                }
-                if (Min == Max - 2)
-                {
-                    return $"{Min}, {Max - 1}, {Max}";
-                }
-                if (Min == Max - 3)
-                {
-                    return $"{Min}, {Max - 2}, {Max - 1}, {Max}";
-                }
-
-                if (Min == Max - 4)
-                {
-                    return $"{Min}, {Max - 3}, {Max - 2}, {Max - 1}, {Max}";
-                }
-
-                return $"{Min} - {Max}";
-            }
-
-            public override string ToString()
-            {
-                if (Min == Max)
-                {
-                    return CharRep.InRange(Min);
-                }
-                if (Max - Min <= 3)
-                {
-                    return string.Join(", ", Enumerable.Range(Min, Max - Min + 1).Select(x => CharRep.InRange(x)));
-                }
-
-                return $"{CharRep.InRange(Min)}..{CharRep.InRange(Max)}";
-            }
-
-            public static bool TryParse(string str, out Interval range)
-            {
-                var end = 0;
-                while (end < str.Length && char.IsDigit(str, end))
-                {
-                    end += 1;
-                }
-                if (end > 0)
-                {
-                    if (end == str.Length)
-                    {
-                        if (int.TryParse(str, out var minmax))
-                        {
-                            range = new Interval(minmax);
-                            return true;
-                        }
-                    }
-                    else if (str[end] == '-' && int.TryParse(str.AsSpan(0, end), out var min))
-                    {
-                        var start = ++end;
-                        while (end < str.Length && char.IsDigit(str, end))
-                        {
-                            end += 1;
-                        }
-                        if (end > start && end == str.Length)
-                        {
-                            if (int.TryParse(str.AsSpan(start, end - start), out var max))
-                            {
-                                range = new Interval(min, max);
-                                return true;
-                            }
-                        }
-                    }
-                }
-
-                range = default;
-                return false;
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is Interval other && Min == other.Min && Max == other.Max;
-            }
-
-            public override int GetHashCode() => (Min, Max).GetHashCode();
-        }
+        private readonly List<Interval> ranges;
     }
 }

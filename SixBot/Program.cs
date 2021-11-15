@@ -1,8 +1,8 @@
 ﻿using SixBot.Ast;
-using static SixBot.Ast.AstBuilder;
 
 try
 {
+    Do(new Sixg().Grammar());
     Do(new E1().Grammar());
     Do(new Json().Grammar());
 }
@@ -16,7 +16,99 @@ Console.ReadKey(true);
 
 static void Do(Grammar grammar)
 {
+    new IsRegexWalker().Walk(grammar);
+    new IsCompactWalker().Walk(grammar);
+
     grammar.Dump($"{grammar.Name}-dump.txt");
+}
+
+class Sixg : GrammarBuilder
+{
+    public Sixg() : base("sixg") { }
+
+    protected override void Build()
+    {
+        Define("grammar", T("grammar") + Ref("identifier") + T(";") + Ref("rules"));
+
+        Define("rules", Star(Ref("rule")));
+
+        Define("rule", Ref("identifier") + T(":") + Ref("expression") + T(";"));
+
+        Define("expression", Ref("alternation"));
+
+        Define("alternation", Ref("sequence") + Star(T("|") + Ref("sequence")));
+
+        Define("sequence", Star(Ref("element")));
+
+        Define("element",
+              Ref("primary") + Opt(Ref("ebnf"))
+            | Ref("range")
+            );
+
+        Define("ebnf", T("*") | T("+") | T("?"));
+
+        Define("range", Ref("string") + T("..") + Ref("string"));
+
+        Define("primary",
+              Ref("identifier")
+            | Ref("string")
+            | T("(") + Ref("expression") + T(")")
+            | T("<") + Ref("expression") + T(">")
+        );
+
+        Define("identifier", Forced(Ref("id-begin") + Star(Ref("id-continue"))));
+
+        Define("id-begin", Ref("letter") + Star(Ref("letter-or-digit")));
+
+        Define("id-continue", T("-") + Plus(Ref("letter-or-digit")));
+
+        Define("letter", Range('a', 'z') | Range('A', 'Z'));
+
+        Define("digit", Range('0', '9'));
+
+        Define("letter-or-digit", Ref("letter") | Ref("digit"));
+
+        Define("string", Forced(T("'") + Star(Ref("character")) + T("'")) );
+
+        Define("character",
+              Range(0x0020, 0x10FFFF) - T('\'') - T('\\')
+            | T('\\') + Ref("escape")
+        );
+
+        Define("escape",
+              T('\'')
+            | T('\\')
+            | T('a')
+            | T('b')
+            | T('f')
+            | T('n')
+            | T('t')
+            | T('v')
+            | T('x') + Ref("hex") + Ref("hex")
+            | T("u{") + Opt(Ref("hex")) + Opt(Ref("hex")) + Opt(Ref("hex")) + Opt(Ref("hex")) + Opt(Ref("hex")) + Ref("hex") + T("}")
+        );
+
+        Define("hex",
+              Ref("digit")
+            | Range('A', 'F')
+            | Range('a', 'f')
+        );
+
+        Define("whitespace",
+              Ref("space")
+            | Ref("comment")
+        );
+
+        Define("space", T(' ') | T('\t') | T('\n') | T('\r'));
+
+        Define("line-ender", T('\n') | T('\r'));
+
+        Define("comment", Ref("line-comment") | Ref("block-comment"));
+
+        Define("line-comment", T("//") + Star(Any - Ref("line-ender")) );
+
+        Define("block-comment", T("/*") + Star(Any - T("*/")) + T("*/"));
+    }
 }
 
 class E1 : GrammarBuilder
@@ -25,8 +117,8 @@ class E1 : GrammarBuilder
 
     protected override void Build()
     {
-        Rule("E",
-                N("E") + T("+") + N("E")
+        Define("E",
+                Ref("E") + T("+") + Ref("E")
             | T("e")
         );
     }
@@ -38,63 +130,58 @@ class Json : GrammarBuilder
 
     protected override void Build()
     {
-        Rule("json",
-            N("element")
+        Define("json",
+            Ref("element")
         );
 
-        Rule("value",
-              N("object")
-            | N("array")
-            | N("string")
-            | N("number")
+        Define("value",
+              Ref("object")
+            | Ref("array")
+            | Ref("string")
+            | Ref("number")
             | T("true")
             | T("false")
             | T("null")
         );
 
-        Rule("object",
-              T('{') + N("ws") + T('}')
-            | T('{') + N("members") + T('}')
+        Define("object",
+              T('{') + Ref("ws") + T('}')
+            | T('{') + Ref("members") + T('}')
         );
 
-        Rule("members",
-              N("member")
-            | N("member") + T(',') + N("members")
+        Define("members",
+              Ref("member")
+            | Ref("member") + T(',') + Ref("members")
         );
 
-        Rule("member",
-              N("ws") + N("string") + N("ws") + T(':') + N("element")
+        Define("member",
+              Ref("ws") + Ref("string") + Ref("ws") + T(':') + Ref("element")
         );
 
-        Rule("array",
-              T('[') + N("ws") + T(']')
-            | T('[') + N("elements") + T(']')
+        Define("array",
+              T('[') + Ref("ws") + T(']')
+            | T('[') + Ref("elements") + T(']')
         );
 
-        Rule("elements",
-              N("element")
-            | N("element") + T(',') + N("elements")
+        Define("elements",
+              Ref("element")
+            | Ref("element") + T(',') + Ref("elements")
         );
 
-        Rule("element",
-              N("ws") + N("value") + N("ws")
+        Define("element",
+              Ref("ws") + Ref("value") + Ref("ws")
         );
 
-        Rule("string",
-              T(T('"') + N("characters") + T('"'))
+        Define("string",
+              Forced(T('"') + Star(Ref("character")) + T('"'))
         );
 
-        Rule("characters",
-              Empty
-            | N("character") + N("characters")
-        );
-
-        Rule("character",
+        Define("character",
               Range(0x0020, 0x10FFFF) - T('"') - T('\\')
-            | T('\\') + N("escape")
+            | T('\\') + Ref("escape")
         );
 
-        Rule("escape",
+        Define("escape",
               T('"')
             | T('\\')
             | T('/')
@@ -102,73 +189,64 @@ class Json : GrammarBuilder
             | T('f')
             | T('n')
             | T('t')
-            | T('t')
-            | T('u') + N("hex") + N("hex") + N("hex") + N("hex")
+            | T('v')
+            | T('u') + Ref("hex") + Ref("hex") + Ref("hex") + Ref("hex")
         );
 
-        Rule("hex",
-              N("digit")
+        Define("hex",
+              Ref("digit")
             | Range('A', 'F')
             | Range('a', 'f')
         );
 
-        Rule("number",
-              T(N("integer") + N("fraction") + N("exponent"))
+        Define("number",
+              Forced(Ref("integer") + Ref("fraction") + Ref("exponent"))
         );
 
-        Rule("integer",
-              N("digit")
-            | N("onenine") + N("digits")
-            | T('-') + N("digit")
-            | T('-') + N("onenine") + N("digits")
+        Define("integer",
+              Ref("digit")
+            | Ref("onenine") + Ref("digits")
+            | T('-') + Ref("digit")
+            | T('-') + Ref("onenine") + Ref("digits")
         );
 
-        Rule("digits",
-              N("digit")
-            | N("digit") + N("digits")
+        Define("digits",
+              Ref("digit")
+            | Ref("digit") + Ref("digits")
         );
 
-        Rule("digit",
+        Define("digit",
               T('0')
-            | N("onenine")
+            | Ref("onenine")
         );
 
-        Rule("onenine",
+        Define("onenine",
               Range('1', '9')
         );
 
-        Rule("fraction",
+        Define("fraction",
               Empty
-            | T('.') + N("digits")
+            | T('.') + Ref("digits")
         );
 
-        Rule("exponent",
-              T('E') + N("sign") + N("digits")
-            | T('e') + N("sign") + N("digits")
+        Define("exponent",
+              T('E') + Ref("sign") + Ref("digits")
+            | T('e') + Ref("sign") + Ref("digits")
         );
 
-        Rule("sign",
+        Define("sign",
               Empty
             | T('+')
             | T('-')
         );
 
-        Rule("ws",
-              Empty
-            | T(0x0020) + N("ws")
-            | T(0x000A) + N("ws")
-            | T(0x000D) + N("ws")
-            | T(0x0009) + N("ws")
+        Define("ws",
+              Star(
+                  T(0x0020)
+                | T(0x000A)
+                | T(0x000D)
+                | T(0x0009)
+              )
         );
-
-#if false
-        Rule("number",
-              Empty
-        );
-
-        Rule("ws",
-              Empty
-        );
-#endif
     }
 }

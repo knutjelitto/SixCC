@@ -8,11 +8,29 @@
 
             if (utf32 < ' ')
             {
+                switch (utf32)
+                {
+                    case '\n': return "\\n";
+                    case '\r': return "\\r";
+                    case '\t': return "\\t";
+                }
                 return $"\\x{utf32:X02}";
             }
             else if (utf32 == '\'')
             {
                 return "\\'";
+            }
+            else if (utf32 == '\\')
+            {
+                return "\\\\";
+            }
+            else if (utf32 > 0x1FFFF && utf32 <= 0xFFFF)
+            {
+                return $"\\u{utf32:X04}";
+            }
+            else if (utf32 > 0xFFFF)
+            {
+                return $"\\u{utf32:X06}";
             }
             else
             {

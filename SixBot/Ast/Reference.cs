@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SixBot.Ast
+﻿namespace SixBot.Ast
 {
     internal class Reference : Expression
     {
@@ -15,5 +9,9 @@ namespace SixBot.Ast
 
         public Rule Rule { get; }
         public string Name => Rule.Name;
+
+        public override bool IsAtomic => true;
+
+        public override string ToName() => $"{Name}";
     }
 }

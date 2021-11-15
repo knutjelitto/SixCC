@@ -1,8 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
-using SixCC.Sdk.Commons;
-
-namespace SixCC.Sdk.Automata
+namespace Six.Rex
 {
     public class Closure
     {

@@ -35,10 +35,6 @@
             throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
         }
 
-        protected virtual void Visit(Reference reference)
-        {
-        }
-
         protected virtual void Visit(Alt alt)
         {
             foreach (var expression in alt.Expressions)
@@ -55,11 +51,22 @@
             }
         }
 
-        protected virtual void Visit(Nonterminal non)
+        protected virtual void Visit(ZeroOrMore zeroOrMore)
         {
+            Walk(zeroOrMore.Expression);
         }
 
-        protected virtual void Visit(Terminal term)
+        protected virtual void Visit(OneOrMore oneOrMore)
+        {
+            Walk(oneOrMore.Expression);
+        }
+
+        protected virtual void Visit(ZeroOrOne zeroOrOne)
+        {
+            Walk(zeroOrOne.Expression);
+        }
+
+        protected virtual void Visit(Reference reference)
         {
         }
 
@@ -67,21 +74,33 @@
         {
         }
 
+        protected virtual void Visit(Any any)
+        {
+        }
+
         protected virtual void Visit(Undefined undefined)
         {
         }
 
+        protected virtual void Visit(Literal literal)
+        {
+        }
+
+        protected virtual void Visit(Compact terminal)
+        {
+            Walk(terminal.Expression);
+        }
+
         protected virtual void Visit(Substract substract)
         {
+            Walk(substract.Left);
+            Walk(substract.Right);
         }
 
         protected virtual void Visit(Range range)
         {
+            Walk(range.Start);
+            Walk(range.End);
         }
-    }
-
-    internal class Walker<T>
-    {
-
     }
 }

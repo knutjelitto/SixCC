@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\usings.cs" Link="usings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Six.Core\Six.Core.csproj" />
   </ItemGroup>
 

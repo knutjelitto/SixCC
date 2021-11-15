@@ -14,6 +14,13 @@
             return cp.value;
         }
 
+        public override bool Equals([NotNullWhen(true)] object? obj)
+        {
+            return obj is Codepoint other && value == other.value;
+        }
+
+        public override int GetHashCode() => value.GetHashCode();
+
         public override string ToString()
         {
             return char.ConvertFromUtf32(value);

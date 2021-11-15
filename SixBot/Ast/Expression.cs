@@ -2,6 +2,21 @@
 {
     internal abstract class Expression
     {
+        public abstract bool IsAtomic { get; }
+
+        /// <summary>
+        /// true, if this is strutural a regex.
+        /// </summary>
+        public bool IsRegex { get; set; }
+
+        /// <summary>
+        /// true, if this expression is only used in compact rules
+        /// </summary>
+        public bool IsFragment { get; set; }
+
+        public abstract string ToName();
+
+
         public static Seq operator+(Expression left, Expression right)
         {
             if (left is Seq seq)
@@ -26,10 +41,9 @@
             }
         }
 
-        public static Terminal operator -(Expression left, Expression right)
+        public static Expression operator -(Expression left, Expression right)
         {
-            return new Terminal(new Substract(left, right));
+            return new Substract(left, right);
         }
-
     }
 }

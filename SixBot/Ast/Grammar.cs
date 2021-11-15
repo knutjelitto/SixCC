@@ -2,15 +2,13 @@
 {
     internal class Grammar
     {
-        public Grammar(string name, Dictionary<string, Rule> index, List<Rule> rules)
+        public Grammar(string name, UniqueList<string, Rule> rules)
         {
             Name = name;
-            Index = index;
             Rules = rules;
         }
 
         public string Name { get; }
-        public Dictionary<string, Rule> Index { get; }
-        public List<Rule> Rules { get; }
+        public UniqueList<string, Rule> Rules { get; }
     }
 }

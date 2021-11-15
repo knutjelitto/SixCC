@@ -1,8 +1,10 @@
 ﻿namespace Six.Core
 {
-    public class CpString : IReadOnlyList<Codepoint>
+    public sealed class CpString : IReadOnlyList<Codepoint>
     {
+        private int? hash;
         private readonly List<Codepoint> cps;
+
 
         public CpString(IEnumerable<Codepoint> cps)
         {
@@ -24,10 +26,13 @@
         {
         }
 
-        public override string ToString()
+        public override bool Equals(object? obj)
         {
-            return CodepointExtensions.ToString(cps);
+            return obj is CpString other && cps.SequenceEqual(other.cps);
         }
+
+        public override int GetHashCode() => hash ??= cps.Hash();
+        public override string ToString() => CodepointExtensions.ToString(cps);
 
         public Codepoint this[int index] => cps[index];
         public int Count => cps.Count;

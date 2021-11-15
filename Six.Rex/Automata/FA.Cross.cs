@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
-using SixCC.Runtime.Commons;
-
-namespace SixCC.Sdk.Automata
+namespace Six.Rex
 {
     public partial class FA
     {
@@ -63,7 +57,7 @@ namespace SixCC.Sdk.Automata
                             }
                             else if (state1.IsPayload && state2.IsPayload)
                             {
-                                Debug.Assert(true);
+                                Assert(true);
 #if true
                                 if (state1.Transitions.Count == 1 && state1.Transitions[0].Set.IsAny)
                                 {
@@ -120,7 +114,7 @@ namespace SixCC.Sdk.Automata
 
                 private static List<CrossTrans> GetMerge(List<Trans> l1, List<Trans> l2)
                 {
-                    Debug.Assert(l1.Count > 0 && l2.Count > 0);
+                    Assert(l1.Count > 0 && l2.Count > 0);
 
                     var i1 = 0;
                     var i2 = 0;
@@ -139,7 +133,7 @@ namespace SixCC.Sdk.Automata
 
                     for (; ; )
                     {
-                        Debug.Assert(r1.Min == r2.Min);
+                        Assert(r1.Min == r2.Min);
 
                         if (r1.Max == r2.Max)
                         {
@@ -149,7 +143,7 @@ namespace SixCC.Sdk.Automata
                             {
                                 break;
                             }
-                            Debug.Assert(i1 < l1.Count && i2 < l2.Count);
+                            Assert(i1 < l1.Count && i2 < l2.Count);
                             t1 = l1[i1++];
                             r1 = t1.Range;
                             t2 = l2[i2++];
@@ -159,7 +153,7 @@ namespace SixCC.Sdk.Automata
                         {
                             Add(r1);
 
-                            Debug.Assert(i1 < l1.Count);
+                            Assert(i1 < l1.Count);
                             r2 = new Range(r1.Max + 1, r2.Max);
                             t1 = l1[i1++];
                             r1 = t1.Range;
@@ -168,18 +162,18 @@ namespace SixCC.Sdk.Automata
                         {
                             Add(r2);
 
-                            Debug.Assert(i2 < l2.Count);
+                            Assert(i2 < l2.Count);
                             r1 = new Range(r2.Max + 1, r1.Max);
                             t2 = l2[i2++];
                             r2 = t2.Range;
                         }
                     }
 
-                    Debug.Assert(result[0].Range.Min == 0);
-                    Debug.Assert(result[result.Count - 1].Range.Max == UnicodeSets.MaxCodePoint);
+                    Assert(result[0].Range.Min == 0);
+                    Assert(result[^1].Range.Max == UnicodeSets.MaxCodePoint);
                     for (var i = 1; i < result.Count; ++i)
                     {
-                        Debug.Assert(result[i - 1].Range.Max + 1 == result[i].Range.Min);
+                        Assert(result[i - 1].Range.Max + 1 == result[i].Range.Min);
                     }
 
                     return result;
@@ -198,11 +192,11 @@ namespace SixCC.Sdk.Automata
 
                     result = result.OrderBy(t => t.Range.Min).ToList();
 
-                    Debug.Assert(result[0].Range.Min == 0);
-                    Debug.Assert(result[result.Count - 1].Range.Max == UnicodeSets.MaxCodePoint);
+                    Assert(result[0].Range.Min == 0);
+                    Assert(result[^1].Range.Max == UnicodeSets.MaxCodePoint);
                     for (var i = 1; i < result.Count; ++i)
                     {
-                        Debug.Assert(result[i - 1].Range.Max + 1 == result[i].Range.Min);
+                        Assert(result[i - 1].Range.Max + 1 == result[i].Range.Min);
                     }
 
                     return result;
