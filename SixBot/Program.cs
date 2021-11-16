@@ -17,7 +17,7 @@ Console.ReadKey(true);
 static void Do(Grammar grammar)
 {
     new IsRegexWalker().Walk(grammar);
-    new IsCompactWalker().Walk(grammar);
+    new IsFragmentWalker().Walk(grammar);
 
     grammar.Dump($"{grammar.Name}-dump.txt");
 }
@@ -28,6 +28,10 @@ class Sixg : GrammarBuilder
 
     protected override void Build()
     {
+        Define("start", Ref("grammar"));
+        
+        Define("whitespace", Ref("skip"));
+        
         Define("grammar", T("grammar") + Ref("identifier") + T(";") + Ref("rules"));
 
         Define("rules", Star(Ref("rule")));
@@ -45,7 +49,7 @@ class Sixg : GrammarBuilder
             | Ref("range")
             );
 
-        Define("ebnf", T("*") | T("+") | T("?"));
+        Define("ebnf", Forced(T("*") | T("+") | T("?")) );
 
         Define("range", Ref("string") + T("..") + Ref("string"));
 
@@ -94,10 +98,7 @@ class Sixg : GrammarBuilder
             | Range('a', 'f')
         );
 
-        Define("whitespace",
-              Ref("space")
-            | Ref("comment")
-        );
+        Define("skip", Forced(Ref("space") | Ref("comment")) );
 
         Define("space", T(' ') | T('\t') | T('\n') | T('\r'));
 

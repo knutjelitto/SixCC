@@ -11,6 +11,7 @@
         public string Name => Rule.Name;
 
         public override bool IsAtomic => true;
+        public override bool IsCompact => Rule.IsCompact;
 
         public override string ToName() => $"{Name}";
     }

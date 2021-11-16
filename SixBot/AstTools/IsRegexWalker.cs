@@ -20,7 +20,7 @@
         protected override void Visit(Alt alt)
         {
             base.Visit(alt);
-            Set(alt, alt.Expressions.All(e => e.IsRegex));
+            Set(alt, alt.Expressions.All(e => !e.IsCompact && e.IsRegex));
         }
 
         protected override void Visit(Any any)
@@ -51,10 +51,10 @@
             Set(oneOrMore, oneOrMore.Expression.IsRegex);
         }
 
-        protected override void Visit(Range range)
+        protected override void Visit(Set range)
         {
             base.Visit(range);
-            Set(range, range.Start.IsRegex && range.End.IsRegex);
+            Set(range, true);
         }
 
         protected override void Visit(Reference reference)
@@ -72,7 +72,7 @@
         protected override void Visit(Seq seq)
         {
             base.Visit(seq);
-            Set(seq, seq.Expressions.All(e => e.IsRegex));
+            Set(seq, seq.Expressions.All(e => !e.IsCompact && e.IsRegex));
         }
 
         protected override void Visit(Substract substract)

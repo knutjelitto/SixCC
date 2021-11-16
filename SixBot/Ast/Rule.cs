@@ -17,9 +17,8 @@
         public Expression Expression { get; set; }
         public IReadOnlyList<Reference> References => references;
         public override bool IsAtomic => Expression.IsAtomic;
+        public override bool IsCompact => Expression.IsCompact;
         public override string ToName() => $"{Name}";
-
-        public bool IsCompact => Expression is Compact;
 
         public override bool Equals(object? obj) => obj is Rule other && Name == other.Name;
         public override int GetHashCode() => Name.GetHashCode();

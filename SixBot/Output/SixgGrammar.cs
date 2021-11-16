@@ -31,7 +31,46 @@
                 more = true;
                 Walk(rule);
             }
+
+            writer.WriteLine();
+            writer.WriteLine($"/*");
+            writer.WriteLine();
+            Sorts(grammar, "nonterminal", r => !(r.IsCompact || r.IsFragment));
+            writer.WriteLine();
+            Sorts(grammar, "terminals", r => r.IsCompact);
+            writer.WriteLine();
+            Sorts(grammar, "fragments", r => r.IsFragment);
+            writer.WriteLine();
+            writer.WriteLine($"*/");
         }
+
+        private void Sorts(Grammar grammar, string what, Func<Rule, bool> predicate)
+        {
+            var more = false;
+            writer.WriteLine($"=== {what}");
+            using (writer.Indent())
+            {
+                foreach (var rule in grammar.Rules.Where(r => predicate(r)))
+                {
+                    WhenMore(ref more, () => writer.Write(" "));
+                    writer.Write($"{rule.Name}");
+                }
+            }
+            if (more)
+            {
+                writer.WriteLine();
+            }
+        }
+
+        private void WhenMore(ref bool more, Action whenMore)
+        {
+            if (more)
+            {
+                whenMore();
+            }
+            more = true;
+        }
+
 
         protected override void Visit(Rule rule)
         {
@@ -40,7 +79,7 @@
             writer.Write("// [");
             writer.Write($"{rule.References.Count}");
             writer.Write("," + (rule.IsRegex ? "R" : "-"));
-            writer.Write("," + (rule.IsCompact ? "C" : "-"));
+            writer.Write("," + (rule.IsFragment ? "F" : "-"));
             writer.Write("]");
             using (writer.Indent())
             {
@@ -79,7 +118,7 @@
             {
                 if (more)
                 {
-                    writer.Write("|");
+                    writer.Write(" | ");
                 }
                 more = true;
                 Walk(expression);
@@ -132,13 +171,9 @@
             writer.Write($"{literal.Text.Esc()}");
         }
 
-        protected override void Visit(Range range)
+        protected override void Visit(Set range)
         {
-            writer.Write("[");
-            Walk(range.Start);
-            writer.Write(" .. ");
-            Walk(range.End);
-            writer.Write("]");
+            writer.Write($"{range}");
         }
 
         protected override void Visit(Substract substract)

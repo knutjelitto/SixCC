@@ -9,8 +9,16 @@
 
         protected override void Visit(Rule rule)
         {
-            base.Visit(rule);
-            Set(rule, rule.Expression.IsRegex);
+            if (rule.IsCompact || rule.IsFragment)
+            {
+                base.Visit(rule);
+            }
+        }
+
+        protected override void Visit(Reference reference)
+        {
+            base.Visit(reference);
+            Set(reference.Rule, true);
         }
     }
 }

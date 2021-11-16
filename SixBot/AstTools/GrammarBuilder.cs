@@ -108,7 +108,7 @@ namespace SixBot.Ast
             {
                 return new Literal(start);
             }
-            return new Range(new Literal(start), new Literal(end));
+            return new Set(start, end);
         }
 
         protected static Expression Star(Expression expression)

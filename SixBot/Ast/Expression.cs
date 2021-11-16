@@ -3,9 +3,10 @@
     internal abstract class Expression
     {
         public abstract bool IsAtomic { get; }
+        public virtual bool IsCompact => this is Compact;
 
         /// <summary>
-        /// true, if this is strutural a regex.
+        /// true, if this is structural a regex.
         /// </summary>
         public bool IsRegex { get; set; }
 
@@ -43,6 +44,17 @@
 
         public static Expression operator -(Expression left, Expression right)
         {
+            if (left is Set lSet)
+            {
+                if (right is Literal lit && lit.Text.Count == 1)
+                {
+                    return new Set(lSet.Points.ExceptWith(Integers.From((int)lit.Text[0])));
+                }
+                else if (right is Set rSet)
+                {
+                    return new Set(lSet.Points.ExceptWith(rSet.Points));
+                }
+            }
             return new Substract(left, right);
         }
     }

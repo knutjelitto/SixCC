@@ -97,10 +97,8 @@
             Walk(substract.Right);
         }
 
-        protected virtual void Visit(Range range)
+        protected virtual void Visit(Set range)
         {
-            Walk(range.Start);
-            Walk(range.End);
         }
     }
 }

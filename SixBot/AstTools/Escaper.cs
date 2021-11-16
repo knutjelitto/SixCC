@@ -24,7 +24,11 @@
             {
                 return "\\\\";
             }
-            else if (utf32 > 0x1FFFF && utf32 <= 0xFFFF)
+            else if (utf32 == 0x10FFFF)
+            {
+                return "\\∞";
+            }
+            else if (utf32 > 0x1FFF && utf32 <= 0xFFFF)
             {
                 return $"\\u{utf32:X04}";
             }
