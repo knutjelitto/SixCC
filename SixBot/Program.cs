@@ -1,7 +1,10 @@
-﻿using SixBot.Ast;
+﻿using Six.Ast;
+
+HelloWorldGenerated.HelloWorld.SayHello();
 
 try
 {
+    Do(new Gamma0().Grammar());
     Do(new Sixg().Grammar());
     Do(new E1().Grammar());
     Do(new Json().Grammar());
@@ -16,10 +19,23 @@ Console.ReadKey(true);
 
 static void Do(Grammar grammar)
 {
-    new IsRegexWalker().Walk(grammar);
-    new IsFragmentWalker().Walk(grammar);
+}
 
-    grammar.Dump($"{grammar.Name}-dump.txt");
+class Gamma0 : GrammarBuilder
+{
+    public Gamma0() : base("𝚪₀") { }
+
+    protected override void Build()
+    {
+        Define("S",
+              Ref("A") + Ref("S") + T("d")
+            | Ref("B") + Ref("S")
+            | Epsilon
+        );
+
+        Define("A", T("a") | T("c"));
+        Define("B", T("a") | T("b"));
+    }
 }
 
 class Sixg : GrammarBuilder
@@ -47,11 +63,11 @@ class Sixg : GrammarBuilder
         Define("element",
               Ref("primary") + Opt(Ref("ebnf"))
             | Ref("range")
-            );
+        );
 
         Define("ebnf", Forced(T("*") | T("+") | T("?")) );
 
-        Define("range", Ref("string") + T("..") + Ref("string"));
+        Define("range", Ref("string") + (T("..") | T('⋯')) + Ref("string"));
 
         Define("primary",
               Ref("identifier")
@@ -98,11 +114,24 @@ class Sixg : GrammarBuilder
             | Range('a', 'f')
         );
 
-        Define("skip", Forced(Ref("space") | Ref("comment")) );
+        Define("skip", Forced(Ref("space") | Ref("line-end") | Ref("comment")) );
 
-        Define("space", T(' ') | T('\t') | T('\n') | T('\r'));
+        Define("space", T(' ') | T('\t'));
 
-        Define("line-ender", T('\n') | T('\r'));
+        Define("line-end",
+              T('\r') + T('\n')
+            | T('\n')
+            | T('\r')
+            | T('\u2028')
+            | T('\u2029')
+        );
+
+        Define("line-ender",
+              T('\n')
+            | T('\r')
+            | T('\u2028')
+            | T('\u2029')
+        );
 
         Define("comment", Ref("line-comment") | Ref("block-comment"));
 
@@ -226,7 +255,7 @@ class Json : GrammarBuilder
         );
 
         Define("fraction",
-              Empty
+              Epsilon
             | T('.') + Ref("digits")
         );
 
@@ -236,7 +265,7 @@ class Json : GrammarBuilder
         );
 
         Define("sign",
-              Empty
+              Epsilon
             | T('+')
             | T('-')
         );

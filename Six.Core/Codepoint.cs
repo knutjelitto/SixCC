@@ -14,7 +14,7 @@
             return cp.value;
         }
 
-        public override bool Equals([NotNullWhen(true)] object? obj)
+        public override bool Equals(object? obj)
         {
             return obj is Codepoint other && value == other.value;
         }

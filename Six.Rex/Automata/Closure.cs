@@ -31,7 +31,7 @@ namespace Six.Rex
 
             Set = set;
             DfaState = new State(isFinal);
-            this.hashCode = Set.Hash();
+            hashCode = Set.Hash();
         }
 
         public Dictionary<Integers, HashSet<State>> UnambiguateTransitions()
@@ -102,10 +102,10 @@ namespace Six.Rex
             return obj is Closure other && Set.SetEquals(other.Set);
         }
 
-        public override int GetHashCode() => this.hashCode;
+        public override int GetHashCode() => hashCode;
 
         [Conditional("DEBUG")]
-        private void EnsureDistinct(Dictionary<Integers, HashSet<State>> transitions)
+        private static void EnsureDistinct(Dictionary<Integers, HashSet<State>> transitions)
         {
             var terminals = transitions.Keys.ToList();
             var i = 0;

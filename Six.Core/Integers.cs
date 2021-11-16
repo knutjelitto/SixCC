@@ -71,7 +71,7 @@
             return null;
         }
 
-        public static bool TryParse(string str, [MaybeNullWhen(false)] out Integers? set)
+        public static bool TryParse(string str, out Integers? set)
         {
             if (str.Length == 0 || str[0] != '[')
             {
@@ -88,7 +88,7 @@
                 {
                     end += 1;
                 }
-                if (end > start && Interval.TryParse(str[start..end], out var range))
+                if (end > start && Interval.TryParse(str.Substring(start, end - start), out var range))
                 {
                     set.Add(range);
                     start = ++end;
@@ -532,7 +532,7 @@
                             return true;
                         }
                     }
-                    else if (str[end] == '-' && int.TryParse(str.AsSpan(0, end), out var min))
+                    else if (str[end] == '-' && int.TryParse(str.Substring(0, end), out var min))
                     {
                         var start = ++end;
                         while (end < str.Length && char.IsDigit(str, end))
@@ -541,7 +541,7 @@
                         }
                         if (end > start && end == str.Length)
                         {
-                            if (int.TryParse(str.AsSpan(start, end - start), out var max))
+                            if (int.TryParse(str.Substring(start, end - start), out var max))
                             {
                                 range = new Interval(min, max);
                                 return true;

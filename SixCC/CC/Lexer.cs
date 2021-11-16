@@ -58,7 +58,7 @@ namespace SixCC.CC
                     case '|':
                         return Token(TKind.Alter);
                     case '?':
-                        return Token(TKind.Quest);
+                        return Token(TKind.Option);
                     case '!':
                         return Token(TKind.Exclam);
                     case '*':

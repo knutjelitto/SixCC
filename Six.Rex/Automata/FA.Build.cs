@@ -92,7 +92,7 @@ namespace Six.Rex
 
             public static FA From(string sequence)
             {
-                Debug.Assert(!string.IsNullOrEmpty(sequence));
+                Assert(!string.IsNullOrEmpty(sequence));
 
                 var start = new State();
                 var current = start;
@@ -105,7 +105,10 @@ namespace Six.Rex
                     current = next;
                 }
 
-                Debug.Assert(next != null);
+                if (next == null)
+                {
+                    throw new InvalidOperationException();
+                }
                 return FA.From(start, next);
             }
 
@@ -132,8 +135,9 @@ namespace Six.Rex
             public static FA Optional(FA fa)
             {
                 var clone = fa.ToNfa(true);
-                Debug.Assert(clone.Final != null);
+                Assert(clone.Final != null);
 
+                if (clone.Final == null) throw new InvalidOperationException();
                 clone.Start.Add(clone.Final);
 
                 return clone;
@@ -142,8 +146,9 @@ namespace Six.Rex
             public static FA Star(FA fa)
             {
                 var clone = fa.ToNfa(true);
-                Debug.Assert(clone.Final != null);
+                Assert(clone.Final != null);
 
+                if (clone.Final == null) throw new InvalidOperationException();
                 clone.Start.Add(clone.Final);
                 clone.Final.Add(clone.Start);
 
@@ -153,7 +158,15 @@ namespace Six.Rex
             public static FA Plus(FA fa)
             {
                 var clone = fa.ToNfa(true);
-                Debug.Assert(clone.Final != null);
+
+                if (clone == null)
+                {
+                    throw new InvalidOperationException();
+                }
+                if (clone.Final == null)
+                {
+                    throw new InvalidOperationException();
+                }
 
                 clone.Final.Add(clone.Start);
 
@@ -163,14 +176,16 @@ namespace Six.Rex
             public static FA Or(FA fa, FA other)
             {
                 var first = fa.ToNfa(true);
-                Debug.Assert(first.Final != null);
+                Assert(first.Final != null);
                 var second = other.ToNfa(true);
-                Debug.Assert(second.Final != null);
+                Assert(second.Final != null);
                 var newEnd = new State();
 
                 first.Start.Add(second.Start);
 
+                if (first.Final == null) throw new InvalidOperationException();
                 first.Final.Add(newEnd);
+                if (second.Final == null) throw new InvalidOperationException();
                 second.Final.Add(newEnd);
 
 
@@ -180,12 +195,14 @@ namespace Six.Rex
             public static FA Concat(FA fa, FA other)
             {
                 var first = fa.ToNfa(true);
-                Debug.Assert(first.Final != null);
+                Assert(first.Final != null);
                 other = other.ToNfa(true);
-                Debug.Assert(other.Final != null);
+                Assert(other.Final != null);
 
+                if (first.Final == null) throw new InvalidOperationException();
                 first.Final.Add(other.Start);
 
+                if (other.Final == null) throw new InvalidOperationException();
                 return FA.From(first.Start, other.Final);
             }
         }

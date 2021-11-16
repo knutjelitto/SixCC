@@ -1,0 +1,136 @@
+﻿grammar six;
+
+grammar:
+    'grammar' identifier ';' rules
+    ;
+
+rules:
+    rule*
+    ;
+
+rule:
+    identifier ':' expression ';'
+    ;
+
+expression:
+    alternation
+    ;
+
+alternation:
+    sequence ('|' sequence)*
+    ;
+
+sequence:
+    element*
+    ;
+
+element:
+      primary ebnf?
+    | range
+    ;
+
+ebnf:
+    < ('*' | '+' | '?') >
+    ;
+
+range:
+    string ('..' | '⋯') string
+    ;
+
+primary:
+      identifier
+    | string
+    | '(' expression ')'
+    | '<' expression '>'
+    ;
+
+identifier:
+    < id-begin id-continue* >
+    ;
+
+id-begin:
+    letter letter-or-digit*
+    ;
+
+id-continue:
+    '-' letter-or-digit+
+    ;
+
+letter:
+      'a' .. 'z'
+    | 'A' .. 'Z'
+    ;
+
+digit:
+    ['0'⋯'9']
+    ;
+
+letter-or-digit:
+      letter
+    | digit
+    ;
+
+string:
+    < '\'' character* '\'' >
+    ;
+
+character:
+      [' '⋯'&' | '('⋯'[' | ']'⋯'\∞']
+    | '\\' escape
+    ;
+
+escape:
+      '\''
+    | '\\'
+    | 'a'
+    | 'b'
+    | 'f'
+    | 'n'
+    | 't'
+    | 'v'
+    | 'x' hex hex
+    | 'u{' hex? hex? hex? hex? hex? hex '}'
+    ;
+
+hex:
+      digit
+    | ['A'⋯'F']
+    | ['a'⋯'f']
+    ;
+
+skip:
+    < (space | line-end | comment) >
+    ;
+
+space:
+      ' '
+    | '\t'
+    ;
+
+line-end:
+      '\r' '\n'
+    | '\n'
+    | '\r'
+    | '\u2028'
+    | '\u2029'
+    ;
+
+line-ender:
+      '\n'
+    | '\r'
+    | '\u2028'
+    | '\u2029'
+    ;
+
+comment:
+      line-comment
+    | block-comment
+    ;
+
+line-comment:
+    '//' (. - line-ender)*
+    ;
+
+block-comment:
+    '/*' (. - '*/')* '*/'
+    ;

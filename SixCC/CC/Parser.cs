@@ -118,7 +118,7 @@ namespace SixCC.CC
             var element = Primary();
             switch (Current.Kind)
             {
-                case TKind.Quest:
+                case TKind.Option:
                     Match(Current.Kind);
                     element = new ZeroOrOne(element);
                     break;
@@ -210,7 +210,7 @@ namespace SixCC.CC
             var element = RePrimary();
             switch (Current.Kind)
             {
-                case TKind.Quest:
+                case TKind.Option:
                     Match(Current.Kind);
                     element = new ZeroOrOne(element);
                     break;

@@ -3,12 +3,12 @@
     <PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>10</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="..\usings.cs" Link="usings.cs" />
+      <ProjectReference Include="..\Six.Core\Six.Core.csproj" />
     </ItemGroup>
 
 </Project>

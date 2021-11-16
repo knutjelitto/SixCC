@@ -54,14 +54,16 @@ namespace Six.Core
             return Index.ContainsKey(key);
         }
 
-        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
+        public bool TryGetValue(TKey key, out TValue value)
         {
             if (Index.TryGetValue(key, out var i))
             {
                 value = Values[i];
                 return true;
             }
+#pragma warning disable CS8601 // Possible null reference assignment.
             value = default;
+#pragma warning restore CS8601 // Possible null reference assignment.
             return false;
         }
 

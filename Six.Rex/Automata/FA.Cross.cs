@@ -170,7 +170,7 @@ namespace Six.Rex
                     }
 
                     Assert(result[0].Range.Min == 0);
-                    Assert(result[^1].Range.Max == UnicodeSets.MaxCodePoint);
+                    Assert(result[result.Count-1].Range.Max == UnicodeSets.MaxCodePoint);
                     for (var i = 1; i < result.Count; ++i)
                     {
                         Assert(result[i - 1].Range.Max + 1 == result[i].Range.Min);
@@ -193,7 +193,7 @@ namespace Six.Rex
                     result = result.OrderBy(t => t.Range.Min).ToList();
 
                     Assert(result[0].Range.Min == 0);
-                    Assert(result[^1].Range.Max == UnicodeSets.MaxCodePoint);
+                    Assert(result[result.Count - 1].Range.Max == UnicodeSets.MaxCodePoint);
                     for (var i = 1; i < result.Count; ++i)
                     {
                         Assert(result[i - 1].Range.Max + 1 == result[i].Range.Min);

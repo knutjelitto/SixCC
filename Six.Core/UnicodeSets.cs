@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace Six.Core
 {
@@ -8,15 +6,15 @@ namespace Six.Core
     {
         public const int MinCodePoint = 0;
         public const int MaxCodePoint = 0x10FFFF;
-        public static Integers Any() => new Integers((MinCodePoint, MaxCodePoint));
+        public static Integers Any() => new((MinCodePoint, MaxCodePoint));
 
-        public static readonly CatergorySets Category = new CatergorySets();
+        public static readonly CatergorySets Category = new();
 
         public static bool IsAny(Integers set)
         {
             return set.Min == MinCodePoint &&
                    set.Max == MaxCodePoint &
-                   set.Cardinality == (MaxCodePoint - MinCodePoint + 1);
+                   set.Cardinality == MaxCodePoint - MinCodePoint + 1;
         }
 
         public class CatergorySets
@@ -45,12 +43,12 @@ namespace Six.Core
             {
                 get
                 {
-                    if (this.sets.TryGetValue(category, out var result))
+                    if (sets.TryGetValue(category, out var result))
                     {
                         return result;
                     }
 
-                    var def = this.categories.FirstOrDefault(cat => cat.name == category);
+                    var def = categories.FirstOrDefault(cat => cat.name == category);
 
                     if (def.name == null)
                     {
@@ -59,7 +57,7 @@ namespace Six.Core
 
                     if (def.categories.Length == 1)
                     {
-                        this.sets.Add(def.name, this[def.categories[0]]);
+                        sets.Add(def.name, this[def.categories[0]]);
 
                         return this[def.categories[0]];
                     }
@@ -71,7 +69,7 @@ namespace Six.Core
                         set.Add(this[unicodeCategory]);
                     }
 
-                    this.sets.Add(def.name, set);
+                    sets.Add(def.name, set);
 
                     return set;
                 }
@@ -82,7 +80,7 @@ namespace Six.Core
                 get
                 {
                     var index = (int) category;
-                    return this.basicSets[index] ?? (this.basicSets[index] = Generate(category));
+                    return basicSets[index] ?? (basicSets[index] = Generate(category));
                 }
             }
 
@@ -102,7 +100,7 @@ namespace Six.Core
             }
 
             private readonly Integers[] basicSets = new Integers[30];
-            private readonly Dictionary<string, Integers> sets = new Dictionary<string, Integers>();
+            private readonly Dictionary<string, Integers> sets = new();
         }
     }
 }

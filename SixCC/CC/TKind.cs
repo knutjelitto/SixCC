@@ -18,7 +18,7 @@
         Semi,
         Comma,
         Alter,
-        Quest,
+        Option,
         Exclam,
         Star,
         Plus,

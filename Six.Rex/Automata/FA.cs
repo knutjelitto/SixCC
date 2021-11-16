@@ -122,9 +122,17 @@ namespace Six.Rex
         {
             var map = new Dictionary<State, State>();
 
+
+            if (Final != null)
+            {
+                return From(Map(Start), Map(Final));
+            }
+            return From(Map(Start));
+
             State Map(State state)
             {
-                Debug.Assert(state != null);
+                Assert(state != null);
+                if (state == null) throw new ArgumentNullException("state");
 
                 if (!map.TryGetValue(state, out var mapped))
                 {
@@ -140,12 +148,6 @@ namespace Six.Rex
 
                 return mapped;
             }
-
-            if (Final != null)
-            {
-                return From(Map(Start), Map(Final));
-            }
-            return From(Map(Start));
         }
 
         private static IEnumerable<State> Enumerate(State start)
