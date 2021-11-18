@@ -2,7 +2,8 @@
 {
     public class ZeroOrMore : Expression
     {
-        public ZeroOrMore(Expression expression)
+        internal ZeroOrMore(ILocation? location, Expression expression)
+            : base(location)
         {
             Expression = expression;
         }

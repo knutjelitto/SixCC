@@ -6,7 +6,8 @@ namespace Six.Ast
     {
         private readonly List<Reference> references = new List<Reference>();
 
-        public Rule(string name, Expression expression)
+        internal Rule(ILocation? location, string name, Expression expression)
+            : base(location)
         {
             Kind = RuleKind.Undefined;
             Name = name;

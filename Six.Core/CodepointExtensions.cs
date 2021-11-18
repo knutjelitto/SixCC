@@ -1,4 +1,8 @@
-﻿namespace Six.Core
+﻿using System.Collections.Generic;
+using System.Linq;
+using static System.Diagnostics.Debug;
+
+namespace Six.Core
 {
     public static class CodepointExtensions
     {

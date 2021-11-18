@@ -1,7 +1,4 @@
-﻿using Six.Core;
-using System.Linq;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     internal static class Escaper
     {
@@ -27,10 +24,12 @@ namespace Six.Ast
             {
                 return "\\\\";
             }
+#if false
             else if (utf32 == 0x10FFFF)
             {
                 return "\\∞";
             }
+#endif
             else if (utf32 > 0x1FFF && utf32 <= 0xFFFF)
             {
                 return $"\\u{utf32:X04}";

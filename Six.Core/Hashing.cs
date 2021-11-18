@@ -1,4 +1,6 @@
-﻿namespace Six.Core
+﻿using System.Collections.Generic;
+
+namespace Six.Core
 {
     public static class Hashing
     {

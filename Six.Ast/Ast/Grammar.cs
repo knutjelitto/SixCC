@@ -1,13 +1,12 @@
-﻿using Six.Core;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     public class Grammar
     {
-        public Grammar(string name, UniqueList<string, Rule> rules)
+        public Grammar(string name, IEnumerable<Rule> rules)
         {
             Name = name;
-            Rules = rules;
+            Rules = new UniqueList<string, Rule>(r => r.Name);
+            Rules.AddRange(rules);
         }
 
         public string Name { get; }

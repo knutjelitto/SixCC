@@ -2,9 +2,10 @@
 {
     public class Undefined : Expression
     {
-        public static readonly Undefined Instance = new Undefined();
-
-        private Undefined() { }
+        internal Undefined(ILocation? location)
+            : base(location)
+        {
+        }
 
         public override bool IsAtomic => true;
 

@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     public class Alt : Expression
     {
-        public Alt(params Expression[] expressions)
+        internal Alt(ILocation? location, params Expression[] expressions)
+            : this(location, expressions.AsEnumerable())
+        {
+        }
+
+        internal Alt(ILocation? location, IEnumerable<Expression> expressions)
+            : base(location)
         {
             Expressions = expressions.ToList();
         }

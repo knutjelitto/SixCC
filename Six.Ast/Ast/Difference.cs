@@ -1,8 +1,9 @@
 ﻿namespace Six.Ast
 {
-    public class Substract : Expression
+    public class Difference : Expression
     {
-        public Substract(Expression left, Expression right)
+        internal Difference(ILocation? location, Expression left, Expression right)
+            : base(location)
         {
             Left = left;
             Right = right;

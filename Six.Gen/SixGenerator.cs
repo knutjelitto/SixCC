@@ -1,49 +1,56 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using System.Text;
+﻿#if false
+using Microsoft.CodeAnalysis;
 
 namespace Six.Gen
 {
     [Generator]
     public class SixGenerator : ISourceGenerator
     {
+        private void HandleAdditional(GeneratorExecutionContext context, AdditionalText additional)
+        {
+            if (!additional.Path.EndsWith(".sixg", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
+            var filename = $"{Path.GetFileName(additional.Path)}";
+            var name = $"{Path.GetFileNameWithoutExtension(additional.Path)}";
+            var file = $"{name}.gen.cs";
+
+            using (var writer = new Writer())
+            {
+                writer.WriteLine("namespace SixBot");
+                writer.WriteLine("{");
+                using (writer.Indent())
+                {
+                    writer.WriteLine($"public partial class {name}Parser : Parser");
+                    writer.WriteLine("{");
+                    using (writer.Indent())
+                    {
+                        writer.WriteLine($"public override void Print()");
+                        writer.WriteLine("{");
+                        using (writer.Indent())
+                        {
+                            writer.WriteLine($"System.Console.WriteLine(\"Additional text was: {filename}\");");
+                        }
+                        writer.WriteLine("}");
+                    }
+                    writer.WriteLine("}");
+                }
+                writer.WriteLine("}");
+
+                context.AddSource(file, writer.ToString());
+            }
+
+            //new Output(additional.Path, additional.GetText()!.ToString());
+        }
+
         public void Execute(GeneratorExecutionContext context)
         {
-            // begin creating the source we'll inject into the users compilation
-            var sourceBuilder = new StringBuilder(@"
-using System;
-
-namespace HelloWorldGenerated
-{
-    partial class HelloWorld
-    {
-        public static partial void SayHello() 
-        {
-            Console.WriteLine(""Hello from generated code!"");
-            Console.WriteLine(""The following syntax trees existed in the compilation that created this program:"");
-");
-
-            // using the context, get a list of syntax trees in the users compilation
-            var syntaxTrees = context.Compilation.SyntaxTrees;
-
-            // add the filepath of each tree to the class we're building
-            foreach (var tree in syntaxTrees)
-            {
-                sourceBuilder.AppendLine($@"            Console.WriteLine(@"" - {tree.FilePath}"");");
-            }
-
             foreach (var file in context.AdditionalFiles)
             {
-                sourceBuilder.AppendLine($@"            Console.WriteLine(@"" - {file.Path}"");");
+                HandleAdditional(context, file);
             }
-
-            // finish creating the source to inject
-            sourceBuilder.Append(@"
-        }
-    }
-}");
-            // inject the created source into the users compilation
-            context.AddSource("generated.cs", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
         }
 
         public void Initialize(GeneratorInitializationContext context)
@@ -52,3 +59,4 @@ namespace HelloWorldGenerated
         }
     }
 }
+#endif

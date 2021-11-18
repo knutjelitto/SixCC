@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     internal class PredicateWalker : Walker
     {

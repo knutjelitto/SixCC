@@ -1,7 +1,4 @@
-﻿using Six.Core;
-using System.IO;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     public static class GrammarExtensions
     {
@@ -16,7 +13,7 @@ namespace Six.Ast
         {
             using (var writer = new Writer(File(filename)))
             {
-                new SixgDumper(writer).Walk(grammar);
+                new AstDumper(writer).Walk(grammar);
             }
         }
     }

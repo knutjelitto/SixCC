@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     internal class IsRegexWalker : PredicateWalker
     {
@@ -54,6 +52,12 @@ namespace Six.Ast
             Set(range, true);
         }
 
+        protected override void Visit(Range range)
+        {
+            base.Visit(range);
+            Set(range, range.Start.IsRegex && range.End.IsRegex);
+        }
+
         protected override void Visit(Reference reference)
         {
             base.Visit(reference);
@@ -72,7 +76,7 @@ namespace Six.Ast
             Set(seq, seq.Expressions.All(e => !e.IsCompact && e.IsRegex));
         }
 
-        protected override void Visit(Substract substract)
+        protected override void Visit(Difference substract)
         {
             base.Visit(substract);
             Set(substract, substract.Left.IsRegex && substract.Right.IsRegex);

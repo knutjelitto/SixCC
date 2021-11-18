@@ -2,9 +2,10 @@
 {
     public class Any : Expression
     {
-        public static readonly Any Instance = new Any();
-
-        private Any() { }
+        internal Any(ILocation? location)
+            : base(location)
+        { 
+        }
 
         public override bool IsAtomic => true;
 

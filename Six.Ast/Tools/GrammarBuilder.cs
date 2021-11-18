@@ -1,24 +1,17 @@
-﻿using Six.Core;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Diagnostics.Debug;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
-    public abstract class GrammarBuilder
+    public class GrammarBuilder
     {
         private readonly UniqueList<string, Rule> rules = new UniqueList<string, Rule>(r => r.Name);
 
-        protected GrammarBuilder(string name)
+        public GrammarBuilder()
         {
-            Name = name;
             RuleOrder = 0;
         }
 
-        private string Name { get; }
         private int RuleOrder { get; set; }
 
-        public Grammar Grammar()
+        public Grammar Grammar(string name)
         {
             Build();
 
@@ -30,7 +23,7 @@ namespace Six.Ast
             rules.Clear();
             rules.AddRange(x);
 
-            var grammar = new Grammar(Name, rules);
+            var grammar = new Grammar(name, rules);
 
             new IsRegexWalker().Walk(grammar);
             new IsFragmentWalker().Walk(grammar);
@@ -40,13 +33,15 @@ namespace Six.Ast
             return grammar;
         }
 
-        protected abstract void Build();
+        protected virtual void Build()
+        {
+        }
 
-        private Rule Rule(string name)
+        private Rule FindOrCreateRule(ILocation? location, string name)
         {
             if (!rules.TryGetValue(name, out var rule))
             {
-                rule = new Rule(name, Undefined.Instance)
+                rule = new Rule(location, name, new Undefined(location))
                 {
                     Kind = RuleKind.Undefined
                 };
@@ -56,90 +51,91 @@ namespace Six.Ast
             return rule;
         }
 
-        protected void Define(string name, Expression expression)
+        public Expression Seq(ILocation? location, List<Expression> expressions)
         {
-            var rule = Rule(name);
+            Assert(expressions.Count >= 0);
+            if (expressions.Count == 0)
+            {
+                return new Seq(location);
+            }
+            else if (expressions.Count == 1)
+            {
+                return expressions.Single();
+            }
+            else
+            {
+                return new Seq(location, expressions);
+            }
+        }
+
+        public Expression Alt(ILocation? location, List<Expression> expressions)
+        {
+            Assert(expressions.Count >= 1);
+            if (expressions.Count > 1)
+            {
+                return new Alt(location, expressions);
+            }
+            else
+            {
+                return expressions.Single();
+            }
+        }
+
+        public Rule Rule(ILocation location, string name, Expression expression)
+        {
+            var rule = FindOrCreateRule(location, name);
             rule.Order = RuleOrder++;
             rule.Kind = RuleKind.Defined;
             rule.Expression = expression;
+
+            return rule;
         }
 
-        protected Reference Ref(string name)
+        public Reference Ref(ILocation location, string name)
         {
-            var rule = Rule(name);
-            return rule.Add(new Reference(rule));
+            var rule = FindOrCreateRule(location, name);
+            return rule.Add(new Reference(location, rule));
         }
 
-        private Reference TerminalRef(Terminal terminal)
+        public Expression Literal(ILocation location, string literal, string payload)
         {
-            if (!rules.TryGetValue(terminal.ToName(), out var rule))
-            {
-                rule = Rule(terminal.ToName());
-                rule.Kind = RuleKind.Artifical;
-                rule.Expression = terminal;
-            }
-            return rule.Add(new Reference(rule));
+            return new Literal(location, payload);
         }
 
-        protected Expression T(string literal)
+        public Expression Compact(ILocation? location, Expression expression)
         {
-#if true
-            return new Literal(literal);
-#else
-            return TerminalRef(new Literal(literal));
-#endif
+            return new Compact(location, expression);
         }
 
-        protected Expression T(char literal)
+        public Expression Range(ILocation? location, Expression start, Expression end)
         {
-#if true
-            return new Literal(literal);
-#else
-            return TerminalRef(new Literal(literal));
-#endif
+            return new Range(location, start, end);
         }
 
-        protected Expression T(int literal)
+        public Expression Difference(ILocation? location, Expression left, Expression right)
         {
-#if true
-            return new Literal(literal);
-#else
-            return TerminalRef(new Literal(literal));
-#endif
+            return new Difference(location, left, right);
         }
 
-        protected static Expression Forced(Expression expression)
+        public Expression ZeroOrMore(ILocation? location, Expression expression)
         {
-            return new Compact(expression);
+            return new ZeroOrMore(location, expression);
         }
 
-        protected Expression Range(int start, int end)
+        public Expression OneOrMore(ILocation? location, Expression expression)
         {
-            Assert(start >= 0 && start <= 0x10FFFF && end >= 0 && end <= 0x10FFFF && start <= end);
-            if (start == end)
-            {
-                return new Literal(start);
-            }
-            return new Set(start, end);
+            return new OneOrMore(location, expression);
         }
 
-        protected static Expression Star(Expression expression)
+        public Expression ZeroOrOne(ILocation? location, Expression expression)
         {
-            return new ZeroOrMore(expression);
+            return new ZeroOrOne(location, expression);
         }
 
-        protected static Expression Plus(Expression expression)
-        {
-            return new OneOrMore(expression);
-        }
+        public Expression Any(ILocation location) => new Any(location);
 
-        protected static Expression Opt(Expression expression)
-        {
-            return new ZeroOrOne(expression);
-        }
+        public Expression Epsilon() => new Seq(null);
 
-        protected static Expression Epsilon => new Seq();
-
-        protected static Any Any => Any.Instance;
+        public Expression Epsilon(ILocation location) => new Seq(location);
     }
 }

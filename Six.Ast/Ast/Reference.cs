@@ -2,7 +2,8 @@
 {
     public class Reference : Expression
     {
-        public Reference(Rule rule)
+        internal Reference(ILocation? location, Rule rule)
+            : base(location)
         {
             Rule = rule;
         }

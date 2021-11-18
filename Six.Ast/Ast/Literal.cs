@@ -4,18 +4,19 @@ namespace Six.Ast
 {
     public class Literal : Terminal
     {
-        public Literal(CpString text)
+        internal Literal(ILocation? location, CpString text)
+            : base(location)
         {
             Text = text;
         }
 
-        public Literal(string text)
-            : this(new CpString(text))
+        internal Literal(ILocation? location, string text)
+            : this(location, new CpString(text))
         {
         }
 
-        public Literal(int codepoint)
-            : this(new CpString(codepoint))
+        internal Literal(ILocation? location, int codepoint)
+            : this(location, new CpString(codepoint))
         {
         }
 

@@ -1,15 +1,10 @@
-﻿using Six.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
-    internal class SixgDumper : Walker
+    internal class AstDumper : Walker
     {
         private readonly Writer writer;
 
-        public SixgDumper(Writer writer)
+        public AstDumper(Writer writer)
         {
             this.writer = writer;
         }
@@ -78,7 +73,6 @@ namespace Six.Ast
                 more = true;
             }
         }
-
 
         protected override void Visit(Rule rule)
         {
@@ -185,7 +179,14 @@ namespace Six.Ast
             writer.Write($"{range}");
         }
 
-        protected override void Visit(Substract substract)
+        protected override void Visit(Range range)
+        {
+            Walk(range.Start);
+            writer.Write(" .. ");
+            Walk(range.End);
+        }
+
+        protected override void Visit(Difference substract)
         {
             writer.Write("(");
             Walk(substract.Left);

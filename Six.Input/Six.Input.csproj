@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>10</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\usings.cs" Link="usings.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="..\SixBot\Six.six" Link="Samples\Six.six" />
+		<EmbeddedResource Include="..\SixBot\Json.six" Link="Samples\Json.six" />
+		<EmbeddedResource Include="..\SixBot\E.six" Link="Samples\E.six" />
+		<EmbeddedResource Include="..\SixBot\Gamma0.six" Link="Samples\Gamma0.six" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" />
+		<ProjectReference Include="..\Six.Core\Six.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Samples\" />
+	</ItemGroup>
+
+</Project>

@@ -1,4 +1,7 @@
-﻿namespace Six.Core
+﻿using System;
+using System.IO;
+
+namespace Six.Core
 {
     public class Writer : IDisposable
     {
@@ -16,7 +19,6 @@
         public Writer(string filename)
             : this(new StreamWriter(filename), true)
         {
-
         }
 
         public void WriteLine()
@@ -66,7 +68,7 @@
             {
                 return stringWriter.ToString();
             }
-            return "-content-lost-in-sink-";
+            return "-content-lost-in-outer-space-";
         }
 
         public void Dispose()

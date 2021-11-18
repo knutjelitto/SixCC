@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     internal class Walker
     {
@@ -48,10 +46,13 @@ namespace Six.Ast
                 case Set expr:
                     Visit(expr);
                     break;
-                case Substract expr:
+                case Difference expr:
                     Visit(expr);
                     break;
                 case Any expr:
+                    Visit(expr);
+                    break;
+                case Range expr:
                     Visit(expr);
                     break;
                 default:
@@ -129,10 +130,16 @@ namespace Six.Ast
             Walk(terminal.Expression);
         }
 
-        protected virtual void Visit(Substract substract)
+        protected virtual void Visit(Difference substract)
         {
             Walk(substract.Left);
             Walk(substract.Right);
+        }
+
+        protected virtual void Visit(Range range)
+        {
+            Walk(range.Start);
+            Walk(range.End);
         }
 
         protected virtual void Visit(Set range)

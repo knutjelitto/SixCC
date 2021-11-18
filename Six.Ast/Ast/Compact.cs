@@ -2,7 +2,8 @@
 {
     public class Compact : Terminal
     {
-        public Compact(Expression expression)
+        internal Compact(ILocation? location, Expression expression)
+            : base(location)
         {
             Expression = expression;
         }

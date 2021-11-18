@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     public class Seq : Expression
     {
-        public Seq(params Expression[] expressions)
+        internal Seq(ILocation? location, params Expression[] expressions)
+            : this(location, expressions.AsEnumerable())
+        {
+        }
+
+        internal Seq(ILocation? location, IEnumerable<Expression> expressions)
+            : base(location)
         {
             Expressions = expressions.ToList();
         }

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Six.Core
 {
@@ -6,9 +8,9 @@ namespace Six.Core
     {
         public const int MinCodePoint = 0;
         public const int MaxCodePoint = 0x10FFFF;
-        public static Integers Any() => new((MinCodePoint, MaxCodePoint));
+        public static Integers Any() => new Integers((MinCodePoint, MaxCodePoint));
 
-        public static readonly CatergorySets Category = new();
+        public static readonly CatergorySets Category = new CatergorySets();
 
         public static bool IsAny(Integers set)
         {
@@ -100,7 +102,7 @@ namespace Six.Core
             }
 
             private readonly Integers[] basicSets = new Integers[30];
-            private readonly Dictionary<string, Integers> sets = new();
+            private readonly Dictionary<string, Integers> sets = new Dictionary<string, Integers>();
         }
     }
 }

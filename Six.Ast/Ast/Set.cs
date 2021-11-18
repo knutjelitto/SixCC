@@ -1,20 +1,20 @@
-﻿using Six.Core;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
     public class Set : Expression
     {
-        public Set(Codepoint start, Codepoint end)
+        internal Set(ILocation? location, Codepoint start, Codepoint end)
+            : this(location, Integers.From((int)start, (int)end))
         {
-            Points = Integers.From((int)start, (int)end);
         }
 
-        public Set(int start, int end)
+        internal Set(ILocation? location, int start, int end)
+            : this(location, Integers.From(start, end))
+
         {
-            Points = Integers.From((int)start, (int)end);
         }
 
-        public Set(Integers points)
+        internal Set(ILocation? location, Integers points)
+            : base(location)
         {
             Points = points;
         }
