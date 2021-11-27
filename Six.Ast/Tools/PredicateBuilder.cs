@@ -1,8 +1,8 @@
 ﻿namespace Six.Ast
 {
-    internal class PredicateWalker : Walker
+    internal class PredicateBuilder : Walker
     {
-        protected PredicateWalker(Func<Expression, bool> getter, Action<Expression, bool> setter)
+        protected PredicateBuilder(Func<Expression, bool> getter, Action<Expression, bool> setter)
         {
             this.getter = getter;
             this.setter = setter;

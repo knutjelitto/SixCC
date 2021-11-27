@@ -2,13 +2,11 @@
 {
     public class Undefined : Expression
     {
-        internal Undefined(ILocation? location)
+        internal Undefined(ILocation location)
             : base(location)
         {
         }
 
-        public override bool IsAtomic => true;
-
-        public override string ToName() => $"-<undefined>-";
+        public override bool IsSimple => true;
     }
 }

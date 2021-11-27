@@ -44,7 +44,7 @@ namespace SixCC.Runtime.Lexing
 
         private ITerminalToken? LexCommon(Dfa dfa)
         {
-            DfaState? state = dfa.Start;
+            var state = dfa.Start;
             var start = index;
             while (!Source.IsEnd(index))
             {
@@ -82,7 +82,7 @@ namespace SixCC.Runtime.Lexing
 
         private void SkipWhitespace()
         {
-            DfaState? state = Context.Dfas.Spacing.Start;
+            var state = Context.Dfas.Spacing.Start;
             while (!Source.IsEnd(index) && (state = state.Match(Source[index])) != null)
             {
                 index += 1;

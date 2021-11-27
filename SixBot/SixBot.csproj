@@ -11,6 +11,10 @@
 
     <ItemGroup>
         <Compile Include="..\usings.cs" Link="usings.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\ExpressionParser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\Gamma0Parser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\JsonParser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\SixParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\EParser.gen.cs" />
     </ItemGroup>
 
@@ -29,7 +33,8 @@
 		<ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 		<ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		<ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
     </ItemGroup>
 
 </Project>

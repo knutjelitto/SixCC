@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SixCC.Runtime.Structures;
+﻿using SixCC.Runtime.Structures;
 
 namespace SixCC.Runtime.Sources
 {
@@ -103,7 +100,7 @@ namespace SixCC.Runtime.Sources
             var lines = new List<int>(10000);
             lines.Add(0);
             var c2 = '\0';
-            for (int i = 0; i != Content.Length; i++)
+            for (var i = 0; i != Content.Length; i++)
             {
                 var c1 = c2;
                 c2 = Content[i];

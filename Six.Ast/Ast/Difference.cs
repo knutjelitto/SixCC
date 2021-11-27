@@ -1,18 +1,17 @@
 ﻿namespace Six.Ast
 {
-    public class Difference : Expression
+    public class Difference : Expression, IWithTwo
     {
-        internal Difference(ILocation? location, Expression left, Expression right)
+        internal Difference(ILocation location, Expression left, Expression right)
             : base(location)
         {
-            Left = left;
-            Right = right;
+            One = left;
+            Two = right;
         }
 
-        public Expression Left { get; }
-        public Expression Right { get; }
+        public Expression One { get; set; }
+        public Expression Two { get; set; }
 
-        public override bool IsAtomic => true;
-        public override string ToName() => $"({Left.ToName()}-{Right.ToName()})";
+        public override bool IsSimple => true;
     }
 }

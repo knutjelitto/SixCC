@@ -1,93 +1,95 @@
-﻿ grammar six;
+﻿grammar six;
 
-grammar:
-    'grammar' identifier ';' rules
+grammar
+    : 'grammar' identifier ';' rules
     ;
 
-rules:
-    rule*
+rules
+    : rule*
     ;
 
-rule:
-    identifier ':' expression ';'
+rule
+    : identifier ':' expression ';'
     ;
 
-expression:
-    alternation
+expression
+    : alternation
     ;
 
-alternation:
-    sequence ('|' sequence)*
+alternation
+    : sequence ('|' sequence)*
     ;
 
-sequence:
-    element*
+sequence
+    : element*
     ;
 
-element:
-    difference
+element
+    : difference
     ;
 
-difference:
-    range ('-' range)?
+difference
+    : range-or-repeat ('-' range-or-repeat)?
     ;
 
-range:
-    repeat ('..' repeat)?
+range-or-repeat
+    : repeat-or-primary ('..' repeat-or-primary)?
     ;
 
-repeat:
-    primary ebnf?
+repeat-or-primary
+    : primary ebnf?
     ;
 
-ebnf:
-    < ('*' | '+' | '?') >
+ebnf
+    : '*' | '+' | '?'
     ;
 
-primary:
-      identifier
+primary
+    : identifier
     | string
     | '(' expression ')'
     | '<' expression '>'
+    | '&' primary
+    | '!' primary
     ;
 
-identifier:
-    < id-begin id-continue* >
+identifier
+    : < id-begin id-continue* >
     ;
 
-id-begin:
-    letter letter-or-digit*
+id-begin
+    : letter letter-or-digit*
     ;
 
-id-continue:
-    '-' letter-or-digit+
+id-continue
+    : '-' letter-or-digit+
     ;
 
-letter:
-      'a' .. 'z'
+letter
+    : 'a' .. 'z'
     | 'A' .. 'Z'
     ;
 
-digit:
-    '0' .. '9'
+digit
+    : '0' .. '9'
     ;
 
-letter-or-digit:
-      letter
+letter-or-digit
+    : letter
     | digit
     ;
 
-string:
-    < '\'' character* '\'' >
+string
+    : < '\'' character* '\'' >
     ;
 
-character:
-      ' ' .. '\u{10FFFF}' - '\\' - '\''
+character
+    : ' ' .. '\u{10FFFF}' - '\\' - '\''
     | '\\' escape
     ;
 
-escape:
-      '\''
+escape
+    : '\''
     | '\\'
     | 'a'
     | 'b'
@@ -100,45 +102,45 @@ escape:
     | 'u{' hex? hex? hex? hex? hex? hex '}'
     ;
 
-hex:
-      digit
+hex
+    : digit
     | 'A' .. 'F'
     | 'a' .. 'f'
     ;
 
-skip:
-    < (space | line-end | comment) >
+skip
+    : < (space | line-end | comment)* >
     ;
 
-space:
-      ' '
+space
+    : ' '
     | '\t'
     ;
 
-line-end:
-      '\r' '\n'
+line-end
+    : '\r' '\n'
     | '\n'
     | '\r'
     | '\u{2028}'
     | '\u{2029}'
     ;
 
-line-ender:
-      '\n'
+line-ender
+    : '\n'
     | '\r'
     | '\u{2028}'
     | '\u{2029}'
     ;
 
-comment:
-      line-comment
+comment
+    : line-comment
     | block-comment
     ;
 
-line-comment:
-    '//' (. - line-ender)*
+line-comment
+    : '//' (. - line-ender)*
     ;
 
-block-comment:
-    '/*' (. - '*/')* '*/'
+block-comment
+    : '/*' (. - '*/')* '*/'
     ;

@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-
 using SixCC.Sdk.Automata;
 using SixCC.Sdk.Grammars;
 using SixCC.Sdk.LR;
@@ -87,7 +81,7 @@ namespace SixCC.Sdk.Build
         {
             foreach (var core in CoreFactory)
             {
-                Debug.Assert(core.First.IsEmpty);
+                Assert(core.First.IsEmpty);
             }
             foreach (var core in CoreFactory)
             {
@@ -111,14 +105,14 @@ namespace SixCC.Sdk.Build
             }
             foreach (var core in CoreFactory)
             {
-                Debug.Assert(!core.First.IsEmpty);
+                Assert(!core.First.IsEmpty);
             }
         }
 
         private void BuildLR1Sets()
         {
-            Debug.Assert(Grammar.Accept != null);
-            Debug.Assert(Grammar.Eof != null);
+            Assert(Grammar.Accept != null);
+            Assert(Grammar.Eof != null);
 
             var start = new LR1(CoreFactory.Get(Grammar.Accept.Productions[0]), true, Grammar.Eof.First);
             var startSet = new LR1Set(start);
@@ -129,10 +123,10 @@ namespace SixCC.Sdk.Build
 
         private void BuildLR1Table()
         {
-            Debug.Assert(Grammar.PSymbols != null);
+            Assert(Grammar.PSymbols != null);
 
-            int states = Grammar.LR1Sets.Count;
-            int symbols = Grammar.PSymbols.Count;
+            var states = Grammar.LR1Sets.Count;
+            var symbols = Grammar.PSymbols.Count;
 
             var table = new TableCell[states, symbols];
             for (var i = 0; i < states; ++i)
@@ -145,7 +139,7 @@ namespace SixCC.Sdk.Build
 
             foreach (var state in Grammar.LR1Sets)
             {
-                foreach (LR1 item in state)
+                foreach (var item in state)
                 {
                     if (item.IsComplete)
                     {
@@ -179,16 +173,16 @@ namespace SixCC.Sdk.Build
 
         private void BuildSimpleParseTable()
         {
-            Debug.Assert(Grammar.PSymbols != null);
-            Debug.Assert(Grammar.Table != null);
+            Assert(Grammar.PSymbols != null);
+            Assert(Grammar.Table != null);
 
             var fullTable = Grammar.Table;
             var numberOfStates = Grammar.LR1Sets.Count;
             var numberOfTerminals = Grammar.PSymbols.Where(s => s is Terminal).Count();
             var numberOfSymbols = Grammar.PSymbols.Count;
 
-            Debug.Assert(fullTable.GetLength(0) == numberOfStates);
-            Debug.Assert(fullTable.GetLength(1) == numberOfSymbols);
+            Assert(fullTable.GetLength(0) == numberOfStates);
+            Assert(fullTable.GetLength(1) == numberOfSymbols);
 
             var table = new ParseAction[numberOfStates, numberOfSymbols];
 
@@ -205,7 +199,7 @@ namespace SixCC.Sdk.Build
                     ParseAction entry;
                     switch (action)
                     {
-                        case Accept _:
+                        case Accept:
                             entry = ParseAction.Accept;
                             break;
                         case Shift shift:
@@ -227,7 +221,7 @@ namespace SixCC.Sdk.Build
 
         private void BuildDfaSets()
         {
-            Debug.Assert(Grammar.ParseTable != null);
+            Assert(Grammar.ParseTable != null);
 
             var terminalSets = new List<Integers>();
 
@@ -247,7 +241,7 @@ namespace SixCC.Sdk.Build
                     }
                 }
 
-                Debug.Assert(!terminalSet.IsEmpty);
+                Assert(!terminalSet.IsEmpty);
                 terminalSets.Add(terminalSet);
             }
 
@@ -271,7 +265,7 @@ namespace SixCC.Sdk.Build
                 tDfas[index] = fa;
             });
 
-            Debug.Assert(result.IsCompleted);
+            Assert(result.IsCompleted);
 
             var terminalDfas = tDfas.ToList();
             var already = new Dictionary<Integers, int>();
@@ -279,7 +273,7 @@ namespace SixCC.Sdk.Build
 
             foreach (var terminalSet in terminalSets)
             {
-                Debug.Assert(!terminalSet.IsEmpty);
+                Assert(!terminalSet.IsEmpty);
 
                 if (!already.TryGetValue(terminalSet, out var index))
                 {
@@ -311,14 +305,14 @@ namespace SixCC.Sdk.Build
 
                 var finals = dfa.Finals.Select(s => s.Payload).Distinct().OrderBy(p => p).ToList();
                 var numbers = terminalSet.Distinct().OrderBy(p => p).ToList();
-                Debug.Assert(finals.SequenceEqual(numbers));
+                Assert(finals.SequenceEqual(numbers));
 
                 dfas[index] = dfa;
             });
 
             FA Combine(IEnumerable<FA> fas)
             {
-                FA combined = fas.First().Clone();
+                var combined = fas.First().Clone();
                 foreach (var fa in fas.Skip(1))
                 {
                     combined = combined.Union(fa, true);
@@ -326,9 +320,9 @@ namespace SixCC.Sdk.Build
                 return combined;
             }
 
-            Debug.Assert(result.IsCompleted);
-            Debug.Assert(Grammar.Table != null);
-            Debug.Assert(stateDfas.Count == Grammar.Table.GetLength(0));
+            Assert(result.IsCompleted);
+            Assert(Grammar.Table != null);
+            Assert(stateDfas.Count == Grammar.Table.GetLength(0));
 
             Grammar.Dfas = dfas.ToArray();
             Grammar.StateToDfa = stateDfas;

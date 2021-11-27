@@ -1,6 +1,6 @@
 ﻿namespace Six.Ast
 {
-    internal static class Escaper
+    public static class Escaper
     {
         public static string Esc(this Codepoint cp)
         {
@@ -24,12 +24,6 @@
             {
                 return "\\\\";
             }
-#if false
-            else if (utf32 == 0x10FFFF)
-            {
-                return "\\∞";
-            }
-#endif
             else if (utf32 > 0x1FFF && utf32 <= 0xFFFF)
             {
                 return $"\\u{utf32:X04}";
@@ -47,6 +41,11 @@
         public static string Esc(this CpString cps)
         {
             return $"'{string.Join(string.Empty, cps.Select(cp => cp.Esc()))}'";
+        }
+
+        public static string Esc(this string text)
+        {
+            return $"'{string.Join(string.Empty, text.Codepoints().Select(cp => cp.Esc()))}'";
         }
     }
 }

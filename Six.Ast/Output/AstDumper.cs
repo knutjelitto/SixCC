@@ -9,12 +9,13 @@
             this.writer = writer;
         }
 
-        private void Clamped(Expression expression, string suffix)
+        private void Clamped(Expression expression, string prefix = "", string suffix = "")
         {
-            if (!expression.IsAtomic)
+            writer.Write(prefix);
+            if (!expression.IsSimple)
                 writer.Write("(");
             Walk(expression);
-            if (!expression.IsAtomic)
+            if (!expression.IsSimple)
                 writer.Write(")");
             writer.Write(suffix);
         }
@@ -22,91 +23,76 @@
         protected override void Visit(Grammar grammar)
         {
             var more = false;
-            foreach (var rule in grammar.Rules)
+            foreach (var symbol in grammar.Symbols)
             {
                 if (more)
                 {
                     writer.WriteLine();
                 }
                 more = true;
-                Walk(rule);
+                Walk(symbol);
             }
 
             writer.WriteLine();
             writer.WriteLine($"/*");
             writer.WriteLine();
-            Sorts(grammar, "nonterminal", r => !(r.IsCompact || r.IsFragment));
+            Sorts("nonterminals", grammar.Nonterminals());
             writer.WriteLine();
-            Sorts(grammar, "terminals", r => r.IsCompact && !r.IsFragment);
+            Sorts("terminals", grammar.Terminals());
             writer.WriteLine();
-            Sorts(grammar, "fragments", r => r.IsFragment);
+            Sorts("fragments", grammar.Fragments());
             writer.WriteLine();
             writer.WriteLine($"*/");
         }
 
-        private void Sorts(Grammar grammar, string what, Func<Rule, bool> predicate)
+        private void Sorts(string what, IEnumerable<Symbol> symbols)
         {
-            var more = false;
             writer.WriteLine($"=== {what}");
             using (writer.Indent())
             {
-                foreach (var rule in grammar.Rules.Where(r => predicate(r)))
+                foreach (var symbol in symbols)
                 {
-                    WhenMore(ref more, () => writer.Write(" "));
-                    writer.Write($"{rule.Name}");
+                    writer.WriteLine($"{symbol.Name}");
                 }
-            }
-            if (more)
-            {
-                writer.WriteLine();
             }
         }
 
-        private void WhenMore(ref bool more, Action whenMore)
+        private void WhenMore(ref bool more, Action whenMore, Action? whenNotMore = null)
         {
             if (more)
             {
-                whenMore();
+                whenMore.Invoke();
             }
             else
             {
+                whenNotMore?.Invoke();
                 more = true;
             }
         }
 
-        protected override void Visit(Rule rule)
+        protected override void Visit(Symbol symbol)
         {
-            writer.Write($"{rule.Name}:");
-            writer.Write(new string(' ', Math.Max(1, 20 - rule.Name.Length)));
+            writer.Write($"{symbol.Name}");
+            writer.Write(new string(' ', Math.Max(1, 20 - symbol.Name.Length)));
             writer.Write("// [");
-            writer.Write($"{rule.References.Count}");
-            writer.Write("," + (rule.IsRegex ? "R" : "-"));
-            writer.Write("," + (rule.IsFragment ? "F" : "-"));
+            writer.Write((symbol.IsFragment ? "F" : "-"));
             writer.Write("]");
             using (writer.Indent())
             {
-                if (rule.Expression is Alt alt && alt.Expressions.Count >= 2)
+                if (symbol.Expression is Alternation alt && alt.Expressions.Count >= 1)
                 {
                     var more = false;
                     foreach (var sub in alt.Expressions)
                     {
                         writer.WriteLine();
-                        if (more)
-                        {
-                            writer.Write("| ");
-                        }
-                        else
-                        {
-                            writer.Write("  ");
-                            more = true;
-                        }
+                        WhenMore(ref more, () => writer.Write("| "), () => writer.Write(": "));
                         Walk(sub);
                     }
                 }
                 else
                 {
                     writer.WriteLine();
-                    Walk(rule.Expression);
+                    Walk(symbol.Expression);
                 }
                 writer.WriteLine();
                 writer.WriteLine(";");
@@ -123,14 +109,14 @@
             }
         }
 
-        protected override void Visit(Alt alt)
+        protected override void Visit(Alternation alt)
         {
-            writer.Write(alt.IsAtomic ? "" : "(");
+            writer.Write(alt.IsSimple ? "" : "(");
             Loop(alt.Expressions, () => writer.Write(" | "));
-            writer.Write(alt.IsAtomic ? "" : ")");
+            writer.Write(alt.IsSimple ? "" : ")");
         }
 
-        protected override void Visit(Seq seq)
+        protected override void Visit(Sequence seq)
         {
             if (seq.Expressions.Count == 0)
             {
@@ -144,17 +130,27 @@
 
         protected override void Visit(ZeroOrMore zeroOrMore)
         {
-            Clamped(zeroOrMore.Expression, "*");
+            Clamped(zeroOrMore.Expression, suffix: "*");
         }
 
         protected override void Visit(ZeroOrOne zeroOrOne)
         {
-            Clamped(zeroOrOne.Expression, "?");
+            Clamped(zeroOrOne.Expression, suffix: "?");
         }
 
         protected override void Visit(OneOrMore oneOrMore)
         {
-            Clamped(oneOrMore.Expression, "+");
+            Clamped(oneOrMore.Expression, suffix: "+") ;
+        }
+
+        protected override void Visit(NotPredicate not)
+        {
+            Clamped(not.Expression, prefix: "!");
+        }
+
+        protected override void Visit(AndPredicate and)
+        {
+            Clamped(and.Expression, prefix: "&");
         }
 
         protected override void Visit(Reference reference)
@@ -174,24 +170,19 @@
             writer.Write($"{literal.Text.Esc()}");
         }
 
-        protected override void Visit(Set range)
-        {
-            writer.Write($"{range}");
-        }
-
         protected override void Visit(Range range)
         {
-            Walk(range.Start);
+            Walk(range.One);
             writer.Write(" .. ");
-            Walk(range.End);
+            Walk(range.Two);
         }
 
         protected override void Visit(Difference substract)
         {
             writer.Write("(");
-            Walk(substract.Left);
+            Walk(substract.One);
             writer.Write(" - ");
-            Walk(substract.Right);
+            Walk(substract.Two);
             writer.Write(")");
         }
 

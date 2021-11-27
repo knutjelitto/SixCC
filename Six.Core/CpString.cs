@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Six.Core
+﻿namespace Six.Core
 {
     public sealed class CpString : IReadOnlyList<Codepoint>
     {

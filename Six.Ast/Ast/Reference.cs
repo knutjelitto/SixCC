@@ -1,19 +1,15 @@
 ﻿namespace Six.Ast
 {
-    public class Reference : Expression
+    public class Reference : ReferenceCore
     {
-        internal Reference(ILocation? location, Rule rule)
-            : base(location)
+        internal Reference(Grammar grammar, ILocation location, string name)
+            : base(grammar, location, name)
         {
-            Rule = rule;
         }
 
-        public Rule Rule { get; }
-        public string Name => Rule.Name;
+        public Symbol Symbol => Grammar[Name];
 
-        public override bool IsAtomic => true;
-        public override bool IsCompact => Rule.IsCompact;
-
-        public override string ToName() => $"{Name}";
+        public override bool IsSimple => true;
+        public override bool IsCompact => false;
     }
 }

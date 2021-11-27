@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SixBot
+﻿namespace SixBot
 {
-    public class Parser
+    public abstract class Parser
     {
-        public virtual void Print()
+        public virtual void Match(string text)
         {
-            Console.WriteLine("bä");
+            throw new NotImplementedException();
         }
     }
 }

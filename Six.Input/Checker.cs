@@ -1,20 +1,21 @@
-﻿using Six.Input.Errors;
+﻿using Six.Ast;
+using Six.Input.Errors;
 using System.Reflection;
 
 namespace Six.Input
 {
     public class Checker
     {
-        public void Run()
+        public IEnumerable<Grammar?> Run(bool basic)
         {
             foreach (var name in Assembly.GetExecutingAssembly().GetManifestResourceNames())
             {
                 Console.WriteLine($"{name}");
-                Run(name);
+                yield return Run(basic, name);
             }
         }
 
-        private void Run(string name)
+        private Grammar? Run(bool basic, string name)
         {
             var content = string.Empty;
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name)!)
@@ -23,10 +24,10 @@ namespace Six.Input
                 content = reader.ReadToEnd();
             }
 
-            Run(name, content);
+            return Run(basic, name, content);
         }
 
-        private void Run(string name, string content)
+        public Grammar? Run(bool basic, string name, string content)
         {
             try
             {
@@ -34,12 +35,25 @@ namespace Six.Input
                 var lexer = new Lexer(source);
                 var tokens = new Tokens(lexer);
                 var parser = new Parser(tokens);
-                var grammar = parser.Grammar();
+                var grammar = parser.Parse();
+                grammar.DumpTree($"{grammar.Name}-tree.txt");
+
+                if (basic)
+                {
+                    return grammar;
+                }
+
+                var grammar2 = new BnfTransformer(grammar).Transform();
+                grammar2.DumpAst($"{grammar.Name}-ast.txt");
+
+                return grammar2;
             }
             catch (DiagnosticException ex)
             {
                 ex.Diagnostic.Report(new Writer(Console.Out));
             }
+
+            return null;
         }
     }
 }

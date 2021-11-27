@@ -61,7 +61,9 @@ namespace Six.Input
                     case '?':
                         return Token(TKind.Option);
                     case '!':
-                        return Token(TKind.Exclam);
+                        return Token(TKind.Not);
+                    case '&':
+                        return Token(TKind.And);
                     case '*':
                         return Token(TKind.Star);
                     case '+':

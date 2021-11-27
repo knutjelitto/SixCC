@@ -1,4 +1,4 @@
-﻿ grammar Gamma0;
+﻿grammar Gamma0;
 
 S:    A S 'd'
     | B S

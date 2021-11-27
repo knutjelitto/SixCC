@@ -1,28 +1,28 @@
 ﻿namespace Six.Ast
 {
-    internal class Walker
+    public class Walker
     {
         public void Walk(Grammar grammar)
         {
             Visit(grammar);
         }
 
-        public void Walk(Rule rule)
+        public void Walk(Symbol symbol)
         {
-            Visit(rule);
+            Visit(symbol);
         }
 
         public void Walk(Expression expression)
         {
             switch (expression)
             {
-                case Rule expr:
+                case Symbol expr:
                     Visit(expr);
                     break;
-                case Seq expr:
+                case Sequence expr:
                     Visit(expr);
                     break;
-                case Alt expr:
+                case Alternation expr:
                     Visit(expr);
                     break;
                 case ZeroOrMore expr:
@@ -43,9 +43,6 @@
                 case Compact expr:
                     Visit(expr);
                     break;
-                case Set expr:
-                    Visit(expr);
-                    break;
                 case Difference expr:
                     Visit(expr);
                     break;
@@ -55,6 +52,12 @@
                 case Range expr:
                     Visit(expr);
                     break;
+                case NotPredicate expr:
+                    Visit(expr);
+                    break;
+                case AndPredicate expr:
+                    Visit(expr);
+                    break;
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -62,23 +65,18 @@
 
         protected virtual void Visit(Grammar grammar)
         {
-            foreach (var rule in grammar.Rules)
+            foreach (var rule in grammar.Symbols)
             {
                 Walk(rule);
             }
         }
 
-        protected virtual void Visit(Rule rule)
+        protected virtual void Visit(Symbol symbol)
         {
-            Walk(rule.Expression);
+            Walk(symbol.Expression);
         }
 
-        private void Visit(Expression expression)
-        {
-            throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
-        }
-
-        protected virtual void Visit(Alt alt)
+        protected virtual void Visit(Alternation alt)
         {
             foreach (var expression in alt.Expressions)
             {
@@ -86,7 +84,7 @@
             }
         }
 
-        protected virtual void Visit(Seq seq)
+        protected virtual void Visit(Sequence seq)
         {
             foreach (var expression in seq.Expressions)
             {
@@ -109,6 +107,16 @@
             Walk(zeroOrOne.Expression);
         }
 
+        protected virtual void Visit(NotPredicate not)
+        {
+            Walk(not.Expression);
+        }
+
+        protected virtual void Visit(AndPredicate and)
+        {
+            Walk(and.Expression);
+        }
+
         protected virtual void Visit(Reference reference)
         {
         }
@@ -125,25 +133,21 @@
         {
         }
 
-        protected virtual void Visit(Compact terminal)
+        protected virtual void Visit(Compact compact)
         {
-            Walk(terminal.Expression);
+            Walk(compact.Expression);
         }
 
-        protected virtual void Visit(Difference substract)
+        protected virtual void Visit(Difference difference  )
         {
-            Walk(substract.Left);
-            Walk(substract.Right);
+            Walk(difference.One);
+            Walk(difference.Two);
         }
 
         protected virtual void Visit(Range range)
         {
-            Walk(range.Start);
-            Walk(range.End);
-        }
-
-        protected virtual void Visit(Set range)
-        {
+            Walk(range.One);
+            Walk(range.Two);
         }
     }
 }

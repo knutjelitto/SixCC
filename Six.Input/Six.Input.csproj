@@ -27,4 +27,8 @@
 		<Folder Include="Samples\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <EmbeddedResource Include="..\SixBot\Expression.six" Link="Samples\Expression.six" />
+	</ItemGroup>
+
 </Project>

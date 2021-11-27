@@ -24,6 +24,12 @@ namespace Six.Core
         {
         }
 
+        public UniqueList(Func<TValue, TKey> getKey, IEnumerable<TValue> values)
+            : this(getKey)
+        {
+            AddRange(values);
+        }
+
         public UniqueList(Func<TValue, TKey> getKey, IEqualityComparer<TKey> eq)
             : this(getKey, new Dictionary<TKey, int>(eq))
         {

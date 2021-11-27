@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Six.Core
+﻿namespace SixCC.Sdk.Commons
 {
     public static class EnumerableExtensions
     {

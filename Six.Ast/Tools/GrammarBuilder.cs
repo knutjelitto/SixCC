@@ -2,140 +2,97 @@
 {
     public class GrammarBuilder
     {
-        private readonly UniqueList<string, Rule> rules = new UniqueList<string, Rule>(r => r.Name);
+        private readonly Grammar grammar;
 
         public GrammarBuilder()
         {
-            RuleOrder = 0;
+            grammar = new TreeGrammar(string.Empty);
         }
-
-        private int RuleOrder { get; set; }
 
         public Grammar Grammar(string name)
         {
-            Build();
+            Name = name;
 
-            var x = new List<Rule>();
-
-            x.AddRange(rules.Where(r => r.Kind == RuleKind.Defined).OrderBy(r => r.Order));
-            x.AddRange(rules.Where(r => r.Kind == RuleKind.Undefined));
-            x.AddRange(rules.Where(r => r.Kind == RuleKind.Artifical).OrderBy(r => r.Name));
-            rules.Clear();
-            rules.AddRange(x);
-
-            var grammar = new Grammar(name, rules);
-
-            new IsRegexWalker().Walk(grammar);
-            new IsFragmentWalker().Walk(grammar);
-
-            grammar.Dump($"{grammar.Name}-dump.txt");
+            new IsFragmentBuilder().Walk(grammar);
 
             return grammar;
         }
+
+        public string Name { get => grammar.Name; set => grammar.Name = value; }
 
         protected virtual void Build()
         {
         }
 
-        private Rule FindOrCreateRule(ILocation? location, string name)
+        public Indefinite Indefinite(ILocation location, string name, Expression expression)
         {
-            if (!rules.TryGetValue(name, out var rule))
-            {
-                rule = new Rule(location, name, new Undefined(location))
-                {
-                    Kind = RuleKind.Undefined
-                };
-                rules.Add(rule);
-            }
-
-            return rule;
+            var symbol = new Indefinite(location, name, expression);
+            grammar.Add(symbol);
+            return symbol;
         }
 
-        public Expression Seq(ILocation? location, List<Expression> expressions)
+        public Expression Sequence(ILocation location, List<Expression> expressions)
         {
-            Assert(expressions.Count >= 0);
-            if (expressions.Count == 0)
-            {
-                return new Seq(location);
-            }
-            else if (expressions.Count == 1)
-            {
-                return expressions.Single();
-            }
-            else
-            {
-                return new Seq(location, expressions);
-            }
+            return new Sequence(location, expressions);
         }
 
-        public Expression Alt(ILocation? location, List<Expression> expressions)
+        public Expression Alternation(ILocation location, List<Expression> expressions)
         {
-            Assert(expressions.Count >= 1);
-            if (expressions.Count > 1)
-            {
-                return new Alt(location, expressions);
-            }
-            else
-            {
-                return expressions.Single();
-            }
+            return new Alternation(location, expressions);
         }
 
-        public Rule Rule(ILocation location, string name, Expression expression)
+        public Expression Reference(ILocation location, string name)
         {
-            var rule = FindOrCreateRule(location, name);
-            rule.Order = RuleOrder++;
-            rule.Kind = RuleKind.Defined;
-            rule.Expression = expression;
-
-            return rule;
+            return new Reference(grammar, location, name);
         }
 
-        public Reference Ref(ILocation location, string name)
+        public Expression Literal(ILocation location, string text)
         {
-            var rule = FindOrCreateRule(location, name);
-            return rule.Add(new Reference(location, rule));
+            return new Literal(location, text);
         }
 
-        public Expression Literal(ILocation location, string literal, string payload)
+        public Expression Not(ILocation location, Expression expression)
         {
-            return new Literal(location, payload);
+            return new NotPredicate(location, expression);
         }
 
-        public Expression Compact(ILocation? location, Expression expression)
+        public Expression And(ILocation location, Expression expression)
+        {
+            return new AndPredicate(location, expression);
+        }
+
+        public Expression Compact(ILocation location, Expression expression)
         {
             return new Compact(location, expression);
         }
 
-        public Expression Range(ILocation? location, Expression start, Expression end)
+        public Expression Range(ILocation location, Expression start, Expression end)
         {
             return new Range(location, start, end);
         }
 
-        public Expression Difference(ILocation? location, Expression left, Expression right)
+        public Expression Difference(ILocation location, Expression left, Expression right)
         {
             return new Difference(location, left, right);
         }
 
-        public Expression ZeroOrMore(ILocation? location, Expression expression)
+        public Expression ZeroOrMore(ILocation location, Expression expression)
         {
             return new ZeroOrMore(location, expression);
         }
 
-        public Expression OneOrMore(ILocation? location, Expression expression)
+        public Expression OneOrMore(ILocation location, Expression expression)
         {
             return new OneOrMore(location, expression);
         }
 
-        public Expression ZeroOrOne(ILocation? location, Expression expression)
+        public Expression ZeroOrOne(ILocation location, Expression expression)
         {
             return new ZeroOrOne(location, expression);
         }
 
         public Expression Any(ILocation location) => new Any(location);
 
-        public Expression Epsilon() => new Seq(null);
-
-        public Expression Epsilon(ILocation location) => new Seq(location);
+        public Expression Epsilon(ILocation location) => new Sequence(location);
     }
 }

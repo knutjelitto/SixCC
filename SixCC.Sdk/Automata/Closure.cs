@@ -1,5 +1,4 @@
 using System.Diagnostics;
-
 using SixCC.Sdk.Commons;
 
 namespace SixCC.Sdk.Automata
@@ -35,7 +34,7 @@ namespace SixCC.Sdk.Automata
 
             Set = set;
             DfaState = new State(isFinal);
-            this.hashCode = Set.Hash();
+            hashCode = Set.Hash();
         }
 
         public Dictionary<Integers, HashSet<State>> UnambiguateTransitions()

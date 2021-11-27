@@ -1,17 +1,15 @@
 ﻿namespace Six.Ast
 {
-    public class ZeroOrMore : Expression
+    public class ZeroOrMore : Expression, IWithOne
     {
-        internal ZeroOrMore(ILocation? location, Expression expression)
+        internal ZeroOrMore(ILocation location, Expression expression)
             : base(location)
         {
             Expression = expression;
         }
 
-        public Expression Expression { get; }
+        public Expression Expression { get; set; }
 
-        public override bool IsAtomic => Expression.IsAtomic;
-
-        public override string ToName() => $"({Expression.ToName()})*";
+        public override bool IsSimple => Expression.IsSimple;
     }
 }

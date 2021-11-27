@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace SixCC.Sdk.Automata
 {
@@ -38,7 +36,7 @@ namespace SixCC.Sdk.Automata
                         }
                     }
 
-                    bool more = true;
+                    var more = true;
                     while (more)
                     {
                         more = false;
@@ -64,10 +62,7 @@ namespace SixCC.Sdk.Automata
                                                 }
                                                 if (si > sj)
                                                 {
-                                                    var tmp = si;
-                                                    si = sj;
-                                                    sj = tmp;
-
+                                                    (sj, si) = (si, sj);
                                                     Debug.Assert(si < sj);
                                                 }
 
@@ -151,7 +146,7 @@ namespace SixCC.Sdk.Automata
                     return mini;
                 }
 
-                private FA MergeTransitions(FA dfa)
+                private static FA MergeTransitions(FA dfa)
                 {
                     foreach (var state in dfa.States)
                     {

@@ -2,11 +2,11 @@
 {
     public abstract class Base : Expression
     {
-        protected Base(ILocation? location)
+        protected Base(ILocation location)
             : base(location)
         {
         }
 
-        public override bool IsAtomic => true;
+        public override bool IsSimple => true;
     }
 }

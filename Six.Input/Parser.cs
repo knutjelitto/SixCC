@@ -19,7 +19,7 @@ namespace Six.Input
         private Token Current => tokens[current];
         private Token Next => tokens[current + 1];
 
-        public Grammar Grammar()
+        public Grammar Parse()
         {
             Keyword("grammar");
             var name = Name();
@@ -38,14 +38,14 @@ namespace Six.Input
             while (Current.Kind != TKind.EOF && Current.Kind != TKind.RightCurly);
         }
 
-        private Rule Rule()
+        private Symbol Rule()
         {
             var name = Name();
             Match(TKind.Colon);
             var expression = Expression();
             Match(TKind.Semi);
 
-            return builder.Rule(name.Location, name.Text, expression);
+            return builder.Indefinite(name.Location, name.Text, expression);
         }
 
         private Expression Expression()
@@ -62,7 +62,7 @@ namespace Six.Input
             }
             while (Try(TKind.Alter));
 
-            return builder.Alt(expressions.First().Location, expressions);
+            return builder.Alternation(expressions.First().Location, expressions);
         }
 
         private Expression Sequence()
@@ -75,7 +75,7 @@ namespace Six.Input
                 expressions.Add(Element());
             }
 
-            return builder.Seq(location, expressions);
+            return builder.Sequence(location, expressions);
         }
 
         private Expression Element()
@@ -143,6 +143,14 @@ namespace Six.Input
                     expression = builder.Any(Current.Location);
                     Match(Current.Kind);
                     break;
+                case TKind.Not:
+                    Match(TKind.Not);
+                    expression = builder.Not(Current.Location, Primary());
+                    break;
+                case TKind.And:
+                    Match(TKind.And);
+                    expression = builder.And(Current.Location, Primary());
+                    break;
                 case TKind.LeftParent:
                     Match(TKind.LeftParent);
                     expression = Expression();
@@ -164,7 +172,7 @@ namespace Six.Input
         private Expression Literal()
         {
             var token = Match(TKind.Literal);
-            return builder.Literal(token.Location, token.Text, token.Payload);
+            return builder.Literal(token.Location, token.Payload);
         }
 
         private Token Name()
@@ -175,7 +183,7 @@ namespace Six.Input
         private Expression Reference()
         {
             var token = Match(TKind.Name);
-            return builder.Ref(token.Location, token.Text);
+            return builder.Reference(token.Location, token.Text);
         }
 
         private bool Check(params TKind[] kinds)

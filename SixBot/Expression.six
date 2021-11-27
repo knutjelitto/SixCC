@@ -1,0 +1,105 @@
+﻿grammar Expression;
+
+start
+    : expression !.
+    ;
+
+expression
+    : add-expression
+    ;
+
+add-expression
+    : mul-expression (add-operator mul-expression)*
+    ;
+
+add-operator
+    : '+' | '-'
+    ;
+
+mul-expression
+    : primary (mul-operator primary)*
+    ;
+
+mul-operator
+    : '*' | '/'
+    ;
+
+primary
+    : identifier
+    | number
+    | '(' expression ')'
+    | identifier '(' argument-list? ')'
+    ;
+
+argument-list
+    : argument (',' argument)*
+    ;
+
+argument
+    : expression
+    ;
+
+identifier
+    : < letter letter-or-digit* >
+    ;
+
+letter
+    : 'a' .. 'z'
+    | 'A' .. 'Z'
+    ;
+
+digit
+    : '0' .. '9'
+    ;
+
+letter-or-digit
+    : letter
+    | digit
+    ;
+
+hex
+    : digit
+    | 'A' .. 'F'
+    | 'a' .. 'f'
+    ;
+
+number
+    : < digit+ >
+    ;
+
+string
+    : < '\'' string-char+ '\'' >
+    ;
+
+string-char
+    : !('\\' | '\'') .
+    | '\\' escape
+    ;
+
+escape
+    : '\''
+    | '\\'
+    | 'a'
+    | 'b'
+    | 'f'
+    | 'n'
+    | 't'
+    | 'r'
+    | 'v'
+    | 'x' hex hex
+    | 'u{' hex? hex? hex? hex? hex? hex '}'
+    ;
+
+eol
+    : '\r' '\n'
+    | '\n'
+    | '\r'
+    ;
+
+line-comment
+    : '//' (!eol .)* eol?
+    ;
+
+block-comment
+    : '/*' (!'*/' .)* &'*/' '*/'
+    ;

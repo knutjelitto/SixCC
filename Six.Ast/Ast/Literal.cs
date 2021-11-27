@@ -1,26 +1,19 @@
-﻿using Six.Core;
-
-namespace Six.Ast
+﻿namespace Six.Ast
 {
-    public class Literal : Terminal
+    public class Literal : Expression
     {
-        internal Literal(ILocation? location, CpString text)
+        internal Literal(ILocation location, string text)
             : base(location)
         {
             Text = text;
         }
 
-        internal Literal(ILocation? location, string text)
-            : this(location, new CpString(text))
+        internal Literal(ILocation location, int codepoint)
+            : this(location, char.ConvertFromUtf32(codepoint))
         {
         }
 
-        internal Literal(ILocation? location, int codepoint)
-            : this(location, new CpString(codepoint))
-        {
-        }
-
-        public CpString Text { get; }
+        public string Text { get; }
 
         public override string ToString()
         {
@@ -28,7 +21,6 @@ namespace Six.Ast
         }
 
 
-        public override string ToName() => $"{Text.Esc()}";
-
+        public override bool IsSimple => true;
     }
 }

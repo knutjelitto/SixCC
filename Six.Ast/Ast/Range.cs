@@ -1,22 +1,17 @@
 ﻿namespace Six.Ast
 {
-    public class Range : Expression
+    public class Range : Expression, IWithTwo
     {
-        internal Range(ILocation? location, Expression start, Expression end)
+        internal Range(ILocation location, Expression start, Expression end)
             : base(location)
         {
-            Start = start;
-            End = end;
+            One = start;
+            Two = end;
         }
 
-        public Expression Start { get; }
-        public Expression End { get; }
+        public Expression One { get; set; }
+        public Expression Two { get; set; }
 
-        public override bool IsAtomic => false;
-
-        public override string ToName()
-        {
-            return $"({Start.ToName()}..{End.ToName()})";
-        }
+        public override bool IsSimple => false;
     }
 }
