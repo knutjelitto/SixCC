@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>10</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Six\E.six" />
+		<None Remove="Six\Expression.six" />
+		<None Remove="Six\Gamma0.six" />
+		<None Remove="Six\Json.six" />
+		<None Remove="Six\Six.six" />
+		<None Remove="Six\T.six" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Six\E.six" />
+		<EmbeddedResource Include="Six\Expression.six" />
+		<EmbeddedResource Include="Six\Gamma0.six" />
+		<EmbeddedResource Include="Six\Json.six" />
+		<EmbeddedResource Include="Six\Six.six" />
+		<EmbeddedResource Include="Six\T.six" />
+	</ItemGroup>
+
+</Project>

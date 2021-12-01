@@ -2,8 +2,6 @@
 {
     public abstract class Operator : IReadOnlyList<Operator>
     {
-        public List<Operator> Arguments { get; }
-
         public Operator(params Operator[] arguments)
             : this(arguments.AsEnumerable())
         {
@@ -14,6 +12,23 @@
             Arguments = arguments.ToList();
         }
 
+        protected void Set(params Operator[] arguments)
+        {
+            Arguments = arguments.ToList();
+        }
+
+        public int Id { get; set; } = -1;
+        public List<Operator> Arguments { get; protected set; }
+        public Operator Argument
+        {
+            get
+            {
+                Assert(Arguments.Count == 1);
+                return Arguments[0];
+            }
+        }
+        public bool Closed => Arguments.Count == 0;
+
         private void DumpInner(Writer writer)
         {
             foreach (var op in Arguments)
@@ -22,7 +37,8 @@
             }
         }
 
-        protected virtual string DumpHead => GetType().Name;
+        //protected virtual string DumpHead => GetType().Name;
+        protected abstract string DumpHead { get; }
 
         public virtual void Dump(Writer writer)
         {

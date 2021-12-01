@@ -1,6 +1,6 @@
 ﻿namespace SixBot
 {
-    public partial class JsonParser : Parser
+    public partial class JsonParser : ParserCore
     {
     }
 }

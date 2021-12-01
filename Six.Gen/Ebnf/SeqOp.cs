@@ -1,12 +1,12 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class SeqOp : Operator
+    public sealed class SeqOp : Operator
     {
         public SeqOp(IEnumerable<Operator> arguments)
             : base(arguments)
         {
         }
 
-        protected override string DumpHead => "══";
+        protected override string DumpHead => "sequence";
     }
 }

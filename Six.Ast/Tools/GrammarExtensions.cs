@@ -29,19 +29,6 @@
             return new Writer(File(filename));
         }
 
-        public static void DumpAst(this Grammar grammar, string filename)
-        {
-            using (var writer = new Writer(File(filename)))
-            {
-                grammar.DumpAst(writer);
-            }
-        }
-
-        public static void DumpAst(this Grammar grammar, Writer writer)
-        {
-            new AstDumper(writer).Walk(grammar);
-        }
-
         public static void DumpTree(this Grammar grammar, string filename)
         {
             using (var writer = new Writer(File(filename)))

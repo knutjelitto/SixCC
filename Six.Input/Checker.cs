@@ -1,33 +1,21 @@
 ﻿using Six.Ast;
+using Six.Core;
 using Six.Input.Errors;
-using System.Reflection;
+using Six.Samples;
 
 namespace Six.Input
 {
     public class Checker
     {
-        public IEnumerable<Grammar?> Run(bool basic)
+        public IEnumerable<Grammar?> Run()
         {
-            foreach (var name in Assembly.GetExecutingAssembly().GetManifestResourceNames())
+            foreach (var sample in Sampler.LoadSix())
             {
-                Console.WriteLine($"{name}");
-                yield return Run(basic, name);
+                yield return Run(sample.Name, sample.Content);
             }
         }
 
-        private Grammar? Run(bool basic, string name)
-        {
-            var content = string.Empty;
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name)!)
-            using (var reader = new StreamReader(stream))
-            {
-                content = reader.ReadToEnd();
-            }
-
-            return Run(basic, name, content);
-        }
-
-        public Grammar? Run(bool basic, string name, string content)
+        public Grammar? Run(string name, string content)
         {
             try
             {
@@ -38,15 +26,7 @@ namespace Six.Input
                 var grammar = parser.Parse();
                 grammar.DumpTree($"{grammar.Name}-tree.txt");
 
-                if (basic)
-                {
-                    return grammar;
-                }
-
-                var grammar2 = new BnfTransformer(grammar).Transform();
-                grammar2.DumpAst($"{grammar.Name}-ast.txt");
-
-                return grammar2;
+                return grammar;
             }
             catch (DiagnosticException ex)
             {

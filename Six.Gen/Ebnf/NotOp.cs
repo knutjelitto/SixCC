@@ -1,12 +1,12 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class NotOp : Operator
+    public sealed class NotOp : Operator
     {
         public NotOp(Operator argument)
             : base(argument)
         {
         }
 
-        protected override string DumpHead => "!";
+        protected override string DumpHead => "not";
     }
 }

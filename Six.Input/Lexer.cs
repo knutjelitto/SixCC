@@ -1,4 +1,5 @@
-﻿using Six.Input.Errors;
+﻿using Six.Core;
+using Six.Input.Errors;
 using System.Globalization;
 using System.Text;
 
@@ -76,6 +77,8 @@ namespace Six.Input
                         return Token(TKind.Any);
                     case '\'':
                         return Literal();
+                    case '%':
+                        return Special();
                     default:
                         if (Letter(Current))
                         {
@@ -94,6 +97,13 @@ namespace Six.Input
         private void Error(string message)
         {
             throw new DiagnosticException(new SyntaxError(GetLocation(), message));
+        }
+
+        private Token Special()
+        {
+            Assert(Current == '%');
+            offset += 1;
+            return Identifier();
         }
 
         private Token Identifier()

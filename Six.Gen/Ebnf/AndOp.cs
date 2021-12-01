@@ -1,12 +1,12 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class AndOp : Operator
+    public sealed class AndOp : Operator
     {
         public AndOp(Operator argument)
             : base(argument)
         {
         }
 
-        protected override string DumpHead => "&";
+        protected override string DumpHead => "and";
     }
 }

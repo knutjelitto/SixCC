@@ -1,4 +1,6 @@
-﻿namespace Six.Input
+﻿using Six.Core;
+
+namespace Six.Input
 {
     [DebuggerDisplay("{DbgOut()}")]
     public class Location : ILocation

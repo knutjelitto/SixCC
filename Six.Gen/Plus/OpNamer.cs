@@ -1,0 +1,140 @@
+﻿using System.Text;
+
+using Six.Ast;
+
+namespace Six.Gen.Ebnf
+{
+    internal class OpNamer : EbnfWalker
+    {
+        const string LeftAngle = "❬";
+        const string RightAngle = "❭";
+
+        private readonly StringBuilder builder = new();
+
+        public string NameOf(Operator op)
+        {
+            builder.Clear();
+            Walk(op);
+            return builder.ToString();
+        }
+
+        private void Write(string str)
+        {
+            builder.Append(str);
+        }
+
+        private void Left(Operator op)
+        {
+            Write(LeftAngle);
+        }
+
+        private void Right(Operator op)
+        {
+            Write(RightAngle);
+        }
+
+        private void Arguments(Operator op, string separator)
+        {
+            var more = false;
+            foreach (var argument in op.Arguments)
+            {
+                if (more)
+                {
+                    Write(separator);
+                }
+                more = true;
+                Walk(argument);
+            }
+        }
+
+        protected override void Visit(AltOp op)
+        {
+            Left(op);
+            Arguments(op, "|");
+            Right(op);
+        }
+
+        protected override void Visit(AndOp op)
+        {
+            Write("&");
+            Walk(op.Argument);
+        }
+
+        protected override void Visit(AnyOp op)
+        {
+            Write("⚬");
+        }
+
+        protected override void Visit(CharacterOp op)
+        {
+            Write(op.Codepoint.ToString().Esc());
+        }
+
+        protected override void Visit(EpsilonOp op)
+        {
+            Write("𝛆");
+        }
+
+        protected override void Visit(NotOp op)
+        {
+            Write("!");
+            Walk(op.Argument);
+        }
+
+        protected override void Visit(OptionalOp op)
+        {
+            Walk(op.Argument);
+            Write("?");
+        }
+
+        protected override void Visit(PlusOp op)
+        {
+            Walk(op.Argument);
+            Write("+");
+        }
+
+        protected override void Visit(RangeOp op)
+        {
+            Left(op);
+            Write(op.Codepoint1.ToString().Esc());
+            Write("⤍");
+            Write(op.Codepoint2.ToString().Esc());
+            Right(op);
+        }
+
+        protected override void Visit(RefOp op)
+        {
+            Write($"⤇{op.Name}");
+        }
+
+        protected override void Visit(RuleOp op)
+        {
+            Write(op.Name);
+        }
+
+        protected override void Visit(SeqOp op)
+        {
+            Left(op);
+            Arguments(op, "·");
+            Right(op);
+        }
+
+        protected override void Visit(StarOp op)
+        {
+            Walk(op.Argument);
+            Write("*");
+        }
+
+        protected override void Visit(StringOp op)
+        {
+            Write(op.Text.Esc());
+        }
+
+        protected override void Visit(TokenOp op)
+        {
+            Write("«");
+            Walk(op.Argument);
+            Write("»");
+        }
+    }
+}

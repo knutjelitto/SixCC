@@ -54,15 +54,6 @@
             builder.Append('>');
         }
 
-        protected override void Visit(Difference difference)
-        {
-            builder.Append(Left);
-            Walk(difference.One);
-            builder.Append('-');
-            Walk(difference.Two);
-            builder.Append(Right);
-        }
-
         protected override void Visit(Literal literal)
         {
             builder.Append(literal.ToString());

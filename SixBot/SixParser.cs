@@ -1,6 +1,6 @@
 ﻿namespace SixBot
 {
-    public partial class SixParser : Parser
+    public partial class SixParser : ParserCore
     {
     }
 }

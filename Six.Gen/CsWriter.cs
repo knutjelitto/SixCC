@@ -6,6 +6,7 @@
         {
             return $"\"{string.Join(string.Empty, text.Select(chr => Escape(chr)))}\"";
 
+            //TODO: incomplete
             static string Escape(char chr)
             {
                 switch (chr)
@@ -36,65 +37,24 @@
             }
         }
 
-        public static void L(this Writer writer)
+        public static string CsIndentifier(this string identifier)
         {
-            writer.WriteLine();
-        }
-
-        public static void L(this Writer writer, string text)
-        {
-            writer.WriteLine(text);
-        }
-
-        public static IDisposable Block(this Writer writer, string head)
-        {
-            writer.WriteLine(head);
-            return new Unblock(writer, "{", "}");
-        }
-
-        public static void Block(this Writer writer, string head, Action content)
-        {
-            writer.WriteLine(head);
-            writer.WriteLine("{");
-            using (writer.Indent())
+            if (identifier.StartsWith("%"))
             {
-                content();
-            }
-            writer.WriteLine("}");
-        }
-
-        public static void Initializer(this Writer writer, string head, Action content)
-        {
-            writer.WriteLine(head);
-            writer.WriteLine("{");
-            using (writer.Indent())
-            {
-                content();
-            }
-            writer.WriteLine("};");
-        }
-
-        private class Unblock : IDisposable
-        {
-            private readonly Writer writer;
-            private readonly string start;
-            private readonly string end;
-
-            public Unblock(Writer writer, string start, string end)
-            {
-                this.writer = writer;
-                this.start = start;
-                this.end = end;
-
-                writer.WriteLine(this.start);
-                writer.Plus();
+                return "__" + Cap(identifier.Substring(1));
             }
 
-            public void Dispose()
-            {
-                writer.Minus();
-                writer.WriteLine(end);
-            }
+            var parts = identifier.Split('-');
+
+            return "_" + string.Join(string.Empty, parts.Take(1).Concat(parts.Skip(1).Select(part => Cap(part))));
+        }
+
+        public static string Cap(string name)
+        {
+            var first = char.ToUpperInvariant(name.First()).ToString();
+            var rest = string.Join(string.Empty, name.Skip(1).Select(chr => char.ToLowerInvariant(chr)));
+
+            return first + rest;
         }
     }
 }

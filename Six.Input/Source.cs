@@ -1,4 +1,6 @@
-﻿namespace Six.Input
+﻿using Six.Core;
+
+namespace Six.Input
 {
     public class Source : ISource
     {

@@ -2,27 +2,34 @@
 {
     public class Continuation
     {
-        private Action<Cursor> action { get; set; }
+        private Action<Cursor> success { get; set; }
+        private Action<Cursor> failure { get; set; }
+        
+        private HashSet<Cursor>? already;
+
+        public readonly Cursor current;
+
 
         [DebuggerStepThrough]
-        public Continuation(Action<Cursor> action)
+        public Continuation(Cursor current, Action<Cursor> success, Action<Cursor> failure)
         {
-            this.action = action;
+            this.current = current;
+            this.success = success;
+            this.failure = failure;
         }
 
-        public void Add(Action<Cursor> action)
+        public void Success(Cursor success)
         {
-            this.action += action;
+            this.success(success);
         }
 
-        public void Add(Continuation continuation)
+        public void Fail(Cursor failure)
         {
-            action += continuation.action;
-        }
-
-        public void Invoke(Cursor cursor)
-        {
-            action(cursor);
+            if (!(already ??= new HashSet<Cursor>()).Contains(failure))
+            {
+                already.Add(failure);
+                this.failure(failure);
+            }
         }
     }
 }

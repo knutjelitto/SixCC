@@ -71,11 +71,6 @@
             return new Range(location, start, end);
         }
 
-        public Expression Difference(ILocation location, Expression left, Expression right)
-        {
-            return new Difference(location, left, right);
-        }
-
         public Expression ZeroOrMore(ILocation location, Expression expression)
         {
             return new ZeroOrMore(location, expression);

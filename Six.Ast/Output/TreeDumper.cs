@@ -128,14 +128,5 @@
                 base.Visit(range);
             }
         }
-
-        protected override void Visit(Difference difference)
-        {
-            writer.WriteLine("difference");
-            using (writer.Indent())
-            {
-                base.Visit(difference);
-            }
-        }
     }
 }

@@ -80,18 +80,7 @@ namespace Six.Input
 
         private Expression Element()
         {
-            return Difference();
-        }
-
-        private Expression Difference()
-        {
-            var expr = Range();
-            while (Try(TKind.Minus))
-            {
-                var end = Range();
-                expr = builder.Difference(expr.Location, expr, end);
-            }
-            return expr;
+            return Range();
         }
 
         private Expression Range()

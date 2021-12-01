@@ -1,12 +1,12 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class AltOp : Operator
+    public sealed class AltOp : Operator
     {
         public AltOp(IEnumerable<Operator> arguments)
             : base(arguments)
         {
         }
 
-        protected override string DumpHead => "║";
+        protected override string DumpHead => "alternatives";
     }
 }

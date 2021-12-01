@@ -1,17 +1,41 @@
-﻿using SixBot;
+﻿using Six.Samples;
+using SixBot;
 
-var grammars = new Six.Input.Checker().Run(true).ToList();
+//new TParser().Match("tt");
+//new EParser().Match("e+e");
+//new EParser().Match("e+e+e");
+//new EParser().Match("e+e+e+e");
+//new EParser().Match("e+e+e+e+e");
+//Console.WriteLine();
 
-new EParser().Match("e+e+e");
-
-var expressionGrammar = grammars.Where(g => g is not null && g.Name == "Expression").SingleOrDefault();
-
-if (expressionGrammar is not null)
+var which = 5;
+var count = 0;
+foreach (var sample in Sampler.LoadSix())
 {
-    var transformer = new Six.Gen.Ebnf.EbnfTransformer(expressionGrammar);
-    var transformed = transformer.Transform();
+    var name = Path.GetExtension(Path.GetFileNameWithoutExtension(sample.Name)).Substring(1);
+    if (which == count)
+    {
+        new SixParser().Match(name, sample.Content);
+    }
+    ++count;
+}
+Console.WriteLine();
 
-    using (var writer = Six.Ast.GrammarExtensions.Writer($"{expressionGrammar.Name}-ebnf.txt"))
+var grammars = new Six.Input.Checker().Run().ToList();
+
+foreach (var grammar in grammars)
+{
+    if (grammar == null)
+    {
+        continue;
+    }
+
+    Console.WriteLine(grammar.Name);
+
+    var creator = new Six.Gen.Ebnf.EbnfCreator(grammar);
+    var transformed = creator.Create();
+
+    using (var writer = Six.Ast.GrammarExtensions.Writer($"{grammar.Name}-ebnf.txt"))
     {
         new Six.Gen.Ebnf.EbnfDumper(transformed).Dump(writer);
     }

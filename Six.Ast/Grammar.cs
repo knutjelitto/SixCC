@@ -29,5 +29,7 @@
             : base(name, symbol => symbol.Name)
         {
         }
+        public Symbol StartRule => Symbols.Where(op => op.Name.ToLowerInvariant() == "%start").FirstOrDefault();
+        public Symbol WhitespaceRule => Symbols.Where(op => op.Name.ToLowerInvariant() == "%whitespace").FirstOrDefault();
     }
 }

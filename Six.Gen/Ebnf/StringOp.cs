@@ -2,7 +2,7 @@
 
 namespace Six.Gen.Ebnf
 {
-    public class StringOp : Operator
+    public sealed class StringOp : Operator
     {
         public StringOp(string text)
         {
@@ -11,6 +11,6 @@ namespace Six.Gen.Ebnf
 
         public string Text { get; }
 
-        protected override string DumpHead => Text.Esc();
+        protected override string DumpHead => $"string({Text.Esc()})";
     }
 }

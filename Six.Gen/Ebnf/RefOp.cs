@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class RefOp : Operator
+    public sealed class RefOp : Operator
     {
         public RefOp(EbnfGrammar grammar, string name)
         {
@@ -10,7 +10,6 @@
 
         public EbnfGrammar Grammar { get; }
         public string Name { get; }
-
         protected override string DumpHead => $"⤇{Name}";
     }
 }

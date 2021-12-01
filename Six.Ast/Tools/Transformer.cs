@@ -36,8 +36,6 @@
                     return Visit(top, expr);
                 case Compact expr:
                     return Visit(top, expr);
-                case Difference expr:
-                    return Visit(top, expr);
                 case Any expr:
                     return Visit(top, expr);
                 case Range expr:
@@ -129,11 +127,6 @@
         protected virtual Expression Visit(bool top, Compact compact)
         {
             return new Compact(compact.Location, Transform(false, compact.Expression));
-        }
-
-        protected virtual Expression Visit(bool top, Difference difference)
-        {
-            return new Difference(difference.Location, Transform(false, difference.One), Transform(false, difference.Two));
         }
 
         protected virtual Expression Visit(bool top, Range range)

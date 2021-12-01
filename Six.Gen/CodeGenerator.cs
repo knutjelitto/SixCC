@@ -6,21 +6,24 @@ namespace Six.Gen
     {
         public static void Generate(SourceProductionContext context, AdditionalText additional)
         {
-            using (var generator = new BnfGenerator())
-            {
 #if XDEBUG
-                if (!Debugger.IsAttached)
-                {
-                    Debugger.Launch();
-                }
-#endif                 
-                var name = $"{Path.GetFileNameWithoutExtension(additional.Path)}";
-                var fileHint = $"{name}Parser.gen.cs";
-                var content = additional.GetText()?.ToString() ?? string.Empty;
-
-                generator.Generate(name, content);
-                context.AddSource(fileHint, generator.ToString());
+            if (!Debugger.IsAttached)
+            {
+                Debugger.Launch();
             }
+#endif
+            var name = $"{Path.GetFileNameWithoutExtension(additional.Path)}";
+            var fileHint = $"{name}Parser.gen.cs";
+            var content = additional.GetText()?.ToString() ?? string.Empty;
+            var generated = string.Empty;
+
+            using (var generator = new EbnfCsGenerator())
+            {
+                generator.Generate(name, content);
+                generated = generator.ToString();
+            }
+
+            context.AddSource(fileHint, generated);
         }
 
 #if false

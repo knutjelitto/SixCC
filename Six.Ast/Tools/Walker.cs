@@ -43,9 +43,6 @@
                 case Compact expr:
                     Visit(expr);
                     break;
-                case Difference expr:
-                    Visit(expr);
-                    break;
                 case Any expr:
                     Visit(expr);
                     break;
@@ -136,12 +133,6 @@
         protected virtual void Visit(Compact compact)
         {
             Walk(compact.Expression);
-        }
-
-        protected virtual void Visit(Difference difference  )
-        {
-            Walk(difference.One);
-            Walk(difference.Two);
         }
 
         protected virtual void Visit(Range range)
