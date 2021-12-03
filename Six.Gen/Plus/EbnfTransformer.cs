@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public abstract class EbnfTransformer
+    public abstract class EbnfTransformer<T>
     {
         protected void Transform(EbnfGrammar grammar)
         {
@@ -10,7 +10,7 @@
             }    
         }
 
-        protected Operator Transform(Operator expression)
+        protected T Transform(Operator expression)
         {
             switch (expression)
             {
@@ -22,15 +22,19 @@
                     return Visit(expr);
                 case CharacterOp expr:
                     return Visit(expr);
-                case EpsilonOp expr:
-                    return Visit(expr);
                 case NotOp expr:
                     return Visit(expr);
                 case PlusOp expr:
                     return Visit(expr);
                 case RangeOp expr:
                     return Visit(expr);
+                case DiffOp expr:
+                    return Visit(expr);
                 case RefOp expr:
+                    return Visit(expr);
+                case StartRuleOp expr:
+                    return Visit(expr);
+                case WhiteRuleOp expr:
                     return Visit(expr);
                 case RuleOp expr:
                     return Visit(expr);
@@ -49,79 +53,89 @@
             }
         }
 
-        protected virtual Operator Visit(AltOp op)
+        protected virtual T Visit(AltOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(AndOp op)
+        protected virtual T Visit(AndOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(AnyOp op)
+        protected virtual T Visit(AnyOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(CharacterOp op)
+        protected virtual T Visit(CharacterOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(EpsilonOp op)
+        protected virtual T Visit(NotOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(NotOp op)
+        protected virtual T Visit(OptionalOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(OptionalOp op)
+        protected virtual T Visit(PlusOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(PlusOp op)
+        protected virtual T Visit(RangeOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(RangeOp op)
+        protected virtual T Visit(DiffOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(RefOp op)
+        protected virtual T Visit(RefOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(RuleOp op)
+        protected virtual T Visit(RuleOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(SeqOp op)
+        protected virtual T Visit(StartRuleOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(StarOp op)
+        protected virtual T Visit(WhiteRuleOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(StringOp op)
+        protected virtual T Visit(SeqOp op)
         {
-            return op;
+            throw new NotImplementedException();
         }
 
-        protected virtual Operator Visit(TokenOp op)
+        protected virtual T Visit(StarOp op)
         {
-            return op;
+            throw new NotImplementedException();
+        }
+
+        protected virtual T Visit(StringOp op)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual T Visit(TokenOp op)
+        {
+            throw new NotImplementedException();
         }
     }
 }

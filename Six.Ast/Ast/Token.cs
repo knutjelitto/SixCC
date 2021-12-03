@@ -1,8 +1,8 @@
 ﻿namespace Six.Ast
 {
-    public class Compact : Expression, IWithOne
+    public class Token : Expression, IWithOne
     {
-        internal Compact(ILocation location, Expression expression)
+        internal Token(ILocation location, Expression expression)
             : base(location)
         {
             Expression = expression;

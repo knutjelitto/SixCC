@@ -2,17 +2,17 @@
 {
     public record Range(ImplementationCore Core, int Id, string Name, int CP1, int CP2) : Token(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor cursor, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
-            var at = cursor.At;
+            var at = context.Start.At;
 
             if (CP1 <= at && at <= CP2)
             {
-                continuation.Success(cursor.Advance(1));
+                context.Success(context.Start.Advance(1));
             }
             else
             {
-                continuation.Fail(cursor);
+                context.Failure(context.Start);
             }
         }
 

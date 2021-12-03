@@ -12,7 +12,7 @@
         private readonly Func<Expression, bool> getter;
         private readonly Action<Expression, bool> setter;
 
-        protected override void Visit(Grammar grammar)
+        protected override void Visit(AstGrammar grammar)
         {
             Changed = true;
             while (Changed)

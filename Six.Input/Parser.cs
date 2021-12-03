@@ -1,5 +1,5 @@
 ﻿using Six.Ast;
-using Six.Input.Errors;
+using Six.Core.Errors;
 
 namespace Six.Input
 {
@@ -9,9 +9,9 @@ namespace Six.Input
         private int current;
         private readonly GrammarBuilder builder;
 
-        public Parser(Tokens tokens_)
+        public Parser(Tokens tokens)
         {
-            tokens = tokens_;
+            this.tokens = tokens;
             current = 0;
             builder = new GrammarBuilder();
         }
@@ -19,7 +19,7 @@ namespace Six.Input
         private Token Current => tokens[current];
         private Token Next => tokens[current + 1];
 
-        public Grammar Parse()
+        public AstGrammar Parse()
         {
             Keyword("grammar");
             var name = Name();
@@ -41,8 +41,16 @@ namespace Six.Input
         private Symbol Rule()
         {
             var name = Name();
+            Expression expression;
             Match(TKind.Colon);
-            var expression = Expression();
+            if (Current.Kind == TKind.LeftAngle)
+            {
+                expression = Token();
+            }
+            else
+            {
+                expression = Expression();
+            }
             Match(TKind.Semi);
 
             return builder.Indefinite(name.Location, name.Text, expression);
@@ -85,13 +93,18 @@ namespace Six.Input
 
         private Expression Range()
         {
-            var expr = Repeat();
+            var first = Repeat();
             if (Try(TKind.Range))
             {
-                var end = Repeat();
-                expr = builder.Range(expr.Location, expr, end);
+                var second = Repeat();
+                first = builder.Range(first.Location, first, second);
             }
-            return expr;
+            else if (Try(TKind.Minus))
+            {
+                var second = Repeat();
+                first = builder.Diff(first.Location, first, second);
+            }
+            return first;
         }
 
         private Expression Repeat()
@@ -132,29 +145,27 @@ namespace Six.Input
                     expression = builder.Any(Current.Location);
                     Match(Current.Kind);
                     break;
-                case TKind.Not:
-                    Match(TKind.Not);
-                    expression = builder.Not(Current.Location, Primary());
-                    break;
-                case TKind.And:
-                    Match(TKind.And);
-                    expression = builder.And(Current.Location, Primary());
-                    break;
                 case TKind.LeftParent:
                     Match(TKind.LeftParent);
                     expression = Expression();
                     Match(TKind.RightParent);
                     break;
                 case TKind.LeftAngle:
-                    Match(TKind.LeftAngle);
-                    var inner = Expression();
-                    expression = builder.Compact(inner.Location, inner);
-                    Match(TKind.RightAngle);
+                    expression = Token();
                     break;
                 default:
                     expression = Error<Expression>($"expected 'primary', but found '{Current.Kind}'");
                     break;
             }
+            return expression;
+        }
+
+        private Expression Token()
+        {
+            Match(TKind.LeftAngle);
+            var inner = Expression();
+            var expression = builder.Token(inner.Location, inner);
+            Match(TKind.RightAngle);
             return expression;
         }
 

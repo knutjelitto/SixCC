@@ -2,7 +2,7 @@
 {
     public class Walker
     {
-        public void Walk(Grammar grammar)
+        public void Walk(AstGrammar grammar)
         {
             Visit(grammar);
         }
@@ -40,13 +40,16 @@
                 case Literal expr:
                     Visit(expr);
                     break;
-                case Compact expr:
+                case Token expr:
                     Visit(expr);
                     break;
                 case Any expr:
                     Visit(expr);
                     break;
                 case Range expr:
+                    Visit(expr);
+                    break;
+                case Diff expr:
                     Visit(expr);
                     break;
                 case NotPredicate expr:
@@ -60,7 +63,7 @@
             }
         }
 
-        protected virtual void Visit(Grammar grammar)
+        protected virtual void Visit(AstGrammar grammar)
         {
             foreach (var rule in grammar.Symbols)
             {
@@ -130,7 +133,7 @@
         {
         }
 
-        protected virtual void Visit(Compact compact)
+        protected virtual void Visit(Token compact)
         {
             Walk(compact.Expression);
         }
@@ -139,6 +142,12 @@
         {
             Walk(range.One);
             Walk(range.Two);
+        }
+
+        protected virtual void Visit(Diff diff)
+        {
+            Walk(diff.One);
+            Walk(diff.Two);
         }
     }
 }

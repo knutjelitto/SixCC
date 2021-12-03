@@ -5,7 +5,7 @@
         private UniqueList<string, Operator> Inners;
         private OpNamer Namer;
 
-        public EbnfCreator(Ast.Grammar grammar)
+        public EbnfCreator(Ast.AstGrammar grammar)
         {
             Grammar = grammar;
             Ebnf = new EbnfGrammar(grammar.Name);
@@ -13,7 +13,7 @@
             Inners = new UniqueList<string, Operator>(op => Namer.NameOf(op));
         }
 
-        public Ast.Grammar Grammar { get; }
+        public Ast.AstGrammar Grammar { get; }
         public EbnfGrammar Ebnf { get; }
 
         public EbnfGrammar Create()
@@ -39,7 +39,7 @@
             }
             else
             {
-                whiteRule.Set(Add(new EpsilonOp()));
+                whiteRule.Set(Add(new SeqOp()));
             }
 
             foreach (var symbol in Grammar.Symbols)
@@ -64,6 +64,7 @@
                 Ebnf.Add(op);
             }
 
+            //new RexTransformer().Transform(whiteRule);
 
             return Ebnf;
         }
@@ -108,11 +109,13 @@
                         return Visit(expr);
                     case Ast.Literal expr:
                         return Visit(expr);
-                    case Ast.Compact expr:
+                    case Ast.Token expr:
                         return Visit(expr);
                     case Ast.Any expr:
                         return Visit(expr);
                     case Ast.Range expr:
+                        return Visit(expr);
+                    case Ast.Diff expr:
                         return Visit(expr);
                     case Ast.Undefined expr:
                         return Visit(expr);
@@ -138,17 +141,16 @@
         private Operator Visit(Ast.Sequence seq)
         {
             Assert(seq.Expressions.Count >= 0);
-            if (seq.Expressions.Count == 0)
+
+            var transformed = seq.Expressions.Select(e => Transform(e)).ToList();
+
+            if (seq.Expressions.Count == 1)
             {
-                return new EpsilonOp();
-            }
-            else if (seq.Expressions.Count == 1)
-            {
-                return Transform(seq.Expressions[0]);
+                return transformed[0];
             }
             else
             {
-                return new SeqOp(seq.Expressions.Select(e => Transform(e)));
+                return new SeqOp(transformed);
             }
         }
 
@@ -206,10 +208,6 @@
 
         private Operator Visit(Ast.Range range)
         {
-            if (range.One.ToString() == "' '")
-            {
-                Assert(true);
-            }
             var start = Transform(range.One);
             var end = Transform(range.Two);
 
@@ -222,7 +220,15 @@
             throw new NotImplementedException();
         }
 
-        private Operator Visit(Ast.Compact compact)
+        private Operator Visit(Ast.Diff range)
+        {
+            var first = Transform(range.One);
+            var second = Transform(range.Two);
+
+            return new DiffOp(first, second);
+        }
+
+        private Operator Visit(Ast.Token compact)
         {
             return new TokenOp(Transform(compact.Expression));
         }

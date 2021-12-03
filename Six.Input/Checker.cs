@@ -1,13 +1,13 @@
 ﻿using Six.Ast;
 using Six.Core;
-using Six.Input.Errors;
+using Six.Core.Errors;
 using Six.Samples;
 
 namespace Six.Input
 {
     public class Checker
     {
-        public IEnumerable<Grammar?> Run()
+        public IEnumerable<AstGrammar?> Run()
         {
             foreach (var sample in Sampler.LoadSix())
             {
@@ -15,18 +15,11 @@ namespace Six.Input
             }
         }
 
-        public Grammar? Run(string name, string content)
+        public AstGrammar? Run(string name, string content)
         {
             try
             {
-                var source = new Source(name, content);
-                var lexer = new Lexer(source);
-                var tokens = new Tokens(lexer);
-                var parser = new Parser(tokens);
-                var grammar = parser.Parse();
-                grammar.DumpTree($"{grammar.Name}-tree.txt");
-
-                return grammar;
+                return Builder.Build(name, content);
             }
             catch (DiagnosticException ex)
             {

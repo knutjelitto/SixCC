@@ -1,6 +1,6 @@
 ﻿namespace Six.Ast
 {
-    public class TreeGrammar : Grammar
+    public class TreeGrammar : AstGrammar
     {
         public TreeGrammar(string name)
             : base(name)

@@ -2,7 +2,7 @@
 {
     public class Reference : ReferenceCore
     {
-        internal Reference(Grammar grammar, ILocation location, string name)
+        internal Reference(AstGrammar grammar, ILocation location, string name)
             : base(grammar, location, name)
         {
         }

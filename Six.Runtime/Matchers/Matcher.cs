@@ -3,12 +3,13 @@
     public abstract record Matcher(ImplementationCore Core, int Id, string Name)
     {
         public Matcher[] Matchers = Array.Empty<Matcher>();
+        public Dfa.Dfa? Dfa = null;
 
-        protected abstract void MatchCore(Cursor cursor, Continuation continuation);
+        protected abstract void MatchCore(Context context);
 
-        public virtual void Match(Cursor cursor, Continuation continuation)
+        public virtual void Match(Context context)
         {
-            MatchCore(cursor, continuation);
+            MatchCore(context);
         }
 
         public void Set(params Matcher[] matchers)
@@ -16,24 +17,9 @@
             Matchers = matchers;
         }
 
-        protected void CollectWhitespace(Cursor current, Continuation continuation)
+        public void Set(Dfa.Dfa dfa)
         {
-            if (Core.__InToken)
-            {
-                continuation.Success(current);
-            }
-            else
-            {
-                Core.__Whitespace.Match(current, new Continuation(current,
-                    succ =>
-                    {
-                        continuation.Success(succ);
-                    },
-                    fail =>
-                    {
-                        continuation.Fail(fail);
-                    }));
-            }
+            Dfa = dfa;
         }
 
         public override string ToString()

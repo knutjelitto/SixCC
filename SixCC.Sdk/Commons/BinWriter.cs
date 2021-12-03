@@ -43,7 +43,7 @@ namespace SixCC.Sdk.Commons
         {
             // Write out an int 7 bits at a time.  The high bit of the byte,
             // when on, tells reader to continue reading more bytes.
-            uint v = (uint)value;   // support negative numbers
+            var v = (uint)value;   // support negative numbers
             while (v >= 0x80)
             {
                 WriteByte((byte)(v | 0x80));

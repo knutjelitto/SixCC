@@ -1,8 +1,8 @@
 ﻿namespace Six.Ast
 {
-    public abstract class Grammar<T>
+    public abstract class AstGrammar<T>
     {
-        public Grammar(string name, Func<T, string> getKey)
+        public AstGrammar(string name, Func<T, string> getKey)
         {
             Name = name;
             Symbols = new UniqueList<string, T>(getKey);
@@ -23,9 +23,9 @@
         public UniqueList<string, T> Symbols { get; }
     }
 
-    public class Grammar : Grammar<Symbol>
+    public class AstGrammar : AstGrammar<Symbol>
     {
-        public Grammar(string name)
+        public AstGrammar(string name)
             : base(name, symbol => symbol.Name)
         {
         }

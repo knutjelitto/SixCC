@@ -1,4 +1,4 @@
-﻿namespace Six.Input.Errors
+﻿namespace Six.Core.Errors
 {
     public enum Level
     {

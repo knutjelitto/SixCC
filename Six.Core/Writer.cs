@@ -62,6 +62,14 @@ namespace Six.Core
             return new Undenter(this);
         }
 
+        public void Indent(Action content)
+        {
+            using (Indent())
+            {
+                content();
+            }
+        }
+
         public override string ToString()
         {
             if (sink is StringWriter stringWriter)

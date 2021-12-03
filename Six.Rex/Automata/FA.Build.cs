@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Six.Rex
 {
     public partial class FA
@@ -34,6 +32,11 @@ namespace Six.Rex
         public static FA From(string sequence) => Builder.From(sequence);
 
         public static FA From(int from, int to) => Builder.From(from, to);
+
+        public static FA Epsilon()
+        {
+            return Builder.Epsilon();
+        }
 
         public static FA And(FA first, params FA[] nexts)
         {
@@ -128,6 +131,13 @@ namespace Six.Rex
                 var illegal = new State();
                 start.Add(Integers.Any, illegal);
                 illegal.Add(Integers.Any, illegal);
+
+                return FA.From(start, start);
+            }
+
+            public static FA Epsilon()
+            {
+                var start = new State();
 
                 return FA.From(start, start);
             }

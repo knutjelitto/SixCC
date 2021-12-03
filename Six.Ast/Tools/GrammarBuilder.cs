@@ -2,14 +2,14 @@
 {
     public class GrammarBuilder
     {
-        private readonly Grammar grammar;
+        private readonly AstGrammar grammar;
 
         public GrammarBuilder()
         {
             grammar = new TreeGrammar(string.Empty);
         }
 
-        public Grammar Grammar(string name)
+        public AstGrammar Grammar(string name)
         {
             Name = name;
 
@@ -61,14 +61,19 @@
             return new AndPredicate(location, expression);
         }
 
-        public Expression Compact(ILocation location, Expression expression)
+        public Expression Token(ILocation location, Expression expression)
         {
-            return new Compact(location, expression);
+            return new Token(location, expression);
         }
 
         public Expression Range(ILocation location, Expression start, Expression end)
         {
             return new Range(location, start, end);
+        }
+
+        public Expression Diff(ILocation location, Expression left, Expression right)
+        {
+            return new Diff(location, left, right);
         }
 
         public Expression ZeroOrMore(ILocation location, Expression expression)

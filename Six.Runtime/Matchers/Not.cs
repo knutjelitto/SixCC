@@ -2,17 +2,22 @@
 {
     public record Not(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor current, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(current, new Continuation(current,
+            Matchers[0].Match(new Context(context.Start,
                 next =>
                 {
-                    continuation.Fail(current);
+                    context.Failure(context.Start);
                 },
                 next =>
                 {
-                    continuation.Success(current);
+                    context.Success(context.Start);
                 }));
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

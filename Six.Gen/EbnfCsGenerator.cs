@@ -16,9 +16,8 @@ namespace Six.Gen
 
         public override void Generate(string name, string content)
         {
-            var checker = new Checker();
-            var preGrammar = checker.Run(name, content)!;
-            var transformer = new EbnfCreator(preGrammar);
+            var ast = Builder.Build(name, content)!;
+            var transformer = new EbnfCreator(ast);
             var grammar = transformer.Create();
 
             if (grammar == null)
@@ -26,12 +25,16 @@ namespace Six.Gen
                 return;
             }
 
+            grammar = new RexTransformer(grammar).Transform();
+
+            var dfaGenerator = new DfaCsGenerator(writer, grammar);
             var parserClass = $"{name}Parser";
             var implementationClass = $"__{parserClass}Implementation";
 
             wl("using System.Collections.Generic;");
             wl("using Six.Runtime;");
             wl("using Six.Runtime.Matchers;");
+            wl("using Six.Runtime.Dfa;");
             wl("using Range = Six.Runtime.Matchers.Range;");
             wl("using String = Six.Runtime.Matchers.String;");
             wl();
@@ -70,7 +73,7 @@ namespace Six.Gen
                             foreach (var rule in grammar.Rules)
                             {
                                 w($"/* {rule.Id,3} {rule.GetType().Name,-12} */ {Matchers}[{rule.Id}] = ");
-                                wl($"{rule.Name.CsIndentifier()} = new {ClassName(rule)}(this, {rule.Id}, {rule.Name.CsString()});");
+                                wl($"{rule.RuleId()} = new {ClassName(rule)}(this, {rule.Id}, {rule.Name.CsString()});");
                             }
                             foreach (var inner in grammar.Others)
                             {
@@ -78,10 +81,10 @@ namespace Six.Gen
                                 switch (inner)
                                 {
                                     case RuleOp rule:
-                                        wl($"{rule.Name.CsIndentifier()} = new {RuleClass}(this, {rule.Id}, {rule.Name.CsString()});");
+                                        wl($"{rule.RuleId()} = new {RuleClass}(this, {rule.Id}, {rule.Name.CsString()});");
                                         break;
                                     case RefOp op:
-                                        wl($"{op.Name.CsIndentifier()};");
+                                        wl($"{op.RuleId()};");
                                         break;
                                     case CharacterOp op:
                                         NonRule(op, $"{(int)op.Codepoint}");
@@ -115,6 +118,11 @@ namespace Six.Gen
                                 }
                                 wl($");");
                             }
+                            wl();
+
+                            dfaGenerator.Create();
+                            wl();
+                            dfaGenerator.Init();
                         });
                         wl();
 
@@ -122,9 +130,12 @@ namespace Six.Gen
                         {
                             if (!op.Name.StartsWith("%"))
                             {
-                                wl($"private {RuleClass} {op.Name.CsIndentifier()};");
+                                wl($"private {RuleClass} {op.RuleId()};");
                             }
                         }
+                        wl();
+
+                        dfaGenerator.Declare();
                     });
                     wl();
                 });

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -8,21 +8,47 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="E\1.e" />
+		<None Remove="E\2.e" />
+		<None Remove="E\3.e" />
+		<None Remove="E\4.e" />
+		<None Remove="E\5.e" />
+		<None Remove="E\6.e" />
 		<None Remove="Six\E.six" />
+		<None Remove="Six\Error.six" />
 		<None Remove="Six\Expression.six" />
 		<None Remove="Six\Gamma0.six" />
 		<None Remove="Six\Json.six" />
 		<None Remove="Six\Six.six" />
 		<None Remove="Six\T.six" />
+		<None Remove="T\1.t" />
+		<None Remove="T\2.t" />
+		<None Remove="T\3.t" />
+		<None Remove="T\4.t" />
+		<None Remove="T\5.t" />
+		<None Remove="T\6.t" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="E\1.e" />
+		<EmbeddedResource Include="E\2.e" />
+		<EmbeddedResource Include="E\3.e" />
+		<EmbeddedResource Include="E\4.e" />
+		<EmbeddedResource Include="E\5.e" />
+		<EmbeddedResource Include="E\6.e" />
 		<EmbeddedResource Include="Six\E.six" />
-		<EmbeddedResource Include="Six\Expression.six" />
+		<EmbeddedResource Include="Six\T.six" />
 		<EmbeddedResource Include="Six\Gamma0.six" />
+		<EmbeddedResource Include="Six\Error.six" />
+		<EmbeddedResource Include="Six\Expression.six" />
 		<EmbeddedResource Include="Six\Json.six" />
 		<EmbeddedResource Include="Six\Six.six" />
-		<EmbeddedResource Include="Six\T.six" />
+		<EmbeddedResource Include="T\1.t" />
+		<EmbeddedResource Include="T\2.t" />
+		<EmbeddedResource Include="T\3.t" />
+		<EmbeddedResource Include="T\4.t" />
+		<EmbeddedResource Include="T\6.t" />
+		<EmbeddedResource Include="T\5.t" />
 	</ItemGroup>
 
 </Project>

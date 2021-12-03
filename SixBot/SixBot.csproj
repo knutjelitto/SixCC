@@ -16,6 +16,7 @@
         <AdditionalFiles Include="..\Six.Samples\Six\Json.six" Link="Samples\Json.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\Six.six" Link="Samples\Six.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T.six" Link="Samples\T.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\Error.six" Link="Samples\Error.six" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\TParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\ExpressionParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\Gamma0Parser.gen.cs" />
@@ -29,6 +30,7 @@
 		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 		<ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 		<ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\Six.Rex\Six.Rex.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 		<ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
     </ItemGroup>
 

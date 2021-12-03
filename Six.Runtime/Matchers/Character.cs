@@ -1,17 +1,20 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Character(ImplementationCore Core, int Id, string Name, int CP) : Token(Core, Id, Name)
+    public sealed record Character(ImplementationCore Core, int Id, string Name, int Codepoint) : Token(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor cursor, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
-            if (cursor.At == CP)
+            Core.__MatchToken(context, current =>
             {
-                continuation.Success(cursor.Advance(1));
-            }
-            else
-            {
-                continuation.Fail(cursor);
-            }
+                if (current.Start.At == Codepoint)
+                {
+                    current.Success(current.Start.Advance(1));
+                }
+                else
+                {
+                    current.Failure(current.Start);
+                }
+            });
         }
 
         public override string ToString()

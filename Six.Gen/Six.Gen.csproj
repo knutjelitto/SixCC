@@ -18,6 +18,7 @@
       <ProjectReference Include="..\Six.Ast\Six.Ast.csproj" GeneratePathProperty="true" PrivateAssets="all" />
       <ProjectReference Include="..\Six.Core\Six.Core.csproj" GeneratePathProperty="true" PrivateAssets="all" />
       <ProjectReference Include="..\Six.Input\Six.Input.csproj" GeneratePathProperty="true" PrivateAssets="all" />
+      <ProjectReference Include="..\Six.Rex\Six.Rex.csproj" />
     </ItemGroup>
 
 </Project>

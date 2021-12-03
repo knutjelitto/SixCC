@@ -1,4 +1,6 @@
-﻿namespace Six.Gen.Ebnf
+﻿using Six.Rex;
+
+namespace Six.Gen.Ebnf
 {
     public class RuleOp : Operator
     {
@@ -14,6 +16,8 @@
         }
 
         public string Name { get; }
+
+        public FA? DFA { get; set; }
 
         protected override string DumpHead => Name;
     }

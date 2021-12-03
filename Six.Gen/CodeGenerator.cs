@@ -1,53 +1,80 @@
 ﻿using Microsoft.CodeAnalysis;
+using Six.Core.Errors;
+using System.Diagnostics;
 
 namespace Six.Gen
 {
-    internal class CodeGenerator
+    internal static class CodeGenerator
     {
         public static void Generate(SourceProductionContext context, AdditionalText additional)
         {
-#if XDEBUG
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
-#endif
             var name = $"{Path.GetFileNameWithoutExtension(additional.Path)}";
             var fileHint = $"{name}Parser.gen.cs";
             var content = additional.GetText()?.ToString() ?? string.Empty;
             var generated = string.Empty;
 
-            using (var generator = new EbnfCsGenerator())
+            try
             {
-                generator.Generate(name, content);
-                generated = generator.ToString();
+#if XDEBUG
+                if (name == "Error" && !Debugger.IsAttached)
+                {
+                    Debugger.Launch();
+                }
+#endif
+                using (var generator = new EbnfCsGenerator())
+                {
+                    generator.Generate(name, content);
+                    generated = generator.ToString();
+                }
+            }
+            catch (DiagnosticException exception)
+            {
+                Error(exception, context, additional);
             }
 
             context.AddSource(fileHint, generated);
         }
 
-#if false
-        private static readonly DiagnosticDescriptor InvalidSixError = new(
+        private static readonly DiagnosticDescriptor CommonError = new(
             id: "SIXGEN001",
-            title: "Couldn't parse SIX grammar file",
-            messageFormat: "Couldn't parse SIX grammar file",
-            category: "SixGenerator",
+            title: "Common Error",
+            messageFormat: "YYYCouldn't parse SIX grammar file",
+            category: "SixGen",
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-#pragma warning disable IDE0051 // Remove unused private members
-        private void Error()
-#pragma warning restore IDE0051 // Remove unused private members
+        private static readonly DiagnosticDescriptor SyntaxError = new(
+            id: "SIXGEN002",
+            title: "Syntax Error",
+            messageFormat: "syntax error - {0}",
+            category: "SixGen",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        private static void Error(DiagnosticException exception, SourceProductionContext context, AdditionalText additional)
         {
-            var ts = new Microsoft.CodeAnalysis.Text.TextSpan(0, 6);
-            var l1 = new Microsoft.CodeAnalysis.Text.LinePosition(0, 0);
-            var l2 = new Microsoft.CodeAnalysis.Text.LinePosition(0, 6);
-            var ls = new Microsoft.CodeAnalysis.Text.LinePositionSpan(l1, l2);
-            var lc = Microsoft.CodeAnalysis.Location.Create(additional.Path, ts, ls);
+            if (exception.Diagnostic is SyntaxError syntax)
+            {
+                var location = MakeLocation(additional.Path, syntax);
 
-            context.ReportDiagnostic(Diagnostic.Create(InvalidSixError, lc));
-
+                context.ReportDiagnostic(Microsoft.CodeAnalysis.Diagnostic.Create(SyntaxError, location, syntax.Message));
+            }
+            else
+            {
+                context.ReportDiagnostic(Microsoft.CodeAnalysis.Diagnostic.Create(CommonError, null));
+            }
         }
-#endif
+
+        private static Location MakeLocation(string file, SyntaxError syntax)
+        {
+            var (startLineNo, startColumnNo) = syntax.Location.Source.GetLineAndColumn(syntax.Location.Offset);
+            var (endLineNo, endColumnNo) = syntax.Location.Source.GetLineAndColumn(syntax.Location.Offset + syntax.Location.Length);
+
+            var span = new Microsoft.CodeAnalysis.Text.TextSpan(syntax.Location.Offset, syntax.Location.Offset);
+            var start = new Microsoft.CodeAnalysis.Text.LinePosition(startLineNo - 1, startColumnNo - 1);
+            var end = new Microsoft.CodeAnalysis.Text.LinePosition(endLineNo - 1, endColumnNo - 1);
+            var lineSpan = new Microsoft.CodeAnalysis.Text.LinePositionSpan(start, end);
+            return Location.Create(file, span, lineSpan);
+        }
     }
 }

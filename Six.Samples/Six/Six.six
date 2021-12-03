@@ -5,7 +5,7 @@
     ;
 
 %whitespace
-    : whitespace
+    : skip
     ;
 
 grammar
@@ -13,11 +13,11 @@ grammar
     ;
 
 rules
-    : rule*
+    : rule+
     ;
 
 rule
-    : identifier ':' expression ';'
+    : rule-name ':' expression ';'
     ;
 
 expression
@@ -33,15 +33,8 @@ sequence
     ;
 
 element
-    : difference
-    ;
-
-difference
-    : range-or-repeat ('-' range-or-repeat)?
-    ;
-
-range-or-repeat
     : repeat-or-primary ('..' repeat-or-primary)?
+    | repeat-or-primary ('-' repeat-or-primary)?
     ;
 
 repeat-or-primary
@@ -53,16 +46,25 @@ ebnf
     ;
 
 primary
-    : identifier
+    : rule-reference
     | string
+    | '.'
     | '(' expression ')'
     | '<' expression '>'
     | '&' primary
     | '!' primary
     ;
 
+rule-reference
+    : identifier
+    ;
+
+rule-name
+    : < '%'? identifier >
+    ;
+
 identifier
-    : < '%'? id-begin id-continue* >
+    : < id-begin id-continue* >
     ;
 
 id-begin
@@ -92,7 +94,7 @@ string
     ;
 
 character
-    : !('\\' | '\'') .
+    : (. - ('\\' | '\''))
     | '\\' escape
     ;
 
@@ -116,7 +118,7 @@ hex
     | 'a' .. 'f'
     ;
 
-whitespace
+skip
     : < (space | line-end | comment)* >
     ;
 
@@ -146,9 +148,9 @@ comment
     ;
 
 line-comment
-    : '//' (!line-ender .)*
+    : '//' (. - line-end)* line-end?
     ;
 
 block-comment
-    : '/*' (!'*/' .)* '*/'
+    : '/*' (. - '*/')* '*/'
     ;

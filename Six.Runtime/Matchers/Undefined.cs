@@ -2,7 +2,7 @@
 {
     public record Undefined(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor cursor, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
             throw new NotImplementedException();
         }

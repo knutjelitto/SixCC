@@ -9,6 +9,16 @@ namespace Six.Samples
             return LoadAll(name => name.EndsWith(".six"));
         }
 
+        public static IEnumerable<Sample> LoadT()
+        {
+            return LoadAll(name => name.EndsWith(".t"));
+        }
+
+        public static IEnumerable<Sample> LoadE()
+        {
+            return LoadAll(name => name.EndsWith(".e"));
+        }
+
         public static IEnumerable<Sample> LoadAll(Func<string, bool> filter)
         {
             var assembly = typeof(Sampler).Assembly;

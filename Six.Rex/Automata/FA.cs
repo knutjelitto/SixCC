@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-
 namespace Six.Rex
 {
     public partial class FA
@@ -154,6 +148,10 @@ namespace Six.Rex
         {
             var visited = new HashSet<State>();
 
+            Visit(start);
+
+            return visited.OrderBy(state => state.Id);
+
             void Visit(State state)
             {
                 if (!visited.Contains(state))
@@ -168,9 +166,6 @@ namespace Six.Rex
                 }
             }
 
-            Visit(start);
-
-            return visited.OrderBy(state => state.Id);
         }
     }
 }

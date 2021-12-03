@@ -19,6 +19,14 @@
                 using (writer.Indent())
                 {
                     rule.Argument.Dump(writer);
+
+                    if (rule.DFA != null)
+                    {
+                        writer.WriteLine();
+                        writer.WriteLine("-- with DFA --");
+                        writer.WriteLine();
+                        new FaDfaDumper().Dump(writer, rule.DFA);
+                    }
                 }
             }
         }

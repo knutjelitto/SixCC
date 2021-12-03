@@ -77,7 +77,7 @@ string
     ;
 
 string-char
-    : !('\\' | '\'') .
+    : . - ('\\' | '\'')
     | '\\' escape
     ;
 
@@ -118,9 +118,9 @@ comment
     ;
 
 line-comment
-    : '//' (!eol .)* eol?
+    : '//' (. - eol)* eol?
     ;
 
 block-comment
-    : '/*' (!'*/' .)* '*/'
+    : '/*' (. - '*/')* '*/'
     ;

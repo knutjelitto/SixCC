@@ -42,11 +42,11 @@ namespace SixCC.Sdk.Dumping
                 }
             }
 
-            string namesFormat = $"{{0,-{namesLength}}}";
-            string bodyFormat = $"{{0,-{bodyLength}}}";
-            string aleftFormat = $"{{0,-{actionLeft}}}";
-            string arightFormat = $"i{{0,-{actionRight}}}";
-            string prodFormat = $"{{0}}";
+            var namesFormat = $"{{0,-{namesLength}}}";
+            var bodyFormat = $"{{0,-{bodyLength}}}";
+            var aleftFormat = $"{{0,-{actionLeft}}}";
+            var arightFormat = $"i{{0,-{actionRight}}}";
+            var prodFormat = $"{{0}}";
 
             foreach (var set in Grammar.LR1Sets)
             {

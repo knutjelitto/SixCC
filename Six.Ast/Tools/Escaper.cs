@@ -20,6 +20,10 @@
             {
                 return "\\'";
             }
+            else if (utf32 == '\"')
+            {
+                return "\\\"";
+            }
             else if (utf32 == '\\')
             {
                 return "\\\\";

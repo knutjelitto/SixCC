@@ -7,6 +7,11 @@
         {
         }
 
+        public SeqOp(params Operator[] arguments)
+            : base(arguments)
+        {
+        }
+
         protected override string DumpHead => "sequence";
     }
 }

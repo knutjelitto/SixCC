@@ -4,17 +4,17 @@
     {
         private const string top = "bot";
 
-        public static IEnumerable<Symbol> Nonterminals(this Grammar grammar)
+        public static IEnumerable<Symbol> Nonterminals(this AstGrammar grammar)
         {
             return grammar.Symbols.Where(sym => sym.IsNonterminal);
         }
 
-        public static IEnumerable<Symbol> Terminals(this Grammar grammar)
+        public static IEnumerable<Symbol> Terminals(this AstGrammar grammar)
         {
             return grammar.Symbols.Where(sym => sym.IsTerminal);
         }
 
-        public static IEnumerable<Symbol> Fragments(this Grammar grammar)
+        public static IEnumerable<Symbol> Fragments(this AstGrammar grammar)
         {
             return grammar.Symbols.Where(sym => sym.IsFragment);
         }
@@ -24,12 +24,12 @@
             return Path.Combine(Temp.TempPath(top), filename);
         }
 
-        public static Writer Writer(string filename)
+        public static Writer Writer(this string filename)
         {
             return new Writer(File(filename));
         }
 
-        public static void DumpTree(this Grammar grammar, string filename)
+        public static void DumpTree(this AstGrammar grammar, string filename)
         {
             using (var writer = new Writer(File(filename)))
             {
@@ -37,7 +37,7 @@
             }
         }
 
-        public static void DumpTree(this Grammar grammar, Writer writer)
+        public static void DumpTree(this AstGrammar grammar, Writer writer)
         {
             new TreeDumper(writer).Walk(grammar);
         }

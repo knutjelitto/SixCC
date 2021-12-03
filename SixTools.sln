@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Input", "Six.Input\Six.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Runtime", "Six.Runtime\Six.Runtime.csproj", "{5315C9FB-1F05-4D07-9084-245C292D9F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Six.Samples", "Six.Samples\Six.Samples.csproj", "{2B514EB1-A107-41DB-8993-A15CF87BD657}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Samples", "Six.Samples\Six.Samples.csproj", "{2B514EB1-A107-41DB-8993-A15CF87BD657}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

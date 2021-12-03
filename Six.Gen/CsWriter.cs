@@ -1,4 +1,6 @@
-﻿namespace Six.Gen
+﻿using Six.Gen.Ebnf;
+
+namespace Six.Gen
 {
     internal static class CsWriter
     {
@@ -32,12 +34,24 @@
                     case '\v':
                         return "\\v";
                     default:
+                        if (char.IsControl(chr) || char.IsSeparator(chr))
+                        {
+                            if (chr <= 0xFFFF)
+                            {
+                                return $"\\u{(int)chr:X04}";
+                            }
+                            else
+                            {
+                                return $"\\U{(int)chr:X08}";
+                            }
+
+                        }
                         return chr.ToString();
                 }
             }
         }
 
-        public static string CsIndentifier(this string identifier)
+        public static string RuleId(this string identifier)
         {
             if (identifier.StartsWith("%"))
             {
@@ -47,6 +61,21 @@
             var parts = identifier.Split('-');
 
             return "_" + string.Join(string.Empty, parts.Take(1).Concat(parts.Skip(1).Select(part => Cap(part))));
+        }
+
+        public static string RuleId(this RuleOp op)
+        {
+            return op.Name.RuleId();
+        }
+
+        public static string RuleId(this RefOp op)
+        {
+            return op.Name.RuleId();
+        }
+
+        public static string DfaId(this RuleOp op)
+        {
+            return op.Name.RuleId() + "_DFA";
         }
 
         public static string Cap(string name)

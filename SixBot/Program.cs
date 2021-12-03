@@ -1,25 +1,34 @@
-﻿using Six.Samples;
+﻿using Six.Gen.Ebnf;
+using Six.Ast;
+using Six.Samples;
 using SixBot;
 
-//new TParser().Match("tt");
-//new EParser().Match("e+e");
-//new EParser().Match("e+e+e");
-//new EParser().Match("e+e+e+e");
-//new EParser().Match("e+e+e+e+e");
-//Console.WriteLine();
-
-var which = 5;
-var count = 0;
-foreach (var sample in Sampler.LoadSix())
-{
-    var name = Path.GetExtension(Path.GetFileNameWithoutExtension(sample.Name)).Substring(1);
-    if (which == count)
-    {
-        new SixParser().Match(name, sample.Content);
-    }
-    ++count;
-}
+Check<SixParser>(0, Sampler.LoadSix());
+Check<TParser>(6, Sampler.LoadT());
+Check<EParser>(0, Sampler.LoadE());
 Console.WriteLine();
+
+void Check<ParserType>(int which, IEnumerable<Sample> samples)
+    where ParserType : ParserCore, new()
+{
+    if (which == 0)
+    {
+        return;
+    }
+
+    var count = 0;
+    foreach (var sample in samples)
+    {
+        count++;
+
+        var name = Path.GetExtension(Path.GetFileNameWithoutExtension(sample.Name))[1..];
+        Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {name}");
+        if (which == count)
+        {
+            new ParserType().Match(name, sample.Content);
+        }
+    }
+}
 
 var grammars = new Six.Input.Checker().Run().ToList();
 
@@ -35,9 +44,12 @@ foreach (var grammar in grammars)
     var creator = new Six.Gen.Ebnf.EbnfCreator(grammar);
     var transformed = creator.Create();
 
-    using (var writer = Six.Ast.GrammarExtensions.Writer($"{grammar.Name}-ebnf.txt"))
+    var white = transformed.WhitespaceRule;
+    new RexTransformer(transformed).Transform();
+
+    using (var writer = $"{grammar.Name}-ebnf.txt".Writer())
     {
-        new Six.Gen.Ebnf.EbnfDumper(transformed).Dump(writer);
+        new EbnfDumper(transformed).Dump(writer);
     }
 }
 

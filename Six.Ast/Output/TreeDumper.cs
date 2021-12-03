@@ -9,7 +9,7 @@
             this.writer = writer;
         }
 
-        protected override void Visit(Grammar grammar)
+        protected override void Visit(AstGrammar grammar)
         {
             var more = false;
             foreach (var rule in grammar.Symbols)
@@ -50,7 +50,7 @@
             }
         }
 
-        protected override void Visit(Compact compact)
+        protected override void Visit(Token compact)
         {
             writer.WriteLine("compact");
             using (writer.Indent())

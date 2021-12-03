@@ -8,7 +8,7 @@
         }
 
         public abstract bool IsSimple { get; }
-        public virtual bool IsCompact => this is Compact || this is Terminal;
+        public virtual bool IsCompact => this is Token || this is Terminal;
         public int Id { get; set; } = -1;
 
         public ILocation Location { get; set; }

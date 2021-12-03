@@ -2,24 +2,46 @@
 {
     public record Plus(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor current, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(current, new Continuation(current, Success, FirstFailure));
+            var already = new HashSet<Cursor>();
+            var todo = new Queue<Cursor>();
+            var succeeded = false;
 
-            void Success(Cursor succ)
+            already.Add(context.Start);
+            todo.Enqueue(context.Start);
+
+            while (todo.Count > 0)
             {
-                continuation.Success(succ);
-                Matchers[0].Match(succ, new Continuation(succ, Success, NextFailure));
+                var next = todo.Dequeue();
+
+                Matchers[0].Match(new Context(next, Success, Failure));
             }
 
-            void FirstFailure(Cursor fail)
+            if (!succeeded)
             {
-                continuation.Fail(fail);
+                context.Failure(context.Start);
             }
 
-            void NextFailure(Cursor fail)
+            void Success(Cursor success)
             {
+                if (already.Add(success))
+                {
+                    succeeded = true;
+                    context.Success(success);
+                    todo.Enqueue(success);
+                }
             }
+
+            void Failure(Cursor failure)
+            {
+                // ignore: star can't fail
+            }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

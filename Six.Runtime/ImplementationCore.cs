@@ -42,11 +42,11 @@ namespace Six.Runtime
 
         public bool __InToken { get; set; }
 
-        public void __CollectWhitespace(Cursor current, Continuation continuation)
+        public void __CollectWhitespace(Context context)
         {
-            var farthest = current;
+            var farthest = context.Start;
 
-            __Whitespace.Match(current, new Continuation(current, Success, Failure));
+            __Whitespace.Match(new Context(context.Start, Success, Failure));
 
             void Success(Cursor success)
             {
@@ -61,7 +61,31 @@ namespace Six.Runtime
                 // ignore: we collect whitespace really greedy
             }
 
-            continuation.Success(farthest);
+            context.Success(farthest);
+        }
+
+        public void __MatchToken(Context context, Dfa.Dfa dfa)
+        {
+            __MatchToken(context, dfa.Match);
+        }
+
+        public void __MatchToken(Context context, Action<Context> match)
+        {
+            Assert(__Whitespace.Dfa != null);
+            __Whitespace.Dfa.Match(new Context(context.Start, AfterWhite, AfterWhite));
+
+            void AfterWhite(Cursor current)
+            {
+                match(new Context(current,
+                    success =>
+                    {
+                        context.Success(success);
+                    },
+                    failure =>
+                    {
+                        context.Failure(failure);
+                    }));
+            }
         }
     }
 }

@@ -3,10 +3,18 @@
     internal class CsGenerator : IDisposable
     {
         protected Writer writer;
+        private readonly bool owns;
 
         protected CsGenerator()
         {
             writer = new Writer();
+            owns = true;
+        }
+
+        protected CsGenerator(Writer writer)
+        {
+            this.writer = writer; ;
+            owns = false;
         }
 
         public virtual void Generate(string name, string content)
@@ -73,7 +81,10 @@
 
         public void Dispose()
         {
-            writer.Dispose();
+            if (owns)
+            {
+                writer.Dispose();
+            }
         }
 
         public override string ToString()

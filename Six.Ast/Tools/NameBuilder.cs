@@ -47,7 +47,7 @@
             builder.Append('.');
         }
 
-        protected override void Visit(Compact terminal)
+        protected override void Visit(Token terminal)
         {
             builder.Append('<');
             Walk(terminal.Expression);

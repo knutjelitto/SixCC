@@ -18,24 +18,47 @@
 
         public void Match(string name, string content)
         {
-            var source = new Source(content);
+            var source = Source.FromString(name, content);
             var cursor = new Cursor(source, 0);
             var successCounter = 0;
             var failureCounter = 0;
+            var lastfailure = cursor;
 
-            __Core.__Start.Match(cursor, new Continuation(cursor,
+            var watch = new Stopwatch();
+            watch.Start();
+
+            __Core.__Start.Match(new Context(cursor,
                 success =>
                 {
-                    Console.WriteLine($"#{++successCounter} {__Name} {name}@{success.Offset} - OK");
+                    var elapsed = watch.Elapsed;
+                    var rep = source.LCO(success.Offset);
+                    var lines = source.GetLineNoFromIndex(success.Offset);
+                    var ms = Math.Round(elapsed.TotalMilliseconds);
+                    var cps = Math.Round(success.Offset / elapsed.TotalSeconds, 0);
+                    var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
+                    Console.WriteLine($"OK  #{++successCounter} {__Name} {rep}");
+                    Console.WriteLine($"elapsed: {ms} ms, {cps} cps, {lps} lps");
                 },
                 failure =>
                 {
-                    Console.WriteLine($"#{++failureCounter} {__Name} {name}@{failure.Offset} - FAIL");
-                    if (failure.Offset == 115)
+                    if (failure > lastfailure)
                     {
-                        Assert(true);
+                        lastfailure = failure;
                     }
+                    ++failureCounter;
                 }));
+
+            if (successCounter == 0)
+            {
+                var elapsed = watch.Elapsed;
+                var rep = source.LCO(lastfailure.Offset);
+                var lines = source.GetLineNoFromIndex(lastfailure.Offset);
+                var ms = Math.Round(elapsed.TotalMilliseconds);
+                var cps = Math.Round(lastfailure.Offset / elapsed.TotalSeconds, 0);
+                var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
+                Console.WriteLine($"FAIL#{failureCounter} {__Name} {rep}");
+                Console.WriteLine($"elapsed: {ms} ms, {cps} cps, {lps} lps");
+            }
         }
     }
 }

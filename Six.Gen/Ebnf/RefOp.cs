@@ -10,6 +10,8 @@
 
         public EbnfGrammar Grammar { get; }
         public string Name { get; }
+
+        public RuleOp Rule => (RuleOp)Grammar.Inner[Name];
         protected override string DumpHead => $"⤇{Name}";
     }
 }

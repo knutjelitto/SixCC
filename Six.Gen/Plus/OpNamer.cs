@@ -70,11 +70,6 @@ namespace Six.Gen.Ebnf
             Write(op.Codepoint.ToString().Esc());
         }
 
-        protected override void Visit(EpsilonOp op)
-        {
-            Write("𝛆");
-        }
-
         protected override void Visit(NotOp op)
         {
             Write("!");
@@ -102,6 +97,15 @@ namespace Six.Gen.Ebnf
             Right(op);
         }
 
+        protected override void Visit(DiffOp op)
+        {
+            Left(op);
+            Walk(op.Arguments[0]);
+            Write("-");
+            Walk(op.Arguments[1]);
+            Right(op);
+        }
+
         protected override void Visit(RefOp op)
         {
             Write($"⤇{op.Name}");
@@ -115,7 +119,14 @@ namespace Six.Gen.Ebnf
         protected override void Visit(SeqOp op)
         {
             Left(op);
-            Arguments(op, "·");
+            if (op.Arguments.Count > 0)
+            {
+                Arguments(op, "·");
+            }
+            else
+            {
+                Write("𝛆");
+            }
             Right(op);
         }
 

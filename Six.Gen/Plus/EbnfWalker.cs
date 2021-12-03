@@ -26,9 +26,6 @@
                 case CharacterOp expr:
                     Visit(expr);
                     break;
-                case EpsilonOp expr:
-                    Visit(expr);
-                    break;
                 case NotOp expr:
                     Visit(expr);
                     break;
@@ -36,6 +33,9 @@
                     Visit(expr);
                     break;
                 case RangeOp expr:
+                    Visit(expr);
+                    break;
+                case DiffOp expr:
                     Visit(expr);
                     break;
                 case RefOp expr:
@@ -92,11 +92,6 @@
             WalkArguments(op);
         }
 
-        protected virtual void Visit(EpsilonOp op)
-        {
-            WalkArguments(op);
-        }
-
         protected virtual void Visit(NotOp op)
         {
             WalkArguments(op);
@@ -113,6 +108,11 @@
         }
 
         protected virtual void Visit(RangeOp op)
+        {
+            WalkArguments(op);
+        }
+
+        protected virtual void Visit(DiffOp op)
         {
             WalkArguments(op);
         }

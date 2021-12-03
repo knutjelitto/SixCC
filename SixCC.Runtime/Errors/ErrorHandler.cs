@@ -19,7 +19,7 @@ namespace SixCC.Runtime.Errors
 
         public static string GetLocation(ISource source, int offset)
         {
-            (int lineNo, int colNo) = source.GetLineCol(offset);
+            var (lineNo, colNo) = source.GetLineCol(offset);
 
             return $"{source.Name}:{lineNo}:{colNo}";
         }

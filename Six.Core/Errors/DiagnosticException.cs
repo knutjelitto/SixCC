@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Six.Input.Errors
+﻿namespace Six.Core.Errors
 {
     public class DiagnosticException : Exception
     {

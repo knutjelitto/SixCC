@@ -1,7 +1,7 @@
 ﻿using Six.Core;
-using Six.Input.Errors;
+using Six.Core.Errors;
 using System.Globalization;
-using System.Text;
+
 
 namespace Six.Input
 {

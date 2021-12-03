@@ -1,6 +1,4 @@
-﻿using Six.Core;
-
-namespace Six.Input.Errors
+﻿namespace Six.Core.Errors
 {
     public abstract class Diagnostic
     {

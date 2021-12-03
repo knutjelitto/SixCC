@@ -2,16 +2,16 @@
 {
     public class Transformer
     {
-        protected Transformer(Grammar grammar)
+        protected Transformer(AstGrammar grammar)
         {
             Grammar = grammar;
-            Transformed = new Grammar(grammar.Name);
+            Transformed = new AstGrammar(grammar.Name);
         }
 
-        public Grammar Grammar { get; }
-        public Grammar Transformed { get; }
+        public AstGrammar Grammar { get; }
+        public AstGrammar Transformed { get; }
 
-        public Grammar Transform()
+        public AstGrammar Transform()
         {
             return Visit(Grammar);
         }
@@ -34,7 +34,7 @@
                     return Visit(top, expr);
                 case Literal expr:
                     return Visit(top, expr);
-                case Compact expr:
+                case Token expr:
                     return Visit(top, expr);
                 case Any expr:
                     return Visit(top, expr);
@@ -49,9 +49,9 @@
             }
         }
 
-        protected virtual Grammar Visit(Grammar grammar)
+        protected virtual AstGrammar Visit(AstGrammar grammar)
         {
-            var newGrammar = new Grammar(grammar.Name);
+            var newGrammar = new AstGrammar(grammar.Name);
 
             for (var i = 0; i < grammar.Symbols.Count; i++)
             {
@@ -124,9 +124,9 @@
             return literal;
         }
 
-        protected virtual Expression Visit(bool top, Compact compact)
+        protected virtual Expression Visit(bool top, Token compact)
         {
-            return new Compact(compact.Location, Transform(false, compact.Expression));
+            return new Token(compact.Location, Transform(false, compact.Expression));
         }
 
         protected virtual Expression Visit(bool top, Range range)

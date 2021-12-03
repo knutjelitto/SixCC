@@ -57,19 +57,57 @@ namespace Six.Core
                         return "\\\\";
 
                     default:
-                        if (value >= 32 && value < 127 || value >= 160 && value <= 255)
+                        if (IsSpecial(value))
                         {
-                            return $"{(char)value}";
+                            return "U+" + value.ToString("X4", CultureInfo.InvariantCulture);
                         }
-                        else if (value >= 0 && value <= 244)
-                        {
-                            return "\\x" + value.ToString("X2", CultureInfo.InvariantCulture);
-                        }
-                        break;
+
+                        return $"{(char)value}";
                 }
             }
 
             return "U+" + value.ToString("X4", CultureInfo.InvariantCulture);
+        }
+
+        public static bool IsSpecial(int value)
+        {
+            switch (char.GetUnicodeCategory((char)value))
+            {
+                case UnicodeCategory.Control:
+                case UnicodeCategory.Format:
+                case UnicodeCategory.LineSeparator:
+                case UnicodeCategory.ModifierLetter:
+                case UnicodeCategory.ModifierSymbol:
+                case UnicodeCategory.NonSpacingMark:
+                case UnicodeCategory.OtherNotAssigned:
+                case UnicodeCategory.ParagraphSeparator:
+                case UnicodeCategory.PrivateUse:
+                case UnicodeCategory.SpacingCombiningMark:
+                case UnicodeCategory.Surrogate:
+                    return true;
+
+                case UnicodeCategory.ClosePunctuation:
+                case UnicodeCategory.ConnectorPunctuation:
+                case UnicodeCategory.CurrencySymbol:
+                case UnicodeCategory.DashPunctuation:
+                case UnicodeCategory.DecimalDigitNumber:
+                case UnicodeCategory.EnclosingMark:
+                case UnicodeCategory.FinalQuotePunctuation:
+                case UnicodeCategory.InitialQuotePunctuation:
+                case UnicodeCategory.LetterNumber:
+                case UnicodeCategory.LowercaseLetter:
+                case UnicodeCategory.MathSymbol:
+                case UnicodeCategory.OpenPunctuation:
+                case UnicodeCategory.OtherLetter:
+                case UnicodeCategory.OtherNumber:
+                case UnicodeCategory.OtherPunctuation:
+                case UnicodeCategory.OtherSymbol:
+                case UnicodeCategory.SpaceSeparator:
+                case UnicodeCategory.TitlecaseLetter:
+                case UnicodeCategory.UppercaseLetter:
+                default:
+                    return false;
+            }
         }
     }
 }

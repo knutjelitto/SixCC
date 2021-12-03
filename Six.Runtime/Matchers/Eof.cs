@@ -2,16 +2,21 @@
 {
     public record Eof(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor cursor, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
-            if (cursor.At == -1)
+            if (context.Start.At == -1)
             {
-                continuation.Fail(cursor);
+                context.Failure(context.Start);
             }
             else
             {
-                continuation.Success(cursor.Advance(1));
+                context.Success(context.Start.Advance(1));
             }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

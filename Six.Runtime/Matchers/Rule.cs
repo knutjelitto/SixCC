@@ -2,66 +2,69 @@
 {
     public record Rule(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected readonly Dictionary<Cursor, List<Continuation>> Continuations = new();
+        protected readonly Dictionary<Cursor, List<Context>> Continuations = new();
         protected readonly Dictionary<Cursor, HashSet<Cursor>> Successes = new();
         protected readonly Dictionary<Cursor, HashSet<Cursor>> Failures = new();
 
-        public override void Match(Cursor current, Continuation continueWith)
+        public override void Match(Context context)
         {
-            if (Name == "rule")
-            {
-                Assert(true);
-            }
             Assert(Matchers.Length == 1);
             var first = false;
 
-            if (!Continuations.TryGetValue(current, out var continuations))
+            if (!Continuations.TryGetValue(context.Start, out var continuations))
             {
-                continuations = new List<Continuation>();
-                Continuations.Add(current, continuations);
-                Successes.Add(current, new HashSet<Cursor>());
-                Failures.Add(current, new HashSet<Cursor>());
+                continuations = new List<Context>();
+                Continuations.Add(context.Start, continuations);
+                Successes.Add(context.Start, new HashSet<Cursor>());
+                Failures.Add(context.Start, new HashSet<Cursor>());
                 first = true;
             }
-            continuations.Add(continueWith);
+            continuations.Add(context);
 
             if (!first)
             {
-                foreach (var succ in Successes[current])
+                foreach (var succ in Successes[context.Start])
                 {
-                    continueWith.Success(succ);
+                    context.Success(succ);
                 }
 
-                foreach (var fail in Failures[current])
+                foreach (var fail in Failures[context.Start])
                 {
-                    continueWith.Fail(fail);
+                    context.Failure(fail);
                 }
             }
             else
             {
-                MatchCore(current, new Continuation(current,
+                MatchCore(new Context(context.Start,
                     succ =>
                     {
-                        Successes[current].Add(succ);
-                        foreach (var continuation in Continuations[current])
+                        Successes[context.Start].Add(succ);
+                        foreach (var continuation in Continuations[context.Start])
                         {
                             continuation.Success(succ);
                         }
                     },
                     fail =>
                     {
-                        Failures[current].Add(fail);
-                        foreach (var continuation in Continuations[current])
+                        Failures[context.Start].Add(fail);
+                        foreach (var continuation in Continuations[context.Start])
                         {
-                            continuation.Fail(fail);
+                            continuation.Failure(fail);
                         }
                     }));
             }
         }
 
-        protected override void MatchCore(Cursor cursor, Continuation continueWith)
+        protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(cursor, continueWith);
+            if (Dfa != null)
+            {
+                Core.__MatchToken(context, Dfa);
+            }
+            else
+            {
+                Matchers[0].Match(context);
+            }
         }
 
         public override string ToString()

@@ -1,13 +1,5 @@
 ﻿grammar T;
 
-%start
-    : T
-    ;
-
-%whitespace
-    : ' '*
-    ;
-
 T   : t* t*
     ;
 

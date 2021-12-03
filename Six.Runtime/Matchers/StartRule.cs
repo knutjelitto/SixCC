@@ -2,31 +2,32 @@
 {
     public record StartRule(ImplementationCore Core, int Id, string Name) : Rule(Core, Id, Name)
     {
-        protected override void MatchCore(Cursor current, Continuation continueWith)
+        protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(current, new Continuation(current,
+            Matchers[0].Match(new Context(context.Start,
                 success =>
                 {
-                    Core.__CollectWhitespace(success, new Continuation(success,
+                    Core.__CollectWhitespace(new Context(success,
                         innerSuccess =>
                         {
                             if (innerSuccess.At == -1)
                             {
-                                continueWith.Success(innerSuccess);
+                                context.Success(innerSuccess);
                             }
                             else
                             {
-                                continueWith.Fail(innerSuccess);
+                                context.Failure(innerSuccess);
                             }
                         },
                         innerFailure =>
                         {
-                            continueWith.Fail(innerFailure);
+                            // never ever
+                            Assert(false);
                         }));
                 },
                 failure =>
                 {
-                    continueWith.Fail(failure);
+                    context.Failure(failure);
                 }));
         }
 

@@ -2,29 +2,30 @@
 {
     public record Token(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        public override void Match(Cursor current, Continuation continuation)
+#if false
+        public override void Match(Context context)
         {
             if (!Core.__InToken)
             {
                 Core.__InToken = true;
-                Core.__CollectWhitespace(current, new Continuation(current,
+                Core.__CollectWhitespace(new Context(context.Start,
                     succ => Continue(succ),
                     fail => Continue(fail)));
                 Core.__InToken = false;
 
                 void Continue(Cursor cursor)
                 {
-                    MatchCore(cursor, new Continuation(cursor,
+                    MatchCore(new Context(cursor,
                         succ =>
                         {
                             Core.__InToken = false;
-                            continuation.Success(succ);
+                            context.Success(succ);
                             Core.__InToken = true;
                         },
                         fail =>
                         {
                             Core.__InToken = false;
-                            continuation.Fail(fail);
+                            context.Failure(fail);
                             Core.__InToken = true;
                         }));
                 }
@@ -32,13 +33,14 @@
             }
             else
             {
-                MatchCore(current, continuation);
+                MatchCore(context);
             }
         }
+#endif
 
-        protected override void MatchCore(Cursor cursor, Continuation continuation)
+        protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(cursor, continuation);
+            Matchers[0].Match(context);
         }
 
         public override string ToString()
