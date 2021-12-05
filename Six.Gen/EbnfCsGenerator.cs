@@ -25,8 +25,6 @@ namespace Six.Gen
                 return;
             }
 
-            grammar = new RexTransformer(grammar).Transform();
-
             var dfaGenerator = new DfaCsGenerator(writer, grammar);
             var parserClass = $"{name}Parser";
             var implementationClass = $"__{parserClass}Implementation";

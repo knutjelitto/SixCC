@@ -72,9 +72,11 @@ STRING_END
     : '``' StringCharacter* '"'
     ;
 
+/*
 VERBATIM_STRING
     : '"""' (. - '"""')* '"""'
     ;
+*/
 
 CharCharacter
     : . - ('\\' | '\'')

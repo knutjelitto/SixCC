@@ -1,0 +1,3 @@
+﻿namespace Six.Gen.Ebnf
+{
+}

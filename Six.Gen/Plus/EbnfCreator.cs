@@ -77,6 +77,7 @@ namespace Six.Gen.Ebnf
                 Ebnf.Add(op);
             }
 
+            Ebnf = new DiffTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
 
             return Ebnf;
