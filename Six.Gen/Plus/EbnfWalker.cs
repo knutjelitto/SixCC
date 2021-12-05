@@ -17,16 +17,10 @@
                 case AltOp expr:
                     Visit(expr);
                     break;
-                case AndOp expr:
-                    Visit(expr);
-                    break;
                 case AnyOp expr:
                     Visit(expr);
                     break;
                 case CharacterOp expr:
-                    Visit(expr);
-                    break;
-                case NotOp expr:
                     Visit(expr);
                     break;
                 case PlusOp expr:
@@ -77,22 +71,12 @@
             WalkArguments(op);
         }
 
-        protected virtual void Visit(AndOp op)
-        {
-            WalkArguments(op);
-        }
-
         protected virtual void Visit(AnyOp op)
         {
             WalkArguments(op);
         }
 
         protected virtual void Visit(CharacterOp op)
-        {
-            WalkArguments(op);
-        }
-
-        protected virtual void Visit(NotOp op)
         {
             WalkArguments(op);
         }

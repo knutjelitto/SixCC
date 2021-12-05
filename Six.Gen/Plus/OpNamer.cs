@@ -54,12 +54,6 @@ namespace Six.Gen.Ebnf
             Right();
         }
 
-        protected override void Visit(AndOp op)
-        {
-            Write("&");
-            Walk(op.Argument);
-        }
-
         protected override void Visit(AnyOp op)
         {
             Write("⚬");
@@ -68,12 +62,6 @@ namespace Six.Gen.Ebnf
         protected override void Visit(CharacterOp op)
         {
             Write(op.Codepoint.ToString().Esc());
-        }
-
-        protected override void Visit(NotOp op)
-        {
-            Write("!");
-            Walk(op.Argument);
         }
 
         protected override void Visit(OptionalOp op)

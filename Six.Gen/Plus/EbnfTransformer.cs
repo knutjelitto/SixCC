@@ -16,13 +16,9 @@
             {
                 case AltOp expr:
                     return Visit(expr);
-                case AndOp expr:
-                    return Visit(expr);
                 case AnyOp expr:
                     return Visit(expr);
                 case CharacterOp expr:
-                    return Visit(expr);
-                case NotOp expr:
                     return Visit(expr);
                 case PlusOp expr:
                     return Visit(expr);
@@ -58,22 +54,12 @@
             throw new NotImplementedException();
         }
 
-        protected virtual T Visit(AndOp op)
-        {
-            throw new NotImplementedException();
-        }
-
         protected virtual T Visit(AnyOp op)
         {
             throw new NotImplementedException();
         }
 
         protected virtual T Visit(CharacterOp op)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual T Visit(NotOp op)
         {
             throw new NotImplementedException();
         }

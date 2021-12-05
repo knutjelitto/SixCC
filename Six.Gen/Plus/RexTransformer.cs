@@ -100,12 +100,6 @@ namespace Six.Gen.Ebnf
             return first.Difference(second).Minimize().RemoveDead().ToDfa();
         }
 
-        protected override FA Visit(NotOp op)
-        {
-            var inner = Transform(op.Argument).ToDfa();
-            return inner.ToDfa().Complete().Complement().Minimize().RemoveDead().ToDfa();
-        }
-
         protected override FA Visit(AnyOp op)
         {
             return FA.Any().ToDfa().Minimize().RemoveDead().ToDfa();

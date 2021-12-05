@@ -32,9 +32,9 @@ namespace Six.Rex
             [Conditional("DEBUG")]
             private static void EnsureDistinctTransitions(State state)
             {
-                foreach (var pair in state.Transitions.GlidePairWise())
+                foreach (var (Left, Right) in state.Transitions.GlidePairWise())
                 {
-                    if (pair.Left.Set.Overlaps(pair.Right.Set))
+                    if (Left.Set.Overlaps(Right.Set))
                     {
                         throw new Exception("DFA: some transitions overlap");
                     }
