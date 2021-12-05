@@ -6,3 +6,4 @@ Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 SIXGEN001 | SixGen | Error | CodeGenerator
 SIXGEN002 | SixGen | Error | CodeGenerator
+SIXGEN003 | SixGen | Error | CodeGenerator

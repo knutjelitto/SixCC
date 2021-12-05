@@ -23,12 +23,12 @@ namespace Six.Gen.Ebnf
             builder.Append(str);
         }
 
-        private void Left(Operator op)
+        private void Left()
         {
             Write(LeftAngle);
         }
 
-        private void Right(Operator op)
+        private void Right()
         {
             Write(RightAngle);
         }
@@ -49,9 +49,9 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(AltOp op)
         {
-            Left(op);
+            Left();
             Arguments(op, "|");
-            Right(op);
+            Right();
         }
 
         protected override void Visit(AndOp op)
@@ -90,20 +90,20 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(RangeOp op)
         {
-            Left(op);
+            Left();
             Write(op.Codepoint1.ToString().Esc());
             Write("⤍");
             Write(op.Codepoint2.ToString().Esc());
-            Right(op);
+            Right();
         }
 
         protected override void Visit(DiffOp op)
         {
-            Left(op);
+            Left();
             Walk(op.Arguments[0]);
             Write("-");
             Walk(op.Arguments[1]);
-            Right(op);
+            Right();
         }
 
         protected override void Visit(RefOp op)
@@ -118,7 +118,7 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(SeqOp op)
         {
-            Left(op);
+            Left();
             if (op.Arguments.Count > 0)
             {
                 Arguments(op, "·");
@@ -127,7 +127,7 @@ namespace Six.Gen.Ebnf
             {
                 Write("𝛆");
             }
-            Right(op);
+            Right();
         }
 
         protected override void Visit(StarOp op)

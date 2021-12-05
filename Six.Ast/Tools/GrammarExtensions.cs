@@ -4,21 +4,6 @@
     {
         private const string top = "bot";
 
-        public static IEnumerable<Symbol> Nonterminals(this AstGrammar grammar)
-        {
-            return grammar.Symbols.Where(sym => sym.IsNonterminal);
-        }
-
-        public static IEnumerable<Symbol> Terminals(this AstGrammar grammar)
-        {
-            return grammar.Symbols.Where(sym => sym.IsTerminal);
-        }
-
-        public static IEnumerable<Symbol> Fragments(this AstGrammar grammar)
-        {
-            return grammar.Symbols.Where(sym => sym.IsFragment);
-        }
-
         public static string File(string filename)
         {
             return Path.Combine(Temp.TempPath(top), filename);

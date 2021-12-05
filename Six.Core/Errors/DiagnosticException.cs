@@ -2,11 +2,27 @@
 {
     public class DiagnosticException : Exception
     {
-        public DiagnosticException(Diagnostic diagnostic)
+        public DiagnosticException(params Diagnostic[] diagnostics)
         {
-            Diagnostic = diagnostic;
+            Diagnostics = diagnostics;
         }
 
-        public Diagnostic Diagnostic { get; }
+        public Diagnostic[] Diagnostics { get; }
+
+        public void Report(Writer writer)
+        {
+            foreach (var diagnostic in Diagnostics)
+            {
+                diagnostic.Report(writer);
+            }
+        }
+
+        public void Report()
+        {
+            using (var writer = new Writer(Console.Out))
+            {
+                Report(writer);
+            }
+        }
     }
 }

@@ -2,14 +2,9 @@
 {
     public class StartRuleOp : RuleOp
     {
-        public StartRuleOp(string name) 
-            : base(name)
+        public StartRuleOp(string name, ILocation location) 
+            : base(name, location)
         {
-        }
-
-        public void Set(Operator argument)
-        {
-            base.Set(argument);
         }
     }
 }

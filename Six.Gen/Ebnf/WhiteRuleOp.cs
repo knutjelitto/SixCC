@@ -2,14 +2,9 @@
 {
     public class WhiteRuleOp : RuleOp
     {
-        public WhiteRuleOp(string name)
-            : base(name)
+        public WhiteRuleOp(string name, ILocation location)
+            : base(name, location)
         {
-        }
-
-        public void Set(Operator argument)
-        {
-            base.Set(argument);
         }
     }
 }

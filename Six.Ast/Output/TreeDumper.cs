@@ -86,24 +86,6 @@
             }
         }
 
-        protected override void Visit(NotPredicate not)
-        {
-            writer.WriteLine("not");
-            using (writer.Indent())
-            {
-                base.Visit(not);
-            }
-        }
-
-        protected override void Visit(AndPredicate and)
-        {
-            writer.WriteLine("and");
-            using (writer.Indent())
-            {
-                base.Visit(and);
-            }
-        }
-
         protected override void Visit(Reference reference)
         {
             writer.WriteLine($"→{reference.Name}");

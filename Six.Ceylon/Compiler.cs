@@ -9,7 +9,7 @@ namespace Six.Ceylon
 {
     public class Compiler
     {
-        private Dictionary<FileRef, Compilation> files = new();
+        private readonly Dictionary<FileRef, Compilation> files = new();
 
         public Compiler()
         {

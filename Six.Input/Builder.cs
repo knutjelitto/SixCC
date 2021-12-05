@@ -1,4 +1,5 @@
 ﻿using Six.Ast;
+using Six.Core;
 
 namespace Six.Input
 {
@@ -6,12 +7,12 @@ namespace Six.Input
     {
         public static AstGrammar Build(string name, string content)
         {
-            var source = new Source(name, content);
+            var source = Source.FromString(name, content);
             var lexer = new Lexer(source);
             var tokens = new Tokens(lexer);
             var parser = new Parser(tokens);
             var grammar = parser.Parse();
-            grammar.DumpTree($"{grammar.Name}-tree.txt");
+            grammar.DumpTree($"{grammar.Name}-ast.txt");
 
             return grammar;
         }

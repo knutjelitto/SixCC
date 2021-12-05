@@ -1,4 +1,6 @@
-﻿namespace Six.Runtime
+﻿using Six.Core;
+
+namespace Six.Runtime
 {
     public abstract class ParserCore
     {
@@ -30,14 +32,7 @@
             __Core.__Start.Match(new Context(cursor,
                 success =>
                 {
-                    var elapsed = watch.Elapsed;
-                    var rep = source.LCO(success.Offset);
-                    var lines = source.GetLineNoFromIndex(success.Offset);
-                    var ms = Math.Round(elapsed.TotalMilliseconds);
-                    var cps = Math.Round(success.Offset / elapsed.TotalSeconds, 0);
-                    var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
-                    Console.WriteLine($"OK  #{++successCounter} {__Name} {rep}");
-                    Console.WriteLine($"elapsed: {ms} ms, {cps} cps, {lps} lps");
+                    Report("OK  ", ++successCounter, success.Offset);
                 },
                 failure =>
                 {
@@ -50,15 +45,38 @@
 
             if (successCounter == 0)
             {
+                Report("FAIL", failureCounter, lastfailure.Offset);
+            }
+
+            void Report(string what, int counter, int offset)
+            {
                 var elapsed = watch.Elapsed;
-                var rep = source.LCO(lastfailure.Offset);
-                var lines = source.GetLineNoFromIndex(lastfailure.Offset);
-                var ms = Math.Round(elapsed.TotalMilliseconds);
-                var cps = Math.Round(lastfailure.Offset / elapsed.TotalSeconds, 0);
+                var rep = source.LCO(offset);
+                var lines = source.GetLineNoFromIndex(offset);
+                var ms = Math.Round(elapsed.TotalMilliseconds, 1);
+                var cps = Math.Round(offset / elapsed.TotalSeconds, 0);
                 var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
-                Console.WriteLine($"FAIL#{failureCounter} {__Name} {rep}");
+                Console.WriteLine($"{what}#{counter} {__Name} {rep}");
                 Console.WriteLine($"elapsed: {ms} ms, {cps} cps, {lps} lps");
             }
+        }
+
+        public bool Recognize(string name, string content)
+        {
+            var source = Source.FromString(name, content);
+            var cursor = new Cursor(source, 0);
+            var ok = false;
+
+            __Core.__Start.Match(new Context(cursor,
+                success =>
+                {
+                    ok = true;
+                },
+                failure =>
+                {
+                }));
+
+            return ok;
         }
     }
 }

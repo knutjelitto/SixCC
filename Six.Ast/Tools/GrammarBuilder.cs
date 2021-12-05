@@ -6,14 +6,12 @@
 
         public GrammarBuilder()
         {
-            grammar = new TreeGrammar(string.Empty);
+            grammar = new AstGrammar(string.Empty);
         }
 
         public AstGrammar Grammar(string name)
         {
             Name = name;
-
-            new IsFragmentBuilder().Walk(grammar);
 
             return grammar;
         }
@@ -24,9 +22,9 @@
         {
         }
 
-        public Indefinite Indefinite(ILocation location, string name, Expression expression)
+        public AstSymbol Indefinite(ILocation location, string name, Expression expression)
         {
-            var symbol = new Indefinite(location, name, expression);
+            var symbol = new AstSymbol(location, name, expression);
             grammar.Add(symbol);
             return symbol;
         }
@@ -49,16 +47,6 @@
         public Expression Literal(ILocation location, string text)
         {
             return new Literal(location, text);
-        }
-
-        public Expression Not(ILocation location, Expression expression)
-        {
-            return new NotPredicate(location, expression);
-        }
-
-        public Expression And(ILocation location, Expression expression)
-        {
-            return new AndPredicate(location, expression);
         }
 
         public Expression Token(ILocation location, Expression expression)

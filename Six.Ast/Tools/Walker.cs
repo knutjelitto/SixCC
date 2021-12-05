@@ -52,12 +52,6 @@
                 case Diff expr:
                     Visit(expr);
                     break;
-                case NotPredicate expr:
-                    Visit(expr);
-                    break;
-                case AndPredicate expr:
-                    Visit(expr);
-                    break;
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -107,25 +101,11 @@
             Walk(zeroOrOne.Expression);
         }
 
-        protected virtual void Visit(NotPredicate not)
-        {
-            Walk(not.Expression);
-        }
-
-        protected virtual void Visit(AndPredicate and)
-        {
-            Walk(and.Expression);
-        }
-
         protected virtual void Visit(Reference reference)
         {
         }
 
         protected virtual void Visit(Any any)
-        {
-        }
-
-        protected virtual void Visit(Undefined undefined)
         {
         }
 

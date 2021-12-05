@@ -14,13 +14,5 @@
         public Expression Expression { get; }
 
         public override bool IsSimple => true;
-        public override bool IsCompact => Expression.IsCompact;
-        public virtual bool IsTerminal => this is Terminal || IsCompact && !IsFragment;
-        public virtual bool IsNonterminal => this is Nonterminal || (!IsTerminal && !IsFragment);
-
-        /// <summary>
-        /// true, if this expression is only used in terminal rules
-        /// </summary>
-        public bool IsFragment { get; set; }
     }
 }

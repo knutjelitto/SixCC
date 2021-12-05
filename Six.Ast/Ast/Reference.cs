@@ -7,9 +7,6 @@
         {
         }
 
-        public Symbol Symbol => Grammar[Name];
-
         public override bool IsSimple => true;
-        public override bool IsCompact => false;
     }
 }

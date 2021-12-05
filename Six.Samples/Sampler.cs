@@ -19,27 +19,55 @@ namespace Six.Samples
             return LoadAll(name => name.EndsWith(".e"));
         }
 
+        public static IEnumerable<Sample> LoadJson()
+        {
+#if true
+            return LoadAll(name => name.EndsWith(".json")).Where(s => !s.Name.StartsWith("_stack_"));
+#else
+            var root = "d:/Temp/JSONTestSuite/test_parsing";
+
+            foreach (var filepath in Directory.EnumerateFiles(root, "*.json"))
+            {
+                if (Path.GetFileName(filepath).StartsWith("_stack_"))
+                {
+                    continue;
+                }
+                yield return LoadFile(filepath);
+            }
+#endif
+        }
+
         public static IEnumerable<Sample> LoadAll(Func<string, bool> filter)
         {
             var assembly = typeof(Sampler).Assembly;
 
-            foreach (var name in assembly.GetManifestResourceNames())
+            foreach (var resourceName in assembly.GetManifestResourceNames())
             {
-                if (filter(name))
+                if (filter(resourceName))
                 {
-                    yield return LoadEmbedded(assembly, name);
+                    var name = resourceName.Substring("Six.Samples.".Length);
+                    name = name.Substring(name.IndexOf('.') + 1);
+                    yield return LoadEmbedded(assembly, resourceName, name);
                 }
             }
         }
 
-        private static Sample LoadEmbedded(Assembly assembly, string name)
+        private static Sample LoadEmbedded(Assembly assembly, string resourceName, string name)
         {
             var content = string.Empty;
-            using (var stream = assembly.GetManifestResourceStream(name)!)
+            using (var stream = assembly.GetManifestResourceStream(resourceName)!)
             using (var reader = new StreamReader(stream))
             {
                 content = reader.ReadToEnd();
             }
+
+            return new Sample(name, content);
+        }
+
+        private static Sample LoadFile(string filepath)
+        {
+            var content = File.ReadAllText(filepath);
+            var name = Path.GetFileName(filepath);
 
             return new Sample(name, content);
         }

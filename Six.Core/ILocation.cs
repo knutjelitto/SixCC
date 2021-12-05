@@ -2,7 +2,7 @@
 {
     public interface ILocation
     {
-        ISource Source { get; }
+        Source Source { get; }
         int Offset { get; }
         int Length { get; }
 

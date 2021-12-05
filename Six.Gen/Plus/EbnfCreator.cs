@@ -1,9 +1,13 @@
-﻿namespace Six.Gen.Ebnf
+﻿using Six.Core.Errors;
+using Six.Input;
+
+namespace Six.Gen.Ebnf
 {
     public class EbnfCreator
     {
-        private UniqueList<string, Operator> Inners;
-        private OpNamer Namer;
+        private readonly OpNamer Namer;
+        private readonly UniqueList<string, Operator> Inners;
+        private readonly List<RefOp> References;
 
         public EbnfCreator(Ast.AstGrammar grammar)
         {
@@ -11,31 +15,32 @@
             Ebnf = new EbnfGrammar(grammar.Name);
             Namer = new OpNamer();
             Inners = new UniqueList<string, Operator>(op => Namer.NameOf(op));
+            References = new List<RefOp>();
         }
 
         public Ast.AstGrammar Grammar { get; }
-        public EbnfGrammar Ebnf { get; }
+        public EbnfGrammar Ebnf { get; private set; }
 
         public EbnfGrammar Create()
         {
-            var startRule = Add(new StartRuleOp("%start"));
-            var whiteRule = Add(new WhiteRuleOp("%whitespace"));
+            var startRule = Add(new StartRuleOp("%start", Location.Nowhere));
+            var whiteRule = Add(new WhiteRuleOp("%whitespace", Location.Nowhere));
 
             var startSymbol = Grammar.StartRule;
             if (startSymbol != null)
             {
-                startRule.Set(Transform(startSymbol.Expression));
+                startRule.Set(startSymbol.Location, Transform(startSymbol.Expression));
             }
             else
             {
                 var defaultStart = Grammar.Symbols.First();
-                startRule.Set(Add(new RefOp(Ebnf, defaultStart.Name)));
+                startRule.Set(Add(new RefOp(Ebnf, Location.Nowhere, defaultStart.Name)));
             }
 
             var whiteSymbol = Grammar.WhitespaceRule;
             if (whiteSymbol != null)
             {
-                whiteRule.Set(Transform(whiteSymbol.Expression));
+                whiteRule.Set(whiteSymbol.Location, Transform(whiteSymbol.Expression));
             }
             else
             {
@@ -52,7 +57,15 @@
                 var name = symbol.Name;
                 var transformed = Transform(symbol.Expression);
 
-                Add(new RuleOp(name, transformed));
+                AddNamedRule(new RuleOp(name, symbol.Location, transformed));
+            }
+
+            foreach (var reference in References)
+            {
+                if (!Inners.Contains(reference.Name))
+                {
+                    throw new DiagnosticException(new SemanticError(reference.Location, $"can't reference undefined rule '{reference.Name}'"));
+                }
             }
 
             var id = 0;
@@ -64,9 +77,23 @@
                 Ebnf.Add(op);
             }
 
-            //new RexTransformer().Transform(whiteRule);
+            Ebnf = new RexTransformer(Ebnf).Transform();
 
             return Ebnf;
+        }
+
+        private RuleOp AddNamedRule(RuleOp rule)
+        {
+            if (Inners.TryGetValue(rule.Name, out var op))
+            {
+                var already = (RuleOp)op;
+                var diagnostic1 = new SemanticError(rule.Location, $"rule '{rule.Name}' already defined elsewhere");
+                var diagnostic2 = new SemanticError(already.Location, $"rule '{already.Name}' defined here");
+                throw new DiagnosticException(diagnostic1, diagnostic2);
+            }
+            Inners.Add(rule);
+
+            return rule;
         }
 
         private T Add<T>(T newOp)
@@ -78,6 +105,11 @@
             {
                 op = newOp;
                 Inners.Add(op);
+
+                if (op is RefOp refOp)
+                {
+                    References.Add(refOp);
+                }
             }
 
             return (T)op;
@@ -101,10 +133,6 @@
                         return Visit(expr);
                     case Ast.OneOrMore expr:
                         return Visit(expr);
-                    case Ast.NotPredicate expr:
-                        return Visit(expr);
-                    case Ast.AndPredicate expr:
-                        return Visit(expr);
                     case Ast.Reference expr:
                         return Visit(expr);
                     case Ast.Literal expr:
@@ -116,8 +144,6 @@
                     case Ast.Range expr:
                         return Visit(expr);
                     case Ast.Diff expr:
-                        return Visit(expr);
-                    case Ast.Undefined expr:
                         return Visit(expr);
                     default:
                         throw new NotImplementedException($"can't transform expression of type {expression.GetType()}");
@@ -169,29 +195,15 @@
             return new OptionalOp(Transform(zeroOrOne.Expression));
         }
 
-        private Operator Visit(Ast.NotPredicate not)
-        {
-            return new NotOp(Transform(not.Expression));
-        }
-
-        private Operator Visit(Ast.AndPredicate and)
-        {
-            return new AndOp(Transform(and.Expression));
-        }
-
         private Operator Visit(Ast.Reference reference)
         {
-            return new RefOp(Ebnf, reference.Name);
+            var op = new RefOp(Ebnf, reference.Location, reference.Name);
+            return op;
         }
 
         private Operator Visit(Ast.Any any)
         {
             return new AnyOp();
-        }
-
-        private Operator Visit(Ast.Undefined undefined)
-        {
-            throw new NotImplementedException();
         }
 
         private Operator Visit(Ast.Literal literal)
@@ -220,10 +232,10 @@
             throw new NotImplementedException();
         }
 
-        private Operator Visit(Ast.Diff range)
+        private Operator Visit(Ast.Diff diff)
         {
-            var first = Transform(range.One);
-            var second = Transform(range.Two);
+            var first = Transform(diff.One);
+            var second = Transform(diff.Two);
 
             return new DiffOp(first, second);
         }

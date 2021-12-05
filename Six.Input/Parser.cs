@@ -193,6 +193,10 @@ namespace Six.Input
 
         private Token Match(TKind kind)
         {
+            if (kind == TKind.Semi && Current.Kind != TKind.Semi)
+            {
+                Assert(true);
+            }
             if (Current.Kind == kind)
             {
                 var token = Current;

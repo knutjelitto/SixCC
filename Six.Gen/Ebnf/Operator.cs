@@ -9,14 +9,21 @@
 
         public Operator(IEnumerable<Operator> arguments)
         {
+            Location = Six.Input.Location.Nowhere;
             Arguments = arguments.ToList();
         }
 
-        protected void Set(params Operator[] arguments)
+        public void Set(params Operator[] arguments)
         {
             Arguments = arguments.ToList();
         }
 
+        public void Set(ILocation location)
+        {
+            Location = location;
+        }
+
+        public ILocation Location { get; private set; }
         public int Id { get; set; } = -1;
         public List<Operator> Arguments { get; protected set; }
         public Operator Argument
@@ -36,8 +43,6 @@
                 op.Dump(writer);
             }
         }
-
-        //protected virtual string DumpHead => GetType().Name;
         protected abstract string DumpHead { get; }
 
         public virtual void Dump(Writer writer)

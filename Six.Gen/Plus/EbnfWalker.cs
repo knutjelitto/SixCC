@@ -68,7 +68,7 @@
         {
             foreach (var arg in op.Arguments)
             {
-                Walk(op);
+                Walk(arg);
             }
         }
 

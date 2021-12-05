@@ -1,4 +1,6 @@
-﻿namespace Six.Runtime
+﻿using Six.Core;
+
+namespace Six.Runtime
 {
     public struct Cursor : IEquatable<Cursor>
     {

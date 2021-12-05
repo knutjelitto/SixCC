@@ -58,7 +58,7 @@ namespace Six.Gen
                 return "__" + Cap(identifier.Substring(1));
             }
 
-            var parts = identifier.Split('-');
+            var parts = identifier.Split('-', '_');
 
             return "_" + string.Join(string.Empty, parts.Take(1).Concat(parts.Skip(1).Select(part => Cap(part))));
         }

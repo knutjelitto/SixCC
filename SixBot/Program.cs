@@ -1,11 +1,13 @@
 ﻿using Six.Gen.Ebnf;
 using Six.Ast;
 using Six.Samples;
+using Six.Core.Errors;
 using SixBot;
 
-Check<SixParser>(0, Sampler.LoadSix());
-Check<TParser>(6, Sampler.LoadT());
+Check<SixParser>(1, Sampler.LoadSix());
+Check<TParser>(0, Sampler.LoadT());
 Check<EParser>(0, Sampler.LoadE());
+//CheckJson(Sampler.LoadJson());
 Console.WriteLine();
 
 void Check<ParserType>(int which, IEnumerable<Sample> samples)
@@ -21,44 +23,83 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     {
         count++;
 
-        var name = Path.GetExtension(Path.GetFileNameWithoutExtension(sample.Name))[1..];
-        Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {name}");
-        if (which == count)
+        Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name}");
+        if (which == count || true)
         {
-            new ParserType().Match(name, sample.Content);
+            for (var i = 0; i < 4; ++i)
+            {
+                if (!new ParserType().Recognize(sample.Name, sample.Content))
+                {
+                    new ParserType().Match(sample.Name, sample.Content);
+                    return;
+                }
+            }
+            new ParserType().Match(sample.Name, sample.Content);
         }
     }
 }
 
-var grammars = new Six.Input.Checker().Run().ToList();
-
-foreach (var grammar in grammars)
+#pragma warning disable CS8321 // Local function is declared but never used
+void CheckJson(IEnumerable<Sample> samples)
 {
-    if (grammar == null)
+    var count = 0;
+    foreach (var sample in samples)
     {
-        continue;
-    }
+        count++;
 
-    Console.WriteLine(grammar.Name);
+        Console.Write($"JSON {count,3} check - ");
+        var parser = new JsonParser();
+        bool fail;
+        bool ok;
+        if (ok = parser.Recognize(sample.Name, sample.Content))
+        {
+            fail = sample.Name.StartsWith("n_");
+            Outcome();
+        }
+        else
+        {
+            fail = sample.Name.StartsWith("y_");
+            Outcome();
+        }
+        Console.WriteLine(sample.Name);
 
-    var creator = new Six.Gen.Ebnf.EbnfCreator(grammar);
-    var transformed = creator.Create();
+        if (fail)
+        {
+            break;
+        }
 
-    var white = transformed.WhitespaceRule;
-    new RexTransformer(transformed).Transform();
-
-    using (var writer = $"{grammar.Name}-ebnf.txt".Writer())
-    {
-        new EbnfDumper(transformed).Dump(writer);
+        void Outcome()
+        {
+            if (!sample.Name.StartsWith("i_"))
+            {
+                ok = sample.Name.StartsWith("y_") && ok || sample.Name.StartsWith("n_") && !ok;
+            }
+            Console.Write(ok ? "OK   " : "FAIL ");
+        }
     }
 }
+#pragma warning restore CS8321 // Local function is declared but never used
 
 try
 {
+    foreach (var sample in Sampler.LoadSix())
+    {
+        Console.WriteLine(sample.Name);
+
+        var ast = Six.Input.Builder.Build(sample.Name, sample.Content);
+        var ebnf = new Six.Gen.Ebnf.EbnfCreator(ast).Create();
+
+        using (var writer = $"{ast.Name}-ebnf.txt".Writer())
+        {
+            new EbnfDumper(ebnf).Dump(writer);
+        }
+    }
+
 }
-catch (Exception ex)
+catch (DiagnosticException ex)
 {
-    Console.WriteLine(ex.ToString());
+    Console.WriteLine("=== errors ===");
+    ex.Report();
 }
 
 Console.Write("any key ... ");

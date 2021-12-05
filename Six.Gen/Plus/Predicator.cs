@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    internal class Predicator : EbnfWalker
+    internal abstract class Predicator : EbnfWalker
     {
         protected Predicator(Func<Operator, bool> getter, Action<Operator, bool> setter)
         {

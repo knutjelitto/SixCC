@@ -8,19 +8,20 @@ namespace Six.Input
     internal class Lexer
     {
         private const string eofInLiteral = "premature eof in string literal";
+        private const string illegalInLiteral = "illegal character '{0}' in string literal";
         private const string shortLiteral = "empty string literal";
         private const string incompleteEscape = "incomplete escape sequence";
-        private const string illegalCharacter = "illegal character";
+        private const string illegalCharacter = "illegal character '{0}'";
         private const string illegalUnicodeEscape = "illegal unicode escape";
 
-        public Lexer(ISource source)
+        public Lexer(Source source)
         {
             Source = source;
             start = 0;
             offset = 0;
         }
 
-        public ISource Source { get; }
+        public Source Source { get; }
 
         private int start = 0;
         private int offset = 0;
@@ -86,7 +87,7 @@ namespace Six.Input
                         }
                         else
                         {
-                            Error(illegalCharacter);
+                            Error(illegalCharacter, CharRep.InText(Current));
                         }
                         break;
                 }
@@ -94,9 +95,9 @@ namespace Six.Input
             return Token(TKind.EOF, 0);
         }
 
-        private void Error(string message)
+        private void Error(string message, params object[] args)
         {
-            throw new DiagnosticException(new SyntaxError(GetLocation(), message));
+            throw new DiagnosticException(new SyntaxError(GetLocation(), string.Format(message, args)));
         }
 
         private Token Special()
@@ -114,7 +115,7 @@ namespace Six.Input
             {
                 offset += 1;
             }
-            while (More && Current == '-' && OneMore && Letter(Next))
+            while (More && (Current == '-' || Current == '_') && OneMore && Letter(Next))
             {
                 offset += 2;
                 while (More && LetterOrDigit(Current))
@@ -138,14 +139,14 @@ namespace Six.Input
             return 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || c == 'ε';
         }
 
-        private static bool Digit(int c)
+        private static bool DecimalDigit(int c)
         {
             return '0' <= c && c <= '9';
         }
 
         private static bool LetterOrDigit(int c)
         {
-            return Letter(c) || Digit(c);
+            return Letter(c) || DecimalDigit(c);
         }
 
         private static bool HexDigit(int c)
@@ -263,6 +264,11 @@ namespace Six.Input
                         }
                         break;
                     default:
+                        if (char.IsControl((char)Current))
+                        {
+                            start = offset;
+                            Error(illegalInLiteral, CharRep.InText(Current));
+                        }
                         payload.Append(char.ConvertFromUtf32(Current));
                         offset += 1;
                         break;
@@ -301,7 +307,6 @@ namespace Six.Input
                         break;
                     case '\n':
                         offset += 1;
-                        Source.IndexNewline(offset);
                         break;
                     case '/' when OneMore && Next == '/':
                         offset += 2;
@@ -310,11 +315,13 @@ namespace Six.Input
                             if (Current == '\n')
                             {
                                 offset += 1;
-                                Source.IndexNewline(offset);
                                 break;
                             }
                             offset += 1;
                         }
+                        break;
+                    case '/' when OneMore && Next == '*':
+                        SkipBlockComment();
                         break;
                     default:
                         done = true;
@@ -322,6 +329,31 @@ namespace Six.Input
                 }
             }
             start = offset;
+
+            void SkipBlockComment()
+            {
+                offset += 2;
+                while (More)
+                {
+                    if (More && Current == '*')
+                    {
+                        offset += 1;
+                        if (More && Current == '/')
+                        {
+                            offset += 1;
+                            break;
+                        }
+                        else
+                        {
+                            offset += 1;
+                        }
+                    }
+                    if (More)
+                    {
+                        offset += 1;
+                    }
+                }
+            }
         }
 
         private bool More => offset < Source.Length;

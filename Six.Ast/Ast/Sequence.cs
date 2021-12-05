@@ -16,6 +16,5 @@
         public List<Expression> Expressions { get; }
 
         public override bool IsSimple => Expressions.Count <= 1;
-        public override bool IsCompact => Expressions.Count == 1 && Expressions[0].IsCompact;
     }
 }

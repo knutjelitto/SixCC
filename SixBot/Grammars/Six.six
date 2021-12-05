@@ -1,0 +1,154 @@
+﻿grammar Six;
+
+%start
+    : grammar
+    ;
+
+%whitespace
+    : skip
+    ;
+
+grammar
+    : 'lexer'? 'grammar' identifier ';' rules
+    ;
+
+rules
+    : rule+
+    ;
+
+rule
+    : rule-name ':' rule-body ';'
+    ;
+
+rule-body
+    : expression
+    | '<' expression '>'
+    ;
+
+expression
+    : alternation
+    ;
+
+alternation
+    : sequence ('|' sequence)*
+    ;
+
+sequence
+    : element*
+    ;
+
+element
+    : repeat-or-primary ('..' repeat-or-primary)?
+    | repeat-or-primary ('-' repeat-or-primary)?
+    ;
+
+repeat-or-primary
+    : primary ebnf?
+    ;
+
+ebnf
+    : '*' | '+' | '?'
+    ;
+
+primary
+    : identifier
+    | string
+    | '.'
+    | '(' expression ')'
+    ;
+
+rule-name
+    : < '%'? identifier >
+    ;
+
+identifier
+    : < id-begin id-continue* >
+    ;
+
+id-begin
+    : letter letter-or-digit*
+    ;
+
+id-continue
+    : ('-'|'_') letter-or-digit+
+    ;
+
+letter
+    : 'a' .. 'z'
+    | 'A' .. 'Z'
+    ;
+
+digit
+    : '0' .. '9'
+    ;
+
+letter-or-digit
+    : letter
+    | digit
+    ;
+
+string
+    : < '\'' character* '\'' >
+    ;
+
+character
+    : (. - ('\\' | '\''))
+    | '\\' escape
+    ;
+
+escape
+    : '\''
+    | '\\'
+    | 'a'
+    | 'b'
+    | 'f'
+    | 'n'
+    | 't'
+    | 'r'
+    | 'v'
+    | 'x' hex hex
+    | 'u{' hex? hex? hex? hex? hex? hex '}'
+    ;
+
+hex
+    : digit
+    | 'A' .. 'F'
+    | 'a' .. 'f'
+    ;
+
+skip
+    : < (space | line-end | comment)* >
+    ;
+
+space
+    : ' '
+    | '\t'
+    ;
+
+line-end
+    : '\r' '\n'
+    | '\n'
+    | '\r'
+    | '\u{2028}'
+    | '\u{2029}'
+    ;
+
+line-ender
+    : '\n'
+    | '\r'
+    | '\u{2028}'
+    | '\u{2029}'
+    ;
+
+comment
+    : line-comment
+    | block-comment
+    ;
+
+line-comment
+    : '//' (. - line-end)* line-end?
+    ;
+
+block-comment
+    : '/*' ((. - '*') | ('*' (. - '/')))* '*/'
+    ;
