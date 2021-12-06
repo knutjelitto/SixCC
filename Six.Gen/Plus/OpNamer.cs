@@ -56,7 +56,7 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(AnyOp op)
         {
-            Write("⚬");
+            Write("·");
         }
 
         protected override void Visit(CharacterOp op)
@@ -109,7 +109,7 @@ namespace Six.Gen.Ebnf
             Left();
             if (op.Arguments.Count > 0)
             {
-                Arguments(op, "·");
+                Arguments(op, "»");
             }
             else
             {

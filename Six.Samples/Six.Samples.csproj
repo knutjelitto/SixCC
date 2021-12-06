@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Error\1.error" />
 		<None Remove="E\1.e" />
 		<None Remove="E\2.e" />
 		<None Remove="E\3.e" />
@@ -348,6 +349,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="Error\1.error" />
 		<EmbeddedResource Include="E\1.e" />
 		<EmbeddedResource Include="E\2.e" />
 		<EmbeddedResource Include="E\3.e" />

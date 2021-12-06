@@ -2,8 +2,8 @@
 {
     public sealed class AltOp : Operator
     {
-        public AltOp(IEnumerable<Operator> arguments)
-            : base(arguments)
+        public AltOp(ILocation location, IEnumerable<Operator> arguments)
+            : base(location, arguments)
         {
         }
 

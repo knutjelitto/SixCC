@@ -2,8 +2,8 @@
 {
     public sealed class OptionalOp : Operator
     {
-        public OptionalOp(Operator argument)
-            : base(argument)
+        public OptionalOp(ILocation location, Operator argument)
+            : base(location, argument)
         {
         }
 

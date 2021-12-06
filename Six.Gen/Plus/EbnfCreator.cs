@@ -33,7 +33,7 @@ namespace Six.Gen.Ebnf
             }
             else
             {
-                var defaultStart = Grammar.Symbols.First();
+                var defaultStart = Grammar.Symbols.First(s => !s.Name.StartsWith("%"));
                 startRule.Set(Add(new RefOp(Ebnf, Location.Nowhere, defaultStart.Name)));
             }
 
@@ -44,7 +44,7 @@ namespace Six.Gen.Ebnf
             }
             else
             {
-                whiteRule.Set(Add(new SeqOp()));
+                whiteRule.Set(Add(new SeqOp(Location.Nowhere)));
             }
 
             foreach (var symbol in Grammar.Symbols)
@@ -161,7 +161,7 @@ namespace Six.Gen.Ebnf
             }
             else
             {
-                return new AltOp(alt.Expressions.Select(e => Transform(e)));
+                return new AltOp(alt.Location, alt.Expressions.Select(e => Transform(e)));
             }
         }
 
@@ -177,23 +177,23 @@ namespace Six.Gen.Ebnf
             }
             else
             {
-                return new SeqOp(transformed);
+                return new SeqOp(seq.Location, transformed);
             }
         }
 
         private Operator Visit(Ast.ZeroOrMore zeroOrMore)
         {
-            return new StarOp(Transform(zeroOrMore.Expression));
+            return new StarOp(zeroOrMore.Location, Transform(zeroOrMore.Expression));
         }
 
         private Operator Visit(Ast.OneOrMore oneOrMore)
         {
-            return new PlusOp(Transform(oneOrMore.Expression));
+            return new PlusOp(oneOrMore.Location, Transform(oneOrMore.Expression));
         }
 
         private Operator Visit(Ast.ZeroOrOne zeroOrOne)
         {
-            return new OptionalOp(Transform(zeroOrOne.Expression));
+            return new OptionalOp(zeroOrOne.Location, Transform(zeroOrOne.Expression));
         }
 
         private Operator Visit(Ast.Reference reference)
@@ -204,7 +204,7 @@ namespace Six.Gen.Ebnf
 
         private Operator Visit(Ast.Any any)
         {
-            return new AnyOp();
+            return new AnyOp(any.Location);
         }
 
         private Operator Visit(Ast.Literal literal)
@@ -214,9 +214,9 @@ namespace Six.Gen.Ebnf
 
             if (cps.Count == 1)
             {
-                return new CharacterOp(cps[0]);
+                return new CharacterOp(literal.Location, cps[0]);
             }
-            return new StringOp(literal.Text);
+            return new StringOp(literal.Location, literal.Text);
         }
 
         private Operator Visit(Ast.Range range)
@@ -226,7 +226,7 @@ namespace Six.Gen.Ebnf
 
             if (start is CharacterOp cp1 && end is CharacterOp cp2)
             {
-                return new RangeOp(cp1.Codepoint, cp2.Codepoint);
+                return new RangeOp(range.Location, cp1.Codepoint, cp2.Codepoint);
             }
 
             Assert(start is CharacterOp && end is CharacterOp);
@@ -238,12 +238,12 @@ namespace Six.Gen.Ebnf
             var first = Transform(diff.One);
             var second = Transform(diff.Two);
 
-            return new DiffOp(first, second);
+            return new DiffOp(diff.Location, first, second);
         }
 
-        private Operator Visit(Ast.Token compact)
+        private Operator Visit(Ast.Token token)
         {
-            return new TokenOp(Transform(compact.Expression));
+            return new TokenOp(token.Location, Transform(token.Expression));
         }
     }
 }

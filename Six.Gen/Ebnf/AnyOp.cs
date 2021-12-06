@@ -2,7 +2,8 @@
 {
     public sealed class AnyOp : Operator
     {
-        public AnyOp()
+        public AnyOp(ILocation location)
+            : base(location)
         {
         }
 

@@ -62,10 +62,11 @@ namespace Six.Gen
                                 return name.Substring(0, name.Length - 2);
                             }
 
-                            void NonRule(Operator op, string? extraArguments = null)
+                            void NonRule(Operator op, string? className = null, string? extra = null)
                             {
-                                var extra = extraArguments == null ? ");" : $", {extraArguments});";
-                                wl($"new {ClassName(op)}(this, {op.Id}, {namer.NameOf(op).CsString()}{extra}");
+                                var arguments = extra == null ? ");" : $", {extra});";
+                                className = className ?? ClassName(op);
+                                wl($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
                             }
 
                             foreach (var rule in grammar.Rules)
@@ -84,14 +85,17 @@ namespace Six.Gen
                                     case RefOp op:
                                         wl($"{op.RuleId()};");
                                         break;
+                                    case DiffOp op when op.CodepointSet != null:
+                                        NonRule(op, className: "Set", extra: dfaGenerator.DfaSet(op.CodepointSet));
+                                        break;
                                     case CharacterOp op:
-                                        NonRule(op, $"{(int)op.Codepoint}");
+                                        NonRule(op, extra: $"{(int)op.Codepoint}");
                                         break;
                                     case RangeOp op:
-                                        NonRule(op, $"{(int)op.Codepoint1}, {(int)op.Codepoint2}");
+                                        NonRule(op, extra: $"{(int)op.Codepoint1}, {(int)op.Codepoint2}");
                                         break;
                                     case StringOp op:
-                                        NonRule(op, $"{op.Text.CsString()}");
+                                        NonRule(op, extra: $"{op.Text.CsString()}");
                                         break;
                                     default:
                                         NonRule(inner);

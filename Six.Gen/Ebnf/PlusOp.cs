@@ -2,8 +2,8 @@
 {
     public sealed class PlusOp : Operator
     {
-        public PlusOp(Operator argument)
-            : base(argument)
+        public PlusOp(ILocation location, Operator argument)
+            : base(location, argument)
         {
         }
 

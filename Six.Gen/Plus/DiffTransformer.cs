@@ -17,16 +17,18 @@ namespace Six.Gen.Ebnf
             return Grammar;
         }
 
-        protected override void Visit(DiffOp op)
+        protected override void Visit(DiffOp diff)
         {
-            var transformer = new SetTransformer(Grammar, op, Error);
+            var transformer = new SetTransformer(Grammar, diff, Error);
             var set = transformer.Transform();
+            diff.Set(set);
 
             DiagnosticException Error(Operator op)
             {
-                var name = new OpNamer().NameOf(op);
-                var diagnostic = new SemanticError(op.Location, $"can't convert '{name}' to codepoint set");
-                return new DiagnosticException(diagnostic);
+                var namer = new OpNamer();
+                var diagnostic1 = new SemanticError(op.Location, $"can't convert {namer.NameOf(op)} to codepoint set");
+                var diagnostic2 = new SemanticError(diff.Location, $"can't convert {namer.NameOf(diff)} to codepoint set");
+                return new DiagnosticException(diagnostic1, diagnostic2);
             }
         }
 

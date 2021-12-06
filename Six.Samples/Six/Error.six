@@ -1,3 +1,24 @@
 ﻿grammar Error;
 
-A: A;
+%whitespace
+    : skip
+    ;
+
+A   : ^'a'
+    ;
+
+hidden
+    : ' '
+    | '\t'
+    | '\r'
+    | '\n'
+    | comment
+    ;
+
+skip
+    : hidden*
+    ;
+
+comment
+    : '/*' (^'*' | ('*' ^'/'))* '*/'
+    ;

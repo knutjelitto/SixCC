@@ -3,10 +3,10 @@
     public sealed class RefOp : Operator
     {
         public RefOp(EbnfGrammar grammar, ILocation location, string name)
+            : base(location)
         {
             Grammar = grammar;
             Name = name;
-            Set(location);
         }
 
         public EbnfGrammar Grammar { get; }

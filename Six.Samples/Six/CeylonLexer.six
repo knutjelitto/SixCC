@@ -121,16 +121,21 @@ LineBreak
     | NewlineCharacter
     ;
 
+LineBreakCharacter
+    : CarriageReturnCharacter
+    | NewlineCharacter
+    ;
+
 Whitespace
     :   (' ' | '\r' | '\n')+
     ;
 
 SingleLineComment
-    : ('//'|'#!') (. - LineBreak)* LineBreak?
+    : ('//'|'#!') (. - LineBreakCharacter)* LineBreak?
     ;   
 
 MultiLineComment
-    : '/*' (. - '*/')* '*/'
+    : '/*' (^'*' | '*' ^'/')* '*/'
     ;
 
 Space

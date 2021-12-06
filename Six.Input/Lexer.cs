@@ -60,12 +60,11 @@ namespace Six.Input
                         return Token(TKind.Comma);
                     case '|':
                         return Token(TKind.Alter);
+                    case '^':
+                    case '¬':
+                        return Token(TKind.Not);
                     case '?':
                         return Token(TKind.Option);
-                    case '!':
-                        return Token(TKind.Not);
-                    case '&':
-                        return Token(TKind.And);
                     case '*':
                         return Token(TKind.Star);
                     case '+':
@@ -302,6 +301,7 @@ namespace Six.Input
                 switch(Current)
                 {
                     case ' ':
+                    case '\t':
                     case '\r':
                         offset += 1;
                         break;

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Diagnostics.Debug;
-
-namespace Six.Core
+﻿namespace Six.Core
 {
     public class Integers : IEnumerable<int>, IEquatable<Integers>
     {
-        public static Integers Empty => new Integers();
-        public static Integers Any => new Integers(UnicodeSets.Any());
+        public static Integers Empty => new();
+        public static Integers Any => new(UnicodeSets.Any());
 
         private Integers(Interval range)
             : this(Enumerable.Repeat(range, 1))

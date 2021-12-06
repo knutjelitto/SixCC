@@ -55,6 +55,7 @@ primary
     | string
     | '.'
     | '(' expression ')'
+    | '^' primary
     ;
 
 rule-name
@@ -146,9 +147,9 @@ comment
     ;
 
 line-comment
-    : '//' (. - line-end)* line-end?
+    : '//' (. - line-ender)* line-end?
     ;
 
 block-comment
-    : '/*' ((. - '*') | ('*' (. - '/')))* '*/'
+    : '/*' (^'*' | '*' ^'/')* '*/'
     ;

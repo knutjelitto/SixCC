@@ -2,8 +2,8 @@
 {
     public sealed class StarOp : Operator
     {
-        public StarOp(Operator argument)
-            : base(argument)
+        public StarOp(ILocation location, Operator argument)
+            : base(location, argument)
         {
         }
 

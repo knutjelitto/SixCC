@@ -2,8 +2,8 @@
 {
     public sealed class TokenOp : Operator
     {
-        public TokenOp(Operator argument)
-            : base(argument)
+        public TokenOp(ILocation location, Operator argument)
+            : base(location, argument)
         {
         }
 

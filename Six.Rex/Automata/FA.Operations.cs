@@ -11,7 +11,7 @@ namespace Six.Rex
 
                 foreach (var state in dfa.States)
                 {
-                    var all = new Integers();
+                    var all = Integers.Empty;
                     var sum = 0;
                     foreach (var transition in state.Transitions)
                     {

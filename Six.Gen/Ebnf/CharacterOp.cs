@@ -4,7 +4,8 @@ namespace Six.Gen.Ebnf
 {
     public sealed class CharacterOp : Operator
     {
-        public CharacterOp(Codepoint codepoint)
+        public CharacterOp(ILocation location, Codepoint codepoint)
+            : base(location)
         {
             Codepoint = codepoint;
         }

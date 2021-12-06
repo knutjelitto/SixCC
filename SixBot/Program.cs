@@ -7,6 +7,7 @@ using SixBot;
 Check<SixParser>(1, Sampler.LoadSix());
 Check<TParser>(0, Sampler.LoadT());
 Check<EParser>(0, Sampler.LoadE());
+Check<ErrorParser>(0, Sampler.LoadError());
 //CheckJson(Sampler.LoadJson());
 Console.WriteLine();
 
@@ -26,7 +27,7 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
         Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name}");
         if (which == count || true)
         {
-            for (var i = 0; i < 4; ++i)
+            for (var i = 0; i < 0; ++i)
             {
                 if (!new ParserType().Recognize(sample.Name, sample.Content))
                 {

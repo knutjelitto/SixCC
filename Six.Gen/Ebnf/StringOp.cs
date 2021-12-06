@@ -4,7 +4,8 @@ namespace Six.Gen.Ebnf
 {
     public sealed class StringOp : Operator
     {
-        public StringOp(string text)
+        public StringOp(ILocation location, string text)
+            : base(location)
         {
             Text = text;
         }

@@ -64,6 +64,11 @@
             return new Diff(location, left, right);
         }
 
+        public Expression Not(ILocation location, Expression expression)
+        {
+            return new Diff(location, Any(location), expression);
+        }
+
         public Expression ZeroOrMore(ILocation location, Expression expression)
         {
             return new ZeroOrMore(location, expression);

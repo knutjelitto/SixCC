@@ -5,16 +5,15 @@ namespace Six.Gen.Ebnf
     public class RuleOp : Operator
     {
         public RuleOp(string name, ILocation location, Operator argument)
-            : base(argument)
+            : base(location, argument)
         {
             Name = name;
-            Set(location);
         }
 
         public RuleOp(string name, ILocation location)
+            : base(location)
         {
             Name = name;
-            Set(location);
         }
 
         public void Set(ILocation location, Operator argument)

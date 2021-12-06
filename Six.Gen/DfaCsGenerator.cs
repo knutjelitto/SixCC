@@ -76,16 +76,21 @@ namespace Six.Gen
                                 wl($",");
                             }
                             more = true;
-                            w($"new DfaTrans({name}.States[{transition.TargetId}], new DfaSet({Intervals(transition)}))");
+                            w($"new DfaTrans({name}.States[{transition.TargetId}], {DfaSet(transition.Set)})");
                         }
                         wl();
                     });
             }
         }
 
-        private string Intervals(Transition transition)
+        public string DfaSet(Integers set)
         {
-            return string.Join(", ", transition.Set.GetIntervals().Select(i => $"new Interval({i.Min}, {i.Max})"));
+            return $"new DfaSet({Intervals(set)})";
+        }
+
+        private string Intervals(Integers set)
+        {
+            return string.Join(", ", set.GetIntervals().Select(i => $"new Interval({i.Min}, {i.Max})"));
         }
     }
 }

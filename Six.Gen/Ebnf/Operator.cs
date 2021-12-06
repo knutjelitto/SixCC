@@ -2,14 +2,14 @@
 {
     public abstract class Operator : IReadOnlyList<Operator>
     {
-        public Operator(params Operator[] arguments)
-            : this(arguments.AsEnumerable())
+        public Operator(ILocation location, params Operator[] arguments)
+            : this(location, arguments.AsEnumerable())
         {
         }
 
-        public Operator(IEnumerable<Operator> arguments)
+        public Operator(ILocation location, IEnumerable<Operator> arguments)
         {
-            Location = Six.Input.Location.Nowhere;
+            Location = location;
             Arguments = arguments.ToList();
         }
 

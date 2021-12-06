@@ -142,8 +142,12 @@ namespace Six.Input
                     expression = Reference();
                     break;
                 case TKind.Any:
+                    Match(TKind.Any);
                     expression = builder.Any(Current.Location);
-                    Match(Current.Kind);
+                    break;
+                case TKind.Not:
+                    Match(TKind.Not);
+                    expression = builder.Not(Current.Location, Primary());
                     break;
                 case TKind.LeftParent:
                     Match(TKind.LeftParent);

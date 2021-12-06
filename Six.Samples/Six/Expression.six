@@ -112,15 +112,20 @@ eol
     | '\r'
     ;
 
+eol-char
+    : '\n'
+    | '\r'
+    ;
+
 comment
     : line-comment
     | block-comment
     ;
 
 line-comment
-    : '//' (. - eol)* eol?
+    : '//' (. - eol-char)* eol?
     ;
 
 block-comment
-    : '/*' (. - '*/')* '*/'
+    : '/*' ((. - '*') | ('*' (. - '/')))* '*/'
     ;

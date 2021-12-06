@@ -19,6 +19,11 @@ namespace Six.Samples
             return LoadAll(name => name.EndsWith(".e"));
         }
 
+        public static IEnumerable<Sample> LoadError()
+        {
+            return LoadAll(name => name.EndsWith(".error"));
+        }
+
         public static IEnumerable<Sample> LoadJson()
         {
 #if true

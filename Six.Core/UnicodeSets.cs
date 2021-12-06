@@ -64,7 +64,7 @@ namespace Six.Core
                         return this[def.categories[0]];
                     }
 
-                    var set = new Integers();
+                    var set = Integers.Empty;
 
                     foreach (var unicodeCategory in def.categories)
                     {
@@ -88,7 +88,7 @@ namespace Six.Core
 
             private static Integers Generate(UnicodeCategory category)
             {
-                var set = new Integers();
+                var set = Integers.Empty;
 
                 for (int ch = char.MinValue; ch <= char.MaxValue; ++ch)
                 {
