@@ -25,6 +25,8 @@
 
         public ILocation Location { get; private set; }
         public int Id { get; set; } = -1;
+        public bool RuleReached { get; set; }
+        public bool TokenReached { get; set; }
         public List<Operator> Arguments { get; protected set; }
         public Operator Argument
         {
@@ -34,7 +36,7 @@
                 return Arguments[0];
             }
         }
-        public bool Closed => Arguments.Count == 0;
+        public bool HasArguments => Arguments.Count > 0;
 
         private void DumpInner(Writer writer)
         {
@@ -47,10 +49,22 @@
 
         public virtual void Dump(Writer writer)
         {
-            writer.WriteLine($"{DumpHead}");
+            writer.WriteLine($"{DumpHead}{Reached}");
             using (writer.Indent())
             {
                 DumpInner(writer);
+            }
+        }
+
+        public string Reached
+        {
+            get
+            {
+                if (RuleReached || TokenReached)
+                {
+                    return " [" + (RuleReached ? "R" : "") + (TokenReached ? "T" : "") + "]";
+                }
+                return string.Empty;
             }
         }
 

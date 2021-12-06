@@ -104,9 +104,13 @@ namespace Six.Gen
                             }
                             wl();
 
-                            foreach (var op in grammar.Inner.Where(i => !i.Closed))
+                            foreach (var op in grammar.Inner.Where(i => i.HasArguments))
                             {
                                 w($"/* {op.Id,3} {op.GetType().Name,-12} */ ");
+                                if (op is DfaRuleOp)
+                                {
+                                    w($"/* RULE WITH TOKEN WITH DFA */ // ");
+                                }
                                 w($"{Matchers}[{op.Id}].Set(");
                                 var more = false;
                                 foreach (var argument in op)

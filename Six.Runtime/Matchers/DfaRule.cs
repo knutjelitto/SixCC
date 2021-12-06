@@ -1,40 +1,19 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Rule(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public record DfaRule(ImplementationCore Core, int Id, string Name) : Rule(Core, Id, Name)
     {
-        protected readonly Dictionary<Cursor, List<Context>> Continuations = new();
-        protected readonly Dictionary<Cursor, HashSet<Cursor>> Successes = new();
-        protected readonly Dictionary<Cursor, HashSet<Cursor>> Failures = new();
-
         public override void Match(Context context)
         {
-            Assert(Dfa == null);
-            var first = false;
-
+            Assert(Dfa != null);
+            
             if (!Continuations.TryGetValue(context.Start, out var continuations))
             {
                 continuations = new List<Context>();
                 Continuations.Add(context.Start, continuations);
                 Successes.Add(context.Start, new HashSet<Cursor>());
                 Failures.Add(context.Start, new HashSet<Cursor>());
-                first = true;
-            }
-            continuations.Add(context);
+                continuations.Add(context);
 
-            if (!first)
-            {
-                foreach (var succ in Successes[context.Start])
-                {
-                    context.Success(succ);
-                }
-
-                foreach (var fail in Failures[context.Start])
-                {
-                    context.Failure(fail);
-                }
-            }
-            else
-            {
                 MatchCore(new Context(context.Start,
                     succ =>
                     {
@@ -53,10 +32,26 @@
                         }
                     }));
             }
+            else
+            {
+                continuations.Add(context);
+
+                foreach (var succ in Successes[context.Start])
+                {
+                    context.Success(succ);
+                }
+
+                foreach (var fail in Failures[context.Start])
+                {
+                    context.Failure(fail);
+                }
+            }
         }
 
         protected override void MatchCore(Context context)
         {
+            Assert(Dfa != null);
+
             if (Dfa != null)
             {
                 Core.__MatchToken(context, Dfa);

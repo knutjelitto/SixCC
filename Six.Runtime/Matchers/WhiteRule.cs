@@ -1,26 +1,19 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record WhiteRule(ImplementationCore Core, int Id, string Name) : Rule(Core, Id, Name)
+    public record WhiteRule(ImplementationCore Core, int Id, string Name) : DfaRule(Core, Id, Name)
     {
         protected override void MatchCore(Context context)
         {
-            if (Dfa != null)
-            {
-                //Console.WriteLine($"{context.Start}");
-                Dfa.Match(new Context(context.Start,
-                    success =>
-                    {
-                        context.Success(success);
-                    },
-                    failure =>
-                    {
-                        context.Failure(context.Start);
-                    }));
-            }
-            else
-            {
-                Matchers[0].Match(context);
-            }
+            Assert(Dfa != null);
+            Dfa.Match(new Context(context.Start,
+                success =>
+                {
+                    context.Success(success);
+                },
+                failure =>
+                {
+                    context.Failure(context.Start);
+                }));
         }
 
         public override string ToString()

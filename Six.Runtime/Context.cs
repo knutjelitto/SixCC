@@ -16,6 +16,14 @@
             Failure = failure;
         }
 
+        [DebuggerStepThrough]
+        public Context(Cursor start, Action<Cursor> success)
+        {
+            Start = start;
+            Success = success;
+            Failure = cursor => { };
+        }
+
         public override string ToString()
         {
             return $"context({Start})";

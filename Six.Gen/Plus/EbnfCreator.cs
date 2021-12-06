@@ -41,10 +41,14 @@ namespace Six.Gen.Ebnf
             if (whiteSymbol != null)
             {
                 whiteRule.Set(whiteSymbol.Location, Transform(whiteSymbol.Expression));
+                if (whiteRule.Argument is not TokenOp)
+                {
+                    whiteRule.Set(Add(new TokenOp(whiteRule.Argument.Location, whiteRule.Argument)));
+                }
             }
             else
             {
-                whiteRule.Set(Add(new SeqOp(Location.Nowhere)));
+                whiteRule.Set(Add(new TokenOp(Location.Nowhere, Add(new SeqOp(Location.Nowhere)))));
             }
 
             foreach (var symbol in Grammar.Symbols)
@@ -57,7 +61,14 @@ namespace Six.Gen.Ebnf
                 var name = symbol.Name;
                 var transformed = Transform(symbol.Expression);
 
-                AddNamedRule(new RuleOp(name, symbol.Location, transformed));
+                if (transformed is TokenOp)
+                {
+                    AddNamedRule(new DfaRuleOp(name, symbol.Location, transformed));
+                }
+                else
+                {
+                    AddNamedRule(new RuleOp(name, symbol.Location, transformed));
+                }
             }
 
             foreach (var reference in References)
@@ -77,10 +88,28 @@ namespace Six.Gen.Ebnf
                 Ebnf.Add(op);
             }
 
+            new RuleReached().Reach(Ebnf);
+
             Ebnf = new DiffTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
 
+#if false
             return Ebnf;
+#else
+            var final = new EbnfGrammar(Ebnf.Name);
+            id = 0;
+            foreach (var op in Ebnf.Inner)
+            {
+                if (!op.RuleReached || op is TokenOp)
+                {
+                    continue;
+                }
+                op.Id = id++;
+                final.Add(op);
+            }
+
+            return final;
+#endif
         }
 
         private RuleOp AddNamedRule(RuleOp rule)
@@ -244,6 +273,11 @@ namespace Six.Gen.Ebnf
         private Operator Visit(Ast.Token token)
         {
             return new TokenOp(token.Location, Transform(token.Expression));
+        }
+
+        public override string ToString()
+        {
+            return $"ebnf-creator({Ebnf.Name})";
         }
     }
 }

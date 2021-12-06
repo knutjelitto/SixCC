@@ -85,6 +85,11 @@ try
 {
     foreach (var sample in Sampler.LoadSix())
     {
+        if (!sample.Name.Contains("Six.six") && false)
+        {
+            continue;
+        }
+
         Console.WriteLine(sample.Name);
 
         var ast = Six.Input.Builder.Build(sample.Name, sample.Content);
