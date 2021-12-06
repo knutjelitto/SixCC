@@ -8,7 +8,7 @@ Check<SixParser>(1, Sampler.LoadSix());
 Check<TParser>(0, Sampler.LoadT());
 Check<EParser>(0, Sampler.LoadE());
 Check<ErrorParser>(0, Sampler.LoadError());
-//CheckJson(Sampler.LoadJson());
+CheckJson(false, Sampler.LoadJson());
 Console.WriteLine();
 
 void Check<ParserType>(int which, IEnumerable<Sample> samples)
@@ -19,6 +19,11 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
         return;
     }
 
+    foreach (var sample in samples)
+    {
+        new ParserType().Recognize(sample.Name, sample.Content);
+    }
+
     var count = 0;
     foreach (var sample in samples)
     {
@@ -27,22 +32,19 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
         Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name}");
         if (which == count || true)
         {
-            for (var i = 0; i < 0; ++i)
-            {
-                if (!new ParserType().Recognize(sample.Name, sample.Content))
-                {
-                    new ParserType().Match(sample.Name, sample.Content);
-                    return;
-                }
-            }
             new ParserType().Match(sample.Name, sample.Content);
         }
     }
 }
 
 #pragma warning disable CS8321 // Local function is declared but never used
-void CheckJson(IEnumerable<Sample> samples)
+void CheckJson(bool enabled, IEnumerable<Sample> samples)
 {
+    if (!enabled)
+    {
+        return;
+    }
+
     var count = 0;
     foreach (var sample in samples)
     {

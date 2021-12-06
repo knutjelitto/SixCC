@@ -12,10 +12,6 @@
                     {
                         context.Success(success);
                     }
-                },
-                failure =>
-                {
-                    // ignore: optional can't fail
                 }));
 
             context.Success(context.Start);

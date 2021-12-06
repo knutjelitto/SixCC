@@ -33,14 +33,6 @@ namespace Six.Runtime
                 success =>
                 {
                     Report("OK  ", ++successCounter, success.Offset);
-                },
-                failure =>
-                {
-                    if (failure > lastfailure)
-                    {
-                        lastfailure = failure;
-                    }
-                    ++failureCounter;
                 }));
 
             if (successCounter == 0)
@@ -71,9 +63,6 @@ namespace Six.Runtime
                 success =>
                 {
                     ok = true;
-                },
-                failure =>
-                {
                 }));
 
             return ok;

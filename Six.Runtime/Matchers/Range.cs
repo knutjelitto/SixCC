@@ -10,10 +10,6 @@
             {
                 context.Success(context.Start.Advance(1));
             }
-            else
-            {
-                context.Failure(context.Start);
-            }
         }
 
         public override string ToString()

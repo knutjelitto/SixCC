@@ -15,7 +15,7 @@
                 var next = todo.Dequeue();
                 context.Success(next);
 
-                Matchers[0].Match(new Context(next, Success, Failure));
+                Matchers[0].Match(new Context(next, Success));
             }
 
             void Success(Cursor success)
@@ -24,11 +24,6 @@
                 {
                     todo.Enqueue(success);
                 }
-            }
-
-            void Failure(Cursor failure)
-            {
-                // ignore: star can't fail
             }
         }
 

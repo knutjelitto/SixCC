@@ -4,7 +4,6 @@
     {
         protected readonly Dictionary<Cursor, List<Context>> Continuations = new();
         protected readonly Dictionary<Cursor, HashSet<Cursor>> Successes = new();
-        protected readonly Dictionary<Cursor, HashSet<Cursor>> Failures = new();
 
         public override void Match(Context context)
         {
@@ -16,7 +15,6 @@
                 continuations = new List<Context>();
                 Continuations.Add(context.Start, continuations);
                 Successes.Add(context.Start, new HashSet<Cursor>());
-                Failures.Add(context.Start, new HashSet<Cursor>());
                 first = true;
             }
             continuations.Add(context);
@@ -26,11 +24,6 @@
                 foreach (var succ in Successes[context.Start])
                 {
                     context.Success(succ);
-                }
-
-                foreach (var fail in Failures[context.Start])
-                {
-                    context.Failure(fail);
                 }
             }
             else
@@ -42,14 +35,6 @@
                         foreach (var continuation in Continuations[context.Start])
                         {
                             continuation.Success(succ);
-                        }
-                    },
-                    fail =>
-                    {
-                        Failures[context.Start].Add(fail);
-                        foreach (var continuation in Continuations[context.Start])
-                        {
-                            continuation.Failure(fail);
                         }
                     }));
             }

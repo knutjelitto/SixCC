@@ -20,10 +20,6 @@
                         succ =>
                         {
                             match(index + 1, succ);
-                        },
-                        fail =>
-                        {
-                            context.Failure(fail);
                         }));
                 }
             }

@@ -9,10 +9,6 @@
                 success =>
                 {
                     context.Success(success);
-                },
-                failure =>
-                {
-                    context.Failure(context.Start);
                 }));
         }
 

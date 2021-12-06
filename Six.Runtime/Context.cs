@@ -2,26 +2,21 @@
 {
     public class Context
     {
-        public Action<Cursor> Success { get; }
-        public Action<Cursor> Failure { get; }
-        
+        private readonly Action<Cursor> success;
+
         public readonly Cursor Start;
 
-
-        [DebuggerStepThrough]
-        public Context(Cursor start, Action<Cursor> success, Action<Cursor> failure)
-        {
-            Start = start;
-            Success = success;
-            Failure = failure;
-        }
 
         [DebuggerStepThrough]
         public Context(Cursor start, Action<Cursor> success)
         {
             Start = start;
-            Success = success;
-            Failure = cursor => { };
+            this.success = success;
+        }
+
+        public void Success(Cursor next)
+        {
+            success(next);
         }
 
         public override string ToString()

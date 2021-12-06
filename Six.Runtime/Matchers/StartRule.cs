@@ -14,20 +14,7 @@
                             {
                                 context.Success(innerSuccess);
                             }
-                            else
-                            {
-                                context.Failure(innerSuccess);
-                            }
-                        },
-                        innerFailure =>
-                        {
-                            // never ever
-                            Assert(false);
                         }));
-                },
-                failure =>
-                {
-                    context.Failure(failure);
                 }));
         }
 

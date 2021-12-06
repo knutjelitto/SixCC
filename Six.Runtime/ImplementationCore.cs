@@ -46,7 +46,7 @@ namespace Six.Runtime
         {
             var farthest = context.Start;
 
-            __Whitespace.Match(new Context(context.Start, Success, Failure));
+            __Whitespace.Match(new Context(context.Start, Success));
 
             void Success(Cursor success)
             {
@@ -54,11 +54,6 @@ namespace Six.Runtime
                 {
                     farthest = success;
                 }
-            }
-
-            void Failure(Cursor failure)
-            {
-                // ignore: we collect whitespace really greedy
             }
 
             context.Success(farthest);
@@ -72,7 +67,7 @@ namespace Six.Runtime
         public void __MatchToken(Context context, Action<Context> match)
         {
             Assert(__Whitespace.Dfa != null);
-            __Whitespace.Dfa.Match(new Context(context.Start, AfterWhite, AfterWhite));
+            __Whitespace.Dfa.Match(new Context(context.Start, AfterWhite));
 
             void AfterWhite(Cursor current)
             {
@@ -80,10 +75,6 @@ namespace Six.Runtime
                     success =>
                     {
                         context.Success(success);
-                    },
-                    failure =>
-                    {
-                        context.Failure(failure);
                     }));
             }
         }

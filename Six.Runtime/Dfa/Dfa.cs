@@ -29,7 +29,6 @@
                         context.Success(current);
                         return;
                     }
-                    context.Failure(current);
                     return;
                 }
                 state = next;
@@ -42,7 +41,6 @@
                 return;
             }
 
-            context.Failure(current);
             return;
         }
 

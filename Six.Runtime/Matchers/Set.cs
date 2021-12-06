@@ -10,10 +10,6 @@
                 {
                     current.Success(current.Start.Advance(1));
                 }
-                else
-                {
-                    current.Failure(current.Start);
-                }
             });
         }
 

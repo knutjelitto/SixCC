@@ -11,24 +11,15 @@
                 continuations = new List<Context>();
                 Continuations.Add(context.Start, continuations);
                 Successes.Add(context.Start, new HashSet<Cursor>());
-                Failures.Add(context.Start, new HashSet<Cursor>());
                 continuations.Add(context);
 
                 MatchCore(new Context(context.Start,
-                    succ =>
+                    success =>
                     {
-                        Successes[context.Start].Add(succ);
+                        Successes[context.Start].Add(success);
                         foreach (var continuation in Continuations[context.Start])
                         {
-                            continuation.Success(succ);
-                        }
-                    },
-                    fail =>
-                    {
-                        Failures[context.Start].Add(fail);
-                        foreach (var continuation in Continuations[context.Start])
-                        {
-                            continuation.Failure(fail);
+                            continuation.Success(success);
                         }
                     }));
             }
@@ -39,11 +30,6 @@
                 foreach (var succ in Successes[context.Start])
                 {
                     context.Success(succ);
-                }
-
-                foreach (var fail in Failures[context.Start])
-                {
-                    context.Failure(fail);
                 }
             }
         }

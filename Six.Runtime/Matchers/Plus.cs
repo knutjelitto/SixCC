@@ -6,7 +6,6 @@
         {
             var already = new HashSet<Cursor>();
             var todo = new Queue<Cursor>();
-            var succeeded = false;
 
             already.Add(context.Start);
             todo.Enqueue(context.Start);
@@ -15,27 +14,16 @@
             {
                 var next = todo.Dequeue();
 
-                Matchers[0].Match(new Context(next, Success, Failure));
-            }
-
-            if (!succeeded)
-            {
-                context.Failure(context.Start);
+                Matchers[0].Match(new Context(next, Success));
             }
 
             void Success(Cursor success)
             {
                 if (already.Add(success))
                 {
-                    succeeded = true;
                     context.Success(success);
                     todo.Enqueue(success);
                 }
-            }
-
-            void Failure(Cursor failure)
-            {
-                // ignore: star can't fail
             }
         }
 

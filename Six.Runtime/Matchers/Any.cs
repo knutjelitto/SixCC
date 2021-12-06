@@ -4,11 +4,7 @@
     {
         protected override void MatchCore(Context context)
         {
-            if (context.Start.At == -1)
-            {
-                context.Failure(context.Start);
-            }
-            else
+            if (context.Start.At != -1)
             {
                 context.Success(context.Start.Advance(1));
             }
