@@ -6,7 +6,7 @@
             : base(name, location)
         {
         }
-        public DfaRuleOp(string name, ILocation location, Operator argument)
+        public DfaRuleOp(string name, ILocation location, CoreOp argument)
             : base(name, location, argument)
         {
         }

@@ -6,6 +6,10 @@ namespace Six.Gen
     internal class DfaCsGenerator : CsGenerator
     {
         const string DfaClass = "Dfa";
+        const string DfaStateClass = "DfaState";
+        const string DfaTransClass = "DfaTrans";
+        const string DfaSetClass = "DfaSet";
+        const string DfaIntervalClass = "DfaInterval";
 
         public DfaCsGenerator(Writer writer, EbnfGrammar grammar) : base(writer)
         {
@@ -41,7 +45,7 @@ namespace Six.Gen
 
         private void Create(string name, FA dfa)
         {
-            wl($"{name} = new Dfa(");
+            wl($"{name} = new {DfaClass}(");
             indent(() =>
             {
                 var more = false;
@@ -54,7 +58,7 @@ namespace Six.Gen
                     more = true;
 
                     var final = state.Final ? "true" : "false";
-                    w($"new DfaState({state.Id}, {final}, {state.Payload})");
+                    w($"new {DfaStateClass}({state.Id}, {final}, {state.Payload})");
                 }
                 wl();
             });
@@ -64,7 +68,7 @@ namespace Six.Gen
                 var state = dfa.States[i];
                 var transitions = state.TerminalTransitions.ToArray();
 
-                initializer($"{name}.States[{i}].Transitions = new DfaTrans[]",
+                initializer($"{name}.States[{i}].Transitions = new {DfaTransClass}[]",
                     () =>
                     {
                         var more = false;
@@ -76,21 +80,24 @@ namespace Six.Gen
                                 wl($",");
                             }
                             more = true;
-                            w($"new DfaTrans({name}.States[{transition.TargetId}], {DfaSet(transition.Set)})");
+                            w($"new {DfaTransClass}({name}.States[{transition.TargetId}], {DfaSet(transition.Set)})");
                         }
-                        wl();
+                        if (transitions.Length > 0)
+                        {
+                            wl();
+                        }
                     });
             }
         }
 
         public string DfaSet(Integers set)
         {
-            return $"new DfaSet({Intervals(set)})";
+            return $"new {DfaSetClass}({Intervals(set)})";
         }
 
         private string Intervals(Integers set)
         {
-            return string.Join(", ", set.GetIntervals().Select(i => $"new Interval({i.Min}, {i.Max})"));
+            return string.Join(", ", set.GetIntervals().Select(i => $"new {DfaIntervalClass}({i.Min}, {i.Max})"));
         }
     }
 }

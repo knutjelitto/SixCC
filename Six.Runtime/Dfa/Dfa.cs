@@ -12,7 +12,7 @@
 
         public DfaState[] States { get; }
         public DfaState Start => States[0];
-
+            
         public void Match(Context context)
         {
             var state = Start;
@@ -42,6 +42,39 @@
             }
 
             return;
+        }
+
+        public bool TryMatch(Cursor start, out Cursor success)
+        {
+            var state = Start;
+            var current = start;
+
+            while (current.At != -1)
+            {
+                Assert(state != null);
+                var next = state.Match(current.At);
+                if (next == null)
+                {
+                    if (state.Final)
+                    {
+                        success = current;
+                        return true;
+                    }
+                    success = start;
+                    return false;
+                }
+                state = next;
+                current = current.Advance(1);
+            }
+
+            if (state.Final)
+            {
+                success = current;
+                return true;
+            }
+
+            success = start;
+            return false;
         }
 
         public IEnumerable<int> GetPayloads()

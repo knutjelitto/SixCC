@@ -3,13 +3,16 @@ using Six.Ast;
 using Six.Samples;
 using Six.Core.Errors;
 using SixBot;
+using Six.Gen;
 
-Check<SixParser>(1, Sampler.LoadSix());
 Check<TParser>(0, Sampler.LoadT());
-Check<EParser>(0, Sampler.LoadE());
+Check<EParser>(2, Sampler.LoadE());
+Check<SixParser>(-1, Sampler.LoadSix());
 Check<ErrorParser>(0, Sampler.LoadError());
 CheckJson(false, Sampler.LoadJson());
-Console.WriteLine();
+CheckGenerate(true);
+Console.Write("any key ... ");
+Console.ReadKey(true);
 
 void Check<ParserType>(int which, IEnumerable<Sample> samples)
     where ParserType : ParserCore, new()
@@ -19,25 +22,24 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
         return;
     }
 
-    foreach (var sample in samples)
-    {
-        new ParserType().Recognize(sample.Name, sample.Content);
-    }
-
+    var watch = new Stopwatch();
+    watch.Start();
     var count = 0;
     foreach (var sample in samples)
     {
         count++;
 
         Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name}");
-        if (which == count || true)
+        if (which == -1 || which == count)
         {
             new ParserType().Match(sample.Name, sample.Content);
         }
     }
+    watch.Stop();
+    Console.WriteLine();
+    Console.WriteLine($"elapsed: {Math.Round(watch.Elapsed.TotalMilliseconds)} ms");
 }
 
-#pragma warning disable CS8321 // Local function is declared but never used
 void CheckJson(bool enabled, IEnumerable<Sample> samples)
 {
     if (!enabled)
@@ -81,34 +83,48 @@ void CheckJson(bool enabled, IEnumerable<Sample> samples)
         }
     }
 }
-#pragma warning restore CS8321 // Local function is declared but never used
 
-try
+void CheckGenerate(bool enabled)
 {
-    foreach (var sample in Sampler.LoadSix())
+    if (!enabled)
     {
-        if (!sample.Name.Contains("Six.six") && false)
-        {
-            continue;
-        }
-
-        Console.WriteLine(sample.Name);
-
-        var ast = Six.Input.Builder.Build(sample.Name, sample.Content);
-        var ebnf = new Six.Gen.Ebnf.EbnfCreator(ast).Create();
-
-        using (var writer = $"{ast.Name}-ebnf.txt".Writer())
-        {
-            new EbnfDumper(ebnf).Dump(writer);
-        }
+        return;
     }
+    try
+    {
+        foreach (var sample in Sampler.LoadSix())
+        {
+            if (!sample.Name.Contains("Six.six") && false)
+            {
+                continue;
+            }
 
-}
-catch (DiagnosticException ex)
-{
-    Console.WriteLine("=== errors ===");
-    ex.Report();
-}
+            Console.WriteLine(sample.Name);
 
-Console.Write("any key ... ");
-Console.ReadKey(true);
+            var ast = Six.Input.Builder.Build(sample.Name, sample.Content);
+            var ebnf = new Six.Gen.Ebnf.EbnfCreator(ast).Create();
+
+            using (var writer = $"{ebnf.Name}-ebnf.txt".Writer())
+            {
+                new EbnfDumper(ebnf).Dump(writer);
+            }
+
+            using (var generator = new EbnfCsGenerator())
+            {
+                generator.Generate(ebnf.Name, sample.Content);
+                var generated = generator.ToString();
+
+                using (var writer = $"{ebnf.Name}.gen.cs".Writer())
+                {
+                    writer.Write(generated);
+                }
+            }
+        }
+
+    }
+    catch (DiagnosticException ex)
+    {
+        Console.WriteLine("=== errors ===");
+        ex.Report();
+    }
+}

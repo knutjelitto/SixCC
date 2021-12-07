@@ -1,9 +1,9 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    internal class RuleReached : Predicator
+    internal class IsReachedWalker : EbnfPredicator
     {
-        public RuleReached()
-            : base(op => op.RuleReached, (op, value) => op.RuleReached = value)
+        public IsReachedWalker()
+            : base(op => op.IsReached, (op, value) => op.IsReached = value)
         {
         }
 
@@ -36,7 +36,7 @@
             base.Visit(op);
         }
 
-        protected override void Visit(DiffOp op)
+        protected override void Visit(SetOp op)
         {
             Set(op, true);
             base.Visit(op);
@@ -62,7 +62,7 @@
 
         protected override void Visit(RefOp op)
         {
-            if (!op.RuleReached)
+            if (!op.IsReached)
             {
                 Set(op, true);
                 Walk(op.Rule);

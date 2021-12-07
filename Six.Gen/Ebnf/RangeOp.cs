@@ -2,7 +2,7 @@
 
 namespace Six.Gen.Ebnf
 {
-    public sealed class RangeOp : Operator
+    public sealed class RangeOp : CoreOp
     {
         public RangeOp(ILocation location, Codepoint codepoint1, Codepoint codepoint2)
             : base(location)

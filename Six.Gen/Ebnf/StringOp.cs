@@ -2,7 +2,7 @@
 
 namespace Six.Gen.Ebnf
 {
-    public sealed class StringOp : Operator
+    public sealed class StringOp : CoreOp
     {
         public StringOp(ILocation location, string text)
             : base(location)

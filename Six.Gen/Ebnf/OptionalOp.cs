@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public sealed class OptionalOp : Operator
+    public sealed class OptionalOp : CoreOp
     {
-        public OptionalOp(ILocation location, Operator argument)
+        public OptionalOp(ILocation location, CoreOp argument)
             : base(location, argument)
         {
         }

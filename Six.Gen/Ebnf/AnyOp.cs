@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public sealed class AnyOp : Operator
+    public sealed class AnyOp : CoreOp
     {
         public AnyOp(ILocation location)
             : base(location)

@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public sealed class TokenOp : Operator
+    public sealed class TokenOp : CoreOp
     {
-        public TokenOp(ILocation location, Operator argument)
+        public TokenOp(ILocation location, CoreOp argument)
             : base(location, argument)
         {
         }

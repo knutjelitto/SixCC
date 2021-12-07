@@ -2,9 +2,9 @@
 
 namespace Six.Gen.Ebnf
 {
-    public class RuleOp : Operator
+    public class RuleOp : CoreOp
     {
-        public RuleOp(string name, ILocation location, Operator argument)
+        public RuleOp(string name, ILocation location, CoreOp argument)
             : base(location, argument)
         {
             Name = name;
@@ -16,10 +16,10 @@ namespace Six.Gen.Ebnf
             Name = name;
         }
 
-        public void Set(ILocation location, Operator argument)
+        public void Set(ILocation location, CoreOp argument)
         {
-            Set(location);
-            Set(argument);
+            Patch(location);
+            Patch(argument);
         }
 
         public string Name { get; }

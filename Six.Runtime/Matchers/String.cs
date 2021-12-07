@@ -4,13 +4,12 @@
     {
         protected override void MatchCore(Context context)
         {
-            Core.__MatchToken(context, current =>
+            var white = Core.__MatchWhite(context.Start);
+
+            if (white.Match(Text))
             {
-                if (current.Start.Match(Text))
-                {
-                    current.Success(current.Start.Advance(Text.Length));
-                }
-            });
+                context.Success(white.Advance(Text.Length));
+            }
         }
 
         public override string ToString()

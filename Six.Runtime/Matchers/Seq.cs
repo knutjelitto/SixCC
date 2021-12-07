@@ -16,11 +16,12 @@
                 {
                     var matcher = Matchers[index];
 
-                    matcher.Match(new Context(next,
-                        succ =>
+                    matcher.Match(
+                        next,
+                        success =>
                         {
-                            match(index + 1, succ);
-                        }));
+                            match(index + 1, success);
+                        });
                 }
             }
         }

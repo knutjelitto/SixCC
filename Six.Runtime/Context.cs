@@ -1,27 +1,40 @@
-﻿namespace Six.Runtime
-{
-    public class Context
-    {
-        private readonly Action<Cursor> success;
+﻿using Six.Runtime.Matchers;
 
+namespace Six.Runtime
+{
+    public sealed class Context
+    {
+        private readonly Action<Cursor> Continue;
+        public readonly Matcher Matcher;
         public readonly Cursor Start;
+        public readonly HashSet<int> Nexts;
 
 
         [DebuggerStepThrough]
-        public Context(Cursor start, Action<Cursor> success)
+        private Context(Matcher matcher, Cursor start, Action<Cursor> next)
         {
+            Matcher = matcher;
             Start = start;
-            this.success = success;
+            Continue = next;
+            Nexts = new HashSet<int>();
+        }
+
+        public static Context From(Matcher matcher, Cursor start, Action<Cursor> next)
+        {
+            return new Context(matcher, start, next);
         }
 
         public void Success(Cursor next)
         {
-            success(next);
+            Nexts.Add(next.Offset);
+            Continue(next);
         }
 
         public override string ToString()
         {
-            return $"context({Start})";
+            var nexts = string.Join(',', Nexts.OrderBy(x => x));
+
+            return $"context({Start}, {Matcher}, [{nexts}])";
         }
     }
 }

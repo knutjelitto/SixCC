@@ -16,7 +16,7 @@ namespace Six.Samples
 
         public static IEnumerable<Sample> LoadE()
         {
-            return LoadAll(name => name.EndsWith(".e"));
+            return LoadAll(name => name.EndsWith(".e")).OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadError()

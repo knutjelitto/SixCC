@@ -6,11 +6,7 @@
         {
             foreach (var matcher in Matchers)
             {
-                matcher.Match(new Context(context.Start,
-                    success =>
-                    {
-                        context.Success(success);
-                    }));
+                matcher.Match(context.Start, context.Success);
             }
         }
 

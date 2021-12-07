@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public sealed class DiffOp : Operator
+    public sealed class SetOp : CoreOp
     {
-        public DiffOp(ILocation location, Operator argument1, Operator argument2)
+        public SetOp(ILocation location, CoreOp argument1, CoreOp argument2)
             : base(location, argument1, argument2)
         {
         }

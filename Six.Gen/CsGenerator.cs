@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen
 {
-    internal class CsGenerator : IDisposable
+    public class CsGenerator : IDisposable
     {
         protected Writer writer;
         private readonly bool owns;

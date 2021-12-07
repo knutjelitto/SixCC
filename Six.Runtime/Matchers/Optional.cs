@@ -4,7 +4,7 @@
     {
         protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(new Context(context.Start,
+            Matchers[0].Match(context.Start,
                 success =>
                 {
                     // bail out nullables
@@ -12,7 +12,7 @@
                     {
                         context.Success(success);
                     }
-                }));
+                });
 
             context.Success(context.Start);
         }

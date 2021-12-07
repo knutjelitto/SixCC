@@ -1,24 +1,8 @@
 ﻿grammar Error;
 
-%whitespace
-    : skip
+E   : id
+    | id id
     ;
 
-A   : ^'a'
-    ;
-
-hidden
-    : ' '
-    | '\t'
-    | '\r'
-    | '\n'
-    | comment
-    ;
-
-skip
-    : hidden*
-    ;
-
-comment
-    : '/*' (^'*' | ('*' ^'/'))* '*/'
+id  : 'a' .. 'z'
     ;

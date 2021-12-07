@@ -3,27 +3,27 @@ namespace Six.Runtime.Dfa
 {
     public struct DfaSet
     {
-        public readonly Interval[] Intervals;
+        public readonly DfaInterval[] Intervals;
 
-        public DfaSet(params Interval[] intervals)
+        public DfaSet(params DfaInterval[] intervals)
         {
             Intervals = intervals;
         }
 
         public DfaSet(params (int min, int max)[] intervals)
         {
-            Intervals = intervals.Select(minmax => new Interval(minmax.min, minmax.max)).ToArray();
+            Intervals = intervals.Select(minmax => new DfaInterval(minmax.min, minmax.max)).ToArray();
         }
 
         public DfaSet(params int[] minOmax)
         {
             Intervals = Enum().ToArray();
 
-            IEnumerable<Interval> Enum()
+            IEnumerable<DfaInterval> Enum()
             {
                 for (var i = 0; i < minOmax.Length; i += 2)
                 {
-                    yield return new Interval(minOmax[i], minOmax[i + 1]);
+                    yield return new DfaInterval(minOmax[i], minOmax[i + 1]);
                 }
             }
         }

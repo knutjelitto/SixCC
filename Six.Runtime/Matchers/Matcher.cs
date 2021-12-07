@@ -2,24 +2,31 @@
 {
     public abstract record Matcher(ImplementationCore Core, int Id, string Name)
     {
-        public Matcher[] Matchers = Array.Empty<Matcher>();
-        public Dfa.Dfa? Dfa = null;
+        protected readonly Dictionary<Cursor, List<Context>> Continuations = new();
+        protected readonly Dictionary<Cursor, HashSet<Cursor>> Successes = new();
 
-        protected abstract void MatchCore(Context context);
+        public Matcher[] Matchers = Array.Empty<Matcher>();
 
         public virtual void Match(Context context)
         {
             MatchCore(context);
         }
 
+        public void Match(Cursor start, Action<Cursor> next)
+        {
+            Match(Context.From(this, start, next));
+        }
+
+        protected abstract void MatchCore(Context context);
+
+        public void MatchCore(Cursor start, Action<Cursor> next)
+        {
+            MatchCore(Context.From(this, start, next));
+        }
+
         public void Set(params Matcher[] matchers)
         {
             Matchers = matchers;
-        }
-
-        public void Set(Dfa.Dfa dfa)
-        {
-            Dfa = dfa;
         }
 
         public override string ToString()

@@ -7,17 +7,11 @@ namespace Six.Runtime
     public class ImplementationCore
     {
         private Matcher? __start = null;
-        private Matcher? __whitespace = null;
+        private DfaRule? __whitespace = null;
 
         public ImplementationCore()
         {
-            __Matchers = new Matcher[]
-            {
-                new Epsilon(this, 0, "---start---"),
-                new Epsilon(this, 1, "---whitespace---"),
-            };
-            __Start = __Matchers[0];
-            __Whitespace = __Matchers[0];
+            __Matchers = Array.Empty<Matcher>();
         }
 
         protected ImplementationCore(Matcher[] matchers)
@@ -34,49 +28,23 @@ namespace Six.Runtime
             protected set => __start = value;
         }
 
-        public Matcher __Whitespace
+        protected DfaRule __Whitespace
         {
-            get => __whitespace ??= __Matchers[1];
-            protected set => __whitespace = value;
-        }
-
-        public bool __InToken { get; set; }
-
-        public void __CollectWhitespace(Context context)
-        {
-            var farthest = context.Start;
-
-            __Whitespace.Match(new Context(context.Start, Success));
-
-            void Success(Cursor success)
+            get => __whitespace ??= (DfaRule)__Matchers[1];
+            set
             {
-                if (success > farthest)
-                {
-                    farthest = success;
-                }
+                __whitespace = value;
             }
-
-            context.Success(farthest);
         }
 
-        public void __MatchToken(Context context, Dfa.Dfa dfa)
+        [DebuggerStepThrough]
+        public Cursor __MatchWhite(Cursor start)
         {
-            __MatchToken(context, dfa.Match);
-        }
-
-        public void __MatchToken(Context context, Action<Context> match)
-        {
-            Assert(__Whitespace.Dfa != null);
-            __Whitespace.Dfa.Match(new Context(context.Start, AfterWhite));
-
-            void AfterWhite(Cursor current)
+            if (__Whitespace.Dfa!.TryMatch(start, out var next))
             {
-                match(new Context(current,
-                    success =>
-                    {
-                        context.Success(success);
-                    }));
+                return next;
             }
+            return start;
         }
     }
 }

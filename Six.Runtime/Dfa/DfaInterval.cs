@@ -2,12 +2,12 @@
 
 namespace Six.Runtime.Dfa
 {
-    public struct Interval
+    public struct DfaInterval
     {
         public readonly int Min;
         public readonly int Max;
 
-        public Interval(int min, int max)
+        public DfaInterval(int min, int max)
         {
             Min = min;
             Max = max;

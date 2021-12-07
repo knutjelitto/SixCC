@@ -4,18 +4,15 @@
     {
         protected override void MatchCore(Context context)
         {
-            Matchers[0].Match(new Context(context.Start,
+            Matchers[0].Match(context.Start,
                 success =>
                 {
-                    Core.__CollectWhitespace(new Context(success,
-                        innerSuccess =>
-                        {
-                            if (innerSuccess.At == -1)
-                            {
-                                context.Success(innerSuccess);
-                            }
-                        }));
-                }));
+                    var white = Core.__MatchWhite(success);
+                    if (white.At == -1)
+                    {
+                        context.Success(white);
+                    }
+                });
         }
 
         public override string ToString()

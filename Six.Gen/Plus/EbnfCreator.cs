@@ -5,16 +5,16 @@ namespace Six.Gen.Ebnf
 {
     public class EbnfCreator
     {
-        private readonly OpNamer Namer;
-        private readonly UniqueList<string, Operator> Inners;
+        private readonly NameWalker Namer;
+        private readonly UniqueList<string, CoreOp> Inners;
         private readonly List<RefOp> References;
 
         public EbnfCreator(Ast.AstGrammar grammar)
         {
             Grammar = grammar;
             Ebnf = new EbnfGrammar(grammar.Name);
-            Namer = new OpNamer();
-            Inners = new UniqueList<string, Operator>(op => Namer.NameOf(op));
+            Namer = new NameWalker();
+            Inners = new UniqueList<string, CoreOp>(op => Namer.NameOf(op));
             References = new List<RefOp>();
         }
 
@@ -34,7 +34,7 @@ namespace Six.Gen.Ebnf
             else
             {
                 var defaultStart = Grammar.Symbols.First(s => !s.Name.StartsWith("%"));
-                startRule.Set(Add(new RefOp(Ebnf, Location.Nowhere, defaultStart.Name)));
+                startRule.Patch(Add(new RefOp(Ebnf, Location.Nowhere, defaultStart.Name)));
             }
 
             var whiteSymbol = Grammar.WhitespaceRule;
@@ -43,12 +43,12 @@ namespace Six.Gen.Ebnf
                 whiteRule.Set(whiteSymbol.Location, Transform(whiteSymbol.Expression));
                 if (whiteRule.Argument is not TokenOp)
                 {
-                    whiteRule.Set(Add(new TokenOp(whiteRule.Argument.Location, whiteRule.Argument)));
+                    whiteRule.Patch(Add(new TokenOp(whiteRule.Argument.Location, whiteRule.Argument)));
                 }
             }
             else
             {
-                whiteRule.Set(Add(new TokenOp(Location.Nowhere, Add(new SeqOp(Location.Nowhere)))));
+                whiteRule.Patch(Add(new TokenOp(Location.Nowhere, Add(new SeqOp(Location.Nowhere)))));
             }
 
             foreach (var symbol in Grammar.Symbols)
@@ -67,7 +67,7 @@ namespace Six.Gen.Ebnf
                 }
                 else
                 {
-                    AddNamedRule(new RuleOp(name, symbol.Location, transformed));
+                    AddNamedRule(new PlainRuleOp(name, symbol.Location, transformed));
                 }
             }
 
@@ -88,28 +88,34 @@ namespace Six.Gen.Ebnf
                 Ebnf.Add(op);
             }
 
-            new RuleReached().Reach(Ebnf);
+            new IsReachedWalker().Reach(Ebnf);
 
-            Ebnf = new DiffTransformer(Ebnf).Transform();
+            Ebnf = new SetTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
 
-#if false
-            return Ebnf;
-#else
-            var final = new EbnfGrammar(Ebnf.Name);
+            var final = new List<CoreOp>();
             id = 0;
-            foreach (var op in Ebnf.Inner)
+            // all reached rules
+            foreach (var op in Ebnf.Rules.Where(op => op.IsReached))
             {
-                if (!op.RuleReached || op is TokenOp)
-                {
-                    continue;
-                }
                 op.Id = id++;
                 final.Add(op);
             }
+            // all reached non-references
+            foreach (var op in Ebnf.Others.Where(op => op.IsReached && op is not TokenOp && op is not RefOp))
+            {
+                op.Id = id++;
+                final.Add(op);
+            }
+            // all reached references
+            foreach (var op in Ebnf.Others.Where(op => op.IsReached && op is not TokenOp && op is RefOp))
+            {
+                op.Id = id++;
+                final.Add(op);
+            }
+            Ebnf.Patch(final);
 
-            return final;
-#endif
+            return Ebnf;
         }
 
         private RuleOp AddNamedRule(RuleOp rule)
@@ -127,7 +133,7 @@ namespace Six.Gen.Ebnf
         }
 
         private T Add<T>(T newOp)
-            where T : Operator
+            where T : CoreOp
         {
             var name = Namer.NameOf(newOp);
 
@@ -145,11 +151,11 @@ namespace Six.Gen.Ebnf
             return (T)op;
         }
 
-        private Operator Transform(Ast.Expression expression)
+        private CoreOp Transform(Ast.Expression expression)
         {
             return Add(transform());
 
-            Operator transform()
+            CoreOp transform()
             {
                 switch (expression)
                 {
@@ -181,7 +187,7 @@ namespace Six.Gen.Ebnf
             }
         }
 
-        protected virtual Operator Visit(Ast.Alternation alt)
+        protected virtual CoreOp Visit(Ast.Alternation alt)
         {
             Assert(alt.Expressions.Count >= 1);
             if (alt.Expressions.Count == 1)
@@ -194,7 +200,7 @@ namespace Six.Gen.Ebnf
             }
         }
 
-        private Operator Visit(Ast.Sequence seq)
+        private CoreOp Visit(Ast.Sequence seq)
         {
             Assert(seq.Expressions.Count >= 0);
 
@@ -210,33 +216,33 @@ namespace Six.Gen.Ebnf
             }
         }
 
-        private Operator Visit(Ast.ZeroOrMore zeroOrMore)
+        private CoreOp Visit(Ast.ZeroOrMore zeroOrMore)
         {
             return new StarOp(zeroOrMore.Location, Transform(zeroOrMore.Expression));
         }
 
-        private Operator Visit(Ast.OneOrMore oneOrMore)
+        private CoreOp Visit(Ast.OneOrMore oneOrMore)
         {
             return new PlusOp(oneOrMore.Location, Transform(oneOrMore.Expression));
         }
 
-        private Operator Visit(Ast.ZeroOrOne zeroOrOne)
+        private CoreOp Visit(Ast.ZeroOrOne zeroOrOne)
         {
             return new OptionalOp(zeroOrOne.Location, Transform(zeroOrOne.Expression));
         }
 
-        private Operator Visit(Ast.Reference reference)
+        private CoreOp Visit(Ast.Reference reference)
         {
             var op = new RefOp(Ebnf, reference.Location, reference.Name);
             return op;
         }
 
-        private Operator Visit(Ast.Any any)
+        private CoreOp Visit(Ast.Any any)
         {
             return new AnyOp(any.Location);
         }
 
-        private Operator Visit(Ast.Literal literal)
+        private CoreOp Visit(Ast.Literal literal)
         {
             var cps = literal.Text.Codepoints().ToList();
             Assert(cps.Count >= 1);
@@ -248,7 +254,7 @@ namespace Six.Gen.Ebnf
             return new StringOp(literal.Location, literal.Text);
         }
 
-        private Operator Visit(Ast.Range range)
+        private CoreOp Visit(Ast.Range range)
         {
             var start = Transform(range.One);
             var end = Transform(range.Two);
@@ -262,15 +268,15 @@ namespace Six.Gen.Ebnf
             throw new NotImplementedException();
         }
 
-        private Operator Visit(Ast.Diff diff)
+        private CoreOp Visit(Ast.Diff diff)
         {
             var first = Transform(diff.One);
             var second = Transform(diff.Two);
 
-            return new DiffOp(diff.Location, first, second);
+            return new SetOp(diff.Location, first, second);
         }
 
-        private Operator Visit(Ast.Token token)
+        private CoreOp Visit(Ast.Token token)
         {
             return new TokenOp(token.Location, Transform(token.Expression));
         }

@@ -2,9 +2,9 @@
 
 namespace Six.Gen.Ebnf
 {
-    internal class DiffTransformer : EbnfWalker
+    internal class SetTransformer : EbnfWalker
     {
-        public DiffTransformer(EbnfGrammar grammar)
+        public SetTransformer(EbnfGrammar grammar)
         {
             Grammar = grammar;
         }
@@ -17,24 +17,24 @@ namespace Six.Gen.Ebnf
             return Grammar;
         }
 
-        protected override void Visit(DiffOp diff)
+        protected override void Visit(SetOp diff)
         {
-            var transformer = new SetTransformer(Grammar, diff, Error);
+            var transformer = new Transformer(Grammar, diff, Error);
             var set = transformer.Transform();
             diff.Set(set);
 
-            DiagnosticException Error(Operator op)
+            DiagnosticException Error(CoreOp op)
             {
-                var namer = new OpNamer();
+                var namer = new NameWalker();
                 var diagnostic1 = new SemanticError(op.Location, $"can't convert {namer.NameOf(op)} to codepoint set");
                 var diagnostic2 = new SemanticError(diff.Location, $"can't convert {namer.NameOf(diff)} to codepoint set");
                 return new DiagnosticException(diagnostic1, diagnostic2);
             }
         }
 
-        private class SetTransformer : EbnfTransformer<Integers>
+        private class Transformer : EbnfTransformer<Integers>
         {
-            public SetTransformer(EbnfGrammar grammar, DiffOp diff, Func<Operator, DiagnosticException> error)
+            public Transformer(EbnfGrammar grammar, SetOp diff, Func<CoreOp, DiagnosticException> error)
             {
                 Grammar = grammar;
                 Diff = diff;
@@ -42,15 +42,15 @@ namespace Six.Gen.Ebnf
             }
 
             public EbnfGrammar Grammar { get; }
-            public DiffOp Diff { get; }
-            public Func<Operator, DiagnosticException> Error { get; }
+            public SetOp Diff { get; }
+            public Func<CoreOp, DiagnosticException> Error { get; }
 
             public Integers Transform()
             {
                 return Transform(Diff);
             }
 
-            protected override Integers Visit(DiffOp op)
+            protected override Integers Visit(SetOp op)
             {
                 var left = Transform(op.Arguments[0]);
                 var right = Transform(op.Arguments[1]);

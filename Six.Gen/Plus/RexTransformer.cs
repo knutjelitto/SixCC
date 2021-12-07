@@ -35,7 +35,7 @@ namespace Six.Gen.Ebnf
 
         protected override FA Visit(AltOp op)
         {
-            return FA.Or(Transform(op.First()), op.Skip(1).Select(x => Transform(x)).ToArray())
+            return FA.Or(Transform(op.Arguments.First()), op.Arguments.Skip(1).Select(x => Transform(x)).ToArray())
                 .ToDfa().Minimize().RemoveDead().ToDfa();
         }
 
@@ -92,7 +92,7 @@ namespace Six.Gen.Ebnf
             return dfa;
         }
 
-        protected override FA Visit(DiffOp op)
+        protected override FA Visit(SetOp op)
         {
             var first = Transform(op.Arguments[0]).Minimize().RemoveDead().ToDfa();
             var second = Transform(op.Arguments[1]).Minimize().RemoveDead().ToDfa();

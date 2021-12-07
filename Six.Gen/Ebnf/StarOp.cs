@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public sealed class StarOp : Operator
+    public sealed class StarOp : CoreOp
     {
-        public StarOp(ILocation location, Operator argument)
+        public StarOp(ILocation location, CoreOp argument)
             : base(location, argument)
         {
         }

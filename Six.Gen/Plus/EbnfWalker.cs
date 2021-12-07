@@ -10,7 +10,7 @@
             }    
         }
 
-        protected void Walk(Operator expression)
+        protected void Walk(CoreOp expression)
         {
             switch (expression)
             {
@@ -29,7 +29,7 @@
                 case RangeOp expr:
                     Visit(expr);
                     break;
-                case DiffOp expr:
+                case SetOp expr:
                     Visit(expr);
                     break;
                 case RefOp expr:
@@ -58,7 +58,7 @@
             }
         }
 
-        protected virtual void WalkArguments(Operator op)
+        protected virtual void WalkArguments(CoreOp op)
         {
             foreach (var arg in op.Arguments)
             {
@@ -96,7 +96,7 @@
             WalkArguments(op);
         }
 
-        protected virtual void Visit(DiffOp op)
+        protected virtual void Visit(SetOp op)
         {
             WalkArguments(op);
         }

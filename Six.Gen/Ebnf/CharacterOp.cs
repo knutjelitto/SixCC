@@ -2,7 +2,7 @@
 
 namespace Six.Gen.Ebnf
 {
-    public sealed class CharacterOp : Operator
+    public sealed class CharacterOp : CoreOp
     {
         public CharacterOp(ILocation location, Codepoint codepoint)
             : base(location)

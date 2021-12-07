@@ -2,7 +2,6 @@
 
 namespace Six.Input
 {
-    [DebuggerDisplay("{DbgOut()}")]
     public class Location : ILocation
     {
         public static readonly Location Nowhere = new Location(Source.FromString(string.Empty), 0, 0);

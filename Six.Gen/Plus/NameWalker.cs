@@ -4,14 +4,14 @@ using Six.Ast;
 
 namespace Six.Gen.Ebnf
 {
-    internal class OpNamer : EbnfWalker
+    internal class NameWalker : EbnfWalker
     {
         const string LeftAngle = "❬";
         const string RightAngle = "❭";
 
         private readonly StringBuilder builder = new();
 
-        public string NameOf(Operator op)
+        public string NameOf(CoreOp op)
         {
             builder.Clear();
             Walk(op);
@@ -33,7 +33,7 @@ namespace Six.Gen.Ebnf
             Write(RightAngle);
         }
 
-        private void Arguments(Operator op, string separator)
+        private void Arguments(CoreOp op, string separator)
         {
             var more = false;
             foreach (var argument in op.Arguments)
@@ -85,7 +85,7 @@ namespace Six.Gen.Ebnf
             Right();
         }
 
-        protected override void Visit(DiffOp op)
+        protected override void Visit(SetOp op)
         {
             Left();
             Walk(op.Arguments[0]);

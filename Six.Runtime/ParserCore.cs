@@ -29,11 +29,11 @@ namespace Six.Runtime
             var watch = new Stopwatch();
             watch.Start();
 
-            __Core.__Start.Match(new Context(cursor,
+            __Core.__Start.Match(cursor,
                 success =>
                 {
                     Report("OK  ", ++successCounter, success.Offset);
-                }));
+                });
 
             if (successCounter == 0)
             {
@@ -59,11 +59,11 @@ namespace Six.Runtime
             var cursor = new Cursor(source, 0);
             var ok = false;
 
-            __Core.__Start.Match(new Context(cursor,
+            __Core.__Start.Match(cursor,
                 success =>
                 {
                     ok = true;
-                }));
+                });
 
             return ok;
         }

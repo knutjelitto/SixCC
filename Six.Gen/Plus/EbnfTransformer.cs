@@ -4,13 +4,13 @@
     {
         protected void Transform(EbnfGrammar grammar)
         {
-            foreach (var op in grammar.Inner)
+            foreach (var op in grammar.Operators)
             {
                 Transform(op);
             }    
         }
 
-        protected T Transform(Operator expression)
+        protected T Transform(CoreOp expression)
         {
             switch (expression)
             {
@@ -24,7 +24,7 @@
                     return Visit(expr);
                 case RangeOp expr:
                     return Visit(expr);
-                case DiffOp expr:
+                case SetOp expr:
                     return Visit(expr);
                 case RefOp expr:
                     return Visit(expr);
@@ -79,7 +79,7 @@
             throw new NotImplementedException();
         }
 
-        protected virtual T Visit(DiffOp op)
+        protected virtual T Visit(SetOp op)
         {
             throw new NotImplementedException();
         }

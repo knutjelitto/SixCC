@@ -1,34 +1,34 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public abstract class Operator : IReadOnlyList<Operator>
+    public abstract class CoreOp
     {
-        public Operator(ILocation location, params Operator[] arguments)
+        public CoreOp(ILocation location, params CoreOp[] arguments)
             : this(location, arguments.AsEnumerable())
         {
         }
 
-        public Operator(ILocation location, IEnumerable<Operator> arguments)
+        public CoreOp(ILocation location, IEnumerable<CoreOp> arguments)
         {
             Location = location;
             Arguments = arguments.ToList();
         }
 
-        public void Set(params Operator[] arguments)
+        public void Patch(params CoreOp[] arguments)
         {
             Arguments = arguments.ToList();
         }
 
-        public void Set(ILocation location)
+        public void Patch(ILocation location)
         {
             Location = location;
         }
 
         public ILocation Location { get; private set; }
         public int Id { get; set; } = -1;
-        public bool RuleReached { get; set; }
+        public bool IsReached { get; set; }
         public bool TokenReached { get; set; }
-        public List<Operator> Arguments { get; protected set; }
-        public Operator Argument
+        public List<CoreOp> Arguments { get; protected set; }
+        public CoreOp Argument
         {
             get
             {
@@ -60,17 +60,12 @@
         {
             get
             {
-                if (RuleReached || TokenReached)
+                if (IsReached || TokenReached)
                 {
-                    return " [" + (RuleReached ? "R" : "") + (TokenReached ? "T" : "") + "]";
+                    return " [" + (IsReached ? "R" : "") + (TokenReached ? "T" : "") + "]";
                 }
                 return string.Empty;
             }
         }
-
-        public Operator this[int index] => Arguments[index];
-        public int Count => Arguments.Count;
-        public IEnumerator<Operator> GetEnumerator() => Arguments.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Arguments).GetEnumerator();
     }
 }
