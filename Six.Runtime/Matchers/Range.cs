@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Range(ImplementationCore Core, int Id, string Name, int CP1, int CP2) : Token(Core, Id, Name)
+    public sealed record Range(ImplementationCore Core, int Id, string Name, int CP1, int CP2) : Token(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             var at = context.Start.At;
 

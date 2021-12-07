@@ -4,37 +4,57 @@ namespace Six.Runtime
 {
     public sealed class Context
     {
-        private readonly Action<Cursor> Continue;
+        private readonly List<Action<Cursor>> Continues = new();
+        public readonly HashSet<Cursor> Nexts = new();
         public readonly Matcher Matcher;
         public readonly Cursor Start;
-        public readonly HashSet<int> Nexts;
 
 
         [DebuggerStepThrough]
-        private Context(Matcher matcher, Cursor start, Action<Cursor> next)
+        private Context(Matcher matcher, Cursor start)
         {
             Matcher = matcher;
             Start = start;
-            Continue = next;
-            Nexts = new HashSet<int>();
+            Nexts = new HashSet<Cursor>();
         }
 
-        public static Context From(Matcher matcher, Cursor start, Action<Cursor> next)
+        public static Context From(Matcher matcher, Cursor start, Action<Cursor> @continue)
         {
-            return new Context(matcher, start, next);
+            if (!matcher.Contexts.TryGetValue(start, out var context))
+            {
+                context = new Context(matcher, start);
+                matcher.Contexts.Add(start, context);
+                context.Continues.Add(@continue);
+
+                matcher.MatchCore(context);
+            }
+            else
+            {
+                context.Continues.Add(@continue);
+                foreach (var next in context.Nexts)
+                {
+                    @continue(next);
+                }
+            }
+
+            return context;
         }
 
         public void Success(Cursor next)
         {
-            Nexts.Add(next.Offset);
-            Continue(next);
+            Nexts.Add(next);
+            var count = Continues.Count;
+            for (var i = 0; i < count; i++)
+            {
+                Continues[i](next);
+            }
         }
 
         public override string ToString()
         {
-            var nexts = string.Join(',', Nexts.OrderBy(x => x));
+            var nexts = string.Join(',', Nexts.OrderBy(x => x.Offset));
 
-            return $"context({Start}, {Matcher}, [{nexts}])";
+            return $"context({Start}, {Matcher}, [{nexts}], [#{Continues.Count}])";
         }
     }
 }

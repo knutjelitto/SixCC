@@ -8,9 +8,8 @@ namespace Six.Gen
         const string Matchers = "__Matchers";
 
         const string ImplementationCoreClass = "ImplementationCore";
-        const string RuleClass = "Rule";
         const string MatcherClass = "Matcher";
-        const string ParserCore = "ParserCore";
+        const string ParserCoreClass = "ParserCore";
 
         private readonly NameWalker namer = new();
 
@@ -39,7 +38,7 @@ namespace Six.Gen
 
             block("namespace SixBot", () =>
             {
-                block($"public partial class {parserClass} : {ParserCore}", () =>
+                block($"public partial class {parserClass} : {ParserCoreClass}", () =>
                 {
                     wl($"public {parserClass}()");
                     indent(() => wl($": base({name.CsString()}, new {implementationClass}())"));
@@ -79,9 +78,6 @@ namespace Six.Gen
                                         w($"{rule.RuleId()} = ");
                                         CreateMatcher(rule);
                                         break;
-                                    case RefOp op:
-                                        wl($"{op.RuleId()};");
-                                        break;
                                     case SetOp op when op.CodepointSet != null:
                                         CreateMatcher(op, extra: dfaGenerator.DfaSet(op.CodepointSet));
                                         break;
@@ -103,39 +99,47 @@ namespace Six.Gen
 
                             foreach (var op in grammar.Operators.Where(i => i.HasArguments))
                             {
-                                if (op is DfaRuleOp)
-                                {
-                                    // dfa is set
-                                    continue;
-                                }
-
                                 w($"/* {op.Id,3} {op.GetType().Name,-12} */ ");
-                                w($"{Matchers}[{op.Id}].Set(");
-                                var more = false;
-                                foreach (var argument in op.Arguments)
+                                if (op is DfaRuleOp dfaRule)
                                 {
-                                    if (more)
+                                    wl($"{dfaRule.RuleId()}.Set({dfaRule.DfaId()});");
+                                }
+                                else
+                                {
+                                    if (op is RuleOp ruleOp)
                                     {
-                                        w(", ");
-                                    }
-                                    more = true;
-                                    if (argument is RefOp reference)
-                                    {
-                                        var rule = reference.Rule;
-                                        w($"{rule.RuleId()}");
+                                        w($"{ruleOp.RuleId()}.Set(");
                                     }
                                     else
                                     {
-                                        w($"{Matchers}[{argument.Id}]");
+                                        w($"{Matchers}[{op.Id}].Set(");
                                     }
+                                    var more = false;
+                                    foreach (var argument in op.Arguments)
+                                    {
+                                        if (more)
+                                        {
+                                            w(", ");
+                                        }
+                                        more = true;
+                                        if (argument is RefOp reference)
+                                        {
+                                            var rule = reference.Rule;
+                                            w($"{rule.RuleId()}");
+                                        }
+                                        else
+                                        {
+                                            w($"{Matchers}[{argument.Id}]");
+                                        }
+                                    }
+                                    wl($");");
                                 }
-                                wl($");");
                             }
                             wl();
 
                             dfaGenerator.Create();
-                            wl();
-                            dfaGenerator.Init();
+                            //wl();
+                            //dfaGenerator.Init();
                         });
                         wl();
 

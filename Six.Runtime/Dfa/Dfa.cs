@@ -6,11 +6,17 @@
 
         public Dfa(params DfaState[] states)
         {
+            Assert(states.Length >= 0);
+            States = states;
+        }
+
+        public void Set(params DfaState[] states)
+        {
             Assert(states.Length > 0);
             States = states;
         }
 
-        public DfaState[] States { get; }
+        public DfaState[] States { get; private set; }
         public DfaState Start => States[0];
             
         public void Match(Context context)

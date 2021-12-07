@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record String(ImplementationCore Core, int Id, string Name, string Text) : Token(Core, Id, Name)
+    public sealed record String(ImplementationCore Core, int Id, string Name, string Text) : Token(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             var white = Core.__MatchWhite(context.Start);
 

@@ -39,13 +39,13 @@ namespace Six.Gen
         {
             foreach (var rule in Grammar.Rules.Where(r => r.DFA != null))
             {
-                wl($"private {DfaClass} {rule.DfaId()};");
+                wl($"private {DfaClass} {rule.DfaId()} = new {DfaClass}();");
             }
         }
 
         private void Create(string name, FA dfa)
         {
-            wl($"{name} = new {DfaClass}(");
+            wl($"{name}.Set(");
             indent(() =>
             {
                 var more = false;
@@ -58,7 +58,7 @@ namespace Six.Gen
                     more = true;
 
                     var final = state.Final ? "true" : "false";
-                    w($"new {DfaStateClass}({state.Id}, {final}, {state.Payload})");
+                    w($"new {DfaStateClass}({state.Id}, {final})");
                 }
                 wl();
             });
@@ -68,6 +68,29 @@ namespace Six.Gen
                 var state = dfa.States[i];
                 var transitions = state.TerminalTransitions.ToArray();
 
+#if true
+                indent(
+                    $"{name}.States[{i}].Set(",
+                    () =>
+                    {
+                        var more = false;
+                        for (var j = 0; j < transitions.Length; j++)
+                        {
+                            var transition = transitions[j];
+                            if (more)
+                            {
+                                wl($",");
+                            }
+                            more = true;
+                            w($"new {DfaTransClass}({name}.States[{transition.TargetId}], {DfaIntervals(transition.Set)})");
+                        }
+                        if (transitions.Length > 0)
+                        {
+                            wl();
+                        }
+                    });
+                wl(");");
+#else
                 initializer($"{name}.States[{i}].Transitions = new {DfaTransClass}[]",
                     () =>
                     {
@@ -80,22 +103,23 @@ namespace Six.Gen
                                 wl($",");
                             }
                             more = true;
-                            w($"new {DfaTransClass}({name}.States[{transition.TargetId}], {DfaSet(transition.Set)})");
+                            w($"new {DfaTransClass}({name}.States[{transition.TargetId}], {DfaIntervals(transition.Set)})");
                         }
                         if (transitions.Length > 0)
                         {
                             wl();
                         }
                     });
+#endif
             }
         }
 
         public string DfaSet(Integers set)
         {
-            return $"new {DfaSetClass}({Intervals(set)})";
+            return $"new {DfaSetClass}({DfaIntervals(set)})";
         }
 
-        private string Intervals(Integers set)
+        private string DfaIntervals(Integers set)
         {
             return string.Join(", ", set.GetIntervals().Select(i => $"new {DfaIntervalClass}({i.Min}, {i.Max})"));
         }

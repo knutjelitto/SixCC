@@ -1,6 +1,7 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record DfaRule(ImplementationCore Core, int Id, string Name) : Rule(Core, Id, Name)
+    public record DfaRule(ImplementationCore Core, int Id, string Name)
+        : Rule(Core, Id, Name)
     {
         public Dfa.Dfa? Dfa = null;
 
@@ -9,7 +10,7 @@
             Dfa = dfa;
         }
 
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             var white = Core.__MatchWhite(context.Start);
             if (Dfa!.TryMatch(white, out var done))

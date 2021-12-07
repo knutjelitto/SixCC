@@ -5,16 +5,16 @@ using Six.Core.Errors;
 using SixBot;
 using Six.Gen;
 
-Check<TParser>(0, Sampler.LoadT());
-Check<EParser>(2, Sampler.LoadE());
-Check<SixParser>(-1, Sampler.LoadSix());
-Check<ErrorParser>(0, Sampler.LoadError());
+Check<TParser>(3, true, Sampler.LoadT());
+Check<EParser>(0, false, Sampler.LoadE());
+Check<SixParser>(-1, false, Sampler.LoadSix());
+Check<ErrorParser>(0, false, Sampler.LoadError());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);
 Console.Write("any key ... ");
 Console.ReadKey(true);
 
-void Check<ParserType>(int which, IEnumerable<Sample> samples)
+void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
     where ParserType : ParserCore, new()
 {
     if (which == 0)
@@ -29,10 +29,28 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     {
         count++;
 
-        Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name}");
+        var content = (sample.Content.Length < 20 ? sample.Content : sample.Content.Substring(0,20) + " ...").Esc();
+        Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name} {content}");
         if (which == -1 || which == count)
         {
-            new ParserType().Match(sample.Name, sample.Content);
+            var source = Source.FromString(sample.Name, sample.Content);
+
+            if (parse)
+            {
+                var parser = new ParserType();
+                var ok = parser.Parse(source);
+                if (ok)
+                {
+                    using (var builder = new TreeBuilder(source, parser))
+                    {
+                        builder.Build();
+                    }
+                }
+            }
+            else
+            {
+                new ParserType().Match(source);
+            }
         }
     }
     watch.Stop();

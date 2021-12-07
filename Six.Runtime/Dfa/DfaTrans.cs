@@ -11,6 +11,12 @@
             Set = set;
         }
 
+        public DfaTrans(DfaState target, params DfaInterval[] intervals)
+        {
+            Target = target;
+            Set = new DfaSet(intervals);
+        }
+
         public override string ToString()
         {
             return $"{Set}->{Target.Id}";

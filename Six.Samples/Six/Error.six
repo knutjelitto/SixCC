@@ -1,8 +1,11 @@
 ﻿grammar Error;
 
 E   : id
-    | id id
+    | ids
     ;
 
-id  : 'a' .. 'z'
+ids : id id
+    ;
+
+id  : <'a' .. 'z'>
     ;

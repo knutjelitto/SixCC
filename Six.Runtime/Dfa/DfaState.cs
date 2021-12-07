@@ -9,19 +9,16 @@
 
         public DfaTrans[] Transitions = Array.Empty<DfaTrans>();
 
-        public DfaState(int id, bool final, int payload, params DfaTrans[] transitions)
+        public DfaState(int id, bool final, int payload = -1)
         {
             Id = id;
             Final = final;
             Payload = payload;
-            Transitions = transitions;
         }
 
-        public DfaState(int id, bool final, int payload)
+        public void Set(params DfaTrans[] transitions)
         {
-            Id = id;
-            Final = final;
-            Payload = payload;
+            Transitions = transitions;
         }
 
         [DebuggerStepThrough]

@@ -1,10 +1,13 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Optional(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public sealed record Optional(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
-            Matchers[0].Match(context.Start,
+            context.Success(context.Start);
+
+            Matchers[0].Match(
+                context.Start,
                 success =>
                 {
                     // bail out nullables
@@ -13,8 +16,6 @@
                         context.Success(success);
                     }
                 });
-
-            context.Success(context.Start);
         }
 
         public override string ToString()

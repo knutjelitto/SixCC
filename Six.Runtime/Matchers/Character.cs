@@ -2,7 +2,7 @@
 {
     public sealed record Character(ImplementationCore Core, int Id, string Name, int Codepoint) : Token(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             var white = Core.__MatchWhite(context.Start);
 

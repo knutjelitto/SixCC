@@ -74,6 +74,15 @@
             }
         }
 
+        protected void indent(string head, Action content)
+        {
+            writer.WriteLine(head);
+            using (writer.Indent())
+            {
+                content();
+            }
+        }
+
         protected IDisposable indent()
         {
             return writer.Indent();

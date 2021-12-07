@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Seq(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public sealed record Seq(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             match(0, context.Start);
 

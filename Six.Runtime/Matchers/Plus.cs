@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Plus(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public sealed record Plus(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             var already = new HashSet<Cursor>();
             var todo = new Queue<Cursor>();

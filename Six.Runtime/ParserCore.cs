@@ -5,7 +5,7 @@ namespace Six.Runtime
     public abstract class ParserCore
     {
         public readonly string __Name;
-        protected readonly ImplementationCore __Core;
+        public readonly ImplementationCore __Core;
 
         protected ParserCore()
             : this("<noname>", new ImplementationCore())
@@ -18,12 +18,10 @@ namespace Six.Runtime
             __Core = core;
         }
 
-        public void Match(string name, string content)
+        public bool Match(Source source)
         {
-            var source = Source.FromString(name, content);
             var cursor = new Cursor(source, 0);
             var successCounter = 0;
-            var failureCounter = 0;
             var lastfailure = cursor;
 
             var watch = new Stopwatch();
@@ -32,12 +30,20 @@ namespace Six.Runtime
             __Core.__Start.Match(cursor,
                 success =>
                 {
-                    Report("OK  ", ++successCounter, success.Offset);
+                    ++successCounter;
                 });
+
+            watch.Stop();
 
             if (successCounter == 0)
             {
-                Report("FAIL", failureCounter, lastfailure.Offset);
+                Report("FAIL", 0, 0);
+                return false;
+            }
+            else
+            {
+                Report("OK  ", successCounter, source.Length);
+                return true;
             }
 
             void Report(string what, int counter, int offset)
@@ -51,6 +57,13 @@ namespace Six.Runtime
                 Console.WriteLine($"{what}#{counter} {__Name} {rep}");
                 Console.WriteLine($"elapsed: {ms} ms, {cps} cps, {lps} lps");
             }
+        }
+
+        public bool Parse(Source source)
+        {
+            var ok = Match(source);
+
+            return ok;
         }
 
         public bool Recognize(string name, string content)

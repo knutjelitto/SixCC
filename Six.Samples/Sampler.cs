@@ -11,7 +11,7 @@ namespace Six.Samples
 
         public static IEnumerable<Sample> LoadT()
         {
-            return LoadAll(name => name.EndsWith(".t"));
+            return LoadAll(name => name.EndsWith(".t")).OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadE()
@@ -21,7 +21,7 @@ namespace Six.Samples
 
         public static IEnumerable<Sample> LoadError()
         {
-            return LoadAll(name => name.EndsWith(".error"));
+            return LoadAll(name => name.EndsWith(".error")).OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadJson()

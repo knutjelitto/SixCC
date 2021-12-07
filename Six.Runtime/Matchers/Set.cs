@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Set(ImplementationCore Core, int Id, string Name, Dfa.DfaSet DfaSet) : Token(Core, Id, Name)
+    public sealed record Set(ImplementationCore Core, int Id, string Name, Dfa.DfaSet DfaSet) : Token(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             var white = Core.__MatchWhite(context.Start);
 

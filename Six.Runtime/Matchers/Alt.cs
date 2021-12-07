@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Alt(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public sealed record Alt(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             foreach (var matcher in Matchers)
             {

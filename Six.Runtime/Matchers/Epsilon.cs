@@ -1,8 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public record Epsilon(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public sealed record Epsilon(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
     {
-        protected override void MatchCore(Context context)
+        public override void MatchCore(Context context)
         {
             context.Success(context.Start);
         }
