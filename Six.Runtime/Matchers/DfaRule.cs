@@ -10,6 +10,8 @@
             Dfa = dfa;
         }
 
+        public override bool IsTerminal => true;
+
         public override void MatchCore(Context context)
         {
             var white = Core.__MatchWhite(context.Start);

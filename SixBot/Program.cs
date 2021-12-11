@@ -4,9 +4,11 @@ using Six.Samples;
 using Six.Core.Errors;
 using SixBot;
 using Six.Gen;
+using Six.Runtime.Tree;
 
-Check<TParser>(3, true, Sampler.LoadT());
-Check<EParser>(0, false, Sampler.LoadE());
+Check<Gamma1Parser>(0, false, Sampler.LoadGamma1());
+Check<TParser>(0, true, Sampler.LoadT());
+Check<EParser>(2, true, Sampler.LoadE());
 Check<SixParser>(-1, false, Sampler.LoadSix());
 Check<ErrorParser>(0, false, Sampler.LoadError());
 CheckJson(false, Sampler.LoadJson());
@@ -29,7 +31,7 @@ void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
     {
         count++;
 
-        var content = (sample.Content.Length < 20 ? sample.Content : sample.Content.Substring(0,20) + " ...").Esc();
+        var content = (sample.Content.Length < 20 ? sample.Content : sample.Content[..20] + " ...").Esc();
         Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name} {content}");
         if (which == -1 || which == count)
         {
@@ -41,10 +43,8 @@ void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
                 var ok = parser.Parse(source);
                 if (ok)
                 {
-                    using (var builder = new TreeBuilder(source, parser))
-                    {
-                        builder.Build();
-                    }
+                    var builder = new TreeBuilder(source, parser);
+                    builder.Build();
                 }
             }
             else

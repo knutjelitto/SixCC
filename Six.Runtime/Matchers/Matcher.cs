@@ -8,14 +8,31 @@
 
         public void Match(Cursor start, Action<Cursor> next)
         {
-            Context.From(this, start, next);
+            Runtime.Context.From(this, start, next);
         }
 
         public abstract void MatchCore(Context context);
 
+        public abstract bool IsTerminal { get; }
+
+        public int Count => Matchers.Length;
+
         public void Set(params Matcher[] matchers)
         {
             Matchers = matchers;
+        }
+
+        [DebuggerStepThrough]
+        public Context? Context(Cursor at)
+        {
+            if (Contexts.TryGetValue(at, out var context))
+            {
+                if (context.Nexts.Count > 0)
+                {
+                    return context;
+                }
+            }
+            return null;
         }
 
         public override string ToString()

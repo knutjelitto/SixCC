@@ -38,6 +38,11 @@ namespace Six.Runtime
             return obj is Cursor other && Offset == other.Offset;
         }
 
+        public static Cursor operator+(Cursor cursor, int advance)
+        {
+            return cursor.Advance(advance);
+        }
+
         public bool Equals(Cursor other)
         {
             return Offset == other.Offset;
@@ -53,14 +58,24 @@ namespace Six.Runtime
             return !c1.Equals(c2);
         }
 
+        public static bool operator <(Cursor c1, Cursor c2)
+        {
+            return c1.Offset < c2.Offset;
+        }
+
+        public static bool operator <=(Cursor c1, Cursor c2)
+        {
+            return c1.Offset <= c2.Offset;
+        }
+
         public static bool operator >(Cursor c1, Cursor c2)
         {
             return c1.Offset > c2.Offset;
         }
 
-        public static bool operator <(Cursor c1, Cursor c2)
+        public static bool operator >=(Cursor c1, Cursor c2)
         {
-            return c1.Offset < c2.Offset;
+            return c1.Offset >= c2.Offset;
         }
 
         [DebuggerStepThrough]

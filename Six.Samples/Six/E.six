@@ -1,9 +1,5 @@
 ﻿grammar E;
 
-%whitespace
-    : ' '*
-    ;
-
 E   : E '+' E
     | 'e'
     ;

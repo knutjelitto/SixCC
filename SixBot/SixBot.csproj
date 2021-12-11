@@ -22,6 +22,8 @@
         <AdditionalFiles Include="..\Six.Samples\Six\Error.six" Link="Samples\Error.six" />
         <AdditionalFiles Include="Grammars\Json.six" />
         <AdditionalFiles Include="Grammars\Six.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\Gamma1.six" Link="Samples\Gamma1.six" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\Gamma1Parser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\ErrorParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\TParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\ExpressionParser.gen.cs" />

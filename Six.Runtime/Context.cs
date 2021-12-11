@@ -52,9 +52,9 @@ namespace Six.Runtime
 
         public override string ToString()
         {
-            var nexts = string.Join(',', Nexts.OrderBy(x => x.Offset));
+            var nexts = string.Join(',', Nexts.Select(x => x.Offset).OrderBy(x => x));
 
-            return $"context({Start}, {Matcher}, [{nexts}], [#{Continues.Count}])";
+            return $"context({Start.Offset}, {Matcher}, [{nexts}], [#{Continues.Count}])";
         }
     }
 }

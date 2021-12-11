@@ -1,7 +1,4 @@
 ﻿grammar T;
 
-T   : t* t*
-    ;
-
-t   : 't'
+T   : 't'* 't'*
     ;

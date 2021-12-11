@@ -6,8 +6,9 @@ namespace Six.Gen.Ebnf
 {
     internal class NameWalker : EbnfWalker
     {
-        const string LeftAngle = "❬";
-        const string RightAngle = "❭";
+        const string LeftParent = "(";
+        const string RightParent = ")";
+        const string Comma = ",";
 
         private readonly StringBuilder builder = new();
 
@@ -23,14 +24,15 @@ namespace Six.Gen.Ebnf
             builder.Append(str);
         }
 
-        private void Left()
+        private void Left(string head)
         {
-            Write(LeftAngle);
+            Write(head);
+            Write(LeftParent);
         }
 
         private void Right()
         {
-            Write(RightAngle);
+            Write(RightParent);
         }
 
         private void Arguments(CoreOp op, string separator)
@@ -49,54 +51,37 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(AltOp op)
         {
-            Left();
+            Left("alt");
             Arguments(op, "|");
             Right();
         }
 
         protected override void Visit(AnyOp op)
         {
-            Write("·");
-        }
-
-        protected override void Visit(CharacterOp op)
-        {
-            Write(op.Codepoint.ToString().Esc());
+            Write("any");
         }
 
         protected override void Visit(OptionalOp op)
         {
+            Left("?");
             Walk(op.Argument);
-            Write("?");
-        }
-
-        protected override void Visit(PlusOp op)
-        {
-            Walk(op.Argument);
-            Write("+");
+            Right();
         }
 
         protected override void Visit(RangeOp op)
         {
-            Left();
+            Left("range");
             Write(op.Codepoint1.ToString().Esc());
-            Write("⤍");
+            Write(Comma);
             Write(op.Codepoint2.ToString().Esc());
-            Right();
-        }
-
-        protected override void Visit(SetOp op)
-        {
-            Left();
-            Walk(op.Arguments[0]);
-            Write("-");
-            Walk(op.Arguments[1]);
             Right();
         }
 
         protected override void Visit(RefOp op)
         {
-            Write($"⤇{op.Name}");
+            Left("ref");
+            Write(op.Name);
+            Right();
         }
 
         protected override void Visit(RuleOp op)
@@ -106,22 +91,28 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(SeqOp op)
         {
-            Left();
-            if (op.Arguments.Count > 0)
-            {
-                Arguments(op, "»");
-            }
-            else
-            {
-                Write("𝛆");
-            }
+            Left("_");
+            Arguments(op, Comma);
             Right();
         }
 
         protected override void Visit(StarOp op)
         {
+            Left("*");
             Walk(op.Argument);
-            Write("*");
+            Right();
+        }
+
+        protected override void Visit(PlusOp op)
+        {
+            Left("+");
+            Walk(op.Argument);
+            Right(); ;
+        }
+
+        protected override void Visit(CharacterOp op)
+        {
+            Write(op.Codepoint.ToString().Esc());
         }
 
         protected override void Visit(StringOp op)
@@ -129,11 +120,18 @@ namespace Six.Gen.Ebnf
             Write(op.Text.Esc());
         }
 
+        protected override void Visit(SetOp op)
+        {
+            Left("set");
+            Arguments(op, Comma);
+            Right();
+        }
+
         protected override void Visit(TokenOp op)
         {
-            Write("«");
+            Left("tok");
             Walk(op.Argument);
-            Write("»");
+            Right();
         }
     }
 }

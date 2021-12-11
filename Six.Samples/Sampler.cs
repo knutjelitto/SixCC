@@ -24,6 +24,11 @@ namespace Six.Samples
             return LoadAll(name => name.EndsWith(".error")).OrderBy(s => s.Name);
         }
 
+        public static IEnumerable<Sample> LoadGamma1()
+        {
+            return LoadAll(name => name.EndsWith(".gamma1")).OrderBy(s => s.Name);
+        }
+
         public static IEnumerable<Sample> LoadJson()
         {
 #if true

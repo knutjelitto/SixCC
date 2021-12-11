@@ -15,6 +15,7 @@
 		<None Remove="E\4.e" />
 		<None Remove="E\5.e" />
 		<None Remove="E\6.e" />
+		<None Remove="Gamma1\1.gamma1" />
 		<None Remove="Json\i_number_double_huge_neg_exp.json" />
 		<None Remove="Json\i_number_huge_exp.json" />
 		<None Remove="Json\i_number_neg_int_huge_exp.json" />
@@ -338,6 +339,7 @@
 		<None Remove="Six\Error.six" />
 		<None Remove="Six\Expression.six" />
 		<None Remove="Six\Gamma0.six" />
+		<None Remove="Six\Gamma1.six" />
 		<None Remove="Six\T.six" />
 		<None Remove="Six\Tester.six" />
 		<None Remove="T\1.t" />
@@ -356,8 +358,10 @@
 		<EmbeddedResource Include="E\4.e" />
 		<EmbeddedResource Include="E\5.e" />
 		<EmbeddedResource Include="E\6.e" />
+		<EmbeddedResource Include="Gamma1\1.gamma1" />
 		<EmbeddedResource Include="Six\CeylonLexer.six" />
 		<EmbeddedResource Include="Six\E.six" />
+		<EmbeddedResource Include="Six\Gamma1.six" />
 		<EmbeddedResource Include="Six\Tester.six" />
 		<EmbeddedResource Include="Six\T.six" />
 		<EmbeddedResource Include="Six\Gamma0.six" />

@@ -34,6 +34,10 @@ namespace Six.Gen
                     case '\v':
                         return "\\v";
                     default:
+                        if (chr == ' ')
+                        {
+                            return " ";
+                        }
                         if (char.IsControl(chr) || char.IsSeparator(chr))
                         {
                             if (chr <= 0xFFFF)
