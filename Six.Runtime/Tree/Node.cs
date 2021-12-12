@@ -7,12 +7,19 @@ namespace Six.Runtime.Tree
     {
         protected string Extend()
         {
-            return Extend(Start, End, Matcher);
+            return Extend(Start, null, End, Matcher);
         }
 
-        protected static string Extend(Cursor start, Cursor end, Matcher matcher)
+        protected static string Extend(Cursor start, Cursor? pivot, Cursor end, Matcher matcher)
         {
-            return $"{matcher.Name} [{start.Offset}-{end.Offset}]";
+            if (pivot is null)
+            {
+                return $"{matcher.Name} [{start.Offset}-{end.Offset}]";
+            }
+            else
+            {
+                return $"{matcher.Name} [{start.Offset}-{pivot.Value.Offset}-{end.Offset}]";
+            }
         }
 
         public string Name => Matcher.Name;

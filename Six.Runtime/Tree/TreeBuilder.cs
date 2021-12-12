@@ -20,7 +20,7 @@ namespace Six.Runtime.Tree
 
         public void Build()
         {
-            var root = Build(parser.__Core.__Start, new Cursor(source, 0), new Cursor(source, source.Length), true).ToList();
+            var root = Build(parser.__Core.__Start, new Cursor(source, 0), new Cursor(source, source.Length)).ToList();
 
             var file = Path.GetFileNameWithoutExtension(source.Name);
             using (var writer = $"{parser.__Name}-{file}-sppf.txt".Writer())
@@ -48,32 +48,32 @@ namespace Six.Runtime.Tree
 #endif
         }
 
-        private IEnumerable<Node> Build(Matcher matcher, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> Build(Matcher matcher, Cursor start, Cursor end)
         {
             switch (matcher)
             {
                 case StartRule match:
-                    return BuildStartRule(match, start, ultimo, hard).ToArray();
+                    return BuildStartRule(match, start, end).ToArray();
                 case PlainRule match:
-                    return BuildPlainRule(match, start, ultimo, hard).ToArray();
+                    return BuildPlainRule(match, start, end).ToArray();
                 case Alt match:
-                    return BuildAlt(match, start, ultimo, hard).ToArray();
+                    return BuildAlt(match, start, end).ToArray();
                 case Seq match:
-                    return BuildSeq(match, start, ultimo, hard).ToArray();
+                    return BuildSeq(match, start, end).ToArray();
                 case Star match:
-                    return BuildStar(match, start, ultimo, hard).ToArray();
+                    return BuildStar(match, start, end, true).ToArray();
                 case Optional match:
-                    return BuildOptional(match, start, ultimo, hard).ToArray();
+                    return BuildOptional(match, start, end, true).ToArray();
                 case Character match:
-                    return BuildCharacter(match, start, ultimo, hard).ToArray();
+                    return BuildCharacter(match, start, end, true).ToArray();
                 default:
                     throw new NotImplementedException($"can't build node for '{matcher.GetType().Name}'");
             }
         }
 
-        private IEnumerable<Node> BuildStartRule(StartRule rule, Cursor start, Cursor end, bool hard)
+        private IEnumerable<Node> BuildStartRule(StartRule rule, Cursor start, Cursor end)
         {
-            var build = BuildRule(rule, start, end, hard);
+            var build = BuildRule(rule, start, end);
 
             foreach (var node in build)
             {
@@ -84,29 +84,29 @@ namespace Six.Runtime.Tree
             }
         }
 
-        private IEnumerable<Node> BuildPlainRule(PlainRule rule, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> BuildPlainRule(PlainRule rule, Cursor start, Cursor end)
         {
-            return BuildRule(rule, start, ultimo, hard);
+            return BuildRule(rule, start, end);
         }
 
-        private IEnumerable<Node> BuildRule(Rule rule, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> BuildRule(Rule rule, Cursor start, Cursor ultimo)
         {
             if (Covers(rule, start))
             {
                 if (rule.IsTerminal)
                 {
-                    return BuildTerminal(rule, start, ultimo, hard).ToArray();
+                    return BuildTerminal(rule, start, ultimo).ToArray();
                 }
                 else
                 {
-                    return BuildNonterminal(rule, start, ultimo, hard).ToArray();
+                    return BuildNonterminal(rule, start, ultimo).ToArray();
                 }
             }
 
             return Enumerable.Empty<Node>();
         }
 
-        private IEnumerable<Node> BuildAlt(Alt matcher, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> BuildAlt(Alt matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -114,11 +114,11 @@ namespace Six.Runtime.Tree
             {
                 foreach (var alt in matcher.Matchers)
                 {
-                    if (CanMatch(alt, start, ultimo))
+                    if (CanMatch(alt, start, end))
                     {
-                        foreach (var node in Build(alt, start, ultimo, hard).ToArray())
+                        foreach (var node in Build(alt, start, end).ToArray())
                         {
-                            if (node.End <= ultimo)
+                            if (node.End <= end)
                             {
                                 yield return node;
                             }
@@ -128,19 +128,150 @@ namespace Six.Runtime.Tree
             }
         }
 
-        private IEnumerable<Node> BuildSeq(Seq matcher, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> BuildSeq(Seq matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start);
+            var packeds = BuildMatcher(matcher, start, end).ToArray();
 
-            if (context != null)
+            var nonterminal = NewNonterminal(start, end, matcher, packeds);
+
+            yield return nonterminal;
+        }
+
+        private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
+        {
+            var partitions = FindPartitions(matcher, 0, start, end).ToList();
+
+            var packeds = new List<Packed>();
+
+            foreach (var partition in partitions)
             {
-                var children = BuildPacked(matcher, matcher.Count, start, ultimo, hard).ToArray();
+                var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).ToList();
 
-                foreach (var (end, packed) in Groups(children))
+                foreach (var partial in partials)
                 {
-                    var nonterminal = NewNonterminal(start, end, matcher, packed);
+                    Assert(partial.End == end);
+                }
 
-                    yield return nonterminal;
+                packeds.AddRange(partials);
+            }
+
+            return packeds;
+        }
+
+        private IEnumerable<Packed> BuildPackedPartitioned(Matcher matcher, int dot, List<Cursor> partition)
+        {
+            Assert(matcher.Count + 1 == partition.Count);
+
+            if (dot > 0)
+            {
+                dot--;
+
+                var rights = Build(matcher.Matchers[dot], partition[dot], partition[dot + 1]).ToList();
+
+                if (dot == 0)
+                {
+                    foreach (var right in rights)
+                    {
+                        Assert(right.Start == partition[dot]);
+                        Assert(right.End == partition[dot + 1]);
+                        yield return NewPacked(partition[dot], partition[dot + 1], matcher, partition[dot], null, right);
+                    }
+                }
+                else
+                {
+                    var lefts = BuildLeftPartitioned(matcher, dot, partition).ToList();
+
+                    foreach (var left in lefts)
+                    {
+                        foreach (var right in rights)
+                        {
+                            yield return NewPacked(left.Start, right.End, matcher, left.End, left, right);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                yield break;
+            }
+        }
+
+        private IEnumerable<Node> BuildLeftPartitioned(Matcher matcher, int dot, List<Cursor> partition)
+        {
+            Assert(dot > 0);
+
+            dot--;
+
+            if (dot == 0)
+            {
+                var lefts = Build(matcher.Matchers[dot], partition[dot], partition[dot + 1]).ToList();
+
+                foreach (var left in lefts)
+                {
+                    yield return left;
+                }
+            }
+            else
+            {
+                var lefts = BuildLeftPartitioned(matcher, dot, partition).ToList();
+                var rights = Build(matcher.Matchers[dot], partition[dot], partition[dot+1]);
+
+                var packeds = new List<Packed>();
+
+                foreach (var left in lefts)
+                {
+                    Assert(left.Start == partition[dot - 1]);
+
+                    foreach (var right in rights)
+                    {
+                        Assert(right.End == partition[dot + 1]);
+
+                        var packed = NewPacked(left.Start, right.End, matcher, left.End, left, right);
+
+                        packeds.Add(packed);
+                    }
+                }
+
+                yield return NewIntermediate(partition[dot-1], partition[dot+1], matcher, dot + 1, packeds.ToArray());
+            }
+        }
+
+        private IEnumerable<List<Cursor>> FindPartitions(Matcher symbol, int dot, Cursor start, Cursor end)
+        {
+            Assert(dot < symbol.Count);
+
+            if (dot < symbol.Count)
+            {
+                var matcher = symbol.Matchers[dot];
+
+                var context = matcher.Context(start);
+
+                if (context != null)
+                {
+                    if (dot + 1 == symbol.Count)
+                    {
+                        if (context.Nexts.Contains(end))
+                        {
+                            yield return new List<Cursor> { start, end };
+                        }
+                    }
+                    else
+                    {
+                        foreach (var next in context.Nexts.OrderBy(x => x.Offset).Where(x => x <= end).ToList())
+                        {
+                            if (next <= end)
+                            {
+                                foreach (var sub in FindPartitions(symbol, dot + 1, next, end).ToList())
+                                {
+                                    var list = new List<Cursor>();
+                                    list.Add(start);
+                                    list.AddRange(sub);
+
+                                    yield return list;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -221,48 +352,35 @@ namespace Six.Runtime.Tree
             }
         }
 
-        private IEnumerable<Node> BuildTerminal(Matcher matcher, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> BuildTerminal(Matcher matcher, Cursor start, Cursor end)
         {
             Assert(matcher.IsTerminal);
             Assert(Covers(matcher, start));
 
             var context = matcher.Context(start);
-            if (context != null)
+            if (context != null && context.Nexts.Contains(end))
             {
-                foreach (var next in context.Nexts.OrderBy(x => x.Offset))
-                {
-                    if (next <= ultimo)
-                    {
-                        yield return NewTerminal(start, next, matcher);
-                    }
-                }
+                yield return NewTerminal(start, end, matcher);
             }
         }
 
-        private IEnumerable<Node> BuildNonterminal(Rule matcher, Cursor start, Cursor ultimo, bool hard)
+        private IEnumerable<Node> BuildNonterminal(Rule matcher, Cursor start, Cursor end)
         {
             Assert(!matcher.IsTerminal);
             Assert(Covers(matcher, start));
 
-            var key = Nonterminal.Key(start, ultimo, matcher);
+            var context = matcher.Context(start);
 
-            if (cache.TryGetValue(key, out var node))
+            if (context != null)
             {
-                yield return node;
-            }
-            else
-            {
-                var context = matcher.Context(start);
+                var children = BuildMatcher(matcher, start, end).ToArray();
 
-                if (context != null)
+                foreach (var packed in children)
                 {
-                    var children = BuildPacked(matcher, matcher.Matchers.Length, start, ultimo, hard).ToArray();
-
-                    foreach (var (end, nodes) in Groups(children))
-                    {
-                        yield return NewNonterminal(start, end, matcher, nodes);
-                    }
+                    Assert(packed.End == end);
                 }
+
+                yield return NewNonterminal(start, end, matcher, children);
             }
         }
 
@@ -282,9 +400,9 @@ namespace Six.Runtime.Tree
 
                     foreach (var next in context.Nexts.OrderBy(x => x.Offset))
                     {
-                        if (next <= ultimo)
+                        if (hard && next == ultimo || !hard && next <= ultimo)
                         {
-                            var symbols = Build(before, start, next, hard).ToArray();
+                            var symbols = Build(before, start, next).ToArray();
 
                             foreach (var symbol in symbols)
                             {
@@ -309,35 +427,32 @@ namespace Six.Runtime.Tree
 
         private IEnumerable<Packed> BuildPacked(Matcher matcher, int dot, Cursor start, Cursor ultimo, bool hard)
         {
-            Assert(dot > 0);
+            Assert(dot > 0 && dot <= matcher.Count);
             Assert(Covers(matcher, start));
             Assert(matcher.Matchers.Length > 0);
 
-            if (dot <= matcher.Count)
+            var lefts = BuildPackedLeft(matcher, dot, start, ultimo, hard && dot == matcher.Count).ToArray();
+
+            foreach (var left in lefts)
             {
-                var lefts = BuildPackedLeft(matcher, dot, start, ultimo, hard).ToArray();
+                Assert(left.End <= ultimo);
 
-                foreach (var left in lefts)
+                if (dot < matcher.Count)
                 {
-                    Assert(left.End <= ultimo);
+                    var rights = Build(matcher.Matchers[dot], left.End, ultimo).ToArray();
 
-                    if (dot < matcher.Count)
+                    foreach (var right in rights)
                     {
-                        var rights = Build(matcher.Matchers[dot], left.End, ultimo, hard).ToArray();
-
-                        foreach (var right in rights)
-                        {
-                            var packed = NewPacked(start, right.End, matcher, right.Start, left, right);
-
-                            yield return packed;
-                        }
-                    }
-                    else
-                    {
-                        var packed = NewPacked(start, left.End, matcher, left.Start, null, left);
+                        var packed = NewPacked(start, right.End, matcher, right.Start, left, right);
 
                         yield return packed;
                     }
+                }
+                else
+                {
+                    var packed = NewPacked(start, left.End, matcher, left.Start, null, left);
+
+                    yield return packed;
                 }
             }
         }
@@ -409,11 +524,12 @@ namespace Six.Runtime.Tree
             return matcher.Contexts.ContainsKey(start);
         }
 
-        private static bool CanMatch(Matcher matcher, Cursor start, Cursor ultimo)
+        [DebuggerStepThrough]
+        private static bool CanMatch(Matcher matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
-            return context != null && context.Nexts.Select(x => x.Offset).Min() <= ultimo.Offset;
+            return context != null && context.Nexts.Contains(end);
         }
     }
 }

@@ -8,7 +8,7 @@ using Six.Runtime.Tree;
 
 Check<Gamma1Parser>(0, false, Sampler.LoadGamma1());
 Check<TParser>(0, true, Sampler.LoadT());
-Check<EParser>(2, true, Sampler.LoadE());
+Check<EParser>(5, true, Sampler.LoadE());
 Check<SixParser>(-1, false, Sampler.LoadSix());
 Check<ErrorParser>(0, false, Sampler.LoadError());
 CheckJson(false, Sampler.LoadJson());

@@ -9,14 +9,12 @@ namespace Six.Runtime.Tree
     {
         public override string ToString()
         {
-            var txt = Source.GetText(Start.Offset, End.Offset - Start.Offset);
-
-            return $"<terminal> {Extend()} '{txt}'";
+            return Key(Start, End, Matcher);
         }
 
         public static string Key(Cursor start, Cursor end, Matcher matcher)
         {
-            return $"<terminal> {Extend(start, end, matcher)}";
+            return $"<terminal> {Extend(start, null, end, matcher)}";
         }
     }
 }

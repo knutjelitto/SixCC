@@ -19,7 +19,6 @@ namespace Six.Runtime.Tree
 
         public void Dump()
         {
-            w.wl("hello");
             Dump(Root);
         }
 

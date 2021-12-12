@@ -13,7 +13,7 @@ namespace Six.Runtime.Tree
 
         public static string Key(Cursor start, Cursor end, Matcher matcher)
         {
-            return $"<nonterminal> {Extend(start, end, matcher)}";
+            return $"<nonterminal> {Extend(start, null, end, matcher)}";
         }
     }
 }

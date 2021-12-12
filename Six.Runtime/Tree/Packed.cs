@@ -8,12 +8,12 @@ namespace Six.Runtime.Tree
     {
         public override string ToString()
         {
-            return $"<packed> {Extend()} ({Pivot.Offset})";
+            return Key(Start, End, Matcher, Pivot);
         }
 
         public static string Key(Cursor start, Cursor end, Matcher matcher, Cursor pivot)
         {
-            return $"<packed> {Extend(start, end, matcher)} ({pivot.Offset})";
+            return $"<packed> {Extend(start, pivot, end, matcher)}";
         }
     }
 }
