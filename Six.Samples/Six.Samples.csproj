@@ -8,14 +8,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="Error\1.error" />
-		<None Remove="E\1.e" />
-		<None Remove="E\2.e" />
-		<None Remove="E\3.e" />
-		<None Remove="E\4.e" />
-		<None Remove="E\5.e" />
-		<None Remove="E\6.e" />
-		<None Remove="Gamma1\1.gamma1" />
+		<None Remove="A\1.a" />
+		<None Remove="B\1.b" />
+		<None Remove="B\2.b" />
+		<None Remove="B\3.b" />
+		<None Remove="C\1.c" />
+		<None Remove="C\2.c" />
+		<None Remove="C\3.c" />
+		<None Remove="C\4.c" />
+		<None Remove="C\5.c" />
+		<None Remove="C\6.c" />
+		<None Remove="C\7.c" />
+		<None Remove="C\8.c" />
+		<None Remove="D\1.d" />
+		<None Remove="D\2.d" />
+		<None Remove="D\3.d" />
+		<None Remove="D\4.d" />
+		<None Remove="D\5.d" />
+		<None Remove="D\6.d" />
 		<None Remove="Json\i_number_double_huge_neg_exp.json" />
 		<None Remove="Json\i_number_huge_exp.json" />
 		<None Remove="Json\i_number_neg_int_huge_exp.json" />
@@ -334,45 +344,40 @@
 		<None Remove="Json\_stack_i_structure_500_nested_arrays.json" />
 		<None Remove="Json\_stack_n_structure_100000_opening_arrays.json" />
 		<None Remove="Json\_stack_n_structure_open_array_object.json" />
-		<None Remove="Six\CeylonLexer.six" />
-		<None Remove="Six\E.six" />
-		<None Remove="Six\Error.six" />
+		<None Remove="Six\A.six" />
+		<None Remove="Six\B.six" />
+		<None Remove="Six\C.six" />
+		<None Remove="Six\D.six" />
 		<None Remove="Six\Expression.six" />
-		<None Remove="Six\Gamma0.six" />
-		<None Remove="Six\Gamma1.six" />
-		<None Remove="Six\T.six" />
-		<None Remove="Six\Tester.six" />
-		<None Remove="T\1.t" />
-		<None Remove="T\2.t" />
-		<None Remove="T\3.t" />
-		<None Remove="T\4.t" />
-		<None Remove="T\5.t" />
-		<None Remove="T\6.t" />
+		<None Remove="Six\Test.six" />
+		<None Remove="Test\1.test" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Error\1.error" />
-		<EmbeddedResource Include="E\1.e" />
-		<EmbeddedResource Include="E\2.e" />
-		<EmbeddedResource Include="E\3.e" />
-		<EmbeddedResource Include="E\4.e" />
-		<EmbeddedResource Include="E\5.e" />
-		<EmbeddedResource Include="E\6.e" />
-		<EmbeddedResource Include="Gamma1\1.gamma1" />
-		<EmbeddedResource Include="Six\CeylonLexer.six" />
-		<EmbeddedResource Include="Six\E.six" />
-		<EmbeddedResource Include="Six\Gamma1.six" />
-		<EmbeddedResource Include="Six\Tester.six" />
-		<EmbeddedResource Include="Six\T.six" />
-		<EmbeddedResource Include="Six\Gamma0.six" />
-		<EmbeddedResource Include="Six\Error.six" />
+		<EmbeddedResource Include="B\1.b" />
+		<EmbeddedResource Include="B\3.b" />
+		<EmbeddedResource Include="B\2.b" />
+		<EmbeddedResource Include="C\1.c" />
+		<EmbeddedResource Include="C\2.c" />
+		<EmbeddedResource Include="C\3.c" />
+		<EmbeddedResource Include="C\4.c" />
+		<EmbeddedResource Include="C\5.c" />
+		<EmbeddedResource Include="C\8.c" />
+		<EmbeddedResource Include="C\7.c" />
+		<EmbeddedResource Include="C\6.c" />
+		<EmbeddedResource Include="A\1.a" />
+		<EmbeddedResource Include="Six\C.six" />
+		<EmbeddedResource Include="Six\A.six" />
+		<EmbeddedResource Include="Six\Test.six" />
+		<EmbeddedResource Include="Six\D.six" />
+		<EmbeddedResource Include="Six\B.six" />
 		<EmbeddedResource Include="Six\Expression.six" />
-		<EmbeddedResource Include="T\1.t" />
-		<EmbeddedResource Include="T\2.t" />
-		<EmbeddedResource Include="T\3.t" />
-		<EmbeddedResource Include="T\4.t" />
-		<EmbeddedResource Include="T\6.t" />
-		<EmbeddedResource Include="T\5.t" />
+		<EmbeddedResource Include="D\1.d" />
+		<EmbeddedResource Include="D\2.d" />
+		<EmbeddedResource Include="D\3.d" />
+		<EmbeddedResource Include="D\4.d" />
+		<EmbeddedResource Include="D\6.d" />
+		<EmbeddedResource Include="D\5.d" />
 		<EmbeddedResource Include="Json\i_number_double_huge_neg_exp.json" />
 		<EmbeddedResource Include="Json\i_number_huge_exp.json" />
 		<EmbeddedResource Include="Json\i_number_neg_int_huge_exp.json" />
@@ -696,10 +701,7 @@
 	<ItemGroup>
 	  <EmbeddedResource Include="..\SixBot\Grammars\Json.six" Link="Six\Json.six" />
 	  <EmbeddedResource Include="..\SixBot\Grammars\Six.six" Link="Six\Six.six" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Ceylon\" />
+	  <EmbeddedResource Include="Test\1.test" />
 	</ItemGroup>
 
 </Project>

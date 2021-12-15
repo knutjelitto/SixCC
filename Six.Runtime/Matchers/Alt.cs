@@ -4,7 +4,7 @@
     {
         public override void MatchCore(Context context)
         {
-            foreach (var matcher in Matchers)
+            foreach (var matcher in this)
             {
                 matcher.Match(context.Start, context.Success);
             }

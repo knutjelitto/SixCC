@@ -42,12 +42,12 @@ namespace Six.Runtime
 
         public void Success(Cursor next)
         {
-            Nexts.Add(next);
             var count = Continues.Count;
             for (var i = 0; i < count; i++)
             {
                 Continues[i](next);
             }
+            Nexts.Add(next);
         }
 
         public override string ToString()

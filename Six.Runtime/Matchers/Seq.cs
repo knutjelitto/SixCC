@@ -8,13 +8,13 @@
 
             void match(int index, Cursor next)
             {
-                if (index == Matchers.Length)
+                if (index == Count)
                 {
                     context.Success(next);
                 }
                 else
                 {
-                    var matcher = Matchers[index];
+                    var matcher = this[index];
 
                     matcher.Match(
                         next,

@@ -1,0 +1,10 @@
+﻿grammar Test;
+
+G	: R+
+	;
+
+R	: E*
+	;
+
+E	: 'id' 'x'?
+	;

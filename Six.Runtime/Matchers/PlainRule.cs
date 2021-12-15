@@ -4,7 +4,17 @@
     {
         public override void MatchCore(Context context)
         {
-            Matchers[0].Match(context.Start, context.Success);
+            if (Name == "element")
+            {
+                Assert(true);
+            }
+
+
+            this[0].Match(context.Start,
+                success =>
+                {
+                    context.Success(success);
+                });
         }
 
         public override string ToString()

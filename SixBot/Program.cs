@@ -1,16 +1,16 @@
 ﻿using Six.Gen.Ebnf;
-using Six.Ast;
 using Six.Samples;
 using Six.Core.Errors;
 using SixBot;
 using Six.Gen;
-using Six.Runtime.Tree;
+using Six.Runtime.Sppf;
 
-Check<Gamma1Parser>(0, false, Sampler.LoadGamma1());
-Check<TParser>(0, true, Sampler.LoadT());
-Check<EParser>(5, true, Sampler.LoadE());
-Check<SixParser>(-1, false, Sampler.LoadSix());
-Check<ErrorParser>(0, false, Sampler.LoadError());
+Check<TestParser>(1, true, Sampler.LoadTest());
+Check<AParser>(0, true, Sampler.LoadA());
+Check<BParser>(0, true, Sampler.LoadB());
+Check<CParser>(0, true, Sampler.LoadC());
+Check<DParser>(0, true, Sampler.LoadD());
+Check<SixParser>(0, true, Sampler.LoadSix());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);
 Console.Write("any key ... ");
@@ -43,8 +43,20 @@ void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
                 var ok = parser.Parse(source);
                 if (ok)
                 {
-                    var builder = new TreeBuilder(source, parser);
-                    builder.Build();
+                    var builder = new SppfBuilder(source, parser);
+                    var root = builder.BuildSppf();
+                    if (root != null)
+                    {
+                        var file = Path.GetFileNameWithoutExtension(source.Name);
+                        using (var writer = $"{parser.__Name}-{file}-sppf.txt".Writer())
+                        {
+                            new SppfDumper(root, writer).Dump();
+                        }
+                        using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
+                        {
+                            new SppfEnumerator(root, writer).Enumerate();
+                        }
+                    }
                 }
             }
             else

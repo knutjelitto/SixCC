@@ -15,22 +15,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="..\Six.Samples\Six\E.six" Link="Samples\E.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\Expression.six" Link="Samples\Expression.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\Gamma0.six" Link="Samples\Gamma0.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T.six" Link="Samples\T.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\Error.six" Link="Samples\Error.six" />
         <AdditionalFiles Include="Grammars\Json.six" />
         <AdditionalFiles Include="Grammars\Six.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\Gamma1.six" Link="Samples\Gamma1.six" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\Gamma1Parser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\ErrorParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\TParser.gen.cs" />
+        <AdditionalFiles Include="..\Six.Samples\Six\A.six" Link="Samples\A.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\B.six" Link="Samples\B.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\C.six" Link="Samples\C.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\D.six" Link="Samples\D.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\Test.six" Link="Samples\Test.six" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\TestParser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\DParser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\CParser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\BParser.gen.cs" />
+        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\AParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\ExpressionParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\Gamma0Parser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\JsonParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\SixParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\EParser.gen.cs" />
     </ItemGroup>
 
     <ItemGroup>

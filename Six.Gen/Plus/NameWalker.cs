@@ -79,9 +79,13 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(RefOp op)
         {
+#if true
+            Write($">{op.Name}");
+#else
             Left("ref");
             Write(op.Name);
             Right();
+#endif
         }
 
         protected override void Visit(RuleOp op)

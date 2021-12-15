@@ -1,10 +1,12 @@
-﻿namespace Six.Runtime.Matchers
+﻿using System.Collections;
+
+namespace Six.Runtime.Matchers
 {
-    public abstract record Matcher(ImplementationCore Core, int Id, string Name)
+    public abstract record Matcher(ImplementationCore Core, int Id, string Name) : IEnumerable<Matcher>
     {
         public readonly Dictionary<Cursor, Context> Contexts = new();
 
-        public Matcher[] Matchers = Array.Empty<Matcher>();
+        private Matcher[] Matchers = Array.Empty<Matcher>();
 
         public void Match(Cursor start, Action<Cursor> next)
         {
@@ -15,6 +17,8 @@
 
         public abstract bool IsTerminal { get; }
 
+        public Matcher this[int index] => Matchers[index];
+
         public int Count => Matchers.Length;
 
         public void Set(params Matcher[] matchers)
@@ -22,15 +26,12 @@
             Matchers = matchers;
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public Context? Context(Cursor at)
         {
             if (Contexts.TryGetValue(at, out var context))
             {
-                if (context.Nexts.Count > 0)
-                {
-                    return context;
-                }
+                return context;
             }
             return null;
         }
@@ -39,5 +40,8 @@
         {
             return Name;
         }
+
+        public IEnumerator<Matcher> GetEnumerator() => ((IEnumerable<Matcher>)Matchers).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Matchers.GetEnumerator();
     }
 }

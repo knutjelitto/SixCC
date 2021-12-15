@@ -14,7 +14,7 @@
             {
                 var next = todo.Dequeue();
 
-                Matchers[0].Match(next, Success);
+                this[0].Match(next, Success);
             }
 
             void Success(Cursor success)

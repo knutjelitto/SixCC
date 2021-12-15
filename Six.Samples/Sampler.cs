@@ -4,29 +4,34 @@ namespace Six.Samples
 {
     public static class Sampler
     {
+        public static IEnumerable<Sample> LoadA()
+        {
+            return LoadAll(name => name.EndsWith(".a")).OrderBy(s => s.Name);
+        }
+
+        public static IEnumerable<Sample> LoadB()
+        {
+            return LoadAll(name => name.EndsWith(".b")).OrderBy(s => s.Name);
+        }
+
+        public static IEnumerable<Sample> LoadC()
+        {
+            return LoadAll(name => name.EndsWith(".c")).OrderBy(s => s.Name);
+        }
+
+        public static IEnumerable<Sample> LoadD()
+        {
+            return LoadAll(name => name.EndsWith(".d")).OrderBy(s => s.Name);
+        }
+
+        public static IEnumerable<Sample> LoadTest()
+        {
+            return LoadAll(name => name.EndsWith(".test")).OrderBy(s => s.Name);
+        }
+
         public static IEnumerable<Sample> LoadSix()
         {
-            return LoadAll(name => name.EndsWith(".six"));
-        }
-
-        public static IEnumerable<Sample> LoadT()
-        {
-            return LoadAll(name => name.EndsWith(".t")).OrderBy(s => s.Name);
-        }
-
-        public static IEnumerable<Sample> LoadE()
-        {
-            return LoadAll(name => name.EndsWith(".e")).OrderBy(s => s.Name);
-        }
-
-        public static IEnumerable<Sample> LoadError()
-        {
-            return LoadAll(name => name.EndsWith(".error")).OrderBy(s => s.Name);
-        }
-
-        public static IEnumerable<Sample> LoadGamma1()
-        {
-            return LoadAll(name => name.EndsWith(".gamma1")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".six")).OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadJson()

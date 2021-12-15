@@ -1,9 +1,0 @@
-﻿grammar Gamma1;
-
-S:    'b' 'a' 'c'
-    | 'b' 'a' 'a'
-    | 'b' A 'c'
-    ;
-
-A:  'a'
-    ;

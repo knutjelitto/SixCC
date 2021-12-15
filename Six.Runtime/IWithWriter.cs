@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Six.Runtime
 {
-    internal interface IWithWriter
+    public interface IWithWriter
     {
         Writer Writer { get; }
 

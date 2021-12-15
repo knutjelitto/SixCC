@@ -1,0 +1,11 @@
+﻿grammar B;
+
+B   : id
+    | ids
+    ;
+
+ids : id+ id*
+    ;
+
+id  : <'a' .. 'z'>
+    ;
