@@ -1,23 +1,21 @@
-﻿using System;
-using System.IO;
-
-namespace Six.Core
+﻿namespace Six.Core
 {
     public class Writer : IDisposable
     {
-        public Writer(TextWriter sink, bool owns = false)
+        public Writer(TextWriter sink, int? indent = null, bool owns = false)
         {
             this.sink = sink;
             this.owns = owns;
+            prefix = new string(' ', indent ?? 4);
         }
 
-        public Writer()
-            : this(new StringWriter(), true)
+        public Writer(int? indent = null)
+            : this(new StringWriter(), indent, true)
         {
         }
 
-        public Writer(string filename)
-            : this(new StreamWriter(filename), true)
+        public Writer(string filename, int? indent = null)
+            : this(new StreamWriter(filename), indent, true)
         {
         }
 
@@ -106,6 +104,6 @@ namespace Six.Core
         private readonly bool owns;
         private int level;
         private bool pending = true;
-        private readonly string prefix = "    ";
+        private readonly string prefix;
     }
 }

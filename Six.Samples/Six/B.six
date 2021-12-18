@@ -1,7 +1,6 @@
 ﻿grammar B;
 
-B   : id
-    | ids
+B   : ids
     ;
 
 ids : id+ id*

@@ -2,7 +2,7 @@
 {
     internal interface IWithTwo
     {
-        Expression One { get; set; }
-        Expression Two { get; set; }
+        Expression Left { get; set; }
+        Expression Right { get; set; }
     }
 }

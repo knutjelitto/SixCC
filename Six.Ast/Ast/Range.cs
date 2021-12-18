@@ -2,15 +2,15 @@
 {
     public class Range : Expression, IWithTwo
     {
-        internal Range(ILocation location, Expression start, Expression end)
+        internal Range(ILocation location, Expression left, Expression right)
             : base(location)
         {
-            One = start;
-            Two = end;
+            Left = left;
+            Right = right;
         }
 
-        public Expression One { get; set; }
-        public Expression Two { get; set; }
+        public Expression Left { get; set; }
+        public Expression Right { get; set; }
 
         public override bool IsSimple => false;
     }

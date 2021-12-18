@@ -2,7 +2,7 @@
 
 namespace Six.Runtime
 {
-    public struct Cursor : IEquatable<Cursor>
+    public struct Cursor : IEquatable<Cursor>, IComparable<Cursor>
     {
         [DebuggerStepThrough]
         public Cursor(Source source, int offset)
@@ -86,6 +86,11 @@ namespace Six.Runtime
         public override string ToString()
         {
             return $"cursor@{Offset}";
+        }
+
+        public int CompareTo(Cursor other)
+        {
+            return Offset.CompareTo(other.Offset);
         }
     }
 }

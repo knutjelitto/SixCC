@@ -1,4 +1,5 @@
-﻿grammar Six;
+﻿/* six grammar */
+grammar Six;
 
 %start
     : grammar
@@ -44,8 +45,9 @@ sequence
     ;
 
 element
-    : repeat-or-primary ('..' repeat-or-primary)?
-    | repeat-or-primary ('-' repeat-or-primary)?
+    : repeat-or-primary '..' repeat-or-primary
+    | repeat-or-primary '-' repeat-or-primary
+    | repeat-or-primary
     ;
 
 repeat-or-primary

@@ -5,12 +5,12 @@
         internal Diff(ILocation location, Expression left, Expression right)
             : base(location)
         {
-            One = left;
-            Two = right;
+            Left = left;
+            Right = right;
         }
 
-        public Expression One { get; set; }
-        public Expression Two { get; set; }
+        public Expression Left { get; set; }
+        public Expression Right { get; set; }
 
         public override bool IsSimple => false;
     }

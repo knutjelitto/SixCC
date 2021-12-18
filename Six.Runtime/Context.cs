@@ -5,9 +5,10 @@ namespace Six.Runtime
     public sealed class Context
     {
         private readonly List<Action<Cursor>> Continues = new();
-        public readonly HashSet<Cursor> Nexts = new();
+        public readonly SortedSet<Cursor> Nexts;
         public readonly Matcher Matcher;
         public readonly Cursor Start;
+        public Cursor Core;
 
 
         [DebuggerStepThrough]
@@ -15,25 +16,26 @@ namespace Six.Runtime
         {
             Matcher = matcher;
             Start = start;
-            Nexts = new HashSet<Cursor>();
+            Core = start;
+            Nexts = new SortedSet<Cursor>();
         }
 
-        public static Context From(Matcher matcher, Cursor start, Action<Cursor> @continue)
+        public static Context From(Matcher matcher, Cursor start, Action<Cursor> onNext)
         {
             if (!matcher.Contexts.TryGetValue(start, out var context))
             {
                 context = new Context(matcher, start);
                 matcher.Contexts.Add(start, context);
-                context.Continues.Add(@continue);
+                context.Continues.Add(onNext);
 
                 matcher.MatchCore(context);
             }
             else
             {
-                context.Continues.Add(@continue);
+                context.Continues.Add(onNext);
                 foreach (var next in context.Nexts)
                 {
-                    @continue(next);
+                    onNext(next);
                 }
             }
 
@@ -52,7 +54,7 @@ namespace Six.Runtime
 
         public override string ToString()
         {
-            var nexts = string.Join(',', Nexts.Select(x => x.Offset).OrderBy(x => x));
+            var nexts = string.Join(',', Nexts.Select(x => x.Offset));
 
             return $"context({Start.Offset}, {Matcher}, [{nexts}], [#{Continues.Count}])";
         }

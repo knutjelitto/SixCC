@@ -1,9 +1,6 @@
 ﻿grammar Test;
 
-G	: R+
-	;
-
-R	: E*
+T	: E+
 	;
 
 E	: 'id' 'x'?

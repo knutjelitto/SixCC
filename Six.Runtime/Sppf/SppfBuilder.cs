@@ -64,6 +64,8 @@ namespace Six.Runtime.Sppf
                     return BuildCharacter(match, start, end);
                 case Matchers.String match:
                     return BuildString(match, start, end);
+                case Matchers.Range match:
+                    return BuildRange(match, start, end);
                 default:
                     throw new NotImplementedException($"can't build node for '{matcher.GetType().Name}'");
             }
@@ -86,7 +88,7 @@ namespace Six.Runtime.Sppf
 
         private Node? BuildRule(Role role, Rule rule, Cursor start, Cursor end)
         {
-            if (Covers(rule, start))
+            if (CanMatch(rule, start, end))
             {
                 if (rule.IsTerminal)
                 {
@@ -118,7 +120,7 @@ namespace Six.Runtime.Sppf
             {
                 var packeds = BuildMatcher(matcher, start, end).ToArray();
 
-                var optional = NewNonterminal(Role.Opt, matcher, start, end, packeds);
+                var optional = NewNonterminal(Role.Optional, matcher, start, end, packeds);
 
                 return optional;
             }
@@ -169,7 +171,15 @@ namespace Six.Runtime.Sppf
 
             if (context != null && CanMatch(matcher, start, end))
             {
-                var partition = context.Nexts.OrderBy(x => x.Offset).Where(x => x <= end).ToList();
+                var partition = context.Nexts.Where(x => x <= end).ToList();
+
+                for (var i = 0; i < partition.Count - 1; i++)
+                {
+                    if (!CanMatch(matcher[0], partition[i], partition[i + 1]))
+                    {
+                        partition.RemoveAt(i);
+                    }
+                }
 
                 for (var i = 0; i < partition.Count - 1; i++)
                 {
@@ -227,12 +237,17 @@ namespace Six.Runtime.Sppf
                     {
                         start
                     };
-                partition.AddRange(context.Nexts.OrderBy(x => x.Offset).Where(x => x <= end));
+                partition.AddRange(context.Nexts.Where(x => x <= end));
 
                 for (var i = 0; i < partition.Count - 1; i++)
                 {
-                    var packeds = BuildMatcher(matcher, partition[i], partition[i + 1]).ToArray();
-
+                    if (!CanMatch(matcher[0], partition[i], partition[i + 1]))
+                    {
+                        partition.RemoveAt(i);
+                    }
+                }
+                for (var i = 0; i < partition.Count - 1; i++)
+                {
                     var next = Build(matcher[0], partition[i], partition[i + 1]);
 
                     Assert(next != null);
@@ -386,7 +401,7 @@ namespace Six.Runtime.Sppf
                     }
                     else
                     {
-                        foreach (var next in context.Nexts.OrderBy(x => x.Offset).Where(x => x <= end).ToList())
+                        foreach (var next in context.Nexts.Where(x => x <= end).ToList())
                         {
                             if (next <= end)
                             {
@@ -413,7 +428,7 @@ namespace Six.Runtime.Sppf
 
             if (context != null && context.Nexts.Contains(end))
             {
-                var chr = NewTerminal(matcher, start, end);
+                var chr = NewTerminal(matcher, start, context.Core, end);
 
                 return chr;
             }
@@ -427,7 +442,21 @@ namespace Six.Runtime.Sppf
 
             if (context != null && context.Nexts.Contains(end))
             {
-                var chr = NewTerminal(matcher, start, end);
+                var chr = NewTerminal(matcher, start, context.Core, end);
+
+                return chr;
+            }
+
+            return null;
+        }
+
+        private Node? BuildRange(Matchers.Range matcher, Cursor start, Cursor end)
+        {
+            var context = matcher.Context(start);
+
+            if (context != null && context.Nexts.Contains(end))
+            {
+                var chr = NewTerminal(matcher, start, context.Core, end);
 
                 return chr;
             }
@@ -437,14 +466,11 @@ namespace Six.Runtime.Sppf
 
         private Node? BuildTerminal(Matcher matcher, Cursor start, Cursor end)
         {
-            Assert(matcher.IsTerminal);
-            Assert(Covers(matcher, start));
-
             var context = matcher.Context(start);
 
             if (context != null && context.Nexts.Contains(end))
             {
-                return NewTerminal(matcher, start, end);
+                return NewTerminal(matcher, start, context.Core, end);
             }
 
             return null;
@@ -454,11 +480,6 @@ namespace Six.Runtime.Sppf
         {
             Assert(!matcher.IsTerminal);
             Assert(Covers(matcher, start));
-
-            if (matcher.Name == "element")
-            {
-                Assert(true);
-            }
 
             var context = matcher.Context(start);
 
@@ -481,18 +502,19 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Terminal NewTerminal(Matcher matcher, Cursor start, Cursor end)
+        private Terminal NewTerminal(Matcher matcher, Cursor start, Cursor core, Cursor end)
         {
+            Assert(core >= start && core < end);
             var key = Terminal.Key(matcher, start, end);
 
-            return Cache(key, () => new Terminal(matcher, start, end, source));
+            return Cache(key, () => new Terminal(matcher, start, core, end, source));
         }
 
         private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Packed[] nodes)
         {
             var key = Nonterminal.Key(role, matcher, start, end);
 
-            if (nodes.Length == 1 && nodes[0].Left == null && false)
+            if (nodes.Length == 1 && nodes[0].Left == null && true)
             {
                 return Cache(key, () => new Nonterminal(role, matcher, start, end, nodes[0].Right));
             }
@@ -504,9 +526,7 @@ namespace Six.Runtime.Sppf
 
         private Intermediate NewIntermediate(Matcher matcher, Cursor start, Cursor end, int dot, params Packed[] nodes)
         {
-            var key = Intermediate.Key(matcher, start, end, dot);
-
-            return Cache(key, () => new Intermediate(matcher, start, end, dot, nodes));
+            return new Intermediate(matcher, start, end, dot, nodes);
         }
 
         private static Packed NewPacked(Matcher matcher, Cursor start, Cursor end, Cursor pivot, Node? left, Node right)

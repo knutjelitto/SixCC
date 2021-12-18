@@ -256,8 +256,8 @@ namespace Six.Gen.Ebnf
 
         private CoreOp Visit(Ast.Range range)
         {
-            var start = Transform(range.One);
-            var end = Transform(range.Two);
+            var start = Transform(range.Left);
+            var end = Transform(range.Right);
 
             if (start is CharacterOp cp1 && end is CharacterOp cp2)
             {
@@ -270,8 +270,8 @@ namespace Six.Gen.Ebnf
 
         private CoreOp Visit(Ast.Diff diff)
         {
-            var first = Transform(diff.One);
-            var second = Transform(diff.Two);
+            var first = Transform(diff.Left);
+            var second = Transform(diff.Right);
 
             return new SetOp(diff.Location, first, second);
         }

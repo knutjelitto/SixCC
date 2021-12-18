@@ -277,7 +277,6 @@ namespace Six.Input
                     Error(eofInLiteral);
                 }
             }
-
         }
 
         private Location GetLocation(int skip = 1)

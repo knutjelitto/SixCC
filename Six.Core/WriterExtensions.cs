@@ -9,9 +9,9 @@
             return Path.Combine(Temp.TempPath(top), filename);
         }
 
-        public static Writer Writer(this string filename)
+        public static Writer Writer(this string filename, int? indent = null)
         {
-            return new Writer(File(filename));
+            return new Writer(File(filename), indent);
         }
     }
 }

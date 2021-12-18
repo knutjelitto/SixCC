@@ -120,14 +120,14 @@
 
         protected virtual void Visit(Range range)
         {
-            Walk(range.One);
-            Walk(range.Two);
+            Walk(range.Left);
+            Walk(range.Right);
         }
 
         protected virtual void Visit(Diff diff)
         {
-            Walk(diff.One);
-            Walk(diff.Two);
+            Walk(diff.Left);
+            Walk(diff.Right);
         }
     }
 }

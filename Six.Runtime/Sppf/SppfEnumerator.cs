@@ -12,14 +12,20 @@ namespace Six.Runtime.Sppf
         }
 
         public Symbol Root { get; }
+        public bool Tree { get; }
         public Writer Writer { get; }
 
         protected IWithWriter w => this;
 
-        public void Enumerate()
+        public void Enum()
         {
             var count = 0;
-            foreach (var tree in Dump(() => string.Empty, Root).OrderBy(x => x).ToList())
+            var items = Dump(() => string.Empty, Root).OrderBy(x => x).ToList();
+            if (items.Count != items.Distinct().Count())
+            {
+                Assert(false);
+            }
+            foreach (var tree in items)
             {
                 w.wl($"{++count, 3}  {tree}");
 
@@ -57,19 +63,12 @@ namespace Six.Runtime.Sppf
                 }
                 else
                 {
-                    var builder = new StringBuilder();
-                    foreach (var child in node.Children)
+                    foreach (var packed in node.Children)
                     {
-                        builder.Clear();
-                        foreach (var tree in Dump(() => $"", child).ToList())
+                        foreach (var tree in Dump(prefix, packed))
                         {
-                            if (builder.Length > 0)
-                            {
-                                builder.Append(" ");
-                            }
-                            builder.Append(tree);
+                            yield return tree;
                         }
-                        yield return $"{prefix()}{builder})";
                     }
                 }
             }
@@ -107,7 +106,7 @@ namespace Six.Runtime.Sppf
                     }
                 }
             }
-            else if (node.Role == Role.Opt)
+            else if (node.Role == Role.Optional)
             {
                 if (node.Children.Length == 0)
                 {
@@ -124,32 +123,29 @@ namespace Six.Runtime.Sppf
                     }
                 }
             }
-            else
+            else if (node.Role == Role.Rule)
             {
                 foreach (var child in node.Children)
                 {
-                    switch (node.Role)
+                    foreach (var tree in Dump(() => $"{node.Name}(", child).ToList())
                     {
-                        case Role.Start:
-                            foreach (var tree in Dump(() => $"", child).ToList())
-                            {
-                                yield return $"{prefix()}{tree}";
-                            }
-                            break;
-                        case Role.Rule:
-                            foreach (var tree in Dump(() => $"{node.Name}(", child).ToList())
-                            {
-                                yield return $"{prefix()}{tree})";
-                            }
-                            break;
-                        case Role.Terminal:
-                        case Role.Intermediate:
-                        case Role.Alt:
-                        case Role.Plus:
-                        default:
-                            throw new NotImplementedException($"can't dump nonterminal of role '{node.Role.ToString().ToLowerInvariant()}'");
+                        yield return $"{prefix()}{tree})";
                     }
                 }
+            }
+            else if (node.Role == Role.Start)
+            {
+                foreach (var child in node.Children)
+                {
+                    foreach (var tree in Dump(() => $"", child).ToList())
+                    {
+                        yield return $"{prefix()}{tree}";
+                    }
+                }
+            }
+            else
+            {
+                throw new NotImplementedException($"can't dump nonterminal of role '{node.Role.ToString().ToLowerInvariant()}'");
             }
         }
 
@@ -182,10 +178,6 @@ namespace Six.Runtime.Sppf
             }
             else
             {
-                if (node.End.Offset == 53)
-                {
-                    Assert(true);
-                }
                 foreach (var left in Dump(() => "", node.Left).ToList())
                 {
                     foreach (var right in Dump(() => " ", node.Right).ToList())

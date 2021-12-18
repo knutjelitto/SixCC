@@ -22,6 +22,8 @@ namespace Six.Runtime.Sppf
             }
         }
 
+        public Cursor Core => Matcher.Contexts[Start].Core;
+
         public string Name => Matcher.Name;
     }
 }

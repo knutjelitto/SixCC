@@ -26,7 +26,7 @@ namespace Six.Runtime.Matchers
             Matchers = matchers;
         }
 
-        //[DebuggerStepThrough]
+        [DebuggerStepThrough]
         public Context? Context(Cursor at)
         {
             if (Contexts.TryGetValue(at, out var context))

@@ -14,8 +14,8 @@
 
         public override void MatchCore(Context context)
         {
-            var white = Core.__MatchWhite(context.Start);
-            if (Dfa!.TryMatch(white, out var done))
+            context.Core = Core.__MatchWhite(context.Start);
+            if (Dfa!.TryMatch(context.Core, out var done))
             {
                 context.Success(done);
             }

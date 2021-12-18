@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 		<None Remove="A\1.a" />
+		<None Remove="A\2.a" />
 		<None Remove="B\1.b" />
 		<None Remove="B\2.b" />
 		<None Remove="B\3.b" />
@@ -351,9 +352,11 @@
 		<None Remove="Six\Expression.six" />
 		<None Remove="Six\Test.six" />
 		<None Remove="Test\1.test" />
+		<None Remove="Test\2.test" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="A\2.a" />
 		<EmbeddedResource Include="B\1.b" />
 		<EmbeddedResource Include="B\3.b" />
 		<EmbeddedResource Include="B\2.b" />
@@ -701,6 +704,7 @@
 	<ItemGroup>
 	  <EmbeddedResource Include="..\SixBot\Grammars\Json.six" Link="Six\Json.six" />
 	  <EmbeddedResource Include="..\SixBot\Grammars\Six.six" Link="Six\Six.six" />
+	  <EmbeddedResource Include="Test\2.test" />
 	  <EmbeddedResource Include="Test\1.test" />
 	</ItemGroup>
 

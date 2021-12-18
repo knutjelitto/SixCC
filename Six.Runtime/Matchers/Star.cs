@@ -12,16 +12,18 @@
 
             while (todo.Count > 0)
             {
-                var start = todo.Dequeue();
-                context.Success(start);
+                var next = todo.Dequeue();
 
-                this[0].Match(start, Success);
+                this[0].Match(next, Success);
             }
+
+            context.Success(context.Start);
 
             void Success(Cursor success)
             {
                 if (already.Add(success))
                 {
+                    context.Success(success);
                     todo.Enqueue(success);
                 }
             }

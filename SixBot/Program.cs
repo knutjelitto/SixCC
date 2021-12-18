@@ -4,13 +4,14 @@ using Six.Core.Errors;
 using SixBot;
 using Six.Gen;
 using Six.Runtime.Sppf;
+using Six.Runtime.Tree;
 
-Check<TestParser>(1, true, Sampler.LoadTest());
+Check<TestParser>(0, true, Sampler.LoadTest());
 Check<AParser>(0, true, Sampler.LoadA());
 Check<BParser>(0, true, Sampler.LoadB());
 Check<CParser>(0, true, Sampler.LoadC());
 Check<DParser>(0, true, Sampler.LoadD());
-Check<SixParser>(0, true, Sampler.LoadSix());
+Check<SixParser>(-1, true, Sampler.LoadSix());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);
 Console.Write("any key ... ");
@@ -54,7 +55,13 @@ void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
                         }
                         using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
                         {
-                            new SppfEnumerator(root, writer).Enumerate();
+                            new SppfEnumerator(root, writer).Enum();
+                        }
+                        var treeBuilder = new TreeBuilder(root);
+                        var tree = treeBuilder.Build();
+                        using (var writer = $"{parser.__Name}-{file}-tree.txt".Writer(2))
+                        {
+                            new TreeDumper(tree, writer).Dump();
                         }
                     }
                 }

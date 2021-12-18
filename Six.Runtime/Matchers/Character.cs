@@ -4,11 +4,11 @@
     {
         public override void MatchCore(Context context)
         {
-            var white = Core.__MatchWhite(context.Start);
+            context.Core = Core.__MatchWhite(context.Start);
 
-            if (white.At == Codepoint)
+            if (context.Core.At == Codepoint)
             {
-                context.Success(white.Advance(1));
+                context.Success(context.Core.Advance(1));
             }
         }
 

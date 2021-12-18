@@ -4,11 +4,11 @@
     {
         public override void MatchCore(Context context)
         {
-            var white = Core.__MatchWhite(context.Start);
+            context.Core = Core.__MatchWhite(context.Start);
 
-            if (white.Match(Text))
+            if (context.Core.Match(Text))
             {
-                context.Success(white.Advance(Text.Length));
+                context.Success(context.Core.Advance(Text.Length));
             }
         }
 

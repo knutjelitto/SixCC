@@ -1,11 +1,12 @@
 ﻿using Six.Core;
+using System.Runtime.CompilerServices;
 
 namespace Six.Runtime.Sppf
 {
 #pragma warning disable IDE1006 // Naming Styles
     public class SppfDumper : IWithWriter
     {
-        private readonly Dictionary<string, Node> cache;
+        private readonly HashSet<Node> cache = new(new NodeEquals());
         public SppfDumper(Symbol root, Writer writer)
         {
             Root = root;
@@ -22,24 +23,17 @@ namespace Six.Runtime.Sppf
         {
             Dump(Root);
         }
-
-        private IEnumerable<string> Content(Node anyNode)
-        {
-            throw new NotImplementedException();
-        }
-
         private void Dump(Node anyNode)
         {
-            var key = anyNode.ToString();
-            if (cache.TryGetValue(key, out var already))
+            if (cache.Contains(anyNode))
             {
-                w.wl($"=> {already}");
+                w.wl($"=> {anyNode}");
             }
             else
             {
                 if (anyNode is not Packed)
                 {
-                    cache.Add(key, anyNode);
+                    cache.Add(anyNode);
                 }
                 switch (anyNode)
                 {
@@ -106,6 +100,19 @@ namespace Six.Runtime.Sppf
                     Dump(child);
                 }
             });
+        }
+
+        private class NodeEquals : IEqualityComparer<Node>
+        {
+            public bool Equals(Node? x, Node? y)
+            {
+                return ReferenceEquals(x, y);
+            }
+
+            public int GetHashCode([DisallowNull] Node obj)
+            {
+                return RuntimeHelpers.GetHashCode(obj);
+            }
         }
     }
 }

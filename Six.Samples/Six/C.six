@@ -1,5 +1,8 @@
 ﻿grammar C;
 
-S   : S '+' S
-    | 'e'
+C   : C '+' C
+    | id
+    ;
+
+id  : <'a' .. 'z'>
     ;
