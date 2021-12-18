@@ -11,6 +11,7 @@ Check<AParser>(0, true, Sampler.LoadA());
 Check<BParser>(0, true, Sampler.LoadB());
 Check<CParser>(0, true, Sampler.LoadC());
 Check<DParser>(0, true, Sampler.LoadD());
+Check<EParser>(1, true, Sampler.LoadE());
 Check<SixParser>(-1, true, Sampler.LoadSix());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);

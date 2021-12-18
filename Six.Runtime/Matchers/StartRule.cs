@@ -9,11 +9,11 @@
             this[0].Match(context.Start,
                 success =>
                 {
-                    White = success;
-
                     var white = Core.__MatchWhite(success);
                     if (white.At == -1)
                     {
+                        White = success;
+
                         context.Success(white);
                     }
                 });

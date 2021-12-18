@@ -171,11 +171,13 @@ namespace Six.Runtime.Sppf
 
             if (context != null && CanMatch(matcher, start, end))
             {
+                var repeat = matcher[0];
+
                 var partition = context.Nexts.Where(x => x <= end).ToList();
 
                 for (var i = 0; i < partition.Count - 1; i++)
                 {
-                    if (!CanMatch(matcher[0], partition[i], partition[i + 1]))
+                    if (!CanMatch(repeat, partition[i], partition[i + 1]))
                     {
                         partition.RemoveAt(i);
                     }
@@ -191,11 +193,11 @@ namespace Six.Runtime.Sppf
                         Assert(true);
                     }
 
-                    var next = Build(matcher[0], partition[i], partition[i + 1]);
+                    var next = Build(repeat, partition[i], partition[i + 1]);
 
                     if (next == null)
                     {
-                        next = Build(matcher[0], partition[i], partition[i + 1]);
+                        next = Build(repeat, partition[i], partition[i + 1]);
                     }
 
                     Assert(next != null);
@@ -233,6 +235,8 @@ namespace Six.Runtime.Sppf
 
             if (context != null && CanMatch(matcher, start, end))
             {
+                var repeat = matcher[0];
+
                 var partition = new List<Cursor>
                     {
                         start
@@ -241,14 +245,14 @@ namespace Six.Runtime.Sppf
 
                 for (var i = 0; i < partition.Count - 1; i++)
                 {
-                    if (!CanMatch(matcher[0], partition[i], partition[i + 1]))
+                    if (!CanMatch(repeat, partition[i], partition[i + 1]))
                     {
                         partition.RemoveAt(i);
                     }
                 }
                 for (var i = 0; i < partition.Count - 1; i++)
                 {
-                    var next = Build(matcher[0], partition[i], partition[i + 1]);
+                    var next = Build(repeat, partition[i], partition[i + 1]);
 
                     Assert(next != null);
 

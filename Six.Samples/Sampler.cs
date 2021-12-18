@@ -24,6 +24,11 @@ namespace Six.Samples
             return LoadAll(name => name.EndsWith(".d")).OrderBy(s => s.Name);
         }
 
+        public static IEnumerable<Sample> LoadE()
+        {
+            return LoadAll(name => name.EndsWith(".e")).OrderBy(s => s.Name);
+        }
+
         public static IEnumerable<Sample> LoadTest()
         {
             return LoadAll(name => name.EndsWith(".test")).OrderBy(s => s.Name);

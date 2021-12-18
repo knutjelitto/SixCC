@@ -27,6 +27,7 @@
 		<None Remove="D\4.d" />
 		<None Remove="D\5.d" />
 		<None Remove="D\6.d" />
+		<None Remove="E\1.e" />
 		<None Remove="Json\i_number_double_huge_neg_exp.json" />
 		<None Remove="Json\i_number_huge_exp.json" />
 		<None Remove="Json\i_number_neg_int_huge_exp.json" />
@@ -349,7 +350,7 @@
 		<None Remove="Six\B.six" />
 		<None Remove="Six\C.six" />
 		<None Remove="Six\D.six" />
-		<None Remove="Six\Expression.six" />
+		<None Remove="Six\E.six" />
 		<None Remove="Six\Test.six" />
 		<None Remove="Test\1.test" />
 		<None Remove="Test\2.test" />
@@ -369,12 +370,13 @@
 		<EmbeddedResource Include="C\7.c" />
 		<EmbeddedResource Include="C\6.c" />
 		<EmbeddedResource Include="A\1.a" />
+		<EmbeddedResource Include="E\1.e" />
 		<EmbeddedResource Include="Six\C.six" />
 		<EmbeddedResource Include="Six\A.six" />
 		<EmbeddedResource Include="Six\Test.six" />
 		<EmbeddedResource Include="Six\D.six" />
 		<EmbeddedResource Include="Six\B.six" />
-		<EmbeddedResource Include="Six\Expression.six" />
+		<EmbeddedResource Include="Six\E.six" />
 		<EmbeddedResource Include="D\1.d" />
 		<EmbeddedResource Include="D\2.d" />
 		<EmbeddedResource Include="D\3.d" />
