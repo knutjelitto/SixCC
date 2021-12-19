@@ -18,16 +18,12 @@ rules
     ;
 
 rule
-    : rule-name ':' rule-body ';'
+    : identifier ':' body ';'
+    | '%start' ':' identifier ';'
+    | '%whitespace' ':' identifier ';'
     ;
 
-rule-name
-    : identifier
-    | '%start'
-    | '%whitespace'
-    ;
-
-rule-body
+body
     : expression
     | '<' expression '>'
     ;
@@ -45,25 +41,23 @@ sequence
     ;
 
 element
-    : repeat-or-primary '..' repeat-or-primary
-    | repeat-or-primary '-' repeat-or-primary
-    | repeat-or-primary
-    ;
-
-repeat-or-primary
-    : primary ebnf?
-    ;
-
-ebnf
-    : '*' | '+' | '?'
+    : primary
     ;
 
 primary
+    : atom
+    | atom '..' atom
+    | atom '-' atom
+    | atom '*'
+    | atom '+'
+    | atom '?'
+    | '^' atom
+    ;
+
+atom
     : identifier
     | string
-    | '.'
     | '(' expression ')'
-    | '^' primary
     ;
 
 identifier
@@ -75,7 +69,7 @@ id-begin
     ;
 
 id-continue
-    : ('-'|'_') letter-or-digit+
+    : '-' letter-or-digit+
     ;
 
 letter
@@ -97,7 +91,7 @@ string
     ;
 
 character
-    : (. - ('\\' | '\''))
+    : (^('\\' | '\''))
     | '\\' escape
     ;
 
@@ -147,7 +141,7 @@ comment
     ;
 
 line-comment
-    : '//' (. - line-ender)* line-end?
+    : '//' (^line-ender)* line-end?
     ;
 
 block-comment

@@ -8,26 +8,29 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="A\1.a" />
-		<None Remove="A\2.a" />
-		<None Remove="B\1.b" />
-		<None Remove="B\2.b" />
-		<None Remove="B\3.b" />
-		<None Remove="C\1.c" />
-		<None Remove="C\2.c" />
-		<None Remove="C\3.c" />
-		<None Remove="C\4.c" />
-		<None Remove="C\5.c" />
-		<None Remove="C\6.c" />
-		<None Remove="C\7.c" />
-		<None Remove="C\8.c" />
-		<None Remove="D\1.d" />
-		<None Remove="D\2.d" />
-		<None Remove="D\3.d" />
-		<None Remove="D\4.d" />
-		<None Remove="D\5.d" />
-		<None Remove="D\6.d" />
-		<None Remove="E\1.e" />
+		<None Remove="Six\T2.six" />
+		<None Remove="Six\T3.six" />
+		<None Remove="Six\T4.six" />
+		<None Remove="Six\T5.six" />
+		<None Remove="Six\T6.six" />
+		<None Remove="Six\T7.six" />
+		<None Remove="T1\1.t1" />
+		<None Remove="T2\1.t2" />
+		<None Remove="T2\2.t2" />
+		<None Remove="T2\4.t2" />
+		<None Remove="T2\5.t2" />
+		<None Remove="T2\6.t2" />
+		<None Remove="T3\1.t3" />
+		<None Remove="T3\2.t3" />
+		<None Remove="T3\3.t3" />
+		<None Remove="T3\4.t3" />
+		<None Remove="T3\5.t3" />
+		<None Remove="T3\6.t3" />
+		<None Remove="T4\1.t4" />
+		<None Remove="T4\2.t4" />
+		<None Remove="T4\3.t4" />
+		<None Remove="T4\4.t4" />
+		<None Remove="T4\5.t4" />
 		<None Remove="Json\i_number_double_huge_neg_exp.json" />
 		<None Remove="Json\i_number_huge_exp.json" />
 		<None Remove="Json\i_number_neg_int_huge_exp.json" />
@@ -346,43 +349,50 @@
 		<None Remove="Json\_stack_i_structure_500_nested_arrays.json" />
 		<None Remove="Json\_stack_n_structure_100000_opening_arrays.json" />
 		<None Remove="Json\_stack_n_structure_open_array_object.json" />
-		<None Remove="Six\A.six" />
-		<None Remove="Six\B.six" />
-		<None Remove="Six\C.six" />
-		<None Remove="Six\D.six" />
-		<None Remove="Six\E.six" />
-		<None Remove="Six\Test.six" />
-		<None Remove="Test\1.test" />
-		<None Remove="Test\2.test" />
+		<None Remove="Six\T1.six" />
+		<None Remove="T1\2.t1" />
+		<None Remove="T2\3.t2" />
+		<None Remove="T4\6.t4" />
+		<None Remove="T5\1.t5" />
+		<None Remove="T6\1.t6" />
+		<None Remove="T6\2.t6" />
+		<None Remove="T7\1.t7" />
+		<None Remove="T7\2.t7" />
+		<None Remove="T7\3.t7" />
+		<None Remove="T7\4.t7" />
+		<None Remove="T7\5.t7" />
+		<None Remove="T7\6.t7" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="A\2.a" />
-		<EmbeddedResource Include="B\1.b" />
-		<EmbeddedResource Include="B\3.b" />
-		<EmbeddedResource Include="B\2.b" />
-		<EmbeddedResource Include="C\1.c" />
-		<EmbeddedResource Include="C\2.c" />
-		<EmbeddedResource Include="C\3.c" />
-		<EmbeddedResource Include="C\4.c" />
-		<EmbeddedResource Include="C\5.c" />
-		<EmbeddedResource Include="C\8.c" />
-		<EmbeddedResource Include="C\7.c" />
-		<EmbeddedResource Include="C\6.c" />
-		<EmbeddedResource Include="A\1.a" />
-		<EmbeddedResource Include="E\1.e" />
-		<EmbeddedResource Include="Six\C.six" />
-		<EmbeddedResource Include="Six\A.six" />
-		<EmbeddedResource Include="Six\Test.six" />
-		<EmbeddedResource Include="Six\D.six" />
-		<EmbeddedResource Include="Six\B.six" />
-		<EmbeddedResource Include="Six\E.six" />
-		<EmbeddedResource Include="D\1.d" />
-		<EmbeddedResource Include="D\2.d" />
-		<EmbeddedResource Include="D\3.d" />
-		<EmbeddedResource Include="D\4.d" />
-		<EmbeddedResource Include="D\6.d" />
-		<EmbeddedResource Include="D\5.d" />
+		<EmbeddedResource Include="Six\T7.six" />
+		<EmbeddedResource Include="T1\2.t1" />
+		<EmbeddedResource Include="T2\1.t2" />
+		<EmbeddedResource Include="T2\3.t2" />
+		<EmbeddedResource Include="T2\2.t2" />
+		<EmbeddedResource Include="T2\4.t2" />
+		<EmbeddedResource Include="T2\5.t2" />
+		<EmbeddedResource Include="T2\6.t2" />
+		<EmbeddedResource Include="T3\1.t3" />
+		<EmbeddedResource Include="T3\2.t3" />
+		<EmbeddedResource Include="T3\3.t3" />
+		<EmbeddedResource Include="T3\4.t3" />
+		<EmbeddedResource Include="T3\5.t3" />
+		<EmbeddedResource Include="T3\6.t3" />
+		<EmbeddedResource Include="T1\1.t1" />
+		<EmbeddedResource Include="T5\1.t5" />
+		<EmbeddedResource Include="Six\T3.six" />
+		<EmbeddedResource Include="Six\T1.six" />
+		<EmbeddedResource Include="Six\T6.six" />
+		<EmbeddedResource Include="Six\T4.six" />
+		<EmbeddedResource Include="Six\T2.six" />
+		<EmbeddedResource Include="Six\T5.six" />
+		<EmbeddedResource Include="T4\1.t4" />
+		<EmbeddedResource Include="T4\2.t4" />
+		<EmbeddedResource Include="T4\3.t4" />
+		<EmbeddedResource Include="T4\4.t4" />
+		<EmbeddedResource Include="T4\6.t4" />
+		<EmbeddedResource Include="T4\5.t4" />
 		<EmbeddedResource Include="Json\i_number_double_huge_neg_exp.json" />
 		<EmbeddedResource Include="Json\i_number_huge_exp.json" />
 		<EmbeddedResource Include="Json\i_number_neg_int_huge_exp.json" />
@@ -706,8 +716,14 @@
 	<ItemGroup>
 	  <EmbeddedResource Include="..\SixBot\Grammars\Json.six" Link="Six\Json.six" />
 	  <EmbeddedResource Include="..\SixBot\Grammars\Six.six" Link="Six\Six.six" />
-	  <EmbeddedResource Include="Test\2.test" />
-	  <EmbeddedResource Include="Test\1.test" />
+	  <EmbeddedResource Include="T6\2.t6" />
+	  <EmbeddedResource Include="T6\1.t6" />
+	  <EmbeddedResource Include="T7\1.t7" />
+	  <EmbeddedResource Include="T7\2.t7" />
+	  <EmbeddedResource Include="T7\3.t7" />
+	  <EmbeddedResource Include="T7\4.t7" />
+	  <EmbeddedResource Include="T7\5.t7" />
+	  <EmbeddedResource Include="T7\6.t7" />
 	</ItemGroup>
 
 </Project>

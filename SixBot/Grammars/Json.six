@@ -1,5 +1,9 @@
 ﻿grammar Json;
 
+%whitespace
+    : ws
+    ;
+
 json:
     element
     ;
@@ -15,7 +19,7 @@ value:
     ;
 
 object:
-      '{' ws '}'
+      '{' '}'
     | '{' members '}'
     ;
 
@@ -25,11 +29,11 @@ members:
     ;
 
 member:
-    ws string ws ':' element
+    string ':' element
     ;
 
 array:
-      '[' ws ']'
+      '[' ']'
     | '[' elements ']'
     ;
 
@@ -39,7 +43,7 @@ elements:
     ;
 
 element:
-    ws value ws
+    value
     ;
 
 string:

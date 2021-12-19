@@ -1,0 +1,10 @@
+﻿grammar T2;
+
+B   : ids
+    ;
+
+ids : id+ id*
+    ;
+
+id  : <'a' .. 'z'>
+    ;

@@ -4,34 +4,40 @@ namespace Six.Samples
 {
     public static class Sampler
     {
-        public static IEnumerable<Sample> LoadA()
+        public static IEnumerable<Sample> LoadT1()
         {
-            return LoadAll(name => name.EndsWith(".a")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".t1")).OrderBy(s => s.Name);
         }
 
-        public static IEnumerable<Sample> LoadB()
+        public static IEnumerable<Sample> LoadT2()
         {
-            return LoadAll(name => name.EndsWith(".b")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".t2")).OrderBy(s => s.Name);
         }
 
-        public static IEnumerable<Sample> LoadC()
+        public static IEnumerable<Sample> LoadT3()
         {
-            return LoadAll(name => name.EndsWith(".c")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".t3")).OrderBy(s => s.Name);
         }
 
-        public static IEnumerable<Sample> LoadD()
+        public static IEnumerable<Sample> LoadT4()
         {
-            return LoadAll(name => name.EndsWith(".d")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".t4")).OrderBy(s => s.Name);
         }
 
-        public static IEnumerable<Sample> LoadE()
+        public static IEnumerable<Sample> LoadT5()
         {
-            return LoadAll(name => name.EndsWith(".e")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".t5" +
+                "")).OrderBy(s => s.Name);
         }
 
-        public static IEnumerable<Sample> LoadTest()
+        public static IEnumerable<Sample> LoadT6()
         {
-            return LoadAll(name => name.EndsWith(".test")).OrderBy(s => s.Name);
+            return LoadAll(name => name.EndsWith(".t6")).OrderBy(s => s.Name);
+        }
+
+        public static IEnumerable<Sample> Load(string extension)
+        {
+            return LoadAll(name => name.EndsWith(extension)).OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadSix()
@@ -81,7 +87,14 @@ namespace Six.Samples
                 content = reader.ReadToEnd();
             }
 
-            return new Sample(name, content);
+            var ext = Path.GetExtension(name);
+
+            if (ext.Length == 3 && ext[1] == 't')
+            {
+                return new Sample(name, content, true);
+            }
+
+            return new Sample(name, content, false);
         }
 
         private static Sample LoadFile(string filepath)
@@ -89,7 +102,7 @@ namespace Six.Samples
             var content = File.ReadAllText(filepath);
             var name = Path.GetFileName(filepath);
 
-            return new Sample(name, content);
+            return new Sample(name, content, false);
         }
     }
 }

@@ -1,7 +1,0 @@
-﻿grammar Test;
-
-T	: E+
-	;
-
-E	: 'id' 'x'?
-	;

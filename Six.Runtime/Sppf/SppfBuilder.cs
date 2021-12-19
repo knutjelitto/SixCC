@@ -167,64 +167,70 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            Node? result = null;
-
             if (context != null && CanMatch(matcher, start, end))
             {
                 var repeat = matcher[0];
+                var packeds = new List<Packed>();
 
-                var partition = context.Nexts.Where(x => x <= end).ToList();
-
-                for (var i = 0; i < partition.Count - 1; i++)
+                foreach (var partition in StarPartitions(context, repeat, start, end))
                 {
-                    if (!CanMatch(repeat, partition[i], partition[i + 1]))
+                    Node? result = null;
+
+                    for (var i = 0; i < partition.Count; i++)
                     {
-                        partition.RemoveAt(i);
+                        var extent = partition[i];
+
+                        var next = Build(repeat, extent.Start, extent.End);
+
+                        Assert(next != null);
+
+                        if (result != null)
+                        {
+                            var packed = NewPacked(matcher, result.Start, next.End, result.End, result, next);
+                            result = NewIntermediate(matcher, result.Start, next.End, i + 1, packed);
+                        }
+                        else
+                        {
+                            result = next;
+                        }
                     }
-                }
-
-                for (var i = 0; i < partition.Count - 1; i++)
-                {
-                    var s = partition[i];
-                    var e = partition[i + 1];
-
-                    if (s.Offset == 52)
-                    {
-                        Assert(true);
-                    }
-
-                    var next = Build(repeat, partition[i], partition[i + 1]);
-
-                    if (next == null)
-                    {
-                        next = Build(repeat, partition[i], partition[i + 1]);
-                    }
-
-                    Assert(next != null);
 
                     if (result != null)
                     {
-                        var packed = NewPacked(matcher, result.Start, next.End, result.End, result, next);
-                        result = NewIntermediate(matcher, result.Start, partition[i + 1], i + 1, packed);
-                    }
-                    else
-                    {
-                        result = next;
+                        var packed = NewPacked(matcher, start, end, result);
+                        packeds.Add(packed);
                     }
                 }
 
-                if (result == null)
-                {
-                    result = NewNonterminal(Role.Star, matcher, start, end);
-                }
-                else
-                {
-                    var packed = NewPacked(matcher, start, end, result);
-                    result = NewNonterminal(Role.Star, matcher, start, end, packed);
-                }
+                var star = NewNonterminal(Role.Star, matcher, start, end, packeds.ToArray());
+
+                return star;
             }
 
-            return result;
+            return null;
+        }
+
+        private IEnumerable<List<Extend>> StarPartitions(Context starContext, Matcher repeat, Cursor start, Cursor end)
+        {
+            if (start >= end)
+            {
+                yield return new List<Extend>();
+            }
+            else
+            {
+                var repContext = repeat.Context(start)!;
+
+                foreach (var next in repContext.Nexts)
+                {
+                    var extend = new Extend(start, next);
+
+                    foreach (var nextPartition in StarPartitions(starContext, repeat, next, end))
+                    {
+                        var list = Enumerable.Repeat(extend, 1).Concat(nextPartition).ToList();
+                        yield return list;
+                    }
+                }
+            }
         }
 
         private Node? BuildPlus(Plus matcher, Cursor start, Cursor end)

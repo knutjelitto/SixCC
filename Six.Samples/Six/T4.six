@@ -1,0 +1,15 @@
+﻿grammar T4;
+
+S   : d? d?
+    | d? d*
+    | d? d+
+    | d* d?
+    | d* d*
+    | d* d+
+    | d+ d?
+    | d+ d*
+    | d+ d+
+    ;
+
+d   : 'd'
+    ;

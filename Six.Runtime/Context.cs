@@ -33,7 +33,7 @@ namespace Six.Runtime
             else
             {
                 context.Continues.Add(onNext);
-                foreach (var next in context.Nexts)
+                foreach (var next in context.Nexts.ToList())
                 {
                     onNext(next);
                 }

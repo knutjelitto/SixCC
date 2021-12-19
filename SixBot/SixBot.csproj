@@ -17,18 +17,13 @@
     <ItemGroup>
         <AdditionalFiles Include="Grammars\Json.six" />
         <AdditionalFiles Include="Grammars\Six.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\A.six" Link="Samples\A.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\B.six" Link="Samples\B.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\C.six" Link="Samples\C.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\D.six" Link="Samples\D.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\Test.six" Link="Samples\Test.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\E.six" Link="Samples\E.six" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\EParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\TestParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\DParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\CParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\BParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\AParser.gen.cs" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T1.six" Link="Samples\T1.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T2.six" Link="Samples\T2.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T3.six" Link="Samples\T3.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T4.six" Link="Samples\T4.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T5.six" Link="Samples\T5.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T6.six" Link="Samples\T6.six" />
+        <AdditionalFiles Include="..\Six.Samples\Six\T7.six" Link="Samples\T7.six" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\JsonParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\SixParser.gen.cs" />
     </ItemGroup>

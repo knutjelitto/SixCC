@@ -17,14 +17,10 @@ namespace Six.Runtime.Sppf
 
         protected IWithWriter w => this;
 
-        public void Enum()
+        public int Enum()
         {
             var count = 0;
-            var items = Dump(() => string.Empty, Root).OrderBy(x => x).ToList();
-            if (items.Count != items.Distinct().Count())
-            {
-                Assert(false);
-            }
+            var items = Dump(string.Empty, Root).OrderBy(x => x).ToList();
             foreach (var tree in items)
             {
                 w.wl($"{++count, 3}  {tree}");
@@ -34,9 +30,10 @@ namespace Six.Runtime.Sppf
                     break;
                 }
             }
+            return count;
         }
 
-        private IEnumerable<string> Dump(Func<string> prefix, Node anyNode)
+        private IEnumerable<string> Dump(string prefix, Node anyNode)
         {
             switch (anyNode)
             {
@@ -53,13 +50,13 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private IEnumerable<string> Dump(Func<string> prefix, Nonterminal node)
+        private IEnumerable<string> Dump(string prefix, Nonterminal node)
         {
             if (node.Role == Role.Seq)
             {
                 if (node.Children.Length == 0)
                 {
-                    yield return $"{prefix()})";
+                    yield return $"{prefix})";
                 }
                 else
                 {
@@ -76,15 +73,15 @@ namespace Six.Runtime.Sppf
             {
                 if (node.Children.Length == 0)
                 {
-                    yield return $"{prefix()}*()";
+                    yield return $"{prefix}*()";
                 }
                 else
                 {
                     foreach (var child in node.Children)
                     {
-                        foreach (var tree in Dump(() => $"*(", child).ToList())
+                        foreach (var tree in Dump($"*(", child).ToList())
                         {
-                            yield return $"{prefix()}{tree})";
+                            yield return $"{prefix}{tree})";
                         }
                     }
                 }
@@ -93,15 +90,15 @@ namespace Six.Runtime.Sppf
             {
                 if (node.Children.Length == 0)
                 {
-                    yield return $"{prefix()}+()";
+                    yield return $"{prefix}+()";
                 }
                 else
                 {
                     foreach (var child in node.Children)
                     {
-                        foreach (var tree in Dump(() => $"+(", child).ToList())
+                        foreach (var tree in Dump($"+(", child).ToList())
                         {
-                            yield return $"{prefix()}{tree})";
+                            yield return $"{prefix}{tree})";
                         }
                     }
                 }
@@ -110,15 +107,15 @@ namespace Six.Runtime.Sppf
             {
                 if (node.Children.Length == 0)
                 {
-                    yield return $"{prefix()}?()";
+                    yield return $"{prefix}?()";
                 }
                 else
                 {
                     foreach (var child in node.Children)
                     {
-                        foreach (var tree in Dump(() => $"?(", child).ToList())
+                        foreach (var tree in Dump($"?(", child).ToList())
                         {
-                            yield return $"{prefix()}{tree})";
+                            yield return $"{prefix}{tree})";
                         }
                     }
                 }
@@ -127,9 +124,9 @@ namespace Six.Runtime.Sppf
             {
                 foreach (var child in node.Children)
                 {
-                    foreach (var tree in Dump(() => $"{node.Name}(", child).ToList())
+                    foreach (var tree in Dump($"{node.Name}(", child).ToList())
                     {
-                        yield return $"{prefix()}{tree})";
+                        yield return $"{prefix}{tree})";
                     }
                 }
             }
@@ -137,9 +134,9 @@ namespace Six.Runtime.Sppf
             {
                 foreach (var child in node.Children)
                 {
-                    foreach (var tree in Dump(() => $"", child).ToList())
+                    foreach (var tree in Dump($"", child).ToList())
                     {
-                        yield return $"{prefix()}{tree}";
+                        yield return $"{prefix}{tree}";
                     }
                 }
             }
@@ -149,41 +146,41 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private static IEnumerable<string> Dump(Func<string> prefix, Terminal node)
+        private static IEnumerable<string> Dump(string prefix, Terminal node)
         {
             var text = node.Source.GetText(node.Start.Offset, node.End.Offset - node.Start.Offset);
             var esc = text.Esc();
 
             if (esc != node.Name)
             {
-                yield return $"{prefix()}{node.Name}[{esc}]";
+                yield return $"{prefix}{node.Name}[{esc}]";
             }
             else
             {
-                yield return $"{prefix()}{node.Name}";
+                yield return $"{prefix}{node.Name}";
             }
         }
 
-        private IEnumerable<string> Dump(Func<string> prefix, Packed node)
+        private IEnumerable<string> Dump(string prefix, Packed node)
         {
             var ok = false;
 
             if (node.Left == null)
             {
-                foreach (var right in Dump(() => $"", node.Right).ToList())
+                foreach (var right in Dump($"", node.Right).ToList())
                 {
                     ok = true;
-                    yield return $"{prefix()}{right}";
+                    yield return $"{prefix}{right}";
                 }
             }
             else
             {
-                foreach (var left in Dump(() => "", node.Left).ToList())
+                foreach (var left in Dump("", node.Left).ToList())
                 {
-                    foreach (var right in Dump(() => " ", node.Right).ToList())
+                    foreach (var right in Dump(" ", node.Right).ToList())
                     {
                         ok = true;
-                        yield return $"{prefix()}{left}{right}";
+                        yield return $"{prefix}{left}{right}";
                     }
 
                     Assert(ok);
@@ -199,13 +196,13 @@ namespace Six.Runtime.Sppf
         }
 
 
-        private IEnumerable<string> Dump(Func<string> prefix, Intermediate node)
+        private IEnumerable<string> Dump(string prefix, Intermediate node)
         {
             foreach (var child in node.Children)
             {
-                foreach (var tree in Dump(() => $"", child).ToList())
+                foreach (var tree in Dump("", child).ToList())
                 {
-                    yield return $"{prefix()}{tree}";
+                    yield return $"{prefix}{tree}";
                 }
             }
         }

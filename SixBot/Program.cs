@@ -6,17 +6,30 @@ using Six.Gen;
 using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 
-Check<TestParser>(0, true, Sampler.LoadTest());
-Check<AParser>(0, true, Sampler.LoadA());
-Check<BParser>(0, true, Sampler.LoadB());
-Check<CParser>(0, true, Sampler.LoadC());
-Check<DParser>(0, true, Sampler.LoadD());
-Check<EParser>(1, true, Sampler.LoadE());
+TCheckAll(-1);
+Check<T1Parser>(0, true, Sampler.Load(".t1"));
+Check<T2Parser>(0, true, Sampler.Load(".t2"));
+Check<T3Parser>(0, true, Sampler.Load(".t3"));
+Check<T4Parser>(0, true, Sampler.Load(".t4"));
+Check<T5Parser>(0, true, Sampler.Load(".t5"));
+Check<T6Parser>(0, true, Sampler.Load(".t6"));
+Check<T7Parser>(0, true, Sampler.Load(".t7"));
 Check<SixParser>(-1, true, Sampler.LoadSix());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);
 Console.Write("any key ... ");
 Console.ReadKey(true);
+
+void TCheckAll(int which)
+{
+    Check<T1Parser>(which, true, Sampler.Load(".t1"));
+    Check<T2Parser>(which, true, Sampler.Load(".t2"));
+    Check<T3Parser>(which, true, Sampler.Load(".t3"));
+    Check<T4Parser>(which, true, Sampler.Load(".t4"));
+    Check<T5Parser>(which, true, Sampler.Load(".t5"));
+    Check<T6Parser>(which, true, Sampler.Load(".t6"));
+    Check<T7Parser>(which, true, Sampler.Load(".t7"));
+}
 
 void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
     where ParserType : ParserCore, new()
@@ -56,7 +69,11 @@ void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
                         }
                         using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
                         {
-                            new SppfEnumerator(root, writer).Enum();
+                            var enumCount = new SppfEnumerator(root, writer).Enum();
+                            if (sample.Count >= 0)
+                            {
+                                Assert(enumCount == sample.Count);
+                            }
                         }
                         var treeBuilder = new TreeBuilder(root);
                         var tree = treeBuilder.Build();
@@ -140,7 +157,7 @@ void CheckGenerate(bool enabled)
             Console.WriteLine(sample.Name);
 
             var ast = Six.Input.Builder.Build(sample.Name, sample.Content);
-            var ebnf = new Six.Gen.Ebnf.EbnfCreator(ast).Create();
+            var ebnf = new EbnfCreator(ast).Create();
 
             using (var writer = $"{ebnf.Name}-ebnf.txt".Writer())
             {
