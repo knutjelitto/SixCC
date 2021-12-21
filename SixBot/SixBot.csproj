@@ -10,11 +10,13 @@
 	</PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Grammars\Ceylon.six" />
       <None Remove="Samples\Json.six" />
       <None Remove="Samples\Six.six" />
     </ItemGroup>
 
     <ItemGroup>
+        <AdditionalFiles Include="Grammars\Ceylon.six" />
         <AdditionalFiles Include="Grammars\Json.six" />
         <AdditionalFiles Include="Grammars\Six.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T1.six" Link="Samples\T1.six" />

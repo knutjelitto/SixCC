@@ -9,6 +9,7 @@ namespace Six.Gen.Ebnf
         const string LeftParent = "(";
         const string RightParent = ")";
         const string Comma = ",";
+        const string Bar = "|";
 
         private readonly StringBuilder builder = new();
 
@@ -52,7 +53,7 @@ namespace Six.Gen.Ebnf
         protected override void Visit(AltOp op)
         {
             Left("alt");
-            Arguments(op, "|");
+            Arguments(op, Bar);
             Right();
         }
 
@@ -79,13 +80,7 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(RefOp op)
         {
-#if true
             Write($">{op.Name}");
-#else
-            Left("ref");
-            Write(op.Name);
-            Right();
-#endif
         }
 
         protected override void Visit(RuleOp op)

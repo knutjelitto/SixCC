@@ -10,7 +10,7 @@ namespace Six.Runtime.Matchers
 
         public void Match(Cursor start, Action<Cursor> next)
         {
-            Runtime.Context.From(this, start, next);
+            Runtime.Context.Match(this, start, next);
         }
 
         public abstract void MatchCore(Context context);

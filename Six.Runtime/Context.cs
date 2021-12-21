@@ -5,7 +5,7 @@ namespace Six.Runtime
     public sealed class Context
     {
         private readonly List<Action<Cursor>> Continues = new();
-        public readonly SortedSet<Cursor> Nexts;
+        public readonly CursorSet Nexts;
         public readonly Matcher Matcher;
         public readonly Cursor Start;
         public Cursor Core;
@@ -17,10 +17,10 @@ namespace Six.Runtime
             Matcher = matcher;
             Start = start;
             Core = start;
-            Nexts = new SortedSet<Cursor>();
+            Nexts = new CursorSet();
         }
 
-        public static Context From(Matcher matcher, Cursor start, Action<Cursor> onNext)
+        public static void Match(Matcher matcher, Cursor start, Action<Cursor> onNext)
         {
             if (!matcher.Contexts.TryGetValue(start, out var context))
             {
@@ -38,8 +38,6 @@ namespace Six.Runtime
                     onNext(next);
                 }
             }
-
-            return context;
         }
 
         public void Success(Cursor next)
@@ -54,9 +52,7 @@ namespace Six.Runtime
 
         public override string ToString()
         {
-            var nexts = string.Join(',', Nexts.Select(x => x.Offset));
-
-            return $"context({Start.Offset}, {Matcher}, [{nexts}], [#{Continues.Count}])";
+            return $"context({Start.Offset}, {Matcher}, [{Nexts}], [#{Continues.Count}])";
         }
     }
 }

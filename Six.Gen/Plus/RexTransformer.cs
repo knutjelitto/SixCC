@@ -48,7 +48,7 @@ namespace Six.Gen.Ebnf
             else
             {
                 return FA.And(Transform(op.Arguments.First()), op.Arguments.Skip(1).Select(x => Transform(x)).ToArray())
-                    .ToDfa().Minimize().RemoveDead();
+                    .ToDfa().Minimize().RemoveDead().ToDfa();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Six.Gen.Ebnf
         {
             var inner = Transform(op.Argument);
 
-            return inner.Star().ToDfa().Minimize().RemoveDead();
+            return inner.Star().ToDfa().Minimize().RemoveDead().ToDfa();
         }
 
         protected override FA Visit(PlusOp op)

@@ -6,32 +6,49 @@ using Six.Gen;
 using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 
-TCheckAll(-1);
-Check<T1Parser>(0, true, Sampler.Load(".t1"));
-Check<T2Parser>(0, true, Sampler.Load(".t2"));
-Check<T3Parser>(0, true, Sampler.Load(".t3"));
-Check<T4Parser>(0, true, Sampler.Load(".t4"));
-Check<T5Parser>(0, true, Sampler.Load(".t5"));
-Check<T6Parser>(0, true, Sampler.Load(".t6"));
-Check<T7Parser>(0, true, Sampler.Load(".t7"));
-Check<SixParser>(-1, true, Sampler.LoadSix());
-CheckJson(false, Sampler.LoadJson());
-CheckGenerate(true);
-Console.Write("any key ... ");
-Console.ReadKey(true);
+var profile = false;
 
-void TCheckAll(int which)
+if (profile)
 {
-    Check<T1Parser>(which, true, Sampler.Load(".t1"));
-    Check<T2Parser>(which, true, Sampler.Load(".t2"));
-    Check<T3Parser>(which, true, Sampler.Load(".t3"));
-    Check<T4Parser>(which, true, Sampler.Load(".t4"));
-    Check<T5Parser>(which, true, Sampler.Load(".t5"));
-    Check<T6Parser>(which, true, Sampler.Load(".t6"));
-    Check<T7Parser>(which, true, Sampler.Load(".t7"));
+    try
+    {
+        Check<SixParser>(-1, Sampler.LoadSix());
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+        Console.ReadKey();
+    }
+}
+else
+{
+    CheckAllT(0);
+    Check<T1Parser>(0, Sampler.Load(".t1"));
+    Check<T2Parser>(0, Sampler.Load(".t2"));
+    Check<T3Parser>(0, Sampler.Load(".t3"));
+    Check<T4Parser>(0, Sampler.Load(".t4"));
+    Check<T5Parser>(0, Sampler.Load(".t5"));
+    Check<T6Parser>(0, Sampler.Load(".t6"));
+    Check<T7Parser>(0, Sampler.Load(".t7"));
+    Check<SixParser>(-1, Sampler.LoadSix());
+    CheckJson(false, Sampler.LoadJson());
+    CheckGenerate(true);
+    Console.Write("any key ... ");
+    Console.ReadKey(true);
 }
 
-void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
+void CheckAllT(int which)
+{
+    Check<T1Parser>(which, Sampler.Load(".t1"));
+    Check<T2Parser>(which, Sampler.Load(".t2"));
+    Check<T3Parser>(which, Sampler.Load(".t3"));
+    Check<T4Parser>(which, Sampler.Load(".t4"));
+    Check<T5Parser>(which, Sampler.Load(".t5"));
+    Check<T6Parser>(which, Sampler.Load(".t6"));
+    Check<T7Parser>(which, Sampler.Load(".t7"));
+}
+
+void Check<ParserType>(int which, IEnumerable<Sample> samples)
     where ParserType : ParserCore, new()
 {
     if (which == 0)
@@ -48,39 +65,37 @@ void Check<ParserType>(int which, bool parse, IEnumerable<Sample> samples)
 
         var content = (sample.Content.Length < 20 ? sample.Content : sample.Content[..20] + " ...").Esc();
         Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name} {content}");
+
         if (which == -1 || which == count)
         {
             var source = Source.FromString(sample.Name, sample.Content);
 
-            if (parse)
+            var parser = new ParserType();
+            var ok = parser.Parse(source);
+            if (ok)
             {
-                var parser = new ParserType();
-                var ok = parser.Parse(source);
-                if (ok)
+                var builder = new SppfBuilder(source, parser);
+                var root = builder.BuildSppf();
+                if (root != null)
                 {
-                    var builder = new SppfBuilder(source, parser);
-                    var root = builder.BuildSppf();
-                    if (root != null)
+                    var file = Path.GetFileNameWithoutExtension(source.Name);
+                    using (var writer = $"{parser.__Name}-{file}-sppf.txt".Writer())
                     {
-                        var file = Path.GetFileNameWithoutExtension(source.Name);
-                        using (var writer = $"{parser.__Name}-{file}-sppf.txt".Writer())
+                        new SppfDumper(root, writer).Dump();
+                    }
+                    using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
+                    {
+                        var enumCount = new SppfEnumerator(root, writer).Enum();
+                        if (sample.Count >= 0)
                         {
-                            new SppfDumper(root, writer).Dump();
+                            Assert(enumCount == sample.Count);
                         }
-                        using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
-                        {
-                            var enumCount = new SppfEnumerator(root, writer).Enum();
-                            if (sample.Count >= 0)
-                            {
-                                Assert(enumCount == sample.Count);
-                            }
-                        }
-                        var treeBuilder = new TreeBuilder(root);
-                        var tree = treeBuilder.Build();
-                        using (var writer = $"{parser.__Name}-{file}-tree.txt".Writer(2))
-                        {
-                            new TreeDumper(tree, writer).Dump();
-                        }
+                    }
+                    var treeBuilder = new TreeBuilder(root);
+                    var tree = treeBuilder.Build();
+                    using (var writer = $"{parser.__Name}-{file}-tree.txt".Writer(2))
+                    {
+                        new TreeDumper(tree, writer).Dump();
                     }
                 }
             }

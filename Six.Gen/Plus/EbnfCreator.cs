@@ -29,7 +29,7 @@ namespace Six.Gen.Ebnf
             var startSymbol = Grammar.StartRule;
             if (startSymbol != null)
             {
-                startRule.Set(startSymbol.Location, Transform(startSymbol.Expression));
+                startRule.Set(startSymbol.Location, Create(startSymbol.Expression));
             }
             else
             {
@@ -40,7 +40,7 @@ namespace Six.Gen.Ebnf
             var whiteSymbol = Grammar.WhitespaceRule;
             if (whiteSymbol != null)
             {
-                whiteRule.Set(whiteSymbol.Location, Transform(whiteSymbol.Expression));
+                whiteRule.Set(whiteSymbol.Location, Create(whiteSymbol.Expression));
                 if (whiteRule.Argument is not TokenOp)
                 {
                     whiteRule.Patch(Add(new TokenOp(whiteRule.Argument.Location, whiteRule.Argument)));
@@ -59,7 +59,7 @@ namespace Six.Gen.Ebnf
                 }
 
                 var name = symbol.Name;
-                var transformed = Transform(symbol.Expression);
+                var transformed = Create(symbol.Expression);
 
                 if (transformed is TokenOp)
                 {
@@ -151,11 +151,11 @@ namespace Six.Gen.Ebnf
             return (T)op;
         }
 
-        private CoreOp Transform(Ast.Expression expression)
+        private CoreOp Create(Ast.Expression expression)
         {
-            return Add(transform());
+            return Add(create());
 
-            CoreOp transform()
+            CoreOp create()
             {
                 switch (expression)
                 {
@@ -192,11 +192,11 @@ namespace Six.Gen.Ebnf
             Assert(alt.Expressions.Count >= 1);
             if (alt.Expressions.Count == 1)
             {
-                return Transform(alt.Expressions[0]);
+                return Create(alt.Expressions[0]);
             }
             else
             {
-                return new AltOp(alt.Location, alt.Expressions.Select(e => Transform(e)));
+                return new AltOp(alt.Location, alt.Expressions.Select(e => Create(e)));
             }
         }
 
@@ -204,7 +204,7 @@ namespace Six.Gen.Ebnf
         {
             Assert(seq.Expressions.Count >= 0);
 
-            var transformed = seq.Expressions.Select(e => Transform(e)).ToList();
+            var transformed = seq.Expressions.Select(e => Create(e)).ToList();
 
             if (seq.Expressions.Count == 1)
             {
@@ -218,17 +218,17 @@ namespace Six.Gen.Ebnf
 
         private CoreOp Visit(Ast.ZeroOrMore zeroOrMore)
         {
-            return new StarOp(zeroOrMore.Location, Transform(zeroOrMore.Expression));
+            return new StarOp(zeroOrMore.Location, Create(zeroOrMore.Expression));
         }
 
         private CoreOp Visit(Ast.OneOrMore oneOrMore)
         {
-            return new PlusOp(oneOrMore.Location, Transform(oneOrMore.Expression));
+            return new PlusOp(oneOrMore.Location, Create(oneOrMore.Expression));
         }
 
         private CoreOp Visit(Ast.ZeroOrOne zeroOrOne)
         {
-            return new OptionalOp(zeroOrOne.Location, Transform(zeroOrOne.Expression));
+            return new OptionalOp(zeroOrOne.Location, Create(zeroOrOne.Expression));
         }
 
         private CoreOp Visit(Ast.Reference reference)
@@ -256,8 +256,8 @@ namespace Six.Gen.Ebnf
 
         private CoreOp Visit(Ast.Range range)
         {
-            var start = Transform(range.Left);
-            var end = Transform(range.Right);
+            var start = Create(range.Left);
+            var end = Create(range.Right);
 
             if (start is CharacterOp cp1 && end is CharacterOp cp2)
             {
@@ -270,15 +270,15 @@ namespace Six.Gen.Ebnf
 
         private CoreOp Visit(Ast.Diff diff)
         {
-            var first = Transform(diff.Left);
-            var second = Transform(diff.Right);
+            var first = Create(diff.Left);
+            var second = Create(diff.Right);
 
             return new SetOp(diff.Location, first, second);
         }
 
         private CoreOp Visit(Ast.Token token)
         {
-            return new TokenOp(token.Location, Transform(token.Expression));
+            return new TokenOp(token.Location, Create(token.Expression));
         }
 
         public override string ToString()

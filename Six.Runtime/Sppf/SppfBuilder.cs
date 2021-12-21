@@ -88,7 +88,7 @@ namespace Six.Runtime.Sppf
 
         private Node? BuildRule(Role role, Rule rule, Cursor start, Cursor end)
         {
-            if (CanMatch(rule, start, end))
+            if (rule.CanMatch(start, end))
             {
                 if (rule.IsTerminal)
                 {
@@ -135,7 +135,7 @@ namespace Six.Runtime.Sppf
             if (context != null)
             {
                 var children = (from alt in matcher
-                                where CanMatch(alt, start, end)
+                                where alt.CanMatch(start, end)
                                 let child = Build(alt, start, end)
                                 where child != null
                                 select child).ToList();
@@ -156,7 +156,7 @@ namespace Six.Runtime.Sppf
                         packeds.Add(packed);
                     }
 
-                    return NewNonterminal(Role.Alt, matcher, start, end, packeds.ToArray());
+                    return NewNonterminal(Role.Alt, matcher, start, end, packeds);
                 }
             }
 
@@ -167,7 +167,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && CanMatch(matcher, start, end))
+            if (context != null && matcher.CanMatch(start, end))
             {
                 var repeat = matcher[0];
                 var packeds = new List<Packed>();
@@ -202,7 +202,7 @@ namespace Six.Runtime.Sppf
                     }
                 }
 
-                var star = NewNonterminal(Role.Star, matcher, start, end, packeds.ToArray());
+                var star = NewNonterminal(Role.Star, matcher, start, end, packeds);
 
                 return star;
             }
@@ -239,7 +239,7 @@ namespace Six.Runtime.Sppf
 
             Node? result = null;
 
-            if (context != null && CanMatch(matcher, start, end))
+            if (context != null && matcher.CanMatch(start, end))
             {
                 var repeat = matcher[0];
 
@@ -251,7 +251,7 @@ namespace Six.Runtime.Sppf
 
                 for (var i = 0; i < partition.Count - 1; i++)
                 {
-                    if (!CanMatch(repeat, partition[i], partition[i + 1]))
+                    if (!repeat.CanMatch(partition[i], partition[i + 1]))
                     {
                         partition.RemoveAt(i);
                     }
@@ -501,11 +501,6 @@ namespace Six.Runtime.Sppf
                 }
                 var children = BuildMatcher(matcher, start, end).ToArray();
 
-                foreach (var packed in children)
-                {
-                    Assert(packed.End == end);
-                }
-
                 return NewNonterminal(role, matcher, start, end, children);
             }
 
@@ -518,6 +513,11 @@ namespace Six.Runtime.Sppf
             var key = Terminal.Key(matcher, start, end);
 
             return Cache(key, () => new Terminal(matcher, start, core, end, source));
+        }
+
+        private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, IEnumerable<Packed> nodes)
+        {
+            return NewNonterminal(role, matcher, start, end, nodes.ToArray());
         }
 
         private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Packed[] nodes)

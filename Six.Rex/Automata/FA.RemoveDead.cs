@@ -14,6 +14,36 @@ namespace Six.Rex
 
                 var closures = new Dictionary<State, HashSet<State>>();
 
+                foreach (var state in dfa.States)
+                {
+                    Initial(state);
+                }
+
+                var added = true;
+                while (added)
+                {
+                    added = false;
+
+                    foreach (var state in dfa.States)
+                    {
+                        added = added || Close(state);
+                    }
+                }
+
+                var dead = new HashSet<State>();
+
+                foreach (var state in dfa.States)
+                {
+                    var set = closures[state];
+
+                    if (set.All(s => !s.Final))
+                    {
+                        dead.UnionWith(set);
+                    }
+                }
+
+                return RemoveDead(dfa, dead);
+
                 void Initial(State state)
                 {
                     var set = new HashSet<State>() { state };
@@ -44,35 +74,6 @@ namespace Six.Rex
                     return after > before;
                 }
 
-                foreach (var state in dfa.States)
-                {
-                    Initial(state);
-                }
-
-                var added = true;
-                while (added)
-                {
-                    added = false;
-
-                    foreach (var state in dfa.States)
-                    {
-                        added = added || Close(state);
-                    }
-                }
-
-                var dead = new HashSet<State>();
-
-                foreach (var state in dfa.States)
-                {
-                    var set = closures[state];
-
-                    if (set.All(s => !s.Final))
-                    {
-                        dead.UnionWith(set);
-                    }
-                }
-
-                return RemoveDead(dfa, dead);
             }
 
             private static FA RemoveDead(FA dfa, HashSet<State> dead)
