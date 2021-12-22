@@ -6,46 +6,35 @@ using Six.Gen;
 using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 
-var profile = false;
-
-if (profile)
-{
-    try
-    {
-        Check<SixParser>(-1, Sampler.LoadSix());
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex);
-        Console.ReadKey();
-    }
-}
-else
-{
-    CheckAllT(0);
-    Check<T1Parser>(0, Sampler.Load(".t1"));
-    Check<T2Parser>(0, Sampler.Load(".t2"));
-    Check<T3Parser>(0, Sampler.Load(".t3"));
-    Check<T4Parser>(0, Sampler.Load(".t4"));
-    Check<T5Parser>(0, Sampler.Load(".t5"));
-    Check<T6Parser>(0, Sampler.Load(".t6"));
-    Check<T7Parser>(0, Sampler.Load(".t7"));
-    Check<SixParser>(-1, Sampler.LoadSix());
-    CheckJson(false, Sampler.LoadJson());
-    CheckGenerate(true);
-    Console.Write("any key ... ");
-    Console.ReadKey(true);
-}
+CheckAllT(0);
+Check<T1Parser>(0, Sampler.Load(".t1"));
+Check<T2Parser>(0, Sampler.Load(".t2"));
+Check<T3Parser>(0, Sampler.Load(".t3"));
+Check<T4Parser>(0, Sampler.Load(".t4"));
+Check<T5Parser>(0, Sampler.Load(".t5"));
+Check<T6Parser>(0, Sampler.Load(".t6"));
+Check<T7Parser>(0, Sampler.Load(".t7"));
+Check<T8Parser>(0, Sampler.Load(".t8"));
+Check<CeylonParser>(25, Sampler.Load(".ceylon"));
+Check<SixParser>(0, Sampler.LoadSix());
+CheckJson(false, Sampler.LoadJson());
+CheckGenerate(true);
+Console.Write("any key ... ");
+Console.ReadKey(true);
 
 void CheckAllT(int which)
 {
-    Check<T1Parser>(which, Sampler.Load(".t1"));
-    Check<T2Parser>(which, Sampler.Load(".t2"));
-    Check<T3Parser>(which, Sampler.Load(".t3"));
-    Check<T4Parser>(which, Sampler.Load(".t4"));
-    Check<T5Parser>(which, Sampler.Load(".t5"));
-    Check<T6Parser>(which, Sampler.Load(".t6"));
-    Check<T7Parser>(which, Sampler.Load(".t7"));
+    if (which != 0)
+    {
+        Check<T1Parser>(which, Sampler.Load(".t1"));
+        Check<T2Parser>(which, Sampler.Load(".t2"));
+        Check<T3Parser>(which, Sampler.Load(".t3"));
+        Check<T4Parser>(which, Sampler.Load(".t4"));
+        Check<T5Parser>(which, Sampler.Load(".t5"));
+        Check<T6Parser>(which, Sampler.Load(".t6"));
+        Check<T7Parser>(which, Sampler.Load(".t7"));
+        Check<T8Parser>(which, Sampler.Load(".t8"));
+    }
 }
 
 void Check<ParserType>(int which, IEnumerable<Sample> samples)
@@ -72,6 +61,26 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
 
             var parser = new ParserType();
             var ok = parser.Parse(source);
+            if (!ok)
+            {
+                var furthest = 0;
+                foreach (var m in parser.__Core.__Matchers)
+                {
+                    foreach (var c in m.Contexts.Values)
+                    {
+                        if (c.Nexts.Count > 0)
+                        {
+                            foreach (var next in c.Nexts)
+                            {
+                                if (next.Offset > furthest)
+                                {
+                                    furthest = next.Offset;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             if (ok)
             {
                 var builder = new SppfBuilder(source, parser);
@@ -85,10 +94,15 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                     }
                     using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
                     {
-                        var enumCount = new SppfEnumerator(root, writer).Enum();
-                        if (sample.Count >= 0)
+                        var enumerator = new SppfEnumerator(root, writer);
+                        var cnt = enumerator.Count();
+                        if (cnt <= 2000)
                         {
-                            Assert(enumCount == sample.Count);
+                            var enumCount = enumerator.Enum();
+                            if (sample.Count >= 0)
+                            {
+                                //Assert(enumCount == sample.Count);
+                            }
                         }
                     }
                     var treeBuilder = new TreeBuilder(root);
@@ -98,10 +112,6 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                         new TreeDumper(tree, writer).Dump();
                     }
                 }
-            }
-            else
-            {
-                new ParserType().Match(source);
             }
         }
     }
@@ -164,11 +174,6 @@ void CheckGenerate(bool enabled)
     {
         foreach (var sample in Sampler.LoadSix())
         {
-            if (!sample.Name.Contains("Six.six") && false)
-            {
-                continue;
-            }
-
             Console.WriteLine(sample.Name);
 
             var ast = Six.Input.Builder.Build(sample.Name, sample.Content);

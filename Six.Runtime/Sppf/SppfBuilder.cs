@@ -1,6 +1,8 @@
 ﻿using Six.Core;
 using Six.Runtime.Matchers;
 
+#pragma warning disable IDE0028 // Simplify collection initialization
+
 namespace Six.Runtime.Sppf
 {
     public class SppfBuilder
@@ -156,7 +158,9 @@ namespace Six.Runtime.Sppf
                         packeds.Add(packed);
                     }
 
-                    return NewNonterminal(Role.Alt, matcher, start, end, packeds);
+                    var intermediate = NewIntermediate(matcher, start, end, 0, packeds.ToArray());
+
+                    return intermediate;
                 }
             }
 
@@ -165,6 +169,17 @@ namespace Six.Runtime.Sppf
 
         private Node? BuildStar(Star matcher, Cursor start, Cursor end)
         {
+            return BuildLoop(Role.Star, matcher, start, end);
+        }
+
+        private Node? BuildPlus(Plus matcher, Cursor start, Cursor end)
+        {
+            return BuildLoop(Role.Plus, matcher, start, end);
+        }
+
+
+        private Node? BuildLoop(Role role, Matcher matcher, Cursor start, Cursor end)
+        {
             var context = matcher.Context(start);
 
             if (context != null && matcher.CanMatch(start, end))
@@ -172,7 +187,7 @@ namespace Six.Runtime.Sppf
                 var repeat = matcher[0];
                 var packeds = new List<Packed>();
 
-                foreach (var partition in StarPartitions(context, repeat, start, end))
+                foreach (var partition in LoopPartitions(context, repeat, start, end))
                 {
                     Node? result = null;
 
@@ -202,15 +217,15 @@ namespace Six.Runtime.Sppf
                     }
                 }
 
-                var star = NewNonterminal(Role.Star, matcher, start, end, packeds);
+                var loop = NewNonterminal(role, matcher, start, end, packeds);
 
-                return star;
+                return loop;
             }
 
             return null;
         }
 
-        private IEnumerable<List<Extend>> StarPartitions(Context starContext, Matcher repeat, Cursor start, Cursor end)
+        private IEnumerable<List<Extend>> LoopPartitions(Context starContext, Matcher repeat, Cursor start, Cursor end)
         {
             if (start >= end)
             {
@@ -224,7 +239,7 @@ namespace Six.Runtime.Sppf
                 {
                     var extend = new Extend(start, next);
 
-                    foreach (var nextPartition in StarPartitions(starContext, repeat, next, end))
+                    foreach (var nextPartition in LoopPartitions(starContext, repeat, next, end))
                     {
                         var list = Enumerable.Repeat(extend, 1).Concat(nextPartition).ToList();
                         yield return list;
@@ -232,63 +247,6 @@ namespace Six.Runtime.Sppf
                 }
             }
         }
-
-        private Node? BuildPlus(Plus matcher, Cursor start, Cursor end)
-        {
-            var context = matcher.Context(start);
-
-            Node? result = null;
-
-            if (context != null && matcher.CanMatch(start, end))
-            {
-                var repeat = matcher[0];
-
-                var partition = new List<Cursor>
-                    {
-                        start
-                    };
-                partition.AddRange(context.Nexts.Where(x => x <= end));
-
-                for (var i = 0; i < partition.Count - 1; i++)
-                {
-                    if (!repeat.CanMatch(partition[i], partition[i + 1]))
-                    {
-                        partition.RemoveAt(i);
-                    }
-                }
-                for (var i = 0; i < partition.Count - 1; i++)
-                {
-                    var next = Build(repeat, partition[i], partition[i + 1]);
-
-                    Assert(next != null);
-
-                    if (result != null)
-                    {
-                        var packed = NewPacked(matcher, result.Start, next.End, result.End, result, next);
-                        result = NewIntermediate(matcher, result.Start, partition[i + 1], i + 1, packed);
-                    }
-                    else
-                    {
-                        result = next;
-                    }
-                }
-
-                Assert(result != null);
-
-                if (result == null)
-                {
-                    result = NewNonterminal(Role.Plus, matcher, start, end);
-                }
-                else
-                {
-                    var packed = NewPacked(matcher, start, end, result);
-                    result = NewNonterminal(Role.Plus, matcher, start, end, packed);
-                }
-            }
-
-            return result;
-        }
-
         private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
         {
             var partitions = FindPartitions(matcher, 0, start, end).ToList();
@@ -297,6 +255,8 @@ namespace Six.Runtime.Sppf
 
             foreach (var partition in partitions)
             {
+                //Assert(partition.Count == partition.Distinct().Count());
+
                 var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).ToList();
 
                 foreach (var partial in partials)
@@ -326,17 +286,7 @@ namespace Six.Runtime.Sppf
                         Assert(right.Start == partition[dot]);
                         Assert(right.End == partition[dot + 1]);
 
-                        if (right is Nonterminal nonterminal && nonterminal.Role == Role.Alt)
-                        {
-                            foreach (var node in nonterminal.Children.Cast<Packed>())
-                            {
-                                yield return node;
-                            }
-                        }
-                        else
-                        {
-                            yield return NewPacked(matcher, partition[dot], partition[dot + 1], partition[dot], null, right);
-                        }
+                        yield return NewPacked(matcher, partition[dot], partition[dot + 1], partition[dot], null, right);
                     }
                     else
                     {
@@ -380,7 +330,11 @@ namespace Six.Runtime.Sppf
 
                         var packed = NewPacked(matcher, left.Start, right.End, left.End, left, right);
 
-                        var intermediate = NewIntermediate(matcher, partition[dot - 1], partition[dot + 1], dot + 1, packed);
+                        //var intermediate = NewIntermediate(matcher, partition[dot - 1], partition[dot + 1], dot + 1, packed);
+                        var intermediate = NewIntermediate(matcher, packed.Start, packed.End, dot + 1, packed);
+
+                        Assert(intermediate.Start == packed.Start);
+                        Assert(intermediate.End == packed.End);
 
                         return intermediate;
                     }
@@ -417,13 +371,19 @@ namespace Six.Runtime.Sppf
                             {
                                 foreach (var sub in FindPartitions(symbol, dot + 1, next, end).ToList())
                                 {
-                                    var list = new List<Cursor>
-                                    {
-                                        start
-                                    };
+#if true
+                                    var list = new List<Cursor>();
+                                    list.Add(start);
                                     list.AddRange(sub);
 
                                     yield return list;
+#else
+                                    var set = new SortedSet<Cursor>();
+                                    set.Add(start);
+                                    set.AddRange(sub);
+
+                                    yield return set.ToList();
+#endif
                                 }
                             }
                         }
@@ -476,7 +436,9 @@ namespace Six.Runtime.Sppf
 
         private Node? BuildTerminal(Matcher matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start);
+            var context = matcher.Context(start, end);
+
+            Assert(context != null);
 
             if (context != null && context.Nexts.Contains(end))
             {
@@ -488,10 +450,9 @@ namespace Six.Runtime.Sppf
 
         private Node? BuildNonterminal(Role role, Rule matcher, Cursor start, Cursor end)
         {
-            Assert(!matcher.IsTerminal);
-            Assert(Covers(matcher, start));
+            var context = matcher.Context(start, end);
 
-            var context = matcher.Context(start);
+            Assert(context != null);
 
             if (context != null)
             {
@@ -522,6 +483,11 @@ namespace Six.Runtime.Sppf
 
         private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Packed[] nodes)
         {
+            if (nodes.Length > 1)
+            {
+                Assert(true);
+            }
+
             var key = Nonterminal.Key(role, matcher, start, end);
 
             if (nodes.Length == 1 && nodes[0].Left == null && true)
@@ -555,14 +521,6 @@ namespace Six.Runtime.Sppf
         private static bool Covers(Matcher matcher, Cursor start)
         {
             return matcher.Contexts.ContainsKey(start);
-        }
-
-        [DebuggerStepThrough]
-        private static bool CanMatch(Matcher matcher, Cursor start, Cursor end)
-        {
-            var context = matcher.Context(start);
-
-            return context != null && context.Nexts.Contains(end);
         }
     }
 }

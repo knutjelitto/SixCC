@@ -2,12 +2,9 @@
 {
     public enum Role
     {
-        //Terminal,
-        //Intermediate,
         Start,
         Rule,
         Seq,
-        Alt,
         Star,
         Plus,
         Optional,

@@ -14,6 +14,7 @@
 		<None Remove="Six\T5.six" />
 		<None Remove="Six\T6.six" />
 		<None Remove="Six\T7.six" />
+		<None Remove="Six\T8.six" />
 		<None Remove="T1\1.t1" />
 		<None Remove="T2\1.t2" />
 		<None Remove="T2\2.t2" />
@@ -362,9 +363,15 @@
 		<None Remove="T7\4.t7" />
 		<None Remove="T7\5.t7" />
 		<None Remove="T7\6.t7" />
+		<None Remove="T8\1.t8" />
+		<None Remove="T8\2.t8" />
+		<None Remove="T8\3.t8" />
+		<None Remove="T8\4.t8" />
+		<None Remove="T8\5.t8" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="Six\T8.six" />
 		<EmbeddedResource Include="Six\T7.six" />
 		<EmbeddedResource Include="T1\2.t1" />
 		<EmbeddedResource Include="T2\1.t2" />
@@ -724,6 +731,147 @@
 	  <EmbeddedResource Include="T7\4.t7" />
 	  <EmbeddedResource Include="T7\5.t7" />
 	  <EmbeddedResource Include="T7\6.t7" />
+	  <EmbeddedResource Include="T8\5.t8" />
+	  <EmbeddedResource Include="T8\4.t8" />
+	  <EmbeddedResource Include="T8\3.t8" />
+	  <EmbeddedResource Include="T8\2.t8" />
+	  <EmbeddedResource Include="T8\1.t8" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Ceylon\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\and.ceylon" Link="Ceylon\and.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Annotated.ceylon" Link="Ceylon\Annotated.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Annotation.ceylon" Link="Ceylon\Annotation.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\annotations.ceylon" Link="Ceylon\annotations.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\any.ceylon" Link="Ceylon\any.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Anything.ceylon" Link="Ceylon\Anything.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\apply.ceylon" Link="Ceylon\apply.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Array.ceylon" Link="Ceylon\Array.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\arrayOfSize.ceylon" Link="Ceylon\arrayOfSize.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\ArraySequence.ceylon" Link="Ceylon\ArraySequence.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\AssertionError.ceylon" Link="Ceylon\AssertionError.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Basic.ceylon" Link="Ceylon\Basic.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Binary.ceylon" Link="Ceylon\Binary.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Boolean.ceylon" Link="Ceylon\Boolean.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\byDecreasing.ceylon" Link="Ceylon\byDecreasing.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\byIncreasing.ceylon" Link="Ceylon\byIncreasing.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\byItem.ceylon" Link="Ceylon\byItem.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\byKey.ceylon" Link="Ceylon\byKey.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Byte.ceylon" Link="Ceylon\Byte.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Callable.ceylon" Link="Ceylon\Callable.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Category.ceylon" Link="Ceylon\Category.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\ChainedIterator.ceylon" Link="Ceylon\ChainedIterator.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Character.ceylon" Link="Ceylon\Character.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\className.ceylon" Link="Ceylon\className.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Collection.ceylon" Link="Ceylon\Collection.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Comparable.ceylon" Link="Ceylon\Comparable.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\comparing.ceylon" Link="Ceylon\comparing.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Comparison.ceylon" Link="Ceylon\Comparison.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\compose.ceylon" Link="Ceylon\compose.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\concatenate.ceylon" Link="Ceylon\concatenate.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\ConstrainedAnnotation.ceylon" Link="Ceylon\ConstrainedAnnotation.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Contextual.ceylon" Link="Ceylon\Contextual.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Correspondence.ceylon" Link="Ceylon\Correspondence.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\corresponding.ceylon" Link="Ceylon\corresponding.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\count.ceylon" Link="Ceylon\count.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\curry.ceylon" Link="Ceylon\curry.ceylon" />
+	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\CycledIterator.ceylon" Link="Ceylon\CycledIterator.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Destroyable.ceylon" Link="Ceylon\Destroyable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Empty.ceylon" Link="Ceylon\Empty.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\emptyOrSingleton.ceylon" Link="Ceylon\emptyOrSingleton.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Entry.ceylon" Link="Ceylon\Entry.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Enumerable.ceylon" Link="Ceylon\Enumerable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\every.ceylon" Link="Ceylon\every.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Exception.ceylon" Link="Ceylon\Exception.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\expand.ceylon" Link="Ceylon\expand.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Exponentiable.ceylon" Link="Ceylon\Exponentiable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Finished.ceylon" Link="Ceylon\Finished.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\flatten.ceylon" Link="Ceylon\flatten.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Float.ceylon" Link="Ceylon\Float.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\forItem.ceylon" Link="Ceylon\forItem.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\forKey.ceylon" Link="Ceylon\forKey.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\formatFloat.ceylon" Link="Ceylon\formatFloat.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\formatInteger.ceylon" Link="Ceylon\formatInteger.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\functions.ceylon" Link="Ceylon\functions.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\identical.ceylon" Link="Ceylon\identical.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Identifiable.ceylon" Link="Ceylon\Identifiable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\identityHash.ceylon" Link="Ceylon\identityHash.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\infinity.ceylon" Link="Ceylon\infinity.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\InitializationError.ceylon" Link="Ceylon\InitializationError.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Integer.ceylon" Link="Ceylon\Integer.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Integral.ceylon" Link="Ceylon\Integral.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\interleave.ceylon" Link="Ceylon\interleave.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Invertible.ceylon" Link="Ceylon\Invertible.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Iterable.ceylon" Link="Ceylon\Iterable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Iterator.ceylon" Link="Ceylon\Iterator.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\language.ceylon" Link="Ceylon\language.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\largest.ceylon" Link="Ceylon\largest.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\List.ceylon" Link="Ceylon\List.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\loop.ceylon" Link="Ceylon\loop.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Map.ceylon" Link="Ceylon\Map.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\max.ceylon" Link="Ceylon\max.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Measure.ceylon" Link="Ceylon\Measure.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\min.ceylon" Link="Ceylon\min.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\module.ceylon" Link="Ceylon\module.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Multiplicable.ceylon" Link="Ceylon\Multiplicable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\not.ceylon" Link="Ceylon\not.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\nothing.ceylon" Link="Ceylon\nothing.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Null.ceylon" Link="Ceylon\Null.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Number.ceylon" Link="Ceylon\Number.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Numeric.ceylon" Link="Ceylon\Numeric.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Object.ceylon" Link="Ceylon\Object.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Obtainable.ceylon" Link="Ceylon\Obtainable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\operatingSystem.ceylon" Link="Ceylon\operatingSystem.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\OptionalAnnotation.ceylon" Link="Ceylon\OptionalAnnotation.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\or.ceylon" Link="Ceylon\or.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Ordinal.ceylon" Link="Ceylon\Ordinal.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\OverflowException.ceylon" Link="Ceylon\OverflowException.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\package.ceylon" Link="Ceylon\package.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\pairs.ceylon" Link="Ceylon\pairs.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\parseBoolean.ceylon" Link="Ceylon\parseBoolean.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\ParseException.ceylon" Link="Ceylon\ParseException.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\parseFloat.ceylon" Link="Ceylon\parseFloat.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\parseInteger.ceylon" Link="Ceylon\parseInteger.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\plus.ceylon" Link="Ceylon\plus.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\print.ceylon" Link="Ceylon\print.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\printStackTrace.ceylon" Link="Ceylon\printStackTrace.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\process.ceylon" Link="Ceylon\process.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\product.ceylon" Link="Ceylon\product.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Range.ceylon" Link="Ceylon\Range.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Ranged.ceylon" Link="Ceylon\Ranged.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Resource.ceylon" Link="Ceylon\Resource.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\runtime.ceylon" Link="Ceylon\runtime.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Scalable.ceylon" Link="Ceylon\Scalable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\SearchableList.ceylon" Link="Ceylon\SearchableList.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Sequence.ceylon" Link="Ceylon\Sequence.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\SequencedAnnotation.ceylon" Link="Ceylon\SequencedAnnotation.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Sequential.ceylon" Link="Ceylon\Sequential.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Set.ceylon" Link="Ceylon\Set.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\shuffle.ceylon" Link="Ceylon\shuffle.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Singleton.ceylon" Link="Ceylon\Singleton.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\smallest.ceylon" Link="Ceylon\smallest.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\sort.ceylon" Link="Ceylon\sort.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Span.ceylon" Link="Ceylon\Span.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\String.ceylon" Link="Ceylon\String.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\StringBuilder.ceylon" Link="Ceylon\StringBuilder.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\StringTokens.ceylon" Link="Ceylon\StringTokens.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\sum.ceylon" Link="Ceylon\sum.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Summable.ceylon" Link="Ceylon\Summable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\system.ceylon" Link="Ceylon\system.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Throwable.ceylon" Link="Ceylon\Throwable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\times.ceylon" Link="Ceylon\times.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\transpose.ceylon" Link="Ceylon\transpose.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Tuple.ceylon" Link="Ceylon\Tuple.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\unflatten.ceylon" Link="Ceylon\unflatten.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\unzip.ceylon" Link="Ceylon\unzip.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Usable.ceylon" Link="Ceylon\Usable.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\vmArguments.ceylon" Link="Ceylon\vmArguments.ceylon" />
+	  <None Include="..\..\SixTmp\ceylon\language\src\ceylon\language\zip.ceylon" Link="Ceylon\zip.ceylon" />
+	  <EmbeddedResource Include="..\SixBot\Grammars\Ceylon.six" Link="Six\Ceylon.six" />
 	</ItemGroup>
 
 </Project>

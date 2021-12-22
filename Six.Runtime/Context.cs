@@ -43,16 +43,16 @@ namespace Six.Runtime
         public void Success(Cursor next)
         {
             var count = Continues.Count;
+            Nexts.Add(next);
             for (var i = 0; i < count; i++)
             {
                 Continues[i](next);
             }
-            Nexts.Add(next);
         }
 
         public override string ToString()
         {
-            return $"context({Start.Offset}, {Matcher}, [{Nexts}], [#{Continues.Count}])";
+            return $"context({Start}, [{Nexts}], [#{Continues.Count}], {Matcher})";
         }
     }
 }

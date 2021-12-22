@@ -71,13 +71,14 @@ namespace Six.Core
 
         public static bool IsSpecial(int value)
         {
-            switch (char.GetUnicodeCategory((char)value))
+            var category = char.GetUnicodeCategory((char)value);
+
+            switch (category)
             {
                 case UnicodeCategory.Control:
                 case UnicodeCategory.Format:
                 case UnicodeCategory.LineSeparator:
                 case UnicodeCategory.ModifierLetter:
-                case UnicodeCategory.ModifierSymbol:
                 case UnicodeCategory.NonSpacingMark:
                 case UnicodeCategory.OtherNotAssigned:
                 case UnicodeCategory.ParagraphSeparator:
@@ -97,6 +98,7 @@ namespace Six.Core
                 case UnicodeCategory.LetterNumber:
                 case UnicodeCategory.LowercaseLetter:
                 case UnicodeCategory.MathSymbol:
+                case UnicodeCategory.ModifierSymbol:
                 case UnicodeCategory.OpenPunctuation:
                 case UnicodeCategory.OtherLetter:
                 case UnicodeCategory.OtherNumber:

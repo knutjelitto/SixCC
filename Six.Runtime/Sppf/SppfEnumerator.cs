@@ -17,6 +17,43 @@ namespace Six.Runtime.Sppf
 
         protected IWithWriter w => this;
 
+        public int Count()
+        {
+            return Count(Root);
+        }
+
+        private int Count(Node anyNode)
+        {
+            switch (anyNode)
+            {
+                case Packed packed:
+                    {
+                        if (packed.Left == null)
+                        {
+                            return Count(packed.Right);
+                        }
+                        else
+                        {
+                            return Count(packed.Left) * Count(packed.Right);
+                        }
+                    }
+                case Intermediate intermediate:
+                    {
+                        return Math.Max(1, intermediate.Children.Sum(child => Count(child)));
+                    }
+                case Nonterminal nonterminal:
+                    {
+                        return Math.Max(1, nonterminal.Children.Sum(child => Count(child)));
+                    }
+                case Terminal terminal:
+                    {
+                        return 1;
+                    }
+            }
+
+            return -1;
+        }
+
         public int Enum()
         {
             var count = 0;
@@ -25,11 +62,16 @@ namespace Six.Runtime.Sppf
             {
                 w.wl($"{++count, 3}  {tree}");
 
-                if (count == 1000)
+                if (count == 2000)
                 {
                     break;
                 }
             }
+
+            var distinct = items.Distinct().Count();
+
+            Assert(count == distinct);
+
             return count;
         }
 

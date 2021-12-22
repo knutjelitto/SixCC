@@ -45,10 +45,10 @@
             return new Source(name, content);
         }
 
-        public (int lineNo, int colNo) GetLineAndColumn(int index)
+        public (int lineNo, int colNo) GetLineAndColumn(int offset)
         {
-            var lineNo = GetLineNoFromIndex(index);
-            var colNo = index - GetIndexFromLineNo(lineNo) + 1;
+            var lineNo = GetLineNoFromIndex(offset);
+            var colNo = offset - GetIndexFromLineNo(lineNo) + 1;
 
             return (lineNo, colNo);
         }

@@ -51,7 +51,7 @@ primary
     | atom '*'
     | atom '+'
     | atom '?'
-    | '^' atom
+    | ('^'|'~') atom
     ;
 
 atom

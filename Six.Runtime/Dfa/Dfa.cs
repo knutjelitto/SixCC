@@ -57,6 +57,8 @@
 
             while (current.At != -1)
             {
+                var x = (char)current.At;
+
                 Assert(state != null);
                 var next = state.Match(current.At);
                 if (next == null)
@@ -71,6 +73,11 @@
                 }
                 state = next;
                 current = current.Advance(1);
+
+                if (current.Offset == 470)
+                {
+                    Assert(true);
+                }
             }
 
             if (state.Final)

@@ -8,23 +8,23 @@
             if (test)
             {
                 var parts = fileContent.Split(Enumerable.Repeat(Environment.NewLine, 1).ToArray(), StringSplitOptions.RemoveEmptyEntries);
-                Assert(1 <= parts.Length && parts.Length <= 2);
+                Assert(1 <= parts.Length);
                 if (parts.Length == 1)
                 {
                     Count = -1;
                     Content = parts[0];
+                    return;
                 }
-                else
+                else if (parts.Length == 2 && int.TryParse(parts[0], out var count))
                 {
-                    Count = int.Parse(parts[0].Trim());
+                    Count = count;
                     Content = parts[1];
+                    return;
                 }
             }
-            else
-            {
-                Content = fileContent;
-                Count = 1;
-            }
+
+            Content = fileContent;
+            Count = 1;
         }
 
         public string Name { get; }

@@ -85,7 +85,7 @@ namespace Six.Runtime
 
         public override string ToString()
         {
-            return $"cursor@{Offset}";
+            return $"c{Source.GetLineAndColumn(Offset)}@{Offset}";
         }
 
         public int CompareTo(Cursor other)

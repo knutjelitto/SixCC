@@ -4,8 +4,6 @@
     {
         public override void MatchCore(Context context)
         {
-            context.Success(context.Start);
-
             this[0].Match(
                 context.Start,
                 success =>
@@ -16,6 +14,8 @@
                         context.Success(success);
                     }
                 });
+
+            context.Success(context.Start);
         }
 
         public override string ToString()
