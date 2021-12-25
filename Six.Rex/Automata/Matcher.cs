@@ -36,7 +36,7 @@ namespace Six.Rex
                 }
             }
 
-            return State.Final;
+            return State.IsFinal;
         }
     }
 }

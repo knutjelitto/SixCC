@@ -11,6 +11,7 @@ namespace Six.Gen.Ebnf
         }
 
         public string Text { get; }
+        public bool IsKeyword { get; set; }
 
         protected override string DumpHead => $"string({Text.Esc()})";
     }

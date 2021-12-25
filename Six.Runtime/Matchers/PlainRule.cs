@@ -8,11 +8,7 @@
 
             var matcher = this[0];
 
-            matcher.Match(context.Start,
-                success =>
-                {
-                    context.Success(success);
-                });
+            matcher.Match(context.Start, context.Success);
         }
 
         public override string ToString()

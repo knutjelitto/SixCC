@@ -1,26 +1,22 @@
 ﻿/* six grammar */
 grammar Six;
 
-%start
-    : grammar
-    ;
-
-%whitespace
-    : skip
-    ;
+%start      : grammar;
+%whitespace : skip ;
 
 grammar
     : 'grammar' identifier ';' rules
     ;
 
 rules
-    : rule+
+    : rule*
     ;
 
 rule
     : identifier ':' body ';'
     | '%start' ':' identifier ';'
     | '%whitespace' ':' identifier ';'
+    | '%keywords' ':' identifier ';'
     ;
 
 body
@@ -116,7 +112,9 @@ hex
     ;
 
 skip
-    : < (space | line-end | comment)* >
+    : space
+    | line-end
+    | comment
     ;
 
 space

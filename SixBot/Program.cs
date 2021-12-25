@@ -15,7 +15,8 @@ Check<T5Parser>(0, Sampler.Load(".t5"));
 Check<T6Parser>(0, Sampler.Load(".t6"));
 Check<T7Parser>(0, Sampler.Load(".t7"));
 Check<T8Parser>(0, Sampler.Load(".t8"));
-Check<CeylonParser>(25, Sampler.Load(".ceylon"));
+Check<CeylonParser>(129, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
+//Check<CeylonParser>(-1, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
 Check<SixParser>(0, Sampler.LoadSix());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);
@@ -48,6 +49,9 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     var watch = new Stopwatch();
     watch.Start();
     var count = 0;
+
+    var parser = new ParserType();
+
     foreach (var sample in samples)
     {
         count++;
@@ -59,35 +63,50 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
         {
             var source = Source.FromString(sample.Name, sample.Content);
 
-            var parser = new ParserType();
+            parser.Reset();
             var ok = parser.Parse(source);
             if (!ok)
             {
                 var furthest = 0;
+                var contexts = parser.__Core.__Matchers
+                    .Select(m => m.Furthest())
+                    .Where(c => c != null)
+                    .OrderByDescending(c => c!.Nexts.Last())
+                    .ThenByDescending(c => c!.Nexts.Last().Offset - c!.Start.Offset)
+                    .ToList();
                 foreach (var m in parser.__Core.__Matchers)
                 {
-                    foreach (var c in m.Contexts.Values)
+                    var context = m.Furthest();
+                    if (context != null)
                     {
-                        if (c.Nexts.Count > 0)
+                        if (context.Start.Offset > furthest)
                         {
-                            foreach (var next in c.Nexts)
+                            furthest = context.Start.Offset;
+                            if (furthest >= 5446)
                             {
-                                if (next.Offset > furthest)
-                                {
-                                    furthest = next.Offset;
-                                }
+                                Assert(true);
                             }
                         }
                     }
                 }
+
+                Console.WriteLine($"furthest: {new Cursor(source, furthest)}");
+                break;
             }
             if (ok)
             {
+                var contexts = parser.__Core.__Matchers
+                    .Select(m => m.Furthest())
+                    .Where(c => c != null && c.Continues.Count > 1)
+                    .OrderByDescending(c => c!.Nexts.Last())
+                    .ThenByDescending(c => c!.Nexts.Last().Offset - c!.Start.Offset)
+                    .ToList();
+
                 var builder = new SppfBuilder(source, parser);
                 var root = builder.BuildSppf();
                 if (root != null)
                 {
-                    var file = Path.GetFileNameWithoutExtension(source.Name);
+                    var file = $"{count:D4}-{Path.GetFileNameWithoutExtension(source.Name)}";
                     using (var writer = $"{parser.__Name}-{file}-sppf.txt".Writer())
                     {
                         new SppfDumper(root, writer).Dump();
@@ -95,13 +114,18 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                     using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
                     {
                         var enumerator = new SppfEnumerator(root, writer);
-                        var cnt = enumerator.Count();
-                        if (cnt <= 2000)
+                        var counted = enumerator.Count();
+                        writer.WriteLine($"counted: {counted}");
+                        //var enumCount = enumerator.Enum();
+                        if (sample.Count >= 0)
                         {
-                            var enumCount = enumerator.Enum();
-                            if (sample.Count >= 0)
+                            if (counted != sample.Count)
                             {
-                                //Assert(enumCount == sample.Count);
+                                if (counted >= 2)
+                                {
+                                    Assert(true);
+                                    break;
+                                }
                             }
                         }
                     }

@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    internal class IsReachedWalker : EbnfPredicator
+    internal class ReachWalker : EbnfPredicator
     {
-        public IsReachedWalker()
+        public ReachWalker()
             : base(op => op.IsReached, (op, value) => op.IsReached = value)
         {
         }
@@ -16,6 +16,7 @@
         {
             Walk(grammar.WhitespaceRule);
             Walk(grammar.StartRule);
+            Walk(grammar.KeywordsRule);
         }
 
         protected override void Visit(AltOp op)
@@ -25,12 +26,6 @@
         }
 
         protected override void Visit(AnyOp op)
-        {
-            Set(op, true);
-            base.Visit(op);
-        }
-
-        protected override void Visit(CharacterOp op)
         {
             Set(op, true);
             base.Visit(op);

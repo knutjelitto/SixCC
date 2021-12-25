@@ -14,11 +14,11 @@ namespace Six.Runtime.Sppf
         {
             if (pivot is null)
             {
-                return $"{matcher.Name} [{start.Offset}-{end.Offset}]";
+                return $"[{start.Offset}-{end.Offset}] {matcher.Name}";
             }
             else
             {
-                return $"{matcher.Name} [{start.Offset}-{pivot.Value.Offset}-{end.Offset}]";
+                return $"[{start.Offset}-{pivot.Value.Offset}-{end.Offset}] {matcher.Name}";
             }
         }
 

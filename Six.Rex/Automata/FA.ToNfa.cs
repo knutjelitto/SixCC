@@ -23,7 +23,7 @@ namespace Six.Rex
                 dfa.States.Add(dfa.Final);
                 foreach (var state in dfa.States)
                 {
-                    state.Final = false;
+                    state.IsFinal = false;
                 }
 
                 return dfa;

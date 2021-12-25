@@ -3,7 +3,7 @@
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public record Nonterminal(Role Role, Matcher Matcher, Cursor Start, Cursor End, params Node[] Children)
+    public sealed record Nonterminal(Role Role, Matcher Matcher, Cursor Start, Cursor End, params Node[] Children)
         : Symbol(Matcher, Start, End, Children)
     {
         public override string ToString()

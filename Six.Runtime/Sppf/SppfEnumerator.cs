@@ -57,7 +57,7 @@ namespace Six.Runtime.Sppf
         public int Enum()
         {
             var count = 0;
-            var items = Dump(string.Empty, Root).OrderBy(x => x).ToList();
+            var items = Dump(string.Empty, Root);
             foreach (var tree in items)
             {
                 w.wl($"{++count, 3}  {tree}");
@@ -80,13 +80,13 @@ namespace Six.Runtime.Sppf
             switch (anyNode)
             {
                 case Nonterminal node:
-                    return Dump(prefix, node).ToList();
+                    return Dump(prefix, node);
                 case Terminal node:
-                    return Dump(prefix, node).ToList();
+                    return Dump(prefix, node);
                 case Packed node:
-                    return Dump(prefix, node).ToList();
+                    return Dump(prefix, node);
                 case Intermediate node:
-                    return Dump(prefix, node).ToList();
+                    return Dump(prefix, node);
                 default:
                     throw new NotImplementedException($"can't dump node of type '{anyNode.GetType().Name}'");
             }
@@ -121,7 +121,7 @@ namespace Six.Runtime.Sppf
                 {
                     foreach (var child in node.Children)
                     {
-                        foreach (var tree in Dump($"*(", child).ToList())
+                        foreach (var tree in Dump($"*(", child))
                         {
                             yield return $"{prefix}{tree})";
                         }
@@ -138,7 +138,7 @@ namespace Six.Runtime.Sppf
                 {
                     foreach (var child in node.Children)
                     {
-                        foreach (var tree in Dump($"+(", child).ToList())
+                        foreach (var tree in Dump($"+(", child))
                         {
                             yield return $"{prefix}{tree})";
                         }
@@ -155,7 +155,7 @@ namespace Six.Runtime.Sppf
                 {
                     foreach (var child in node.Children)
                     {
-                        foreach (var tree in Dump($"?(", child).ToList())
+                        foreach (var tree in Dump($"?(", child))
                         {
                             yield return $"{prefix}{tree})";
                         }
@@ -166,7 +166,7 @@ namespace Six.Runtime.Sppf
             {
                 foreach (var child in node.Children)
                 {
-                    foreach (var tree in Dump($"{node.Name}(", child).ToList())
+                    foreach (var tree in Dump($"{node.Name}(", child))
                     {
                         yield return $"{prefix}{tree})";
                     }
@@ -176,7 +176,7 @@ namespace Six.Runtime.Sppf
             {
                 foreach (var child in node.Children)
                 {
-                    foreach (var tree in Dump($"", child).ToList())
+                    foreach (var tree in Dump($"", child))
                     {
                         yield return $"{prefix}{tree}";
                     }
@@ -190,7 +190,7 @@ namespace Six.Runtime.Sppf
 
         private static IEnumerable<string> Dump(string prefix, Terminal node)
         {
-            var text = node.Source.GetText(node.Start.Offset, node.End.Offset - node.Start.Offset);
+            var text = node.Source.GetText(node.Core.Offset, node.End.Offset - node.Core.Offset);
             var esc = text.Esc();
 
             if (esc != node.Name)
@@ -209,7 +209,7 @@ namespace Six.Runtime.Sppf
 
             if (node.Left == null)
             {
-                foreach (var right in Dump($"", node.Right).ToList())
+                foreach (var right in Dump($"", node.Right))
                 {
                     ok = true;
                     yield return $"{prefix}{right}";
@@ -217,9 +217,9 @@ namespace Six.Runtime.Sppf
             }
             else
             {
-                foreach (var left in Dump("", node.Left).ToList())
+                foreach (var left in Dump("", node.Left))
                 {
-                    foreach (var right in Dump(" ", node.Right).ToList())
+                    foreach (var right in Dump(" ", node.Right))
                     {
                         ok = true;
                         yield return $"{prefix}{left}{right}";
@@ -242,7 +242,7 @@ namespace Six.Runtime.Sppf
         {
             foreach (var child in node.Children)
             {
-                foreach (var tree in Dump("", child).ToList())
+                foreach (var tree in Dump("", child))
                 {
                     yield return $"{prefix}{tree}";
                 }

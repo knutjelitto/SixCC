@@ -26,7 +26,6 @@
         public ILocation Location { get; private set; }
         public int Id { get; set; } = -1;
         public bool IsReached { get; set; }
-        public bool TokenReached { get; set; }
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
         {
@@ -60,9 +59,9 @@
         {
             get
             {
-                if (IsReached || TokenReached)
+                if (IsReached)
                 {
-                    return " [" + (IsReached ? "R" : "") + (TokenReached ? "T" : "") + "]";
+                    return " [" + (IsReached ? "R" : "") + "]";
                 }
                 return string.Empty;
             }

@@ -14,6 +14,7 @@
         RightCurly,
         LeftAngle,
         RightAngle,
+        Define,
         Colon,
         Semi,
         Comma,

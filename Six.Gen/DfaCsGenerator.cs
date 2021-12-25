@@ -57,7 +57,7 @@ namespace Six.Gen
                     }
                     more = true;
 
-                    var final = state.Final ? "true" : "false";
+                    var final = state.IsFinal ? "true" : "false";
                     w($"new {DfaStateClass}({state.Id}, {final})");
                 }
                 wl();

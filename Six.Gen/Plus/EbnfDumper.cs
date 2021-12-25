@@ -29,6 +29,15 @@
                     }
                 }
             }
+            writer.WriteLine();
+            writer.WriteLine("keywords:");
+            using (writer.Indent())
+            {
+                foreach (var keyword in Grammar.Keywords)
+                {
+                    writer.WriteLine($"{keyword}");
+                }
+            }
         }
     }
 }

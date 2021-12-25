@@ -64,6 +64,8 @@ namespace Six.Runtime.Sppf
                     return BuildOptional(match, start, end);
                 case Character match:
                     return BuildCharacter(match, start, end);
+                case Matchers.Keyword match:
+                    return BuildKeyword(match, start, end);
                 case Matchers.String match:
                     return BuildString(match, start, end);
                 case Matchers.Range match:
@@ -142,6 +144,13 @@ namespace Six.Runtime.Sppf
                                 where child != null
                                 select child).ToList();
 
+                if (children.Count >= 2)
+                {
+                    Assert(true);
+                }
+
+                children = ReduceAlternates(children).ToList();
+
                 if (children.Count == 1)
                 {
                     return children[0];
@@ -176,7 +185,6 @@ namespace Six.Runtime.Sppf
         {
             return BuildLoop(Role.Plus, matcher, start, end);
         }
-
 
         private Node? BuildLoop(Role role, Matcher matcher, Cursor start, Cursor end)
         {
@@ -371,19 +379,11 @@ namespace Six.Runtime.Sppf
                             {
                                 foreach (var sub in FindPartitions(symbol, dot + 1, next, end).ToList())
                                 {
-#if true
                                     var list = new List<Cursor>();
                                     list.Add(start);
                                     list.AddRange(sub);
 
                                     yield return list;
-#else
-                                    var set = new SortedSet<Cursor>();
-                                    set.Add(start);
-                                    set.AddRange(sub);
-
-                                    yield return set.ToList();
-#endif
                                 }
                             }
                         }
@@ -407,6 +407,20 @@ namespace Six.Runtime.Sppf
         }
 
         private Node? BuildString(Matchers.String matcher, Cursor start, Cursor end)
+        {
+            var context = matcher.Context(start);
+
+            if (context != null && context.Nexts.Contains(end))
+            {
+                var chr = NewTerminal(matcher, start, context.Core, end);
+
+                return chr;
+            }
+
+            return null;
+        }
+
+        private Node? BuildKeyword(Keyword matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -483,9 +497,17 @@ namespace Six.Runtime.Sppf
 
         private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Packed[] nodes)
         {
-            if (nodes.Length > 1)
+            nodes = ReduceEmptyTails(nodes).ToArray();
+
+            switch (role)
             {
-                Assert(true);
+                case Role.Optional:
+                case Role.Star:
+                    Assert(nodes.Length >= 0);
+                    break;
+                default:
+                    Assert(nodes.Length >= 1);
+                    break;
             }
 
             var key = Nonterminal.Key(role, matcher, start, end);
@@ -502,6 +524,10 @@ namespace Six.Runtime.Sppf
 
         private Intermediate NewIntermediate(Matcher matcher, Cursor start, Cursor end, int dot, params Packed[] nodes)
         {
+            if (nodes.Length >= 2)
+            {
+                Assert(true);
+            }
             return new Intermediate(matcher, start, end, dot, nodes);
         }
 
@@ -515,12 +541,41 @@ namespace Six.Runtime.Sppf
             return new Packed(matcher, start, end, start, null, right);
         }
 
-        /********** helpers */
+        /********** policies */
 
-        [DebuggerStepThrough]
-        private static bool Covers(Matcher matcher, Cursor start)
+        private IEnumerable<Node> ReduceAlternates(IEnumerable<Node> packeds)
         {
-            return matcher.Contexts.ContainsKey(start);
+            //
+            // strange policy:
+            //   select first alternate
+            //
+            return Enumerable.Repeat(packeds.First(), 1);
+        }
+
+        private IEnumerable<Packed> ReduceEmptyTails(Packed[] packeds)
+        {
+            //
+            // strange policy:
+            //   remove empty tails
+            //
+            if (packeds.Length >= 2)
+            {
+                Assert(true);
+                foreach (var packed in packeds)
+                {
+                    if (packed.Pivot < packed.End)
+                    {
+                        yield return packed;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var packed in packeds)
+                {
+                    yield return packed;
+                }
+            }
         }
     }
 }

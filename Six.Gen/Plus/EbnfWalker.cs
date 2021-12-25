@@ -20,9 +20,6 @@
                 case AnyOp expr:
                     Visit(expr);
                     break;
-                case CharacterOp expr:
-                    Visit(expr);
-                    break;
                 case PlusOp expr:
                     Visit(expr);
                     break;
@@ -72,11 +69,6 @@
         }
 
         protected virtual void Visit(AnyOp op)
-        {
-            WalkArguments(op);
-        }
-
-        protected virtual void Visit(CharacterOp op)
         {
             WalkArguments(op);
         }

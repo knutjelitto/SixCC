@@ -7,7 +7,8 @@ namespace Six.Runtime
     public class ImplementationCore
     {
         private Matcher? __start = null;
-        private DfaRule? __whitespace = null;
+        private WhiteRule? __whitespace = null;
+        private DfaRule? __keywords = null;
 
         public ImplementationCore()
         {
@@ -16,8 +17,16 @@ namespace Six.Runtime
 
         protected ImplementationCore(Matcher[] matchers)
         {
-            Assert(matchers.Length >= 2);
+            Assert(matchers.Length >= 3);
             __Matchers = matchers;
+        }
+
+        public void Reset()
+        {
+            foreach (var matcher in __Matchers)
+            {
+                matcher.Reset();
+            }
         }
 
         public Matcher[] __Matchers { get; }
@@ -28,19 +37,50 @@ namespace Six.Runtime
             protected set => __start = value;
         }
 
-        protected DfaRule __Whitespace
+        protected WhiteRule __Whitespace
         {
-            get => __whitespace ??= (DfaRule)__Matchers[1];
+            get => __whitespace ??= (WhiteRule)__Matchers[1];
             set
             {
                 __whitespace = value;
             }
         }
 
+        protected DfaRule __Keywords
+        {
+            get => __keywords ??= (DfaRule)__Matchers[2];
+            set
+            {
+                __keywords = value;
+            }
+        }
+
         [DebuggerStepThrough]
         public Cursor __MatchWhite(Cursor start)
         {
-            if (__Whitespace.Dfa!.TryMatch(start, out var next))
+#if true
+            if (__Whitespace.Whites.TryGetValue(start, out var white))
+            {
+                return white;
+            }
+#endif
+            var current = start;
+            while (__Whitespace.Dfa!.TryMatch(current, out var next))
+            {
+                current = next;
+            }
+
+#if true
+            __Whitespace.Whites.Add(start, current);
+#endif
+
+            return current;
+        }
+
+        [DebuggerStepThrough]
+        public Cursor __MatchKeyword(Cursor start)
+        {
+            if (__Keywords.Dfa!.TryMatch(start, out var next))
             {
                 return next;
             }

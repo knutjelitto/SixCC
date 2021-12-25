@@ -1,22 +1,13 @@
 ﻿grammar Ceylon;
 
-%start
-    : compilationUnit
-    ;
-
-%whitespace
-    : skip
-    ;
+%start      : compilationUnit ;
+%whitespace : skip ;
+%keywords   : LIDENTIFIER ;
 
 compilationUnit
     : hash-tag?
       ( compilerAnnotations ';' )?
-      ( 
-        importDeclaration 
-      | moduleDescriptor 
-      | packageDescriptor
-      | toplevelDeclaration
-      )*
+      ( importDeclaration | moduleDescriptor | packageDescriptor | toplevelDeclaration )*
     ;
 
 toplevelDeclaration
@@ -24,7 +15,7 @@ toplevelDeclaration
     ;
 
 moduleDescriptor
-    : compilerAnnotations annotations
+    : annotations
       'module' 
       packagePath (importNamespace ':' (literal-string | packagePath) (':' literal-string (':' literal-string)? )? )?
       literal-string?
@@ -32,16 +23,11 @@ moduleDescriptor
     ;
 
 importModuleList
-    : '{'
-      ( compilerAnnotations annotations (inferredAttributeDeclaration | importModule) )*
-      '}'
+    : '{' ( annotations (inferredAttributeDeclaration | importModule) )* '}'
     ;
 
 packageDescriptor
-    : compilerAnnotations annotations
-      'package'
-      packagePath
-      ';'
+    : annotations 'package' packagePath ';'
     ;
 
 importModule
@@ -68,8 +54,7 @@ importElementList
     ;
 
 importElement
-    : compilerAnnotations
-    ( importName ('=' importName)? importElementList?)
+    : compilerAnnotations ( importName ('=' importName)? importElementList?)
     ;
 
 importWildcard
@@ -234,6 +219,11 @@ assertion
     : assertMessage 'assert' conditions ';'
     ;
 
+assertMessage
+    : (stringLiteral | stringExpression)?
+    ;
+
+
 block
     : '{' (importDeclaration | declarationOrStatement)* '}'
     ;
@@ -297,27 +287,6 @@ parameters
     : '(' (parameterDeclarationOrRefOrPattern  (',' parameterDeclarationOrRefOrPattern)*)? ')'
     ;
 
-parameter
-    : compilerAnnotations annotations parameterDeclaration
-    ;
-    
-parameterDeclaration
-    : ( variadicType
-      | 'void'
-      | 'function'
-      | 'dynamic'
-      | 'value'
-      )
-      memberNameDeclaration
-      ( specifier?
-      | typeParameters? parameters+ functionSpecifier?
-      )
-    ;
-
-parameterRef
-    : memberName specifier?
-    ;
-
 parameterDeclarationOrRefOrPattern
     : tupleOrEntryPattern
     | parameterDeclarationOrRef
@@ -326,6 +295,20 @@ parameterDeclarationOrRefOrPattern
 parameterDeclarationOrRef
     : parameter
     | parameterRef
+    ;
+
+parameter
+    : annotations parameterDeclaration
+    ;
+    
+parameterRef
+    : memberName specifier?
+    ;
+
+parameterDeclaration
+    : (variadicType | 'void' | 'function' | 'dynamic' | 'value')
+      memberNameDeclaration
+      (specifier? | typeParameters? parameters+ functionSpecifier?)
     ;
 
 typeParameters
@@ -342,13 +325,7 @@ variance
     ;
     
 typeConstraint
-    : compilerAnnotations
-      'given'
-      typeNameDeclaration?
-      typeParameters?
-      caseTypes?
-      satisfiedTypes?
-      abstractedType?
+    : compilerAnnotations 'given' typeNameDeclaration? typeParameters? caseTypes? satisfiedTypes? abstractedType?
     ;
 
 anonymousTypeConstraint
@@ -374,33 +351,22 @@ declarationOrStatement
     ;
 
 declaration
-    : annotations
-    ( classDeclaration
-    | interfaceDeclaration
-    | aliasDeclaration
-    | objectDeclaration
-    | setterDeclaration
-    | voidOrInferredMethodDeclaration
-    | inferredAttributeDeclaration
-    | typedMethodOrAttributeDeclaration
-    | constructor
-    | enumeratedObject
-    )
+    : entityAnnotations
+      ( classDeclaration
+      | interfaceDeclaration
+      | aliasDeclaration
+      | objectDeclaration
+      | setterDeclaration
+      | voidOrInferredMethodDeclaration
+      | inferredAttributeDeclaration
+      | typedMethodOrAttributeDeclaration
+      | constructor
+      | enumeratedObject
+      )
     ;
 
-// recognize some common patterns that are unambiguously
-// type abbreviations - these are not necessary, but 
-// help the IDE
 fullQualifiedType
     : baseType ('.' typeNameWithArguments)*
-    ;
-
-unambiguousType
-    : fullQualifiedType  (('?' | '[' ']')? '->' fullQualifiedType)? ('?' | '[' ']')
-    | '{' fullQualifiedType ('?' | '[' ']')? ('->' fullQualifiedType ('?' | '[' ']')? )?  ('*' | '+') '}'
-    | '[' fullQualifiedType ('?' | '[' ']')? ('->' fullQualifiedType ('?' | '[' ']')? )? 
-      (','  fullQualifiedType ('?' | '[' ']')? ('->' fullQualifiedType ('?' | '[' ']')? )? )* ('*'|'+') 
-      ']'
     ;
 
 statement
@@ -434,11 +400,13 @@ directive
     ;
 
 returnDirective
-    : 'return' functionOrExpression?
+    : 'return' functionOrExpression
+    | 'return'
     ;
 
 throwDirective
-    : 'throw' functionOrExpression?
+    : 'throw' functionOrExpression
+    | 'throw'
     ;
 
 breakDirective
@@ -493,15 +461,21 @@ baseReferenceOrParameterized
     ;
 
 memberReference
-    : memberName typeArguments?
+    : memberName typeArguments
+    | memberName
     ;
 
 typeReference
-    : typeName typeArguments?
+    : typeName typeArguments
+    | typeName
     ;
 
 primary
-    : base (qualifiedReference | indexOrIndexRange  | positionalArguments  | namedArguments)*
+    : primary qualifiedReference
+    | primary indexOrIndexRange
+    | primary positionalArguments
+    | primary namedArguments
+    | base
     ;
 
 qualifiedReference
@@ -512,6 +486,19 @@ memberSelectionOperator
     : '.'
     | '?.'
     | '*.'
+    ;
+
+indexOrIndexRange
+    //TODO: move indexOperator to ElementOrRange and
+    //      make this rule return ElementOrRange instead
+    //      of IndexExpression, instantiating IndexExpression
+    //      from the calling primary rule
+    : '['
+      ( '...' index
+      | index ( '...' | '..' index | ':' index )?
+      | functionOrExpression
+      )
+      ']'
     ;
 
 enumeration
@@ -539,35 +526,26 @@ valueCaseList
     : valueCase ( (',' |'|') valueCase)*
     ;
 
-indexOrIndexRange
-    //TODO: move indexOperator to ElementOrRange and
-    //      make this rule return ElementOrRange instead
-    //      of IndexExpression, instantiating IndexExpression
-    //      from the calling primary rule
-    : '['
-      ( '...' index
-      | index ( '...' | '..' index | ':' index )?
-      | functionOrExpression
-      )
-      ']'
-    ;
-
 index
     : additiveExpression 
     ;
 
 namedArguments
-    : '{'  (namedArgument | anonymousArgument)* sequencedArgument? '}'
+    : '{' (namedArgument | anonymousArgument)* sequencedArgument? '}'
     ;
 
 sequencedArgument
-    : compilerAnnotations
-      (comprehension | positionalArgument | spreadArgument) (',' (comprehension | positionalArgument | spreadArgument))* 
+    : compilerAnnotations sequencedArgumentItem (',' sequencedArgumentItem)* 
+    ;
+
+sequencedArgumentItem
+    : comprehension
+    | positionalArgument
+    | spreadArgument
     ;
 
 namedArgument
-    : compilerAnnotations 
-      (namedSpecifiedArgument | namedArgumentDeclaration)
+    : compilerAnnotations (namedSpecifiedArgument | namedArgumentDeclaration)
     ;
 
 namedSpecifiedArgument
@@ -628,18 +606,18 @@ spreadArgument
 
 functionOrExpression
     : anonymousFunction
-    | let
+    | letClause
     | ifExpression
     | switchExpression
     | expression
     ;
 
-let
-    : letClause
+letVariable
+    : pattern specifier?
     ;
 
-letVariable
-    : (pattern | variable) specifier?
+letVariable2
+    : tupleOrEntryPattern specifier?
     ;
 
 letClause
@@ -664,21 +642,17 @@ elseExpression
     ;
 
 ifExpression
-    : 'if'
-      conditions
-      thenExpression
-      elseExpression
+    : 'if' conditions thenExpression elseExpression
     ;
 
 conditionalBranch
     : ifExpression
-    | let
+    | letClause
     | disjunctionExpression
     ;
 
 thenExpression
-    : 'then'
-      conditionalBranch
+    : 'then' conditionalBranch
     ;
 
 anonymousFunction
@@ -709,7 +683,8 @@ ifComprehensionClause
     ;
     
 assignmentExpression
-    : thenElseExpression (assignmentOperator functionOrExpression)?
+    : thenElseExpression assignmentOperator functionOrExpression
+    | thenElseExpression
     ;
 
 assignmentOperator
@@ -727,7 +702,8 @@ assignmentOperator
     ;
 
 thenElseExpression
-    : disjunctionExpression (thenElseOperator disjunctionExpression)*
+    : thenElseExpression thenElseOperator disjunctionExpression
+    | disjunctionExpression
     ;
 
 thenElseOperator
@@ -736,7 +712,8 @@ thenElseOperator
     ;
 
 disjunctionExpression
-    : conjunctionExpression (disjunctionOperator conjunctionExpression)*
+    : disjunctionExpression disjunctionOperator conjunctionExpression
+    | conjunctionExpression
     ;
 
 disjunctionOperator
@@ -744,7 +721,8 @@ disjunctionOperator
     ;
 
 conjunctionExpression
-    : logicalNegationExpression (conjunctionOperator logicalNegationExpression)*
+    : conjunctionExpression conjunctionOperator logicalNegationExpression
+    | logicalNegationExpression
     ;
 
 conjunctionOperator
@@ -766,7 +744,8 @@ expressionOrMeta
     ;
 
 equalityExpression
-    : comparisonExpression (equalityOperator comparisonExpression)?
+    : comparisonExpression equalityOperator comparisonExpression
+    | comparisonExpression
     ;
 
 equalityOperator
@@ -776,12 +755,12 @@ equalityOperator
     ;
 
 comparisonExpression
-    : existenceEmptinessExpression
-      ( comparisonOperator existenceEmptinessExpression
-      | largerOperator existenceEmptinessExpression
-      | smallerOperator existenceEmptinessExpression (smallerOperator existenceEmptinessExpression)?
-      | typeOperator type
-      )?
+    : existenceEmptinessExpression comparisonOperator existenceEmptinessExpression
+    | existenceEmptinessExpression largerOperator existenceEmptinessExpression
+    | existenceEmptinessExpression smallerOperator existenceEmptinessExpression smallerOperator existenceEmptinessExpression
+    | existenceEmptinessExpression smallerOperator existenceEmptinessExpression
+    | existenceEmptinessExpression typeOperator type
+    | existenceEmptinessExpression
     ;
 
 smallerOperator
@@ -807,7 +786,8 @@ typeOperator
     ;
 
 existenceEmptinessExpression
-    : pipelinedExpression existsNonemptyOperator?
+    : pipelinedExpression existsNonemptyOperator
+    | pipelinedExpression
     ;
 
 existsNonemptyOperator
@@ -816,11 +796,18 @@ existsNonemptyOperator
     ;
 
 pipelinedExpression
-    : entryRangeExpression ('|>' entryRangeExpression | '>|>' entryRangeExpression)*
+    : pipelinedExpression pipelineOperator entryRangeExpression
+    | entryRangeExpression
+    ;
+
+pipelineOperator
+    : '|>'
+    | '>|>'
     ;
 
 entryRangeExpression
-    : additiveExpression (rangeIntervalEntryOperator additiveExpression)?
+    : additiveExpression rangeIntervalEntryOperator additiveExpression
+    | additiveExpression
     ;
 
 rangeIntervalEntryOperator
@@ -830,7 +817,8 @@ rangeIntervalEntryOperator
     ;
 
 additiveExpression
-    : scaleExpression (additiveOperator scaleExpression)*
+    : additiveExpression additiveOperator scaleExpression
+    | scaleExpression
     ;
 
 additiveOperator
@@ -839,11 +827,13 @@ additiveOperator
     ;
 
 scaleExpression
-    : multiplicativeExpression (scaleOperator scaleExpression)?
+    : multiplicativeExpression scaleOperator scaleExpression
+    | multiplicativeExpression
     ;
 
 multiplicativeExpression
-    : unionExpression (multiplicativeOperator unionExpression)*
+    : multiplicativeExpression multiplicativeOperator unionExpression
+    | unionExpression
     ;
 
 multiplicativeOperator
@@ -853,7 +843,8 @@ multiplicativeOperator
     ;
 
 unionExpression
-    : intersectionExpression (unionOperator intersectionExpression)*
+    : unionExpression unionOperator intersectionExpression
+    | intersectionExpression
     ;
     
 unionOperator
@@ -862,7 +853,8 @@ unionOperator
     ;
 
 intersectionExpression
-    : negationComplementExpression (intersectionOperator negationComplementExpression)*
+    : intersectionExpression intersectionOperator negationComplementExpression
+    | negationComplementExpression
     ;
     
 intersectionOperator
@@ -881,7 +873,8 @@ unaryMinusOrComplementOperator
     ;
 
 exponentiationExpression
-    : incrementDecrementExpression (exponentiationOperator exponentiationExpression)?
+    : incrementDecrementExpression exponentiationOperator exponentiationExpression
+    | incrementDecrementExpression
     ;
 
 exponentiationOperator
@@ -903,7 +896,8 @@ prefixOperator
     ;
 
 postfixIncrementDecrementExpression
-    : valueExpression postfixOperator*
+    : postfixIncrementDecrementExpression postfixOperator
+    | valueExpression
     ;
 
 valueExpression
@@ -975,29 +969,40 @@ type
     ;
 
 entryType
-    : unionType ('->' unionType)?
+    : unionType '->' unionType
+    | unionType
     ;
 
 unionType
-    : intersectionType ( ('|' intersectionType)+ )?
+    : unionType '|' intersectionType
+    | intersectionType
     ;
 
 intersectionType
-    : primaryType ( ('&' primaryType)+ )?
+    : intersectionType '&' primaryType
+    | primaryType
+    ;
+
+
+primaryType
+    : primaryType '?'
+    | primaryType '[' literal-natural? ']'
+    | primaryType '(' ( spreadType | defaultedType (',' defaultedType)* )? ')'
+    | atomicType
+    ;
+
+primaryTypeX
+    : atomicType
+      ( '?' 
+      | '[' literal-natural? ']' 
+      | '(' ( spreadType | defaultedType (',' defaultedType)* )? ')'
+      )*
     ;
 
 atomicType
     : qualifiedType 
     | tupleType 
     | iterableType
-    ;
-
-primaryType
-    : atomicType
-      ( '?' 
-      | '[' literal-natural? ']' 
-      | '(' ( spreadType | defaultedType (',' defaultedType)* )? ')'
-      )*
     ;
 
 baseType
@@ -1007,27 +1012,26 @@ baseType
     ;
 
 qualifiedType
-    : baseType ( '.' typeNameWithArguments )*
+    : qualifiedType '.' typeNameWithArguments
+    | baseType
     ;
 
 typeNameWithArguments
-    : typeName typeArguments?
+    : typeName typeArguments
+    | typeName
     ;
     
 memberNameWithArguments
-    : memberName typeArguments?
+    : memberName typeArguments
+    | memberName
     ;
     
-annotations
-    : stringLiteral? annotation*
+entityAnnotations
+    : stringLiteral? entityAnnotation*
     ;
 
-annotation
+entityAnnotation
     : annotationName ( positionalArguments | namedArguments )?
-    ;
-
-assertMessage
-    : (stringLiteral | stringExpression)?
     ;
 
 compilerAnnotations
@@ -1040,6 +1044,10 @@ compilerAnnotation
 
 conditions
     : '(' ( condition ( ',' condition )* )? ')'
+    ;
+
+annotations
+    : compilerAnnotations entityAnnotations
     ;
 
 condition
@@ -1056,11 +1064,11 @@ booleanCondition
 
 
 existsCondition
-    : '!'? 'exists' (letVariable  | impliedVariable | expression)
+    : '!'? 'exists' (letVariable2 | impliedVariable | expression)
     ;
     
 nonemptyCondition
-    : '!'? 'nonempty' (letVariable | impliedVariable | expression)
+    : '!'? 'nonempty' (letVariable2 | impliedVariable | expression)
     ;
 
 isCondition
@@ -1173,7 +1181,7 @@ failBlock
     ;
 
 forIterator
-    : '(' ( (pattern | variable) containment? )? ')'
+    : '(' ( (tupleOrEntryPattern | variable) containment? )? ')'
     ;
     
 containment
@@ -1388,7 +1396,7 @@ string-part
     ;
 
 escape-sequence
-    : '\\' ( ~'{' | '{' (~'}')* '}'? )?
+    : '\\' (~'{' | '{' (~'}')* '}' )
     ;
 
 escape-core
@@ -1397,7 +1405,8 @@ escape-core
     ;
 
 skip
-    : (white | comment)*
+    : white
+    | comment
     ;
 
 white

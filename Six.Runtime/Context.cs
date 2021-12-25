@@ -4,7 +4,7 @@ namespace Six.Runtime
 {
     public sealed class Context
     {
-        private readonly List<Action<Cursor>> Continues = new();
+        public readonly List<Action<Cursor>> Continues = new();
         public readonly CursorSet Nexts;
         public readonly Matcher Matcher;
         public readonly Cursor Start;
@@ -15,27 +15,39 @@ namespace Six.Runtime
         private Context(Matcher matcher, Cursor start)
         {
             Matcher = matcher;
-            Start = start;
-            Core = start;
+            Core = Start = start;
             Nexts = new CursorSet();
         }
 
-        public static void Match(Matcher matcher, Cursor start, Action<Cursor> onNext)
+        public static void Match(Matcher matcher, Cursor start, Action<Cursor> onMatched)
         {
             if (!matcher.Contexts.TryGetValue(start, out var context))
             {
                 context = new Context(matcher, start);
                 matcher.Contexts.Add(start, context);
-                context.Continues.Add(onNext);
+                context.Continues.Add(onMatched);
 
                 matcher.MatchCore(context);
             }
             else
             {
-                context.Continues.Add(onNext);
-                foreach (var next in context.Nexts.ToList())
+                if (context.Continues.Count == 1)
                 {
-                    onNext(next);
+                    Assert(true);
+                    var onMatched1 = context.Continues[0]; ;
+                    if(onMatched.Method == onMatched1.Method)
+                    {
+                        Assert(true);
+                    }
+                    else
+                    {
+                        Assert(true);
+                    }
+                }
+                context.Continues.Add(onMatched);
+                foreach (var next in context.Nexts)
+                {
+                    onMatched(next);
                 }
             }
         }
@@ -43,11 +55,11 @@ namespace Six.Runtime
         public void Success(Cursor next)
         {
             var count = Continues.Count;
-            Nexts.Add(next);
             for (var i = 0; i < count; i++)
             {
                 Continues[i](next);
             }
+            Nexts.Add(next);
         }
 
         public override string ToString()

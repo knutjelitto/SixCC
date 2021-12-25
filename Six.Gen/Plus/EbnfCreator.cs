@@ -1,5 +1,6 @@
 ﻿using Six.Core.Errors;
 using Six.Input;
+using Six.Rex;
 
 namespace Six.Gen.Ebnf
 {
@@ -8,6 +9,7 @@ namespace Six.Gen.Ebnf
         private readonly NameWalker Namer;
         private readonly UniqueList<string, CoreOp> Inners;
         private readonly List<RefOp> References;
+        private int currentId = 0;
 
         public EbnfCreator(Ast.AstGrammar grammar)
         {
@@ -23,8 +25,9 @@ namespace Six.Gen.Ebnf
 
         public EbnfGrammar Create()
         {
-            var startRule = Add(new StartRuleOp("%start", Location.Nowhere));
-            var whiteRule = Add(new WhiteRuleOp("%whitespace", Location.Nowhere));
+            var startRule = Add(new StartRuleOp(Ast.AstGrammar.TheStart, Location.Nowhere));
+            var whiteRule = Add(new WhiteRuleOp(Ast.AstGrammar.TheWhitespace, Location.Nowhere));
+            var keywordsRule = Add(new IdentifierRuleOp(Ast.AstGrammar.TheKeywords, Location.Nowhere));
 
             var startSymbol = Grammar.StartRule;
             if (startSymbol != null)
@@ -51,9 +54,24 @@ namespace Six.Gen.Ebnf
                 whiteRule.Patch(Add(new TokenOp(Location.Nowhere, Add(new SeqOp(Location.Nowhere)))));
             }
 
+            var keywordsSymbol = Grammar.KeywordsRule;
+            if (keywordsSymbol != null)
+            {
+                var expression = Create(keywordsSymbol.Expression);
+                Assert(expression is RefOp);
+                var token = Add(new TokenOp(keywordsSymbol.Expression.Location, expression));
+                keywordsRule.Set(keywordsSymbol.Location, token);
+            }
+            else
+            {
+                var range = Add(new RangeOp(Location.Nowhere, new Codepoint('a'), new Codepoint('z')));
+                var plus = Add(new PlusOp(Location.Nowhere, range));
+                keywordsRule.Patch(Add(new TokenOp(Location.Nowhere, plus)));
+            }
+
             foreach (var symbol in Grammar.Symbols)
             {
-                if (symbol == startSymbol || symbol == whiteSymbol)
+                if (symbol == startSymbol || symbol == whiteSymbol || symbol == keywordsSymbol)
                 {
                     continue;
                 }
@@ -82,13 +100,14 @@ namespace Six.Gen.Ebnf
             var id = 0;
             foreach (var op in Inners)
             {
-                Assert(op.Id == -1);
-                op.Id = id++;
+                Assert(op.Id == id);
+
+                id++;
 
                 Ebnf.Add(op);
             }
 
-            new IsReachedWalker().Reach(Ebnf);
+            new ReachWalker().Reach(Ebnf);
 
             Ebnf = new SetTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
@@ -115,6 +134,48 @@ namespace Six.Gen.Ebnf
             }
             Ebnf.Patch(final);
 
+            foreach (var op in Ebnf.Operators)
+            {
+                Assert(op.IsReached);
+            }
+
+            var keywords = new SortedSet<string>();
+
+            if (keywordsSymbol != null)
+            {
+                Assert(keywordsRule.DFA != null);
+                var dfa = keywordsRule.DFA;
+                Assert(dfa != null);
+                var keywordMatcher = new Rex.Matcher(dfa!);
+
+                foreach (var str in Ebnf.Operators.OfType<StringOp>())
+                {
+                    if (keywordMatcher.FullMatch(str.Text))
+                    {
+                        str.IsKeyword = true;
+                        keywords.Add(str.Text);
+                    }
+                }
+            }
+
+            Ebnf.SetKeywords(keywords.OrderBy(k => k.Length));
+
+            if (keywordsSymbol != null && keywords.Count > 0)
+            {
+                if (keywordsRule != null && keywordsRule.Argument is TokenOp token && token.Argument is RefOp refOp && refOp.Rule is DfaRuleOp identifier)
+                {
+                    var fa = FA.From(keywords.First());
+                    foreach (var next in keywords.Skip(1))
+                    {
+                        fa = fa.Or(FA.From(next));
+                    }
+
+                    var modifiedIdentifierDFA = identifier.DFA!.Difference(fa.ToFinalDfa(), true).ToFinalDfa();
+
+                    identifier.DFA = modifiedIdentifierDFA;
+                }
+            }
+
             return Ebnf;
         }
 
@@ -127,7 +188,7 @@ namespace Six.Gen.Ebnf
                 var diagnostic2 = new SemanticError(already.Location, $"rule '{already.Name}' defined here");
                 throw new DiagnosticException(diagnostic1, diagnostic2);
             }
-            Inners.Add(rule);
+            Add(rule);
 
             return rule;
         }
@@ -137,18 +198,19 @@ namespace Six.Gen.Ebnf
         {
             var name = Namer.NameOf(newOp);
 
-            if (!Inners.TryGetValue(name, out var op))
+            if (!Inners.TryGetValue(name, out var coreOp))
             {
-                op = newOp;
-                Inners.Add(op);
+                coreOp = newOp;
+                coreOp.Id = currentId++;
+                Inners.Add(coreOp);
 
-                if (op is RefOp refOp)
+                if (coreOp is RefOp refOp)
                 {
                     References.Add(refOp);
                 }
             }
 
-            return (T)op;
+            return (T)coreOp;
         }
 
         private CoreOp Create(Ast.Expression expression)
@@ -237,20 +299,16 @@ namespace Six.Gen.Ebnf
             return op;
         }
 
-        private CoreOp Visit(Ast.Any any)
+        private static CoreOp Visit(Ast.Any any)
         {
             return new AnyOp(any.Location);
         }
 
-        private CoreOp Visit(Ast.Literal literal)
+        private static CoreOp Visit(Ast.Literal literal)
         {
             var cps = literal.Text.Codepoints().ToList();
             Assert(cps.Count >= 1);
 
-            if (cps.Count == 1)
-            {
-                return new CharacterOp(literal.Location, cps[0]);
-            }
             return new StringOp(literal.Location, literal.Text);
         }
 
@@ -259,12 +317,12 @@ namespace Six.Gen.Ebnf
             var start = Create(range.Left);
             var end = Create(range.Right);
 
-            if (start is CharacterOp cp1 && end is CharacterOp cp2)
+            if (start is StringOp s1 && end is StringOp s2)
             {
-                return new RangeOp(range.Location, cp1.Codepoint, cp2.Codepoint);
+                var cp1 = s1.Text.Codepoints().Single();
+                var cp2 = s2.Text.Codepoints().Single();
+                return new RangeOp(range.Location, cp1, cp2);
             }
-
-            Assert(start is CharacterOp && end is CharacterOp);
             throw new NotImplementedException();
         }
 

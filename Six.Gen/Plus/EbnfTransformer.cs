@@ -18,8 +18,6 @@
                     return Visit(expr);
                 case AnyOp expr:
                     return Visit(expr);
-                case CharacterOp expr:
-                    return Visit(expr);
                 case PlusOp expr:
                     return Visit(expr);
                 case RangeOp expr:
@@ -55,11 +53,6 @@
         }
 
         protected virtual T Visit(AnyOp op)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual T Visit(CharacterOp op)
         {
             throw new NotImplementedException();
         }

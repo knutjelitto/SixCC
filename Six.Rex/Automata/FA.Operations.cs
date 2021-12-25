@@ -96,6 +96,7 @@ namespace Six.Rex
             {
                 if (dfa.Final != null)
                 {
+                    Assert(dfa.Final == null);
                     throw new Exception("DFA: dfa.Final must be null");
                 }
                 if (!dfa.Finals.Any())

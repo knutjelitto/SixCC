@@ -16,7 +16,7 @@ namespace Six.Gen
             try
             {
 #if XDEBUG
-                if (name == "Error" && !Debugger.IsAttached)
+                if (!Debugger.IsAttached)
                 {
                     Debugger.Launch();
                 }

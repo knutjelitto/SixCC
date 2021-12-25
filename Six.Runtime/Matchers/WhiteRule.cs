@@ -3,10 +3,18 @@
     public sealed record WhiteRule(ImplementationCore Core, int Id, string Name)
         : DfaRule(Core, Id, Name)
     {
+        public Dictionary<Cursor, Cursor> Whites = new();
+
         public override void MatchCore(Context context)
         {
             Assert(Dfa != null);
             Dfa.Match(context);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            Whites.Clear();
         }
 
         public override string ToString()

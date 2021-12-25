@@ -109,11 +109,6 @@ namespace Six.Gen.Ebnf
             Right(); ;
         }
 
-        protected override void Visit(CharacterOp op)
-        {
-            Write(op.Codepoint.ToString().Esc());
-        }
-
         protected override void Visit(StringOp op)
         {
             Write(op.Text.Esc());

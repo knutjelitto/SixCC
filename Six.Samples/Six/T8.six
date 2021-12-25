@@ -1,7 +1,7 @@
 ﻿grammar T8;
 
-%start: S;
-%whitespace: skip;
+%start:         S ;
+%whitespace:    skip ;
 
 S   : expr*
     ;
@@ -20,7 +20,7 @@ string-part
     ;
 
 escape-sequence
-    : '\\' ( ~'{' | '{' (~'}')* '}'? )?
+    : '\\' ( ~'{' | '{' (~'}')* '}' )
     ;
 
 escape-core
@@ -29,7 +29,9 @@ escape-core
     ;
 
 skip
-    : (space | line-end | comment)*
+    : space
+    | line-end
+    | comment
     ;
 
 space

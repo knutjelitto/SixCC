@@ -5,13 +5,13 @@ namespace Six.Rex
     {
         public State(bool isFinal = false)
         {
-            Final = isFinal;
+            IsFinal = isFinal;
             Id = -1;
             Payload = -1;
             Transitions = new List<Transition>();
         }
 
-        public bool Final { get; set; }
+        public bool IsFinal { get; set; }
         public int Id { get; set; }
         public int Payload { get; private set; }
         public bool IsPayload => Payload >= 0;
@@ -79,7 +79,7 @@ namespace Six.Rex
 
         public override string ToString()
         {
-            return $"({Id},{Final},{Payload},({string.Join(",", Transitions)}))";
+            return $"({Id},{IsFinal},{Payload},({string.Join(",", Transitions)}))";
         }
     }
 }

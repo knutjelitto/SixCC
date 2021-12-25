@@ -4,7 +4,7 @@ using Six.Runtime.Matchers;
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public record Terminal(Matcher Matcher, Cursor Start, Cursor Core, Cursor End, Source Source)
+    public sealed record Terminal(Matcher Matcher, Cursor Start, Cursor Core, Cursor End, Source Source)
         : Symbol(Matcher, Start, End)
     {
         public override string ToString()

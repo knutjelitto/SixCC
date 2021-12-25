@@ -70,7 +70,7 @@ namespace Six.Gen
                         {
                             foreach (var inner in grammar.Operators.Where(o => o is not RefOp))
                             {
-                                w($"/* {inner.Id,3} {inner.GetType().Name,-12} */ ");
+                                w($"/* {inner.Id,3} {inner.GetType().Name,-16} */ ");
                                 w($"{Matchers}[{inner.Id}] = ");
                                 switch (inner)
                                 {
@@ -81,11 +81,11 @@ namespace Six.Gen
                                     case SetOp op when op.CodepointSet != null:
                                         CreateMatcher(op, extra: dfaGenerator.DfaSet(op.CodepointSet));
                                         break;
-                                    case CharacterOp op:
-                                        CreateMatcher(op, extra: $"{(int)op.Codepoint}");
-                                        break;
                                     case RangeOp op:
                                         CreateMatcher(op, extra: $"{(int)op.Codepoint1}, {(int)op.Codepoint2}");
+                                        break;
+                                    case StringOp op when op.IsKeyword:
+                                        CreateMatcher(op, className: "Keyword", extra: $"{op.Text.CsString()}");
                                         break;
                                     case StringOp op:
                                         CreateMatcher(op, extra: $"{op.Text.CsString()}");
@@ -99,7 +99,7 @@ namespace Six.Gen
 
                             foreach (var op in grammar.Operators.Where(i => i.HasArguments))
                             {
-                                w($"/* {op.Id,3} {op.GetType().Name,-12} */ ");
+                                w($"/* {op.Id,3} {op.GetType().Name,-16} */ ");
                                 if (op is DfaRuleOp dfaRule)
                                 {
                                     wl($"{dfaRule.RuleId()}.Set({dfaRule.DfaId()});");

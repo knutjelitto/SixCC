@@ -52,37 +52,42 @@
 
         public bool TryMatch(Cursor start, out Cursor success)
         {
-            var state = Start;
-            var current = start;
-
-            while (current.At != -1)
+            if (start.Offset == 48)
             {
-                var x = (char)current.At;
+                Assert(true);
+            }
+            var currentState = Start;
+            var currentCursor = start;
 
-                Assert(state != null);
-                var next = state.Match(current.At);
+            while (currentCursor.At != -1)
+            {
+                var x = (char)currentCursor.At;
+
+                Assert(currentState != null);
+                var next = currentState.Match(currentCursor.At);
                 if (next == null)
                 {
-                    if (state.Final)
+                    if (currentState.Final)
                     {
-                        success = current;
+                        success = currentCursor;
                         return true;
                     }
-                    success = start;
-                    return false;
+                    else
+                    {
+                        success = start;
+                        return false;
+                    }
                 }
-                state = next;
-                current = current.Advance(1);
-
-                if (current.Offset == 470)
+                else
                 {
-                    Assert(true);
+                    currentState = next;
+                    currentCursor = currentCursor.Advance(1);
                 }
             }
 
-            if (state.Final)
+            if (currentState.Final)
             {
-                success = current;
+                success = currentCursor;
                 return true;
             }
 

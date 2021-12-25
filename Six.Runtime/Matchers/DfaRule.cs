@@ -14,10 +14,17 @@
 
         public override void MatchCore(Context context)
         {
-            context.Core = Core.__MatchWhite(context.Start);
-            if (Dfa!.TryMatch(context.Core, out var done))
+            if (context.Nexts.Count > 0)
             {
-                context.Success(done);
+                Assert(context.Nexts.Count == 1);
+                context.Success(context.Nexts.First());
+            }
+            Assert(context.Nexts.Count == 0);
+
+            context.Core = Core.__MatchWhite(context.Start);
+            if (Dfa!.TryMatch(context.Core, out var matched))
+            {
+                context.Success(matched);
             }
         }
 

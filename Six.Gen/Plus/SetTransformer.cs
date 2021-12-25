@@ -124,11 +124,6 @@ namespace Six.Gen.Ebnf
                 return Integers.From((int)op.Codepoint1, (int)op.Codepoint2);
             }
 
-            protected override Integers Visit(CharacterOp op)
-            {
-                return Integers.From((int)op.Codepoint);
-            }
-
             protected override Integers Visit(StringOp op)
             {
                 var cps = new CpString(op.Text);

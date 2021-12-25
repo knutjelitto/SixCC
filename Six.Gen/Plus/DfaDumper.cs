@@ -14,8 +14,8 @@ namespace Six.Gen
 
         public void Dump(Writer writer, State state)
         {
-            var finA = state.Final ? "(" : ".";
-            var finB = state.Final ? ")" : ".";
+            var finA = state.IsFinal ? "(" : ".";
+            var finB = state.IsFinal ? ")" : ".";
             var pay = state.IsPayload ? $"  «{state.Payload}»" : string.Empty;
 
             writer.WriteLine($"{finA}{state.Id}{finB}{pay}");

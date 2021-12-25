@@ -10,14 +10,14 @@ namespace Six.Rex
 
             if (final == null)
             {
-                if (!States.Any(state => state.Final))
+                if (!States.Any(state => state.IsFinal))
                 {
                     Debug.Assert(false, "no final state in DFA");
                 }
             }
             else
             {
-                if (States.Any(state => state.Final))
+                if (States.Any(state => state.IsFinal))
                 {
                     Debug.Assert(false, "final state in NFA");
 
@@ -28,8 +28,8 @@ namespace Six.Rex
         public State Start { get; }
         public State? Final { get; private set; }
         public List<State> States { get; }
-        public IEnumerable<State> Finals => States.Where(state => state.Final);
-        public IEnumerable<State> Nons => States.Where(state => !state.Final);
+        public IEnumerable<State> Finals => States.Where(state => state.IsFinal);
+        public IEnumerable<State> Nons => States.Where(state => !state.IsFinal);
 
         public static FA From(State start, State final)
         {
@@ -48,8 +48,8 @@ namespace Six.Rex
         {
             foreach (var state in States)
             {
-                var finA = state.Final ? "(" : (state == Final ? "[" : ".");
-                var finB = state.Final ? ")" : (state == Final ? "]" : ".");
+                var finA = state.IsFinal ? "(" : (state == Final ? "[" : ".");
+                var finB = state.IsFinal ? ")" : (state == Final ? "]" : ".");
                 writer.WriteLine($"{prefix}{finA}{state.Id}{finB}");
                 foreach (var transition in state.TerminalTransitions)
                 {
@@ -92,6 +92,12 @@ namespace Six.Rex
             return Operations.ToDfa(CloneIf(cloned));
         }
 
+        public FA ToFinalDfa(bool cloned = false)
+        {
+            return ToDfa(cloned).Minimize().RemoveDead().ToDfa();
+        }
+
+
         public FA ToNfa(bool cloned = false)
         {
             return Operations.ToNfa(CloneIf(cloned));
@@ -130,7 +136,7 @@ namespace Six.Rex
 
                 if (!map.TryGetValue(state, out var mapped))
                 {
-                    mapped = new State(state.Final);
+                    mapped = new State(state.IsFinal);
                     mapped.AddPayload(state);
                     map.Add(state, mapped);
 
@@ -165,7 +171,6 @@ namespace Six.Rex
                     }
                 }
             }
-
         }
     }
 }

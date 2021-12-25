@@ -8,12 +8,17 @@ namespace Six.Runtime.Matchers
 
         private Matcher[] Matchers = Array.Empty<Matcher>();
 
-        public void Match(Cursor start, Action<Cursor> next)
+        public virtual void Match(Cursor start, Action<Cursor> next)
         {
             Runtime.Context.Match(this, start, next);
         }
 
         public abstract void MatchCore(Context context);
+
+        public virtual void Reset()
+        {
+            Contexts.Clear();
+        }
 
         public abstract bool IsTerminal { get; }
 
@@ -39,6 +44,11 @@ namespace Six.Runtime.Matchers
         public override string ToString()
         {
             return Name;
+        }
+
+        public Context? Furthest()
+        {
+            return Contexts.Values.Where(c => c.Nexts.Count > 0).MaxBy(c => c.Start.Offset);
         }
 
         public IEnumerator<Matcher> GetEnumerator() => ((IEnumerable<Matcher>)Matchers).GetEnumerator();

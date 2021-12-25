@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-
 namespace Six.Rex
 {
     public partial class FA
@@ -36,7 +32,7 @@ namespace Six.Rex
                 {
                     var set = closures[state];
 
-                    if (set.All(s => !s.Final))
+                    if (set.All(s => !s.IsFinal))
                     {
                         dead.UnionWith(set);
                     }
@@ -89,7 +85,7 @@ namespace Six.Rex
                 {
                     if (!map.TryGetValue(state, out var mapped))
                     {
-                        mapped = new State(state.Final);
+                        mapped = new State(state.IsFinal);
                         mapped.AddPayload(state);
                         map.Add(state, mapped);
 

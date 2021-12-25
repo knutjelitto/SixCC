@@ -1,4 +1,3 @@
-
 namespace Six.Rex
 {
     public partial class FA
@@ -7,17 +6,17 @@ namespace Six.Rex
         {
             public static FA Union(FA dfa1, FA dfa2)
             {
-                return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.Final || s2.Final);
+                return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.IsFinal || s2.IsFinal);
             }
 
             public static FA Intersect(FA dfa1, FA dfa2)
             {
-                return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.Final && s2.Final);
+                return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.IsFinal && s2.IsFinal);
             }
 
             public static FA Difference(FA dfa1, FA dfa2)
             {
-                return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.Final && !s2.Final);
+                return CrossBuilder.Build(dfa1, dfa2, (s1, s2) => s1.IsFinal && !s2.IsFinal);
             }
 
             private static class CrossBuilder

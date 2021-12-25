@@ -18,6 +18,11 @@ namespace Six.Runtime
             __Core = core;
         }
 
+        public void Reset()
+        {
+            __Core.Reset();
+        }
+
         public bool Match(Source source)
         {
             var cursor = new Cursor(source, 0);
@@ -54,8 +59,8 @@ namespace Six.Runtime
                 var ms = Math.Round(elapsed.TotalMilliseconds, 1);
                 var cps = Math.Round(offset / elapsed.TotalSeconds, 0);
                 var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
-                Console.WriteLine($"{what}#{counter} {__Name} {rep}");
-                Console.WriteLine($"elapsed: {ms} ms, {cps} cps, {lps} lps");
+                Console.WriteLine($"    {what}#{counter} {__Name} {rep}");
+                Console.WriteLine($"    elapsed: {ms} ms, {cps} cps, {lps} lps");
             }
         }
 
