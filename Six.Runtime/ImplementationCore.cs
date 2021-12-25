@@ -55,7 +55,7 @@ namespace Six.Runtime
             }
         }
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         public Cursor __MatchWhite(Cursor start)
         {
 #if true
@@ -67,6 +67,10 @@ namespace Six.Runtime
             var current = start;
             while (__Whitespace.Dfa!.TryMatch(current, out var next))
             {
+                if (current == next)
+                {
+                    break;
+                }
                 current = next;
             }
 

@@ -15,8 +15,8 @@ Check<T5Parser>(0, Sampler.Load(".t5"));
 Check<T6Parser>(0, Sampler.Load(".t6"));
 Check<T7Parser>(0, Sampler.Load(".t7"));
 Check<T8Parser>(0, Sampler.Load(".t8"));
-Check<CeylonParser>(129, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
-//Check<CeylonParser>(-1, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
+//Check<CeylonParser>(129, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
+Check<CeylonParser>(-1, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
 Check<SixParser>(0, Sampler.LoadSix());
 CheckJson(false, Sampler.LoadJson());
 CheckGenerate(true);
@@ -95,13 +95,6 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
             }
             if (ok)
             {
-                var contexts = parser.__Core.__Matchers
-                    .Select(m => m.Furthest())
-                    .Where(c => c != null && c.Continues.Count > 1)
-                    .OrderByDescending(c => c!.Nexts.Last())
-                    .ThenByDescending(c => c!.Nexts.Last().Offset - c!.Start.Offset)
-                    .ToList();
-
                 var builder = new SppfBuilder(source, parser);
                 var root = builder.BuildSppf();
                 if (root != null)

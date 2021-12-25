@@ -255,6 +255,7 @@ namespace Six.Runtime.Sppf
                 }
             }
         }
+
         private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
         {
             var partitions = FindPartitions(matcher, 0, start, end).ToList();
@@ -263,8 +264,6 @@ namespace Six.Runtime.Sppf
 
             foreach (var partition in partitions)
             {
-                //Assert(partition.Count == partition.Distinct().Count());
-
                 var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).ToList();
 
                 foreach (var partial in partials)

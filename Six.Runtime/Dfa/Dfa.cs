@@ -52,10 +52,6 @@
 
         public bool TryMatch(Cursor start, out Cursor success)
         {
-            if (start.Offset == 48)
-            {
-                Assert(true);
-            }
             var currentState = Start;
             var currentCursor = start;
 
