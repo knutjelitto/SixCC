@@ -51,6 +51,11 @@ namespace Six.Runtime.Matchers
             return Contexts.Values.Where(c => c.Nexts.Count > 0).MaxBy(c => c.Start.Offset);
         }
 
+        public IEnumerable<Context> Matches()
+        {
+            return Contexts.Values.Where(c => c.Nexts.Count > 0);
+        }
+
         public IEnumerator<Matcher> GetEnumerator() => ((IEnumerable<Matcher>)Matchers).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Matchers.GetEnumerator();
     }

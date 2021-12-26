@@ -6,22 +6,32 @@ using Six.Gen;
 using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 
-CheckAllT(0);
-Check<T1Parser>(0, Sampler.Load(".t1"));
-Check<T2Parser>(0, Sampler.Load(".t2"));
-Check<T3Parser>(0, Sampler.Load(".t3"));
-Check<T4Parser>(0, Sampler.Load(".t4"));
-Check<T5Parser>(0, Sampler.Load(".t5"));
-Check<T6Parser>(0, Sampler.Load(".t6"));
-Check<T7Parser>(0, Sampler.Load(".t7"));
-Check<T8Parser>(0, Sampler.Load(".t8"));
-//Check<CeylonParser>(129, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
-Check<CeylonParser>(-1, Sampler.Load(".ceylon").OrderBy(s => s.Content.Length));
-Check<SixParser>(0, Sampler.LoadSix());
-CheckJson(false, Sampler.LoadJson());
-CheckGenerate(true);
-Console.Write("any key ... ");
-Console.ReadKey(true);
+var profile = false;
+
+if (profile)
+{
+    Check<CeylonParser>(850, Sampler.LoadCeylon().OrderBy(s => s.Content.Length));
+}
+else
+{
+    CheckAllT(0);
+    Check<T1Parser>(0, Sampler.Load(".t1"));
+    Check<T2Parser>(0, Sampler.Load(".t2"));
+    Check<T3Parser>(0, Sampler.Load(".t3"));
+    Check<T4Parser>(0, Sampler.Load(".t4"));
+    Check<T5Parser>(0, Sampler.Load(".t5"));
+    Check<T6Parser>(0, Sampler.Load(".t6"));
+    Check<T7Parser>(0, Sampler.Load(".t7"));
+    Check<T8Parser>(0, Sampler.Load(".t8"));
+    //Check<CeylonParser>(231, Sampler.LoadCeylonLanguage().OrderBy(s => s.Content.Length));
+    //Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Content.Length));
+    Check<CeylonParser>(1, Sampler.LoadCeylonLanguage().OrderBy(s => s.Name).Take(1));
+    Check<SixParser>(0, Sampler.LoadSix());
+    CheckJson(false, Sampler.LoadJson());
+    CheckGenerate(false);
+    Console.Write("any key ... ");
+    Console.ReadKey(true);
+}
 
 void CheckAllT(int which)
 {
@@ -65,11 +75,17 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
 
             parser.Reset();
             var ok = parser.Parse(source);
+
+            if (profile)
+            {
+                continue;
+            }
+
             if (!ok)
             {
                 var furthest = 0;
                 var contexts = parser.__Core.__Matchers
-                    .Select(m => m.Furthest())
+                    .SelectMany(m => m.Matches())
                     .Where(c => c != null)
                     .OrderByDescending(c => c!.Nexts.Last())
                     .ThenByDescending(c => c!.Nexts.Last().Offset - c!.Start.Offset)
@@ -82,10 +98,6 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                         if (context.Start.Offset > furthest)
                         {
                             furthest = context.Start.Offset;
-                            if (furthest >= 5446)
-                            {
-                                Assert(true);
-                            }
                         }
                     }
                 }

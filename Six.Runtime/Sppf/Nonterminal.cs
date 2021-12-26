@@ -3,9 +3,16 @@
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public sealed record Nonterminal(Role Role, Matcher Matcher, Cursor Start, Cursor End, params Node[] Children)
-        : Symbol(Matcher, Start, End, Children)
+    public sealed class Nonterminal : Symbol
     {
+        public Nonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Node[] children)
+            : base(matcher, start, end, children)
+        {
+            Role = role;
+        }
+
+        public Role Role { get; }
+
         public override string ToString()
         {
             return Key(Role, Matcher, Start, End);

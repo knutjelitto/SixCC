@@ -63,6 +63,33 @@ namespace Six.Samples
 #endif
         }
 
+        public static IEnumerable<Sample> LoadCeylon()
+        {
+            return LoadCeylonLanguage().Concat(LoadCeylonSdk());
+        }
+
+        public static IEnumerable<Sample> LoadCeylonSdk()
+        {
+            return LoadCeylon("sdk", @"D:\SixTmp\ceylon-sdk\source\ceylon");
+        }
+
+        public static IEnumerable<Sample> LoadCeylonLanguage()
+        {
+            return LoadCeylon("language", @"D:\SixTmp\ceylon\language\src\ceylon\language");
+        }
+
+        private static IEnumerable<Sample> LoadCeylon(string prefix, string root)
+        {
+            foreach (var filepath in Directory.EnumerateFiles(root, "*.ceylon", SearchOption.AllDirectories))
+            {
+                var name = prefix + filepath.Substring(root.Length).Replace('\\', '.');
+
+                var sample = LoadFile(filepath, name);
+
+                yield return sample;
+            }
+        }
+
         public static IEnumerable<Sample> LoadAll(Func<string, bool> filter)
         {
             var assembly = typeof(Sampler).Assembly;
@@ -97,10 +124,10 @@ namespace Six.Samples
             return new Sample(name, content, false);
         }
 
-        private static Sample LoadFile(string filepath)
+        private static Sample LoadFile(string filepath, string? name = null)
         {
             var content = File.ReadAllText(filepath);
-            var name = Path.GetFileName(filepath);
+            name ??= Path.GetFileName(filepath);
 
             return new Sample(name, content, false);
         }

@@ -72,10 +72,6 @@ namespace Six.Rex
                                                 {
                                                     var isij = table[i, j];
                                                     more = more || !table[i, j];
-                                                    if (!before && more)
-                                                    {
-                                                        Debug.Assert(true);
-                                                    }
                                                     table[i, j] = true;
                                                 }
                                             }

@@ -3,9 +3,19 @@
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public sealed record Packed(Matcher Matcher, Cursor Start, Cursor End, Cursor Pivot, Node? Left, Node Right)
-        : Node(Matcher, Start, End)
+    public sealed class Packed: Node
     {
+        public Packed(Matcher matcher, Cursor start, Cursor end, Cursor pivot, Node? left, Node right)
+            : base(matcher, start, end)
+        {
+            Pivot = pivot;
+            Left = left;
+            Right = right;
+        }
+        public Cursor Pivot { get; }
+        public Node? Left { get; }
+        public Node Right { get; }
+
         public override string ToString()
         {
             return Key(Matcher, Start, End, Pivot);

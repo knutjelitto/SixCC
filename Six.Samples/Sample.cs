@@ -27,7 +27,7 @@
             Count = 1;
         }
 
-        public string Name { get; }
+        public string Name { get; set; }
         public string Content { get; }
         public int Count { get; }
     }

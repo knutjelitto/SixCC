@@ -55,15 +55,14 @@ namespace Six.Runtime
             }
         }
 
-        //[DebuggerStepThrough]
+        [DebuggerStepThrough]
         public Cursor __MatchWhite(Cursor start)
         {
-#if true
             if (__Whitespace.Whites.TryGetValue(start, out var white))
             {
                 return white;
             }
-#endif
+
             var current = start;
             while (__Whitespace.Dfa!.TryMatch(current, out var next))
             {
@@ -74,9 +73,7 @@ namespace Six.Runtime
                 current = next;
             }
 
-#if true
             __Whitespace.Whites.Add(start, current);
-#endif
 
             return current;
         }

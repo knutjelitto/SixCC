@@ -14,7 +14,7 @@
 
         public override string ToString()
         {
-            return $"[{Start.Offset}..{End.Offset}]";
+            return $"[{Start}-{End}]";
         }
     }
 }

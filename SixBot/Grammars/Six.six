@@ -65,7 +65,7 @@ id-begin
     ;
 
 id-continue
-    : '-' letter-or-digit+
+    : ('-'|'_') letter-or-digit+
     ;
 
 letter

@@ -7,8 +7,7 @@
 
         public override void MatchCore(Context context)
         {
-            Assert(Dfa != null);
-            Dfa.Match(context);
+            throw new InvalidOperationException();
         }
 
         public override void Reset()

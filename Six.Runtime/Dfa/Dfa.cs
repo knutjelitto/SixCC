@@ -2,11 +2,10 @@
 {
     public class Dfa
     {
-        public static readonly Dfa Nope = new();
-
-        public Dfa(params DfaState[] states)
+        public Dfa(string name, params DfaState[] states)
         {
             Assert(states.Length >= 0);
+            Name = name;
             States = states;
         }
 
@@ -16,6 +15,7 @@
             States = states;
         }
 
+        public string Name { get; }
         public DfaState[] States { get; private set; }
         public DfaState Start => States[0];
             
@@ -96,5 +96,9 @@
             return States.Where(state => state.Payload >= 0).Select(state => state.Payload).Distinct();
         }
 
+        public override string ToString()
+        {
+            return $"dfa({Name})";
+        }
     }
 }

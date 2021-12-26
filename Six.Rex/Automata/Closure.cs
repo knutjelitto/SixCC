@@ -16,10 +16,6 @@ namespace Six.Rex
             {
                 foreach (var closureState in state.Closure())
                 {
-                    if (closureState.Id == end.Id)
-                    {
-                        Debug.Assert(true);
-                    }
                     if (closureState.Equals(end))
                     {
                         isFinal = true;

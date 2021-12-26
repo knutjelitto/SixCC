@@ -2,9 +2,16 @@
 
 namespace Six.Runtime.Sppf
 {
-    public sealed record Intermediate(Matcher Matcher, Cursor Start, Cursor End, int Dot, params Node[] Children)
-        : Symbol(Matcher, Start, End, Children)
+    public sealed class Intermediate : Symbol
     {
+        public Intermediate(Matcher matcher, Cursor start, Cursor end, int dot, params Node[] children)
+            : base(matcher, start, end, children)
+        {
+            Dot = dot;
+        }
+
+        public int Dot { get; }
+
         public override string ToString()
         {
             return Key(Matcher, Start, End, Dot);

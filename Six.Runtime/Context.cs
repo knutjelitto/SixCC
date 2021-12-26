@@ -31,19 +31,6 @@ namespace Six.Runtime
             }
             else
             {
-                if (context.Continues.Count == 1)
-                {
-                    Assert(true);
-                    var onMatched1 = context.Continues[0]; ;
-                    if(onMatched.Method == onMatched1.Method)
-                    {
-                        Assert(true);
-                    }
-                    else
-                    {
-                        Assert(true);
-                    }
-                }
                 context.Continues.Add(onMatched);
                 foreach (var next in context.Nexts)
                 {

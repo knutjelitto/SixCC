@@ -3,8 +3,14 @@
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public abstract record Node(Matcher Matcher, Cursor Start, Cursor End)
+    public abstract class Node
     {
+        public Node(Matcher matcher, Cursor start, Cursor end)
+        {
+            Matcher = matcher;
+            Start = start;
+            End = end;
+        }
         protected string Extend()
         {
             return Extend(Matcher, Start, End, null);
@@ -22,8 +28,10 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        public Cursor Core => Matcher.Contexts[Start].Core;
-
         public string Name => Matcher.Name;
+
+        public Matcher Matcher { get; }
+        public Cursor Start { get; }
+        public Cursor End { get; }
     }
 }

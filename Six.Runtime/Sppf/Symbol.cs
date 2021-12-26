@@ -3,8 +3,14 @@
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public abstract record Symbol(Matcher Matcher, Cursor Start, Cursor End, params Node[] Children)
-        : Node(Matcher, Start, End)
+    public abstract class Symbol : Node
     {
+        public Symbol(Matcher matcher, Cursor start, Cursor end, params Node[] children)
+            : base(matcher, start, end)
+        {
+            Children = children;
+        }
+
+        public Node[] Children { get; }
     }
 }

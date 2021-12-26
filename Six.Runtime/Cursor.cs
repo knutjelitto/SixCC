@@ -4,15 +4,15 @@ namespace Six.Runtime
 {
     public struct Cursor : IEquatable<Cursor>, IComparable<Cursor>
     {
+        public Source Source;
+        public int Offset;
+
         [DebuggerStepThrough]
         public Cursor(Source source, int offset)
         {
             Source = source;
             Offset = offset;
         }
-
-        public Source Source { get; }
-        public int Offset { get; }
 
         [DebuggerStepThrough]
         public bool Match(string text)

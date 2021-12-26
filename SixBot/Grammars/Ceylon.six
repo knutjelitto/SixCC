@@ -108,11 +108,11 @@ objectExpression
     ;
 
 voidOrInferredMethodDeclaration
-    : ('void' | 'function') memberNameDeclaration? typeParameters? parameters* typeConstraints? (block | functionSpecifier? ';')
+    : ('void' | 'function') memberNameDeclaration? typeParameters? parameters* typeConstraints? (block | function-specifier? ';')
     ;
 
 setterDeclaration
-    : 'assign' memberNameDeclaration? (block | functionSpecifier? ';')
+    : 'assign' memberNameDeclaration? (block | function-specifier? ';')
     ;
 
 variableOrTuplePattern
@@ -161,13 +161,13 @@ destructure2
     ;
 
 inferredAttributeDeclaration
-    : 'value' memberNameDeclaration?( (specifier | lazySpecifier)? ';' | block )
+    : 'value' memberNameDeclaration?( (specifier | lazy-specifier)? ';' | block )
     ;
 
 typedMethodOrAttributeDeclaration
     : (variadicType | 'dynamic') memberNameDeclaration
-      ( typeParameters? parameters+ typeConstraints? (block | functionSpecifier? ';')
-      | (specifier | lazySpecifier )? ';'
+      ( typeParameters? parameters+ typeConstraints? (block | function-specifier? ';')
+      | (specifier | lazy-specifier )? ';'
       | block
       )
     ;
@@ -179,7 +179,7 @@ interfaceDeclaration
       caseTypes?
       satisfiedTypes?
       typeConstraints?
-      (interfaceBody | typeSpecifier? ';')
+      (interfaceBody | type-specifier? ';')
     ;
 
 classDeclaration
@@ -211,7 +211,7 @@ aliasDeclaration
       typeNameDeclaration?
       typeParameters?
       typeConstraints?
-      typeSpecifier?
+      type-specifier?
       ';'
     ;
 
@@ -220,7 +220,7 @@ assertion
     ;
 
 assertMessage
-    : (stringLiteral | stringExpression)?
+    : (string-literal | string-expression)?
     ;
 
 
@@ -308,7 +308,7 @@ parameterRef
 parameterDeclaration
     : (variadicType | 'void' | 'function' | 'dynamic' | 'value')
       memberNameDeclaration
-      (specifier? | typeParameters? parameters+ functionSpecifier?)
+      (specifier? | typeParameters? parameters+ function-specifier?)
     ;
 
 typeParameters
@@ -341,13 +341,7 @@ anonymousTypeConstraints
     ;
 
 declarationOrStatement
-    : compilerAnnotations
-      ( destructure
-      | destructure2
-      | assertion
-      | declaration
-      | statement
-      )
+    : compilerAnnotations ( destructure | destructure2 | assertion | declaration | statement)
     ;
 
 declaration
@@ -376,12 +370,12 @@ statement
     ;
 
 expressionOrSpecificationStatement
-    : specificationStatement
-    | expressionStatement
+    : expressionStatement
+    | specificationStatement
     ;
 
 specificationStatement
-    : valueExpression (specifier | lazySpecifier) ';'
+    : value-expression (specifier | lazy-specifier) ';'
     ;
     
 expressionStatement
@@ -417,7 +411,7 @@ continueDirective
     : 'continue'
     ;
 
-typeSpecifier
+type-specifier
     : ('=>' | '=') type?
     ;
 
@@ -429,12 +423,13 @@ specifier
     : '=' functionOrExpression
     ;
 
-lazySpecifier
+lazy-specifier
     : '=>' functionOrExpression
     ;
 
-functionSpecifier
-    : ('=>' | '=') functionOrExpression
+function-specifier
+    : specifier
+    | lazy-specifier
     ;
 
 expression
@@ -442,8 +437,8 @@ expression
     ;
 
 base
-    : nonstringLiteral
-    | stringExpression
+    : nonstring-literal
+    | string-expression
     | metaLiteral
     | enumeration
     | tuple
@@ -457,7 +452,7 @@ baseReferenceOrParameterized
     : memberName typeParameters? parameters+
     | memberReference
     | typeReference
-    | selfReference (memberSelectionOperator memberName typeParameters? parameters+)?
+    | self-reference (memberSelectionOperator memberName typeParameters? parameters+)?
     ;
 
 memberReference
@@ -561,23 +556,23 @@ objectArgument
     ;
 
 voidOrInferredMethodArgument
-    : ('void' | 'function') memberNameDeclaration? typeParameters? parameters* (block | functionSpecifier? ';')
+    : ('void' | 'function') memberNameDeclaration? typeParameters? parameters* (block | function-specifier? ';')
     ;
 
 inferredGetterArgument
-    : 'value' memberNameDeclaration? (block | (specifier | lazySpecifier)? ';')
+    : 'value' memberNameDeclaration? (block | (specifier | lazy-specifier)? ';')
     ;
 
 typedMethodOrGetterArgument
     : (type |'dynamic')
       memberNameDeclaration
-      ( typeParameters? parameters+ (block | functionSpecifier? ';')
-      | (block | (specifier | lazySpecifier)? ';')
+      ( typeParameters? parameters+ (block | function-specifier? ';')
+      | (block | (specifier | lazy-specifier)? ';')
       )
     ;
 
 untypedMethodOrGetterArgument
-    : memberName (parameters+ functionSpecifier | lazySpecifier ) ';'
+    : memberName (parameters+ function-specifier | lazy-specifier ) ';'
     ;
 
 namedArgumentDeclaration
@@ -614,10 +609,6 @@ functionOrExpression
 
 letVariable
     : pattern specifier?
-    ;
-
-letVariable2
-    : tupleOrEntryPattern specifier?
     ;
 
 letClause
@@ -786,23 +777,13 @@ typeOperator
     ;
 
 existenceEmptinessExpression
-    : pipelinedExpression existsNonemptyOperator
-    | pipelinedExpression
+    : entryRangeExpression existsNonemptyOperator
+    | entryRangeExpression
     ;
 
 existsNonemptyOperator
     : 'exists' 
     | 'nonempty'
-    ;
-
-pipelinedExpression
-    : pipelinedExpression pipelineOperator entryRangeExpression
-    | entryRangeExpression
-    ;
-
-pipelineOperator
-    : '|>'
-    | '>|>'
     ;
 
 entryRangeExpression
@@ -829,6 +810,10 @@ additiveOperator
 scaleExpression
     : multiplicativeExpression scaleOperator scaleExpression
     | multiplicativeExpression
+    ;
+
+scaleOperator
+    : '**' 
     ;
 
 multiplicativeExpression
@@ -881,56 +866,52 @@ exponentiationOperator
     : '^' 
     ;
 
-scaleOperator
-    : '**' 
-    ;
-
 incrementDecrementExpression
-    : prefixOperator incrementDecrementExpression
+    : prefix-operator incrementDecrementExpression
     | postfixIncrementDecrementExpression
     ;
 
-prefixOperator
+prefix-operator
     : '--'
     | '++'
     ;
 
 postfixIncrementDecrementExpression
-    : postfixIncrementDecrementExpression postfixOperator
-    | valueExpression
+    : postfixIncrementDecrementExpression postfix-operator
+    | value-expression
     ;
 
-valueExpression
-    : declarationRef
+value-expression
+    : declaration-ref
     | primary
     ;
 
-postfixOperator
+postfix-operator
     : '--' 
     | '++' 
     ;
 
-selfReference
+self-reference
     : 'this'
     | 'super' 
     | 'outer'
     | 'package'
     ;
     
-nonstringLiteral
+nonstring-literal
     : literal-natural 
     | literal-float 
     | literal-char 
     ;
 
-stringLiteral
+string-literal
     : literal-string 
     | verbatim-string
     ;
 
-stringExpression
-    : stringLiteral
-    | STRING_START functionOrExpression (STRING_MID functionOrExpression)* STRING_END
+string-expression
+    : string-literal
+    | string-start functionOrExpression (string-mid functionOrExpression)* string-end
     ;
 
 typeArguments
@@ -1027,7 +1008,7 @@ memberNameWithArguments
     ;
     
 entityAnnotations
-    : stringLiteral? entityAnnotation*
+    : string-literal? entityAnnotation*
     ;
 
 entityAnnotation
@@ -1039,7 +1020,7 @@ compilerAnnotations
     ;
     
 compilerAnnotation
-    : ('$' | '@' | '#') annotationName (':' stringLiteral)?
+    : ('$' | '@' | '#') annotationName (':' string-literal)?
     ;
 
 conditions
@@ -1064,11 +1045,11 @@ booleanCondition
 
 
 existsCondition
-    : '!'? 'exists' (letVariable2 | impliedVariable | expression)
+    : '!'? 'exists' (letVariable | impliedVariable | expression)
     ;
     
 nonemptyCondition
-    : '!'? 'nonempty' (letVariable2 | impliedVariable | expression)
+    : '!'? 'nonempty' (letVariable | impliedVariable | expression)
     ;
 
 isCondition
@@ -1309,14 +1290,14 @@ modelExpression
   ;
 
 metaLiteral
-    : '`' (declarationRef | modelExpression) '`'
+    : '`' (declaration-ref | modelExpression) '`'
     ;
 
 modelRef
     : '^' modelExpression
     ;
     
-declarationRef
+declaration-ref
     : moduleLiteral
     | packageLiteral
     | classLiteral
@@ -1367,15 +1348,15 @@ literal-char
     : < '\'' char-part '\'' >
     ;
 
-STRING_START
+string-start
     : < '"' string-part '``' >
     ;
 
-STRING_MID
+string-mid
     : < '``' string-part '``' >
     ;
 
-STRING_END
+string-end
     : < '``' string-part '`'* '"' >
     ;
 
@@ -1496,5 +1477,5 @@ HexDigit
     ;
 
 BinaryDigit
-    : '0'|'1'
+    : '0' | '1'
     ;

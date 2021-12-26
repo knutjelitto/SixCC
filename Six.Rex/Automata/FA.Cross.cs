@@ -56,8 +56,6 @@ namespace Six.Rex
                             }
                             else if (state1.IsPayload && state2.IsPayload)
                             {
-                                Assert(true);
-#if true
                                 if (state1.Transitions.Count == 1 && state1.Transitions[0].Set.IsAny)
                                 {
                                     newState.AddPayload(state1);
@@ -78,7 +76,6 @@ namespace Six.Rex
                                     }
                                     //throw new InternalException("missing tie break");
                                 }
-#endif
                             }
 
                             cross[n1, n2] = newState;

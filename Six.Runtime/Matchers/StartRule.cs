@@ -1,20 +1,23 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record StartRule(ImplementationCore Core, int Id, string Name) : Rule(Core, Id, Name)
+    public sealed record StartRule(ImplementationCore Core, int Id, string Name)
+            : Rule(Core, Id, Name)
     {
-        public Cursor? White { get; private set; }
+        public Cursor? Eof { get; private set; }
 
         public override void MatchCore(Context context)
         {
-            this[0].Match(context.Start,
+            var matcher = this[0];
+
+            matcher.Match(context.Start,
                 success =>
                 {
-                    var white = Core.__MatchWhite(success);
-                    if (white.At == -1)
+                    var eof = Core.__MatchWhite(success);
+                    if (eof.At == -1)
                     {
-                        White = success;
+                        Eof = success;
 
-                        context.Success(white);
+                        context.Success(eof);
                     }
                 });
         }

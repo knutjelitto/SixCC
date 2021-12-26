@@ -1,8 +1,6 @@
 ﻿using Six.Core;
 using Six.Runtime.Matchers;
 
-#pragma warning disable IDE0028 // Simplify collection initialization
-
 namespace Six.Runtime.Sppf
 {
     public class SppfBuilder
@@ -64,7 +62,7 @@ namespace Six.Runtime.Sppf
                     return BuildOptional(match, start, end);
                 case Character match:
                     return BuildCharacter(match, start, end);
-                case Matchers.Keyword match:
+                case Keyword match:
                     return BuildKeyword(match, start, end);
                 case Matchers.String match:
                     return BuildString(match, start, end);
@@ -143,11 +141,6 @@ namespace Six.Runtime.Sppf
                                 let child = Build(alt, start, end)
                                 where child != null
                                 select child).ToList();
-
-                if (children.Count >= 2)
-                {
-                    Assert(true);
-                }
 
                 children = ReduceAlternates(children).ToList();
 
@@ -233,6 +226,101 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
+        private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
+        {
+            var partitions = FindPartitions(matcher, 0, start, end).ToList();
+
+            var packeds = new List<Packed>();
+
+            foreach (var partition in partitions)
+            {
+                var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).ToList();
+
+                foreach (var partial in partials)
+                {
+                    Assert(partial.End == end);
+                    packeds.Add(partial);
+                }
+            }
+
+            return packeds;
+        }
+        private IEnumerable<Packed> BuildPackedPartitioned(Matcher matcher, int dot, List<Extend> partition)
+        {
+            Assert(matcher.Count == partition.Count);
+
+            if (dot > 0)
+            {
+                dot--;
+
+                var extend = partition[dot];
+
+                var right = Build(matcher[dot], extend.Start, extend.End);
+
+                if (right != null)
+                {
+                    if (dot == 0)
+                    {
+                        Assert(right.Start == extend.Start);
+                        Assert(right.End == extend.End);
+
+                        yield return NewPacked(matcher, extend.Start, extend.End, extend.Start, null, right);
+                    }
+                    else
+                    {
+                        var left = BuildLeftPartitioned(matcher, dot - 1, partition);
+
+                        if (left != null)
+                        {
+                            yield return NewPacked(matcher, left.Start, right.End, left.End, left, right);
+                        }
+                    }
+                }
+            }
+        }
+
+        private Node? BuildLeftPartitioned(Matcher matcher, int dot, List<Extend> partition)
+        {
+            if (dot == 0)
+            {
+                var extend = partition[dot];
+
+                var left = Build(matcher[dot], extend.Start, extend.End);
+
+                return left;
+            }
+            else
+            {
+                var left = BuildLeftPartitioned(matcher, dot - 1, partition);
+
+                if (left != null)
+                {
+                    Assert(left.Start == partition[0].Start);
+                    Assert(left.End == partition[dot - 1].End);
+
+                    var extend = partition[dot];
+
+                    var right = Build(matcher[dot], extend.Start, extend.End);
+
+                    if (right != null)
+                    {
+                        Assert(right.End == extend.End);
+
+                        var packed = NewPacked(matcher, left.Start, right.End, left.End, left, right);
+
+                        var intermediate = NewIntermediate(matcher, packed.Start, packed.End, dot + 1, packed);
+
+                        Assert(intermediate.Start == packed.Start);
+                        Assert(intermediate.End == packed.End);
+
+                        return intermediate;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private IEnumerable<List<Extend>> LoopPartitions(Context starContext, Matcher repeat, Cursor start, Cursor end)
         {
             if (start >= end)
@@ -256,106 +344,18 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
+        private IEnumerable<List<Extend>> FindPartitions(Matcher symbol, int dot, Cursor start, Cursor end)
         {
-            var partitions = FindPartitions(matcher, 0, start, end).ToList();
+            Assert(dot >= 0);
 
-            var packeds = new List<Packed>();
-
-            foreach (var partition in partitions)
+            if (dot == symbol.Count)
             {
-                var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).ToList();
-
-                foreach (var partial in partials)
+                if (start == end)
                 {
-                    Assert(partial.End == end);
-                    packeds.Add(partial);
+                    yield return new List<Extend>();
                 }
-            }
-
-            return packeds;
-        }
-
-        private IEnumerable<Packed> BuildPackedPartitioned(Matcher matcher, int dot, List<Cursor> partition)
-        {
-            Assert(matcher.Count + 1 == partition.Count);
-
-            if (dot > 0)
-            {
-                dot--;
-
-                var right = Build(matcher[dot], partition[dot], partition[dot + 1]);
-
-                if (right != null)
-                {
-                    if (dot == 0)
-                    {
-                        Assert(right.Start == partition[dot]);
-                        Assert(right.End == partition[dot + 1]);
-
-                        yield return NewPacked(matcher, partition[dot], partition[dot + 1], partition[dot], null, right);
-                    }
-                    else
-                    {
-                        var left = BuildLeftPartitioned(matcher, dot, partition);
-
-                        if (left != null)
-                        {
-                            yield return NewPacked(matcher, left.Start, right.End, left.End, left, right);
-                        }
-                    }
-                }
-            }
-        }
-
-        private Node? BuildLeftPartitioned(Matcher matcher, int dot, List<Cursor> partition)
-        {
-            Assert(dot > 0);
-
-            dot--;
-
-            if (dot == 0)
-            {
-                var left = Build(matcher[dot], partition[dot], partition[dot + 1]);
-
-                return left;
             }
             else
-            {
-                var left = BuildLeftPartitioned(matcher, dot, partition);
-
-                if (left != null)
-                {
-                    Assert(left.Start == partition[0]);
-                    Assert(left.End == partition[dot]);
-
-                    var right = Build(matcher[dot], partition[dot], partition[dot + 1]);
-
-                    if (right != null)
-                    {
-                        Assert(right.End == partition[dot + 1]);
-
-                        var packed = NewPacked(matcher, left.Start, right.End, left.End, left, right);
-
-                        //var intermediate = NewIntermediate(matcher, partition[dot - 1], partition[dot + 1], dot + 1, packed);
-                        var intermediate = NewIntermediate(matcher, packed.Start, packed.End, dot + 1, packed);
-
-                        Assert(intermediate.Start == packed.Start);
-                        Assert(intermediate.End == packed.End);
-
-                        return intermediate;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        private IEnumerable<List<Cursor>> FindPartitions(Matcher symbol, int dot, Cursor start, Cursor end)
-        {
-            Assert(dot < symbol.Count);
-
-            if (dot < symbol.Count)
             {
                 var matcher = symbol[dot];
 
@@ -363,27 +363,15 @@ namespace Six.Runtime.Sppf
 
                 if (context != null)
                 {
-                    if (dot + 1 == symbol.Count)
+                    foreach (var next in context.Nexts.Where(x => x <= end).ToList())
                     {
-                        if (context.Nexts.Contains(end))
+                        if (next <= end)
                         {
-                            yield return new List<Cursor> { start, end };
-                        }
-                    }
-                    else
-                    {
-                        foreach (var next in context.Nexts.Where(x => x <= end).ToList())
-                        {
-                            if (next <= end)
+                            var extend = new Extend(start, next);
+                            foreach (var sub in FindPartitions(symbol, dot + 1, next, end).ToList())
                             {
-                                foreach (var sub in FindPartitions(symbol, dot + 1, next, end).ToList())
-                                {
-                                    var list = new List<Cursor>();
-                                    list.Add(start);
-                                    list.AddRange(sub);
-
-                                    yield return list;
-                                }
+                                var list = Enumerable.Repeat(extend, 1).Concat(sub).ToList();
+                                yield return list;
                             }
                         }
                     }
@@ -471,7 +459,7 @@ namespace Six.Runtime.Sppf
             {
                 if (matcher is StartRule startRule)
                 {
-                    end = startRule.White!.Value;
+                    end = startRule.Eof!.Value;
                 }
                 var children = BuildMatcher(matcher, start, end).ToArray();
 
@@ -483,7 +471,7 @@ namespace Six.Runtime.Sppf
 
         private Terminal NewTerminal(Matcher matcher, Cursor start, Cursor core, Cursor end)
         {
-            Assert(core >= start && core < end);
+            Assert(start <= core && core < end);
             var key = Terminal.Key(matcher, start, end);
 
             return Cache(key, () => new Terminal(matcher, start, core, end, source));
@@ -496,19 +484,10 @@ namespace Six.Runtime.Sppf
 
         private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Packed[] nodes)
         {
-            nodes = ReduceEmptyTails(nodes).ToArray();
-
-            switch (role)
+            if (matcher.Name == "scaleOperator")
             {
-                case Role.Optional:
-                case Role.Star:
-                    Assert(nodes.Length >= 0);
-                    break;
-                default:
-                    Assert(nodes.Length >= 1);
-                    break;
+                Assert(true);
             }
-
             var key = Nonterminal.Key(role, matcher, start, end);
 
             if (nodes.Length == 1 && nodes[0].Left == null && true)
@@ -523,10 +502,6 @@ namespace Six.Runtime.Sppf
 
         private Intermediate NewIntermediate(Matcher matcher, Cursor start, Cursor end, int dot, params Packed[] nodes)
         {
-            if (nodes.Length >= 2)
-            {
-                Assert(true);
-            }
             return new Intermediate(matcher, start, end, dot, nodes);
         }
 
@@ -549,32 +524,6 @@ namespace Six.Runtime.Sppf
             //   select first alternate
             //
             return Enumerable.Repeat(packeds.First(), 1);
-        }
-
-        private IEnumerable<Packed> ReduceEmptyTails(Packed[] packeds)
-        {
-            //
-            // strange policy:
-            //   remove empty tails
-            //
-            if (packeds.Length >= 2)
-            {
-                Assert(true);
-                foreach (var packed in packeds)
-                {
-                    if (packed.Pivot < packed.End)
-                    {
-                        yield return packed;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var packed in packeds)
-                {
-                    yield return packed;
-                }
-            }
         }
     }
 }

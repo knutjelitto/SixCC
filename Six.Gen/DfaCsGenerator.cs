@@ -39,7 +39,7 @@ namespace Six.Gen
         {
             foreach (var rule in Grammar.Rules.Where(r => r.DFA != null))
             {
-                wl($"private {DfaClass} {rule.DfaId()} = new {DfaClass}();");
+                wl($"private {DfaClass} {rule.DfaId()} = new {DfaClass}({rule.Name.CsString()});");
             }
         }
 

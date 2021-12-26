@@ -4,9 +4,18 @@ using Six.Runtime.Matchers;
 namespace Six.Runtime.Sppf
 {
     [DebuggerStepThrough]
-    public sealed record Terminal(Matcher Matcher, Cursor Start, Cursor Core, Cursor End, Source Source)
-        : Symbol(Matcher, Start, End)
+    public sealed class Terminal : Symbol
     {
+        public Terminal(Matcher matcher, Cursor start, Cursor core, Cursor end, Source source)
+            : base(matcher, start, end)
+        {
+            Core = core;
+            Source = source;
+        }
+
+        public Cursor Core { get; }
+        public Source Source { get; }
+
         public override string ToString()
         {
             return Key(Matcher, Start, End);
