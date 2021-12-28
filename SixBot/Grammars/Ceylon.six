@@ -5,38 +5,33 @@
 %keywords   : LIDENTIFIER ;
 
 compilationUnit
-    : hash-tag?
+    : hashTag?
       ( compilerAnnotations ';' )?
-      ( importDeclaration | moduleDescriptor | packageDescriptor | toplevelDeclaration )*
-    ;
-
-toplevelDeclaration
-    : compilerAnnotations declaration
+      ( importDeclaration | moduleDescriptor | packageDescriptor | declaration )*
     ;
 
 moduleDescriptor
     : annotations
       'module' 
-      packagePath (importNamespace ':' (literal-string | packagePath) (':' literal-string (':' literal-string)? )? )?
-      literal-string?
+      packagePath (importNamespace ':' (literalString | packagePath) (':' literalString (':' literalString)? )? )?
+      literalString?
       importModuleList
-    ;
-
-importModuleList
-    : '{' ( annotations (inferredAttributeDeclaration | importModule) )* '}'
     ;
 
 packageDescriptor
     : annotations 'package' packagePath ';'
     ;
 
+importModuleList
+    : '{' ( annotations (inferredAttributeDeclaration | importModule) )* '}'
+    ;
+
 importModule
     : 'import'
       (importNamespace ':')?
-      (
-        (literal-string | packagePath) ( ':' literal-string ( ':' literal-string )? )?
-      )
-      (literal-string | memberName)?
+      (literalString | packagePath)
+      ( ':' literalString ( ':' literalString )? )?
+      (literalString | memberName)?
       ';'
     ;
 
@@ -108,11 +103,11 @@ objectExpression
     ;
 
 voidOrInferredMethodDeclaration
-    : ('void' | 'function') memberNameDeclaration? typeParameters? parameters* typeConstraints? (block | function-specifier? ';')
+    : voidOrFunction memberNameDeclaration? typeParameters? parameters* typeConstraints? (block | functionSpecifier? ';')
     ;
 
 setterDeclaration
-    : 'assign' memberNameDeclaration? (block | function-specifier? ';')
+    : 'assign' memberNameDeclaration? (block | functionSpecifier? ';')
     ;
 
 variableOrTuplePattern
@@ -161,13 +156,13 @@ destructure2
     ;
 
 inferredAttributeDeclaration
-    : 'value' memberNameDeclaration?( (specifier | lazy-specifier)? ';' | block )
+    : 'value' memberNameDeclaration?( (specifier | lazySpecifier)? ';' | block )
     ;
 
 typedMethodOrAttributeDeclaration
     : (variadicType | 'dynamic') memberNameDeclaration
-      ( typeParameters? parameters+ typeConstraints? (block | function-specifier? ';')
-      | (specifier | lazy-specifier )? ';'
+      ( typeParameters? parameters+ typeConstraints? (block | functionSpecifier? ';')
+      | (specifier | lazySpecifier )? ';'
       | block
       )
     ;
@@ -179,7 +174,7 @@ interfaceDeclaration
       caseTypes?
       satisfiedTypes?
       typeConstraints?
-      (interfaceBody | type-specifier? ';')
+      (interfaceBody | typeSpecifier? ';')
     ;
 
 classDeclaration
@@ -211,7 +206,7 @@ aliasDeclaration
       typeNameDeclaration?
       typeParameters?
       typeConstraints?
-      type-specifier?
+      typeSpecifier?
       ';'
     ;
 
@@ -220,18 +215,13 @@ assertion
     ;
 
 assertMessage
-    : (string-literal | string-expression)?
+    : stringExpression?
     ;
-
 
 block
     : '{' (importDeclaration | declarationOrStatement)* '}'
     ;
 
-//Note: interface bodies can't really contain 
-//      statements, but error recovery works
-//      much better if we validate that later
-//      on, instead of doing it in the parser.
 interfaceBody
     : '{' (importDeclaration | declarationOrStatement)* '}'
     ;
@@ -308,7 +298,7 @@ parameterRef
 parameterDeclaration
     : (variadicType | 'void' | 'function' | 'dynamic' | 'value')
       memberNameDeclaration
-      (specifier? | typeParameters? parameters+ function-specifier?)
+      (specifier? | typeParameters? parameters+ functionSpecifier?)
     ;
 
 typeParameters
@@ -341,11 +331,12 @@ anonymousTypeConstraints
     ;
 
 declarationOrStatement
-    : compilerAnnotations ( destructure | destructure2 | assertion | declaration | statement)
+    : declaration
+    | compilerAnnotations (destructure | destructure2 | assertion | statement)
     ;
 
 declaration
-    : entityAnnotations
+    : annotations
       ( classDeclaration
       | interfaceDeclaration
       | aliasDeclaration
@@ -375,7 +366,7 @@ expressionOrSpecificationStatement
     ;
 
 specificationStatement
-    : value-expression (specifier | lazy-specifier) ';'
+    : valueExpression (specifier | lazySpecifier) ';'
     ;
     
 expressionStatement
@@ -411,7 +402,7 @@ continueDirective
     : 'continue'
     ;
 
-type-specifier
+typeSpecifier
     : ('=>' | '=') type?
     ;
 
@@ -423,13 +414,13 @@ specifier
     : '=' functionOrExpression
     ;
 
-lazy-specifier
+lazySpecifier
     : '=>' functionOrExpression
     ;
 
-function-specifier
+functionSpecifier
     : specifier
-    | lazy-specifier
+    | lazySpecifier
     ;
 
 expression
@@ -437,8 +428,8 @@ expression
     ;
 
 base
-    : nonstring-literal
-    | string-expression
+    : nonstringLiteral
+    | stringExpression
     | metaLiteral
     | enumeration
     | tuple
@@ -452,17 +443,15 @@ baseReferenceOrParameterized
     : memberName typeParameters? parameters+
     | memberReference
     | typeReference
-    | self-reference (memberSelectionOperator memberName typeParameters? parameters+)?
+    | selfReference (memberSelectionOperator memberName typeParameters? parameters+)?
     ;
 
 memberReference
-    : memberName typeArguments
-    | memberName
+    : memberName typeArguments?
     ;
 
 typeReference
-    : typeName typeArguments
-    | typeName
+    : typeName typeArguments?
     ;
 
 primary
@@ -477,6 +466,13 @@ qualifiedReference
     : memberSelectionOperator (memberReference | typeReference)
     ;
 
+selfReference
+    : 'this'
+    | 'super' 
+    | 'outer'
+    | 'package'
+    ;
+    
 memberSelectionOperator
     : '.'
     | '?.'
@@ -556,23 +552,23 @@ objectArgument
     ;
 
 voidOrInferredMethodArgument
-    : ('void' | 'function') memberNameDeclaration? typeParameters? parameters* (block | function-specifier? ';')
+    : voidOrFunction memberNameDeclaration? typeParameters? parameters* (block | functionSpecifier? ';')
     ;
 
 inferredGetterArgument
-    : 'value' memberNameDeclaration? (block | (specifier | lazy-specifier)? ';')
+    : 'value' memberNameDeclaration? (block | (specifier | lazySpecifier)? ';')
     ;
 
 typedMethodOrGetterArgument
     : (type |'dynamic')
       memberNameDeclaration
-      ( typeParameters? parameters+ (block | function-specifier? ';')
-      | (block | (specifier | lazy-specifier)? ';')
+      ( typeParameters? parameters+ (block | functionSpecifier? ';')
+      | (block | (specifier | lazySpecifier)? ';')
       )
     ;
 
 untypedMethodOrGetterArgument
-    : memberName (parameters+ function-specifier | lazy-specifier ) ';'
+    : memberName (parameters+ functionSpecifier | lazySpecifier ) ';'
     ;
 
 namedArgumentDeclaration
@@ -647,7 +643,12 @@ thenExpression
     ;
 
 anonymousFunction
-    : ('function' | 'void')? typeParameters? (parameters+ typeConstraints?)? ('=>' functionOrExpression | block)
+    : voidOrFunction? typeParameters? (parameters+ typeConstraints?)? ('=>' functionOrExpression | block)
+    ;
+
+voidOrFunction
+    : 'void'
+    | 'function'
     ;
 
 comprehension
@@ -867,51 +868,44 @@ exponentiationOperator
     ;
 
 incrementDecrementExpression
-    : prefix-operator incrementDecrementExpression
+    : prefixOperator incrementDecrementExpression
     | postfixIncrementDecrementExpression
     ;
 
-prefix-operator
+prefixOperator
     : '--'
     | '++'
     ;
 
 postfixIncrementDecrementExpression
-    : postfixIncrementDecrementExpression postfix-operator
-    | value-expression
+    : postfixIncrementDecrementExpression postfixOperator
+    | valueExpression
     ;
 
-value-expression
+valueExpression
     : declaration-ref
     | primary
     ;
 
-postfix-operator
+postfixOperator
     : '--' 
     | '++' 
     ;
 
-self-reference
-    : 'this'
-    | 'super' 
-    | 'outer'
-    | 'package'
-    ;
-    
-nonstring-literal
-    : literal-natural 
-    | literal-float 
-    | literal-char 
+nonstringLiteral
+    : literalNatural 
+    | literalFloat 
+    | literalChar 
     ;
 
-string-literal
-    : literal-string 
-    | verbatim-string
+stringLiteral
+    : literalString 
+    | verbatimString
     ;
 
-string-expression
-    : string-literal
-    | string-start functionOrExpression (string-mid functionOrExpression)* string-end
+stringExpression
+    : stringLiteral
+    | stringStart functionOrExpression (stringMid functionOrExpression)* stringEnd
     ;
 
 typeArguments
@@ -967,17 +961,9 @@ intersectionType
 
 primaryType
     : primaryType '?'
-    | primaryType '[' literal-natural? ']'
+    | primaryType '[' literalNatural? ']'
     | primaryType '(' ( spreadType | defaultedType (',' defaultedType)* )? ')'
     | atomicType
-    ;
-
-primaryTypeX
-    : atomicType
-      ( '?' 
-      | '[' literal-natural? ']' 
-      | '(' ( spreadType | defaultedType (',' defaultedType)* )? ')'
-      )*
     ;
 
 atomicType
@@ -998,21 +984,15 @@ qualifiedType
     ;
 
 typeNameWithArguments
-    : typeName typeArguments
-    | typeName
+    : typeName typeArguments?
     ;
     
 memberNameWithArguments
-    : memberName typeArguments
-    | memberName
+    : memberName typeArguments?
     ;
     
-entityAnnotations
-    : string-literal? entityAnnotation*
-    ;
-
-entityAnnotation
-    : annotationName ( positionalArguments | namedArguments )?
+annotations
+    : compilerAnnotations entityAnnotations
     ;
 
 compilerAnnotations
@@ -1020,15 +1000,19 @@ compilerAnnotations
     ;
     
 compilerAnnotation
-    : ('$' | '@' | '#') annotationName (':' string-literal)?
+    : ('$' | '@' | '#') annotationName (':' stringLiteral)?
+    ;
+
+entityAnnotations
+    : stringLiteral? entityAnnotation*
+    ;
+
+entityAnnotation
+    : annotationName ( positionalArguments | namedArguments )?
     ;
 
 conditions
     : '(' ( condition ( ',' condition )* )? ')'
-    ;
-
-annotations
-    : compilerAnnotations entityAnnotations
     ;
 
 condition
@@ -1039,11 +1023,6 @@ condition
     | booleanCondition
     ;
     
-booleanCondition
-    : functionOrExpression
-    ;
-
-
 existsCondition
     : '!'? 'exists' (letVariable | impliedVariable | expression)
     ;
@@ -1062,6 +1041,10 @@ isConditionVariable
 
 satisfiesCondition
     : 'satisfies' type typeName
+    ;
+
+booleanCondition
+    : functionOrExpression
     ;
 
 controlStatement
@@ -1193,7 +1176,6 @@ catchVariable
     : '(' variable? ')' 
     ;
 
-
 finallyBlock
     : 'finally' controlBlock
     ;
@@ -1312,75 +1294,75 @@ declaration-ref
 
 // Lexer
 
-Digits
-    : Digit ('_' | Digit)*
+decimalDigits
+    : decimalDigit ('_' | decimalDigit)*
     ;
 
-HexDigits
-    : HexDigit ('_' | HexDigit)*
+hexDigits
+    : hexDigit ('_' | hexDigit)*
     ;
 
-BinaryDigits
-    : BinaryDigit ('_' | BinaryDigit)*
+binaryDigits
+    : binaryDigit ('_' | binaryDigit)*
     ;
 
-Exponent
-    : ( 'e' | 'E' ) ( '+' | '-' )? Digit*
+exponent
+    : ( 'e' | 'E' ) ( '+' | '-' )? decimalDigit*
     ;
 
-Magnitude
+magnitude
     : 'k' | 'M' | 'G' | 'T' | 'P'
     ;
 
-FractionalMagnitude
+fractionalMagnitude
     : 'm' | 'u' | 'n' | 'p' | 'f'
     ;
     
-literal-float
-    : < Digits ( '.' Digits (Exponent|Magnitude|FractionalMagnitude)? | FractionalMagnitude) >
+literalFloat
+    : < decimalDigits ( '.' decimalDigits (exponent | magnitude | fractionalMagnitude)? | fractionalMagnitude) >
     ;
 
-literal-natural
-    : < Digits Magnitude? | '#' HexDigits | '$' BinaryDigits >
+literalNatural
+    : < decimalDigits magnitude? | '#' hexDigits | '$' binaryDigits >
     ;
 
-literal-char
-    : < '\'' char-part '\'' >
+literalChar
+    : < '\'' charPart '\'' >
     ;
 
-string-start
-    : < '"' string-part '``' >
+stringStart
+    : < '"' stringPart '``' >
     ;
 
-string-mid
-    : < '``' string-part '``' >
+stringMid
+    : < '``' stringPart '``' >
     ;
 
-string-end
-    : < '``' string-part '`'* '"' >
+stringEnd
+    : < '``' stringPart '`'* '"' >
     ;
 
-literal-string
-    : < '"' string-part '`'* '"' >
+literalString
+    : < '"' stringPart '`'* '"' >
     ;
 
-verbatim-string
+verbatimString
     : < '"""' (~'"' | '"' ~'"' | '""' ~'"')* ('"' ('"' ('"' ('"' '"'?)?)?)?)? >
     ;
 
-char-part
-    : ( ~('\\' | '\'') | escape-sequence )*
+charPart
+    : ( ~('\\' | '\'') | escapeSequence )*
     ;
 
-string-part
-    : ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escape-core | escape-sequence )*
+stringPart
+    : ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escapeCore | escapeSequence )*
     ;
 
-escape-sequence
+escapeSequence
     : '\\' (~'{' | '{' (~'}')* '}' )
     ;
 
-escape-core
+escapeCore
     : ~'{'
     | '{' (~'}')* '}'?
     ;
@@ -1394,31 +1376,31 @@ white
     : ( ' ' | '\r' | '\t' | '\f' | '\n' )+
     ;
 
-line-end
+lineEnd
     : '\r' '\n'
     | '\n'
     | '\r'
     ;
 
-line-ender
+lineEnder
     : '\r'
     | '\n'
     ;
 
 comment
-    : line-comment
-    | block-comment
+    : lineComment
+    | blockComment
     ;
 
-hash-tag
-    : < '#!' (~line-ender)* line-end? >
+hashTag
+    : < '#!' (~lineEnder)* lineEnd? >
     ;
 
-line-comment
-    :   '//' (~line-ender)* line-end?
+lineComment
+    :   '//' (~lineEnder)* lineEnd?
     ;   
 
-block-comment
+blockComment
     : '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
     ;
 
@@ -1427,24 +1409,19 @@ block-comment
 */
 
 LIDENTIFIER
-    : < LStart IdentifierPart* | LIdentifierPrefix IdentifierPart+ >
+    : < LIdentifierStart IdentifierPart* | LIdentifierPrefix IdentifierPart+ >
     ;
 
 UIDENTIFIER 
-    : < UStart IdentifierPart* | UIdentifierPrefix IdentifierPart+ >
+    : < UIdentifierStart IdentifierPart* | UIdentifierPrefix IdentifierPart+ >
     ;
 
-IdentifierStart
-    :   '_'
-    |   Letter
-    ;
-
-LStart
+LIdentifierStart
     : '_'
     | 'a' .. 'z'
     ;
 
-UStart
+UIdentifierStart
     : 'A' .. 'Z'
     ;
 
@@ -1458,7 +1435,7 @@ UIdentifierPrefix
     
 IdentifierPart
     :   '_'
-    |   Digit
+    |   decimalDigit
     |   Letter
     ;
 
@@ -1468,14 +1445,14 @@ Letter
     | '\u{0080}'..'\u{ffff}'
     ;
 
-Digit
+decimalDigit
     : '0'..'9'
     ;
 
-HexDigit
+hexDigit
     : '0'..'9' | 'A'..'F' | 'a'..'f'
     ;
 
-BinaryDigit
+binaryDigit
     : '0' | '1'
     ;

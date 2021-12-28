@@ -2,17 +2,17 @@
 {
     public class Walker
     {
-        public void Walk(AstGrammar grammar)
+        protected void Walk(AstGrammar grammar)
         {
             Visit(grammar);
         }
 
-        public void Walk(Symbol symbol)
+        protected void Walk(Symbol symbol)
         {
             Visit(symbol);
         }
 
-        public void Walk(Expression expression)
+        protected void Walk(Expression expression)
         {
             switch (expression)
             {

@@ -134,10 +134,7 @@ namespace Six.Gen.Ebnf
             }
             Ebnf.Patch(final);
 
-            foreach (var op in Ebnf.Operators)
-            {
-                Assert(op.IsReached);
-            }
+            Ebnf = new InstanceWalker(Ebnf).Walk();
 
             var keywords = new SortedSet<string>();
 

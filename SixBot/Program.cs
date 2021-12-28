@@ -7,10 +7,12 @@ using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 
 var profile = false;
+var minimal = true;
 
 if (profile)
 {
-    Check<CeylonParser>(850, Sampler.LoadCeylon().OrderBy(s => s.Content.Length));
+    var num = 850;
+    Check<CeylonParser>(1, Sampler.LoadCeylon().OrderBy(s => s.Content.Length).Skip(num-1).Take(1));
 }
 else
 {
@@ -23,12 +25,12 @@ else
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    //Check<CeylonParser>(231, Sampler.LoadCeylonLanguage().OrderBy(s => s.Content.Length));
-    //Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Content.Length));
-    Check<CeylonParser>(1, Sampler.LoadCeylonLanguage().OrderBy(s => s.Name).Take(1));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon());
+    //Check<CeylonParser>(231, Sampler.LoadCeylon());
+    Check<CeylonParser>(0, Sampler.LoadCeylonLanguage().Take(1));
     Check<SixParser>(0, Sampler.LoadSix());
     CheckJson(false, Sampler.LoadJson());
-    CheckGenerate(false);
+    CheckGenerate(true);
     Console.Write("any key ... ");
     Console.ReadKey(true);
 }
@@ -76,11 +78,6 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
             parser.Reset();
             var ok = parser.Parse(source);
 
-            if (profile)
-            {
-                continue;
-            }
-
             if (!ok)
             {
                 var furthest = 0;
@@ -107,6 +104,11 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
             }
             if (ok)
             {
+                if (minimal)
+                {
+                    continue;
+                }
+
                 var builder = new SppfBuilder(source, parser);
                 var root = builder.BuildSppf();
                 if (root != null)
@@ -121,7 +123,6 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                         var enumerator = new SppfEnumerator(root, writer);
                         var counted = enumerator.Count();
                         writer.WriteLine($"counted: {counted}");
-                        //var enumCount = enumerator.Enum();
                         if (sample.Count >= 0)
                         {
                             if (counted != sample.Count)
@@ -206,6 +207,13 @@ void CheckGenerate(bool enabled)
             Console.WriteLine(sample.Name);
 
             var ast = Six.Input.Builder.Build(sample.Name, sample.Content);
+
+            using (var writer = $"{ast.Name}-ast.txt".Writer())
+            {
+                var dumper = new Six.Ast.AstDumper(writer, ast);
+                dumper.Dump();
+            }
+
             var ebnf = new EbnfCreator(ast).Create();
 
             using (var writer = $"{ebnf.Name}-ebnf.txt".Writer())

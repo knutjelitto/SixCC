@@ -1,12 +1,19 @@
 ﻿namespace Six.Ast
 {
-    public class TreeDumper : Walker
+    public class AstDumper : Walker
     {
-        private readonly Writer writer;
-
-        public TreeDumper(Writer writer)
+        public AstDumper(Writer writer, AstGrammar grammar)
         {
-            this.writer = writer;
+            Writer = writer;
+            Grammar = grammar;
+        }
+
+        public Writer Writer { get; }
+        public AstGrammar Grammar { get; }
+
+        public void Dump()
+        {
+            Walk(Grammar);
         }
 
         protected override void Visit(AstGrammar grammar)
@@ -16,7 +23,7 @@
             {
                 if (more)
                 {
-                    writer.WriteLine();
+                    Writer.WriteLine();
                 }
                 more = true;
                 Walk(rule);
@@ -25,8 +32,8 @@
 
         protected override void Visit(Symbol symbol)
         {
-            writer.WriteLine($"{symbol}");
-            using (writer.Indent())
+            Writer.WriteLine($"{symbol}");
+            using (Writer.Indent())
             {
                 base.Visit(symbol);
             }
@@ -34,8 +41,8 @@
 
         protected override void Visit(Alternation alt)
         {
-            writer.WriteLine("alternation");
-            using (writer.Indent())
+            Writer.WriteLine("alternation");
+            using (Writer.Indent())
             {
                 base.Visit(alt);
             }
@@ -43,8 +50,8 @@
 
         protected override void Visit(Sequence seq)
         {
-            writer.WriteLine("sequence");
-            using (writer.Indent())
+            Writer.WriteLine("sequence");
+            using (Writer.Indent())
             {
                 base.Visit(seq);
             }
@@ -52,8 +59,8 @@
 
         protected override void Visit(Token compact)
         {
-            writer.WriteLine("compact");
-            using (writer.Indent())
+            Writer.WriteLine("compact");
+            using (Writer.Indent())
             {
                 base.Visit(compact);
             }
@@ -61,8 +68,8 @@
 
         protected override void Visit(OneOrMore oneOrMore)
         {
-            writer.WriteLine("one-or-more");
-            using (writer.Indent())
+            Writer.WriteLine("one-or-more");
+            using (Writer.Indent())
             {
                 base.Visit(oneOrMore);
             }
@@ -70,8 +77,8 @@
 
         protected override void Visit(ZeroOrMore zeroOrMore)
         {
-            writer.WriteLine("zero-or-more");
-            using (writer.Indent())
+            Writer.WriteLine("zero-or-more");
+            using (Writer.Indent())
             {
                 base.Visit(zeroOrMore);
             }
@@ -79,8 +86,8 @@
 
         protected override void Visit(ZeroOrOne zeroOrOne)
         {
-            writer.WriteLine("zero-or-one");
-            using (writer.Indent())
+            Writer.WriteLine("zero-or-one");
+            using (Writer.Indent())
             {
                 base.Visit(zeroOrOne);
             }
@@ -88,24 +95,24 @@
 
         protected override void Visit(Reference reference)
         {
-            writer.WriteLine($"→{reference.Name}");
+            Writer.WriteLine($"→{reference.Name}");
             base.Visit(reference);
         }
 
         protected override void Visit(Any any)
         {
-            writer.WriteLine("any");
+            Writer.WriteLine("any");
         }
 
         protected override void Visit(Literal literal)
         {
-            writer.WriteLine(literal.Text.Esc());
+            Writer.WriteLine(literal.Text.Esc());
         }
 
         protected override void Visit(Range range)
         {
-            writer.WriteLine("range");
-            using (writer.Indent())
+            Writer.WriteLine("range");
+            using (Writer.Indent())
             {
                 base.Visit(range);
             }

@@ -157,13 +157,6 @@ namespace Six.Gen
                     wl();
                 });
             });
-
-            wl();
-            wl("#if false");
-            wl();
-            //grammar.DumpAst(writer);
-            wl();
-            wl("#endif");
         }
     }
 }

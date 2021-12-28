@@ -519,6 +519,10 @@ namespace Six.Runtime.Sppf
 
         private IEnumerable<Node> ReduceAlternates(IEnumerable<Node> packeds)
         {
+            if (packeds.Count() >= 2)
+            {
+                Assert(true);
+            }
             //
             // strange policy:
             //   select first alternate

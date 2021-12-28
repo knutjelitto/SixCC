@@ -15,7 +15,7 @@
             foreach (var rule in Grammar.Rules)
             {
                 writer.WriteLine();
-                writer.WriteLine($"{rule.Name}{rule.Reached}");
+                writer.WriteLine($"{rule.Name}{rule.Attributes}");
                 using (writer.Indent())
                 {
                     rule.Argument.Dump(writer);

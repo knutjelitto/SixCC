@@ -1,4 +1,6 @@
-﻿namespace Six.Gen.Ebnf
+﻿using System.Text;
+
+namespace Six.Gen.Ebnf
 {
     public abstract class CoreOp
     {
@@ -25,7 +27,11 @@
 
         public ILocation Location { get; private set; }
         public int Id { get; set; } = -1;
+
+        public SortedSet<Instance> Instances { get; private set; } = new();
         public bool IsReached { get; set; }
+        public bool IsSpare { get; set; }
+
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
         {
@@ -48,22 +54,23 @@
 
         public virtual void Dump(Writer writer)
         {
-            writer.WriteLine($"{DumpHead}{Reached}");
+            writer.WriteLine($"{DumpHead}{Attributes}");
             using (writer.Indent())
             {
                 DumpInner(writer);
             }
         }
 
-        public string Reached
+        public string Attributes
         {
             get
             {
-                if (IsReached)
+                var builder = new StringBuilder();
+                if (Instances.Count > 0)
                 {
-                    return " [" + (IsReached ? "R" : "") + "]";
+                    builder.Append($"[#{Instances.Count}]");
                 }
-                return string.Empty;
+                return builder.Length > 0 ? $" {builder}" : string.Empty;
             }
         }
     }

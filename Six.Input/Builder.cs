@@ -12,7 +12,6 @@ namespace Six.Input
             var tokens = new Tokens(lexer);
             var parser = new Parser(tokens);
             var grammar = parser.Parse();
-            grammar.DumpTree($"{grammar.Name}-ast.txt");
 
             return grammar;
         }

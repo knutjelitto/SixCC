@@ -65,17 +65,17 @@ namespace Six.Samples
 
         public static IEnumerable<Sample> LoadCeylon()
         {
-            return LoadCeylonLanguage().Concat(LoadCeylonSdk());
+            return LoadCeylonLanguage().Concat(LoadCeylonSdk()).OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadCeylonSdk()
         {
-            return LoadCeylon("sdk", @"D:\SixTmp\ceylon-sdk\source\ceylon");
+            return LoadCeylon("sdk", @"D:\SixTmp\ceylon-sdk\source\ceylon").OrderBy(s => s.Name);
         }
 
         public static IEnumerable<Sample> LoadCeylonLanguage()
         {
-            return LoadCeylon("language", @"D:\SixTmp\ceylon\language\src\ceylon\language");
+            return LoadCeylon("language", @"D:\SixTmp\ceylon\language\src\ceylon\language").OrderBy(s => s.Name);
         }
 
         private static IEnumerable<Sample> LoadCeylon(string prefix, string root)
