@@ -116,6 +116,7 @@ namespace Six.Gen.Ebnf
 
             Ebnf = new SetTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
+            Ebnf = new MaybeAliasWalker(Ebnf).Walk();
 
             var final = new List<CoreOp>();
             id = 0;

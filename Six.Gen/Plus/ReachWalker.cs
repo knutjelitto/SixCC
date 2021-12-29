@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    internal class ReachWalker : EbnfPredicator
+    internal class ReachWalker : EbnfPredicator<CoreOp>
     {
         public ReachWalker()
             : base(op => op.IsReached, (op, value) => op.IsReached = value)

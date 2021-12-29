@@ -2,7 +2,7 @@
 
 namespace Six.Gen.Ebnf
 {
-    internal class SetTransformer : EbnfWalker
+    internal class SetTransformer : EbnfWalker<CoreOp>
     {
         public SetTransformer(EbnfGrammar grammar)
         {

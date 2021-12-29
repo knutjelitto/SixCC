@@ -1,6 +1,7 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class EbnfWalker
+    public class EbnfWalker<Operator>
+        where Operator : CoreOp
     {
         protected virtual void Walk(EbnfGrammar grammar)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class SpareWalker : EbnfWalker
+    public class SpareWalker : EbnfWalker<CoreOp>
     {
         public SpareWalker(EbnfGrammar grammar)
         {
