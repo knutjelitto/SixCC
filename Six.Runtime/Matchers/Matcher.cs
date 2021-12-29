@@ -2,11 +2,21 @@
 
 namespace Six.Runtime.Matchers
 {
-    public abstract record Matcher(ImplementationCore Core, int Id, string Name) : IEnumerable<Matcher>
+    public abstract class Matcher : IEnumerable<Matcher>
     {
+        private Matcher[] Matchers = Array.Empty<Matcher>();
         public readonly Dictionary<Cursor, Context> Contexts = new();
 
-        private Matcher[] Matchers = Array.Empty<Matcher>();
+        protected Matcher(ImplementationCore core, int id, string name)
+        {
+            Core = core;
+            Id = id;
+            Name = name;
+        }
+
+        public ImplementationCore Core { get; }
+        public int Id { get; }
+        public string Name { get; }
 
         public virtual void Match(Cursor start, Action<Cursor> next)
         {

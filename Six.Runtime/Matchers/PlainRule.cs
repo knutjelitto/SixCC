@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record PlainRule(ImplementationCore Core, int Id, string Name) : Rule(Core, Id, Name)
+    public sealed class PlainRule : Rule
     {
+        public PlainRule(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override void MatchCore(Context context)
         {
             Assert(Count == 1);

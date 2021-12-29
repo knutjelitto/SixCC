@@ -102,6 +102,13 @@ namespace Six.Gen.Ebnf
             Right();
         }
 
+        protected override void Visit(NotOp op)
+        {
+            Left("!");
+            Walk(op.Argument);
+            Right();
+        }
+
         protected override void Visit(PlusOp op)
         {
             Left("+");

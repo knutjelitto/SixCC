@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Star(ImplementationCore Core, int Id, string Name) : Structural(Core, Id, Name)
+    public sealed class Star : Structural
     {
+        public Star(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override void MatchCore(Context context)
         {
             var already = new HashSet<Cursor>();

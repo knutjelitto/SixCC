@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public abstract record Token(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public abstract class Token : Matcher
     {
+        protected Token(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override bool IsTerminal => true;
     }
 }

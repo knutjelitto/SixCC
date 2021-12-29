@@ -1,7 +1,15 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Keyword(ImplementationCore Core, int Id, string Name, string Text) : Token(Core, Id, Name)
+    public sealed class Keyword : Token
     {
+        public Keyword(ImplementationCore core, int id, string name, string text)
+            : base(core, id, name)
+        {
+            Text = text;
+        }
+
+        public string Text { get; }
+
         public override void MatchCore(Context context)
         {
             context.Core = Core.__MatchWhite(context.Start);

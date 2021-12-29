@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Any(ImplementationCore Core, int Id, string Name) : Token(Core, Id, Name)
+    public sealed class Any : Token
     {
+        public Any(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override void MatchCore(Context context)
         {
             if (context.Start.At != -1)

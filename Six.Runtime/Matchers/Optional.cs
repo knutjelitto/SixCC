@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Optional(ImplementationCore Core, int Id, string Name) : Structural(Core, Id, Name)
+    public sealed class Optional : Structural
     {
+        public Optional(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override void MatchCore(Context context)
         {
             this[0].Match(

@@ -1,8 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public abstract record Rule(ImplementationCore Core, int Id, string Name)
-        : Matcher(Core, Id, Name)
+    public abstract class Rule : Matcher
     {
+        protected Rule(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override bool IsTerminal => false;
     }
 }

@@ -1,9 +1,13 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record StartRule(ImplementationCore Core, int Id, string Name)
-            : Rule(Core, Id, Name)
+    public sealed class StartRule : Rule
     {
         public Cursor? Eof { get; private set; }
+
+        public StartRule(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
 
         public override void MatchCore(Context context)
         {

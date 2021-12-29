@@ -1,7 +1,15 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Character(ImplementationCore Core, int Id, string Name, int Codepoint) : Token(Core, Id, Name)
+    public sealed class Character : Token
     {
+        public Character(ImplementationCore core, int id, string name, int codepoint)
+            : base(core, id, name)
+        {
+            Codepoint = codepoint;
+        }
+
+        public int Codepoint { get; }
+
         public override void MatchCore(Context context)
         {
             context.Core = Core.__MatchWhite(context.Start);

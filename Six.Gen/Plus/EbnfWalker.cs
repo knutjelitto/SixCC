@@ -50,6 +50,9 @@
                 case OptionalOp expr:
                     Visit(expr);
                     break;
+                case NotOp expr:
+                    Visit(expr);
+                    break;
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -69,6 +72,10 @@
         }
 
         protected virtual void Visit(AnyOp op)
+        {
+            WalkArguments(op);
+        }
+        protected virtual void Visit(NotOp op)
         {
             WalkArguments(op);
         }

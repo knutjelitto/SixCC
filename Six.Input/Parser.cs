@@ -145,6 +145,10 @@ namespace Six.Input
                     Match(TKind.Any);
                     expression = builder.Any(Current.Location);
                     break;
+                case TKind.Complement:
+                    Match(TKind.Complement);
+                    expression = builder.Complement(Current.Location, Primary());
+                    break;
                 case TKind.Not:
                     Match(TKind.Not);
                     expression = builder.Not(Current.Location, Primary());

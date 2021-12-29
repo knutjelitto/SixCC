@@ -64,9 +64,14 @@
             return new Diff(location, left, right);
         }
 
-        public Expression Not(ILocation location, Expression expression)
+        public Expression Complement(ILocation location, Expression expression)
         {
             return new Diff(location, Any(location), expression);
+        }
+
+        public Expression Not(ILocation location, Expression expression)
+        {
+            return new Not(location, expression);
         }
 
         public Expression ZeroOrMore(ILocation location, Expression expression)

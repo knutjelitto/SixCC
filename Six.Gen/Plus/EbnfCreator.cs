@@ -105,6 +105,11 @@ namespace Six.Gen.Ebnf
                 id++;
 
                 Ebnf.Add(op);
+
+                if (op is NotOp)
+                {
+                    Assert(true);
+                }
             }
 
             new ReachWalker().Reach(Ebnf);
@@ -240,6 +245,8 @@ namespace Six.Gen.Ebnf
                         return Visit(expr);
                     case Ast.Diff expr:
                         return Visit(expr);
+                    case Ast.Not expr:
+                        return Visit(expr);
                     default:
                         throw new NotImplementedException($"can't transform expression of type {expression.GetType()}");
                 }
@@ -273,6 +280,11 @@ namespace Six.Gen.Ebnf
             {
                 return new SeqOp(seq.Location, transformed);
             }
+        }
+
+        private CoreOp Visit(Ast.Not expr)
+        {
+            return new NotOp(expr.Location, Create(expr.Expression));
         }
 
         private CoreOp Visit(Ast.ZeroOrMore zeroOrMore)

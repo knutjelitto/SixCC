@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public abstract record Structural(ImplementationCore Core, int Id, string Name) : Matcher(Core, Id, Name)
+    public abstract class Structural : Matcher
     {
+        protected Structural(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override bool IsTerminal => false;
     }
 }

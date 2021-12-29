@@ -68,6 +68,8 @@ namespace Six.Runtime.Sppf
                     return BuildString(match, start, end);
                 case Matchers.Range match:
                     return BuildRange(match, start, end);
+                case Not match:
+                    return BuildNot(match, start, end);
                 default:
                     throw new NotImplementedException($"can't build node for '{matcher.GetType().Name}'");
             }
@@ -126,6 +128,13 @@ namespace Six.Runtime.Sppf
 
                 return optional;
             }
+
+            return null;
+        }
+
+        private Node? BuildNot(Not matcher, Cursor start, Cursor end)
+        {
+            // drop from tree
 
             return null;
         }
@@ -517,17 +526,24 @@ namespace Six.Runtime.Sppf
 
         /********** policies */
 
-        private IEnumerable<Node> ReduceAlternates(IEnumerable<Node> packeds)
+        private IEnumerable<Node> ReduceAlternates(List<Node> nodes)
         {
-            if (packeds.Count() >= 2)
+            if (nodes.Count >= 2)
             {
-                Assert(true);
+                if (nodes.Count >= 2)
+                {
+                    Assert(true);
+                }
             }
+#if true
+            return nodes;
+#else
             //
             // strange policy:
             //   select first alternate
             //
-            return Enumerable.Repeat(packeds.First(), 1);
+            return Enumerable.Repeat(nodes.First(), 1);
+#endif
         }
     }
 }

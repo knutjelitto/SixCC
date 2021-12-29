@@ -1,7 +1,12 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed record Seq(ImplementationCore Core, int Id, string Name) : Structural(Core, Id, Name)
+    public sealed class Seq : Structural
     {
+        public Seq(ImplementationCore core, int id, string name)
+            : base(core, id, name)
+        {
+        }
+
         public override void MatchCore(Context context)
         {
             match(0, context.Start);

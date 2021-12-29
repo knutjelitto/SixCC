@@ -57,6 +57,15 @@
             }
         }
 
+        protected override void Visit(Not expr)
+        {
+            Writer.WriteLine("not");
+            using (Writer.Indent())
+            {
+                base.Visit(expr);
+            }
+        }
+
         protected override void Visit(Token compact)
         {
             Writer.WriteLine("compact");

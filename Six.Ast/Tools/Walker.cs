@@ -52,6 +52,9 @@
                 case Diff expr:
                     Visit(expr);
                     break;
+                case Not expr:
+                    Visit(expr);
+                    break;
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -84,6 +87,11 @@
             {
                 Walk(expression);
             }
+        }
+
+        protected virtual void Visit(Not expr)
+        {
+            Walk(expr.Expression);
         }
 
         protected virtual void Visit(ZeroOrMore zeroOrMore)

@@ -7,7 +7,7 @@ using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 
 var profile = false;
-var minimal = true;
+var minimal = false;
 
 if (profile)
 {
@@ -25,8 +25,8 @@ else
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    Check<CeylonParser>(-1, Sampler.LoadCeylon());
-    //Check<CeylonParser>(231, Sampler.LoadCeylon());
+    Check<CeylonParser>(38, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
     Check<CeylonParser>(0, Sampler.LoadCeylonLanguage().Take(1));
     Check<SixParser>(0, Sampler.LoadSix());
     CheckJson(false, Sampler.LoadJson());
@@ -63,6 +63,8 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     var count = 0;
 
     var parser = new ParserType();
+
+    var maxCounted = 0;
 
     foreach (var sample in samples)
     {
@@ -125,12 +127,17 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                         writer.WriteLine($"counted: {counted}");
                         if (sample.Count >= 0)
                         {
+                            if (counted > maxCounted)
+                            {
+                                maxCounted = counted;
+                            }
+
                             if (counted != sample.Count)
                             {
                                 if (counted >= 2)
                                 {
                                     Assert(true);
-                                    break;
+                                    //break;
                                 }
                             }
                         }

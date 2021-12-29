@@ -37,6 +37,12 @@
             base.Visit(op);
         }
 
+        protected override void Visit(NotOp op)
+        {
+            Set(op, true);
+            base.Visit(op);
+        }
+
         protected override void Visit(OptionalOp op)
         {
             Set(op, true);
