@@ -55,34 +55,43 @@ namespace Six.Gen
             }
         }
 
-        public static string RuleId(this string identifier)
+        public static string RuleId(this CoreOp op)
+        {
+            if (op is RuleOp rule)
+            {
+                return rule.Name.RuleId();
+            }
+            else
+            {
+                return $"__Matchers[{op.Id}]";
+            }
+        }
+
+        public static string DfaId(this CoreOp op)
+        {
+            if (op is RuleOp rule)
+            {
+                return rule.Name.RuleId() + "_DFA";
+            }
+            else
+            {
+                return $"__Matchers_{op.Id}_DFA";
+            }
+        }
+
+        private static string RuleId(this string identifier)
         {
             if (identifier.StartsWith("%"))
             {
-                return "__" + Cap(identifier.Substring(1));
+                return "__" + identifier.Substring(1).Cap();
             }
 
             var parts = identifier.Split('-', '_');
 
-            return "_" + string.Join(string.Empty, parts.Take(1).Concat(parts.Skip(1).Select(part => Cap(part))));
+            return "_" + string.Join(string.Empty, parts.Take(1).Concat(parts.Skip(1).Select(part => part.Cap())));
         }
 
-        public static string RuleId(this RuleOp op)
-        {
-            return op.Name.RuleId();
-        }
-
-        public static string RuleId(this RefOp op)
-        {
-            return op.Name.RuleId();
-        }
-
-        public static string DfaId(this RuleOp op)
-        {
-            return op.Name.RuleId() + "_DFA";
-        }
-
-        public static string Cap(string name)
+        private static string Cap(this string name)
         {
             var first = char.ToUpperInvariant(name.First()).ToString();
             var rest = string.Join(string.Empty, name.Skip(1).Select(chr => char.ToLowerInvariant(chr)));

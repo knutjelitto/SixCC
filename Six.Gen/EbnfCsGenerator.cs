@@ -13,18 +13,20 @@ namespace Six.Gen
 
         private readonly NameWalker namer = new();
 
+        public EbnfGrammar? Grammar { get; private set; }
+
         public override void Generate(string name, string content)
         {
             var ast = Builder.Build(name, content)!;
             var transformer = new EbnfCreator(ast);
-            var grammar = transformer.Create();
+            Grammar = transformer.Create();
 
-            if (grammar == null)
+            if (Grammar == null)
             {
                 return;
             }
 
-            var dfaGenerator = new DfaCsGenerator(writer, grammar);
+            var dfaGenerator = new DfaCsGenerator(writer, Grammar);
             var parserClass = $"{name}Parser";
             var implementationClass = $"__{parserClass}Implementation";
 
@@ -47,7 +49,7 @@ namespace Six.Gen
                     });
                     wl();
 
-                    var matchersCount = grammar.Operators.Count(o => o is not RefOp);
+                    var matchersCount = Grammar.Operators.Count(o => o is not RefOp);
 
                     string ClassName(CoreOp op)
                     {
@@ -68,7 +70,7 @@ namespace Six.Gen
                         indent(() => wl($": base(new {MatcherClass}[{matchersCount}])"));
                         block(() =>
                         {
-                            foreach (var inner in grammar.Operators.Where(o => o is not RefOp))
+                            foreach (var inner in Grammar.Operators.Where(o => o is not RefOp))
                             {
                                 w($"/* {inner.Id,3} {inner.GetType().Name,-16} */ ");
                                 w($"{Matchers}[{inner.Id}] = ");
@@ -90,6 +92,9 @@ namespace Six.Gen
                                     case StringOp op:
                                         CreateMatcher(op, extra: $"{op.Text.CsString()}");
                                         break;
+                                    case NotOp op:
+                                        CreateMatcher(inner);
+                                        break;
                                     default:
                                         CreateMatcher(inner);
                                         break;
@@ -97,12 +102,16 @@ namespace Six.Gen
                             }
                             wl();
 
-                            foreach (var op in grammar.Operators.Where(i => i.HasArguments))
+                            foreach (var op in Grammar.Operators.Where(i => i.HasArguments))
                             {
                                 w($"/* {op.Id,3} {op.GetType().Name,-16} */ ");
                                 if (op is DfaRuleOp dfaRule)
                                 {
                                     wl($"{dfaRule.RuleId()}.Set({dfaRule.DfaId()});");
+                                }
+                                else if (op is NotOp notOp)
+                                {
+                                    wl($"{op.RuleId()}.Set({op.DfaId()});");
                                 }
                                 else
                                 {
@@ -143,7 +152,7 @@ namespace Six.Gen
                         });
                         wl();
 
-                        foreach (var op in grammar.Rules)
+                        foreach (var op in Grammar.Rules)
                         {
                             if (!op.Name.StartsWith("%"))
                             {

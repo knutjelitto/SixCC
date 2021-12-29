@@ -9,17 +9,18 @@
 
         public override void MatchCore(Context context)
         {
-            var matcher = this[0];
-            var fail = false;
+            // match without any leading space
 
-            matcher.Match(
-                context.Start,
-                success =>
+            Assert(Dfa != null);
+
+            if (Dfa.TryMatch(context.Start, out var next))
+            {
+                if (next == context.Start)
                 {
-                    fail = true;
-                });
-
-            if (!fail)
+                    context.Success(context.Start);
+                }
+            }
+            else
             {
                 context.Success(context.Start);
             }

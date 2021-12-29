@@ -25,8 +25,8 @@ else
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    Check<CeylonParser>(38, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
-    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
+    //Check<CeylonParser>(4, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
+    //Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
     Check<CeylonParser>(0, Sampler.LoadCeylonLanguage().Take(1));
     Check<SixParser>(0, Sampler.LoadSix());
     CheckJson(false, Sampler.LoadJson());
@@ -221,21 +221,25 @@ void CheckGenerate(bool enabled)
                 dumper.Dump();
             }
 
-            var ebnf = new EbnfCreator(ast).Create();
-
-            using (var writer = $"{ebnf.Name}-ebnf.txt".Writer())
-            {
-                new EbnfDumper(ebnf).Dump(writer);
-            }
-
             using (var generator = new EbnfCsGenerator())
             {
-                generator.Generate(ebnf.Name, sample.Content);
-                var generated = generator.ToString();
+                generator.Generate(ast.Name, sample.Content);
 
-                using (var writer = $"{ebnf.Name}.gen.cs".Writer())
+                var ebnf = generator.Grammar;
+
+                if (ebnf != null)
                 {
-                    writer.Write(generated);
+                    using (var writer = $"{ebnf.Name}-ebnf.txt".Writer())
+                    {
+                        new EbnfDumper(ebnf).Dump(writer);
+                    }
+
+                    var generated = generator.ToString();
+
+                    using (var writer = $"{ebnf.Name}.gen.cs".Writer())
+                    {
+                        writer.Write(generated);
+                    }
                 }
             }
         }

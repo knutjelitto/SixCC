@@ -1,38 +1,45 @@
 ﻿grammar Ceylon;
 
-%start      : compilationUnit ;
+%start      : compilation-unit ;
 %whitespace : skip ;
 %keywords   : LIDENTIFIER ;
 
-compilationUnit
-    : hashTag?
-      ( compilerAnnotations ';' )?
-      ( importDeclaration | moduleDescriptor | packageDescriptor | declaration )*
+compilation-unit
+    : hash-tag? ( compilerAnnotations ';' )? unit-elements
     ;
 
-moduleDescriptor
-    : annotations
-      'module' 
-      packagePath (importNamespace ':' (literalString | packagePath) (':' literalString (':' literalString)? )? )?
+unit-elements
+    : unit-element*
+    ;
+
+unit-element
+    : import-declaration
+    | module-descriptor
+    | package-descriptor
+    | declaration
+    ;
+
+module-descriptor
+    : annotations 'module' module-name
+      (importNamespace ':' (literalString | module-name) (':' literalString (':' literalString)? )? )?
       literalString?
-      importModuleList
+      module-body
     ;
 
-packageDescriptor
-    : annotations 'package' packagePath ';'
+module-name
+    : packagePath
     ;
 
-importModuleList
+module-body
     : '{' ( annotations (inferredAttributeDeclaration | importModule) )* '}'
     ;
 
+package-descriptor
+    : annotations 'package' packagePath ';'
+    ;
+
 importModule
-    : 'import'
-      (importNamespace ':')?
-      (literalString | packagePath)
-      ( ':' literalString ( ':' literalString )? )?
-      (literalString | memberName)?
-      ';'
+    : 'import' (importNamespace ':')? (literalString | packagePath) ( ':' literalString ( ':' literalString )? )? (literalString | memberName)? ';'
     ;
 
 importNamespace
@@ -40,7 +47,7 @@ importNamespace
     | UIDENTIFIER
     ;
 
-importDeclaration
+import-declaration
     : 'import' packagePath importElementList
     ;
 
@@ -219,15 +226,15 @@ assertMessage
     ;
 
 block
-    : '{' (importDeclaration | declarationOrStatement)* '}'
+    : '{' (import-declaration | declarationOrStatement)* '}'
     ;
 
 interfaceBody
-    : '{' (importDeclaration | declarationOrStatement)* '}'
+    : '{' (import-declaration | declarationOrStatement)* '}'
     ;
 
 classBody
-    : '{' (importDeclaration | declarationOrStatement)* '}'
+    : '{' (import-declaration | declarationOrStatement)* '}'
     ;
 
 extendedType
@@ -853,8 +860,8 @@ negationComplementExpression
     ;
 
 unaryMinusOrComplementOperator
-    : '-' 
-    | '+'
+    : '-' !'-'
+    | '+' !'+'
     | '~'
     ;
 
@@ -1392,7 +1399,7 @@ comment
     | blockComment
     ;
 
-hashTag
+hash-tag
     : < '#!' (~lineEnder)* lineEnd? >
     ;
 
@@ -1403,10 +1410,6 @@ lineComment
 blockComment
     : '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
     ;
-
-/*
-    List of keywords.
-*/
 
 LIDENTIFIER
     : < LIdentifierStart IdentifierPart* | LIdentifierPrefix IdentifierPart+ >

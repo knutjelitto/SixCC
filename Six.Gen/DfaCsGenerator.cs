@@ -21,18 +21,29 @@ namespace Six.Gen
 
         public void Create()
         {
-            foreach (var rule in Grammar.Rules.Where(r => r.DFA != null))
+            foreach (var op in Grammar.Operators.Where(r => r.DFA != null))
             {
-                Create(rule.DfaId(), rule.DFA!);
+                Create(op.DfaId(), op.DFA!);
             }
         }
 
         public void Init()
         {
+#if true
+            foreach (var op in Grammar.Operators.Where(r => r.DFA != null))
+            {
+                wl($"{op.RuleId()}.Set({op.DfaId()});");
+            }
+#else
             foreach (var rule in Grammar.Rules.Where(r => r.DFA != null))
             {
                 wl($"{rule.RuleId()}.Set({rule.DfaId()});");
             }
+            foreach (var op in Grammar.Others.Where(r => r.DFA != null))
+            {
+                wl($"{op.RuleId()}.Set({op.DfaId()});");
+            }
+#endif
         }
 
         public void Declare()
@@ -41,11 +52,15 @@ namespace Six.Gen
             {
                 wl($"private {DfaClass} {rule.DfaId()} = new {DfaClass}({rule.Name.CsString()});");
             }
+            foreach (var op in Grammar.Others.Where(r => r.DFA != null))
+            {
+                wl($"private {DfaClass} {op.DfaId()} = new {DfaClass}({op.DfaId().CsString()});");
+            }
         }
 
-        private void Create(string name, FA dfa)
+        private void Create(string reference, FA dfa)
         {
-            wl($"{name}.Set(");
+            wl($"{reference}.Set(");
             indent(() =>
             {
                 var more = false;
@@ -68,9 +83,8 @@ namespace Six.Gen
                 var state = dfa.States[i];
                 var transitions = state.TerminalTransitions.ToArray();
 
-#if true
                 indent(
-                    $"{name}.States[{i}].Set(",
+                    $"{reference}.States[{i}].Set(",
                     () =>
                     {
                         var more = false;
@@ -82,7 +96,7 @@ namespace Six.Gen
                                 wl($",");
                             }
                             more = true;
-                            w($"new {DfaTransClass}({name}.States[{transition.TargetId}], {DfaIntervals(transition.Set)})");
+                            w($"new {DfaTransClass}({reference}.States[{transition.TargetId}], {DfaIntervals(transition.Set)})");
                         }
                         if (transitions.Length > 0)
                         {
@@ -90,27 +104,6 @@ namespace Six.Gen
                         }
                     });
                 wl(");");
-#else
-                initializer($"{name}.States[{i}].Transitions = new {DfaTransClass}[]",
-                    () =>
-                    {
-                        var more = false;
-                        for (var j = 0; j < transitions.Length; j++)
-                        {
-                            var transition = transitions[j];
-                            if (more)
-                            {
-                                wl($",");
-                            }
-                            more = true;
-                            w($"new {DfaTransClass}({name}.States[{transition.TargetId}], {DfaIntervals(transition.Set)})");
-                        }
-                        if (transitions.Length > 0)
-                        {
-                            wl();
-                        }
-                    });
-#endif
             }
         }
 

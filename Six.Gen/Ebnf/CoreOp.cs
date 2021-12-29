@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Six.Rex;
+using System.Text;
 
 namespace Six.Gen.Ebnf
 {
@@ -27,6 +28,7 @@ namespace Six.Gen.Ebnf
 
         public ILocation Location { get; private set; }
         public int Id { get; set; } = -1;
+        public FA? DFA { get; set; }
 
         public SortedSet<Instance> Instances { get; private set; } = new();
         public bool IsReached { get; set; }

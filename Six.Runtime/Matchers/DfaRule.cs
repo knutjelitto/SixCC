@@ -2,16 +2,9 @@
 {
     public class DfaRule : Rule
     {
-        public Dfa.Dfa? Dfa = null;
-
         public DfaRule(ImplementationCore core, int id, string name)
             : base(core, id, name)
         {
-        }
-
-        public void Set(Dfa.Dfa dfa)
-        {
-            Dfa = dfa;
         }
 
         public override bool IsTerminal => true;

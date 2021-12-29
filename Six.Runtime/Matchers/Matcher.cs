@@ -6,6 +6,8 @@ namespace Six.Runtime.Matchers
     {
         private Matcher[] Matchers = Array.Empty<Matcher>();
         public readonly Dictionary<Cursor, Context> Contexts = new();
+        public Dfa.Dfa? Dfa = null;
+
 
         protected Matcher(ImplementationCore core, int id, string name)
         {
@@ -35,6 +37,11 @@ namespace Six.Runtime.Matchers
         public Matcher this[int index] => Matchers[index];
 
         public int Count => Matchers.Length;
+
+        public void Set(Dfa.Dfa dfa)
+        {
+            Dfa = dfa;
+        }
 
         public void Set(params Matcher[] matchers)
         {

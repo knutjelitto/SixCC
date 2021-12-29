@@ -16,13 +16,16 @@ namespace Six.Gen.Ebnf
             var white = Grammar.WhitespaceRule;
             Transform(white);
 
-            foreach (var rule in Grammar.Rules)
+            foreach (var rule in Grammar.Rules.Where(r => r.Argument is TokenOp))
             {
-                if (rule.Argument is not TokenOp)
-                {
-                    continue;
-                }
                 Transform(rule);
+            }
+
+            var others = Grammar.Others.ToList();
+
+            foreach (var not in others.OfType<NotOp>())
+            {
+                Transform(not);
             }
 
             return Grammar;
@@ -31,6 +34,11 @@ namespace Six.Gen.Ebnf
         private void Transform(RuleOp rule)
         {
             rule.DFA = Transform(rule.Argument).ToFinalDfa();
+        }
+
+        private void Transform(NotOp not)
+        {
+            not.DFA = Transform(not.Argument).ToFinalDfa();
         }
 
         protected override FA Visit(AltOp op)

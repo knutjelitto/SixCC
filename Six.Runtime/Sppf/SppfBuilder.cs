@@ -530,12 +530,9 @@ namespace Six.Runtime.Sppf
         {
             if (nodes.Count >= 2)
             {
-                if (nodes.Count >= 2)
-                {
-                    Assert(true);
-                }
+                Assert(true);
             }
-#if true
+#if false
             return nodes;
 #else
             //
