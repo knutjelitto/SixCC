@@ -58,10 +58,18 @@ namespace Six.Gen
                     }
 
                     void CreateMatcher(CoreOp op, string? className = null, string? extra = null)
-                    {
-                        var arguments = extra == null ? ");" : $", {extra});";
+                    { 
+                        var arguments = extra == null ? "" : $", {extra}";
                         className = className ?? ClassName(op);
-                        wl($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
+                        w($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
+                        if (op.IsAlias)
+                        {
+                            wl(") { IsAlias = true };");
+                        }
+                        else
+                        {
+                            wl($");");
+                        }
                     }
 
                     block($"private class {implementationClass} : {ImplementationCoreClass}", () =>
@@ -91,9 +99,6 @@ namespace Six.Gen
                                         break;
                                     case StringOp op:
                                         CreateMatcher(op, extra: $"{op.Text.CsString()}");
-                                        break;
-                                    case NotOp op:
-                                        CreateMatcher(inner);
                                         break;
                                     default:
                                         CreateMatcher(inner);

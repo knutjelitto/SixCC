@@ -5,6 +5,7 @@ using SixBot;
 using Six.Gen;
 using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
+using Six.Runtime.Matchers;
 
 var profile = false;
 var minimal = false;
@@ -26,7 +27,8 @@ else
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
     //Check<CeylonParser>(4, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
-    //Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
+    //Check<CeylonParser>(-1, Sampler.LoadCeylonLanguage().OrderByDescending(s => s.Content.Length));
     Check<CeylonParser>(0, Sampler.LoadCeylonLanguage().Take(1));
     Check<SixParser>(0, Sampler.LoadSix());
     CheckJson(false, Sampler.LoadJson());
@@ -65,6 +67,8 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     var parser = new ParserType();
 
     var maxCounted = 0;
+
+    var indexer = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
 
     foreach (var sample in samples)
     {
@@ -111,7 +115,7 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                     continue;
                 }
 
-                var builder = new SppfBuilder(source, parser);
+                var builder = new SppfBuilder(source, parser, indexer);
                 var root = builder.BuildSppf();
                 if (root != null)
                 {
@@ -155,6 +159,11 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     watch.Stop();
     Console.WriteLine();
     Console.WriteLine($"elapsed: {Math.Round(watch.Elapsed.TotalMilliseconds)} ms");
+
+    using (var writer = $"_rules_index_.txt".Writer())
+    {
+        indexer.Dump(writer);
+    }
 }
 
 void CheckJson(bool enabled, IEnumerable<Sample> samples)

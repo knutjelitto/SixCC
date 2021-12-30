@@ -29,21 +29,10 @@ namespace Six.Gen
 
         public void Init()
         {
-#if true
             foreach (var op in Grammar.Operators.Where(r => r.DFA != null))
             {
                 wl($"{op.RuleId()}.Set({op.DfaId()});");
             }
-#else
-            foreach (var rule in Grammar.Rules.Where(r => r.DFA != null))
-            {
-                wl($"{rule.RuleId()}.Set({rule.DfaId()});");
-            }
-            foreach (var op in Grammar.Others.Where(r => r.DFA != null))
-            {
-                wl($"{op.RuleId()}.Set({op.DfaId()});");
-            }
-#endif
         }
 
         public void Declare()

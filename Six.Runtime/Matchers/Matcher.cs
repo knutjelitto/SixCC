@@ -7,7 +7,7 @@ namespace Six.Runtime.Matchers
         private Matcher[] Matchers = Array.Empty<Matcher>();
         public readonly Dictionary<Cursor, Context> Contexts = new();
         public Dfa.Dfa? Dfa = null;
-
+        public bool IsAlias = false;
 
         protected Matcher(ImplementationCore core, int id, string name)
         {
@@ -57,7 +57,7 @@ namespace Six.Runtime.Matchers
             }
             return null;
         }
-
+        
         public override string ToString()
         {
             return Name;

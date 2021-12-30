@@ -33,7 +33,7 @@ namespace Six.Gen.Ebnf
         public SortedSet<Instance> Instances { get; private set; } = new();
         public bool IsReached { get; set; }
         public bool IsSpare { get; set; }
-        public bool MaybeAlias { get; set; }
+        public bool IsAlias { get; set; }
 
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
@@ -73,7 +73,7 @@ namespace Six.Gen.Ebnf
                 {
                     builder.Append($"[#{Instances.Count}]");
                 }
-                if (MaybeAlias)
+                if (IsAlias)
                 {
                     builder.Append($"[A]");
                 }

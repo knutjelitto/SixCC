@@ -3,7 +3,7 @@
     internal class MaybeAliasWalker : EbnfPredicator<AltOp>
     {
         public MaybeAliasWalker(EbnfGrammar grammar)
-            : base(op => op.MaybeAlias, (op, value)=> op.MaybeAlias = value)
+            : base(op => op.IsAlias, (op, value)=> op.IsAlias = value)
         {
             Grammar = grammar;
         }

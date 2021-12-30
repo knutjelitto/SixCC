@@ -7,12 +7,14 @@ namespace Six.Runtime.Sppf
     {
         private readonly Source source;
         private readonly ParserCore parser;
+        private readonly RuleIndex? ruleIndex;
         private readonly Dictionary<string, Node> cache;
 
-        public SppfBuilder(Source source, ParserCore parser)
+        public SppfBuilder(Source source, ParserCore parser, RuleIndex? ruleIndex = null)
         {
             this.source = source;
             this.parser = parser;
+            this.ruleIndex = ruleIndex;
             cache = new();
         }
 
@@ -472,6 +474,8 @@ namespace Six.Runtime.Sppf
                 }
                 var children = BuildMatcher(matcher, start, end).ToArray();
 
+                Index(role, matcher, start, end);
+
                 return NewNonterminal(role, matcher, start, end, children);
             }
 
@@ -493,10 +497,6 @@ namespace Six.Runtime.Sppf
 
         private Nonterminal NewNonterminal(Role role, Matcher matcher, Cursor start, Cursor end, params Packed[] nodes)
         {
-            if (matcher.Name == "scaleOperator")
-            {
-                Assert(true);
-            }
             var key = Nonterminal.Key(role, matcher, start, end);
 
             if (nodes.Length == 1 && nodes[0].Left == null && true)
@@ -524,6 +524,19 @@ namespace Six.Runtime.Sppf
             return new Packed(matcher, start, end, start, null, right);
         }
 
+        private void Index(Role role, Matcher matcher, Cursor start, Cursor end)
+        {
+            if (ruleIndex != null)
+            {
+                if (role == Role.Rule)
+                {
+                    var name = matcher.Name;
+                    var location = start.Source.Report(start.Offset, end.Offset);
+                    ruleIndex.Add(name, location);
+                }
+            }
+        }
+
         /********** policies */
 
         private IEnumerable<Node> ReduceAlternates(List<Node> nodes)
@@ -532,7 +545,7 @@ namespace Six.Runtime.Sppf
             {
                 Assert(true);
             }
-#if false
+#if true
             return nodes;
 #else
             //

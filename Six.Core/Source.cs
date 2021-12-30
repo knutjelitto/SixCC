@@ -107,6 +107,14 @@
             return $"{name}({line},{column})";
         }
 
+        public string Report(int start, int end)
+        {
+            var name = Name;
+            var (sline, scolumn) = GetLineAndColumn(start);
+            var (eline, ecolumn) = GetLineAndColumn(end);
+            return $"{name}({sline},{scolumn}-{eline},{ecolumn})";
+        }
+
         public string LCO(int offset)
         {
             var name = Name;
