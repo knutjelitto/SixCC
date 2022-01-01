@@ -11,13 +11,6 @@
 
         public override void MatchCore(Context context)
         {
-            if (context.Nexts.Count > 0)
-            {
-                Assert(context.Nexts.Count == 1);
-                context.Success(context.Nexts.First());
-            }
-            Assert(context.Nexts.Count == 0);
-
             context.Core = Core.__MatchWhite(context.Start);
             if (Dfa!.TryMatch(context.Core, out var matched))
             {

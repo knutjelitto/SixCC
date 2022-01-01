@@ -26,14 +26,19 @@ namespace Six.Runtime.Sppf
 
         public void Dump(Writer writer)
         {
-            foreach (var name in rules.Keys.Where(n => rules[n].Count <= 500).OrderBy(n => rules[n].Count))
+            foreach (var name in rules.Keys.OrderBy(n => rules[n].Count))
             {
-                writer.WriteLine(name);
+                writer.WriteLine($"{name} [{rules[name].Count}]");
                 writer.Indent(() =>
                 {
+                    var count = 0;
                     foreach (var location in rules[name])
                     {
                         writer.WriteLine(location);
+                        if (++count >= 10000)
+                        {
+                            break;
+                        }
                     }
                 });
             }

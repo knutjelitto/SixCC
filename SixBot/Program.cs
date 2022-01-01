@@ -9,6 +9,7 @@ using Six.Runtime.Matchers;
 
 var profile = false;
 var minimal = false;
+var indexRules = true;
 
 if (profile)
 {
@@ -26,10 +27,9 @@ else
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    //Check<CeylonParser>(4, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
-    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderByDescending(s => s.Content.Length));
-    //Check<CeylonParser>(-1, Sampler.LoadCeylonLanguage().OrderByDescending(s => s.Content.Length));
-    Check<CeylonParser>(0, Sampler.LoadCeylonLanguage().Take(1));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    //Check<CeylonParser>(9, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    Check<CeylonParser>(0, Sampler.LoadCeylonOrdered());
     Check<SixParser>(0, Sampler.LoadSix());
     CheckJson(false, Sampler.LoadJson());
     CheckGenerate(true);
@@ -68,7 +68,7 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
 
     var maxCounted = 0;
 
-    var indexer = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
+    var indexer = indexRules ? new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name)) : null;
 
     foreach (var sample in samples)
     {
@@ -160,9 +160,12 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     Console.WriteLine();
     Console.WriteLine($"elapsed: {Math.Round(watch.Elapsed.TotalMilliseconds)} ms");
 
-    using (var writer = $"_rules_index_.txt".Writer())
+    if (indexer != null)
     {
-        indexer.Dump(writer);
+        using (var writer = $"_rules_index_.txt".Writer())
+        {
+            indexer.Dump(writer);
+        }
     }
 }
 

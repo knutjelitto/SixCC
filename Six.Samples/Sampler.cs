@@ -78,6 +78,16 @@ namespace Six.Samples
             return LoadCeylon("language", @"D:\SixTmp\ceylon\language\src\ceylon\language").OrderBy(s => s.Name);
         }
 
+        public static IEnumerable<Sample> LoadCeylonOrdered()
+        {
+            return from s in LoadCeylon("language", @"D:\SixTmp\ceylon\language\src\ceylon\language")
+                   where !s.Name.Contains(".meta.")
+                   let x = Path.GetExtension(Path.GetFileNameWithoutExtension(s.Name))
+                   where char.IsUpper(x[1]) && "A".Contains(x[1])
+                   orderby x[1]
+                   select s;
+        }
+
         private static IEnumerable<Sample> LoadCeylon(string prefix, string root)
         {
             foreach (var filepath in Directory.EnumerateFiles(root, "*.ceylon", SearchOption.AllDirectories))

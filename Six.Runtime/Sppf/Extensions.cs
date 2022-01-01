@@ -9,14 +9,14 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
+            Assert(context != null);
+
             return context != null && context.Nexts.Contains(end);
         }
 
-        public static Context? Context(this Matcher matcher, Cursor start, Cursor end)
+        public static IEnumerable<T> Realize<T>(this IEnumerable<T> enumerable)
         {
-            var context = matcher.Context(start);
-
-            return (context != null && context.Nexts.Contains(end)) ? context : null;
+            return enumerable.ToList();
         }
     }
 }

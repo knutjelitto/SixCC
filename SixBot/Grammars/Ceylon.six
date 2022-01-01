@@ -5,7 +5,7 @@
 %keywords   : LIDENTIFIER ;
 
 compilation-unit
-    : hash-tag? ( compilerAnnotations ';' )? unit-elements
+    : hash-tag? unit-elements
     ;
 
 unit-elements
@@ -21,8 +21,8 @@ unit-element
 
 module-descriptor
     : annotations 'module' module-name
-      (import-namespace ':' (literalString | module-name) (':' literalString (':' literalString)? )? )?
-      literalString?
+      (import-namespace ':' (literal-string | module-name) (':' literal-string (':' literal-string)? )? )?
+      literal-string?
       module-body
     ;
 
@@ -31,7 +31,7 @@ module-name
     ;
 
 module-body
-    : '{' ( annotations (inferredAttributeDeclaration | import-module) )* '}'
+    : '{' ( annotations (inferred-attribute-declaration | import-module) )* '}'
     ;
 
 package-descriptor
@@ -39,7 +39,7 @@ package-descriptor
     ;
 
 import-module
-    : 'import' (import-namespace ':')? (literalString | package-path) ( ':' literalString ( ':' literalString )? )? (literalString | member-name)? ';'
+    : 'import' (import-namespace ':')? (literal-string | package-path) ( ':' literal-string ( ':' literal-string )? )? (literal-string | member-name)? ';'
     ;
 
 import-namespace
@@ -56,7 +56,7 @@ import-element-list
     ;
 
 import-element
-    : compilerAnnotations ( import-name ('=' import-name)? import-element-list?)
+    : import-name ('=' import-name)? import-element-list?
     ;
 
 import-wildcard
@@ -93,32 +93,8 @@ type-name
     : UIDENTIFIER
     ;
 
-member-name-declaration
-    : member-name
-    ;
-
-type-name-declaration
-    : type-name
-    ;
-
-enumerated-object
-    : 'new' member-name-declaration? delegated-constructor? block
-    ;
-    
-object-declaration
-    : 'object' member-name-declaration? extended-type? satisfied-types? class-body
-    ;
-
 object-expression
     : 'object' extended-type? satisfied-types? class-body
-    ;
-
-voidOrInferredMethodDeclaration
-    : voidOrFunction member-name-declaration? type-parameters? parameters* type-constraints? (block | functionSpecifier? ';')
-    ;
-
-setter-declaration
-    : 'assign' member-name-declaration (block | functionSpecifier ';')
     ;
 
 variableOrTuplePattern
@@ -132,7 +108,7 @@ pattern
     | variable-pattern
     ;
 
-tupleOrEntryPattern
+tuple-or-entry-pattern
     : entry-pattern
     | tuple-pattern
     ;
@@ -142,74 +118,28 @@ entry-pattern
     ;
 
 tuple-pattern
-    : '[' (variadicPattern (',' variadicPattern)*)? ']'
+    : '[' (variadic-pattern (',' variadic-pattern)*)? ']'
     ;
 
 variable-pattern
     : variable
     ;
 
-variadicPattern
+variadic-pattern
     : variadic-variable
     | pattern
     ;
 
 variadic-variable
-    : compilerAnnotations unionType? ('*' | '+') member-name-declaration?
+    : union-type? ('*' | '+') member-name?
     ;
-
-//destructure
-//    : 'value' tupleOrEntryPattern specifier ';'
-//    ;
 
 destructure
-    : 'let' '(' letVariable (',' letVariable)* ')' ';'
-    ;
-
-inferredAttributeDeclaration
-    : 'value' member-name-declaration (block | functionSpecifier? ';')
-    ;
-
-typedMethodOrAttributeDeclaration
-    : (variadicType | 'dynamic') member-name-declaration
-      ( type-parameters? parameters+ type-constraints? (block | functionSpecifier? ';')
-      | (specifier | lazySpecifier )? ';'
-      | block
-      )
-    ;
-
-interface-declaration
-    : ('interface' | 'dynamic')
-      type-name-declaration
-      type-parameters?
-      case-types?
-      satisfied-types?
-      type-constraints?
-      (interface-body | type-specifier? ';')
-    ;
-
-class-declaration
-    : 'class' 
-      type-name-declaration
-      type-parameters?
-      parameters?
-      case-types?
-      extended-type?
-      satisfied-types?
-      type-constraints?
-      (class-body | class-specifier? ';')
-    ;
-
-constructor
-    : 'new' member-name-declaration? parameters? delegated-constructor? block
+    : 'let' '(' let-variable (',' let-variable)* ')' ';'
     ;
 
 delegated-constructor
-    : 'extends' classInstantiation
-    ;
-
-alias-declaration
-    : 'alias' type-name-declaration type-parameters? type-constraints? type-specifier? ';'
+    : 'extends' class-instatiation
     ;
 
 assertion
@@ -217,7 +147,7 @@ assertion
     ;
 
 assertion-message
-    : stringExpression?
+    : string-expression?
     ;
 
 block
@@ -233,19 +163,19 @@ class-body
     ;
 
 extended-type
-    : 'extends' classInstantiation
+    : 'extends' class-instatiation
     ;
 
 class-specifier
-    : ('=>' | '=') classInstantiation
+    : ('=>' | '=') class-instatiation
     ;
 
-classInstantiation
-    : (package-qualified-class | super-qualified-class | un-qualified-class) (positional-arguments | namedArguments)?
+class-instatiation
+    : (package-qualified-class | super-qualified-class | un-qualified-class) (positional-arguments | named-arguments)?
     ;
 
 super-qualified-class
-    : super-qualifier (typeNameWithArguments | memberNameWithArguments)
+    : super-qualifier (type-reference | member-reference)
     ;
 
 super-qualifier
@@ -253,7 +183,7 @@ super-qualifier
     ;
 
 package-qualified-class
-    : package-qualifier typeNameWithArguments ( '.' memberNameWithArguments)?
+    : package-qualifier type-reference ( '.' member-reference)?
     ;
 
 package-qualifier
@@ -261,12 +191,12 @@ package-qualifier
     ;
 
 un-qualified-class
-    : typeNameWithArguments ( '.' ( memberNameWithArguments | typeNameWithArguments ('.' typeNameWithArguments?)* )? )?
-    | memberNameWithArguments
+    : type-reference ( '.' ( member-reference | type-reference ('.' type-reference)* )? )?
+    | member-reference
     ;
 
 satisfied-types
-    : 'satisfies' primaryType ( ('&' | ',' | '|') primaryType )*
+    : 'satisfies' union-type (',' union-type )*
     ;
 
 case-types
@@ -274,45 +204,45 @@ case-types
     ;
 
 caseType
-    : primaryType 
+    : primary-type
     | member-name
     | package-qualifier member-name
     ;
 
 parameters
-    : '(' (parameterDeclarationOrRefOrPattern  (',' parameterDeclarationOrRefOrPattern)*)? ')'
+    : '(' (parameter-declaration-or-ref-pattern  (',' parameter-declaration-or-ref-pattern)*)? ')'
     ;
 
-parameterDeclarationOrRefOrPattern
-    : tupleOrEntryPattern
-    | parameterDeclarationOrRef
+parameter-declaration-or-ref-pattern
+    : tuple-or-entry-pattern
+    | parameter-declaration-or-ref
     ;
 
-parameterDeclarationOrRef
+parameter-declaration-or-ref
     : parameter
-    | parameterRef
+    | parameter-reference
     ;
 
 parameter
-    : annotations parameterDeclaration
+    : annotations parameter-declaration
     ;
     
-parameterRef
+parameter-reference
     : member-name specifier?
     ;
 
-parameterDeclaration
-    : (variadicType | 'void' | 'function' | 'dynamic' | 'value')
-      member-name-declaration
-      (specifier? | type-parameters? parameters+ functionSpecifier?)
+parameter-declaration
+    : (variadic-type | 'void' | 'function' | 'dynamic' | 'value')
+      member-name
+      (specifier? | type-parameters? parameters+ function-specifier?)
     ;
 
 type-parameters
-    : '<' typeParameter ( ',' typeParameter )* '>'
+    : '<' type-parameter ( ',' type-parameter )* '>'
     ;
 
-typeParameter
-    : compilerAnnotations variance? type-name-declaration typeDefault?
+type-parameter
+    : variance? type-name type-default?
     ;
 
 variance
@@ -320,91 +250,136 @@ variance
     | 'out'
     ;
     
-typeConstraint
-    : compilerAnnotations 'given' type-name-declaration? type-parameters? case-types? satisfied-types?
+type-constraint
+    : 'given' type-name? type-parameters? case-types? satisfied-types?
     ;
 
 type-constraints
-    : typeConstraint+
+    : type-constraint+
     ;
 
 declaration-or-statement
     : declaration
-    | compilerAnnotations (destructure | assertion | statement)
+    | statement
+    | destructure
+    | assertion
     ;
 
 declaration
-    : annotations
-      ( class-declaration
-      | interface-declaration
-      | alias-declaration
-      | object-declaration
-      | setter-declaration
-      | voidOrInferredMethodDeclaration
-      | inferredAttributeDeclaration
-      | typedMethodOrAttributeDeclaration
-      | constructor
-      | enumerated-object
-      )
+    : constructor
+    | enumerated-object
+    | alias-declaration
+    | object-declaration
+    | setter-declaration
+    | typed-method-declaration
+    | inferred-method-declaration
+    | typed-attribute-declaration
+    | inferred-attribute-declaration
+    | class-declaration
+    | interface-declaration
     ;
 
-fullQualifiedType
-    : baseType ('.' typeNameWithArguments)*
+constructor
+    : annotations 'new' member-name? parameters? delegated-constructor? block
+    ;
+
+enumerated-object
+    : annotations 'new' member-name delegated-constructor? block
+    ;
+    
+alias-declaration
+    : annotations 'alias' type-name type-parameters? type-constraints? type-specifier? ';'
+    ;
+
+object-declaration
+    : annotations 'object' member-name extended-type? satisfied-types? class-body
+    ;
+
+setter-declaration
+    : annotations 'assign' member-name (block | function-specifier ';')
+    ;
+
+typed-method-declaration
+    : annotations (variadic-type | 'void' | 'dynamic') member-name type-parameters? parameters+ type-constraints? (block | function-specifier? ';')
+    ;
+
+inferred-method-declaration
+    : annotations 'function' member-name type-parameters? parameters+ type-constraints? (block | function-specifier? ';')
+    ;
+
+typed-attribute-declaration
+    : annotations (variadic-type | 'dynamic') member-name (block | function-specifier? ';')
+    ;
+
+inferred-attribute-declaration
+    : annotations 'value' member-name (block | function-specifier? ';')
+    ;
+
+class-declaration
+    : annotations 'class' 
+      type-name
+      type-parameters?
+      parameters?
+      case-types?
+      extended-type?
+      satisfied-types?
+      type-constraints?
+      (class-body | class-specifier? ';')
+    ;
+
+interface-declaration
+    : annotations ('interface' | 'dynamic')
+      type-name
+      type-parameters?
+      case-types?
+      satisfied-types?
+      type-constraints?
+      (interface-body | type-specifier? ';')
     ;
 
 statement
-    : directiveStatement
-    | controlStatement
-    | expressionOrSpecificationStatement
+    : directive-statement ';'
+    | expression-statement ';'
+    | specification-statement ';'
+    | control-statement
     ;
 
-expressionOrSpecificationStatement
-    : expressionStatement
-    | specificationStatement
-    ;
-
-specificationStatement
-    : valueExpression (specifier | lazySpecifier) ';'
+specification-statement
+    : value-expression lazy-specifier
     ;
     
-expressionStatement
-    : expression ';'
+expression-statement
+    : expression
     ;
 
-directiveStatement
-    : directive ';'
+directive-statement
+    : return-directive
+    | throw-directive
+    | break-directive
+    | continue-directive
     ;
 
-directive
-    : returnDirective
-    | throwDirective
-    | breakDirective
-    | continueDirective
+return-directive
+    : 'return' function-or-expression?
     ;
 
-returnDirective
-    : 'return' function-or-expression
-    | 'return'
+throw-directive
+    : 'throw' function-or-expression?
     ;
 
-throwDirective
-    : 'throw' function-or-expression
-    | 'throw'
-    ;
-
-breakDirective
+break-directive
     : 'break'
     ;
 
-continueDirective
+continue-directive
     : 'continue'
     ;
 
 type-specifier
-    : ('=>' | '=') type?
+    : ('=>' | '=') type
     ;
 
-typeDefault
+type-default
     : '=' type
     ;
 
@@ -412,169 +387,138 @@ specifier
     : '=' function-or-expression
     ;
 
-lazySpecifier
+lazy-specifier
     : '=>' function-or-expression
     ;
 
-functionSpecifier
+function-specifier
     : specifier
-    | lazySpecifier
+    | lazy-specifier
     ;
 
 expression
-    : assignmentExpression
+    : assignment-expression
     ;
 
-base
-    : nonstringLiteral
-    | stringExpression
-    | metaLiteral
-    | enumeration
-    | tuple
-//    | dynamicObject
-    | object-expression
-    | grouped-expression
-    | baseReferenceOrParameterized
-    ;
-
-baseReferenceOrParameterized
+base-reference-or-parameterized
     : member-name type-parameters? parameters+
-    | memberReference
-    | typeReference
-    | selfReference (memberSelectionOperator member-name type-parameters? parameters+)?
+    | member-reference
+    | type-reference
+    | self-reference (member-selection-operator member-name type-parameters? parameters+)?
     ;
 
-memberReference
+member-reference
     : member-name type-arguments?
     ;
 
-typeReference
+type-reference
     : type-name type-arguments?
     ;
 
-primary
-    : primary qualifiedReference
-    | primary indexOrIndexRange
-    | primary positional-arguments
-    | primary namedArguments
-    | base
+qualified-reference
+    : member-selection-operator (member-reference | type-reference)
     ;
 
-qualifiedReference
-    : memberSelectionOperator (memberReference | typeReference)
-    ;
-
-selfReference
+self-reference
     : 'this'
     | 'super' 
     | 'outer'
     | 'package'
     ;
     
-memberSelectionOperator
+member-selection-operator
     : '.'
     | '?.'
     | '*.'
     ;
 
-indexOrIndexRange
-    //TODO: move indexOperator to ElementOrRange and
-    //      make this rule return ElementOrRange instead
-    //      of IndexExpression, instantiating IndexExpression
-    //      from the calling primary rule
+index-or-index-range
     : '['
       ( '...' index
-      | index ( '...' | '..' index | ':' index )?
+      | index '...'
+      | index '..' index
+      | index ':' index
       | function-or-expression
       )
       ']'
     ;
+    
+index
+    : additive-expression 
+    ;
 
 enumeration
-    : '{' declaration-or-statement* sequencedArgument? '}'
+    : '{' declaration-or-statement* sequenced-arguments? '}'
     ;
 
 tuple
-    : '[' sequencedArgument? ']'
-    ;
-    
-//dynamicObject
-//    : 'dynamic' (dynamicArguments | '[' ',' ']')
-//    ;
-//
-//dynamicArguments
-//    : '[' (namedArgument | anonymousArgument)* sequencedArgument? ']'
-//    ;
-
-valueCase
-    : intersectionType 
-    | intersectionExpression 
+    : '[' sequenced-arguments? ']'
     ;
 
-valueCaseList
-    : valueCase ( (',' |'|') valueCase)*
+
+named-arguments
+    : '{' (named-argument | anonymous-argument)* sequenced-arguments? '}'
     ;
 
-index
-    : additiveExpression 
+named-argument
+    : named-specified-argument
+    | named-argument-declaration
     ;
 
-namedArguments
-    : '{' (namedArgument | anonymousArgument)* sequencedArgument? '}'
+named-specified-argument
+    : member-name specifier ';'
     ;
 
-sequencedArgument
-    : compilerAnnotations sequencedArgumentItem (',' sequencedArgumentItem)* 
+sequenced-arguments
+    : sequenced-argument (',' sequenced-argument)* 
     ;
 
-sequencedArgumentItem
+sequenced-argument
     : comprehension
-    | positionalArgument
-    | spreadArgument
+    | positional-argument
+    | spread-argument
     ;
 
-namedArgument
-    : compilerAnnotations (namedSpecifiedArgument | named-argument-declaration)
-    ;
-
-namedSpecifiedArgument
-    : member-name specifier? ';'
-    ;
-
-anonymousArgument
+anonymous-argument
     : function-or-expression ';'
-    ;
-
-object-argument
-    : 'object' member-name-declaration? extended-type? satisfied-types? class-body
-    ;
-
-voidOrInferredMethodArgument
-    : voidOrFunction member-name-declaration? type-parameters? parameters* (block | functionSpecifier? ';')
-    ;
-
-inferredGetterArgument
-    : 'value' member-name-declaration (block | functionSpecifier? ';')
-    ;
-
-typedMethodOrGetterArgument
-    : (type |'dynamic')
-      member-name-declaration
-      ( type-parameters? parameters+ (block | functionSpecifier? ';')
-      | (block | (specifier | lazySpecifier)? ';')
-      )
-    ;
-
-untypedMethodOrGetterArgument
-    : member-name (parameters+ functionSpecifier | lazySpecifier ) ';'
     ;
 
 named-argument-declaration
     : object-argument
-    | typedMethodOrGetterArgument
-    | voidOrInferredMethodArgument
-    | inferredGetterArgument
-    | untypedMethodOrGetterArgument
+    | typed-method-argument
+    | inferred-method-argument
+    | untyped-method-argument
+    | typed-getter-argument
+    | inferred-getter-argument
+    | untyped-getter-argument
+    ;
+
+object-argument
+    : 'object' member-name? extended-type? satisfied-types? class-body
+    ;
+
+typed-method-argument
+    : (type | 'dynamic' | 'void') member-name type-parameters? parameters+ (block | function-specifier? ';')
+    ;
+
+typed-getter-argument
+    : (type |'dynamic') member-name (block | function-specifier? ';')
+    ;
+
+inferred-method-argument
+    : 'function' member-name? type-parameters? parameters (block | function-specifier? ';')
+    ;
+
+inferred-getter-argument
+    : 'value' member-name (block | function-specifier? ';')
+    ;
+
+untyped-method-argument
+    : member-name parameters+ function-specifier ';'
+    ;
+
+untyped-getter-argument
+    : member-name lazy-specifier ';'
     ;
 
 grouped-expression
@@ -582,99 +526,94 @@ grouped-expression
     ;
         
 positional-arguments
-    : '(' sequencedArgument? ')'
+    : '(' sequenced-arguments? ')'
     ;
 
-positionalArgument
+positional-argument
     : function-or-expression
+    | declaration-reference
     ;
 
-spreadArgument
-    : '*' unionExpression
+spread-argument
+    : '*' union-expression
     ;
 
 function-or-expression
-    : anonymousFunction
-    | letClause
-    | ifExpression
-    | switchExpression
+    : let-clause
+    | if-expression
+    | switch-expression
     | expression
+    | anonymous-function
     ;
 
-letVariable
-    : pattern specifier?
+let-variable
+    : pattern specifier
     ;
 
-letClause
-    : 'let' '(' (letVariable (',' letVariable)*)? ')' conditionalBranch
+let-clause
+    : 'let' '(' (let-variable (',' let-variable)*)? ')' conditional-branch
     ;
 
-switchExpression
-    : switchHeader
-      caseExpressions
+switch-expression
+    : switch-header case-expressions
     ;
 
-caseExpressions
-    : caseExpression+ elseExpression?
+case-expressions
+    : case-expression+ else-expression?
     ;
     
-caseExpression
-    : 'else'? 'case' caseItemList conditionalBranch
+case-expression
+    : 'else'? 'case' case-item-list conditional-branch
     ;
 
-elseExpression
-    : 'else' conditionalBranch
+else-expression
+    : 'else' conditional-branch
     ;
 
-ifExpression
-    : 'if' conditions thenExpression elseExpression
+if-expression
+    : 'if' conditions then-expression else-expression
     ;
 
-conditionalBranch
-    : ifExpression
-    | letClause
-    | disjunctionExpression
+conditional-branch
+    : if-expression
+    | let-clause
+    | disjunction-expression
     ;
 
-thenExpression
-    : 'then' conditionalBranch
+then-expression
+    : 'then' conditional-branch
     ;
 
-anonymousFunction
-    : voidOrFunction? type-parameters? (parameters+ type-constraints?)? ('=>' function-or-expression | block)
-    ;
-
-voidOrFunction
-    : 'void'
-    | 'function'
+anonymous-function
+    : ('void' | 'function')? type-parameters? (parameters+ type-constraints?)? (block | lazy-specifier)
     ;
 
 comprehension
-    : forComprehensionClause
-    | ifComprehensionClause
+    : for-comprehension-clause
+    | if-comprehension-clause
     ;
 
-comprehensionClause
-    : forComprehensionClause 
-    | ifComprehensionClause 
-    | expressionComprehensionClause 
+comprehension-clause
+    : for-comprehension-clause 
+    | if-comprehension-clause 
+    | expression-comprehension-clause 
     ;
 
-expressionComprehensionClause
+expression-comprehension-clause
     : function-or-expression
     ;
 
-forComprehensionClause
-    : 'for' forIterator comprehensionClause
+for-comprehension-clause
+    : 'for' for-iterator comprehension-clause
     ;
     
-ifComprehensionClause
-    : 'if' conditions comprehensionClause
+if-comprehension-clause
+    : 'if' conditions comprehension-clause
     ;
     
-assignmentExpression
-    : thenElseExpression assignmentOperator function-or-expression
-    | thenElseExpression
+assignment-expression
+    : then-else-expression assignmentOperator function-or-expression
+    | then-else-expression
     ;
 
 assignmentOperator
@@ -691,84 +630,84 @@ assignmentOperator
     | '||='
     ;
 
-thenElseExpression
-    : thenElseExpression thenElseOperator disjunctionExpression
-    | disjunctionExpression
+then-else-expression
+    : then-else-expression then-else-operator disjunction-expression
+    | disjunction-expression
     ;
 
-thenElseOperator
+then-else-operator
     : 'else' 
     | 'then'
     ;
 
-disjunctionExpression
-    : disjunctionExpression disjunctionOperator conjunctionExpression
-    | conjunctionExpression
+disjunction-expression
+    : disjunction-expression disjunction-operator conjunction-expression
+    | conjunction-expression
     ;
 
-disjunctionOperator
+disjunction-operator
     : '||' 
     ;
 
-conjunctionExpression
-    : conjunctionExpression conjunctionOperator logicalNegationExpression
+conjunction-expression
+    : conjunction-expression conjunction-operator logicalNegationExpression
     | logicalNegationExpression
     ;
 
-conjunctionOperator
+conjunction-operator
     : '&&' 
     ;
 
 logicalNegationExpression
-    : notOperator logicalNegationExpression
+    : not-operator logicalNegationExpression
     | expressionOrMeta
     ;
 
-notOperator
+not-operator
     : '!' 
     ;
 
 expressionOrMeta
-    : modelRef
-    | equalityExpression
+    : model-reference
+    | equality-expression
     ;
 
-equalityExpression
-    : comparisonExpression equalityOperator comparisonExpression
-    | comparisonExpression
+equality-expression
+    : comparison-expression equality-operator comparison-expression
+    | comparison-expression
     ;
 
-equalityOperator
+equality-operator
     : '==' 
     | '!='
     | '==='
     ;
 
-comparisonExpression
-    : existenceEmptinessExpression comparisonOperator existenceEmptinessExpression
-    | existenceEmptinessExpression largerOperator existenceEmptinessExpression
-    | existenceEmptinessExpression smallerOperator existenceEmptinessExpression smallerOperator existenceEmptinessExpression
-    | existenceEmptinessExpression smallerOperator existenceEmptinessExpression
-    | existenceEmptinessExpression typeOperator type
+comparison-expression
+    : existenceEmptinessExpression comparison-operator existenceEmptinessExpression
+    | existenceEmptinessExpression larger-operator existenceEmptinessExpression
+    | existenceEmptinessExpression smaller-operator existenceEmptinessExpression smaller-operator existenceEmptinessExpression
+    | existenceEmptinessExpression smaller-operator existenceEmptinessExpression
+    | existenceEmptinessExpression type-operator type
     | existenceEmptinessExpression
     ;
 
-smallerOperator
+smaller-operator
     : '<='
     | '<'
     ;
 
-largerOperator
+larger-operator
     : '>='
     | '>'
     ;
 
-comparisonOperator
+comparison-operator
     : '<=>' 
     | 'in'
     ;
 
-typeOperator
+type-operator
     : 'is'
     | 'extends'
     | 'satisfies'
@@ -786,8 +725,8 @@ existsNonemptyOperator
     ;
 
 entryRangeExpression
-    : additiveExpression rangeIntervalEntryOperator additiveExpression
-    | additiveExpression
+    : additive-expression rangeIntervalEntryOperator additive-expression
+    | additive-expression
     ;
 
 rangeIntervalEntryOperator
@@ -796,58 +735,58 @@ rangeIntervalEntryOperator
     | '->'
     ;
 
-additiveExpression
-    : additiveExpression additiveOperator scaleExpression
-    | scaleExpression
+additive-expression
+    : additive-expression additive-operator scale-expression
+    | scale-expression
     ;
 
-additiveOperator
+additive-operator
     : '+' 
     | '-'
     ;
 
-scaleExpression
-    : multiplicativeExpression scaleOperator scaleExpression
-    | multiplicativeExpression
+scale-expression
+    : multiplicative-expression scale-operator scale-expression
+    | multiplicative-expression
     ;
 
-scaleOperator
+scale-operator
     : '**' 
     ;
 
-multiplicativeExpression
-    : multiplicativeExpression multiplicativeOperator unionExpression
-    | unionExpression
+multiplicative-expression
+    : multiplicative-expression multiplicative-operator union-expression
+    | union-expression
     ;
 
-multiplicativeOperator
+multiplicative-operator
     : '*' 
     | '/'
     | '%'
     ;
 
-unionExpression
-    : unionExpression unionOperator intersectionExpression
-    | intersectionExpression
+union-expression
+    : union-expression union-operator intersection-expression
+    | intersection-expression
     ;
     
-unionOperator
+union-operator
     : '|'
     | '~'
     ;
 
-intersectionExpression
-    : intersectionExpression intersectionOperator negationComplementExpression
+intersection-expression
+    : intersection-expression intersection-operator negationComplementExpression
     | negationComplementExpression
     ;
     
-intersectionOperator
+intersection-operator
     : '&'
     ;
 
 negationComplementExpression
     : unaryMinusOrComplementOperator negationComplementExpression
-    | exponentiationExpression
+    | exponentiation-expression
     ;
 
 unaryMinusOrComplementOperator
@@ -856,12 +795,12 @@ unaryMinusOrComplementOperator
     | '~'
     ;
 
-exponentiationExpression
-    : incrementDecrementExpression exponentiationOperator exponentiationExpression
+exponentiation-expression
+    : incrementDecrementExpression exponentiation-operator exponentiation-expression
     | incrementDecrementExpression
     ;
 
-exponentiationOperator
+exponentiation-operator
     : '^' 
     ;
 
@@ -877,12 +816,7 @@ prefixOperator
 
 postfixIncrementDecrementExpression
     : postfixIncrementDecrementExpression postfixOperator
-    | valueExpression
-    ;
-
-valueExpression
-    : declaration-ref
-    | primary
+    | value-expression
     ;
 
 postfixOperator
@@ -890,292 +824,301 @@ postfixOperator
     | '++' 
     ;
 
-nonstringLiteral
-    : literalNatural 
-    | literalFloat 
-    | literalChar 
+value-expression
+    : primary
     ;
 
-stringLiteral
-    : literalString 
-    | verbatimString
+primary
+    : primary qualified-reference
+    | primary index-or-index-range
+    | primary positional-arguments
+    | primary named-arguments
+    | base
     ;
 
-stringExpression
-    : stringLiteral
-    | stringStart function-or-expression (stringMid function-or-expression)* stringEnd
+base
+    : nonstring-literal
+    | string-expression
+    | meta-literal
+    | enumeration
+    | tuple
+    | object-expression
+    | grouped-expression
+    | base-reference-or-parameterized
+    ;
+
+nonstring-literal
+    : literal-natural 
+    | literal-float 
+    | literal-char 
+    ;
+
+string-literal
+    : literal-string 
+    | verbatim-string
+    ;
+
+string-expression
+    : string-literal
+    | string-start function-or-expression (string-mid function-or-expression)* string-end
     ;
 
 type-arguments
     : '<' ( ( variance type? | type) (',' (variance type | type) )* )? '>'
     ;
 
-defaultedType
+defaulted-type
     : type '='
-    | variadicType
+    | variadic-type
     ;
 
-variadicType
-    : unionType ('*' | '+')
+variadic-type
+    : union-type ('*' | '+')
     | type
     ;
 
-spreadType
-    : '*' unionType?
+spread-type
+    : '*' union-type?
     ;
 
-tupleType
-    : '[' (spreadType | defaultedType (',' defaultedType )*)? ']'
+type
+    : entry-type
+    | union-type
     ;
 
-groupedType
+entry-type
+    : union-type '->' union-type
+    ;
+
+union-type
+    : union-type '|' intersection-type
+    | intersection-type
+    ;
+
+intersection-type
+    : intersection-type '&' primary-type
+    | primary-type
+    ;
+
+primary-type
+    : nullable-type
+    | array-type
+    | function-type
+    | atomic-type
+    ;
+
+nullable-type
+    : primary-type '?'
+    ;
+
+array-type
+    : primary-type '[' literal-natural? ']'
+    ;
+
+function-type
+    : primary-type '(' ( spread-type | defaulted-type (',' defaulted-type)* )? ')'
+    ;
+
+atomic-type
+    : qualified-type
+    | tuple-type
+    | iterable-type
+    ;
+
+qualified-type
+    : qualified-type '.' type-reference
+    | package-qualifier? type-reference
+    | grouped-type
+    ;
+    
+tuple-type
+    : '[' (spread-type | defaulted-type (',' defaulted-type )*)? ']'
+    ;
+
+iterable-type
+   : '{' variadic-type? '}'
+   ;
+
+grouped-type
     : '<' type '>'
     ;
 
-iterableType
-   : '{' variadicType? '}'
-   ;
-
-type
-    : type-parameters '=>' entryType
-    | entryType
-    ;
-
-entryType
-    : unionType '->' unionType
-    | unionType
-    ;
-
-unionType
-    : unionType '|' intersectionType
-    | intersectionType
-    ;
-
-intersectionType
-    : intersectionType '&' primaryType
-    | primaryType
-    ;
-
-
-primaryType
-    : primaryType '?'
-    | primaryType '[' literalNatural? ']'
-    | primaryType '(' ( spreadType | defaultedType (',' defaultedType)* )? ')'
-    | atomicType
-    ;
-
-atomicType
-    : qualifiedType 
-    | tupleType 
-    | iterableType
-    ;
-
-baseType
-    : typeNameWithArguments
-    | groupedType
-    | package-qualifier typeNameWithArguments
-    ;
-
-qualifiedType
-    : qualifiedType '.' typeNameWithArguments
-    | baseType
-    ;
-
-typeNameWithArguments
-    : type-name type-arguments?
-    ;
-    
-memberNameWithArguments
-    : member-name type-arguments?
-    ;
-    
 annotations
-    : compilerAnnotations entityAnnotations
+    : string-literal? annotation*
     ;
 
-compilerAnnotations
-    : compilerAnnotation*
-    ;
-    
-compilerAnnotation
-    : ('$' | '@' | '#') annotation-name (':' stringLiteral)?
-    ;
-
-entityAnnotations
-    : stringLiteral? entityAnnotation*
-    ;
-
-entityAnnotation
-    : annotation-name ( positional-arguments | namedArguments )?
+annotation
+    : annotation-name ( positional-arguments | named-arguments )?
     ;
 
 conditions
-    : '(' ( condition ( ',' condition )* )? ')'
+    : '(' condition-list? ')'
+    ;
+
+condition-list
+    : condition (',' condition)*
     ;
 
 condition
-    : existsCondition
-    | nonemptyCondition
-    | isCondition 
-    | satisfiesCondition
-    | booleanCondition
+    : exists-condition
+    | nonempty-condition
+    | is-condition 
+    | satisfies-condition
+    | boolean-condition
     ;
     
-existsCondition
-    : '!'? 'exists' (letVariable | impliedVariable | expression)
+exists-condition
+    : '!'? 'exists' (let-variable | expression)
     ;
     
-nonemptyCondition
-    : '!'? 'nonempty' (letVariable | impliedVariable | expression)
+nonempty-condition
+    : '!'? 'nonempty' (let-variable | expression)
     ;
 
-isCondition
-    : '!'? 'is' type (isConditionVariable | impliedVariable)
+is-condition
+    : '!'? 'is' type is-condition-variable
     ;
 
-isConditionVariable
-    : member-name-declaration specifier
+is-condition-variable
+    : member-name specifier?
     ;
 
-satisfiesCondition
+satisfies-condition
     : 'satisfies' type type-name
     ;
 
-booleanCondition
+boolean-condition
     : function-or-expression
     ;
 
-controlStatement
-    : ifElse 
-    | switchCaseElse 
-    | whileLoop 
-    | forElse 
-    | tryCatchFinally
+control-statement
+    : if-else
+    | switch-case-else 
+    | while-loop
+    | for-else
+    | try-catch-finally
     | dynamic
     ;
 
-controlBlock
+control-block
     : block
     ;
 
 dynamic
-    : dynamicClause
-    ;
-    
-dynamicClause
     : 'dynamic' block
     ;
 
-ifElse
-    : ifBlock elseBlock?
+if-else
+    : if-block else-block?
     ;
 
-ifBlock
-    : 'if' conditions controlBlock
+if-block
+    : 'if' conditions control-block
     ;
 
-elseBlock
-    : 'else' (elseIf | block)
+else-block
+    : 'else' (if-else | block)
     ;
 
-elseIf
-    : ifElse
+switch-case-else
+    : switch-header cases
     ;
 
-switchCaseElse
-    : switchHeader 
-      cases
-    ;
-
-switchHeader
-    : 'switch' '(' switched? ')'
-    ;
-
-compilerAnnotationStart
-    : '$' | '@'
+switch-header
+    : 'switch' '(' switched ')'
     ;
 
 switched
-    : (specifiedVariable | expression)
+    : specified-variable
+    | expression
     ;
 
 cases
-    : caseBlock+ elseBlock?
+    : case-block+ else-block?
     ;
     
-caseBlock
-    : 'else'? 'case' caseItemList block
+case-block
+    : 'else'? 'case' case-item-list block
     ;
 
-caseItemList
-    : '(' caseItem? ')' 
+case-item-list
+    : '(' case-item ')' 
     ;
 
-caseItem
-    : isCaseCondition 
-    | satisfiesCaseCondition
-    | matchCaseCondition
+case-item
+    : is-case-condition
+    | satisfies-case-condition
+    | match-case-condition
     | pattern
     ;
 
-matchCaseCondition
-    : valueCaseList
+is-case-condition
+    : 'is'? type
     ;
 
-isCaseCondition
-    : 'is'? type '.'?
-    ;
-
-satisfiesCaseCondition
+satisfies-case-condition
     : 'satisfies' type
     ;
 
-forElse
-    : forBlock failBlock?
+match-case-condition
+    : value-case-list
     ;
 
-forBlock
-    : 'for' forIterator controlBlock
+value-case-list
+    : value-case ( (',' | '|') value-case)*
     ;
 
-failBlock
-    : 'else' controlBlock
+value-case
+    : intersection-type
+    | intersection-expression 
     ;
 
-forIterator
-    : '(' ( (tupleOrEntryPattern | variable) containment? )? ')'
+for-else
+    : for-block fail-block?
+    ;
+
+for-block
+    : 'for' for-iterator control-block
+    ;
+
+fail-block
+    : 'else' control-block
+    ;
+
+for-iterator
+    : '(' ( (tuple-or-entry-pattern | variable) containment? )? ')'
     ;
     
 containment
     : ('in' | ':') expression?
     ;
     
-whileLoop
-    : whileBlock
+while-loop
+    : while-block
     ;
 
-whileBlock
-    : 'while' conditions controlBlock
+while-block
+    : 'while' conditions control-block
     ;
 
-tryCatchFinally
-    : tryBlock catchBlock* finallyBlock?
+try-catch-finally
+    : try-block catch-block* finally-block?
     ;
 
-tryBlock
-    : 'try' (resources controlBlock | block)
+try-block
+    : 'try' (resources control-block | block)
     ;
 
-catchBlock
-    : 'catch' catchVariable controlBlock
+catch-block
+    : 'catch' catch-variable control-block
     ;
 
-catchVariable
+catch-variable
     : '(' variable? ')' 
     ;
 
-finallyBlock
-    : 'finally' controlBlock
+finally-block
+    : 'finally' control-block
     ;
 
 resources
@@ -1183,184 +1126,176 @@ resources
     ;
 
 resource
-    : specifiedVariable
+    : specified-variable
     | expression
     ;
 
-specifiedVariable
-    : variable specifier?
+specified-variable
+    : variable specifier
     ;
 
 variable
-    : compilerAnnotations var
-    ;
-    
-var
-    : (type | 'void' | 'function' | 'value') member-name-declaration parameters*
+    : (type | 'void' | 'function' | 'value') member-name parameters*
     | member-name parameters*
     ;
 
-impliedVariable
-    : member-name 
-    ;
+reference-path
+    : package-qualifier? reference-path-element ('.' reference-path-element)*
+    ; 
 
-referencePathElement
+reference-path-element
     : type-name 
     | member-name
     ;
     
-referencePath
-    : ( referencePathElement | package-qualifier referencePathElement ) ('.' referencePathElement)*
-    ; 
-
-moduleLiteral
+module-literal
  : 'module' package-path?
  ;
 
-packageLiteral
+package-literal
  : 'package' package-path?
  ;
 
-classLiteral
- : 'class' referencePath?
+class-literal
+ : 'class' reference-path
  ;
 
-interfaceLiteral
- : 'interface' referencePath?
+interface-literal
+ : 'interface' reference-path
  ;
 
-aliasLiteral
- : 'alias' referencePath?
+alias-literal
+ : 'alias' reference-path
  ;
 
-typeParameterLiteral
- : 'given' referencePath?
+type-parameter-literal
+ : 'given' reference-path
  ;
 
-newLiteral
- : 'new' referencePath?
+new-literal
+ : 'new' reference-path
  ;
 
-valueLiteral
-  : ('value' | 'object') referencePath
+value-literal
+  : ('value' | 'object') reference-path
   ;
 
-functionLiteral
-  : 'function' referencePath
+function-literal
+  : 'function' reference-path
   ;
 
-memberPathElement
+member-path-element
     : member-name type-arguments?
     ;
     
 
-memberModelExpression
-    : memberPathElement 
-    | package-qualifier memberPathElement
-    | primaryType '.' memberPathElement
+member-model-expression
+    : member-path-element 
+    | package-qualifier member-path-element
+    | primary-type '.' member-path-element
     ; 
 
-typeModelExpression
+type-model-expression
     : type
     ;
 
-modelExpression
-  : memberModelExpression
-  | typeModelExpression
+model-expression
+  : member-model-expression
+  | type-model-expression
   ;
 
-metaLiteral
-    : '`' (declaration-ref | modelExpression) '`'
+meta-literal
+    : '`' (declaration-reference | model-expression) '`'
     ;
 
-modelRef
-    : '^' modelExpression
+model-reference
+    : '^' model-expression
     ;
     
-declaration-ref
-    : moduleLiteral
-    | packageLiteral
-    | classLiteral
-    | newLiteral
-    | interfaceLiteral
-    | aliasLiteral
-    | typeParameterLiteral
-    | valueLiteral
-    | functionLiteral
+declaration-reference
+    : module-literal
+    | package-literal
+    | class-literal
+    | new-literal
+    | interface-literal
+    | alias-literal
+    | type-parameter-literal
+    | value-literal
+    | function-literal
     ;
 
 
 // Lexer
 
-decimalDigits
-    : decimalDigit ('_' | decimalDigit)*
+decimal-digits
+    : decimal-digit ('_' | decimal-digit)*
     ;
 
-hexDigits
-    : hexDigit ('_' | hexDigit)*
+hex-digits
+    : hex-digit ('_' | hex-digit)*
     ;
 
-binaryDigits
-    : binaryDigit ('_' | binaryDigit)*
+binary-digits
+    : binary-digit ('_' | binary-digit)*
     ;
 
 exponent
-    : ( 'e' | 'E' ) ( '+' | '-' )? decimalDigit*
+    : ( 'e' | 'E' ) ( '+' | '-' )? decimal-digit*
     ;
 
 magnitude
     : 'k' | 'M' | 'G' | 'T' | 'P'
     ;
 
-fractionalMagnitude
+fractional-magnitude
     : 'm' | 'u' | 'n' | 'p' | 'f'
     ;
     
-literalFloat
-    : < decimalDigits ( '.' decimalDigits (exponent | magnitude | fractionalMagnitude)? | fractionalMagnitude) >
+literal-float
+    : < decimal-digits ( '.' decimal-digits (exponent | magnitude | fractional-magnitude)? | fractional-magnitude) >
     ;
 
-literalNatural
-    : < decimalDigits magnitude? | '#' hexDigits | '$' binaryDigits >
+literal-natural
+    : < decimal-digits magnitude? | '#' hex-digits | '$' binary-digits >
     ;
 
-literalChar
-    : < '\'' charPart '\'' >
+literal-char
+    : < '\'' char-part '\'' >
     ;
 
-stringStart
-    : < '"' stringPart '``' >
+string-start
+    : < '"' string-part '``' >
     ;
 
-stringMid
-    : < '``' stringPart '``' >
+string-mid
+    : < '``' string-part '``' >
     ;
 
-stringEnd
-    : < '``' stringPart '`'* '"' >
+string-end
+    : < '``' string-part '`'* '"' >
     ;
 
-literalString
-    : < '"' stringPart '`'* '"' >
+literal-string
+    : < '"' string-part '`'* '"' >
     ;
 
-verbatimString
+verbatim-string
     : < '"""' (~'"' | '"' ~'"' | '""' ~'"')* ('"' ('"' ('"' ('"' '"'?)?)?)?)? >
     ;
 
-charPart
-    : ( ~('\\' | '\'') | escapeSequence )*
+char-part
+    : ( ~('\\' | '\'') | escape-sequence )*
     ;
 
-stringPart
-    : ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escapeCore | escapeSequence )*
+string-part
+    : ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escape-core | escape-sequence )*
     ;
 
-escapeSequence
+escape-sequence
     : '\\' (~'{' | '{' (~'}')* '}' )
     ;
 
-escapeCore
+escape-core
     : ~'{'
     | '{' (~'}')* '}'?
     ;
@@ -1374,31 +1309,31 @@ white
     : ( ' ' | '\r' | '\t' | '\f' | '\n' )+
     ;
 
-lineEnd
+line-end
     : '\r' '\n'
     | '\n'
     | '\r'
     ;
 
-lineEnder
+line-ender
     : '\r'
     | '\n'
     ;
 
 comment
-    : lineComment
-    | blockComment
+    : line-comment
+    | block-comment
     ;
 
 hash-tag
-    : < '#!' (~lineEnder)* lineEnd? >
+    : < '#!' (~line-ender)* line-end? >
     ;
 
-lineComment
-    :   '//' (~lineEnder)* lineEnd?
+line-comment
+    :   '//' (~line-ender)* line-end?
     ;   
 
-blockComment
+block-comment
     : '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
     ;
 
@@ -1429,7 +1364,7 @@ UIdentifierPrefix
     
 IdentifierPart
     :   '_'
-    |   decimalDigit
+    |   decimal-digit
     |   Letter
     ;
 
@@ -1439,14 +1374,14 @@ Letter
     | '\u{0080}'..'\u{ffff}'
     ;
 
-decimalDigit
+decimal-digit
     : '0'..'9'
     ;
 
-hexDigit
+hex-digit
     : '0'..'9' | 'A'..'F' | 'a'..'f'
     ;
 
-binaryDigit
+binary-digit
     : '0' | '1'
     ;

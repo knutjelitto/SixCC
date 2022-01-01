@@ -745,18 +745,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\and.ceylon" Link="Ceylon\language\and.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Annotated.ceylon" Link="Ceylon\language\Annotated.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Annotation.ceylon" Link="Ceylon\language\Annotation.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\annotations.ceylon" Link="Ceylon\language\annotations.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\any.ceylon" Link="Ceylon\language\any.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Anything.ceylon" Link="Ceylon\language\Anything.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\apply.ceylon" Link="Ceylon\language\apply.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Array.ceylon" Link="Ceylon\language\Array.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\arrayOfSize.ceylon" Link="Ceylon\language\arrayOfSize.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\ArraySequence.ceylon" Link="Ceylon\language\ArraySequence.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\AssertionError.ceylon" Link="Ceylon\language\AssertionError.ceylon" />
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Basic.ceylon" Link="Ceylon\language\Basic.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Annotated.ceylon" Link="Ceylon\language\Annotated.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Annotation.ceylon" Link="Ceylon\language\Annotation.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Anything.ceylon" Link="Ceylon\language\Anything.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Array.ceylon" Link="Ceylon\language\Array.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\ArraySequence.ceylon" Link="Ceylon\language\ArraySequence.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\AssertionError.ceylon" Link="Ceylon\language\AssertionError.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\apply.ceylon" Link="Ceylon\language\apply.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\and.ceylon" Link="Ceylon\language\and.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\arrayOfSize.ceylon" Link="Ceylon\language\arrayOfSize.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\annotations.ceylon" Link="Ceylon\language\annotations.ceylon" />
+		<EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Basic.ceylon" Link="Ceylon\language\Basic.ceylon" />
 	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Binary.ceylon" Link="Ceylon\language\Binary.ceylon" />
 	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\Boolean.ceylon" Link="Ceylon\language\Boolean.ceylon" />
 	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\byDecreasing.ceylon" Link="Ceylon\language\byDecreasing.ceylon" />
@@ -874,10 +873,6 @@
 	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\vmArguments.ceylon" Link="Ceylon\language\vmArguments.ceylon" />
 	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\zip.ceylon" Link="Ceylon\language\zip.ceylon" />
 	  <EmbeddedResource Include="..\SixBot\Grammars\Ceylon.six" Link="Six\Ceylon.six" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="..\..\SixTmp\ceylon\language\src\ceylon\language\_test_.ceylon" Link="Ceylon\language\_test_.ceylon" />
 	</ItemGroup>
 
 </Project>

@@ -42,7 +42,7 @@ namespace Six.Runtime.Sppf
             return node;
         }
 
-        private Node? Build(Matcher matcher, Cursor start, Cursor end)
+        private Symbol? Build(Matcher matcher, Cursor start, Cursor end)
         {
             switch (matcher)
             {
@@ -70,29 +70,30 @@ namespace Six.Runtime.Sppf
                     return BuildString(match, start, end);
                 case Matchers.Range match:
                     return BuildRange(match, start, end);
-                case Not match:
-                    return BuildNot(match, start, end);
+                case Not:
+                    // drop from film set
+                    return null;
                 default:
                     throw new NotImplementedException($"can't build node for '{matcher.GetType().Name}'");
             }
         }
 
-        private Node? BuildStartRule(StartRule rule, Cursor start, Cursor end)
+        private Symbol? BuildStartRule(StartRule rule, Cursor start, Cursor end)
         {
             return BuildRule(Role.Start, rule, start, end);
         }
 
-        private Node? BuildPlainRule(PlainRule rule, Cursor start, Cursor end)
+        private Symbol? BuildPlainRule(PlainRule rule, Cursor start, Cursor end)
         {
             return BuildRule(Role.Rule, rule, start, end);
         }
 
-        private Node? BuildDfaRule(DfaRule rule, Cursor start, Cursor end)
+        private Symbol? BuildDfaRule(DfaRule rule, Cursor start, Cursor end)
         {
             return BuildRule(Role.Rule, rule, start, end);
         }
 
-        private Node? BuildRule(Role role, Rule rule, Cursor start, Cursor end)
+        private Symbol? BuildRule(Role role, Rule rule, Cursor start, Cursor end)
         {
             if (rule.CanMatch(start, end))
             {
@@ -109,7 +110,7 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildSeq(Seq matcher, Cursor start, Cursor end)
+        private Symbol? BuildSeq(Seq matcher, Cursor start, Cursor end)
         {
             var packeds = BuildMatcher(matcher, start, end).ToArray();
 
@@ -118,7 +119,7 @@ namespace Six.Runtime.Sppf
             return nonterminal;
         }
 
-        private Node? BuildOptional(Optional matcher, Cursor start, Cursor end)
+        private Symbol? BuildOptional(Optional matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -134,14 +135,7 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildNot(Not matcher, Cursor start, Cursor end)
-        {
-            // drop from tree
-
-            return null;
-        }
-
-        private Node? BuildAlt(Alt matcher, Cursor start, Cursor end)
+        private Symbol? BuildAlt(Alt matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -166,7 +160,10 @@ namespace Six.Runtime.Sppf
 
                     foreach (var child in children)
                     {
-                        var packed = NewPacked(matcher, start, end, child);
+                        Assert(child.Start == start);
+                        Assert(child.End == end);
+
+                        var packed = NewPacked(matcher, child);
 
                         packeds.Add(packed);
                     }
@@ -180,17 +177,17 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildStar(Star matcher, Cursor start, Cursor end)
+        private Symbol? BuildStar(Star matcher, Cursor start, Cursor end)
         {
             return BuildLoop(Role.Star, matcher, start, end);
         }
 
-        private Node? BuildPlus(Plus matcher, Cursor start, Cursor end)
+        private Symbol? BuildPlus(Plus matcher, Cursor start, Cursor end)
         {
             return BuildLoop(Role.Plus, matcher, start, end);
         }
 
-        private Node? BuildLoop(Role role, Matcher matcher, Cursor start, Cursor end)
+        private Symbol? BuildLoop(Role role, Matcher matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -213,7 +210,7 @@ namespace Six.Runtime.Sppf
 
                         if (result != null)
                         {
-                            var packed = NewPacked(matcher, result.Start, next.End, result.End, result, next);
+                            var packed = NewPacked(matcher, result, next);
                             result = NewIntermediate(matcher, result.Start, next.End, i + 1, packed);
                         }
                         else
@@ -224,7 +221,10 @@ namespace Six.Runtime.Sppf
 
                     if (result != null)
                     {
-                        var packed = NewPacked(matcher, start, end, result);
+                        Assert(result.Start == start);
+                        Assert(result.End == end);
+
+                        var packed = NewPacked(matcher, result);
                         packeds.Add(packed);
                     }
                 }
@@ -239,13 +239,13 @@ namespace Six.Runtime.Sppf
 
         private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
         {
-            var partitions = FindPartitions(matcher, 0, start, end).ToList();
+            var partitions = FindPartitions(matcher, 0, start, end).Realize();
 
             var packeds = new List<Packed>();
 
             foreach (var partition in partitions)
             {
-                var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).ToList();
+                var partials = BuildPackedPartitioned(matcher, matcher.Count, partition).Realize();
 
                 foreach (var partial in partials)
                 {
@@ -275,7 +275,7 @@ namespace Six.Runtime.Sppf
                         Assert(right.Start == extend.Start);
                         Assert(right.End == extend.End);
 
-                        yield return NewPacked(matcher, extend.Start, extend.End, extend.Start, null, right);
+                        yield return NewPacked(matcher, right);
                     }
                     else
                     {
@@ -283,7 +283,7 @@ namespace Six.Runtime.Sppf
 
                         if (left != null)
                         {
-                            yield return NewPacked(matcher, left.Start, right.End, left.End, left, right);
+                            yield return NewPacked(matcher, left, right);
                         }
                     }
                 }
@@ -317,7 +317,7 @@ namespace Six.Runtime.Sppf
                     {
                         Assert(right.End == extend.End);
 
-                        var packed = NewPacked(matcher, left.Start, right.End, left.End, left, right);
+                        var packed = NewPacked(matcher, left, right);
 
                         var intermediate = NewIntermediate(matcher, packed.Start, packed.End, dot + 1, packed);
 
@@ -374,12 +374,12 @@ namespace Six.Runtime.Sppf
 
                 if (context != null)
                 {
-                    foreach (var next in context.Nexts.Where(x => x <= end).ToList())
+                    foreach (var next in context.Nexts.Where(x => x <= end).Realize())
                     {
                         if (next <= end)
                         {
                             var extend = new Extend(start, next);
-                            foreach (var sub in FindPartitions(symbol, dot + 1, next, end).ToList())
+                            foreach (var sub in FindPartitions(symbol, dot + 1, next, end).Realize())
                             {
                                 var list = Enumerable.Repeat(extend, 1).Concat(sub).ToList();
                                 yield return list;
@@ -390,7 +390,7 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private Node? BuildCharacter(Character matcher, Cursor start, Cursor end)
+        private Symbol? BuildCharacter(Character matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -404,7 +404,7 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildString(Matchers.String matcher, Cursor start, Cursor end)
+        private Symbol? BuildString(Matchers.String matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -418,7 +418,7 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildKeyword(Keyword matcher, Cursor start, Cursor end)
+        private Symbol? BuildKeyword(Keyword matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -432,7 +432,7 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildRange(Matchers.Range matcher, Cursor start, Cursor end)
+        private Symbol? BuildRange(Matchers.Range matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
@@ -446,11 +446,9 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildTerminal(Matcher matcher, Cursor start, Cursor end)
+        private Symbol? BuildTerminal(Matcher matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start, end);
-
-            Assert(context != null);
+            var context = matcher.Context(start);
 
             if (context != null && context.Nexts.Contains(end))
             {
@@ -460,11 +458,9 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Node? BuildNonterminal(Role role, Rule matcher, Cursor start, Cursor end)
+        private Symbol? BuildNonterminal(Role role, Rule matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start, end);
-
-            Assert(context != null);
+            var context = matcher.Context(start);
 
             if (context != null)
             {
@@ -499,7 +495,7 @@ namespace Six.Runtime.Sppf
         {
             var key = Nonterminal.Key(role, matcher, start, end);
 
-            if (nodes.Length == 1 && nodes[0].Left == null && true)
+            if (nodes.Length == 1 && nodes[0].Left == null)
             {
                 return Cache(key, () => new Nonterminal(role, matcher, start, end, nodes[0].Right));
             }
@@ -509,19 +505,19 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private Intermediate NewIntermediate(Matcher matcher, Cursor start, Cursor end, int dot, params Packed[] nodes)
+        private static Intermediate NewIntermediate(Matcher matcher, Cursor start, Cursor end, int dot, params Packed[] nodes)
         {
             return new Intermediate(matcher, start, end, dot, nodes);
         }
 
-        private static Packed NewPacked(Matcher matcher, Cursor start, Cursor end, Cursor pivot, Node? left, Node right)
+        private static Packed NewPacked(Matcher matcher, Node left, Node right)
         {
-            return new Packed(matcher, start, end, pivot, left, right);
+            return new Packed(matcher, left.Start, right.End, left.End, left, right);
         }
 
-        private static Packed NewPacked(Matcher matcher, Cursor start, Cursor end, Node right)
+        private static Packed NewPacked(Matcher matcher, Node right)
         {
-            return new Packed(matcher, start, end, start, null, right);
+            return new Packed(matcher, right.Start, right.End, right.Start, null, right);
         }
 
         private void Index(Role role, Matcher matcher, Cursor start, Cursor end)
@@ -539,21 +535,14 @@ namespace Six.Runtime.Sppf
 
         /********** policies */
 
-        private IEnumerable<Node> ReduceAlternates(List<Node> nodes)
+        private static IEnumerable<Symbol> ReduceAlternates(List<Symbol> nodes)
         {
-            if (nodes.Count >= 2)
-            {
-                Assert(true);
-            }
-#if true
-            return nodes;
-#else
             //
             // strange policy:
             //   select first alternate
             //
-            return Enumerable.Repeat(nodes.First(), 1);
-#endif
+            return nodes;
+            //return Enumerable.Repeat(nodes.First(), 1);
         }
     }
 }
