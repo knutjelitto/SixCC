@@ -49,13 +49,18 @@ namespace Six.Runtime.Matchers
         }
 
         //[DebuggerStepThrough]
-        public Context? Context(Cursor at)
+        public Context Context(Cursor at)
         {
+#if true
+            return Contexts[at];
+#else
             if (Contexts.TryGetValue(at, out var context))
             {
                 return context;
             }
+            Assert(context != null);
             return null;
+#endif
         }
         
         public override string ToString()

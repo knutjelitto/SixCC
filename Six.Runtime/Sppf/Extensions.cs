@@ -7,11 +7,7 @@ namespace Six.Runtime.Sppf
         [DebuggerStepThrough]
         public static bool CanMatch(this Matcher matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start);
-
-            Assert(context != null);
-
-            return context != null && context.Nexts.Contains(end);
+            return matcher.Context(start).Nexts.Contains(end);
         }
 
         public static IEnumerable<T> Realize<T>(this IEnumerable<T> enumerable)

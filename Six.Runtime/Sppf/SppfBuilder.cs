@@ -121,57 +121,47 @@ namespace Six.Runtime.Sppf
 
         private Symbol? BuildOptional(Optional matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start);
+            var packeds = BuildMatcher(matcher, start, end).ToArray();
 
-            if (context != null)
-            {
-                var packeds = BuildMatcher(matcher, start, end).ToArray();
+            var optional = NewNonterminal(Role.Optional, matcher, start, end, packeds);
 
-                var optional = NewNonterminal(Role.Optional, matcher, start, end, packeds);
-
-                return optional;
-            }
-
-            return null;
+            return optional;
         }
 
         private Symbol? BuildAlt(Alt matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
 
-            if (context != null)
+            var children = (from alt in matcher
+                            where alt.CanMatch(start, end)
+                            let child = Build(alt, start, end)
+                            where child != null
+                            select child).ToList();
+
+            children = ReduceAlternates(children).ToList();
+
+            if (children.Count == 1)
             {
-                var children = (from alt in matcher
-                                where alt.CanMatch(start, end)
-                                let child = Build(alt, start, end)
-                                where child != null
-                                select child).ToList();
+                return children[0];
+            }
 
-                children = ReduceAlternates(children).ToList();
+            if (children.Count > 1)
+            {
+                var packeds = new List<Packed>();
 
-                if (children.Count == 1)
+                foreach (var child in children)
                 {
-                    return children[0];
+                    Assert(child.Start == start);
+                    Assert(child.End == end);
+
+                    var packed = NewPacked(matcher, child);
+
+                    packeds.Add(packed);
                 }
 
-                if (children.Count > 1)
-                {
-                    var packeds = new List<Packed>();
+                var intermediate = NewIntermediate(matcher, start, end, 0, packeds.ToArray());
 
-                    foreach (var child in children)
-                    {
-                        Assert(child.Start == start);
-                        Assert(child.End == end);
-
-                        var packed = NewPacked(matcher, child);
-
-                        packeds.Add(packed);
-                    }
-
-                    var intermediate = NewIntermediate(matcher, start, end, 0, packeds.ToArray());
-
-                    return intermediate;
-                }
+                return intermediate;
             }
 
             return null;
@@ -191,7 +181,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && matcher.CanMatch(start, end))
+            if (context.Nexts.Contains(end))
             {
                 var repeat = matcher[0];
                 var packeds = new List<Packed>();
@@ -372,18 +362,15 @@ namespace Six.Runtime.Sppf
 
                 var context = matcher.Context(start);
 
-                if (context != null)
+                foreach (var next in context.Nexts.Where(x => x <= end).Realize())
                 {
-                    foreach (var next in context.Nexts.Where(x => x <= end).Realize())
+                    if (next <= end)
                     {
-                        if (next <= end)
+                        var extend = new Extend(start, next);
+                        foreach (var sub in FindPartitions(symbol, dot + 1, next, end).Realize())
                         {
-                            var extend = new Extend(start, next);
-                            foreach (var sub in FindPartitions(symbol, dot + 1, next, end).Realize())
-                            {
-                                var list = Enumerable.Repeat(extend, 1).Concat(sub).ToList();
-                                yield return list;
-                            }
+                            var list = Enumerable.Repeat(extend, 1).Concat(sub).ToList();
+                            yield return list;
                         }
                     }
                 }
@@ -394,7 +381,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && context.Nexts.Contains(end))
+            if (context.Nexts.Contains(end))
             {
                 var chr = NewTerminal(matcher, start, context.Core, end);
 
@@ -408,7 +395,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && context.Nexts.Contains(end))
+            if (context.Nexts.Contains(end))
             {
                 var chr = NewTerminal(matcher, start, context.Core, end);
 
@@ -422,7 +409,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && context.Nexts.Contains(end))
+            if (context.Nexts.Contains(end))
             {
                 var chr = NewTerminal(matcher, start, context.Core, end);
 
@@ -436,7 +423,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && context.Nexts.Contains(end))
+            if (context.Nexts.Contains(end))
             {
                 var chr = NewTerminal(matcher, start, context.Core, end);
 
@@ -450,7 +437,7 @@ namespace Six.Runtime.Sppf
         {
             var context = matcher.Context(start);
 
-            if (context != null && context.Nexts.Contains(end))
+            if (context.Nexts.Contains(end))
             {
                 return NewTerminal(matcher, start, context.Core, end);
             }
@@ -460,22 +447,15 @@ namespace Six.Runtime.Sppf
 
         private Symbol? BuildNonterminal(Role role, Rule matcher, Cursor start, Cursor end)
         {
-            var context = matcher.Context(start);
-
-            if (context != null)
+            if (matcher is StartRule startRule)
             {
-                if (matcher is StartRule startRule)
-                {
-                    end = startRule.Eof!.Value;
-                }
-                var children = BuildMatcher(matcher, start, end).ToArray();
-
-                Index(role, matcher, start, end);
-
-                return NewNonterminal(role, matcher, start, end, children);
+                end = startRule.Eof!.Value;
             }
+            var children = BuildMatcher(matcher, start, end).ToArray();
 
-            return null;
+            Index(role, matcher, start, end);
+
+            return NewNonterminal(role, matcher, start, end, children);
         }
 
         private Terminal NewTerminal(Matcher matcher, Cursor start, Cursor core, Cursor end)
@@ -537,12 +517,19 @@ namespace Six.Runtime.Sppf
 
         private static IEnumerable<Symbol> ReduceAlternates(List<Symbol> nodes)
         {
+            if (nodes.Count >= 2)
+            {
+                Assert(true);
+            }
+#if true
+            return nodes;
+#else
             //
             // strange policy:
             //   select first alternate
             //
-            return nodes;
-            //return Enumerable.Repeat(nodes.First(), 1);
+            return Enumerable.Repeat(nodes.First(), 1);
+#endif
         }
     }
 }

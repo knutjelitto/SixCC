@@ -42,11 +42,6 @@ import-module
     : 'import' (import-namespace ':')? (literal-string | package-path) ( ':' literal-string ( ':' literal-string )? )? (literal-string | member-name)? ';'
     ;
 
-import-namespace
-    : LIDENTIFIER
-    | UIDENTIFIER
-    ;
-
 import-declaration
     : 'import' package-path import-element-list
     ;
@@ -77,6 +72,11 @@ any-name
     | UIDENTIFIER
     ;
 
+import-namespace
+    : LIDENTIFIER
+    | UIDENTIFIER
+    ;
+
 package-name
     : any-name
     ;
@@ -93,11 +93,7 @@ type-name
     : UIDENTIFIER
     ;
 
-object-expression
-    : 'object' extended-type? satisfied-types? class-body
-    ;
-
-variableOrTuplePattern
+variable-or-tuple-pattern
     : tuple-pattern
     | variable-pattern
     ;
@@ -114,7 +110,7 @@ tuple-or-entry-pattern
     ;
 
 entry-pattern
-    : variableOrTuplePattern '->' variableOrTuplePattern
+    : variable-or-tuple-pattern '->' variable-or-tuple-pattern
     ;
 
 tuple-pattern
@@ -250,6 +246,10 @@ variance
     | 'out'
     ;
     
+type-default
+    : '=' type
+    ;
+
 type-constraint
     : 'given' type-name? type-parameters? case-types? satisfied-types?
     ;
@@ -345,7 +345,7 @@ statement
     ;
 
 specification-statement
-    : value-expression lazy-specifier
+    : primary lazy-specifier
     ;
     
 expression-statement
@@ -377,10 +377,6 @@ continue-directive
 
 type-specifier
     : ('=>' | '=') type
-    ;
-
-type-default
-    : '=' type
     ;
 
 specifier
@@ -415,10 +411,6 @@ type-reference
     : type-name type-arguments?
     ;
 
-qualified-reference
-    : member-selection-operator (member-reference | type-reference)
-    ;
-
 self-reference
     : 'this'
     | 'super' 
@@ -426,27 +418,6 @@ self-reference
     | 'package'
     ;
     
-member-selection-operator
-    : '.'
-    | '?.'
-    | '*.'
-    ;
-
-index-or-index-range
-    : '['
-      ( '...' index
-      | index '...'
-      | index '..' index
-      | index ':' index
-      | function-or-expression
-      )
-      ']'
-    ;
-    
-index
-    : additive-expression 
-    ;
-
 enumeration
     : '{' declaration-or-statement* sequenced-arguments? '}'
     ;
@@ -563,7 +534,7 @@ case-expressions
     ;
     
 case-expression
-    : 'else'? 'case' case-item-list conditional-branch
+    : 'else'? 'case' '(' case-item ')' conditional-branch
     ;
 
 else-expression
@@ -796,36 +767,32 @@ unaryMinusOrComplementOperator
     ;
 
 exponentiation-expression
-    : incrementDecrementExpression exponentiation-operator exponentiation-expression
-    | incrementDecrementExpression
+    : prefix-expression exponentiation-operator exponentiation-expression
+    | prefix-expression
     ;
 
 exponentiation-operator
     : '^' 
     ;
 
-incrementDecrementExpression
-    : prefixOperator incrementDecrementExpression
-    | postfixIncrementDecrementExpression
+prefix-expression
+    : prefix-operator prefix-expression
+    | postfix-expression
     ;
 
-prefixOperator
+postfix-expression
+    : postfix-expression postfix-operator
+    | primary
+    ;
+
+prefix-operator
     : '--'
     | '++'
     ;
 
-postfixIncrementDecrementExpression
-    : postfixIncrementDecrementExpression postfixOperator
-    | value-expression
-    ;
-
-postfixOperator
+postfix-operator
     : '--' 
     | '++' 
-    ;
-
-value-expression
-    : primary
     ;
 
 primary
@@ -834,6 +801,31 @@ primary
     | primary positional-arguments
     | primary named-arguments
     | base
+    ;
+
+qualified-reference
+    : member-selection-operator (member-reference | type-reference)
+    ;
+
+member-selection-operator
+    : '.'
+    | '?.'
+    | '*.'
+    ;
+
+index-or-index-range
+    : '['
+      ( '...' index
+      | index '...'
+      | index '..' index
+      | index ':' index
+      | function-or-expression
+      )
+      ']'
+    ;
+    
+index
+    : additive-expression 
     ;
 
 base
@@ -853,18 +845,30 @@ nonstring-literal
     | literal-char 
     ;
 
-string-literal
-    : literal-string 
-    | verbatim-string
-    ;
-
 string-expression
     : string-literal
     | string-start function-or-expression (string-mid function-or-expression)* string-end
     ;
 
+string-literal
+    : literal-string 
+    | verbatim-string
+    ;
+
+object-expression
+    : 'object' extended-type? satisfied-types? class-body
+    ;
+
 type-arguments
-    : '<' ( ( variance type? | type) (',' (variance type | type) )* )? '>'
+    : '<' type-argument-list? '>'
+    ;
+
+type-argument-list
+    : varianced-type (',' varianced-type)*
+    ;
+
+varianced-type
+    : variance? type
     ;
 
 defaulted-type
@@ -878,7 +882,7 @@ variadic-type
     ;
 
 spread-type
-    : '*' union-type?
+    : '*' union-type
     ;
 
 type
@@ -904,7 +908,10 @@ primary-type
     : nullable-type
     | array-type
     | function-type
-    | atomic-type
+    | tuple-type
+    | iterable-type
+    | grouped-type
+    | qualified-type
     ;
 
 nullable-type
@@ -919,18 +926,6 @@ function-type
     : primary-type '(' ( spread-type | defaulted-type (',' defaulted-type)* )? ')'
     ;
 
-atomic-type
-    : qualified-type
-    | tuple-type
-    | iterable-type
-    ;
-
-qualified-type
-    : qualified-type '.' type-reference
-    | package-qualifier? type-reference
-    | grouped-type
-    ;
-    
 tuple-type
     : '[' (spread-type | defaulted-type (',' defaulted-type )*)? ']'
     ;
@@ -943,6 +938,11 @@ grouped-type
     : '<' type '>'
     ;
 
+qualified-type
+    : qualified-type '.' type-reference
+    | package-qualifier? type-reference
+    ;
+    
 annotations
     : string-literal? annotation*
     ;
@@ -1000,10 +1000,6 @@ control-statement
     | dynamic
     ;
 
-control-block
-    : block
-    ;
-
 dynamic
     : 'dynamic' block
     ;
@@ -1013,7 +1009,7 @@ if-else
     ;
 
 if-block
-    : 'if' conditions control-block
+    : 'if' conditions block
     ;
 
 else-block
@@ -1038,11 +1034,7 @@ cases
     ;
     
 case-block
-    : 'else'? 'case' case-item-list block
-    ;
-
-case-item-list
-    : '(' case-item ')' 
+    : 'else'? 'case' '(' case-item ')' block
     ;
 
 case-item
@@ -1078,11 +1070,11 @@ for-else
     ;
 
 for-block
-    : 'for' for-iterator control-block
+    : 'for' for-iterator block
     ;
 
 fail-block
-    : 'else' control-block
+    : 'else' block
     ;
 
 for-iterator
@@ -1090,7 +1082,7 @@ for-iterator
     ;
     
 containment
-    : ('in' | ':') expression?
+    : ('in' | ':') expression
     ;
     
 while-loop
@@ -1098,7 +1090,7 @@ while-loop
     ;
 
 while-block
-    : 'while' conditions control-block
+    : 'while' conditions block
     ;
 
 try-catch-finally
@@ -1106,11 +1098,11 @@ try-catch-finally
     ;
 
 try-block
-    : 'try' (resources control-block | block)
+    : 'try' resources? block
     ;
 
 catch-block
-    : 'catch' catch-variable control-block
+    : 'catch' catch-variable block
     ;
 
 catch-variable
@@ -1118,7 +1110,7 @@ catch-variable
     ;
 
 finally-block
-    : 'finally' control-block
+    : 'finally' block
     ;
 
 resources
@@ -1148,6 +1140,41 @@ reference-path-element
     | member-name
     ;
     
+meta-literal
+    : '`' (declaration-reference | model-expression) '`'
+    ;
+
+model-reference
+    : '^' model-expression
+    ;
+    
+model-expression
+  : member-model-expression
+  | type-model-expression
+  ;
+
+member-model-expression
+    : member-reference
+    | package-qualifier member-reference
+    | primary-type '.' member-reference
+    ; 
+
+type-model-expression
+    : type
+    ;
+
+declaration-reference
+    : module-literal
+    | package-literal
+    | class-literal
+    | new-literal
+    | interface-literal
+    | alias-literal
+    | type-parameter-literal
+    | value-literal
+    | function-literal
+    ;
+
 module-literal
  : 'module' package-path?
  ;
@@ -1183,47 +1210,6 @@ value-literal
 function-literal
   : 'function' reference-path
   ;
-
-member-path-element
-    : member-name type-arguments?
-    ;
-    
-
-member-model-expression
-    : member-path-element 
-    | package-qualifier member-path-element
-    | primary-type '.' member-path-element
-    ; 
-
-type-model-expression
-    : type
-    ;
-
-model-expression
-  : member-model-expression
-  | type-model-expression
-  ;
-
-meta-literal
-    : '`' (declaration-reference | model-expression) '`'
-    ;
-
-model-reference
-    : '^' model-expression
-    ;
-    
-declaration-reference
-    : module-literal
-    | package-literal
-    | class-literal
-    | new-literal
-    | interface-literal
-    | alias-literal
-    | type-parameter-literal
-    | value-literal
-    | function-literal
-    ;
-
 
 // Lexer
 
@@ -1280,7 +1266,7 @@ literal-string
     ;
 
 verbatim-string
-    : < '"""' (~'"' | '"' ~'"' | '""' ~'"')* ('"' ('"' ('"' ('"' '"'?)?)?)?)? >
+    : < '"""' (~'"' | '"' ~'"' | '""' ~'"')* '"""' >
     ;
 
 char-part
@@ -1330,7 +1316,7 @@ hash-tag
     ;
 
 line-comment
-    :   '//' (~line-ender)* line-end?
+    : '//' (~line-ender)* line-end?
     ;   
 
 block-comment
@@ -1338,37 +1324,37 @@ block-comment
     ;
 
 LIDENTIFIER
-    : < LIdentifierStart IdentifierPart* | LIdentifierPrefix IdentifierPart+ >
+    : < lower-identifier-start identifier-part* | lower-identifier-prefix identifier-part+ >
     ;
 
 UIDENTIFIER 
-    : < UIdentifierStart IdentifierPart* | UIdentifierPrefix IdentifierPart+ >
+    : < upper-identifier-start identifier-part* | upper-identifier-prefix identifier-part+ >
     ;
 
-LIdentifierStart
+lower-identifier-start
     : '_'
     | 'a' .. 'z'
     ;
 
-UIdentifierStart
+upper-identifier-start
     : 'A' .. 'Z'
     ;
 
-LIdentifierPrefix
+lower-identifier-prefix
     : '\\i'
     ;
 
-UIdentifierPrefix
+upper-identifier-prefix
     : '\\I'
     ;
     
-IdentifierPart
+identifier-part
     :   '_'
     |   decimal-digit
-    |   Letter
+    |   letter
     ;
 
-Letter
+letter
     : 'a'..'z' 
     | 'A'..'Z' 
     | '\u{0080}'..'\u{ffff}'

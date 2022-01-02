@@ -88,7 +88,7 @@ string
     ;
 
 character
-    : (^('\\' | '\''))
+    : (~('\\' | '\''))
     | '\\' escape
     ;
 
@@ -140,9 +140,9 @@ comment
     ;
 
 line-comment
-    : '//' (^line-ender)* line-end?
-    ;
+    : '//' (~line-ender)* line-end?
+    ;   
 
 block-comment
-    : '/*' (^'*' | '*' ^'/')* '*/'
+    : '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
     ;

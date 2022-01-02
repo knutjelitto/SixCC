@@ -62,8 +62,6 @@ namespace Six.Input
                         return Token(TKind.Define);
                     case '|':
                         return Token(TKind.Alter);
-                    case '^':
-                    case '¬':
                     case '~':
                         return Token(TKind.Complement);
                     case '!':
