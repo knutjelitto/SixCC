@@ -30,9 +30,12 @@ namespace Six.Runtime.Tree
                     return BuildStructural(node);
                 case Nonterminal node when node.Role == Role.Optional:
                     return BuildStructural(node);
-
                 case Nonterminal node when node.Role == Role.Seq:
                     return BuildSeq(node);
+                case Nonterminal node when node.Role == Role.Drop:
+                    return BuildDrop(node);
+                case Nonterminal node when node.Role == Role.Lift:
+                    return BuildLift(node);
                 case Packed node:
                     return BuildPacked(node);
                 case Intermediate node:
@@ -59,6 +62,27 @@ namespace Six.Runtime.Tree
         private IEnumerable<TreeNode> BuildSeq(Nonterminal node)
         {
             Assert(node.Role == Role.Seq);
+
+            if (node.Children.Length == 0)
+            {
+                return Enumerable.Empty<TreeNode>();
+            }
+            else
+            {
+                return Build(node.Children[0]);
+            }
+        }
+
+        private IEnumerable<TreeNode> BuildDrop(Nonterminal node)
+        {
+            Assert(node.Role == Role.Drop);
+
+            return Enumerable.Empty<TreeNode>();
+        }
+
+        private IEnumerable<TreeNode> BuildLift(Nonterminal node)
+        {
+            Assert(node.Role == Role.Lift);
 
             if (node.Children.Length == 0)
             {

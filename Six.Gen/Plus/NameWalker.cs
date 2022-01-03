@@ -109,6 +109,25 @@ namespace Six.Gen.Ebnf
             Right();
         }
 
+        protected override void Visit(DropOp op)
+        {
+            Left(",");
+            Walk(op.Argument);
+            Right();
+        }
+
+        protected override void Visit(LiftOp op)
+        {
+            Left("^");
+            Walk(op.Argument);
+            Right();
+        }
+
+        protected override void Visit(EofOp op)
+        {
+            Write("<eof>");
+        }
+
         protected override void Visit(PlusOp op)
         {
             Left("+");

@@ -153,6 +153,14 @@ namespace Six.Input
                     Match(TKind.Not);
                     expression = builder.Not(Current.Location, Primary());
                     break;
+                case TKind.Drop:
+                    Match(TKind.Drop);
+                    expression = builder.Drop(Current.Location, Primary());
+                    break;
+                case TKind.Lift:
+                    Match(TKind.Lift);
+                    expression = builder.Lift(Current.Location, Primary());
+                    break;
                 case TKind.LeftParent:
                     Match(TKind.LeftParent);
                     expression = Expression();

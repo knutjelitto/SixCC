@@ -44,6 +44,8 @@
                     return Visit(expr);
                 case NotOp expr:
                     return Visit(expr);
+                case EofOp expr:
+                    return Visit(expr);
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -60,6 +62,11 @@
         }
 
         protected virtual T Visit(NotOp op)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual T Visit(EofOp op)
         {
             throw new NotImplementedException();
         }

@@ -5,7 +5,7 @@ grammar Six;
 %whitespace : skip ;
 
 grammar
-    : 'grammar' identifier ';' rules
+    : ,'grammar' identifier ,';' rules
     ;
 
 rules
@@ -13,10 +13,10 @@ rules
     ;
 
 rule
-    : identifier ':' body ';'
-    | '%start' ':' identifier ';'
-    | '%whitespace' ':' identifier ';'
-    | '%keywords' ':' identifier ';'
+    : identifier ,':' body ,';'
+    | '%start' ,':' identifier ,';'
+    | '%whitespace' ,':' identifier ,';'
+    | '%keywords' ,':' identifier ,';'
     ;
 
 body
@@ -29,7 +29,7 @@ expression
     ;
 
 alternation
-    : sequence ('|' sequence)*
+    : sequence ( ,'|' sequence)*
     ;
 
 sequence
@@ -37,24 +37,58 @@ sequence
     ;
 
 element
-    : primary
+    : atom
+    | range
+    | diff
+    | star
+    | plus
+    | optional
+    | complement
+    | not
+    | drop
+    | lift
     ;
 
-primary
-    : atom
-    | atom '..' atom
-    | atom '-' atom
-    | atom '*'
-    | atom '+'
-    | atom '?'
-    | ('^'|'~') atom
-    | '!' atom
+range
+    : atom ,'..' atom
+    ;
+
+diff
+    : atom ,'-' atom
+    ;
+
+star
+    : atom ,'*'
+    ;
+
+plus
+    : atom ,'+'
+    ;
+
+optional
+    : atom ,'?'
+    ;
+
+complement
+    : ,'~' atom
+    ;
+
+not
+    : ,'!' atom
+    ;
+
+drop
+    : ,',' atom
+    ;
+
+lift
+    : ,'^' atom
     ;
 
 atom
     : identifier
     | string
-    | '(' expression ')'
+    | ,'(' expression ,')'
     ;
 
 identifier

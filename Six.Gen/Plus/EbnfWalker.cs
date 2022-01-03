@@ -51,7 +51,16 @@
                 case OptionalOp expr:
                     Visit(expr);
                     break;
+                case EofOp expr:
+                    Visit(expr);
+                    break;
                 case NotOp expr:
+                    Visit(expr);
+                    break;
+                case DropOp expr:
+                    Visit(expr);
+                    break;
+                case LiftOp expr:
                     Visit(expr);
                     break;
                 default:
@@ -76,7 +85,23 @@
         {
             WalkArguments(op);
         }
+
         protected virtual void Visit(NotOp op)
+        {
+            WalkArguments(op);
+        }
+
+        protected virtual void Visit(DropOp op)
+        {
+            WalkArguments(op);
+        }
+
+        protected virtual void Visit(LiftOp op)
+        {
+            WalkArguments(op);
+        }
+
+        protected virtual void Visit(EofOp op)
         {
             WalkArguments(op);
         }

@@ -1,5 +1,6 @@
 ﻿using Six.Gen.Ebnf;
 using Six.Input;
+using System.Text;
 
 namespace Six.Gen
 {
@@ -62,9 +63,22 @@ namespace Six.Gen
                         var arguments = extra == null ? "" : $", {extra}";
                         className = className ?? ClassName(op);
                         w($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
+                        var attributes = new StringBuilder();
                         if (op.IsAlias)
                         {
-                            wl(") { IsAlias = true };");
+                            attributes.Append("IsAlias = true, ");
+                        }
+                        if (op.IsDrop)
+                        {
+                            attributes.Append("IsDrop = true, ");
+                        }
+                        if (op.IsLift)
+                        {
+                            attributes.Append("IsLift = true, ");
+                        }
+                        if (attributes.Length > 0)
+                        {
+                            wl($") {{ {attributes}}};");
                         }
                         else
                         {

@@ -104,6 +104,11 @@ namespace Six.Gen.Ebnf
                 throw Error(op);
             }
 
+            protected override Integers Visit(EofOp op)
+            {
+                throw Error(op);
+            }
+
             protected override Integers Visit(RefOp op)
             {
                 return Transform(op.Rule);

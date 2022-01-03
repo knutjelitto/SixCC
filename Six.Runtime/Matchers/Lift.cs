@@ -1,10 +1,8 @@
 ﻿namespace Six.Runtime.Matchers
 {
-    public sealed class StartRule : Rule
+    public sealed class Lift : Structural
     {
-        public Cursor? Eof { get; private set; }
-
-        public StartRule(ImplementationCore core, int id, string name)
+        public Lift(ImplementationCore core, int id, string name)
             : base(core, id, name)
         {
         }

@@ -24,6 +24,21 @@ namespace Six.Runtime.Sppf
             locations.Add(location);
         }
 
+        public RuleIndex Invert()
+        {
+            var inverse = new RuleIndex(Enumerable.Empty<string>());
+
+            foreach (var kv in rules)
+            {
+                foreach (var location in kv.Value)
+                {
+                    inverse.Add(location, kv.Key);
+                }
+            }
+
+            return inverse;
+        }
+
         public void Dump(Writer writer)
         {
             foreach (var name in rules.Keys.OrderBy(n => rules[n].Count))

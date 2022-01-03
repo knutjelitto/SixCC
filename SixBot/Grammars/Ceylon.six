@@ -163,6 +163,10 @@ extended-type
     ;
 
 class-specifier
+    : '=>' class-instatiation
+    ;
+
+class-specifierXXX
     : ('=>' | '=') class-instatiation
     ;
 
@@ -224,13 +228,13 @@ parameter
     ;
     
 parameter-reference
-    : member-name specifier?
+    : member-name value-specifier?
     ;
 
 parameter-declaration
     : (variadic-type | 'void' | 'function' | 'dynamic' | 'value')
       member-name
-      (specifier? | type-parameters? parameters+ function-specifier?)
+      (value-specifier? | type-parameters? parameters+ any-specifier?)
     ;
 
 type-parameters
@@ -308,11 +312,11 @@ inferred-method-declaration
     ;
 
 typed-attribute-declaration
-    : annotations (variadic-type | 'dynamic') member-name (block | function-specifier? ';')
+    : annotations (variadic-type | 'dynamic') member-name (block | any-specifier? ';')
     ;
 
 inferred-attribute-declaration
-    : annotations 'value' member-name (block | function-specifier? ';')
+    : annotations 'value' member-name (block | any-specifier? ';')
     ;
 
 class-declaration
@@ -345,7 +349,7 @@ statement
     ;
 
 specification-statement
-    : primary lazy-specifier
+    : primary function-specifier
     ;
     
 expression-statement
@@ -376,20 +380,20 @@ continue-directive
     ;
 
 type-specifier
-    : ('=>' | '=') type
+    : '=>' type
     ;
 
-specifier
+value-specifier
     : '=' function-or-expression
     ;
 
-lazy-specifier
+function-specifier
     : '=>' function-or-expression
     ;
 
-function-specifier
-    : specifier
-    | lazy-specifier
+any-specifier
+    : value-specifier
+    | function-specifier
     ;
 
 expression
@@ -437,7 +441,7 @@ named-argument
     ;
 
 named-specified-argument
-    : member-name specifier ';'
+    : member-name value-specifier ';'
     ;
 
 sequenced-arguments
@@ -489,7 +493,7 @@ untyped-method-argument
     ;
 
 untyped-getter-argument
-    : member-name lazy-specifier ';'
+    : member-name function-specifier ';'
     ;
 
 grouped-expression
@@ -518,7 +522,7 @@ function-or-expression
     ;
 
 let-variable
-    : pattern specifier
+    : pattern value-specifier
     ;
 
 let-clause
@@ -556,7 +560,7 @@ then-expression
     ;
 
 anonymous-function
-    : ('void' | 'function')? type-parameters? (parameters+ type-constraints?)? (block | lazy-specifier)
+    : ('void' | 'function')? type-parameters? (parameters+ type-constraints?)? (block | function-specifier)
     ;
 
 comprehension
@@ -980,7 +984,7 @@ is-condition
     ;
 
 is-condition-variable
-    : member-name specifier?
+    : member-name value-specifier?
     ;
 
 satisfies-condition
@@ -1123,7 +1127,7 @@ resource
     ;
 
 specified-variable
-    : variable specifier
+    : variable value-specifier
     ;
 
 variable

@@ -6,6 +6,7 @@
         Name,
         Literal,
         Epsilon,
+
         LeftParent,
         RightParent,
         LeftBracket,
@@ -14,10 +15,11 @@
         RightCurly,
         LeftAngle,
         RightAngle,
-        Define,
+
         Colon,
         Semi,
-        Comma,
+        Drop,
+        Lift,
         Alter,
         Option,
         Complement,

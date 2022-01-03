@@ -70,6 +70,12 @@ namespace Six.Runtime.Sppf
                     return BuildString(match, start, end);
                 case Matchers.Range match:
                     return BuildRange(match, start, end);
+                case Eof match:
+                    return BuildEof(match, start, end);
+                case Drop match:
+                    return BuildDrop(match, start, end);
+                case Lift match:
+                    return BuildLift(match, start, end);
                 case Not:
                     // drop from film set
                     return null;
@@ -377,6 +383,38 @@ namespace Six.Runtime.Sppf
             }
         }
 
+        private Symbol? BuildDrop(Drop matcher, Cursor start, Cursor end)
+        {
+            var packeds = BuildMatcher(matcher, start, end).ToArray();
+
+            var drop = NewNonterminal(Role.Drop, matcher, start, end, packeds);
+
+            return drop;
+        }
+
+        private Symbol? BuildLift(Lift matcher, Cursor start, Cursor end)
+        {
+            var packeds = BuildMatcher(matcher, start, end).ToArray();
+
+            var lift = NewNonterminal(Role.Lift, matcher, start, end, packeds);
+
+            return lift;
+        }
+
+        private Symbol? BuildEof(Eof matcher, Cursor start, Cursor end)
+        {
+            var context = matcher.Context(start);
+
+            if (context.Nexts.Contains(end))
+            {
+                var eof = NewTerminal(matcher, start, context.Core, end);
+
+                return eof;
+            }
+
+            return null;
+        }
+
         private Symbol? BuildCharacter(Character matcher, Cursor start, Cursor end)
         {
             var context = matcher.Context(start);
@@ -447,20 +485,20 @@ namespace Six.Runtime.Sppf
 
         private Symbol? BuildNonterminal(Role role, Rule matcher, Cursor start, Cursor end)
         {
-            if (matcher is StartRule startRule)
-            {
-                end = startRule.Eof!.Value;
-            }
-            var children = BuildMatcher(matcher, start, end).ToArray();
+            //if (matcher is StartRule startRule)
+            //{
+            //    end = startRule.Eof!.Value;
+            //}
+            var packeds = BuildMatcher(matcher, start, end).ToArray();
 
             Index(role, matcher, start, end);
 
-            return NewNonterminal(role, matcher, start, end, children);
+            return NewNonterminal(role, matcher, start, end, packeds);
         }
 
         private Terminal NewTerminal(Matcher matcher, Cursor start, Cursor core, Cursor end)
         {
-            Assert(start <= core && core < end);
+            Assert(start <= core && core <= end);
             var key = Terminal.Key(matcher, start, end);
 
             return Cache(key, () => new Terminal(matcher, start, core, end, source));

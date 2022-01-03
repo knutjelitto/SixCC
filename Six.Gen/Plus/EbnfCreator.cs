@@ -32,12 +32,17 @@ namespace Six.Gen.Ebnf
             var startSymbol = Grammar.StartRule;
             if (startSymbol != null)
             {
-                startRule.Set(startSymbol.Location, Create(startSymbol.Expression));
+                var eof = Add(new EofOp(Location.Nowhere));
+                var seq = Add(new SeqOp(startSymbol.Expression.Location, Create(startSymbol.Expression), eof));
+                startRule.Set(startSymbol.Location, seq);
             }
             else
             {
                 var defaultStart = Grammar.Symbols.First(s => !s.Name.StartsWith("%"));
-                startRule.Patch(Add(new RefOp(Ebnf, Location.Nowhere, defaultStart.Name)));
+                var eof = Add(new EofOp(Location.Nowhere));
+                var @ref = Add(new RefOp(Ebnf, Location.Nowhere, defaultStart.Name));
+                var seq = Add(new SeqOp(defaultStart.Expression.Location, @ref, eof));
+                startRule.Patch(seq);
             }
 
             var whiteSymbol = Grammar.WhitespaceRule;
@@ -105,11 +110,6 @@ namespace Six.Gen.Ebnf
                 id++;
 
                 Ebnf.Add(op);
-
-                if (op is NotOp)
-                {
-                    Assert(true);
-                }
             }
 
             new ReachWalker().Reach(Ebnf);
@@ -248,6 +248,10 @@ namespace Six.Gen.Ebnf
                         return Visit(expr);
                     case Ast.Not expr:
                         return Visit(expr);
+                    case Ast.Drop expr:
+                        return Visit(expr);
+                    case Ast.Lift expr:
+                        return Visit(expr);
                     default:
                         throw new NotImplementedException($"can't transform expression of type {expression.GetType()}");
                 }
@@ -286,6 +290,16 @@ namespace Six.Gen.Ebnf
         private CoreOp Visit(Ast.Not expr)
         {
             return new NotOp(expr.Location, Create(expr.Expression));
+        }
+
+        private CoreOp Visit(Ast.Drop expr)
+        {
+            return new DropOp(expr.Location, Create(expr.Expression));
+        }
+
+        private CoreOp Visit(Ast.Lift expr)
+        {
+            return new LiftOp(expr.Location, Create(expr.Expression));
         }
 
         private CoreOp Visit(Ast.ZeroOrMore zeroOrMore)

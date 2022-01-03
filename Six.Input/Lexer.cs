@@ -57,9 +57,9 @@ namespace Six.Input
                     case ';':
                         return Token(TKind.Semi);
                     case ',':
-                        return Token(TKind.Comma);
-                    case '=':
-                        return Token(TKind.Define);
+                        return Token(TKind.Drop);
+                    case '^':
+                        return Token(TKind.Lift);
                     case '|':
                         return Token(TKind.Alter);
                     case '~':

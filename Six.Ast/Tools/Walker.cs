@@ -55,6 +55,12 @@
                 case Not expr:
                     Visit(expr);
                     break;
+                case Drop expr:
+                    Visit(expr);
+                    break;
+                case Lift expr:
+                    Visit(expr);
+                    break;
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -90,6 +96,16 @@
         }
 
         protected virtual void Visit(Not expr)
+        {
+            Walk(expr.Expression);
+        }
+
+        protected virtual void Visit(Drop expr)
+        {
+            Walk(expr.Expression);
+        }
+
+        protected virtual void Visit(Lift expr)
         {
             Walk(expr.Expression);
         }

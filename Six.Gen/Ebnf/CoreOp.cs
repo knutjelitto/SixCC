@@ -34,6 +34,8 @@ namespace Six.Gen.Ebnf
         public bool IsReached { get; set; }
         public bool IsSpare { get; set; }
         public bool IsAlias { get; set; }
+        public bool IsDrop { get; set; }
+        public bool IsLift { get; set; }
 
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
