@@ -9,7 +9,11 @@
 
         public override void MatchCore(Context context)
         {
-            this[0].Match(
+            var matcher = this[0];
+
+            context.Success(context.Start);
+
+            matcher.Match(
                 context.Start,
                 success =>
                 {
@@ -19,8 +23,6 @@
                         context.Success(success);
                     }
                 });
-
-            context.Success(context.Start);
         }
 
         public override string ToString()

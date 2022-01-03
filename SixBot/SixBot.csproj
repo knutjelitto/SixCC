@@ -16,9 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="Grammars\Ceylon.six" />
+		<AdditionalFiles Include="Grammars\Six.six" />
+		<AdditionalFiles Include="Grammars\Ceylon.six" />
         <AdditionalFiles Include="Grammars\Json.six" />
-        <AdditionalFiles Include="Grammars\Six.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T1.six" Link="Samples\T1.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T2.six" Link="Samples\T2.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T3.six" Link="Samples\T3.six" />

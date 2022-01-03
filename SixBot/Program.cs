@@ -29,10 +29,10 @@ else
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    Check<CeylonParser>(0, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
     //Check<CeylonParser>(881, Sampler.LoadCeylon().OrderBy(s => s.Name));
     Check<CeylonParser>(0, Sampler.LoadCeylonOrdered());
-    Check<SixParser>(-1, Sampler.LoadSix());
+    //Check<SixParser>(-1, Sampler.LoadSix());
     CheckJson(false, Sampler.LoadJson());
     CheckGenerate(true);
     Console.Write("any key ... ");

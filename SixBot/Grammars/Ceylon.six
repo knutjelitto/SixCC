@@ -93,14 +93,14 @@ type-name
     : UIDENTIFIER
     ;
 
-variable-or-tuple-pattern
-    : tuple-pattern
-    | variable-pattern
-    ;
-
 pattern
     : entry-pattern
     | tuple-pattern
+    | variable-pattern
+    ;
+
+variable-or-tuple-pattern
+    : tuple-pattern
     | variable-pattern
     ;
 
@@ -114,11 +114,11 @@ entry-pattern
     ;
 
 tuple-pattern
-    : '[' (variadic-pattern (',' variadic-pattern)*)? ']'
+    : '[' variadic-pattern-list? ']'
     ;
 
-variable-pattern
-    : variable
+variadic-pattern-list
+    : variadic-pattern (',' variadic-pattern)*
     ;
 
 variadic-pattern
@@ -126,12 +126,20 @@ variadic-pattern
     | pattern
     ;
 
+variable-pattern
+    : variable
+    ;
+
 variadic-variable
     : union-type? ('*' | '+') member-name?
     ;
 
 destructure
-    : 'let' '(' let-variable (',' let-variable)* ')' ';'
+    : 'let' '(' let-variable-list ')' ';'
+    ;
+
+let-variable-list
+    : let-variable (',' let-variable)*
     ;
 
 delegated-constructor
@@ -164,10 +172,6 @@ extended-type
 
 class-specifier
     : '=>' class-instatiation
-    ;
-
-class-specifierXXX
-    : ('=>' | '=') class-instatiation
     ;
 
 class-instatiation
@@ -526,7 +530,7 @@ let-variable
     ;
 
 let-clause
-    : 'let' '(' (let-variable (',' let-variable)*)? ')' conditional-branch
+    : 'let' '(' let-variable-list? ')' conditional-branch
     ;
 
 switch-expression

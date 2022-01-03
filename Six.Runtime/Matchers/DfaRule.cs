@@ -11,8 +11,10 @@
 
         public override void MatchCore(Context context)
         {
+            Assert(Dfa != null);
+
             context.Core = Core.__MatchWhite(context.Start);
-            if (Dfa!.TryMatch(context.Core, out var matched))
+            if (Dfa.TryMatch(context.Core, out var matched))
             {
                 context.Success(matched);
             }

@@ -38,11 +38,6 @@ namespace Six.Runtime
             return obj is Cursor other && Offset == other.Offset;
         }
 
-        public static Cursor operator+(Cursor cursor, int advance)
-        {
-            return cursor.Advance(advance);
-        }
-
         public bool Equals(Cursor other)
         {
             return Offset == other.Offset;

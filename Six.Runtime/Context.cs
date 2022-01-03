@@ -12,7 +12,7 @@ namespace Six.Runtime
 
 
         [DebuggerStepThrough]
-        private Context(Matcher matcher, Cursor start)
+        private Context(Cursor start, Matcher matcher)
         {
             Matcher = matcher;
             Core = Start = start;
@@ -23,7 +23,7 @@ namespace Six.Runtime
         {
             if (!matcher.Contexts.TryGetValue(start, out var context))
             {
-                context = new Context(matcher, start);
+                context = new Context(start, matcher);
                 matcher.Contexts.Add(start, context);
                 context.Continues.Add(onMatched);
 

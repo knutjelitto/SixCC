@@ -9,22 +9,22 @@
 
         public override void MatchCore(Context context)
         {
-            var already = new HashSet<Cursor>();
             var todo = new Queue<Cursor>();
 
-            already.Add(context.Start);
+            var matcher = this[0];
+
             todo.Enqueue(context.Start);
 
             while (todo.Count > 0)
             {
                 var next = todo.Dequeue();
 
-                this[0].Match(next, Success);
+                matcher.Match(next, Success);
             }
 
             void Success(Cursor success)
             {
-                if (already.Add(success))
+                if (!context.Nexts.Contains(success))
                 {
                     context.Success(success);
                     todo.Enqueue(success);

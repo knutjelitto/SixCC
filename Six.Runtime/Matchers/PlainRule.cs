@@ -9,8 +9,6 @@
 
         public override void MatchCore(Context context)
         {
-            Assert(Count == 1);
-
             var matcher = this[0];
 
             matcher.Match(context.Start, context.Success);

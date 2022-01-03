@@ -5,7 +5,7 @@ grammar Six;
 %whitespace : skip ;
 
 grammar
-    : ,'grammar' identifier ,';' rules
+    : 'grammar' identifier ';' rules
     ;
 
 rules
@@ -13,10 +13,8 @@ rules
     ;
 
 rule
-    : identifier ,':' body ,';'
-    | '%start' ,':' identifier ,';'
-    | '%whitespace' ,':' identifier ,';'
-    | '%keywords' ,':' identifier ,';'
+    : identifier ':' body ';'
+    | special-identifier ':' identifier ';'
     ;
 
 body
@@ -29,7 +27,7 @@ expression
     ;
 
 alternation
-    : sequence ( ,'|' sequence)*
+    : sequence ('|' sequence)*
     ;
 
 sequence
@@ -50,49 +48,57 @@ element
     ;
 
 range
-    : atom ,'..' atom
+    : atom '..' atom
     ;
 
 diff
-    : atom ,'-' atom
+    : atom '-' atom
     ;
 
 star
-    : atom ,'*'
+    : atom '*'
     ;
 
 plus
-    : atom ,'+'
+    : atom '+'
     ;
 
 optional
-    : atom ,'?'
+    : atom '?'
     ;
 
 complement
-    : ,'~' atom
+    : '~' atom
     ;
 
 not
-    : ,'!' atom
+    : '!' atom
     ;
 
 drop
-    : ,',' atom
+    : ',' atom
     ;
 
 lift
-    : ,'^' atom
+    : '^' atom
     ;
 
 atom
     : identifier
     | string
-    | ,'(' expression ,')'
+    | '(' expression ')'
+    ;
+
+special-identifier
+    : < '%' id-core >
     ;
 
 identifier
-    : < id-begin id-continue* >
+    : < id-core >
+    ;
+
+id-core
+    : id-begin id-continue*
     ;
 
 id-begin

@@ -163,9 +163,9 @@
 
         public int At(int offset)
         {
-            if (offset < Text.Length)
+            if (offset < Content.Length)
             {
-                return Text[offset];
+                return Content[offset];
             }
             return -1;
         }
@@ -173,18 +173,18 @@
         public bool Match(int offset, int cp)
         {
             Assert(cp <= 0xFFFF);
-            if (offset < Text.Length)
+            if (offset < Content.Length)
             {
-                return Text[offset] == cp; ;
+                return Content[offset] == cp; ;
             }
             return false;
         }
 
         public bool Match(int offset, string text)
         {
-            if (offset + text.Length <= Text.Length)
+            if (offset + text.Length <= Content.Length)
             {
-                return Text.Substring(offset, text.Length) == text;
+                return Content.Substring(offset, text.Length) == text;
             }
             return false;
         }

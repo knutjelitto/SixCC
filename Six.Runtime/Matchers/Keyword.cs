@@ -22,10 +22,6 @@
             {
                 if (context.Core.Source.GetText(context.Core.Offset, length) == Text)
                 {
-                    if (Text == "see")
-                    {
-                        Assert(true);
-                    }
                     context.Success(idNext);
                 }
             }
