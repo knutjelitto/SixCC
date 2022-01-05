@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    internal class MaybeAliasWalker : EbnfPredicator<AltOp>
+    internal class AliasWalker : EbnfPredicator
     {
-        public MaybeAliasWalker(EbnfGrammar grammar)
+        public AliasWalker(EbnfGrammar grammar)
             : base(op => op.IsAlias, (op, value)=> op.IsAlias = value)
         {
             Grammar = grammar;

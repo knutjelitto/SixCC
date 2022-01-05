@@ -42,16 +42,26 @@ namespace Six.Runtime
 
             if (successCounter == 0)
             {
-                Report("FAIL", 0, 0);
+                Report("FAIL", 0, 0, 1000);
                 return false;
             }
             else
             {
-                Report("OK  ", successCounter, source.Length);
+                var contexts = 0;
+                var nulps = 0;
+                foreach (var matcher in __Core.__Matchers)
+                {
+                    contexts += matcher.Contexts.Count;
+                    nulps += matcher.Contexts.Where(kv => kv.Value.Nexts.Count == 0).Select(kv => kv.Key).Count();
+                }
+
+                var percent = (contexts - nulps) * 100 / contexts;
+
+                Report("OK  ", successCounter, source.Length, percent);
                 return true;
             }
 
-            void Report(string what, int counter, int offset)
+            void Report(string what, int counter, int offset, int percent)
             {
                 var elapsed = watch.Elapsed;
                 var rep = source.LCO(offset);
@@ -60,7 +70,7 @@ namespace Six.Runtime
                 var cps = Math.Round(offset / elapsed.TotalSeconds, 0);
                 var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
                 Console.WriteLine($"    {what}#{counter} {__Name} {rep}");
-                Console.WriteLine($"    elapsed: {ms} ms, {cps} cps, {lps} lps");
+                Console.WriteLine($"    elapsed: {ms} ms, {cps} cps, {lps} lps{percent} {percent} %");
             }
         }
 

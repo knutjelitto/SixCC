@@ -20,12 +20,35 @@ unit-element
     ;
 
 module-descriptor
-    | annotations 'module' module-name
-      (import-namespace ':' (literal-string | module-name) (':' literal-string (':' literal-string)? )? )?
-      literal-string?
-      module-body
+    | annotations 'module' module-name module-specifier version? module-body
     ;
 
+module-specifier
+    | repository ':' module (':' artifact (':' classifier)?)?
+    ;
+
+repository
+    | any-name
+    ;
+
+module
+    | literal-string
+    | module-name
+    ;
+
+artifact
+    | literal-string
+    ;
+
+classifier
+    | literal-string
+    ;
+
+version
+    | literal-string
+    ;
+
+   
 module-name
     | package-path
     ;
@@ -43,15 +66,24 @@ import-module
     ;
 
 import-declaration
-    | 'import' package-path import-element-list
+    | 'import' package-path import-elements
+    ;
+
+import-elements
+    | '{' import-element-list? '}'
     ;
 
 import-element-list
-    | '{' ((import-element | import-wildcard) (',' (import-element | import-wildcard))*)? '}'
+    | import-element (',' import-element)*
     ;
 
 import-element
-    | import-name ('=' import-name)? import-element-list?
+    | import-named
+    | import-wildcard
+    ;
+
+import-named
+    | import-name ('=' import-name)? import-elements?
     ;
 
 import-wildcard
@@ -147,23 +179,32 @@ delegated-constructor
     ;
 
 assertion
-    | assertion-message 'assert' conditions ';'
+    | assertion-message? 'assert' conditions ';'
     ;
 
 assertion-message
-    | string-expression?
+    | string-expression
     ;
 
 block
-    | '{' (import-declaration | declaration-or-statement)* '}'
+    | '{' block-elements '}'
     ;
 
-interface-body
-    | '{' (import-declaration | declaration-or-statement)* '}'
+interface-block
+    | '{' block-elements '}'
     ;
 
-class-body
-    | '{' (import-declaration | declaration-or-statement)* '}'
+class-block
+    | '{' block-elements '}'
+    ;
+
+block-elements
+    | block-element*
+    ;
+
+block-element
+    | import-declaration
+    | declaration-or-statement
     ;
 
 extended-type
@@ -195,8 +236,12 @@ package-qualifier
     ;
 
 un-qualified-class
-    | type-reference ( '.' ( member-reference | type-reference ('.' type-reference)* )? )?
+    | type-reference ( '.' ( member-reference | type-path )? )?
     | member-reference
+    ;
+
+type-path
+    | type-reference ('.' type-reference)*
     ;
 
 satisfied-types
@@ -214,7 +259,11 @@ caseType
     ;
 
 parameters
-    | '(' (parameter-declaration-or-ref-pattern  (',' parameter-declaration-or-ref-pattern)*)? ')'
+    | '(' parameter-list? ')'
+    ;
+
+parameter-list
+    | parameter-declaration-or-ref-pattern  (',' parameter-declaration-or-ref-pattern)*
     ;
 
 parameter-declaration-or-ref-pattern
@@ -236,13 +285,15 @@ parameter-reference
     ;
 
 parameter-declaration
-    | (variadic-type | 'void' | 'function' | 'dynamic' | 'value')
-      member-name
-      (value-specifier? | type-parameters? parameters+ any-specifier?)
+    | (variadic-type | 'void' | 'function' | 'dynamic' | 'value') member-name (value-specifier? | type-parameters? parameters+ any-specifier?)
     ;
 
 type-parameters
-    | '<' type-parameter ( ',' type-parameter )* '>'
+    | '<' type-parameter-list '>'
+    ;
+
+type-parameter-list
+    | type-parameter (',' type-parameter)*
     ;
 
 type-parameter
@@ -300,7 +351,7 @@ alias-declaration
     ;
 
 object-declaration
-    | annotations 'object' member-name extended-type? satisfied-types? class-body
+    | annotations 'object' member-name extended-type? satisfied-types? class-block
     ;
 
 setter-declaration
@@ -332,7 +383,7 @@ class-declaration
       extended-type?
       satisfied-types?
       type-constraints?
-      (class-body | class-specifier? ';')
+      (class-block | class-specifier? ';')
     ;
 
 interface-declaration
@@ -342,7 +393,7 @@ interface-declaration
       case-types?
       satisfied-types?
       type-constraints?
-      (interface-body | type-specifier? ';')
+      (interface-block | type-specifier? ';')
     ;
 
 statement
@@ -473,7 +524,7 @@ named-argument-declaration
     ;
 
 object-argument
-    | 'object' member-name? extended-type? satisfied-types? class-body
+    | 'object' member-name? extended-type? satisfied-types? class-block
     ;
 
 typed-method-argument
@@ -864,7 +915,7 @@ string-literal
     ;
 
 object-expression
-    | 'object' extended-type? satisfied-types? class-body
+    | 'object' extended-type? satisfied-types? class-block
     ;
 
 type-arguments
@@ -877,6 +928,10 @@ type-argument-list
 
 varianced-type
     | variance? type
+    ;
+
+defaulted-type-list
+    | defaulted-type (',' defaulted-type )*
     ;
 
 defaulted-type
@@ -931,11 +986,11 @@ array-type
     ;
 
 function-type
-    | primary-type '(' ( spread-type | defaulted-type (',' defaulted-type)* )? ')'
+    | primary-type '(' (spread-type | defaulted-type-list)? ')'
     ;
 
 tuple-type
-    | '[' (spread-type | defaulted-type (',' defaulted-type )*)? ']'
+    | '[' (spread-type | defaulted-type-list)? ']'
     ;
 
 iterable-type
@@ -1122,7 +1177,11 @@ finally-block
     ;
 
 resources
-    | '(' ( resource (',' resource)* )? ')'
+    | '(' resource-list? ')'
+    ;
+
+resource-list
+    | resource (',' resource)*
     ;
 
 resource
@@ -1139,23 +1198,14 @@ variable
     | member-name parameters*
     ;
 
-reference-path
-    | package-qualifier? reference-path-element ('.' reference-path-element)*
-    ; 
-
-reference-path-element
-    | type-name 
-    | member-name
+model-reference
+    | '^' model-expression
     ;
     
 meta-literal
     | '`' (declaration-reference | model-expression) '`'
     ;
 
-model-reference
-    | '^' model-expression
-    ;
-    
 model-expression
     | member-model-expression
     | type-model-expression
@@ -1219,6 +1269,15 @@ function-literal
     | 'function' reference-path
     ;
 
+reference-path
+    | package-qualifier? reference-path-element ('.' reference-path-element)*
+    ; 
+
+reference-path-element
+    | type-name 
+    | member-name
+    ;
+    
 // Lexer
 
 decimal-digits

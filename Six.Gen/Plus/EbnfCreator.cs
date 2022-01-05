@@ -116,7 +116,6 @@ namespace Six.Gen.Ebnf
 
             Ebnf = new SetTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
-            Ebnf = new MaybeAliasWalker(Ebnf).Walk();
 
             var final = new List<CoreOp>();
             id = 0;
@@ -141,6 +140,9 @@ namespace Six.Gen.Ebnf
             Ebnf.Patch(final);
 
             Ebnf = new InstanceWalker(Ebnf).Walk();
+            Ebnf = new AliasWalker(Ebnf).Walk();
+            Ebnf = new LoopWalker(Ebnf).Walk();
+            Ebnf = new TypeWalker(Ebnf).Walk();
 
             var keywords = new SortedSet<string>();
 

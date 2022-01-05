@@ -4,7 +4,7 @@ using Six.Ast;
 
 namespace Six.Gen.Ebnf
 {
-    internal class NameWalker : EbnfWalker<CoreOp>
+    internal class NameWalker : EbnfWalker
     {
         const string LeftParent = "(";
         const string RightParent = ")";

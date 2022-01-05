@@ -1,6 +1,6 @@
 ﻿namespace Six.Gen.Ebnf
 {
-    public class ResolveWalker : EbnfWalker<CoreOp>
+    public class ResolveWalker : EbnfWalker
     {
         public ResolveWalker(EbnfGrammar grammar)
         {

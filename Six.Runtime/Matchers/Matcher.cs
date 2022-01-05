@@ -49,20 +49,17 @@ namespace Six.Runtime.Matchers
         }
 
         //[DebuggerStepThrough]
-        public Context Context(Cursor at)
+        public bool TryContext(Cursor start, [MaybeNullWhen(false)] out Context context)
         {
-#if true
-            return Contexts[at];
-#else
-            if (Contexts.TryGetValue(at, out var context))
-            {
-                return context;
-            }
-            Assert(context != null);
-            return null;
-#endif
+            return Contexts.TryGetValue(start, out context) && context.Nexts.Count > 0;
         }
-        
+
+        public bool TryContext(Cursor start, Cursor end, [MaybeNullWhen(false)] out Context context)
+        {
+            return Contexts.TryGetValue(start, out context) && context.Nexts.Contains(end);
+        }
+
+
         public override string ToString()
         {
             return Name;

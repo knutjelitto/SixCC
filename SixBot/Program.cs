@@ -12,6 +12,7 @@ using Six.Runtime.Matchers;
 var maximal = false;
 var indexRules = true;
 
+//RunSix();
 RunCeylon();
 
 void RunCeylon()
@@ -19,9 +20,18 @@ void RunCeylon()
     maximal = true;
     indexRules = true;
 
-    //Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
     //Check<CeylonParser>(881, Sampler.LoadCeylon().OrderBy(s => s.Name));
     //Check<CeylonParser>(-1, Sampler.LoadCeylonOrdered());
+    CheckGenerate(true);
+    Wait();
+}
+
+void RunSix()
+{
+    maximal = true;
+    indexRules = true;
+    Check<SixParser>(-1, Sampler.LoadSix());
     CheckGenerate(true);
     Wait();
 }
@@ -37,7 +47,6 @@ void RunTests()
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    //Check<SixParser>(-1, Sampler.LoadSix());
     CheckGenerate(true);
     Wait();
 }

@@ -32,8 +32,8 @@ namespace Six.Gen.Ebnf
 
         public SortedSet<Instance> Instances { get; private set; } = new();
         public bool IsReached { get; set; }
-        public bool IsSpare { get; set; }
         public bool IsAlias { get; set; }
+        public bool IsLoop { get; set; }
         public bool IsDrop { get; set; }
         public bool IsLift { get; set; }
 
@@ -78,6 +78,10 @@ namespace Six.Gen.Ebnf
                 if (IsAlias)
                 {
                     builder.Append($"[A]");
+                }
+                if (IsLoop)
+                {
+                    builder.Append($"[L]");
                 }
                 return builder.Length > 0 ? $" {builder}" : string.Empty;
             }
