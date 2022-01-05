@@ -1,15 +1,14 @@
 ﻿grammar Json;
 
-%whitespace
-    : ws
+%start      = json;
+%whitespace = ws;
+
+json
+    | element
     ;
 
-json:
-    element
-    ;
-
-value:
-      object
+value
+    | object
     | array
     | string
     | number
@@ -18,45 +17,43 @@ value:
     | 'null'
     ;
 
-object:
-      '{' '}'
-    | '{' members '}'
+object
+    | '{' members? '}'
     ;
 
-members:
-      member
+members
+    | member
     | member ',' members
     ;
 
-member:
-    string ':' element
+member
+    | string ':' element
     ;
 
-array:
-      '[' ']'
-    | '[' elements ']'
+array
+    |'[' elements? ']'
     ;
 
-elements:
-      element
+elements
+    | element
     | element ',' elements
     ;
 
-element:
-    value
+element
+    | value
     ;
 
-string:
-    < '"' character* '"' >
+string
+    | < '"' character* '"' >
     ;
 
-character:
-      (('\u{0020}' .. '\u{10FFFF}') - '"') - '\\'
+character
+    | (('\u{0020}' .. '\u{10FFFF}') - '"') - '\\'
     | '\\' escape
     ;
 
-escape:
-      '"'
+escape
+    | '"'
     | '\\'
     | '/'
     | 'b'
@@ -68,50 +65,51 @@ escape:
     | 'u' hex hex hex hex
     ;
 
-hex:
-      digit
+hex
+    | digit
     | 'A' .. 'F'
     | 'a' .. 'f'
     ;
 
-number:
-    < integer fraction? exponent? >
+number
+    | < integer fraction? exponent? >
     ;
 
-integer:
-      digit
+integer
+    | digit
     | onenine digits
     | '-' digit
     | '-' onenine digits
     ;
 
-digits:
-    digit+
+digits
+    | digit+
     ;
 
-digit:
-      '0'
+digit
+    | '0'
     | onenine
     ;
 
-onenine:
-    '1' .. '9'
+onenine
+    | '1' .. '9'
     ;
 
-fraction:
-    '.' digits
+fraction
+    | '.' digits
     ;
 
-exponent:
-    ('E'|'e') sign? digits
+exponent
+    | ('E'|'e') sign? digits
     ;
 
-sign:
+sign
     | '+'
     | '-'
     ;
 
-ws  : ' '
+ws
+    | ' '
     | '\n'
     | '\r'
     | '\t'

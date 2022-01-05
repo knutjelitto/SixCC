@@ -16,6 +16,7 @@
                     var arg = op.Arguments[offset];
                     if (arg is RefOp refOp)
                     {
+                        arg.Instances.Add(new Instance(op, offset));
                         arg = refOp.Rule;
                     }
                     arg.Instances.Add(new Instance(op, offset));

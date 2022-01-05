@@ -4,7 +4,7 @@ namespace Six.Runtime.Matchers
 {
     public abstract class Matcher : IEnumerable<Matcher>
     {
-        private Matcher[] Matchers = Array.Empty<Matcher>();
+        public Matcher[] Matchers = Array.Empty<Matcher>();
         public readonly Dictionary<Cursor, Context> Contexts = new();
         public Dfa.Dfa? Dfa = null;
         public bool IsAlias = false;

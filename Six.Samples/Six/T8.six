@@ -1,63 +1,63 @@
 ﻿grammar T8;
 
-%start:         S ;
-%whitespace:    skip ;
+%start      =   S;
+%whitespace =   skip;
 
-S   : expr*
+S   | expr*
     ;
 
 expr
-    : 'a'
+    | 'a'
     | literal-string
     ;
 
 literal-string
-    : < '"' string-part '`'* '"' >
+    | < '"' string-part '`'* '"' >
     ;
 
 string-part
-    : ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escape-core | escape-sequence )*
+    | ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escape-core | escape-sequence )*
     ;
 
 escape-sequence
-    : '\\' ( ~'{' | '{' (~'}')* '}' )
+    | '\\' ( ~'{' | '{' (~'}')* '}' )
     ;
 
 escape-core
-    : ~'{'
+    | ~'{'
     | '{' (~'}')* '}'?
     ;
 
 skip
-    : space
+    | space
     | line-end
     | comment
     ;
 
 space
-    : ' ' | '\t'
+    | ' ' | '\t'
     ;
 
 line-end
-    : '\r' '\n'
+    | '\r' '\n'
     | '\n'
     | '\r'
     ;
 
 line-ender
-    : '\r'
+    | '\r'
     | '\n'
     ;
 
 comment
-    : line-comment
+    | line-comment
     | block-comment
     ;
 
 line-comment
-    : '//' (~line-ender)* line-end?
+    | '//' (~line-ender)* line-end?
     ;
 
 block-comment
-    : '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
+    | '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
     ;

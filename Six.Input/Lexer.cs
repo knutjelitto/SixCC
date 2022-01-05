@@ -52,6 +52,8 @@ namespace Six.Input
                         return Token(TKind.LeftAngle);
                     case '>':
                         return Token(TKind.RightAngle);
+                    case '=':
+                        return Token(TKind.Assign);
                     case ':':
                         return Token(TKind.Colon);
                     case ';':

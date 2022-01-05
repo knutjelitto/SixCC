@@ -1,6 +1,6 @@
 ﻿grammar T4;
 
-S   : d? d?
+S   | d? d?
     | d? d*
     | d? d+
     | d* d?
@@ -11,5 +11,5 @@ S   : d? d?
     | d+ d+
     ;
 
-d   : 'd'
+d   | 'd'
     ;

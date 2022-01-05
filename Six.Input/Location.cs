@@ -2,7 +2,7 @@
 
 namespace Six.Input
 {
-    public class Location : ILocation
+    public struct Location : ILocation
     {
         public static readonly Location Nowhere = new Location(Source.FromString(string.Empty), 0, 0);
 

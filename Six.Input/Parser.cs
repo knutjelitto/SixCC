@@ -42,13 +42,14 @@ namespace Six.Input
         {
             var name = Name();
             Expression expression;
-            Match(TKind.Colon);
-            if (Current.Kind == TKind.LeftAngle)
+            if (Check(TKind.Alter))
             {
-                expression = Token();
+                Match(TKind.Alter);
+                expression = Expression();
             }
             else
             {
+                Match(TKind.Assign);
                 expression = Expression();
             }
             Match(TKind.Semi);
@@ -207,15 +208,16 @@ namespace Six.Input
             return kinds.Any(kind => Current.Kind == kind);
         }
 
-        private Token Match(TKind kind)
+        private Token Match(params TKind[] kinds)
         {
-            if (Current.Kind == kind)
+            if (Check(kinds))
             {
                 var token = Current;
                 current += 1;
                 return token;
             }
-            return Error<Token>($"expected '{kind}', but found '{Current.Kind}'");
+            var which = string.Join(", ", kinds);
+            return Error<Token>($"expected '{which}', but found '{Current.Kind}'");
         }
 
         private bool Try(TKind kind)

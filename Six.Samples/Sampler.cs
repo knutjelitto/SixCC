@@ -83,7 +83,7 @@ namespace Six.Samples
             return from s in LoadCeylon("language", @"D:\SixTmp\ceylon\language\src\ceylon\language")
                    where !s.Name.Contains(".meta.")
                    let x = Path.GetExtension(Path.GetFileNameWithoutExtension(s.Name))
-                   where char.IsUpper(x[1]) && "A".Contains(x[1])
+                   where char.IsUpper(x[1]) && "ABC".Contains(x[1])
                    orderby x[1]
                    select s;
         }

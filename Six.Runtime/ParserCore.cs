@@ -23,7 +23,7 @@ namespace Six.Runtime
             __Core.Reset();
         }
 
-        public bool Match(Source source)
+        public bool Parse(Source source)
         {
             var cursor = new Cursor(source, 0);
             var successCounter = 0;
@@ -64,26 +64,11 @@ namespace Six.Runtime
             }
         }
 
-        public bool Parse(Source source)
-        {
-            var ok = Match(source);
-
-            return ok;
-        }
-
-        public bool Recognize(string name, string content)
+        public bool Parse(string name, string content)
         {
             var source = Source.FromString(name, content);
-            var cursor = new Cursor(source, 0);
-            var ok = false;
 
-            __Core.__Start.Match(cursor,
-                success =>
-                {
-                    ok = true;
-                });
-
-            return ok;
+            return Parse(source);
         }
     }
 }

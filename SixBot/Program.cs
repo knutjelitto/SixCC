@@ -7,18 +7,26 @@ using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 using Six.Runtime.Matchers;
 
-var profile = false;
-var minimal = false;
+#pragma warning disable CS8321 // Local function is declared but never used
+
+var maximal = false;
 var indexRules = true;
 
-if (profile)
+RunCeylon();
+
+void RunCeylon()
 {
-    var num = 881;
-    minimal = true;
-    indexRules = false;
-    Check<CeylonParser>(1, Sampler.LoadCeylon().OrderBy(s => s.Content.Length).Skip(num-1).Take(1));
+    maximal = true;
+    indexRules = true;
+
+    //Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    //Check<CeylonParser>(881, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    //Check<CeylonParser>(-1, Sampler.LoadCeylonOrdered());
+    CheckGenerate(true);
+    Wait();
 }
-else
+
+void RunTests()
 {
     CheckAllT(0);
     Check<T1Parser>(0, Sampler.Load(".t1"));
@@ -29,12 +37,40 @@ else
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
     Check<T8Parser>(0, Sampler.Load(".t8"));
-    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
-    //Check<CeylonParser>(881, Sampler.LoadCeylon().OrderBy(s => s.Name));
-    Check<CeylonParser>(0, Sampler.LoadCeylonOrdered());
     //Check<SixParser>(-1, Sampler.LoadSix());
-    CheckJson(false, Sampler.LoadJson());
     CheckGenerate(true);
+    Wait();
+}
+
+void RunCompiler()
+{
+    var compiler = new Compiler<CeylonParser>(16);
+    var timer = new Stopwatch();
+    timer.Start();
+    compiler.Compile(Sampler.LoadCeylon().OrderBy(s => s.Name).Select(s => new Job(s.Name, s.Content)));
+    timer.Stop();
+    var ms = Math.Round(timer.Elapsed.TotalMilliseconds, 0);
+    Console.WriteLine();
+    Console.WriteLine($"elapsed: {ms} ms");
+    Wait();
+}
+
+void RunProfile()
+{
+    var num = 881;
+    maximal = false;
+    indexRules = false;
+    Check<CeylonParser>(1, Sampler.LoadCeylon().Skip(num - 1).Take(1));
+}
+
+void RunJson()
+{
+    CheckJson(true, Sampler.LoadJson());
+    Wait();
+}
+
+void Wait()
+{
     Console.Write("any key ... ");
     Console.ReadKey(true);
 }
@@ -76,7 +112,7 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
     {
         count++;
 
-        var content = (sample.Content.Length < 20 ? sample.Content : sample.Content[..20] + " ...").Esc();
+        var content = (sample.Content.Length <= 20 ? sample.Content : sample.Content[..17] + "...").Esc();
         Console.WriteLine($"{typeof(ParserType).Name,-12} {count} check {sample.Name} {content}");
 
         if (which == -1 || which == count)
@@ -112,7 +148,7 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
             }
             if (ok)
             {
-                if (minimal)
+                if (!maximal)
                 {
                     continue;
                 }
@@ -193,7 +229,7 @@ void CheckJson(bool enabled, IEnumerable<Sample> samples)
         var parser = new JsonParser();
         bool fail;
         bool ok;
-        if (ok = parser.Recognize(sample.Name, sample.Content))
+        if (ok = parser.Parse(sample.Name, sample.Content))
         {
             fail = sample.Name.StartsWith("n_");
             Outcome();

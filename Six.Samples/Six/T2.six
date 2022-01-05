@@ -1,10 +1,10 @@
 ﻿grammar T2;
 
-B   : ids
+B   | ids
     ;
 
-ids : id+ id*
+ids | id+ id*
     ;
 
-id  : <'a' .. 'z'>
+id  | <'a' .. 'z'>
     ;

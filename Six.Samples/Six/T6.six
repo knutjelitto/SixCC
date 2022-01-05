@@ -1,7 +1,7 @@
 ﻿grammar T6;
 
-T	: E+
+T	| E+
 	;
 
-E	: 'id' 'x'?
+E	| 'id' 'x'?
 	;

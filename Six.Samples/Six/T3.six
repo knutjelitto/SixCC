@@ -1,8 +1,8 @@
 ﻿grammar T3;
 
-C   : C '+' C
+C   | C '+' C
     | id
     ;
 
-id  : <'a' .. 'z'>
+id  | <'a' .. 'z'>
     ;

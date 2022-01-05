@@ -17,6 +17,7 @@
         RightAngle,
 
         Colon,
+        Assign,
         Semi,
         Drop,
         Lift,

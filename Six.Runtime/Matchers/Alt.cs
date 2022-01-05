@@ -9,9 +9,9 @@
 
         public override void MatchCore(Context context)
         {
-            foreach (var matcher in this)
+            for (var i = 0; i < Matchers.Length; ++i)
             {
-                matcher.Match(context.Start, context.Success);
+                Matchers[i].Match(context.Start, context.Success);
             }
         }
     }

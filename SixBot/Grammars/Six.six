@@ -1,41 +1,39 @@
 ﻿/* six grammar */
 grammar Six;
 
-%start      : grammar;
-%whitespace : skip ;
+%start      = grammar;
+%whitespace = skip ;
 
 grammar
-    : 'grammar' identifier ';' rules
+    | 'grammar' identifier ';' options rules
     ;
 
-rules
-    : rule*
+options
+    | option*
     ;
 
-rule
-    : identifier ':' body ';'
+option
     | special-identifier ':' identifier ';'
     ;
 
-body
-    : expression
-    | '<' expression '>'
+rules
+    | rule*
+    ;
+
+rule
+    | identifier '|' expression ';'
     ;
 
 expression
-    : alternation
-    ;
-
-alternation
-    : sequence ('|' sequence)*
+    | sequence ('|' sequence)*
     ;
 
 sequence
-    : element*
+    | element*
     ;
 
 element
-    : atom
+    | atom
     | range
     | diff
     | star
@@ -48,92 +46,93 @@ element
     ;
 
 range
-    : atom '..' atom
+    | atom '..' atom
     ;
 
 diff
-    : atom '-' atom
+    | atom '-' atom
     ;
 
 star
-    : atom '*'
+    | atom '*'
     ;
 
 plus
-    : atom '+'
+    | atom '+'
     ;
 
 optional
-    : atom '?'
+    | atom '?'
     ;
 
 complement
-    : '~' atom
+    | '~' atom
     ;
 
 not
-    : '!' atom
+    | '!' atom
     ;
 
 drop
-    : ',' atom
+    | ',' atom
     ;
 
 lift
-    : '^' atom
+    | '^' atom
     ;
 
 atom
-    : identifier
+    | identifier
     | string
     | '(' expression ')'
+    | '<' expression '>'
     ;
 
 special-identifier
-    : < '%' id-core >
+    | < '%' id-core >
     ;
 
 identifier
-    : < id-core >
+    | < id-core >
     ;
 
 id-core
-    : id-begin id-continue*
+    | id-begin id-continue*
     ;
 
 id-begin
-    : letter letter-or-digit*
+    | letter letter-or-digit*
     ;
 
 id-continue
-    : ('-'|'_') letter-or-digit+
+    | ('-'|'_') letter-or-digit+
     ;
 
 letter
-    : 'a' .. 'z'
+    | 'a' .. 'z'
     | 'A' .. 'Z'
     ;
 
 digit
-    : '0' .. '9'
+    | '0' .. '9'
     ;
 
 letter-or-digit
-    : letter
+    | letter
     | digit
     ;
 
 string
-    : < '\'' character* '\'' >
+    | < '\'' character* '\'' >
     ;
 
 character
-    : (~('\\' | '\''))
+    | (~('\\' | '\''))
     | '\\' escape
     ;
 
 escape
-    : '\''
+    | '\''
     | '\\'
     | 'a'
     | 'b'
@@ -147,42 +146,42 @@ escape
     ;
 
 hex
-    : digit
+    | digit
     | 'A' .. 'F'
     | 'a' .. 'f'
     ;
 
 skip
-    : space
+    | space
     | line-end
     | comment
     ;
 
 space
-    : ' '
+    | ' '
     | '\t'
     ;
 
 line-end
-    : '\r' '\n'
+    | '\r' '\n'
     | '\n'
     | '\r'
     ;
 
 line-ender
-    : '\n'
+    | '\n'
     | '\r'
     ;
 
 comment
-    : line-comment
+    | line-comment
     | block-comment
     ;
 
 line-comment
-    : '//' (~line-ender)* line-end?
+    | '//' (~line-ender)* line-end?
     ;   
 
 block-comment
-    : '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
+    | '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
     ;
