@@ -10,7 +10,7 @@ namespace Six.Gen
 
         const string ImplementationCoreClass = "ImplementationCore";
         const string MatcherClass = "Matcher";
-        const string ParserCoreClass = "ParserCore";
+        const string ParserCoreClass = "Parser";
 
         private readonly NameWalker namer = new();
 
@@ -64,10 +64,6 @@ namespace Six.Gen
                         className = className ?? ClassName(op);
                         w($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
                         var attributes = new StringBuilder();
-                        if (op.IsAlias)
-                        {
-                            attributes.Append("IsAlias = true, ");
-                        }
                         if (op.IsDrop)
                         {
                             attributes.Append("IsDrop = true, ");

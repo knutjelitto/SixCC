@@ -12,8 +12,8 @@ using Six.Runtime.Matchers;
 var maximal = false;
 var indexRules = true;
 
-//RunSix();
-RunCeylon();
+RunSix();
+//RunCeylon();
 
 void RunCeylon()
 {
@@ -46,7 +46,6 @@ void RunTests()
     Check<T5Parser>(0, Sampler.Load(".t5"));
     Check<T6Parser>(0, Sampler.Load(".t6"));
     Check<T7Parser>(0, Sampler.Load(".t7"));
-    Check<T8Parser>(0, Sampler.Load(".t8"));
     CheckGenerate(true);
     Wait();
 }
@@ -95,12 +94,11 @@ void CheckAllT(int which)
         Check<T5Parser>(which, Sampler.Load(".t5"));
         Check<T6Parser>(which, Sampler.Load(".t6"));
         Check<T7Parser>(which, Sampler.Load(".t7"));
-        Check<T8Parser>(which, Sampler.Load(".t8"));
-    }
+   }
 }
 
 void Check<ParserType>(int which, IEnumerable<Sample> samples)
-    where ParserType : ParserCore, new()
+    where ParserType : Parser, new()
 {
     if (which == 0)
     {

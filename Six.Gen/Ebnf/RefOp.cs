@@ -14,5 +14,21 @@
 
         public RuleOp Rule => (RuleOp)Grammar.Operators[Name];
         protected override string DumpHead => $"⤇{Name}";
+        public override void Dump(Writer writer)
+        {
+#if true
+            base.Dump(writer);
+#else
+            if (Grammar.Operators.Contains(Name))
+            {
+                writer.WriteLine($"{DumpHead}{Rule.Attributes}");
+            }
+            else
+            {
+                base.Dump(writer);
+            }
+#endif
+        }
+
     }
 }

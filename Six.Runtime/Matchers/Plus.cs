@@ -24,9 +24,8 @@
 
             void Success(Cursor success)
             {
-                if (!context.Nexts.Contains(success))
+                if (context.NewSuccess(success))
                 {
-                    context.Success(success);
                     todo.Enqueue(success);
                 }
             }

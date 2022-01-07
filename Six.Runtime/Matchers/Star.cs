@@ -26,11 +26,8 @@
 
             void Success(Cursor success)
             {
-                //if (already.Add(success))
-                if (!context.Nexts.Contains(success))
+                if (context.NewSuccess(success))
                 {
-                    Assert(!context.Nexts.Contains(success));
-                    context.Success(success);
                     todo.Enqueue(success);
                 }
             }

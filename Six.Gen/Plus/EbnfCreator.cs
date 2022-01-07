@@ -140,9 +140,8 @@ namespace Six.Gen.Ebnf
             Ebnf.Patch(final);
 
             Ebnf = new InstanceWalker(Ebnf).Walk();
-            Ebnf = new AliasWalker(Ebnf).Walk();
             Ebnf = new LoopWalker(Ebnf).Walk();
-            Ebnf = new TypeWalker(Ebnf).Walk();
+            Ebnf = new Typing.TypeWalker(Ebnf).Walk();
 
             var keywords = new SortedSet<string>();
 

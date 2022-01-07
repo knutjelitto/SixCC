@@ -1,5 +1,5 @@
-﻿using Six.Rex;
-using System.Text;
+﻿using Six.Gen.Typing;
+using Six.Rex;
 
 namespace Six.Gen.Ebnf
 {
@@ -32,10 +32,12 @@ namespace Six.Gen.Ebnf
 
         public SortedSet<Instance> Instances { get; private set; } = new();
         public bool IsReached { get; set; }
-        public bool IsAlias { get; set; }
         public bool IsLoop { get; set; }
         public bool IsDrop { get; set; }
         public bool IsLift { get; set; }
+        public ClassType? Class { get; set; }
+        public InterfaceType? Interface { get; set; }
+        public BaseType Base => Class!.Base!;
 
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
@@ -55,13 +57,27 @@ namespace Six.Gen.Ebnf
                 op.Dump(writer);
             }
         }
+
         protected abstract string DumpHead { get; }
+
+        public virtual void DumpTypes(Writer writer)
+        {
+            if (Class != null)
+            {
+                writer.WriteLine($":: {Class}");
+            }
+            if (Interface != null)
+            {
+                writer.WriteLine($":: {Interface}");
+            }
+        }
 
         public virtual void Dump(Writer writer)
         {
             writer.WriteLine($"{DumpHead}{Attributes}");
             using (writer.Indent())
             {
+                DumpTypes(writer);
                 DumpInner(writer);
             }
         }
@@ -74,10 +90,6 @@ namespace Six.Gen.Ebnf
                 if (Instances.Count > 0)
                 {
                     builder.Append($"[#{Instances.Count}]");
-                }
-                if (IsAlias)
-                {
-                    builder.Append($"[A]");
                 }
                 if (IsLoop)
                 {

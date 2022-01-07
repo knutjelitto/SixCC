@@ -45,7 +45,7 @@ namespace Six.Input
             if (Check(TKind.Alter))
             {
                 Match(TKind.Alter);
-                expression = Expression();
+                expression = TopExpression();
             }
             else
             {
@@ -55,6 +55,11 @@ namespace Six.Input
             Match(TKind.Semi);
 
             return builder.Indefinite(name.Location, name.Text, expression);
+        }
+
+        private Expression TopExpression()
+        {
+            return Alternation();
         }
 
         private Expression Expression()

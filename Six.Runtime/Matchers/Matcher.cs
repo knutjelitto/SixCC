@@ -1,8 +1,6 @@
-﻿using System.Collections;
-
-namespace Six.Runtime.Matchers
+﻿namespace Six.Runtime.Matchers
 {
-    public abstract class Matcher : IEnumerable<Matcher>
+    public abstract class Matcher
     {
         public Matcher[] Matchers = Array.Empty<Matcher>();
         public readonly Dictionary<Cursor, Context> Contexts = new();
@@ -20,12 +18,12 @@ namespace Six.Runtime.Matchers
         public int Id { get; }
         public string Name { get; }
 
-        public virtual void Match(Cursor start, Action<Cursor> next)
-        {
-            Runtime.Context.Match(this, start, next);
-        }
-
         public abstract void MatchCore(Context context);
+
+        public virtual void Match(Cursor start, Action<Cursor> onMatched)
+        {
+            Context.Match(this, start, onMatched);
+        }
 
         public virtual void Reset()
         {
@@ -48,12 +46,13 @@ namespace Six.Runtime.Matchers
             Matchers = matchers;
         }
 
-        //[DebuggerStepThrough]
+        [DebuggerStepThrough]
         public bool TryContext(Cursor start, [MaybeNullWhen(false)] out Context context)
         {
             return Contexts.TryGetValue(start, out context) && context.Nexts.Count > 0;
         }
 
+        [DebuggerStepThrough]
         public bool TryContext(Cursor start, Cursor end, [MaybeNullWhen(false)] out Context context)
         {
             return Contexts.TryGetValue(start, out context) && context.Nexts.Contains(end);
@@ -74,8 +73,5 @@ namespace Six.Runtime.Matchers
         {
             return Contexts.Values.Where(c => c.Nexts.Count > 0);
         }
-
-        public IEnumerator<Matcher> GetEnumerator() => ((IEnumerable<Matcher>)Matchers).GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => Matchers.GetEnumerator();
     }
 }

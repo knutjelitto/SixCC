@@ -18,6 +18,7 @@
                 writer.WriteLine($"{rule.Name}{rule.Attributes}");
                 using (writer.Indent())
                 {
+                    rule.DumpTypes(writer);
                     rule.Argument.Dump(writer);
 
                     if (rule.DFA != null)

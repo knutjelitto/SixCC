@@ -6,11 +6,11 @@ namespace Six.Runtime.Sppf
     public class SppfBuilder
     {
         private readonly Source source;
-        private readonly ParserCore parser;
+        private readonly Parser parser;
         private readonly RuleIndex? ruleIndex;
         private readonly Dictionary<string, Node> cache;
 
-        public SppfBuilder(Source source, ParserCore parser, RuleIndex? ruleIndex = null)
+        public SppfBuilder(Source source, Parser parser, RuleIndex? ruleIndex = null)
         {
             this.source = source;
             this.parser = parser;
@@ -84,17 +84,17 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private Symbol? BuildRule(Role role, Rule rule, Cursor start, Cursor end)
+        private Symbol? BuildRule(Role role, Matcher matcher, Cursor start, Cursor end)
         {
-            if (rule.TryContext(start, end, out _))
+            if (matcher.TryContext(start, end, out _))
             {
-                if (rule.IsTerminal)
+                if (matcher.IsTerminal)
                 {
-                    return BuildTerminal(rule, start, end);
+                    return BuildTerminal(matcher, start, end);
                 }
                 else
                 {
-                    return BuildNonterminal(role, rule, start, end);
+                    return BuildNonterminal(role, matcher, start, end);
                 }
             }
 
@@ -119,7 +119,7 @@ namespace Six.Runtime.Sppf
         {
             if (matcher.TryContext(start, out var context))
             {
-                var children = (from alt in matcher
+                var children = (from alt in matcher.Matchers
                                 where alt.TryContext(start, end, out _)
                                 let child = Build(alt, start, end)
                                 where child != null
@@ -213,26 +213,12 @@ namespace Six.Runtime.Sppf
 
         private IEnumerable<Packed> BuildMatcher(Matcher matcher, Cursor start, Cursor end)
         {
-            var partitions = FindPartitions(matcher, start, end);
-
-            var packeds = new List<Packed>();
-
-            foreach (var partition in partitions)
-            {
-                var partials = BuildPackedPartitioned(matcher, matcher.Count, partition);
-
-                foreach (var partial in partials)
-                {
-                    Assert(partial.End == end);
-                    packeds.Add(partial);
-                }
-            }
-
-            return packeds;
+            return FindPartitions(matcher, start, end);
         }
-        private IEnumerable<Packed> BuildPackedPartitioned(Matcher matcher, int dot, List<Extend> partition)
+
+        private IEnumerable<Packed> BuildPackedPartitioned(Matcher matcher, int dot, Extend[] partition)
         {
-            Assert(matcher.Count == partition.Count);
+            Assert(matcher.Count == partition.Length);
 
             if (dot > 0)
             {
@@ -264,7 +250,7 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private Node? BuildLeftPartitioned(Matcher matcher, int dot, List<Extend> partition)
+        private Node? BuildLeftPartitioned(Matcher matcher, int dot, Extend[] partition)
         {
             if (dot == 0)
             {
@@ -306,7 +292,7 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private IEnumerable<List<Extend>> LoopPartitions(Context starContext, Matcher repeat, Cursor start, Cursor end)
+        private IEnumerable<List<Extend>> LoopPartitions(Context loopContext, Matcher repeat, Cursor start, Cursor end)
         {
             if (start >= end)
             {
@@ -320,7 +306,7 @@ namespace Six.Runtime.Sppf
                     {
                         var extend = new Extend(start, next);
 
-                        foreach (var nextPartition in LoopPartitions(starContext, repeat, next, end))
+                        foreach (var nextPartition in LoopPartitions(loopContext, repeat, next, end))
                         {
                             var list = Enumerable.Repeat(extend, 1).Concat(nextPartition).ToList();
                             yield return list;
@@ -330,41 +316,46 @@ namespace Six.Runtime.Sppf
             }
         }
 
-        private IEnumerable<List<Extend>> FindPartitions(Matcher symbol, Cursor start, Cursor end)
+        private IEnumerable<Packed> FindPartitions(Matcher matcher, Cursor start, Cursor end)
         {
-            return FindPartitions(symbol, 0, start, end);
-        }
+            var extends = new Extend[matcher.Count];
 
-        private IEnumerable<List<Extend>> FindPartitions(Matcher symbol, int dot, Cursor start, Cursor end)
-        {
-            Assert(dot >= 0);
+            return Partitions(0, start, end);
 
-            if (dot == symbol.Count)
+            IEnumerable<Packed> Partitions(int dot, Cursor start, Cursor end)
             {
-                if (start == end)
-                {
-                    yield return new List<Extend>();
-                }
-            }
-            else
-            {
-                var matcher = symbol[dot];
+                Assert(dot >= 0 && dot <= matcher.Count);
 
-                if (matcher.TryContext(start, out var context))
+                if (dot == matcher.Count)
                 {
-                    foreach (var next in context.Nexts.Where(x => x <= end))
+                    if (start == end)
                     {
-                        var extend = new Extend(start, next);
-                        foreach (var sub in FindPartitions(symbol, dot + 1, next, end))
+                        var partials = BuildPackedPartitioned(matcher, matcher.Count, extends);
+
+                        foreach (var partial in partials)
                         {
-                            var list = Enumerable.Repeat(extend, 1).Concat(sub).ToList();
-                            yield return list;
+                            Assert(partial.End == end);
+                            yield return partial;
+                        }
+                    }
+                }
+                else
+                {
+                    if (matcher[dot].TryContext(start, out var context))
+                    {
+                        foreach (var next in context.Nexts.Where(x => x <= end))
+                        {
+                            extends[dot] = new Extend(start, next);
+
+                            foreach (var packed in Partitions(dot + 1, next, end))
+                            {
+                                yield return packed;
+                            }
                         }
                     }
                 }
             }
         }
-
         private Symbol? BuildDrop(Drop matcher, Cursor start, Cursor end)
         {
             var packeds = BuildMatcher(matcher, start, end).ToArray();
@@ -439,12 +430,8 @@ namespace Six.Runtime.Sppf
             return null;
         }
 
-        private Symbol? BuildNonterminal(Role role, Rule matcher, Cursor start, Cursor end)
+        private Symbol? BuildNonterminal(Role role, Matcher matcher, Cursor start, Cursor end)
         {
-            //if (matcher is StartRule startRule)
-            //{
-            //    end = startRule.Eof!.Value;
-            //}
             var packeds = BuildMatcher(matcher, start, end).ToArray();
 
             Index(role, matcher, start, end);

@@ -16,10 +16,10 @@ namespace Six.Runtime
     }
 
     public class Compiler<TParser>
-        where TParser : ParserCore, new()
+        where TParser : Parser, new()
     {
         private readonly int parserCount;
-        private readonly BufferBlock<ParserCore> parsers;
+        private readonly BufferBlock<Parser> parsers;
         private readonly ActionBlock<Job> action;
 
         public Compiler(int parserCount)

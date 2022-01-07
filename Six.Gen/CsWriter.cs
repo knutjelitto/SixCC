@@ -4,6 +4,18 @@ namespace Six.Gen
 {
     internal static class CsWriter
     {
+        public static string CsId(this RuleOp rule)
+        {
+            return rule.Name.CsId();
+        }
+
+        public static string CsId(this string identifier)
+        {
+            var parts = identifier.Split('-', '_');
+
+            return string.Join(string.Empty, parts.Select(part => part.Cap()));
+        }
+
         public static string CsString(this string text)
         {
             return $"\"{string.Join(string.Empty, text.Select(chr => Escape(chr)))}\"";

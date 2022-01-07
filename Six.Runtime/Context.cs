@@ -51,6 +51,20 @@ namespace Six.Runtime
             }
         }
 
+        public bool NewSuccess(Cursor next)
+        {
+            if (Nexts.Add(next))
+            {
+                var count = Continues.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    Continues[i](next);
+                }
+                return true;
+            }
+            return false;
+        }
+
         public override string ToString()
         {
             return $"context({Start}, [{Nexts}], [#{Continues.Count}], {Matcher})";
