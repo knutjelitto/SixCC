@@ -32,6 +32,7 @@
         public UniqueList<string, CoreOp> Operators { get; private set; }
         public List<string> Keywords { get; }
         public IEnumerable<RuleOp> Rules => Operators.OfType<RuleOp>();
+        public IEnumerable<RuleOp> CoreRules => Rules.Where(r => !r.Name.StartsWith("%"));
         public IEnumerable<CoreOp> Others => Operators.Where(op => op is not RuleOp);
         public RuleOp StartRule => Rules.Where(op => op.Name.ToLowerInvariant() == Ast.AstGrammar.TheStart).First();
         public RuleOp WhitespaceRule => Rules.Where(op => op.Name.ToLowerInvariant() == Ast.AstGrammar.TheWhitespace).First();

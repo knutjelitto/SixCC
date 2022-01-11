@@ -81,6 +81,7 @@ void Wait()
 {
     Console.Write("any key ... ");
     Console.ReadKey(true);
+    Console.WriteLine();
 }
 
 void CheckAllT(int which)
@@ -137,6 +138,11 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                     .Where(c => c != null)
                     .OrderByDescending(c => c!.Nexts.Last())
                     .ThenByDescending(c => c!.Nexts.Last().Offset - c!.Start.Offset)
+                    .ToList();
+                var nons = parser.__Core.__Matchers
+                    .SelectMany(m => m.NonMatches())
+                    .Where(c => c != null)
+                    .OrderByDescending(c => c!.Start.Offset)
                     .ToList();
                 foreach (var m in parser.__Core.__Matchers)
                 {

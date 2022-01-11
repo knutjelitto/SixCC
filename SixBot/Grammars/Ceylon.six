@@ -24,7 +24,7 @@ module-descriptor
     ;
 
 module-specifier
-    | repository ':' module (':' artifact (':' classifier)?)?
+    | repository ':' module artifact-and-classifier?
     ;
 
 repository
@@ -36,12 +36,16 @@ module
     | module-name
     ;
 
+artifact-and-classifier
+    | artifact classifier?
+    ;
+
 artifact
-    | literal-string
+    | ':' literal-string
     ;
 
 classifier
-    | literal-string
+    | ':' literal-string
     ;
 
 version
@@ -58,8 +62,8 @@ module-body
     ;
 
 module-body-element
-    | annotations inferred-attribute-declaration
-    | annotations import-module
+    | inferred-attribute-declaration
+    | import-module
     ;
 
 package-descriptor
@@ -67,8 +71,12 @@ package-descriptor
     ;
 
 import-module
-    | 'import' (import-namespace ':')? module ( ':' literal-string ( ':' literal-string )? )? (literal-string | member-name)? ';'
+    | annotations 'import' module version? ';'
     ;
+
+import-namespace
+     | import-namespace-name ':'
+     ;
 
 import-declaration
     | 'import' package-path import-elements
@@ -88,7 +96,11 @@ import-element
     ;
 
 import-named
-    | import-name ('=' import-name)? import-elements?
+    | import-name import-name-specifier? import-elements?
+    ;
+
+import-name-specifier
+    | '=' import-name
     ;
 
 import-wildcard
@@ -109,7 +121,7 @@ any-name
     | upper-identifier
     ;
 
-import-namespace
+import-namespace-name
     | lower-identifier
     | upper-identifier
     ;
@@ -168,7 +180,7 @@ variable-pattern
     ;
 
 variadic-variable
-    | union-type? ('*' | '+') member-name?
+    | union-type? variadic-operator member-name?
     ;
 
 let-statement
@@ -227,7 +239,7 @@ qualified-class
     ;
 
 super-qualified-class
-    | super-qualifier (type-reference | member-reference)
+    | super-qualifier base-reference
     ;
 
 super-qualifier
@@ -235,7 +247,7 @@ super-qualifier
     ;
 
 package-qualified-class
-    | package-qualifier type-reference ( '.' member-reference)?
+    | package-qualifier un-qualified-class
     ;
 
 package-qualifier
@@ -243,7 +255,8 @@ package-qualifier
     ;
 
 un-qualified-class
-    | type-reference ( '.' ( member-reference | type-path )? )?
+    | type-path '.' member-reference
+    | type-path
     | member-reference
     ;
 
@@ -299,7 +312,23 @@ parameter-reference
     ;
 
 parameter-declaration
-    | (variadic-type | 'void' | 'function' | 'dynamic' | 'value') member-name (value-specifier? | type-parameters? parameters+ function-specifier?)
+    | value-parameter-declaration
+    | function-parameter-declaration
+    ;
+
+value-parameter-declaration
+    | parameter-declaration-type member-name value-specifier?
+    ;
+
+function-parameter-declaration
+    | parameter-declaration-type member-name type-parameters? parameters+ function-specifier?
+    ;
+
+parameter-declaration-type
+    | variadic-type
+    | 'void'
+    | 'function'
+    | 'value'
     ;
 
 type-parameters
@@ -368,23 +397,42 @@ object-declaration
     ;
 
 setter-declaration
-    | annotations 'assign' member-name (block | function-specifier ';')
+    | annotations 'assign' member-name setter-definition
+    ;
+
+setter-definition
+    | block
+    | function-specifier ';'
     ;
 
 typed-method-declaration
-    | annotations (variadic-type | 'void' | 'dynamic') member-name type-parameters? parameters+ type-constraints? (block | function-specifier? ';')
+    | annotations method-type parametrized-member type-constraints? method-definition
+    ;
+
+method-type
+    | variadic-type
+    | 'void'
     ;
 
 inferred-method-declaration
-    | annotations 'function' member-name type-parameters? parameters+ type-constraints? (block | function-specifier? ';')
+    | annotations 'function' parametrized-member type-constraints? method-definition
     ;
 
 typed-attribute-declaration
-    | annotations (variadic-type | 'dynamic') member-name (block | any-specifier? ';')
+    | annotations attribute-type member-name attribute-definition
+    ;
+
+attribute-type
+    | variadic-type
     ;
 
 inferred-attribute-declaration
-    | annotations 'value' member-name (block | any-specifier? ';')
+    | annotations 'value' member-name attribute-definition
+    ;
+
+attribute-definition
+    | block
+    | any-specifier? ';'
     ;
 
 class-declaration
@@ -396,11 +444,21 @@ class-declaration
       extended-type?
       satisfied-types?
       type-constraints?
-      (class-block | class-specifier? ';')
+      class-definition
+    ;
+
+class-definition
+    | class-block
+    | class-specifier? ';'
     ;
 
 interface-declaration
-    | annotations ('interface' | 'dynamic') type-name type-parameters? case-types? satisfied-types? type-constraints? (interface-block | type-specifier? ';')
+    | annotations 'interface' type-name type-parameters? case-types? satisfied-types? type-constraints? interface-definition
+    ;
+
+interface-definition
+    | interface-block
+    | type-specifier? ';'
     ;
 
 statement
@@ -461,10 +519,22 @@ any-specifier
     ;
 
 base-reference-or-parameterized
-    | member-name type-parameters? parameters+
+    | base-reference
+    | parametrized-member
+    | self-reference self-parametrized-member?
+    ;
+
+base-reference
     | member-reference
     | type-reference
-    | self-reference (member-selection-operator member-name type-parameters? parameters+)?
+    ;
+
+parametrized-member
+    | member-name type-parameters? parameters+
+    ;
+
+self-parametrized-member
+    | member-selection-operator parametrized-member
     ;
 
 member-reference
@@ -491,12 +561,17 @@ tuple
     ;
 
 arguments
+    | structural-arguments
     | positional-arguments
-    | named-arguments
     ;
 
-named-arguments
-    | '{' (named-argument | anonymous-argument)* sequenced-arguments? '}'
+structural-arguments
+    | '{' named-or-anonymous* sequenced-arguments? '}'
+    ;
+
+named-or-anonymous
+    | named-argument
+    | anonymous-argument
     ;
 
 named-argument
@@ -537,25 +612,33 @@ object-argument
     ;
 
 typed-method-argument
-    | typed-method-argument-type member-name type-parameters? parameters+ (block | function-specifier? ';')
+    | method-argument-type parametrized-member method-definition
     ;
 
-typed-method-argument-type
+method-definition
+    | block
+    | function-specifier? ';'
+    ;
+
+method-argument-type
     | type
-    | 'dynamic'
     | 'void'
     ;
 
 typed-getter-argument
-    | (type |'dynamic') member-name (block | function-specifier? ';')
+    | getter-argument-type member-name method-definition
+    ;
+
+getter-argument-type
+    | type
     ;
 
 inferred-method-argument
-    | 'function' member-name? type-parameters? parameters (block | function-specifier? ';')
+    | 'function' member-name? type-parameters? parameters method-definition
     ;
 
 inferred-getter-argument
-    | 'value' member-name (block | function-specifier? ';')
+    | 'value' member-name method-definition
     ;
 
 untyped-method-argument
@@ -622,7 +705,21 @@ conditional-expression
     ;
 
 function-expression
-    | ('void' | 'function')? type-parameters? (parameters+ type-constraints?)? (block | function-specifier)
+    | function-expression-type? type-parameters? function-parameters? function-definition
+    ;
+
+function-expression-type
+    | 'void'
+    | 'function'
+    ;
+
+function-parameters
+    | parameters+ type-constraints?
+    ;
+
+function-definition
+    | block
+    | function-specifier
     ;
 
 comprehension
@@ -641,7 +738,7 @@ expression-comprehension-clause
     ;
 
 for-comprehension-clause
-    | 'for' for-iterator comprehension-clause
+    | 'for' '(' for-iterator? ')' comprehension-clause
     ;
     
 if-comprehension-clause
@@ -835,43 +932,38 @@ exclusive-operator
     ;
 
 intersection-expression
-    | intersection-expression intersection-operator negationComplementExpression
-    | negationComplementExpression
+    | intersection-expression intersection-operator negation-or-complement-expression
+    | negation-or-complement-expression
     ;
     
 intersection-operator
     | '&'
     ;
 
-negationComplementExpression
-    | unaryMinusOrComplementOperator negationComplementExpression
+negation-or-complement-expression
+    | unary-minus-or-complement-operator negation-or-complement-expression
     | prefix-expression
     ;
 
-unaryMinusOrComplementOperator
+unary-minus-or-complement-operator
     | '-' !'-'
     | '+' !'+'
     | '~'
     ;
 
 prefix-expression
-    | prefix-operator prefix-expression
+    | increment-operator prefix-expression
     | postfix-expression
     ;
 
 postfix-expression
-    | postfix-expression postfix-operator
+    | postfix-expression increment-operator
     | primary
     ;
 
-prefix-operator
+increment-operator
     | '--'
     | '++'
-    ;
-
-postfix-operator
-    | '--' 
-    | '++' 
     ;
 
 primary
@@ -886,7 +978,7 @@ selection-expression
     ;
 
 qualified-reference
-    | member-selection-operator (member-reference | type-reference)
+    | member-selection-operator base-reference
     ;
 
 member-selection-operator
@@ -896,21 +988,34 @@ member-selection-operator
     ;
 
 indexed-expression
-    | primary index-or-index-range
+    | primary '[' index ']'
     ;
 
-index-or-index-range
-    | '['
-      ( '...' index
-      | index '...'
-      | index '..' index
-      | index ':' index
-      | expression
-      )
-      ']'
+index
+    | lower-spanned
+    | upper-spanned
+    | spanned
+    | measured
+    | expression
+    ;
+
+upper-spanned
+    | index-expression '...'
+    ;
+
+lower-spanned
+    | '...' index-expression
+    ;
+
+spanned
+    | index-expression '..' index-expression
+    ;
+
+measured
+    | index-expression ':' index-expression
     ;
     
-index
+index-expression
     | additive-expression 
     ;
 
@@ -975,8 +1080,13 @@ defaulted-type
     ;
 
 variadic-type
-    | union-type ('*' | '+')
+    | union-type variadic-operator
     | type
+    ;
+
+variadic-operator
+    | '*'
+    | '+'
     ;
 
 spread-type
@@ -1021,11 +1131,16 @@ array-type
     ;
 
 function-type
-    | primary-type '(' (spread-type | defaulted-type-list)? ')'
+    | primary-type '(' type-type-arguments? ')'
+    ;
+
+type-type-arguments
+    | spread-type
+    | defaulted-type-list
     ;
 
 tuple-type
-    | '[' (spread-type | defaulted-type-list)? ']'
+    | '[' type-type-arguments? ']'
     ;
 
 iterable-type
@@ -1065,11 +1180,16 @@ condition
     ;
     
 exists-condition
-    | '!'? 'exists' (let-variable | operator-expression)
+    | '!'? 'exists' let-or-expression
     ;
     
 nonempty-condition
-    | '!'? 'nonempty' (let-variable | operator-expression)
+    | '!'? 'nonempty' let-or-expression
+    ;
+
+let-or-expression
+    | let-variable
+    | operator-expression
     ;
 
 is-condition
@@ -1094,11 +1214,6 @@ control-statement
     | while-loop
     | for-else
     | try-catch-finally
-    | dynamic
-    ;
-
-dynamic
-    | 'dynamic' block
     ;
 
 if-else
@@ -1110,7 +1225,12 @@ if-block
     ;
 
 else-block
-    | 'else' (if-else | block)
+    | 'else' else-block-next
+    ;
+
+else-block-next
+    | if-else
+    | block
     ;
 
 switch-case-else
@@ -1122,8 +1242,7 @@ switch-header
     ;
 
 switched
-    | specified-variable
-    | operator-expression
+    | specified-or-expression
     ;
 
 case-block
@@ -1150,7 +1269,12 @@ match-case-condition
     ;
 
 value-case-list
-    | value-case ( (',' | '|') value-case)*
+    | value-case (value-case-separator value-case)*
+    ;
+
+value-case-separator
+    | ','
+    | '|'
     ;
 
 value-case
@@ -1163,7 +1287,7 @@ for-else
     ;
 
 for-block
-    | 'for' for-iterator block
+    | 'for' '(' for-iterator? ')' block
     ;
 
 fail-block
@@ -1171,11 +1295,21 @@ fail-block
     ;
 
 for-iterator
-    | '(' ( (tuple-or-entry-pattern | variable) containment? )? ')'
+    | for-variable containment?
+    ;
+
+for-variable
+    | tuple-or-entry-pattern
+    | variable
     ;
     
 containment
-    | ('in' | ':') operator-expression
+    | containment-operator operator-expression
+    ;
+
+containment-operator
+    | 'in'
+    | ':'
     ;
     
 while-loop
@@ -1215,6 +1349,10 @@ resource-list
     ;
 
 resource
+    | specified-or-expression
+    ;
+
+specified-or-expression
     | specified-variable
     | operator-expression
     ;
@@ -1239,7 +1377,12 @@ model-reference
     ;
     
 meta-literal
-    | '`' (declaration-reference | model-expression) '`'
+    | '`' meta-expression '`'
+    ;
+
+meta-expression
+    | declaration-reference
+    | model-expression
     ;
 
 model-expression
@@ -1306,7 +1449,12 @@ new-literal
     ;
 
 value-literal
-    | ('value' | 'object') reference-path
+    | value-literal-intro reference-path
+    ;
+
+value-literal-intro
+    | 'value'
+    | 'object'
     ;
 
 function-literal

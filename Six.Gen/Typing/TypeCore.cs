@@ -11,11 +11,11 @@
         public abstract string TypeName { get; }
 
         public SortedSet<InterfaceType> Interfaces { get; } = new();
-        public BaseType? Base { get; set; }
+        public ClassType? Base { get; set; }
 
         public string BaseName => Base == null ? string.Empty : Base.TypeName;
 
-        public string InterfaceNames => $"{string.Join(",", Interfaces.Select(b => b.TypeName))}";
+        public string InterfaceNames => $"{string.Join(", ", Interfaces.Select(b => b.TypeName))}";
 
         public override string ToString()
         {
@@ -23,13 +23,13 @@
             builder.Append(TypeName);
             if (Base != null || Interfaces.Count > 0)
             {
-                builder.Append(":");
+                builder.Append(" : ");
                 if (Base != null)
                 {
                     builder.Append($"{BaseName}");
                     if (Interfaces.Count > 0)
                     {
-                        builder.Append(",");
+                        builder.Append(", ");
                     }
                 }
                 if (Interfaces.Count > 0)

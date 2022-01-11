@@ -8,10 +8,9 @@ namespace Six.Runtime.Tree
         public TerminalNode(Terminal node)
             : base(node)
         {
-            Core = node.Core;
         }
 
-        Cursor Core { get; }
+        Cursor Core => ((Terminal)Node).Core;
 
         public override string ToString()
         {

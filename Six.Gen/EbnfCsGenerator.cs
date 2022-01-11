@@ -33,8 +33,9 @@ namespace Six.Gen
 
             wl("using System.Collections.Generic;");
             wl("using Six.Runtime;");
-            wl("using Six.Runtime.Matchers;");
             wl("using Six.Runtime.Dfa;");
+            wl("using Six.Runtime.Matchers;");
+            wl("using Six.Runtime.Types;");
             wl("using Range = Six.Runtime.Matchers.Range;");
             wl("using String = Six.Runtime.Matchers.String;");
             wl();
@@ -162,8 +163,6 @@ namespace Six.Gen
                             wl();
 
                             dfaGenerator.Create();
-                            //wl();
-                            //dfaGenerator.Init();
                         });
                         wl();
 
@@ -177,8 +176,11 @@ namespace Six.Gen
                         wl();
 
                         dfaGenerator.Declare();
+                        wl();
+
+                        var typeGenerator = new TypeCsGenerator(writer, Grammar);
+                        typeGenerator.Generate();
                     });
-                    wl();
                 });
             });
         }

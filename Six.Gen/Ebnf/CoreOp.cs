@@ -37,7 +37,7 @@ namespace Six.Gen.Ebnf
         public bool IsLift { get; set; }
         public ClassType? Class { get; set; }
         public InterfaceType? Interface { get; set; }
-        public BaseType Base => Class!.Base!;
+        public ClassType Base => Class!.Base!;
 
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
@@ -95,8 +95,19 @@ namespace Six.Gen.Ebnf
                 {
                     builder.Append($"[L]");
                 }
+#if true
+                if ((this is not RuleOp ruleOp || !ruleOp.Name.StartsWith("%")) && Class == null && Interface == null)
+                {
+                    builder.Append($"[!untyped]");
+                }
+#endif
                 return builder.Length > 0 ? $" {builder}" : string.Empty;
             }
+        }
+
+        public override string ToString()
+        {
+            return DumpHead;
         }
     }
 }

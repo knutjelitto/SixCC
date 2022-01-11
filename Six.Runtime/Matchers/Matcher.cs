@@ -73,5 +73,10 @@
         {
             return Contexts.Values.Where(c => c.Nexts.Count > 0);
         }
+
+        public IEnumerable<Context> NonMatches()
+        {
+            return Contexts.Values.Where(c => c.Nexts.Count == 0);
+        }
     }
 }
