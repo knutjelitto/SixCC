@@ -72,10 +72,6 @@ namespace Six.Runtime.Sppf
                     return BuildRange(match, start, end);
                 case Eof match:
                     return BuildEof(match, start, end);
-                case Drop match:
-                    return BuildDrop(match, start, end);
-                case Lift match:
-                    return BuildLift(match, start, end);
                 case Not:
                     // drop from film set
                     return null;
@@ -355,19 +351,6 @@ namespace Six.Runtime.Sppf
                     }
                 }
             }
-        }
-        private Symbol? BuildDrop(Drop matcher, Cursor start, Cursor end)
-        {
-            var packeds = BuildMatcher(matcher, start, end).ToArray();
-
-            return NewNonterminal(Role.Drop, matcher, start, end, packeds);
-        }
-
-        private Symbol? BuildLift(Lift matcher, Cursor start, Cursor end)
-        {
-            var packeds = BuildMatcher(matcher, start, end).ToArray();
-
-            return NewNonterminal(Role.Lift, matcher, start, end, packeds);
         }
 
         private Symbol? BuildEof(Eof matcher, Cursor start, Cursor end)

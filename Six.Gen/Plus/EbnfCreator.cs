@@ -141,7 +141,7 @@ namespace Six.Gen.Ebnf
 
             Ebnf = new InstanceWalker(Ebnf).Walk();
             Ebnf = new LoopWalker(Ebnf).Walk();
-            Ebnf = new Typing.TypeWalker(Ebnf).Walk();
+            Ebnf = new Typing.TypeBuilder(Ebnf).Walk();
 
             var keywords = new SortedSet<string>();
 
@@ -249,10 +249,6 @@ namespace Six.Gen.Ebnf
                         return Visit(expr);
                     case Ast.Not expr:
                         return Visit(expr);
-                    case Ast.Drop expr:
-                        return Visit(expr);
-                    case Ast.Lift expr:
-                        return Visit(expr);
                     default:
                         throw new NotImplementedException($"can't transform expression of type {expression.GetType()}");
                 }
@@ -291,16 +287,6 @@ namespace Six.Gen.Ebnf
         private CoreOp Visit(Ast.Not expr)
         {
             return new NotOp(expr.Location, Create(expr.Expression));
-        }
-
-        private CoreOp Visit(Ast.Drop expr)
-        {
-            return new DropOp(expr.Location, Create(expr.Expression));
-        }
-
-        private CoreOp Visit(Ast.Lift expr)
-        {
-            return new LiftOp(expr.Location, Create(expr.Expression));
         }
 
         private CoreOp Visit(Ast.ZeroOrMore zeroOrMore)

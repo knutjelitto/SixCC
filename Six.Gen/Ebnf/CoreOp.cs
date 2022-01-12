@@ -33,8 +33,6 @@ namespace Six.Gen.Ebnf
         public SortedSet<Instance> Instances { get; private set; } = new();
         public bool IsReached { get; set; }
         public bool IsLoop { get; set; }
-        public bool IsDrop { get; set; }
-        public bool IsLift { get; set; }
         public ClassType? Class { get; set; }
         public InterfaceType? Interface { get; set; }
         public ClassType Base => Class!.Base!;

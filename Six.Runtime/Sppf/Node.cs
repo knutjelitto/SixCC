@@ -34,8 +34,5 @@ namespace Six.Runtime.Sppf
         public Matcher Matcher { get; }
         public Cursor Start { get; }
         public Cursor End { get; }
-
-        public bool IsDrop => Matcher is Drop;
-        public bool IsLift => Matcher is Lift;
     }
 }

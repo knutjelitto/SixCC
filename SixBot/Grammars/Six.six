@@ -41,8 +41,6 @@ element
     | optional
     | complement
     | not
-    | drop
-    | lift
     ;
 
 range
@@ -71,14 +69,6 @@ complement
 
 not
     | '!' atom
-    ;
-
-drop
-    | ',' atom
-    ;
-
-lift
-    | '^' atom
     ;
 
 atom

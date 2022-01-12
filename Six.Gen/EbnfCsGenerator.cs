@@ -28,6 +28,7 @@ namespace Six.Gen
             }
 
             var dfaGenerator = new DfaCsGenerator(writer, Grammar);
+            var typeGenerator = new TypeCsGenerator(writer, Grammar);
             var parserClass = $"{name}Parser";
             var implementationClass = $"__{parserClass}Implementation";
 
@@ -65,13 +66,13 @@ namespace Six.Gen
                         className = className ?? ClassName(op);
                         w($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
                         var attributes = new StringBuilder();
-                        if (op.IsDrop)
+                        if (op.Class != null)
                         {
-                            attributes.Append("IsDrop = true, ");
+                            attributes.Append($"/* CLASS {op.Class.TypeName} */");
                         }
-                        if (op.IsLift)
+                        else if (op.Interface != null)
                         {
-                            attributes.Append("IsLift = true, ");
+                            attributes.Append($"/* INTERFACE {op.Interface.TypeName} */");
                         }
                         if (attributes.Length > 0)
                         {
@@ -178,7 +179,6 @@ namespace Six.Gen
                         dfaGenerator.Declare();
                         wl();
 
-                        var typeGenerator = new TypeCsGenerator(writer, Grammar);
                         typeGenerator.Generate();
                     });
                 });

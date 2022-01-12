@@ -19,8 +19,6 @@
         Colon,
         Assign,
         Semi,
-        Drop,
-        Lift,
         Alter,
         Option,
         Complement,

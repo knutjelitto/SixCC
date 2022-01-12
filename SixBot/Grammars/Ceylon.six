@@ -830,13 +830,13 @@ equality-operator
     ;
 
 comparison-expression
-    | existenceEmptinessExpression comparison-operator existenceEmptinessExpression
-    | existenceEmptinessExpression larger-operator existenceEmptinessExpression
-    | existenceEmptinessExpression larger-operator existenceEmptinessExpression larger-operator existenceEmptinessExpression
-    | existenceEmptinessExpression smaller-operator existenceEmptinessExpression smaller-operator existenceEmptinessExpression
-    | existenceEmptinessExpression smaller-operator existenceEmptinessExpression
-    | existenceEmptinessExpression type-operator type
-    | existenceEmptinessExpression
+    | exists-nonempty-expression comparison-operator exists-nonempty-expression
+    | exists-nonempty-expression larger-operator exists-nonempty-expression
+    | exists-nonempty-expression larger-operator exists-nonempty-expression larger-operator exists-nonempty-expression
+    | exists-nonempty-expression smaller-operator exists-nonempty-expression smaller-operator exists-nonempty-expression
+    | exists-nonempty-expression smaller-operator exists-nonempty-expression
+    | exists-nonempty-expression type-operator type
+    | exists-nonempty-expression
     ;
 
 comparison-operator
@@ -861,22 +861,26 @@ type-operator
     | 'of'
     ;
 
-existenceEmptinessExpression
-    | entryRangeExpression existsNonemptyOperator
-    | entryRangeExpression
+exists-nonempty-expression
+    | exists-expression
+    | nonempty-expression
+    | entry-range-expression
     ;
 
-existsNonemptyOperator
-    | 'exists' 
-    | 'nonempty'
+exists-expression
+    | entry-range-expression 'exists'
     ;
 
-entryRangeExpression
-    | additive-expression rangeIntervalEntryOperator additive-expression
+nonempty-expression
+    | entry-range-expression 'nonempty'
+    ;
+
+entry-range-expression
+    | additive-expression range-or-entry-operator additive-expression
     | additive-expression
     ;
 
-rangeIntervalEntryOperator
+range-or-entry-operator
     | '..' 
     | ':'
     | '->'
@@ -1042,7 +1046,15 @@ nonstring-literal
 
 string-expression
     | string-literal
-    | string-start expression (string-mid expression)* string-end
+    | string-interpolation
+    ;
+
+string-interpolation
+    | string-start expression interpolation-part* string-end
+    ;
+
+interpolation-part
+    | string-mid expression
     ;
 
 string-literal

@@ -1,22 +1,22 @@
 ﻿using Six.Runtime.Sppf;
 
-namespace Six.Runtime.Tree
+namespace Six.Runtime.Types
 {
-    public class TreeBuilder
+    public class TypedBuilder
     {
-        public TreeBuilder(Symbol root)
+        public TypedBuilder(Symbol root)
         {
             Root = root;
         }
 
         public Symbol Root { get; }
 
-        public TreeNode Build()
+        public RNode Build()
         {
             return Build(Root).Single();
         }
 
-        private IEnumerable<TreeNode> Build(Node anyNode)
+        private IEnumerable<RNode> Build(Node anyNode)
         {
             switch (anyNode)
             {
@@ -32,36 +32,36 @@ namespace Six.Runtime.Tree
                     return BuildStructural(node);
                 case Nonterminal node when node.Role == Role.Seq:
                     return BuildSeq(node);
-                case Terminal node:
-                    return BuildTerminal(node);
                 case Packed node:
                     return BuildPacked(node);
                 case Intermediate node:
                     return BuildIntermediate(node);
+                case Terminal node:
+                    return BuildTerminal(node);
                 default:
                     throw new NotImplementedException($"can't build tree for node of type '{anyNode.GetType().Name}'");
             }
         }
 
-        private IEnumerable<TreeNode> BuildStructural(Nonterminal node)
+        private IEnumerable<RNode> BuildStructural(Nonterminal node)
         {
             if (node.Children.Length == 0)
             {
-                yield return new TreeNode(node);
+                yield return new RSequence();
             }
             else
             {
-                yield return new TreeNode(node, Build(node.Children[0]).ToArray());
+                yield return new RSequence(Build(node.Children[0]).ToArray());
             }
         }
 
-        private IEnumerable<TreeNode> BuildSeq(Nonterminal node)
+        private IEnumerable<RNode> BuildSeq(Nonterminal node)
         {
             Assert(node.Role == Role.Seq);
 
             if (node.Children.Length == 0)
             {
-                return Enumerable.Empty<TreeNode>();
+                return Enumerable.Empty<RNode>();
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Six.Runtime.Tree
             }
         }
 
-        private IEnumerable<TreeNode> BuildPacked(Packed node)
+        private IEnumerable<RNode> BuildPacked(Packed node)
         {
             if (node.Left == null)
             {
@@ -81,14 +81,14 @@ namespace Six.Runtime.Tree
             }
         }
 
-        private IEnumerable<TreeNode> BuildIntermediate(Intermediate node)
+        private IEnumerable<RNode> BuildIntermediate(Intermediate node)
         {
             return Build(node.Children[0]);
         }
 
-        private static IEnumerable<TreeNode> BuildTerminal(Terminal node)
+        private static IEnumerable<RNode> BuildTerminal(Terminal node)
         {
-            yield return new TerminalNode(node);
+            yield return new RString(node);
         }
     }
 }

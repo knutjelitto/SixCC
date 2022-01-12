@@ -8,7 +8,5 @@
         Star,
         Plus,
         Optional,
-        Drop,
-        Lift,
     }
 }

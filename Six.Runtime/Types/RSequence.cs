@@ -1,16 +1,10 @@
 ﻿namespace Six.Runtime.Types
 {
-    public class RSequence
+    public class RSequence : RNode
     {
+        public RSequence(params RNode[] children)
+            : base(children)
+        {
+        }
     }
-
-#if false
-    public class RSequence<T>
-    {
-    }
-
-    public class RSequence<T1, T2>
-    {
-    }
-#endif
 }

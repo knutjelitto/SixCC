@@ -43,18 +43,6 @@
             base.Visit(op);
         }
 
-        protected override void Visit(DropOp op)
-        {
-            Set(op, true);
-            base.Visit(op);
-        }
-
-        protected override void Visit(LiftOp op)
-        {
-            Set(op, true);
-            base.Visit(op);
-        }
-
         protected override void Visit(EofOp op)
         {
             Set(op, true);

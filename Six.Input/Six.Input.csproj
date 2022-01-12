@@ -8,13 +8,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" />
-		<ProjectReference Include="..\Six.Core\Six.Core.csproj" />
-		<ProjectReference Include="..\Six.Samples\Six.Samples.csproj" />
+	  <Compile Remove="Samples\**" />
+	  <EmbeddedResource Remove="Samples\**" />
+	  <None Remove="Samples\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Samples\" />
+		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" />
+		<ProjectReference Include="..\Six.Core\Six.Core.csproj" />
+		<ProjectReference Include="..\Six.Samples\Six.Samples.csproj" />
 	</ItemGroup>
 
 </Project>

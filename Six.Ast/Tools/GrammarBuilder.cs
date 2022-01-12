@@ -74,16 +74,6 @@
             return new Not(location, expression);
         }
 
-        public Expression Drop(ILocation location, Expression expression)
-        {
-            return new Drop(location, expression);
-        }
-
-        public Expression Lift(ILocation location, Expression expression)
-        {
-            return new Lift(location, expression);
-        }
-
         public Expression ZeroOrMore(ILocation location, Expression expression)
         {
             return new ZeroOrMore(location, expression);

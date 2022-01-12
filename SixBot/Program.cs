@@ -6,6 +6,7 @@ using Six.Gen;
 using Six.Runtime.Sppf;
 using Six.Runtime.Tree;
 using Six.Runtime.Matchers;
+using Six.Runtime.Types;
 
 #pragma warning disable CS8321 // Local function is declared but never used
 
@@ -202,6 +203,12 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                     using (var writer = $"{parser.__Name}-{file}-tree.txt".Writer(2))
                     {
                         new TreeDumper(tree, writer).Dump();
+                    }
+                    var typedBuilder = new TypedBuilder(root);
+                    var typed = typedBuilder.Build();
+                    using (var writer = $"{parser.__Name}-{file}-typed.txt".Writer(2))
+                    {
+                        new TypedDumper(typed, writer).Dump();
                     }
                 }
             }

@@ -1,4 +1,6 @@
-﻿namespace Six.Runtime.Matchers
+﻿using Six.Runtime.Types;
+
+namespace Six.Runtime.Matchers
 {
     public abstract class Matcher
     {
@@ -6,6 +8,7 @@
         public readonly Dictionary<Cursor, Context> Contexts = new();
         public Dfa.Dfa? Dfa = null;
         public bool IsAlias = false;
+        public Typer? Typer = null;
 
         protected Matcher(ImplementationCore core, int id, string name)
         {
@@ -17,6 +20,9 @@
         public ImplementationCore Core { get; }
         public int Id { get; }
         public string Name { get; }
+        public abstract bool IsTerminal { get; }
+        public Matcher this[int index] => Matchers[index];
+        public int Count => Matchers.Length;
 
         public abstract void MatchCore(Context context);
 
@@ -29,12 +35,6 @@
         {
             Contexts.Clear();
         }
-
-        public abstract bool IsTerminal { get; }
-
-        public Matcher this[int index] => Matchers[index];
-
-        public int Count => Matchers.Length;
 
         public void Set(Dfa.Dfa dfa)
         {
@@ -57,7 +57,6 @@
         {
             return Contexts.TryGetValue(start, out context) && context.Nexts.Contains(end);
         }
-
 
         public override string ToString()
         {

@@ -4,22 +4,21 @@
 
 namespace Six.Gen.Typing
 {
-    public class TypeWalker : EbnfWalker
+    public class TypeBuilder : EbnfWalker
     {
         private const string SequenceBaseClass = "Sequence";
         private const string LoopBaseClass = "Loop";
         private const string StarBaseClass = "Star";
         private const string PlusBaseClass = "Plus";
-        private const string StringBaseClass = "String";
         private const string OptionalBaseClass = "Optional";
+        private const string StringBaseClass = "String";
 
-        public TypeWalker(EbnfGrammar grammar)
+        public TypeBuilder(EbnfGrammar grammar)
         {
             Grammar = grammar;
         }
 
         public EbnfGrammar Grammar { get; }
-        public bool Changed { get; set; }
 
         private RuleOp? CurrentRule { get; set; }
 
@@ -34,7 +33,7 @@ namespace Six.Gen.Typing
                     case RefOp:
                         break;
                     default:
-                        SetClass(rule, rule);
+                        InitClass(rule);
                         break;
                 }
             }
@@ -51,50 +50,59 @@ namespace Six.Gen.Typing
             return Grammar;
         }
 
-        private void SetClass(CoreOp op, ClassType classType)
+        private void InitClass(RuleOp rule)
+        {
+            if (rule.Class == null)
+            {
+                SetClassOf(rule, new ClassType(rule.Name));
+            }
+            else
+            {
+                Assert(true);
+            }
+        }
+
+        private void SetClassOf(CoreOp op, ClassType? classType)
         {
             if (op.Class == null)
             {
                 op.Class = classType;
-                Changed = true;
             }
             else
             {
-                Assert(op.Class.Name == classType.Name);
+                Assert(true);
             }
         }
 
-        private void SetClass(CoreOp op, RuleOp fromRule)
-        {
-            SetClass(op, new ClassType(fromRule.Name));
-        }
-
-        private void SetClass(CoreOp op, string className, CoreOp? genericArgument = null)
+        private void SetClassOf(CoreOp op, string className)
         {
             if (op.Class == null)
             {
-                op.Class = new BaseType(className);
-                Changed = true;
+                SetClassOf(op, new BaseType(className));
             }
             else
             {
-                Assert(op.Class.Name == className);
+                Assert(true);
             }
         }
 
-        private void SetBase(string baseName)
+        private void SetBaseOfCurrent(ClassType? baseType)
         {
-            if (CurrentRule != null)
+            if (CurrentRule != null && CurrentRule.Class != null)
             {
-                CurrentRule.Class!.Base = new BaseType(baseName);
+                CurrentRule.Class.Base = baseType;
             }
         }
 
-        private void SetBase(ClassType baseType)
+        private void SetInterfaceOf(CoreOp op, InterfaceType? iface)
         {
-            if (CurrentRule != null)
+            if (op.Interface == null)
             {
-                CurrentRule.Class!.Base = baseType;
+                op.Interface = iface;
+            }
+            else
+            {
+                Assert(true);
             }
         }
 
@@ -110,7 +118,6 @@ namespace Six.Gen.Typing
                 {
                     op.Interface = new InterfaceType(fromRule.Name);
                 }
-                Changed = true;
             }
             else
             {
@@ -118,32 +125,35 @@ namespace Six.Gen.Typing
             }
         }
 
-        private void AddInterface(CoreOp op, InterfaceType? iface)
+        private void SetGenericArgument(CoreOp op)
+        {
+            if (op.Class != null)
+            {
+                op.Class.Generic = (TypeCore?)op.Arguments[0].Class ?? op.Arguments[0].Interface;
+            }
+        }
+
+        private void AddInterfaceTo(CoreOp op, InterfaceType? iface)
         {
             if (iface != null && op.Interface != null)
             {
                 if (op.Interface.Interfaces.Add(iface))
                 {
-                    Changed = true;
                 }
             }
         }
 
-        private void AddCurrentInterface(CoreOp op)
+        private void AddInterfaceFromCurrentTo(CoreOp op)
         {
             if (CurrentRule != null)
             {
-                AddInterface(op, CurrentRule.Interface);
+                AddInterfaceTo(op, CurrentRule.Interface);
             }
         }
 
-        private TypeCore? GetClassOrInterface(CoreOp coreOp)
+        private bool IsSoleChildOfCurrent()
         {
-            if (coreOp is RefOp refOp)
-            {
-                return (TypeCore?)refOp.Rule.Class ?? refOp.Rule.Interface;
-            }
-            return (TypeCore?)coreOp.Class ?? coreOp.Interface;
+            return CurrentRule != null && CurrentRule.Arguments.Where(a => a is not NotOp).Count() == 1;
         }
 
         private void WalkInnerArguments(CoreOp op)
@@ -154,20 +164,21 @@ namespace Six.Gen.Typing
             CurrentRule = savedCurrentRule;
         }
 
-        protected override void Visit(RuleOp op)
+        protected override void Visit(RuleOp rule)
         {
-            CurrentRule = op;
+            CurrentRule = rule;
             
-            WalkArguments(op);
+            WalkArguments(rule);
             
             CurrentRule = null;
         }
 
         protected override void Visit(RefOp op)
         {
-            SetInterface(op, op.Rule);
+            SetInterfaceOf(op, op.Rule.Interface);
+            SetClassOf(op, op.Rule.Class);
 
-            AddCurrentInterface(op.Rule);
+            AddInterfaceFromCurrentTo(op.Rule);
         }
 
         protected override void Visit(SeqOp op)
@@ -176,25 +187,38 @@ namespace Six.Gen.Typing
 
             if (op.IsLoop)
             {
-                SetClass(op, LoopBaseClass);
+                SetClassOf(op, LoopBaseClass);
+                SetGenericArgument(op);
+                SetBaseOfCurrent(op.Class);
 
-                op.Class!.Generic = (TypeCore?)op.Arguments[0].Class ?? op.Arguments[0].Interface;
+                if (IsSoleChildOfCurrent())
+                {
+                    Assert(true);
+                }
             }
             else
             {
-                var realArguments = op.Arguments.Where(a => a is not NotOp).ToList();
+                var notNotArguments = op.Arguments.Where(a => a is not NotOp).ToList();
 
-                if (realArguments.Count == 1)
+                if (notNotArguments.Count == 1)
                 {
-                    SetClass(op, realArguments[0].Class!);
+                    SetClassOf(op, notNotArguments[0].Class);
                 }
                 else
                 {
-                    SetClass(op, SequenceBaseClass);
+                    SetClassOf(op, SequenceBaseClass);
+                }
+                SetBaseOfCurrent(op.Class);
+
+                if (IsSoleChildOfCurrent())
+                {
+                    Assert(true);
+
+                    //op.Class = CurrentRule!.Class;
+                    //op.Interface = CurrentRule!.Interface;
                 }
             }
 
-            SetBase(op.Class!);
         }
 
         protected override void Visit(AltOp alt)
@@ -207,32 +231,31 @@ namespace Six.Gen.Typing
                 
                 foreach (var arg in alt.Arguments)
                 {
-                    AddCurrentInterface(arg);
-                    AddInterface(arg, CurrentRule.Interface);
+                    AddInterfaceFromCurrentTo(arg);
+                    AddInterfaceTo(arg, CurrentRule.Interface);
                 }
             }
         }
 
         protected override void Visit(StarOp op)
         {
-            SetClass(op, StarBaseClass);
-
             WalkInnerArguments(op);
 
-            op.Class!.Generic = (TypeCore?)op.Argument.Class ?? op.Argument.Interface;
+            SetClassOf(op, StarBaseClass);
+            SetGenericArgument(op);
 
-            SetBase(op.Class!);
+            SetBaseOfCurrent(op.Class);
         }
 
         protected override void Visit(PlusOp op)
         {
-            SetBase(PlusBaseClass);
-
-            SetClass(op, PlusBaseClass);
+            SetClassOf(op, PlusBaseClass);
 
             WalkInnerArguments(op);
 
             op.Class!.Generic = (TypeCore?)op.Argument.Class ?? op.Argument.Interface;
+
+            SetBaseOfCurrent(op.Class);
 
             if (CurrentRule != null)
             {
@@ -244,8 +267,8 @@ namespace Six.Gen.Typing
         {
             WalkInnerArguments(op);
 
-            SetClass(op, OptionalBaseClass);
-            SetBase(op.Class!);
+            SetClassOf(op, OptionalBaseClass);
+            SetBaseOfCurrent(op.Class);
 
             if (CurrentRule == null)
             {
@@ -255,16 +278,16 @@ namespace Six.Gen.Typing
 
         protected override void Visit(StringOp op)
         {
-            SetClass(op, StringBaseClass);
+            SetClassOf(op, StringBaseClass);
 
-            SetBase(op.Class!);
+            SetBaseOfCurrent(op.Class);
         }
 
         protected override void Visit(TokenOp op)
         {
-            SetClass(op, StringBaseClass);
+            SetClassOf(op, StringBaseClass);
 
-            SetBase(op.Class!);
+            SetBaseOfCurrent(op.Class);
         }
     }
 }

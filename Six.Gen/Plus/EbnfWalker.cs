@@ -56,12 +56,6 @@
                 case NotOp expr:
                     Visit(expr);
                     break;
-                case DropOp expr:
-                    Visit(expr);
-                    break;
-                case LiftOp expr:
-                    Visit(expr);
-                    break;
                 default:
                     throw new NotImplementedException($"can't visit expression of type {expression.GetType()}");
             }
@@ -86,16 +80,6 @@
         }
 
         protected virtual void Visit(NotOp op)
-        {
-            WalkArguments(op);
-        }
-
-        protected virtual void Visit(DropOp op)
-        {
-            WalkArguments(op);
-        }
-
-        protected virtual void Visit(LiftOp op)
         {
             WalkArguments(op);
         }
