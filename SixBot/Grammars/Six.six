@@ -5,23 +5,23 @@ grammar Six;
 %whitespace = skip ;
 
 grammar
-    | 'grammar' identifier ';' options rules
+    : 'grammar' identifier ';' options rules
     ;
 
 options
-    | option*
+    : option*
     ;
 
 option
-    | special-identifier '=' identifier ';'
+    : special-identifier '=' identifier ';'
     ;
 
 rules
-    | rule*
+    : rule*
     ;
 
 rule
-    | identifier define expression ';'
+    : identifier define expression ';'
     ;
 
 define
@@ -30,11 +30,11 @@ define
     ;
 
 expression
-    | sequence ('|' sequence)*
+    : sequence ('|' sequence)*
     ;
 
 sequence
-    | element*
+    : element*
     ;
 
 element
@@ -49,31 +49,31 @@ element
     ;
 
 range
-    | atom '..' atom
+    : atom '..' atom
     ;
 
 diff
-    | atom '-' atom
+    : atom '-' atom
     ;
 
 star
-    | atom '*'
+    : atom '*'
     ;
 
 plus
-    | atom '+'
+    : atom '+'
     ;
 
 optional
-    | atom '?'
+    : atom '?'
     ;
 
 complement
-    | '~' atom
+    : '~' atom
     ;
 
 not
-    | '!' atom
+    : '!' atom
     ;
 
 atom
@@ -84,31 +84,31 @@ atom
     ;
 
 grouped-expression
-    | '(' expression ')'
+    : '(' expression ')'
     ;
 
 token-expression
-    | '<' expression '>'
+    : '<' expression '>'
     ;
 
 special-identifier
-    | < '%' id-core >
+    : < '%' id-core >
     ;
 
 identifier
-    | < id-core >
+    : < id-core >
     ;
 
 id-core
-    | id-begin id-continue*
+    : id-begin id-continue*
     ;
 
 id-begin
-    | letter letter-or-digit*
+    : letter letter-or-digit*
     ;
 
 id-continue
-    | ('-'|'_') letter-or-digit+
+    : ('-'|'_') letter-or-digit+
     ;
 
 letter
@@ -117,7 +117,7 @@ letter
     ;
 
 digit
-    | '0' .. '9'
+    : '0' .. '9'
     ;
 
 letter-or-digit
@@ -126,7 +126,7 @@ letter-or-digit
     ;
 
 string
-    | < '\'' character* '\'' >
+    : < '\'' character* '\'' >
     ;
 
 character
@@ -182,7 +182,7 @@ comment
     ;
 
 line-comment
-    | '//' (~line-ender)* line-end?
+    : '//' (~line-ender)* line-end?
     ;   
 
 block-comment

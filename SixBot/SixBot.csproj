@@ -11,8 +11,8 @@
 
     <ItemGroup>
         <None Remove="Grammars\Ceylon.six" />
-        <None Remove="Samples\Json.six" />
-        <None Remove="Samples\Six.six" />
+        <None Remove="Grammars\Json.six" />
+        <None Remove="Grammars\Six.six" />
     </ItemGroup>
 
     <ItemGroup>
