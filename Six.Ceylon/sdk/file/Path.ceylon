@@ -7,25 +7,27 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file.internal {
+import ceylon.file.internal
+{
     parsePathInternal=parsePath,
     parseUriInternal=parseUri,
     rootPathsInternal=rootPaths
 }
 
-import java.lang {
-    S=System {
+import java.lang
+{
+    S=System
+    {
         getProperty
     }
 }
 
-"Represents a path in a hierarchical file system. A 
- path is a sequence of path elements. A path may be 
- an absolute path that begins at the root of the 
- file system, or a relative path."
-shared sealed interface Path
-        satisfies Comparable<Path> {
-    
+"""Represents a path in a hierarchical file system. A path is a sequence of path
+   elements. A path may be an absolute path that begins at the root of the file
+   system, or a relative path.
+"""
+shared sealed interface Path satisfies Comparable<Path>
+{    
     "The parent path of this path, formed by 
      removing the last path element, or, if this 
      path is the root path, and has no path elements, 

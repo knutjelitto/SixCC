@@ -7,16 +7,17 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.nio.file.attribute {
+import java.nio.file.attribute
+{
     BasicFileAttributeView,
     PosixFileAttributeView,
     DosFileAttributeView
 }
 
-"""A view-name, attribute-name pair that identifies a file
-   system attribute, for example `["dos", "hidden"]`,
-   `["posix", "group"]`, `["unix", "uid"]`, or 
-   `["basic", "lastAccessTime"]`."""
+"""A view-name, attribute-name pair that identifies a file system attribute, for
+   example `["dos", "hidden"]`, `["posix", "group"]`, `["unix", "uid"]`, or 
+   `["basic", "lastAccessTime"]`.
+"""
 see (`interface BasicFileAttributeView`)
 see (`interface PosixFileAttributeView`)
 see (`interface DosFileAttributeView`)

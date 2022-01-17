@@ -7,18 +7,23 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.nio.charset {
-    Charset {
+import java.nio.charset
+{
+    Charset
+    {
         defaultCharset,
         forName
     }
 }
 
-Charset parseCharset(String? encoding) {
-    if (exists encoding) {
+Charset parseCharset(String? encoding)
+{
+    if (exists encoding)
+    {
         return forName(encoding);
     }
-    else {
+    else
+    {
         return defaultCharset();
     }
 }

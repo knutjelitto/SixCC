@@ -8,10 +8,9 @@
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
 "Represents a symbolic link."
-shared sealed interface Link 
-        satisfies ExistingResource {
-    
+shared sealed interface Link satisfies ExistingResource
+{    
     "The linked path."
     shared formal Path linkedPath;
-    
+   
 }

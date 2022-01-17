@@ -26,8 +26,14 @@
         <AdditionalFiles Include="..\Six.Samples\Six\T5.six" Link="Samples\T5.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T6.six" Link="Samples\T6.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T7.six" Link="Samples\T7.six" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T5Parser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\CeylonParser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T1Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T2Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T3Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T4Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T5Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T6Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T7Parser.gen.cs" />
+		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\CeylonParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\JsonParser.gen.cs" />
         <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\SixParser.gen.cs" />
     </ItemGroup>

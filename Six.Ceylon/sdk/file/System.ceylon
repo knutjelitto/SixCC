@@ -7,17 +7,20 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     defaultParsePath=parsePath,
     defaultRootPaths=rootPaths,
     defaultStores=stores
 }
-import ceylon.file.internal {
+import ceylon.file.internal
+{
     internalCreateSystem=createSystem
 }
 
 "Represents a special-purpose file system."
-shared interface System {
+shared interface System
+{
     
     "Obtain a `Path` in this file system given the 
      string representation of a path."
@@ -46,16 +49,14 @@ shared interface System {
 shared System createSystem(
         "The URI, as a string."
         String uriString,
-        "A sequence of file system-specific named 
-         values." 
+        "A sequence of file system-specific named values." 
         <String->String>* properties) 
         => internalCreateSystem(uriString, *properties);
 
 "Create a `System` for accessing entries in a zip 
  file."
 shared System createZipFileSystem(
-        "The zip file. If `Nil`, a new zip file
-         will be automatically created." 
+        "The zip file. If `Nil`, a new zip file will be automatically created." 
         File|Nil file, 
         "The character encoding for entry names." 
         String encoding="UTF-8")
@@ -64,9 +65,8 @@ shared System createZipFileSystem(
             "encoding"->encoding);
 
 "A `System` representing the default file system."
-shared object defaultSystem 
-        satisfies System {
-    
+shared object defaultSystem satisfies System
+{    
     parsePath(String pathString) => defaultParsePath(pathString);
     
     rootPaths => defaultRootPaths;
@@ -77,8 +77,8 @@ shared object defaultSystem
     
     writeable => true;
     
-    shared actual void close() {
+    shared actual void close()
+    {
         throw Exception("the default system cannot be closed");
-    }
-    
+    }    
 }

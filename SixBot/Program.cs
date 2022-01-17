@@ -1,12 +1,12 @@
 ﻿using Six.Gen.Ebnf;
 using Six.Samples;
 using Six.Core.Errors;
-using SixBot;
 using Six.Gen;
 using Six.Runtime.Sppf;
-using Six.Runtime.Tree;
 using Six.Runtime.Matchers;
 using Six.Runtime.Types;
+
+using GeneratedParser;
 
 #pragma warning disable CS8321 // Local function is declared but never used
 
@@ -293,7 +293,7 @@ void CheckGenerate(bool enabled)
                 dumper.Dump();
             }
 
-            using (var generator = new EbnfCsGenerator())
+            using (var generator = new EbnfCsGenerator(sample.Name))
             {
                 generator.Generate(ast.Name, sample.Content);
 

@@ -7,18 +7,19 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     AbstractReader=Reader,
     AbstractWriter=Writer
 }
-import ceylon.file.internal {
+import ceylon.file.internal
+{
     sameFileInternal=sameFile
 }
 
 "Represents a file in a hierarchical file system."
-shared sealed interface File 
-        satisfies ExistingResource {
-    
+shared sealed interface File satisfies ExistingResource
+{    
     "The directory containing this file."
     shared formal Directory directory;
     

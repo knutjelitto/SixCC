@@ -7,13 +7,12 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"A [[List]] supporting addition, insertion, removal, and
- replacement of its elements."
+"A [[List]] supporting addition, insertion, removal, and replacement of its elements."
 see (`class LinkedList`, `class ArrayList`)
 by("Stéphane Épardaud")
 shared interface MutableList<Element=Anything>
-        satisfies List<Element>
-                & ListMutator<Element> {
+    satisfies List<Element> & ListMutator<Element>
+{
 
     "Remove the element at the specified [[index]],
      returning the removed element, if any, or `null` if
@@ -33,11 +32,13 @@ shared interface MutableList<Element=Anything>
     "A new list with the same elements as this list."
     shared actual formal MutableList<Element> clone();
     
-    shared actual default void swap(Integer i, Integer j) {
+    shared actual default void swap(Integer i, Integer j)
+    {
         "index may not be negative or greater than the
          last index in the list"
         assert (0<=i<size, 0<=j<size);
-        if (i!=j) {
+        if (i!=j)
+        {
             assert (is Element x = getFromFirst(i),
                     is Element y = getFromFirst(j));
             set(i, y);
@@ -45,43 +46,48 @@ shared interface MutableList<Element=Anything>
         }
     }
     
-    shared actual default void move(Integer i, Integer j) {
-        "index may not be negative or greater than the
-         last index in the list"
+    shared actual default void move(Integer i, Integer j)
+    {
+        "index may not be negative or greater than the last index in the list"
         assert (0<=i<size, 0<=j<size);
-        if (i!=j) {
+        if (i!=j)
+        {
             assert (is Element x = delete(i));
             insert(j, x);
         }
     }
     
-    "Remove every element that satisfies the given 
-     [[predicate function|selecting]] from this list, 
-     returning the number of elements that were removed."
+    "Remove every element that satisfies the given [[predicate function|selecting]]
+     from this list, returning the number of elements that were removed."
     shared default Integer removeWhere(
-        "The predicate function the indexed elements must 
-         satisfy."
-        Boolean selecting(Element&Object element)) {
+        "The predicate function the indexed elements must satisfy."
+        Boolean selecting(Element&Object element))
+    {
         variable value index = 0;
         variable value count = 0;
-        while (index<size) {
-            if (exists elem = getFromFirst(index),
-                selecting(elem)) {
+        while (index<size)
+        {
+            if (exists elem = getFromFirst(index), selecting(elem))
+            {
                 delete(index);
                 count++;
             }
-            else {
+            else
+            {
                 index++;
             }
         }
         return count;
     }
     
-    shared actual default Integer prune() {
+    shared actual default Integer prune()
+    {
         variable value index = 0;
         variable value removed = 0;
-        while (index<size) {
-            if (!getFromFirst(index) exists) {
+        while (index<size)
+        {
+            if (!getFromFirst(index) exists)
+            {
                 removed++;
                 delete(index);
             }

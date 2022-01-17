@@ -7,8 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     Attribute
 }
-String attributeName(Attribute attribute) 
-        => attribute[0]+":"+attribute[1];
+
+String attributeName(Attribute attribute) => attribute[0] + ":" + attribute[1];

@@ -7,24 +7,30 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     NoSuchPrincipalException
 }
 
-import java.nio.file {
+import java.nio.file
+{
     JPath=Path
 }
-import java.nio.file.attribute {
+import java.nio.file.attribute
+{
     UserPrincipalNotFoundException,
     UserPrincipal
 }
 
-UserPrincipal jprincipal(JPath jpath, String name) {
+UserPrincipal jprincipal(JPath jpath, String name)
+{
     value upls = jpath.fileSystem.userPrincipalLookupService;
-    try {
+    try
+    {
         return upls.lookupPrincipalByName(name);
     }
-    catch (UserPrincipalNotFoundException e) {
+    catch (UserPrincipalNotFoundException e)
+    {
         throw NoSuchPrincipalException(name, e);
     }
 }

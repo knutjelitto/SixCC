@@ -7,42 +7,35 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file.internal {
+import ceylon.file.internal
+{
     temporaryDirectoryInternal=temporaryDirectory
 }
 
 "Represents a directory in a hierarchical file system."
-shared sealed interface Directory 
-        satisfies ExistingResource {
-
+shared sealed interface Directory satisfies ExistingResource
+{
     "The name of this directory."
     shared formal String name;
 
-    "The files and subdirectories that directly belong
-     to this directory."
+    "The files and subdirectories that directly belong to this directory."
     shared formal {ExistingResource*} children(
-            "A filter to apply to the file names,
-             expressed as a glob pattern."
+            "A filter to apply to the file names, expressed as a glob pattern."
             String filter="*");
     
     "The files that directly belong to this directory."
     shared formal {File*} files(
-            "A filter to apply to the file names,
-             expressed as a glob pattern."
+            "A filter to apply to the file names, expressed as a glob pattern."
             String filter="*");    
     
-    "The subdirectories that directly belong to this 
-     directory."
+    "The subdirectories that directly belong to this directory."
     shared formal {Directory*} childDirectories(
-            "A filter to apply to the file names,
-             expressed as a glob pattern."
+            "A filter to apply to the file names, expressed as a glob pattern."
             String filter="*");
     
-    "The paths of all files and subdirectories that 
-     directly belong to this directory."
+    "The paths of all files and subdirectories that  directly belong to this directory."
     shared formal {Path*} childPaths(
-            "A filter to apply to the file names,
-             expressed as a glob pattern."
+            "A filter to apply to the file names, expressed as a glob pattern."
             String filter="*");
     
     "Obtain a resource belonging to this directory."
@@ -66,8 +59,7 @@ shared sealed interface Directory
          specified and a suitable temporary directory cannot be
          determined.")
     shared formal class TemporaryDirectory(
-        "The leading part of the temporary directory name to use,
-         or `null` for the system default."
+        "The leading part of the temporary directory name to use, or `null` for the system default."
         String? prefix)
         satisfies Directory & Destroyable {}
 
@@ -95,8 +87,7 @@ shared sealed interface Directory
             satisfies Destroyable & File {}
 }
 
-"The `Directory`s representing the root directories of
- the default file system."
+"The `Directory`s representing the root directories of the default file system."
 see(`value defaultSystem`)
 shared Directory[] rootDirectories
     =>  [ for (p in rootPaths)

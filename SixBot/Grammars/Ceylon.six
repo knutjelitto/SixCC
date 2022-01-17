@@ -5,7 +5,9 @@
 %keywords   = lower-identifier ;
 
 compilation-unit
-    | shebang? unit-elements
+    | module-descriptor
+    | package-descriptor
+    | unit-elements
     ;
 
 unit-elements
@@ -13,8 +15,6 @@ unit-elements
     ;
 
 unit-element
-    | module-descriptor
-    | package-descriptor
     | import-declaration
     | declaration
     ;
@@ -1731,10 +1731,6 @@ line-ender
 comment
     | line-comment
     | block-comment
-    ;
-
-shebang
-    | < '#!' (~line-ender)* line-end? >
     ;
 
 line-comment

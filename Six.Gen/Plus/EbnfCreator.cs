@@ -74,6 +74,17 @@ namespace Six.Gen.Ebnf
                 keywordsRule.Patch(Add(new TokenOp(Location.Nowhere, plus)));
             }
 
+            var @namespace = "GeneratedParser";
+            var namespaceSymbol = Grammar.NamespaceRule;
+            if (namespaceSymbol != null)
+            {
+                var expression = Create(namespaceSymbol.Expression);
+                Assert(expression is StringOp);
+                @namespace = (expression as StringOp)!.Text;
+            }
+
+            Ebnf.Namespace = @namespace;
+
             foreach (var symbol in Grammar.Symbols)
             {
                 if (symbol == startSymbol || symbol == whiteSymbol || symbol == keywordsSymbol)

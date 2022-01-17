@@ -13,7 +13,7 @@ options
     ;
 
 option
-    : special-identifier '=' identifier ';'
+    : special-identifier '=' expression ';'
     ;
 
 rules

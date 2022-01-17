@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using Six.Core.Errors;
-using System.Diagnostics;
 
 namespace Six.Gen
 {
@@ -21,7 +20,7 @@ namespace Six.Gen
                     Debugger.Launch();
                 }
 #endif
-                using (var generator = new EbnfCsGenerator())
+                using (var generator = new EbnfCsGenerator(additional.Path))
                 {
                     generator.Generate(name, content);
                     generated = generator.ToString();

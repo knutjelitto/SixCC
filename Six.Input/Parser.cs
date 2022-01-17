@@ -1,5 +1,6 @@
 ﻿using Six.Ast;
 using Six.Core.Errors;
+using System.ComponentModel;
 
 namespace Six.Input
 {
@@ -173,10 +174,30 @@ namespace Six.Input
                     expression = Token();
                     break;
                 default:
-                    expression = Error<Expression>($"expected 'primary', but found '{Current.Kind}'");
+                    expression = Error<Expression>($"expected 'primary', but found '{Desc(Current.Kind)}'");
                     break;
             }
             return expression;
+        }
+
+        private string Desc(TKind kind)
+        {
+            var type = kind.GetType();
+            var name = Enum.GetName(type, kind);
+            if (name != null)
+            {
+                var field = type.GetField(name);
+                if (field != null)
+                {
+                    if (Attribute.GetCustomAttribute(field,
+                       typeof(DescriptionAttribute)) is DescriptionAttribute attr)
+                    {
+                        return attr.Description;
+                    }
+                }
+            }
+
+            return kind.ToString();
         }
 
         private Expression Token()
@@ -218,8 +239,8 @@ namespace Six.Input
                 current += 1;
                 return token;
             }
-            var which = string.Join(", ", kinds);
-            return Error<Token>($"expected '{which}', but found '{Current.Kind}'");
+            var which = string.Join(", ", kinds.Select(k => Desc(k)));
+            return Error<Token>($"expected '{which}', but found '{Desc(Current.Kind)}'");
         }
 
         private bool Try(TKind kind)

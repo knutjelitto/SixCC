@@ -7,21 +7,18 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"The Ceylon language module containing the core definitions 
- referred to by the [language specification][spec], along 
- with some basic functionality of use to most programs:
+"The Ceylon language module containing the core definitions referred to by the
+ [language specification][spec], along with some basic functionality of use to
+ most programs:
  
- - The [[root package|package ceylon.language]] defines 
-   general-purpose functionality including support for 
-   [[numbers|Numeric]] and [[character strings|String]], 
-   [[streams|Iterable]] and [[sequences|Sequential]], 
+ - The [[root package|package ceylon.language]] defines general-purpose
+   functionality including support for [[numbers|Numeric]] and
+   [[character strings|String]], [[streams|Iterable]] and [[sequences|Sequential]],
    [[exceptions|Throwable]], and [[null values|Null]].
- - The Ceylon _metamodel_ is defined in 
-   [[package ceylon.language.meta]] and its subpackages 
-   [[package ceylon.language.meta.model]] and 
-   [[package ceylon.language.meta.declaration]], which
-   define interfaces for interacting with applied types and 
-   unapplied type declarations respectively.
+ - The Ceylon _metamodel_ is defined in [[package ceylon.language.meta]] and its
+   subpackages [[package ceylon.language.meta.model]] and 
+   [[package ceylon.language.meta.declaration]], which define interfaces for
+   interacting with applied types and unapplied type declarations respectively.
  
  This module defines an abstraction over the basic 
  facilities of the Java or JavaScript virtual machine, 

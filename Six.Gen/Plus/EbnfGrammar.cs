@@ -29,6 +29,7 @@
         }
 
         public string Name { get; set; }
+        public string Namespace { get; set; } = "Generated";
         public UniqueList<string, CoreOp> Operators { get; private set; }
         public List<string> Keywords { get; }
         public IEnumerable<RuleOp> Rules => Operators.OfType<RuleOp>();

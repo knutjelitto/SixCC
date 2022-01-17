@@ -7,8 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"Returns a function which is the logical conjunction of the 
- given predicate functions."
+"Returns a function which is the logical conjunction of the given predicate functions."
 tagged("Functions")
 since("1.1.0")
 shared Boolean and<in Value>(

@@ -7,24 +7,22 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file.internal {
+import ceylon.file.internal
+{
     storesInternal=stores
 }
 
 "Represents a file system store."
-shared sealed interface Store {
-    
-    "The total number of bytes that can be
-     held by this store."
+shared sealed interface Store
+{    
+    "The total number of bytes that can be held by this store."
     shared formal Integer totalSpace;
     
-    "The total number of bytes that are 
-     available in this store."
+    "The total number of bytes that are available in this store."
     see(`value usableSpace`)
     shared formal Integer availableSpace;
     
-    "The total number of bytes that may be
-     written to this store by this process,
+    "The total number of bytes that may be written to this store by this process,
      taking into account permissions, etc."
     see(`value availableSpace`)
     shared formal Integer usableSpace;
@@ -36,7 +34,6 @@ shared sealed interface Store {
     shared formal String name;
 }
 
-"The `Store`s representing the stores of the
- default file system."
+"The `Store`s representing the stores of the default file system."
 see(`value defaultSystem`)
 shared Store[] stores = storesInternal;

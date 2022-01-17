@@ -7,31 +7,37 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     ...
 }
 
-import java.lang {
+import java.lang
+{
     JString=String
 }
-import java.net {
-    URI {
+import java.net
+{
+    URI
+    {
         newURI=create
     }
 }
-import java.nio.file {
+import java.nio.file
+{
     FileSystem,
-    FileSystems {
+    FileSystems
+    {
         newFileSystem
     }
 }
-import java.util {
+import java.util
+{
     HashMap
 }
 
-class ConcreteSystem(FileSystem fs) 
-        satisfies System {
-    
+class ConcreteSystem(FileSystem fs) satisfies System
+{    
     close() => fs.close();
     
     open => fs.open;
@@ -47,9 +53,11 @@ class ConcreteSystem(FileSystem fs)
     
 }
 
-shared System createSystem(String uriString, <String->String>* properties) {
+shared System createSystem(String uriString, <String->String>* properties)
+{
     value map = HashMap<JString,Object>();
-    for (entry in properties) {
+    for (entry in properties)
+    {
         map[JString(entry.key)] = JString(entry.item);
     }
     return ConcreteSystem(newFileSystem(newURI(uriString), map));

@@ -7,29 +7,38 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     ...
 }
 
-import java.io {
+import java.io
+{
     IOException
 }
-import java.net {
-    URI {
+
+import java.net
+{
+    URI
+    {
         newURI=create
     }
 }
-import java.nio.file {
+import java.nio.file
+{
     JPath=Path,
-    Paths {
+    Paths
+    {
         newPath=get
     },
     FileVisitor,
     FileVisitResult,
-    FileSystems {
+    FileSystems
+    {
         defaultFileSystem=default
     },
-    Files {
+    Files
+    {
         isDirectory,
         isRegularFile,
         isExisting=\iexists,
@@ -37,46 +46,44 @@ import java.nio.file {
         walkFileTree
     }
 }
-import java.nio.file.attribute {
+import java.nio.file.attribute
+{
     BasicFileAttributes
 }
 
-shared Path parsePath(String pathString) =>
-        ConcretePath(newPath(pathString));
+shared Path parsePath(String pathString) => ConcretePath(newPath(pathString));
 
-shared Path parseUri(String uriString) =>
-        ConcretePath(newPath(newURI(uriString)));
+shared Path parseUri(String uriString) => ConcretePath(newPath(newURI(uriString)));
 
 shared Path[] rootPaths
-        => [ for (path in defaultFileSystem.rootDirectories)
-             ConcretePath(path) ];
+        => [ for (path in defaultFileSystem.rootDirectories) ConcretePath(path) ];
 
 JPath asJPath(String|Path path, JPath systemPath)
         => if (is ConcretePath path)
         then path.jpath
         else systemPath.fileSystem.getPath(path.string);
 
-class ConcretePath(jpath)
-        satisfies Path {
-    
+class ConcretePath(jpath) satisfies Path
+{    
     shared JPath jpath;
     
-    shared actual ConcretePath parent {
-        if (exists jparent = jpath.parent) {
+    shared actual ConcretePath parent
+    {
+        if (exists jparent = jpath.parent)
+        {
             return ConcretePath(jparent);
         }
-        else {
+        else
+        {
             return this;
         }
     }
     
-    childPath(String|Path subpath) =>
-            ConcretePath(jpath.resolve(asJPath(subpath, jpath)));
+    childPath(String|Path subpath) => ConcretePath(jpath.resolve(asJPath(subpath, jpath)));
     
-    siblingPath(String|Path subpath) =>
-            ConcretePath(jpath.resolveSibling(asJPath(subpath, jpath)));
+    siblingPath(String|Path subpath) => ConcretePath(jpath.resolveSibling(asJPath(subpath, jpath)));
     
-    root => jpath.nameCount==0;
+    root => jpath.nameCount == 0;
     
     absolute => jpath.absolute;
     
@@ -97,14 +104,11 @@ class ConcretePath(jpath)
     
     uriString => jpath.toUri().string;
     
-    shared actual Path[] elementPaths
-            => [for (path in jpath) ConcretePath(path)];
+    shared actual Path[] elementPaths => [for (path in jpath) ConcretePath(path)];
     
-    shared actual String[] elements
-            => [for (path in jpath) path.string];
+    shared actual String[] elements => [for (path in jpath) path.string];
     
-    compare(Path other)
-            => jpath.compareTo(asJPath(other, jpath)) <=> 0;
+    compare(Path other) => jpath.compareTo(asJPath(other, jpath)) <=> 0;
     
     equals(Object that)
             => if (is Path that)
@@ -115,41 +119,47 @@ class ConcretePath(jpath)
     
     separator => jpath.fileSystem.separator;
     
-    shared actual Resource resource {
+    shared actual Resource resource
+    {
         if (isExisting(jpath)) {
             // prefer ConcreteFile and ConcreteDirectory; only return a ConcreteLink
             // if it is 1) a link to nowhere, or 2) a link to another link.
-            if (isRegularFile(jpath)) {
+            if (isRegularFile(jpath))
+            {
                 return ConcreteFile(jpath);
             }
-            else if (isDirectory(jpath)) {
+            else if (isDirectory(jpath))
+            {
                 return ConcreteDirectory(jpath);
             }
-            else if (isSymbolicLink(jpath)) {
+            else if (isSymbolicLink(jpath))
+            {
                 return ConcreteLink(jpath);
             }
-            else {
-                throw Exception("unknown file type: " +
-                        jpath.string);
+            else
+            {
+                throw Exception("unknown file type: " + jpath.string);
             }
         }
-        else if (isSymbolicLink(jpath)) {
+        else if (isSymbolicLink(jpath))
+        {
             // a symbolic link that does not ultimately resolve
             // to a file or directory.
             return ConcreteLink(jpath);
         }
-        else {
+        else
+        {
             return ConcreteNil(jpath);
         }
     }
     
     shared actual Link? link
-        =>  if (isSymbolicLink(jpath))
-            then ConcreteLink(jpath)
-            else null;
+        =>  if (isSymbolicLink(jpath)) then ConcreteLink(jpath) else null;
     
-    shared actual void visit(Visitor visitor) {
-        object fileVisitor satisfies FileVisitor<JPath> {
+    shared actual void visit(Visitor visitor)
+    {
+        object fileVisitor satisfies FileVisitor<JPath>
+        {
             value result {
                 return visitor.terminated 
                         then FileVisitResult.terminate
@@ -184,6 +194,5 @@ class ConcretePath(jpath)
             }
         }
         walkFileTree(jpath, fileVisitor);
-    }    
-    
+    }        
 }

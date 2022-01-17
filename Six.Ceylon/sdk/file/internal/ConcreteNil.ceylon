@@ -7,13 +7,16 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     ...
 }
 
-import java.nio.file {
+import java.nio.file
+{
     JPath=Path,
-    Files {
+    Files
+    {
         newDirectory=createDirectory,
         newDirectories=createDirectories,
         newFile=createFile,

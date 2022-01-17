@@ -1,4 +1,4 @@
-﻿namespace SixBot
+﻿namespace GeneratedParser
 {
     public partial class SixParser : Parser
     {

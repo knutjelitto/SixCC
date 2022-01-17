@@ -15,7 +15,13 @@ namespace Six.Gen
 
         private readonly NameWalker namer = new();
 
+        public EbnfCsGenerator(string original)
+        {
+            Original = original;
+        }
+
         public EbnfGrammar? Grammar { get; private set; }
+        public string Original { get; }
 
         public override void Generate(string name, string content)
         {
@@ -33,6 +39,9 @@ namespace Six.Gen
             var parserClass = $"{name}Parser";
             var implementationClass = $"__{parserClass}Implementation";
 
+            wl($"// <generated from={Original.CsString()} />");
+            wl();
+
             wl("using System.Collections.Generic;");
             wl("using Six.Runtime;");
             wl("using Six.Runtime.Dfa;");
@@ -43,7 +52,7 @@ namespace Six.Gen
             wl("using String = Six.Runtime.Matchers.String;");
             wl();
 
-            block("namespace SixBot", () =>
+            block($"namespace {Grammar.Namespace}", () =>
             {
                 block($"public partial class {parserClass} : {ParserCoreClass}", () =>
                 {
