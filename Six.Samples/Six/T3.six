@@ -1,7 +1,10 @@
 ﻿grammar T3;
 
-C   | C '+' C
+C   | add
     | id
+    ;
+
+add | C '+' C
     ;
 
 id  | <'a' .. 'z'>

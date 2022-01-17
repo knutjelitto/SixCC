@@ -17,7 +17,7 @@ namespace Six.Gen
 
         public void Generate()
         {
-            foreach (var rule in Grammar.CoreRules)
+            foreach (var rule in Grammar.Rules)
             {
                 if (rule.Interface == null)
                 {
@@ -31,12 +31,14 @@ namespace Six.Gen
                 wl($"public interface {rule.Interface.TypeName}{ifaces} {{}}");
             }
             wl();
-            foreach (var rule in Grammar.CoreRules)
+            var more = false;
+            foreach (var rule in Grammar.Rules)
             {
                 if (rule.Class == null)
                 {
                     continue;
                 }
+
                 var ifaces = string.Empty;
                 if (rule.Class.Base != null || rule.Interface != null)
                 {
@@ -54,6 +56,13 @@ namespace Six.Gen
                         ifaces = $"{ifaces}{rule.Interface.TypeName}";
                     }
                 }
+                
+                if (more)
+                {
+                    wl();
+                }
+                more = true;
+
                 block($"public partial class {rule.Class.TypeName}{ifaces}",
                     () =>
                     {
@@ -84,6 +93,9 @@ namespace Six.Gen
                 case TokenOp inner:
                     TokenBody(rule, inner);
                     break;
+                case AltOp inner:
+                    AltBody(rule, inner);
+                    break;
                 default:
                     wl($"// TODO");
                     break;
@@ -94,7 +106,14 @@ namespace Six.Gen
         {
             if (rule.Class != null)
             {
-                wl($"public {rule.Class.TypeName}(params RNode[] children) {{}}");
+                if (rule.Class.Base != null && (rule.Class.Base.TypeName == "RString" || rule.Class.Base.TypeName == "REof"))
+                {
+                    wl($"public {rule.Class.TypeName}(params Node[] children) : base(children) {{}}");
+                }
+                else
+                {
+                    wl($"public {rule.Class.TypeName}(params RNode[] children) : base(children) {{}}");
+                }
             }
         }
 
@@ -109,7 +128,7 @@ namespace Six.Gen
             {
                 var element = inner.Arguments[index];
 
-                wl($"// public {TypeOf(element)} {NameOf(namer, element)} => ({TypeOf(element)})(object)Children[{index}]");
+                wl($"public {TypeOf(element)} {NameOf(namer, element)} => Get<{TypeOf(element)}>({index});");
             }
         }
 
@@ -134,6 +153,11 @@ namespace Six.Gen
         }
 
         private void TokenBody(RuleOp rule, TokenOp op)
+        {
+            Constructor(rule);
+        }
+
+        private void AltBody(RuleOp rule, AltOp op)
         {
             Constructor(rule);
         }

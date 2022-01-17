@@ -20,18 +20,8 @@ namespace Six.Runtime.Types
         {
             switch (anyNode)
             {
-                case Nonterminal node when node.Role == Role.Start:
-                    return BuildStructural(node);
-                case Nonterminal node when node.Role == Role.Rule:
-                    return BuildStructural(node);
-                case Nonterminal node when node.Role == Role.Plus:
-                    return BuildStructural(node);
-                case Nonterminal node when node.Role == Role.Star:
-                    return BuildStructural(node);
-                case Nonterminal node when node.Role == Role.Optional:
-                    return BuildStructural(node);
-                case Nonterminal node when node.Role == Role.Seq:
-                    return BuildSeq(node);
+                case Nonterminal node:
+                    return BuildNonterminal(node);
                 case Packed node:
                     return BuildPacked(node);
                 case Intermediate node:
@@ -43,29 +33,45 @@ namespace Six.Runtime.Types
             }
         }
 
-        private IEnumerable<RNode> BuildStructural(Nonterminal node)
+        private IEnumerable<RNode> BuildNonterminal(Nonterminal node)
         {
-            if (node.Children.Length == 0)
+            if (node.Matcher.Creator != null)
             {
-                yield return new RSequence();
-            }
-            else
-            {
-                yield return new RSequence(Build(node.Children[0]).ToArray());
-            }
-        }
+                if (node.Children.Length == 1 && node.Children[0] is Terminal)
+                {
+                    yield return node.Matcher.Creator.Invoke(node.Children[0]);
 
-        private IEnumerable<RNode> BuildSeq(Nonterminal node)
-        {
-            Assert(node.Role == Role.Seq);
+                    yield break;
+                }
+            }
+
+            Assert(node.Matcher.Builder != null);
 
             if (node.Children.Length == 0)
             {
-                return Enumerable.Empty<RNode>();
+                if (node.Matcher.Builder != null)
+                {
+                    yield return node.Matcher.Builder!.Invoke();
+                }
+                else
+                {
+                    yield return new RNode();
+                }
             }
             else
             {
-                return Build(node.Children[0]);
+                var args = Build(node.Children[0]).ToArray();
+
+                if (node.Matcher.Builder != null)
+                {
+                    var build = node.Matcher.Builder!.Invoke(args);
+                    yield return build;
+                }
+                else
+                {
+                    Assert(args.Length == 1);
+                    yield return new RNode(args);
+                }
             }
         }
 
@@ -88,7 +94,12 @@ namespace Six.Runtime.Types
 
         private static IEnumerable<RNode> BuildTerminal(Terminal node)
         {
-            yield return new RString(node);
+            Assert(node.Matcher.Creator != null);
+
+            if (node.Matcher.Creator != null)
+            {
+                yield return node.Matcher.Creator!.Invoke(node);
+            }
         }
     }
 }

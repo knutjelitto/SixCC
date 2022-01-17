@@ -47,6 +47,11 @@ namespace Six.Input
                 Match(TKind.Alter);
                 expression = TopExpression();
             }
+            else if (Check(TKind.Colon))
+            {
+                Match(TKind.Colon);
+                expression = TopExpression();
+            }
             else
             {
                 Match(TKind.Assign);

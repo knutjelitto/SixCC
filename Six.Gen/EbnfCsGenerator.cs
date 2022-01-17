@@ -1,4 +1,5 @@
 ﻿using Six.Gen.Ebnf;
+using Six.Gen.Typing;
 using Six.Input;
 using System.Text;
 
@@ -36,6 +37,7 @@ namespace Six.Gen
             wl("using Six.Runtime;");
             wl("using Six.Runtime.Dfa;");
             wl("using Six.Runtime.Matchers;");
+            wl("using Six.Runtime.Sppf;");
             wl("using Six.Runtime.Types;");
             wl("using Range = Six.Runtime.Matchers.Range;");
             wl("using String = Six.Runtime.Matchers.String;");
@@ -68,11 +70,47 @@ namespace Six.Gen
                         var attributes = new StringBuilder();
                         if (op.Class != null)
                         {
-                            attributes.Append($"/* CLASS {op.Class.TypeName} */");
+                            if (op.IsTokenType)
+                            {
+                                if (op.Outer != null)
+                                {
+                                    Assert(true);
+                                    attributes.Append($"Creator = node => new {op.Outer.TypeName}(node) ");
+                                }
+                                else
+                                {
+                                    if (op.WithInner)
+                                    {
+                                        attributes.Append($"Creator = node => new {op.Class.TypeName}(node) ");
+                                    }
+                                    else
+                                    {
+                                        attributes.Append($"Creator = node => new {op.Class.TypeName}(node) ");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (op.Outer != null)
+                                {
+                                    attributes.Append($"Builder = nodes => new {op.Outer.TypeName}(nodes) ");
+                                }
+                                else
+                                {
+                                    if (op.WithInner)
+                                    {
+                                        attributes.Append($"Builder = nodes => nodes[0] ");
+                                    }
+                                    else
+                                    {
+                                        attributes.Append($"Builder = nodes => new {op.Class.TypeName}(nodes) ");
+                                    }
+                                }
+                            }
                         }
                         else if (op.Interface != null)
                         {
-                            attributes.Append($"/* INTERFACE {op.Interface.TypeName} */");
+                            attributes.Append($"Builder = nodes => nodes[0] ");
                         }
                         if (attributes.Length > 0)
                         {
@@ -128,7 +166,7 @@ namespace Six.Gen
                                 }
                                 else if (op is NotOp notOp)
                                 {
-                                    wl($"{op.RuleId()}.Set({op.DfaId()});");
+                                    wl($"{notOp.RuleId()}.Set({notOp.DfaId()});");
                                 }
                                 else
                                 {
@@ -169,7 +207,7 @@ namespace Six.Gen
 
                         foreach (var op in Grammar.Rules)
                         {
-                            if (!op.Name.StartsWith("%"))
+                            if (!op.IsSpecial)
                             {
                                 wl($"private {ClassName(op)} {op.RuleId()};");
                             }

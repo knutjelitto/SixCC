@@ -22,6 +22,8 @@
 
         public string Name { get; }
 
+        public bool IsSpecial => Name.StartsWith("%");
+
         protected override string DumpHead => Name;
     }
 }

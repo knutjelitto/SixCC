@@ -1,8 +1,17 @@
 ﻿grammar T1;
 
-S   | 'b' 'a' 'c'
-    | 'b' 'a' 'a'
-    | 'b' A 'c'
+S   | Abac
+    | Bbaa
+    | CbAc
+    ;
+
+Abac | 'b' 'a' 'c'
+    ;
+
+Bbaa | 'b' 'a' 'a'
+    ;
+
+CbAc | 'b' A 'c'
     ;
 
 A   | 'a'

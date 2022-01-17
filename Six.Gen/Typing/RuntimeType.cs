@@ -1,8 +1,8 @@
 ﻿namespace Six.Gen.Typing
 {
-    public sealed class BaseType : ClassType
+    public sealed class RuntimeType : ClassType
     {
-        public BaseType(string name) : base(name)
+        public RuntimeType(string name) : base(name)
         {
         }
 
@@ -10,7 +10,7 @@
 
         public override bool Equals(object obj)
         {
-            return obj is BaseType that && Name == that.Name;
+            return obj is RuntimeType that && Name == that.Name;
         }
 
         public override int GetHashCode()

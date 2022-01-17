@@ -12,8 +12,20 @@ value
     | array
     | string
     | number
+    | true
+    | false
+    | null
+    ;
+
+true
     | 'true'
+    ;
+
+false
     | 'false'
+    ;
+
+null
     | 'null'
     ;
 
@@ -22,8 +34,7 @@ object
     ;
 
 members
-    | member
-    | member ',' members
+    | member (',' member)*
     ;
 
 member
@@ -35,8 +46,7 @@ array
     ;
 
 elements
-    | element
-    | element ',' elements
+    | element (',' element)*
     ;
 
 element

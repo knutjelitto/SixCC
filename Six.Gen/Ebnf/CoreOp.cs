@@ -35,7 +35,33 @@ namespace Six.Gen.Ebnf
         public bool IsLoop { get; set; }
         public ClassType? Class { get; set; }
         public InterfaceType? Interface { get; set; }
-        public ClassType Base => Class!.Base!;
+        public ClassType? Outer { get; set; }
+        public bool WithInner { get; set; }
+
+        public bool IsTokenType
+        {
+            get
+            {
+                if (Class != null)
+                {
+                    if (Class.TypeName == "RString" || Class.TypeName == "REof")
+                    {
+                        return true;
+                    }
+#if true
+                    if (Class.Base != null)
+                    {
+                        if (Class.Base.TypeName == "RString" || Class.Base.TypeName == "REof")
+                        {
+                            return true;
+                        }
+                    }
+#endif
+                }
+
+                return false;
+            }
+        }
 
         public List<CoreOp> Arguments { get; protected set; }
         public CoreOp Argument
@@ -62,7 +88,15 @@ namespace Six.Gen.Ebnf
         {
             if (Class != null)
             {
-                writer.WriteLine($":: {Class}");
+                writer.Write($":: {Class}");
+                if (Outer != null)
+                {
+                    writer.WriteLine($" >> {Outer}");
+                }
+                else
+                {
+                    writer.WriteLine();
+                }
             }
             if (Interface != null)
             {
@@ -93,12 +127,10 @@ namespace Six.Gen.Ebnf
                 {
                     builder.Append($"[L]");
                 }
-#if true
-                if ((this is not RuleOp ruleOp || !ruleOp.Name.StartsWith("%")) && Class == null && Interface == null)
+                if ((this is not RuleOp ruleOp || !ruleOp.IsSpecial) && Class == null && Interface == null)
                 {
                     builder.Append($"[!untyped]");
                 }
-#endif
                 return builder.Length > 0 ? $" {builder}" : string.Empty;
             }
         }

@@ -108,8 +108,7 @@ import-wildcard
     ;
 
 import-name
-    | member-name
-    | type-name
+    | any-name
     ;
 
 package-path
@@ -255,9 +254,13 @@ package-qualifier
     ;
 
 un-qualified-class
-    | type-path '.' member-reference
+    | member-path
     | type-path
     | member-reference
+    ;
+
+member-path
+    | type-path '.' member-reference
     ;
 
 type-path
@@ -282,6 +285,10 @@ case-type-list
 
 case-type
     | primary-type
+    | qualified-case-type
+    ;
+
+qualified-case-type
     | package-qualifier? member-name
     ;
 
@@ -312,23 +319,27 @@ parameter-reference
     ;
 
 parameter-declaration
-    | value-parameter-declaration
     | function-parameter-declaration
-    ;
-
-value-parameter-declaration
-    | parameter-declaration-type member-name value-specifier?
+    | value-parameter-declaration
     ;
 
 function-parameter-declaration
-    | parameter-declaration-type member-name type-parameters? parameters+ function-specifier?
+    | function-parameter-type member-name type-parameters? parameters+ function-specifier?
     ;
 
-parameter-declaration-type
+function-parameter-type
     | variadic-type
-    | 'void'
-    | 'function'
-    | 'value'
+    | kw-void
+    | kw-function
+    ;
+
+value-parameter-declaration
+    | value-parameter-type member-name value-specifier?
+    ;
+
+value-parameter-type
+    | variadic-type
+    | kw-value
     ;
 
 type-parameters
@@ -389,7 +400,7 @@ enumerated-object
     ;
     
 alias-declaration
-    | annotations 'alias' type-name type-parameters? type-constraints? type-specifier? ';'
+    | annotations 'alias' type-name type-parameters? type-constraints? optional-type-specifier
     ;
 
 object-declaration
@@ -402,7 +413,7 @@ setter-declaration
 
 setter-definition
     | block
-    | function-specifier ';'
+    | needed-function-specifier
     ;
 
 typed-method-declaration
@@ -411,7 +422,7 @@ typed-method-declaration
 
 method-type
     | variadic-type
-    | 'void'
+    | kw-void
     ;
 
 inferred-method-declaration
@@ -432,23 +443,23 @@ inferred-attribute-declaration
 
 attribute-definition
     | block
+    | optional-any-specifier
+    ;
+
+optional-any-specifier
     | any-specifier? ';'
     ;
 
 class-declaration
-    | annotations 'class' 
-      type-name
-      type-parameters?
-      parameters?
-      case-types?
-      extended-type?
-      satisfied-types?
-      type-constraints?
-      class-definition
+    | annotations 'class' type-name type-parameters? parameters? case-types? extended-type? satisfied-types? type-constraints? class-definition
     ;
 
 class-definition
     | class-block
+    | optional-class-specifier
+    ;
+
+optional-class-specifier
     | class-specifier? ';'
     ;
 
@@ -458,16 +469,28 @@ interface-declaration
 
 interface-definition
     | interface-block
+    | optional-type-specifier
+    ;
+
+optional-type-specifier
     | type-specifier? ';'
     ;
 
 statement
-    | directive-statement ';'
-    | expression-statement ';'
-    | specification-statement ';'
-    | assertion-statement ';'
-    | let-statement ';'
+    | unclosed-statement
     | control-statement
+    ;
+
+unclosed-statement
+    | open-statement ';'
+    ;
+
+open-statement
+    | directive-statement
+    | expression-statement
+    | specification-statement
+    | assertion-statement
+    | let-statement
     ;
 
 specification-statement
@@ -521,7 +544,8 @@ any-specifier
 base-reference-or-parameterized
     | base-reference
     | parametrized-member
-    | self-reference self-parametrized-member?
+    | self-reference
+    | self-parametrized-member
     ;
 
 base-reference
@@ -534,7 +558,7 @@ parametrized-member
     ;
 
 self-parametrized-member
-    | member-selection-operator parametrized-member
+    | self-reference-selector parametrized-member
     ;
 
 member-reference
@@ -545,13 +569,17 @@ type-reference
     | type-name type-arguments?
     ;
 
+self-reference-selector
+    | self-reference member-selection-operator
+    ;
+
 self-reference
     | 'this'
-    | 'super' 
+    | 'super'
     | 'outer'
     | 'package'
     ;
-    
+
 enumeration
     | '{' declaration-or-statement* sequenced-arguments? '}'
     ;
@@ -617,12 +645,20 @@ typed-method-argument
 
 method-definition
     | block
+    | optional-function-specifier
+    ;
+
+optional-function-specifier
     | function-specifier? ';'
+    ;
+
+needed-function-specifier
+    | function-specifier ';'
     ;
 
 method-argument-type
     | type
-    | 'void'
+    | kw-void
     ;
 
 typed-getter-argument
@@ -642,11 +678,11 @@ inferred-getter-argument
     ;
 
 untyped-method-argument
-    | member-name parameters+ function-specifier ';'
+    | member-name parameters+ needed-function-specifier
     ;
 
 untyped-getter-argument
-    | member-name function-specifier ';'
+    | member-name needed-function-specifier
     ;
 
 positional-arguments
@@ -758,37 +794,39 @@ operator-expression
     ;
 
 assignment-expression
-    | then-else-expression assignment-operator expression
+    | assignment
     | then-else-expression
     ;
 
+assignment
+    | then-else-expression assignment-operator expression
+    ;
+
 assignment-operator
-    | '='
-    | '+='
-    | '-='
-    | '*='
-    | '/='
-    | '%='
-    | '&='
-    | '|='
-    | '~='
-    | '&&='
-    | '||='
+    | < '=' | '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '~=' | '&&=' | '||=' >
     ;
 
 then-else-expression
-    | then-else-expression then-else-operator disjunction-expression
+    | then-else
     | disjunction-expression
     ;
 
+then-else
+    | then-else-expression then-else-operator disjunction-expression
+    ;
+
 then-else-operator
-    | 'else' 
+    | 'else'
     | 'then'
     ;
 
 disjunction-expression
-    | disjunction-expression disjunction-operator conjunction-expression
+    | disjunction
     | conjunction-expression
+    ;
+
+disjunction
+    | disjunction-expression disjunction-operator conjunction-expression
     ;
 
 disjunction-operator
@@ -796,8 +834,12 @@ disjunction-operator
     ;
 
 conjunction-expression
-    | conjunction-expression conjunction-operator logical-negation-expression
+    | conjunction
     | logical-negation-expression
+    ;
+
+conjunction
+    | conjunction-expression conjunction-operator logical-negation-expression
     ;
 
 conjunction-operator
@@ -805,8 +847,12 @@ conjunction-operator
     ;
 
 logical-negation-expression
-    | not-operator logical-negation-expression
+    | logical-negation
     | expression-or-meta
+    ;
+
+logical-negation
+    | not-operator logical-negation-expression
     ;
 
 not-operator
@@ -819,8 +865,12 @@ expression-or-meta
     ;
 
 equality-expression
-    | comparison-expression equality-operator comparison-expression
+    | equality
     | comparison-expression
+    ;
+
+equality
+    | comparison-expression equality-operator comparison-expression
     ;
 
 equality-operator
@@ -830,13 +880,37 @@ equality-operator
     ;
 
 comparison-expression
-    | exists-nonempty-expression comparison-operator exists-nonempty-expression
-    | exists-nonempty-expression larger-operator exists-nonempty-expression
-    | exists-nonempty-expression larger-operator exists-nonempty-expression larger-operator exists-nonempty-expression
-    | exists-nonempty-expression smaller-operator exists-nonempty-expression smaller-operator exists-nonempty-expression
-    | exists-nonempty-expression smaller-operator exists-nonempty-expression
-    | exists-nonempty-expression type-operator type
+    | comparison-expr
+    | larger-expr
+    | smaller-expr
+    | larger-bounds-expr
+    | smaller-bounds-expr
+    | typecheck-expr
     | exists-nonempty-expression
+    ;
+
+comparison-expr
+    | exists-nonempty-expression comparison-operator exists-nonempty-expression
+    ;
+
+larger-expr
+    | exists-nonempty-expression larger-operator exists-nonempty-expression
+    ;
+
+smaller-expr
+    | exists-nonempty-expression smaller-operator exists-nonempty-expression
+    ;
+
+larger-bounds-expr
+    | exists-nonempty-expression larger-operator exists-nonempty-expression larger-operator exists-nonempty-expression
+    ;
+
+smaller-bounds-expr
+    | exists-nonempty-expression smaller-operator exists-nonempty-expression smaller-operator exists-nonempty-expression
+    ;
+
+typecheck-expr
+    | exists-nonempty-expression type-operator type
     ;
 
 comparison-operator
@@ -876,19 +950,27 @@ nonempty-expression
     ;
 
 entry-range-expression
-    | additive-expression range-or-entry-operator additive-expression
+    | entry-or-range
     | additive-expression
     ;
 
+entry-or-range
+    | additive-expression range-or-entry-operator additive-expression
+    ;
+
 range-or-entry-operator
-    | '..' 
+    | '..'
     | ':'
     | '->'
     ;
 
 additive-expression
-    | additive-expression additive-operator scale-expression
+    | additive-expr
     | scale-expression
+    ;
+
+additive-expr
+    | additive-expression additive-operator scale-expression
     ;
 
 additive-operator
@@ -897,8 +979,12 @@ additive-operator
     ;
 
 scale-expression
-    | multiplicative-expression scale-operator scale-expression
+    | scale-expr
     | multiplicative-expression
+    ;
+
+scale-expr
+    | multiplicative-expression scale-operator scale-expression
     ;
 
 scale-operator
@@ -906,19 +992,27 @@ scale-operator
     ;
 
 multiplicative-expression
-    | multiplicative-expression multiplicative-operator union-expression
+    | multiplicative-expr
     | union-expression
     ;
 
+multiplicative-expr
+    | multiplicative-expression multiplicative-operator union-expression
+    ;
+
 multiplicative-operator
-    | '*' 
+    | '*'
     | '/'
     | '%'
     ;
 
 union-expression
-    | union-expression union-operator exclusive-expression
+    | union-expr
     | exclusive-expression
+    ;
+    
+union-expr
+    | union-expression union-operator exclusive-expression
     ;
     
 union-operator
@@ -927,8 +1021,12 @@ union-operator
     ;
 
 exclusive-expression
-    | exclusive-expression exclusive-operator intersection-expression
+    | exclusive-expr
     | intersection-expression
+    ;
+
+exclusive-expr
+    | exclusive-expression exclusive-operator intersection-expression
     ;
 
 exclusive-operator
@@ -936,8 +1034,12 @@ exclusive-operator
     ;
 
 intersection-expression
-    | intersection-expression intersection-operator negation-or-complement-expression
+    | intersection-expr
     | negation-or-complement-expression
+    ;
+    
+intersection-expr
+    | intersection-expression intersection-operator negation-or-complement-expression
     ;
     
 intersection-operator
@@ -945,29 +1047,53 @@ intersection-operator
     ;
 
 negation-or-complement-expression
-    | unary-minus-or-complement-operator negation-or-complement-expression
+    | negation-or-complement-expr
     | prefix-expression
     ;
 
+negation-or-complement-expr
+    | unary-minus-or-complement-operator negation-or-complement-expression
+    ;
+
 unary-minus-or-complement-operator
+    | op-negate
+    | op-neutral
+    | op-complement
+    ;
+
+op-negate
     | '-' !'-'
+    ;
+
+op-neutral
     | '+' !'+'
+    ;
+
+op-complement
     | '~'
     ;
 
 prefix-expression
-    | increment-operator prefix-expression
+    | prefix-expr
     | postfix-expression
     ;
 
+prefix-expr
+    | increment-operator prefix-expression
+    ;
+
 postfix-expression
-    | postfix-expression increment-operator
+    | postfix-expr
     | primary
     ;
 
+postfix-expr
+    | postfix-expression increment-operator
+    ;
+
 increment-operator
-    | '--'
     | '++'
+    | '--'
     ;
 
 primary
@@ -1087,13 +1213,21 @@ defaulted-type-list
     ;
 
 defaulted-type
-    | type '='
+    | defaulted-type-core
     | variadic-type
     ;
 
+defaulted-type-core
+    | type '='
+    ;
+
 variadic-type
-    | union-type variadic-operator
+    | variadic-union-type
     | type
+    ;
+
+variadic-union-type
+    | union-type variadic-operator
     ;
 
 variadic-operator
@@ -1115,13 +1249,21 @@ entry-type
     ;
 
 union-type
-    | union-type '|' intersection-type
+    | union-type-core
     | intersection-type
     ;
 
+union-type-core
+    | union-type '|' intersection-type
+    ;
+
 intersection-type
-    | intersection-type '&' primary-type
+    | intersection-type-core
     | primary-type
+    ;
+
+intersection-type-core
+    | intersection-type '&' primary-type
     ;
 
 primary-type
@@ -1379,9 +1521,9 @@ variable
 
 variable-type
     | type
-    | 'void'
-    | 'function'
-    | 'value'
+    | kw-void
+    | kw-function
+    | kw-value
     ;
 
 model-reference
@@ -1474,13 +1616,22 @@ function-literal
     ;
 
 reference-path
-    | package-qualifier? reference-path-element ('.' reference-path-element)*
-    ; 
+    | package-qualifier? reference-path-element-list
+    ;
+
+reference-path-element-list
+    | reference-path-element ('.' reference-path-element)*
+    ;
 
 reference-path-element
-    | type-name 
-    | member-name
+    | any-name
     ;
+
+// keywords
+
+kw-void | 'void' ;
+kw-function | 'function' ;
+kw-value | 'value' ;
     
 // Lexer
 
@@ -1626,17 +1777,17 @@ identifier-part
     ;
 
 letter
-    | 'a'..'z' 
-    | 'A'..'Z' 
-    | '\u{0080}'..'\u{ffff}'
+    | 'a' .. 'z' 
+    | 'A' .. 'Z' 
+    | '\u{0080}' .. '\u{ffff}'
     ;
 
 decimal-digit
-    | '0'..'9'
+    | '0' .. '9'
     ;
 
 hex-digit
-    | '0'..'9' | 'A'..'F' | 'a'..'f'
+    | '0' .. '9' | 'A' .. 'F' | 'a' .. 'f'
     ;
 
 binary-digit

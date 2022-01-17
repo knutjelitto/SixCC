@@ -2,5 +2,5 @@
 
 namespace Six.Runtime.Types
 {
-    public delegate RNode Typer(params Node[] nodes);
+    public delegate RNode NodeCreator(Node node);
 }

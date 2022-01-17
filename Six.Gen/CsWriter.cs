@@ -11,9 +11,15 @@ namespace Six.Gen
 
         public static string CsId(this string identifier)
         {
-            var parts = identifier.Split('-', '_');
+            var special = identifier.StartsWith("%");
 
-            return string.Join(string.Empty, parts.Select(part => part.Cap()));
+            if (special)
+            {
+                identifier = identifier.Substring(1);
+            }
+            var parts = identifier.Split('-');
+
+            return (special ? "_" : "") + string.Join(string.Empty, parts.Select(part => part.Cap()));
         }
 
         public static string CsString(this string text)

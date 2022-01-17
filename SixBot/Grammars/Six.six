@@ -21,7 +21,12 @@ rules
     ;
 
 rule
-    | identifier '|' expression ';'
+    | identifier define expression ';'
+    ;
+
+define
+    | '|'
+    | ':'
     ;
 
 expression
@@ -74,7 +79,15 @@ not
 atom
     | identifier
     | string
+    | grouped-expression
+    | token-expression
+    ;
+
+grouped-expression
     | '(' expression ')'
+    ;
+
+token-expression
     | '<' expression '>'
     ;
 

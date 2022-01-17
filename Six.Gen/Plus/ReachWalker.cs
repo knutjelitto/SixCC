@@ -14,8 +14,8 @@
 
         protected override void Walk(EbnfGrammar grammar)
         {
-            Walk(grammar.WhitespaceRule);
             Walk(grammar.StartRule);
+            Walk(grammar.WhitespaceRule);
             Walk(grammar.KeywordsRule);
         }
 

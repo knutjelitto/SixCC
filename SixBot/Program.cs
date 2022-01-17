@@ -21,7 +21,7 @@ void RunCeylon()
     maximal = true;
     indexRules = true;
 
-    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name));
+    Check<CeylonParser>(-1, Sampler.LoadCeylon().OrderBy(s => s.Name).Take(1000));
     //Check<CeylonParser>(881, Sampler.LoadCeylon().OrderBy(s => s.Name));
     //Check<CeylonParser>(-1, Sampler.LoadCeylonOrdered());
     CheckGenerate(true);
@@ -172,11 +172,11 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                 if (root != null)
                 {
                     var file = $"{count:D4}-{Path.GetFileNameWithoutExtension(source.Name)}";
-                    using (var writer = $"{parser.__Name}-{file}-sppf.txt".Writer())
+                    using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-sppf.txt".Writer())
                     {
                         new SppfDumper(root, writer).Dump();
                     }
-                    using (var writer = $"{parser.__Name}-{file}-enum.txt".Writer())
+                    using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-enum.txt".Writer())
                     {
                         var enumerator = new SppfEnumerator(root, writer);
                         var counted = enumerator.Count();
@@ -198,15 +198,17 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                             }
                         }
                     }
+#if false
                     var treeBuilder = new TreeBuilder(root);
                     var tree = treeBuilder.Build();
-                    using (var writer = $"{parser.__Name}-{file}-tree.txt".Writer(2))
+                    using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-tree.txt".Writer(2))
                     {
                         new TreeDumper(tree, writer).Dump();
                     }
+#endif
                     var typedBuilder = new TypedBuilder(root);
                     var typed = typedBuilder.Build();
-                    using (var writer = $"{parser.__Name}-{file}-typed.txt".Writer(2))
+                    using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-typed.txt".Writer())
                     {
                         new TypedDumper(typed, writer).Dump();
                     }
@@ -220,16 +222,10 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
 
     if (indexer != null)
     {
-        using (var writer = $"_rules_index_.txt".Writer())
+        using (var writer = $"{parser.__Name}-RulesIndex.txt".Writer())
         {
             indexer.Dump(writer);
         }
-#if false
-        using (var writer = $"_index_rules_.txt".Writer())
-        {
-            indexer.Invert().Dump(writer);
-        }
-#endif
     }
 }
 

@@ -8,7 +8,8 @@ namespace Six.Runtime.Matchers
         public readonly Dictionary<Cursor, Context> Contexts = new();
         public Dfa.Dfa? Dfa = null;
         public bool IsAlias = false;
-        public Typer? Typer = null;
+        public NodeBuilder? Builder = null;
+        public NodeCreator? Creator = null;
 
         protected Matcher(ImplementationCore core, int id, string name)
         {

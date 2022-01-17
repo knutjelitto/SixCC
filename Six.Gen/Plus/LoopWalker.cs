@@ -42,11 +42,11 @@
                 }
                 else if (seq.Arguments[1] is PlusOp plus)
                 {
-                    if (plus.Argument is SeqOp starSeq)
+                    if (plus.Argument is SeqOp plusSeq)
                     {
-                        if (starSeq.Arguments.Count == 2)
+                        if (plusSeq.Arguments.Count == 2)
                         {
-                            var second = starSeq.Arguments[1];
+                            var second = plusSeq.Arguments[1];
 
                             if (first.Id == second.Id)
                             {

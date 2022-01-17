@@ -3,14 +3,15 @@ using Six.Runtime.Sppf;
 
 namespace Six.Runtime.Types
 {
-    public class RString : RNode
+    public class REof : RNode
     {
-        public RString(params Node[] nodes)
+        public REof(params Node[] nodes)
             : this((Terminal)nodes[0])
         {
+            Assert(nodes.Length == 1);
         }
 
-        public RString(Terminal terminal)
+        public REof(Terminal terminal)
         {
             Start = terminal.Start.Offset;
             Core = terminal.Core.Offset;
@@ -25,15 +26,7 @@ namespace Six.Runtime.Types
 
         public string Text()
         {
-            var start = Math.Max(Core, Start);
-
-            var text = Source.GetText(start, End - start);
-            if (text.StartsWith("'") && text.EndsWith("'"))
-            {
-                return text;
-            }
-
-            return text.Esc();
+            return Source.GetText(Start, Core - Start).Esc();
         }
 
         public override string ToString()

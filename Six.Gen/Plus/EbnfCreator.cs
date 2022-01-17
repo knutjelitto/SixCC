@@ -141,7 +141,6 @@ namespace Six.Gen.Ebnf
 
             Ebnf = new InstanceWalker(Ebnf).Walk();
             Ebnf = new LoopWalker(Ebnf).Walk();
-            Ebnf = new Typing.TypeBuilder(Ebnf).Walk();
 
             var keywords = new SortedSet<string>();
 
@@ -162,7 +161,8 @@ namespace Six.Gen.Ebnf
                 }
             }
 
-            Ebnf.SetKeywords(keywords.OrderBy(k => k.Length));
+            Ebnf = new Typing.TypeBuilder(Ebnf).Walk();
+            Ebnf.SetKeywords(keywords.OrderBy(k => k));
 
             if (keywordsSymbol != null && keywords.Count > 0)
             {

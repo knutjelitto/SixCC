@@ -44,7 +44,7 @@ namespace Six.Gen
 
         private IEnumerable<string> Enum(int min, int max)
         {
-            if (max - min <= 4)
+            if (max - min <= 2)
             {
                 for (var i = min; i <= max; i++)
                 {

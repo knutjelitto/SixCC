@@ -6,7 +6,11 @@
 
         public static string File(string filename)
         {
-            return Path.Combine(Temp.TempPath(top), filename);
+            var path = Path.Combine(Temp.TempPath(top), filename);
+            var dir = Path.GetDirectoryName(path);
+            Directory.CreateDirectory(dir);
+
+            return path;
         }
 
         public static Writer Writer(this string filename, int? indent = null)

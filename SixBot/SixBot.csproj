@@ -5,19 +5,19 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
-	</PropertyGroup>
+		    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
+	  </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Grammars\Ceylon.six" />
-      <None Remove="Samples\Json.six" />
-      <None Remove="Samples\Six.six" />
+        <None Remove="Grammars\Ceylon.six" />
+        <None Remove="Samples\Json.six" />
+        <None Remove="Samples\Six.six" />
     </ItemGroup>
 
     <ItemGroup>
-		<AdditionalFiles Include="Grammars\Six.six" />
-		<AdditionalFiles Include="Grammars\Ceylon.six" />
+		    <AdditionalFiles Include="Grammars\Six.six" />
+		    <AdditionalFiles Include="Grammars\Ceylon.six" />
         <AdditionalFiles Include="Grammars\Json.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T1.six" Link="Samples\T1.six" />
         <AdditionalFiles Include="..\Six.Samples\Six\T2.six" Link="Samples\T2.six" />
@@ -33,12 +33,12 @@
     </ItemGroup>
 
     <ItemGroup>
-		<ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		<ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		<ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		<ProjectReference Include="..\Six.Rex\Six.Rex.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		<ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
+		    <ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		    <ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		    <ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		    <ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		    <ProjectReference Include="..\Six.Rex\Six.Rex.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		    <ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,15 +1,26 @@
 ﻿grammar T4;
 
-S   | d? d?
-    | d? d*
-    | d? d+
-    | d* d?
-    | d* d*
-    | d* d+
-    | d+ d?
-    | d+ d*
-    | d+ d+
-    ;
+S  | qq
+   | qs
+   | qp
+   | sq
+   | ss
+   | sp
+   | pq
+   | ps
+   | pp
+   ;
+
+qq | d? d?;
+qs | d? d*;
+qp | d? d+;
+sq | d* d?;
+ss | d* d*;
+sp | d* d+;
+pq | d+ d?;
+ps | d+ d*;
+pp | d+ d+;
+
 
 d   | 'd'
     ;
