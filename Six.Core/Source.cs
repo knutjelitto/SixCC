@@ -115,7 +115,7 @@
             return $"{name}({sline},{scolumn}-{eline},{ecolumn})";
         }
 
-        public string LCO(int offset)
+        public string LineColumnOffset(int offset)
         {
             var name = Name;
             var (line, column) = GetLineAndColumn(offset);

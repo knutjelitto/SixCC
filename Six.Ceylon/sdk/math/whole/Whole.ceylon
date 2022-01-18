@@ -8,14 +8,10 @@
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
 "An arbitrary precision integer."
-shared interface Whole 
-        of WholeImpl
-        satisfies Integral<Whole> &
-                  Exponentiable<Whole, Whole> {
-
-    "The platform-specific implementation object, if any. 
-     This is provided for interoperation with the runtime 
-     platform."
+shared interface Whole of WholeImpl satisfies Integral<Whole> & Exponentiable<Whole, Whole>
+{
+    "The platform-specific implementation object, if any. This is provided for
+     interoperation with the runtime platform."
     see(`function fromImplementation`)
     shared formal Object? implementation;
     
@@ -24,42 +20,35 @@ shared interface Whole
      Special cases:
      
      * Returns one if `this` is one (or all powers)
-     * Returns one if `this` is minus one and the power 
-       is even
-     * Returns minus one if `this` is minus one and the 
-       power is odd
+     * Returns one if `this` is minus one and the power is even
+     * Returns minus one if `this` is minus one and the power is odd
      * Returns one if the power is zero.
-     * Otherwise negative powers result in an `Exception` 
-       being thrown
+     * Otherwise negative powers result in an `Exception` being thrown
      "
-    throws(`class Exception`, "If passed a negative or large 
-                               positive exponent")
+    throws(`class Exception`, "If passed a negative or large positive exponent")
     shared formal actual Whole power(Whole exponent);
 
     deprecated("Renamed to [[moduloPower]].")
     see(`function moduloPower`)
     throws(`class Exception`, "If passed a negative modulus")
-    shared Whole powerRemainder(Whole exponent, 
-                                Whole modulus)
+    shared Whole powerRemainder(Whole exponent, Whole modulus)
         => moduloPower(exponent, modulus);
 
     "The result of `(this^exponent) mod modulus`."
     throws(`class Exception`, "If passed a negative modulus")
-    shared formal Whole moduloPower(Whole exponent, 
-                                 Whole modulus);
+    shared formal Whole moduloPower(Whole exponent, Whole modulus);
 
     //"The result of `this mod modulus`. This method differs from
     // [[remainder]] in that the returned value will always be positive."
     //shared formal Whole modulo(Whole modulus);
 
-    "Returns a pair containing the same results as calling
-     `divided()` and `remainder()` with the given
-     argument, except the division is only performed once."
+    "Returns a pair containing the same results as calling `divided()` and
+     `remainder()` with the given argument, except the division is only performed
+     once."
     shared formal [Whole, Whole] quotientAndRemainder(Whole other);
 
-    "The number, represented as an [[Integer]]. If the number is too 
-     big to fit in an Integer then an Integer corresponding to the
-     lower order bits is returned."
+    "The number, represented as an [[Integer]]. If the number is too big to fit in
+     an Integer then an Integer corresponding to the lower order bits is returned."
     shared formal Integer integer;
     
     "The number, represented as a [[Float]]. If the magnitude of this number 
@@ -68,8 +57,7 @@ shared interface Whole
     shared formal Float float;
     
     "The distance between this whole and the other whole"
-    throws(`class OverflowException`, 
-        "The numbers differ by an amount larger than can be represented as an `Integer`")
+    throws(`class OverflowException`, "The numbers differ by an amount larger than can be represented as an `Integer`")
     shared actual formal Integer offset(Whole other);
 }
 

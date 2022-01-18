@@ -7,13 +7,17 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.lang {
-    JInteger=Integer {
+import java.lang
+{
+    JInteger=Integer
+    {
         maxInt=MAX_VALUE,
         minInt=MIN_VALUE
     }
 }
-import java.math {
+
+import java.math
+{
     BigDecimal
 }
 

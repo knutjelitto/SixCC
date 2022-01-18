@@ -1,33 +1,48 @@
-﻿using Six.Runtime;
+﻿using Six.Ceylon;
 
-var count = 0;
-foreach (var file in SourceFile.LoadAll())
-{
-    count += 1;
+#pragma warning disable CS8321 // Local function is declared but never used
 
-    if (IsModule(file) || IsPackage(file))
-    {
-        Console.WriteLine($"{count,3} {file.Fullname}");
-    }
-}
+var modules = Loader.GetModules().ToList();
+
+//DumpModules(modules);
+
+var compiler = new Compiler();
+compiler.BuildModule(modules.Where(m => m.Name == "language").First());
 
 Wait();
-
-bool IsModule(SourceFile file)
-{
-    return string.Compare(file.Name, "module.ceylon", true) == 0;
-}
-
-bool IsPackage(SourceFile file)
-{
-    return string.Compare(file.Name, "package.ceylon", true) == 0;
-}
-
-
 
 void Wait()
 {
     Console.Write("any key ... ");
     Console.ReadKey(true);
     Console.WriteLine();
+}
+
+void DumpModules(List<Module> modules)
+{
+    foreach (var module in modules)
+    {
+        Console.WriteLine($"module: {module.Name}");
+        foreach (var package in module.Packages.OrderBy(p => p.Name))
+        {
+            Console.Write($"    {package.Name}");
+            var length = int.MaxValue;
+            foreach (var file in package.Files)
+            {
+                if (length > 120)
+                {
+                    Console.WriteLine();
+                    Console.Write("        ");
+                    length = 0;
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
+                Console.Write($"{file.BaseName}");
+                length += file.BaseName.Length + 1;
+            }
+            Console.WriteLine();
+        }
+    }
 }

@@ -7,12 +7,13 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.util.concurrent.atomic {
+import java.util.concurrent.atomic
+{
   AtomicReference
 }
 
-native
-shared class AtomicRef<Value>(Value val) {
+native shared class AtomicRef<Value>(Value val)
+{
     native shared Value get();
     native shared void set(Value val);
     native shared Boolean compareAndSet(Value expect, Value update);
@@ -31,29 +32,4 @@ shared class AtomicRef<Value>(Value val) {
 
   native("jvm") shared Boolean compareAndSet(Value expect, Value update) => state.compareAndSet(expect, update);
   
-}
-
-native("js")
-shared class AtomicRef<Value>(Value val) {
-    
-    variable Value state = val;
-    
-    native("js") shared Value get() => state;
-    
-    native("js") shared void set(Value val) {
-        state = val;
-    }
-    
-    native("js") shared Boolean compareAndSet(Value expect, Value update) {
-        if (exists expect) {
-            if (exists s = state, expect == s) {
-                state = update;
-                return true;
-            }
-        } else if (is Null s = state) {
-            state = update;
-            return true;
-        }
-        return false;
-    }
 }

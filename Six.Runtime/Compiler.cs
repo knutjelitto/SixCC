@@ -50,7 +50,7 @@ namespace Six.Runtime
             var source = Source.FromString(job.Name, job.Content);
 
             var parser = parsers.Receive();
-            parser.Parse(source);
+            parser.ParseVerbose(source);
             parser.Reset();
             parsers.Post(parser);
         }

@@ -28,6 +28,21 @@ namespace Six.Runtime
             var cursor = new Cursor(source, 0);
             var ok = false;
 
+            __Core.__Start.Match(cursor,
+                matched =>
+                {
+                    ok = true;
+                });
+
+            return ok;
+        }
+
+
+        public bool ParseVerbose(Source source)
+        {
+            var cursor = new Cursor(source, 0);
+            var ok = false;
+
             var watch = new Stopwatch();
             watch.Start();
 
@@ -68,21 +83,21 @@ namespace Six.Runtime
             void Report(string what, int offset, double percent)
             {
                 var elapsed = watch.Elapsed;
-                var rep = source.LCO(offset);
+                var rep = source.LineColumnOffset(offset);
                 var lines = source.GetLineNoFromIndex(offset);
                 var ms = Math.Round(elapsed.TotalMilliseconds, 1);
                 var cps = Math.Round(offset / elapsed.TotalSeconds, 0);
                 var lps = Math.Round(lines / elapsed.TotalSeconds, 0);
                 Console.WriteLine($"    {what} {__Name} {rep}");
-                Console.WriteLine($"    elapsed: {ms} ms, {cps} cps, {lps} lps {percent} {percent} %");
+                Console.WriteLine($"    elapsed: {ms} ms, {cps} cps, {lps} lps  {percent} %");
             }
         }
 
-        public bool Parse(string name, string content)
+        public bool ParseVerbose(string name, string content)
         {
             var source = Source.FromString(name, content);
 
-            return Parse(source);
+            return ParseVerbose(source);
         }
     }
 }

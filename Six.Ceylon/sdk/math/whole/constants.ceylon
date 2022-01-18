@@ -7,16 +7,20 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.lang {
-    JInt=Integer {
+import java.lang
+{
+    JInt=Integer
+    {
         maxInt=MAX_VALUE
     },
-    Long {
+    Long
+    {
         maxLong=MAX_VALUE,
         minLong=MIN_VALUE
     }
 }
-import java.math {
+import java.math
+{
     BigInteger
 }
 

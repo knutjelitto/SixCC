@@ -33,17 +33,18 @@
 
  See <http://en.wikipedia.org/wiki/Linear_congruential_generator>"
 shared final class DefaultRandom (
-        "The seed. The value is processed by [[reseed]] prior to use."
-        Integer seed = nextUniqueSeed)
-        satisfies Random {
-
+    "The seed. The value is processed by [[reseed]] prior to use."
+    Integer seed = nextUniqueSeed)
+    satisfies Random
+{
     Integer a;
     Integer c;
     Integer m;
     Integer highUsableBit; // counting from 1
     Integer usableBitCount;
 
-    if (realInts) {
+    if (realInts)
+    {
         // Same parameters as java.util.Random, apparently
         a = 25214903917;
         c = 11;
@@ -51,7 +52,8 @@ shared final class DefaultRandom (
         highUsableBit = 48; // counting from 1
         usableBitCount = 32;
     }
-    else {
+    else
+    {
         a = 214013;
         c = 2531011;
         m = 2^32;
@@ -65,10 +67,14 @@ shared final class DefaultRandom (
     // initialized later by reseed(seed)
     variable Integer xn = 0;
 
-    Integer next() {
-        if (realInts) {
+    Integer next()
+    {
+        if (realInts)
+        {
             return xn = (a * xn + c).and(mask);
-        } else {
+        }
+        else
+        {
             // x % 2^n == x & (2^n - 1) for x >= 0
             value step1 = a * xn + c;
             assert(!step1.negative);

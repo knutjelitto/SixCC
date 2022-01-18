@@ -7,203 +7,240 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.math {
-    BigInteger {
+import java.math
+{
+    BigInteger
+    {
         jzero=ZERO,
         jone=ONE
     }
 }
 
-final class WholeImpl(BigInteger num)
-        satisfies Whole {
-
+final class WholeImpl(BigInteger num) satisfies Whole
+{
     shared actual BigInteger implementation = num;
 
-    shared actual String string {
+    shared actual String string
+    {
         return implementation.string;
     }
 
-    shared actual WholeImpl successor {
+    shared actual WholeImpl successor
+    {
         return WholeImpl(implementation.add(jone));
     }
 
-    shared actual WholeImpl predecessor {
+    shared actual WholeImpl predecessor
+    {
         return WholeImpl(implementation.subtract(jone));
     }
 
-    shared actual WholeImpl negated {
+    shared actual WholeImpl negated
+    {
         return WholeImpl(implementation.negate());
     }
 
-    shared actual Boolean positive {
+    shared actual Boolean positive
+    {
         return implementation.signum() > 0;
     }
 
-    shared actual Boolean negative {
+    shared actual Boolean negative
+    {
         return implementation.signum() < 0;
     }
 
-    shared actual Boolean zero {
-        return implementation === jzero || 
-                implementation.equals(jzero);
+    shared actual Boolean zero
+    {
+        return implementation === jzero || implementation.equals(jzero);
     }
 
-    shared actual Boolean unit {
-        return implementation === jone || 
-                implementation.equals(jone);
+    shared actual Boolean unit
+    {
+        return implementation === jone || implementation.equals(jone);
     }
 
-    shared actual Float float {
+    shared actual Float float
+    {
         return implementation.doubleValue();
     }
 
-    shared actual Integer integer {
+    shared actual Integer integer
+    {
         return implementation.longValue();
     }
 
-    shared actual WholeImpl magnitude {
-        if (implementation.signum() < 0) {
+    shared actual WholeImpl magnitude
+    {
+        if (implementation.signum() < 0)
+        {
             return WholeImpl(implementation.negate());
-        } else {
+        } 
+        else
+        {
             return this;
         }
     }
 
-    shared actual WholeImpl wholePart {
+    shared actual WholeImpl wholePart
+    {
         return this;
     }
 
-    shared actual Whole fractionalPart {
+    shared actual Whole fractionalPart
+    {
         return zeroImpl;
     }
 
-    shared actual Integer sign {
+    shared actual Integer sign
+    {
         return implementation.signum();
     }
 
-    shared actual Integer hash {
+    shared actual Integer hash
+    {
         return implementation.hash;
     }
 
-    shared actual Boolean equals(Object other) {
-        if (is WholeImpl other) {
+    shared actual Boolean equals(Object other)
+    {
+        if (is WholeImpl other)
+        {
             return implementation.equals(other.implementation);
-        } else {
+        } 
+        else
+        {
             return false;
         }
     }
 
-    shared actual Comparison compare(Whole other) {
+    shared actual Comparison compare(Whole other)
+    {
         assert (is WholeImpl other);
         Integer cmp = implementation
                 .compareTo(other.implementation)
                 .sign;
         switch (cmp)
-        case (1) {
-            return larger;
-        } case (-1) {
-            return smaller;
-        } else {
-            return equal;
-        }
+            case (1)
+            {
+                return larger;
+            }
+            case (-1)
+            {
+                return smaller;
+            }
+            else
+            {
+                return equal;
+            }
     }
 
-    shared actual WholeImpl plus(Whole other) {
+    shared actual WholeImpl plus(Whole other)
+    {
         assert (is WholeImpl other);
-        return WholeImpl(implementation
-                .add(other.implementation));
+        return WholeImpl(implementation.add(other.implementation));
     }
 
-    shared actual WholeImpl minus(Whole other) {
+    shared actual WholeImpl minus(Whole other)
+    {
         assert (is WholeImpl other);
-        return WholeImpl(implementation
-                .subtract(other.implementation));
+        return WholeImpl(implementation.subtract(other.implementation));
     }
 
-    shared actual WholeImpl times(Whole other) {
+    shared actual WholeImpl times(Whole other)
+    {
         assert (is WholeImpl other);
-        return WholeImpl(implementation
-                .multiply(other.implementation));
+        return WholeImpl(implementation.multiply(other.implementation));
     }
 
-    shared actual WholeImpl divided(Whole other) {
+    shared actual WholeImpl divided(Whole other)
+    {
         assert (is WholeImpl other);
-        return WholeImpl(implementation
-                .divide(other.implementation));
+        return WholeImpl(implementation.divide(other.implementation));
     }
 
-    shared actual WholeImpl remainder(Whole other) {
+    shared actual WholeImpl remainder(Whole other)
+    {
         assert (is WholeImpl other);
-        return WholeImpl(implementation
-                .remainder(other.implementation));
+        return WholeImpl(implementation.remainder(other.implementation));
     }
 
-    shared actual [WholeImpl, WholeImpl]
-            quotientAndRemainder(Whole other) {
+    shared actual [WholeImpl, WholeImpl] quotientAndRemainder(Whole other)
+    {
         assert (is WholeImpl other);
-        value result = implementation
-                .divideAndRemainder(other.implementation);
-        return [WholeImpl(result.get(0)),
-                WholeImpl(result.get(1))];
+        value result = implementation.divideAndRemainder(other.implementation);
+        return [WholeImpl(result.get(0)), WholeImpl(result.get(1))];
     }
 
-    shared actual WholeImpl modulo(Whole other) {
+    shared actual WholeImpl modulo(Whole other)
+    {
         assert (is WholeImpl other);
-        return WholeImpl(implementation
-                .mod(other.implementation));
+        return WholeImpl(implementation.mod(other.implementation));
     }
 
-    shared actual Whole power(Whole other) {
+    shared actual Whole power(Whole other)
+    {
         assert (is WholeImpl other);
-        if (this == -oneImpl) {
-            if (other % two == zeroImpl) {
+        if (this == -oneImpl)
+        {
+            if (other % two == zeroImpl)
+            {
                 return oneImpl;
-            } else {
+            }
+            else
+            {
                 return -oneImpl;
             }
-        } else if (this == oneImpl) {
+        }
+        else if (this == oneImpl)
+        {
             return oneImpl;
         }
-        if (other.zero) {
+        if (other.zero)
+        {
             return oneImpl;
         }
         "exponent must be non-negative"
         assert (!other.negative);
         "exponent too large"
         assert (other <= intMax);
-        return WholeImpl(implementation
-                .pow(other.implementation.intValue()));
+
+        return WholeImpl(implementation.pow(other.implementation.intValue()));
     }
 
-    shared actual Whole moduloPower(Whole exponent,
-                                 Whole modulus) {
+    shared actual Whole moduloPower(Whole exponent, Whole modulus)
+    {
         assert (is WholeImpl exponent, is WholeImpl modulus);
-        return WholeImpl(implementation
-                .modPow(exponent.implementation, 
-                        modulus.implementation));
+        return WholeImpl(implementation.modPow(exponent.implementation, modulus.implementation));
     }
     
-    shared actual Whole plusInteger(Integer integer) {
+    shared actual Whole plusInteger(Integer integer)
+    {
         return WholeImpl(implementation.add(BigInteger.valueOf(integer)));
     }
     
-    shared actual Whole timesInteger(Integer integer) {
+    shared actual Whole timesInteger(Integer integer)
+    {
         return WholeImpl(implementation.multiply(BigInteger.valueOf(integer)));
     }
     
-    shared actual Whole powerOfInteger(Integer integer) {
+    shared actual Whole powerOfInteger(Integer integer)
+    {
         "exponent must be non-negative"
         assert (integer>=0);
         return WholeImpl(implementation.pow(integer));
     }
     
-    shared actual Whole neighbour(Integer offset) {
+    shared actual Whole neighbour(Integer offset)
+    {
         return plusInteger(offset);
     }
     
-    shared actual Integer offset(Whole other) {
+    shared actual Integer offset(Whole other)
+    {
         Whole diff = this.minus(other);
-        if (longMin <= diff <= longMax) {
+        if (longMin <= diff <= longMax)
+        {
             return diff.integer;
         }
         throw OverflowException();

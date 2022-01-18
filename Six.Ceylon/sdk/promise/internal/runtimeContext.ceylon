@@ -7,25 +7,28 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.promise {
+import ceylon.promise
+{
     ExecutionContext
 }
 
-import java.lang {
+import java.lang
+{
     Runnable,
     Thread,
     Runtime,
     JInteger=Integer
 }
-import java.util.concurrent {
+import java.util.concurrent
+{
     TimeUnit,
     SynchronousQueue,
     ThreadPoolExecutor,
     ThreadFactory
 }
 
-native
-shared object runtimeContext satisfies ExecutionContext {
+native shared object runtimeContext satisfies ExecutionContext
+{
     native shared actual void run(void task());
     native shared actual ExecutionContext childContext();
 }
@@ -67,15 +70,4 @@ shared object runtimeContext satisfies ExecutionContext {
   }
   
   native("jvm") shared actual ExecutionContext childContext() => this;
-  
-}
-
-native("js")
-shared object runtimeContext satisfies ExecutionContext {
-    native("js") shared actual void run(void task()) {
-        dynamic {
-            setTimeout(task, 1);
-        }
-    }
-    native("js") shared actual ExecutionContext childContext() => this;
 }

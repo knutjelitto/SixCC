@@ -7,128 +7,154 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.math.whole {
+import ceylon.math.whole
+{
     Whole,
-    wrapBigInteger=fromImplementation
+    wrapBigInteger = fromImplementation
 }
 
-import java.math {
+import java.math
+{
     BigDecimal
 }
 
 
-final class DecimalImpl(BigDecimal num)
-        satisfies Decimal {
-
+final class DecimalImpl(BigDecimal num) satisfies Decimal
+{
     shared actual BigDecimal implementation = num;
 
-    shared actual Decimal dividedTruncated(Decimal other, 
-                                           Rounding? rounding) {
+    shared actual Decimal dividedTruncated(Decimal other, Rounding? rounding)
+    {
         assert (is DecimalImpl other);
         switch (rounding)
-        case (RoundingImpl) {
-            return DecimalImpl(implementation
-                    .divideToIntegralValue(other.implementation, 
-                            rounding.implementation));
-        } case (null) {
-            return DecimalImpl(implementation
-                    .divideToIntegralValue(other.implementation));
-        } else {
-            assert (false);
-        }
+            case (RoundingImpl)
+            {
+                return DecimalImpl(implementation.divideToIntegralValue(other.implementation, rounding.implementation));
+            } 
+            case (null)
+            {
+                return DecimalImpl(implementation.divideToIntegralValue(other.implementation));
+            }
+            else
+            {
+                assert (false);
+            }
     }
     
-    shared actual Decimal remainderRounded(Decimal other, 
-                                           Rounding? rounding) {
+    shared actual Decimal remainderRounded(Decimal other, Rounding? rounding)
+    {
         assert (is DecimalImpl other);
         switch (rounding)
-        case (RoundingImpl) {
-            return DecimalImpl(implementation
-                    .remainder(other.implementation, 
-                            rounding.implementation));
-        } case (null) {
-            return DecimalImpl(implementation
-                    .remainder(other.implementation));
-        } else {
-            assert (false);
-        }
+            case (RoundingImpl)
+            {
+                return DecimalImpl(implementation.remainder(other.implementation, rounding.implementation));
+            }
+            case (null)
+            {
+                return DecimalImpl(implementation.remainder(other.implementation));
+            }
+            else
+            {
+                assert (false);
+            }
     }
 
-    shared actual DividedWithRemainder dividedAndRemainder(Decimal other, 
-                                                           Rounding? rounding) {
+    shared actual DividedWithRemainder dividedAndRemainder(Decimal other, Rounding? rounding)
+    {
         assert (is DecimalImpl other);
         Array<BigDecimal?> array;
         switch (rounding)
-        case (RoundingImpl) {
-            array = implementation
-                    .divideAndRemainder(other.implementation, 
-            rounding.implementation).array;
-        } case (null) {
-            array = implementation
-                    .divideAndRemainder(other.implementation).array;
-        } else {
+        case (RoundingImpl)
+        {
+            array = implementation.divideAndRemainder(other.implementation, rounding.implementation).array;
+        }
+        case (null)
+        {
+            array = implementation.divideAndRemainder(other.implementation).array;
+        }
+        else
+        {
             assert (false);
         }
-        return DividedWithRemainder(DecimalImpl(array[0] else BigDecimal.zero),
-                DecimalImpl(array[1] else BigDecimal.zero));
+        return DividedWithRemainder(DecimalImpl(array[0] else BigDecimal.zero), DecimalImpl(array[1] else BigDecimal.zero));
     }
 
     "The precision of this decimal."
-    shared actual Integer precision {
+    shared actual Integer precision
+    {
         return implementation.precision();
     }
     "The scale of this decimal."
-    shared actual Integer scale {
+    shared actual Integer scale
+    {
         return implementation.scale();
     }
     "The unscaled value."
-    shared actual Whole unscaled {
+    shared actual Whole unscaled
+    {
         return wrapBigInteger(implementation.unscaledValue());
     }
     "This value rounded according to the given context."
-    shared actual Decimal round(Rounding rounding) {
+    shared actual Decimal round(Rounding rounding)
+    {
         assert (is RoundingImpl rounding);
-        return DecimalImpl(implementation
-                .round(rounding.implementation));
+        return DecimalImpl(implementation.round(rounding.implementation));
     }
-    shared actual Comparison compare(Decimal other) {
+
+    shared actual Comparison compare(Decimal other)
+    {
         assert (is DecimalImpl other);
         Integer cmp = implementation
                 .compareTo(other.implementation)
                 .sign;
         switch (cmp)
-        case (-1) {
-            return smaller;
-        } case (1) {
-            return larger;
-        } else {
-            return equal;
-        }
+            case (-1) 
+            {
+                return smaller;
+            }
+            case (1)
+            {
+                return larger;
+            }
+            else
+            {
+                return equal;
+            }
     }
-    shared actual Decimal divided(Decimal other) {
+
+    shared actual Decimal divided(Decimal other)
+    {
         assert (is DecimalImpl other);
-        if (exists rounding = defaultRounding.get()) {
+        if (exists rounding = defaultRounding.get())
+        {
             return dividedRounded(other, rounding);
-        } else {
-            return DecimalImpl(implementation
-                    .divide(other.implementation));
+        }
+        else
+        {
+            return DecimalImpl(implementation.divide(other.implementation));
         }
     }
-    shared actual Decimal dividedRounded(Decimal other, 
-                                         Rounding? rounding) {
+
+    shared actual Decimal dividedRounded(Decimal other, Rounding? rounding)
+    {
         assert (is DecimalImpl other);
         switch (rounding)
-        case (RoundingImpl) {
-            return DecimalImpl(implementation
-                    .divide(other.implementation, 
-            rounding.implementation));
-        } case (null) {
-            return DecimalImpl(implementation
-                    .divide(other.implementation));
-        } else {
-            assert (false);
-        }
+            case (RoundingImpl)
+            {
+                return DecimalImpl(implementation
+                        .divide(other.implementation, 
+                rounding.implementation));
+            }
+            case (null)
+            {
+                return DecimalImpl(implementation.divide(other.implementation));
+            }
+            else
+            {
+                assert (false);
+            }
     }
+
     shared actual Boolean equals(Object that) {
         assert (is DecimalImpl that);
         return implementation===that.implementation

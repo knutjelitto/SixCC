@@ -129,7 +129,7 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
             var source = Source.FromString(sample.Name, sample.Content);
 
             parser.Reset();
-            var ok = parser.Parse(source);
+            var ok = parser.ParseVerbose(source);
 
             if (!ok)
             {
@@ -245,7 +245,7 @@ void CheckJson(bool enabled, IEnumerable<Sample> samples)
         var parser = new JsonParser();
         bool fail;
         bool ok;
-        if (ok = parser.Parse(sample.Name, sample.Content))
+        if (ok = parser.ParseVerbose(sample.Name, sample.Content))
         {
             fail = sample.Name.StartsWith("n_");
             Outcome();

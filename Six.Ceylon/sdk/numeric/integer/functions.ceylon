@@ -17,16 +17,18 @@ shared see(`function smallest`)
 Integer largest(Integer x, Integer y)
     =>  if (x > y) then x else y;
 
-"The largest [[Integer]] in the given stream, or `null`
- if the stream is empty."
-shared Integer|Absent max<Absent>
-        (Iterable<Integer,Absent> values)
-        given Absent satisfies Null {
+"The largest [[Integer]] in the given stream, or `null` if the stream is empty."
+shared Integer|Absent max<Absent> (Iterable<Integer,Absent> values)
+    given Absent satisfies Null
+{
     value first = values.first;
-    if (exists first) {
+    if (exists first)
+    {
         variable value max = first;
-        for (x in values) {
-            if (x>max) {
+        for (x in values)
+        {
+            if (x > max)
+            {
                 max = x;
             }
         }
@@ -35,16 +37,18 @@ shared Integer|Absent max<Absent>
     return first;
 }
 
-"The smallest [[Integer]] in the given stream, or `null`
- if the stream is empty."
-shared Integer|Absent min<Absent>
-        (Iterable<Integer,Absent> values)
-        given Absent satisfies Null {
+"The smallest [[Integer]] in the given stream, or `null` if the stream is empty."
+shared Integer|Absent min<Absent>(Iterable<Integer,Absent> values)
+    given Absent satisfies Null
+{
     value first = values.first;
-    if (exists first) {
+    if (exists first)
+    {
         variable value min = first;
-        for (x in values) {
-            if (x<min) {
+        for (x in values)
+        {
+            if (x < min)
+            {
                 min = x;
             }
         }
@@ -53,37 +57,37 @@ shared Integer|Absent min<Absent>
     return first;
 }
 
-"The mean of the values in the given stream, or an undefined
- value if the stream is empty."
-shared
-Float mean({Integer*} values) {
+"The mean of the values in the given stream, or an undefined value if the stream is empty."
+shared Float mean({Integer*} values)
+{
     variable Integer sum=0;
     variable Integer count=0;
-    for (x in values) {
+    for (x in values)
+    {
         sum+=x;
         count++;
     }
     return sum.nearestFloat / count;
 }
 
-"The sum of the values in the given stream, or
- `0` if the stream is empty."
-shared
-Integer sum({Integer*} values) {
+"The sum of the values in the given stream, or `0` if the stream is empty."
+shared Integer sum({Integer*} values)
+{
     variable Integer sum=0;
-    for (x in values) {
-        sum+=x;
+    for (x in values)
+    {
+        sum += x;
     }
     return sum;
 }
 
-"The product of the values in the given stream, or
- `1` if the stream is empty."
-shared
-Integer product({Integer*} values) {
+"The product of the values in the given stream, or `1` if the stream is empty."
+shared Integer product({Integer*} values)
+{
     variable Integer product=1;
-    for (x in values) {
-        product*=x;
+    for (x in values)
+    {
+        product *= x;
     }
     return product;
 }
