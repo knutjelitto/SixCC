@@ -5,7 +5,7 @@ namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-        public void BuildModule(Module module)
+        public void BuildModule(ModuleContainer module)
         {
             Console.Write($"{module.Name,-28}");
 
@@ -33,20 +33,18 @@ namespace Six.Ceylon
             }
         }
 
-        public bool BuildPackage(Package package)
+        public bool BuildPackage(PackageContainer package)
         {
             Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
             var ok = BuildFile(package.PackageFile);
 
             if (ok)
             {
-#if false
                 var packageDescriptor = GetPackageDescriptor(package.PackageFile);
 
                 var name = packageDescriptor?.PackagePath.ToString() ?? package.Name;
 
                 Assert(name == package.Name);
-#endif
 
                 foreach (var file in package.Files)
                 {

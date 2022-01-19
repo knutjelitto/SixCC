@@ -13,12 +13,11 @@ compilation-unit
     ;
 
 unit-elements
-    | unit-element*
+    : import-declarations declaration*
     ;
 
-unit-element
-    | import-declaration
-    | declaration
+import-declarations
+    : import-declaration*
     ;
 
 module-descriptor
@@ -122,6 +121,10 @@ any-name
     | upper-identifier
     ;
 
+any-nameX
+    : identifier
+    ;
+
 import-namespace-name
     | lower-identifier
     | upper-identifier
@@ -213,12 +216,7 @@ class-block
     ;
 
 block-elements
-    | '{' block-element* '}'
-    ;
-
-block-element
-    | import-declaration
-    | declaration-or-statement
+    | '{' import-declarations declaration-or-statement* '}'
     ;
 
 extended-type
@@ -1749,6 +1747,15 @@ lower-identifier
 
 upper-identifier 
     | < upper-identifier-start identifier-part* | upper-identifier-prefix identifier-part+ >
+    ;
+
+identifier
+    | < identifier-start identifier-part* >
+    ;
+
+identifier-start
+    | lower-identifier-start
+    | upper-identifier-start
     ;
 
 lower-identifier-start

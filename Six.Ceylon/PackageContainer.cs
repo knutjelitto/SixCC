@@ -1,10 +1,8 @@
-﻿using Six.Runtime;
-
-namespace Six.Ceylon
+﻿namespace Six.Ceylon
 {
-    public class Package
+    public class PackageContainer
     {
-        public Package(FileJob packageFile)
+        public PackageContainer(FileJob packageFile)
         {
             PackageFile = packageFile;
         }

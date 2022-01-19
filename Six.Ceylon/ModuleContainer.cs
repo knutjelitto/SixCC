@@ -1,16 +1,14 @@
-﻿using Six.Runtime;
-
-namespace Six.Ceylon
+﻿namespace Six.Ceylon
 {
-    public class Module
+    public class ModuleContainer
     {
-        public Module(FileJob moduleFile)
+        public ModuleContainer(FileJob moduleFile)
         {
             ModuleFile = moduleFile;
         }
 
         public FileJob ModuleFile { get; }
-        public List<Package> Packages { get; } = new List<Package>();
+        public List<PackageContainer> Packages { get; } = new List<PackageContainer>();
 
         public string Name => Path.GetDirectoryName(ModuleFile.Fullname)!.Replace("\\", ".");
     }

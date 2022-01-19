@@ -1,15 +1,8 @@
-﻿using Six.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Six.Ceylon
+﻿namespace Six.Ceylon
 {
     public class CeylonLoader : Loader
     {
-        public static IEnumerable<Module> GetModules()
+        public static IEnumerable<ModuleContainer> GetModules()
         {
             var files = LoadAll(typeof(CeylonLoader)).ToList();
 
@@ -19,9 +12,9 @@ namespace Six.Ceylon
             }
         }
 
-        public static Module GetModule(FileJob moduleFile, List<FileJob> allFiles)
+        public static ModuleContainer GetModule(FileJob moduleFile, List<FileJob> allFiles)
         {
-            var module = new Module(moduleFile);
+            var module = new ModuleContainer(moduleFile);
 
             var packages = GetPackages(module, allFiles);
             module.Packages.AddRange(packages.OrderBy(p => p.Name));
@@ -29,7 +22,7 @@ namespace Six.Ceylon
             return module;
         }
 
-        public static IEnumerable<Package> GetPackages(Module module, List<FileJob> allFiles)
+        public static IEnumerable<PackageContainer> GetPackages(ModuleContainer module, List<FileJob> allFiles)
         {
             var modDir = Path.GetDirectoryName(module.ModuleFile.Fullname)!;
 
@@ -45,9 +38,9 @@ namespace Six.Ceylon
             }
         }
 
-        public static Package GetPackage(FileJob packageFile, List<FileJob> allFiles)
+        public static PackageContainer GetPackage(FileJob packageFile, List<FileJob> allFiles)
         {
-            var package = new Package(packageFile);
+            var package = new PackageContainer(packageFile);
 
             var files = GetFiles(package, allFiles).ToList();
             package.Files.AddRange(files);
@@ -65,7 +58,7 @@ namespace Six.Ceylon
             return string.Compare(file.Name, "package.ceylon", true) == 0;
         }
 
-        public static IEnumerable<FileJob> GetFiles(Package package, List<FileJob> allFiles)
+        public static IEnumerable<FileJob> GetFiles(PackageContainer package, List<FileJob> allFiles)
         {
             var packageDir = Path.GetDirectoryName(package.PackageFile.Fullname)!;
 
