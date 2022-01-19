@@ -2,18 +2,20 @@
 
 namespace Six.Runtime.Tree
 {
-    public class TreeDumper : IWithWriter
+    public class TreeDumper : WithWriter
     {
         public TreeDumper(TreeNode root, Writer writer)
+            : base(writer)
         {
             Root = root;
-            Writer = writer;
         }
 
         public TreeNode Root { get; }
-        public Writer Writer { get; }
 
-        protected IWithWriter w => this;
+        public static void Dump(TreeNode root, Writer writer)
+        {
+            new TreeDumper(root, writer).Dump();
+        }
 
         public void Dump()
         {
@@ -22,8 +24,8 @@ namespace Six.Runtime.Tree
 
         private void Dump(TreeNode node)
         {
-            w.wl($"{node}");
-            w.indent(() =>
+            wl($"{node}");
+            indent(() =>
             {
                 foreach (var child in node.Children)
                 {

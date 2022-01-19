@@ -7,9 +7,12 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-Boolean eq(Object? a, Object? b) {
-    if(exists a) {
-        if(exists b) {
+Boolean eq(Object? a, Object? b)
+{
+    if(exists a)
+    {
+        if(exists b)
+        {
             return a == b;
         }
         return false;

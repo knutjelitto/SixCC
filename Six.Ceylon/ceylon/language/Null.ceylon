@@ -51,9 +51,7 @@
 see (value null)
 by ("Gavin") 
 tagged("Basic types")
-shared abstract class Null() 
-        of null
-        extends Anything() {}
+shared abstract class Null() of null extends Anything() {}
 
 "The null value."
 by ("Gavin")

@@ -1,4 +1,7 @@
 ﻿using Six.Runtime;
+using Six.Runtime.Sppf;
+using Six.Runtime.Types;
+using static Six.Ceylon.CeylonParserAst;
 
 namespace Six.Ceylon
 {
@@ -16,6 +19,10 @@ namespace Six.Ceylon
 
             if (ok)
             {
+                var moduleDescriptor = GetModuleDescriptor(module.ModuleFile);
+
+                var name = moduleDescriptor.ModuleName.ToString();
+
                 foreach (var package in module.Packages)
                 {
                     ok = ok && BuildPackage(package);
@@ -26,13 +33,11 @@ namespace Six.Ceylon
                     }
                 }
             }
-
-            Console.WriteLine();
         }
 
         public bool BuildPackage(Package package)
         {
-            Console.Write($"  {package.Name,-26}");
+            Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
             var ok = BuildFile(package.PackageFile);
 
             if (ok)
@@ -53,22 +58,34 @@ namespace Six.Ceylon
             return ok;
         }
 
-        public bool BuildFile(SourceFile file)
+        public bool BuildFile(FileJob job)
         {
-            var ok = Ok(() => Parse(file));
+            var ok = Ok(() => Parse(job));
 
             if (!ok)
             {
-                Console.WriteLine();
-                Console.WriteLine($"{file.Fullname}");
+                Console.WriteLine($"parse: {job.Fullname}");
+
+                return false;
             }
 
-            return ok;
+            var sppf = SppfBuilder.Build(job.Source, parser);
+
+            if (sppf == null)
+            {
+                Console.WriteLine($"sppf: {job.Fullname}");
+
+                return false;
+            }
+
+            job.Tree = TypedBuilder.Build(sppf);
+
+            return true;
         }
 
-        private bool Parse(SourceFile file)
+        private bool Parse(FileJob job)
         {
-            var source = Source.FromString(file.Fullname, file.Content);
+            var source = Source.FromString(job.Fullname, job.Content);
             parser.Reset();
             return parser.Parse(source);
         }
@@ -81,7 +98,7 @@ namespace Six.Ceylon
 
             if (ok)
             {
-                Console.Write("\b|");
+                Console.Write("\b.");
             }
             else
             {
@@ -89,6 +106,16 @@ namespace Six.Ceylon
             }
 
             return ok;
+        }
+
+        private CXStart GetStart(FileJob file)
+        {
+            return (CXStart)file.Tree!;
+        }
+
+        private CModuleDescriptor GetModuleDescriptor(FileJob file)
+        {
+            return (CModuleDescriptor)GetStart(file).CompilationUnit;
         }
     }
 }

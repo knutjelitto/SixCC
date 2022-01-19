@@ -1,12 +1,14 @@
-﻿using System.Reflection;
+﻿using Six.Core;
+using Six.Runtime.Types;
 
 namespace Six.Runtime
 {
-    public class SourceFile
+    public class FileJob
     {
         private string? content;
+        private Source? source;
 
-        public SourceFile(string fullname, string name, Func<string> contentLoader)
+        public FileJob(string fullname, string name, Func<string> contentLoader)
         {
             Fullname = fullname;
             Name = name;
@@ -17,6 +19,8 @@ namespace Six.Runtime
         public string Name { get; }
         public string BaseName => Path.GetFileNameWithoutExtension(Name);
         public Func<string> ContentLoader { get; }
-        public string Content { get { return content ??= ContentLoader(); } }
+        public string Content => content ??= ContentLoader();
+        public Source Source => source ??= Source.FromString(Name, Content);
+        public RNode? Tree { get; set; }
     }
 }

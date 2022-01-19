@@ -7,13 +7,11 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"Abstraction of [[numeric|Numeric]] types with a natural 
- [[total order|Comparable]], including the built-in numeric 
- types [[Integer]] and [[Float]].
+"Abstraction of [[numeric|Numeric]] types with a natural [[total order|Comparable]],
+ including the built-in numeric types [[Integer]] and [[Float]].
  
- A `Number` has a well-defined [[magnitude]] together with a 
- [[sign]] of type [[Integer]], defined for any instance `x`
- as follows:
+ A `Number` has a well-defined [[magnitude]] together with a [[sign]] of type
+ [[Integer]], defined for any instance `x` as follows:
  
  - if `x==0` then `x.sign==0` and `x.magnitude==0`,
  - if `x>0` then `x.sign==1` and `x.magnitude==x`, or
@@ -21,16 +19,15 @@
  
  where `0` is the additive identity of the numeric type.
  
- Not every value commonly considered to be a \"number\" is
- a `Number`. For example, complex numbers aren't `Number`s
- since they don't have a total order."
+ Not every value commonly considered to be a \"number\" is a `Number`. For example,
+ complex numbers aren't `Number`s since they don't have a total order."
 see (class Integer, class Float)
 by ("Gavin")
 tagged("Numbers")
 shared interface Number<Other> of Other
-        satisfies Numeric<Other> 
-                & Comparable<Other>
-        given Other satisfies Number<Other> {
+    satisfies Numeric<Other> 
+            & Comparable<Other>
+    given Other satisfies Number<Other> {
     
     "The magnitude of this number, defined for any instance 
      `x` as:

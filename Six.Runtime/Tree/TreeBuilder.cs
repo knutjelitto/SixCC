@@ -11,12 +11,17 @@ namespace Six.Runtime.Tree
 
         public Symbol Root { get; }
 
-        public TreeNode Build()
+        public static TreeNode Build(Symbol root)
         {
-            return Build(Root).Single();
+            return new TreeBuilder(root).Work();
         }
 
-        private IEnumerable<TreeNode> Build(Node anyNode)
+        public TreeNode Work()
+        {
+            return Work(Root).Single();
+        }
+
+        private IEnumerable<TreeNode> Work(Node anyNode)
         {
             switch (anyNode)
             {
@@ -51,7 +56,7 @@ namespace Six.Runtime.Tree
             }
             else
             {
-                yield return new TreeNode(node, Build(node.Children[0]).ToArray());
+                yield return new TreeNode(node, Work(node.Children[0]).ToArray());
             }
         }
 
@@ -65,7 +70,7 @@ namespace Six.Runtime.Tree
             }
             else
             {
-                return Build(node.Children[0]);
+                return Work(node.Children[0]);
             }
         }
 
@@ -73,17 +78,17 @@ namespace Six.Runtime.Tree
         {
             if (node.Left == null)
             {
-                return Build(node.Right);
+                return Work(node.Right);
             }
             else
             {
-                return Build(node.Left).Concat(Build(node.Right));
+                return Work(node.Left).Concat(Work(node.Right));
             }
         }
 
         private IEnumerable<TreeNode> BuildIntermediate(Intermediate node)
         {
-            return Build(node.Children[0]);
+            return Work(node.Children[0]);
         }
 
         private static IEnumerable<TreeNode> BuildTerminal(Terminal node)

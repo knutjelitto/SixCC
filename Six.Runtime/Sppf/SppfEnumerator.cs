@@ -2,20 +2,21 @@
 
 namespace Six.Runtime.Sppf
 {
-#pragma warning disable IDE1006 // Naming Styles
-    public class SppfEnumerator : IWithWriter
+    public class SppfEnumerator : WithWriter
     {
         public SppfEnumerator(Symbol root, Writer writer)
+            : base(writer)
         {
             Root = root;
-            Writer = writer;
         }
 
         public Symbol Root { get; }
         public bool Tree { get; }
-        public Writer Writer { get; }
 
-        protected IWithWriter w => this;
+        public static int Count(Symbol root, Writer writer)
+        {
+            return new SppfEnumerator(root, writer).Count();
+        }
 
         public int Count()
         {
@@ -60,7 +61,7 @@ namespace Six.Runtime.Sppf
             var items = Dump(string.Empty, Root);
             foreach (var tree in items)
             {
-                w.wl($"{++count, 3}  {tree}");
+                wl($"{++count, 3}  {tree}");
 
                 if (count == 2000)
                 {

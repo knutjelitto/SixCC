@@ -7,6 +7,7 @@ using Six.Runtime.Matchers;
 using Six.Runtime.Types;
 
 using GeneratedParser;
+using Six.Runtime.Tree;
 
 #pragma warning disable CS8321 // Local function is declared but never used
 
@@ -167,19 +168,17 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                     continue;
                 }
 
-                var builder = new SppfBuilder(source, parser, indexer);
-                var root = builder.BuildSppf();
+                var root = SppfBuilder.Build(source, parser, indexer);
                 if (root != null)
                 {
                     var file = $"{count:D4}-{Path.GetFileNameWithoutExtension(source.Name)}";
                     using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-sppf.txt".Writer())
                     {
-                        new SppfDumper(root, writer).Dump();
+                        SppfDumper.Dump(root, writer);
                     }
                     using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-enum.txt".Writer())
                     {
-                        var enumerator = new SppfEnumerator(root, writer);
-                        var counted = enumerator.Count();
+                        var counted = SppfEnumerator.Count(root, writer);
                         writer.WriteLine($"counted: {counted}");
                         if (sample.Count >= 0)
                         {
@@ -199,18 +198,16 @@ void Check<ParserType>(int which, IEnumerable<Sample> samples)
                         }
                     }
 #if false
-                    var treeBuilder = new TreeBuilder(root);
-                    var tree = treeBuilder.Build();
+                    var tree = TreeBuilder.Build(root);
                     using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-tree.txt".Writer(2))
                     {
-                        new TreeDumper(tree, writer).Dump();
+                        TreeDumper.Dump(tree, writer);
                     }
 #endif
-                    var typedBuilder = new TypedBuilder(root);
-                    var typed = typedBuilder.Build();
+                    var typed = TypedBuilder.Build(root);
                     using (var writer = $"{parser.__Name}/{parser.__Name}-{file}-typed.txt".Writer())
                     {
-                        new TypedDumper(typed, writer).Dump();
+                        TypedDumper.Dump(typed, writer);
                     }
                 }
             }

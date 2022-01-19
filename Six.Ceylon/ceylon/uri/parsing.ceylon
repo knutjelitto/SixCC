@@ -8,12 +8,15 @@
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
 "Parses a raw percent-encoded path parameter"
-shared Parameter parseParameter(String part) {
+shared Parameter parseParameter(String part)
+{
     Integer? sep = part.firstOccurrence('=');
-    if(exists sep) {
-        return Parameter(decodePercentEncoded(part.initial(sep)),
-            decodePercentEncoded(part.terminal(part.size - sep - 1)));
-    }else{
+    if (exists sep)
+    {
+        return Parameter(decodePercentEncoded(part.initial(sep)), decodePercentEncoded(part.terminal(part.size - sep - 1)));
+    }
+    else
+    {
         return Parameter(decodePercentEncoded(part));
     }
 }
@@ -23,9 +26,9 @@ Query defaultQuery = Query();
 Path defaultPath = Path();
 
 "Parses a URI"
-throws(`class InvalidUriException`,
-    "If the URI is invalid")
-shared Uri parse(String uri) {
+throws(`class InvalidUriException`, "If the URI is invalid")
+shared Uri parse(String uri)
+{
     variable String? scheme = null;
 
     variable String? authorityUser = null;
@@ -38,10 +41,13 @@ shared Uri parse(String uri) {
     variable Query query = defaultQuery;
     variable String? fragment = null;
 
-    String parseScheme(String uri) {
+    String parseScheme(String uri)
+    {
         Integer? sep = uri.firstInclusion(":");
-        if(exists sep) {
-            if(sep > 0) {
+        if (exists sep)
+        {
+            if (sep > 0)
+            {
                 scheme = uri.measure(0, sep);
                 return uri[sep+1...];
             }
@@ -50,63 +56,87 @@ shared Uri parse(String uri) {
         return uri;
     }
 
-    void parseUserInfo(String userInfo) {
+    void parseUserInfo(String userInfo)
+    {
         Integer? sep = userInfo.firstOccurrence(':');
-        if(exists sep) {
+        if (exists sep)
+        {
             authorityUser = decodePercentEncoded(userInfo.measure(0, sep));
             authorityPassword = decodePercentEncoded(userInfo[sep+1...]);
-        }else{
+        }
+        else
+        {
             authorityUser = decodePercentEncoded(userInfo);
             authorityPassword = null;
         }
     }
 
-    void parseHostAndPort(String hostAndPort) {
+    void parseHostAndPort(String hostAndPort)
+    {
         String? portString;
-        if(hostAndPort.startsWith("[")) {
+        if (hostAndPort.startsWith("["))
+        {
             authorityIPLiteral = true;
             Integer? end = hostAndPort.firstOccurrence(']');
-            if(exists end) {
+            if (exists end)
+            {
                 // eat the delimiters
                 authorityHost = hostAndPort.measure(1, end-1);
                 String rest = hostAndPort[end+1...];
-                if(rest.startsWith(":")) {
+                if (rest.startsWith(":"))
+                {
                     portString = rest[1...];
-                }else{
+                }
+                else
+                {
                     portString = null;
                 }
-            }else{
+            }
+            else
+            {
                 throw InvalidUriException("Invalid IP literal: " + hostAndPort);
             }
-        }else{
+        }
+        else
+        {
             authorityIPLiteral = false;
             Integer? sep = hostAndPort.lastOccurrence(':');
-            if(exists sep) {
+            if (exists sep)
+            {
                 authorityHost = decodePercentEncoded(hostAndPort.measure(0, sep));
                 portString = hostAndPort[sep+1...];
-            }else{
+            }
+            else
+            {
                 authorityHost = decodePercentEncoded(hostAndPort);
                 portString = null;
             }
         }
-        if(exists portString) {
-            authorityPort
-                    = if (is Integer port = Integer.parse(portString))
-                    then port else null;
-            if(exists Integer port = authorityPort) {
-                if(port < 0) {
+        if (exists portString)
+        {
+            authorityPort = if (is Integer port = Integer.parse(portString)) then port else null;
+            if (exists Integer port = authorityPort)
+            {
+                if (port < 0)
+                {
                     throw InvalidUriException("Invalid port number: "+portString);
                 }
-            }else{
+            } 
+            else
+            {
                 throw InvalidUriException("Invalid port number: "+portString);
             }
-        }else{
+        }
+        else
+        {
             authorityPort = null;
         }
     }
 
-    String parseAuthority(String uri) {
-        if(!uri.startsWith("//")) {
+    String parseAuthority(String uri)
+    {
+        if (!uri.startsWith("//"))
+        {
             return uri;
         }
         // eat the two slashes

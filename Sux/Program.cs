@@ -7,7 +7,7 @@ var modules = Loader.GetModules().ToList();
 //DumpModules(modules);
 
 var compiler = new Compiler();
-foreach (var module in modules)
+foreach (var module in modules.OrderBy(m => m.Name))
 {
     compiler.BuildModule(module);
 }

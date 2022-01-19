@@ -1,7 +1,5 @@
 ﻿using Six.Gen.Ebnf;
-using Six.Gen.Typing;
 using Six.Input;
-using System.Text;
 
 namespace Six.Gen
 {
@@ -38,6 +36,7 @@ namespace Six.Gen
             var typeGenerator = new TypeCsGenerator(writer, Grammar);
             var parserClass = $"{name}Parser";
             var implementationClass = $"__{parserClass}Implementation";
+            var astClass = $"{parserClass}Ast";
 
             wl($"// <generated from={Original.CsString()} />");
             wl();
@@ -50,6 +49,7 @@ namespace Six.Gen
             wl("using Six.Runtime.Types;");
             wl("using Range = Six.Runtime.Matchers.Range;");
             wl("using String = Six.Runtime.Matchers.String;");
+            wl($"using static {Grammar.Namespace}.{astClass};");
             wl();
 
             block($"namespace {Grammar.Namespace}", () =>
@@ -88,14 +88,7 @@ namespace Six.Gen
                                 }
                                 else
                                 {
-                                    if (op.WithInner)
-                                    {
-                                        attributes.Append($"Creator = node => new {op.Class.TypeName}(node) ");
-                                    }
-                                    else
-                                    {
-                                        attributes.Append($"Creator = node => new {op.Class.TypeName}(node) ");
-                                    }
+                                    attributes.Append($"Creator = node => new {op.Class.TypeName}(node) ");
                                 }
                             }
                             else
@@ -224,10 +217,13 @@ namespace Six.Gen
                         wl();
 
                         dfaGenerator.Declare();
-                        wl();
-
-                        typeGenerator.Generate();
                     });
+                });
+
+                wl();
+                block($"public partial class {astClass}", () =>
+                {
+                    typeGenerator.Generate();
                 });
             });
         }

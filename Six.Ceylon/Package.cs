@@ -4,13 +4,13 @@ namespace Six.Ceylon
 {
     public class Package
     {
-        public Package(SourceFile packageFile)
+        public Package(FileJob packageFile)
         {
             PackageFile = packageFile;
         }
 
-        public SourceFile PackageFile { get; }
-        public List<SourceFile> Files { get; } = new List<SourceFile>();
+        public FileJob PackageFile { get; }
+        public List<FileJob> Files { get; } = new List<FileJob>();
 
         public string Name => Path.GetDirectoryName(PackageFile.Fullname)!.Replace("\\", ".");
     }

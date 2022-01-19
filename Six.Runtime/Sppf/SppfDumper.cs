@@ -3,31 +3,33 @@ using System.Runtime.CompilerServices;
 
 namespace Six.Runtime.Sppf
 {
-#pragma warning disable IDE1006 // Naming Styles
-    public class SppfDumper : IWithWriter
+    public class SppfDumper : WithWriter
     {
         private readonly HashSet<Node> cache = new(new NodeEquals());
         public SppfDumper(Symbol root, Writer writer)
+            : base(writer)
         {
             Root = root;
-            Writer = writer;
             cache = new();
         }
 
         public Symbol Root { get; }
-        public Writer Writer { get; }
 
-        protected IWithWriter w => this;
+        public static void Dump(Symbol root, Writer writer)
+        {
+            new SppfDumper(root, writer).Dump();
+        }
 
         public void Dump()
         {
             Dump(Root);
         }
+
         private void Dump(Node anyNode)
         {
             if (cache.Contains(anyNode))
             {
-                w.wl($"=> {anyNode}");
+                wl($"=> {anyNode}");
             }
             else
             {
@@ -57,8 +59,8 @@ namespace Six.Runtime.Sppf
 
         private void Dump(Nonterminal node)
         {
-            w.wl($"{node}");
-            w.indent(() =>
+            wl($"{node}");
+            indent(() =>
             {
                 foreach (var child in node.Children)
                 {
@@ -69,17 +71,17 @@ namespace Six.Runtime.Sppf
 
         private void Dump(Terminal node)
         {
-            w.wl($"{node}");
+            wl($"{node}");
         }
 
         private void Dump(Packed node)
         {
-            w.wl($"{node}");
-            w.indent(() =>
+            wl($"{node}");
+            indent(() =>
             {
                 if (node.Left == null)
                 {
-                    w.wl("<null>");
+                    wl("<null>");
                 }
                 else
                 {
@@ -92,8 +94,8 @@ namespace Six.Runtime.Sppf
 
         private void Dump(Intermediate node)
         {
-            w.wl($"{node}");
-            w.indent(() =>
+            wl($"{node}");
+            indent(() =>
             {
                 foreach (var child in node.Children)
                 {

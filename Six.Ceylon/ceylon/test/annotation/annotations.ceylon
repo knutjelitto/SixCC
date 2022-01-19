@@ -7,7 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.language.meta.declaration {
+import ceylon.language.meta.declaration
+{
     FunctionDeclaration,
     Declaration,
     ClassDeclaration,
@@ -16,7 +17,8 @@ import ceylon.language.meta.declaration {
     FunctionOrValueDeclaration,
     ValueDeclaration
 }
-import ceylon.test.engine.spi {
+import ceylon.test.engine.spi
+{
     TestCondition,
     ArgumentListProvider,
     ArgumentProvider,

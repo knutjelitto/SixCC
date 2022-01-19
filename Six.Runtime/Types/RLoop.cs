@@ -3,6 +3,8 @@
     public class RLoop<T> : RNode
         where T : class
     {
+        private T[]? elements = null;
+
         public RLoop(params RNode[] children)
             : base(MakeElements(children))
         {
@@ -12,6 +14,7 @@
             Assert(Separators.Length + 1 == Children.Length);
         }
 
+        public T[] Elements => elements ??= Children.Cast<T>().ToArray();
         public RNode[] Separators { get; }
 
         private static RNode[] MakeElements(RNode[] children)

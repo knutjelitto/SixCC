@@ -18,7 +18,12 @@ namespace Six.Runtime.Sppf
             cache = new();
         }
 
-        public Nonterminal? BuildSppf()
+        public static Nonterminal? Build(Source source, Parser parser, RuleIndex? ruleIndex = null)
+        {
+            return new SppfBuilder(source, parser, ruleIndex).Build();
+        }
+
+        public Nonterminal? Build()
         {
             var node = Build(parser.__Core.__Start, new Cursor(source, 0), new Cursor(source, source.Length));
 

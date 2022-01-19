@@ -20,22 +20,20 @@
    [[package ceylon.language.meta.declaration]], which define interfaces for
    interacting with applied types and unapplied type declarations respectively.
  
- This module defines an abstraction over the basic 
- facilities of the Java or JavaScript virtual machine, 
- containing only functionality that can be easily 
- implemented on both platforms. Thus, certain functionality, 
- for example, concurrency, for which there is no common
- virtual machine-agnostic model, is not covered by the
- language module.
+ This module defines an abstraction over the basic facilities of the Java or
+ JavaScript virtual machine, containing only functionality that can be easily 
+ implemented on both platforms. Thus, certain functionality, for example,
+ concurrency, for which there is no common virtual machine-agnostic model, is not
+ covered by the language module.
  
- The language module is an implicit dependency of every
- other Ceylon module, and may not be explicitly imported.
+ The language module is an implicit dependency of every other Ceylon module, and
+ may not be explicitly imported.
  
  [spec]: http://ceylon-lang.org/documentation/current/spec"
 label ("Ceylon Language Module")
-by ("Gavin King", "Tom Bentley", "Tako Schotanus",
-   "Stephane Epardaud", "Enrique Zamudio")
+by ("Gavin King", "Tom Bentley", "Tako Schotanus", "Stephane Epardaud", "Enrique Zamudio")
 license ("http://www.apache.org/licenses/LICENSE-2.0.html")
-module ceylon.language maven:"org.ceylon-lang" "1.3.4-SNAPSHOT"/*@CEYLON_VERSION@*/ {
+module ceylon.language maven:"org.ceylon-lang" "1.3.4-SNAPSHOT"/*@CEYLON_VERSION@*/
+{
     native("jvm") import java.base "7";
 }

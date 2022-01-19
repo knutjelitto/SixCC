@@ -11,12 +11,17 @@ namespace Six.Runtime.Types
 
         public Symbol Root { get; }
 
-        public RNode Build()
+        public static RNode Build(Symbol root)
         {
-            return Build(Root).Single();
+            return new TypedBuilder(root).Work();
         }
 
-        private IEnumerable<RNode> Build(Node anyNode)
+        public RNode Work()
+        {
+            return Work(Root).Single();
+        }
+
+        private IEnumerable<RNode> Work(Node anyNode)
         {
             switch (anyNode)
             {
@@ -60,7 +65,7 @@ namespace Six.Runtime.Types
             }
             else
             {
-                var args = Build(node.Children[0]).ToArray();
+                var args = Work(node.Children[0]).ToArray();
 
                 if (node.Matcher.Builder != null)
                 {
@@ -79,17 +84,17 @@ namespace Six.Runtime.Types
         {
             if (node.Left == null)
             {
-                return Build(node.Right);
+                return Work(node.Right);
             }
             else
             {
-                return Build(node.Left).Concat(Build(node.Right));
+                return Work(node.Left).Concat(Work(node.Right));
             }
         }
 
         private IEnumerable<RNode> BuildIntermediate(Intermediate node)
         {
-            return Build(node.Children[0]);
+            return Work(node.Children[0]);
         }
 
         private static IEnumerable<RNode> BuildTerminal(Terminal node)

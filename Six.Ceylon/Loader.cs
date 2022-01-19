@@ -5,7 +5,7 @@ namespace Six.Ceylon
 {
     public static class Loader
     {
-        public static IEnumerable<SourceFile> LoadAll()
+        public static IEnumerable<FileJob> LoadAll()
         {
             var assembly = typeof(Loader).Assembly;
 
@@ -18,9 +18,9 @@ namespace Six.Ceylon
             }
         }
 
-        private static SourceFile LoadEmbedded(Assembly assembly, string resourceName, string path, string name)
+        private static FileJob LoadEmbedded(Assembly assembly, string resourceName, string path, string name)
         {
-            return new SourceFile(path, name, () => LoadEmbedded(assembly, resourceName));
+            return new FileJob(path, name, () => LoadEmbedded(assembly, resourceName));
         }
 
         private static string LoadEmbedded(Assembly assembly, string resourceName)
@@ -45,7 +45,7 @@ namespace Six.Ceylon
             }
         }
 
-        public static Module GetModule(SourceFile moduleFile, List<SourceFile> allFiles)
+        public static Module GetModule(FileJob moduleFile, List<FileJob> allFiles)
         {
             var module = new Module(moduleFile);
 
@@ -55,7 +55,7 @@ namespace Six.Ceylon
             return module;
         }
 
-        public static IEnumerable<Package> GetPackages(Module module, List<SourceFile> allFiles)
+        public static IEnumerable<Package> GetPackages(Module module, List<FileJob> allFiles)
         {
             var modDir = Path.GetDirectoryName(module.ModuleFile.Fullname)!;
 
@@ -71,7 +71,7 @@ namespace Six.Ceylon
             }
         }
 
-        public static Package GetPackage(SourceFile packageFile, List<SourceFile> allFiles)
+        public static Package GetPackage(FileJob packageFile, List<FileJob> allFiles)
         {
             var package = new Package(packageFile);
 
@@ -81,7 +81,7 @@ namespace Six.Ceylon
             return package;
         }
 
-        public static IEnumerable<SourceFile> GetFiles(Package package, List<SourceFile> allFiles)
+        public static IEnumerable<FileJob> GetFiles(Package package, List<FileJob> allFiles)
         {
             var packageDir = Path.GetDirectoryName(package.PackageFile.Fullname)!;
 
@@ -94,12 +94,12 @@ namespace Six.Ceylon
             }
         }
 
-        public static bool IsModule(SourceFile file)
+        public static bool IsModule(FileJob file)
         {
             return string.Compare(file.Name, "module.ceylon", true) == 0;
         }
 
-        public static bool IsPackage(SourceFile file)
+        public static bool IsPackage(FileJob file)
         {
             return string.Compare(file.Name, "package.ceylon", true) == 0;
         }

@@ -23,7 +23,7 @@ namespace Six.Runtime.Types
         public int End { get; }
         public Source Source { get; }
 
-        public string Text()
+        public string GetText()
         {
             var start = Math.Max(Core, Start);
 
@@ -38,7 +38,7 @@ namespace Six.Runtime.Types
 
         public override string ToString()
         {
-            return $"{CommonName()}{{{Text()}}}";
+            return $"{CommonName()}{{{GetText()}}}";
         }
     }
 }
