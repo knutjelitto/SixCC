@@ -1,11 +1,10 @@
 ﻿using Six.Runtime;
-using static Six.Ceylon.CeylonParserAst;
+using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-
         public void BuildModule(Module module)
         {
             Console.Write($"{module.Name,-28}");
@@ -41,6 +40,14 @@ namespace Six.Ceylon
 
             if (ok)
             {
+#if false
+                var packageDescriptor = GetPackageDescriptor(package.PackageFile);
+
+                var name = packageDescriptor?.PackagePath.ToString() ?? package.Name;
+
+                Assert(name == package.Name);
+#endif
+
                 foreach (var file in package.Files)
                 {
                     ok = ok && BuildFile(file);
@@ -65,6 +72,11 @@ namespace Six.Ceylon
         private CModuleDescriptor? GetModuleDescriptor(FileJob file)
         {
             return GetStart(file)?.CompilationUnit as CModuleDescriptor;
+        }
+
+        private CPackageDescriptor? GetPackageDescriptor(FileJob file)
+        {
+            return GetStart(file)?.CompilationUnit as CPackageDescriptor;
         }
     }
 }

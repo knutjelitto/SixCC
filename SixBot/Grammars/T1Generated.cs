@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T1.six" at="19.01.2022 18:48:09" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T1.six" at="19.01.2022 19:50:54" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -8,20 +8,20 @@ using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 using Range = Six.Runtime.Matchers.Range;
 using String = Six.Runtime.Matchers.String;
-using static GeneratedParser.T1ParserAst;
+using static GeneratedParser.T1Tree;
 
 namespace GeneratedParser
 {
     public partial class T1Parser : Parser
     {
         public T1Parser()
-            : base("T1", new __T1ParserImplementation())
+            : base("T1", new Implementation())
         {
         }
 
-        private class __T1ParserImplementation : ImplementationCore
+        private class Implementation : ImplementationCore
         {
-            public __T1ParserImplementation()
+            public Implementation()
                 : base(new Matcher[17])
             {
                 /*   0 StartRuleOp      */ __Matchers[0] = __Start = new StartRule(this, 0, "%start") { Builder = nodes => nodes[0] };
@@ -84,7 +84,7 @@ namespace GeneratedParser
         }
     }
 
-    public partial class T1ParserAst
+    public partial class T1Tree
     {
         public interface IXStart {}
         public interface IXWhitespace {}

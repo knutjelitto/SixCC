@@ -1,18 +1,18 @@
-﻿using Six.Runtime;
+﻿using Six.Core;
+using Six.Runtime;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
-using static Six.Ceylon.CeylonParserAst;
 
-namespace Six.Ceylon
+namespace Six.Runtime
 {
     public abstract class Compiler<TParser>
-        where TParser : Runtime.Parser, new()
+        where TParser : Parser, new()
     {
-        private readonly TParser parser = new TParser();
+        private readonly TParser parser = new();
 
         public bool BuildFile(FileJob job)
         {
-            var ok = Ok(() => Parse(job));
+            var ok = Compiler<TParser>.Ok(() => Parse(job));
 
             if (!ok)
             {
@@ -32,8 +32,6 @@ namespace Six.Ceylon
 
             job.Tree = TypedBuilder.Build(sppf);
 
-            new DynamicCeylonVisitor().Walk(job.Tree);
-
             return true;
         }
 
@@ -49,7 +47,7 @@ namespace Six.Ceylon
             return ok;
         }
 
-        private bool Ok(Func<bool> action)
+        private static bool Ok(Func<bool> action)
         {
             Console.Write("?");
 

@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Json.six" at="19.01.2022 18:48:09" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Json.six" at="19.01.2022 19:50:54" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -8,20 +8,20 @@ using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 using Range = Six.Runtime.Matchers.Range;
 using String = Six.Runtime.Matchers.String;
-using static GeneratedParser.JsonParserAst;
+using static GeneratedParser.JsonTree;
 
 namespace GeneratedParser
 {
     public partial class JsonParser : Parser
     {
         public JsonParser()
-            : base("Json", new __JsonParserImplementation())
+            : base("Json", new Implementation())
         {
         }
 
-        private class __JsonParserImplementation : ImplementationCore
+        private class Implementation : ImplementationCore
         {
-            public __JsonParserImplementation()
+            public Implementation()
                 : base(new Matcher[39])
             {
                 /*   0 StartRuleOp      */ __Matchers[0] = __Start = new StartRule(this, 0, "%start") { Builder = nodes => nodes[0] };
@@ -218,7 +218,7 @@ namespace GeneratedParser
         }
     }
 
-    public partial class JsonParserAst
+    public partial class JsonTree
     {
         public interface IXStart {}
         public interface IXWhitespace {}

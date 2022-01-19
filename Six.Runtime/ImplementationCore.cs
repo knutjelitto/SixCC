@@ -10,6 +10,8 @@ namespace Six.Runtime
         private WhiteRule? __whitespace = null;
         private DfaRule? __keywords = null;
 
+        public readonly Matcher[] __Matchers;
+
         public ImplementationCore()
         {
             __Matchers = Array.Empty<Matcher>();
@@ -28,8 +30,6 @@ namespace Six.Runtime
                 matcher.Reset();
             }
         }
-
-        public Matcher[] __Matchers { get; }
 
         public Matcher __Start
         { 

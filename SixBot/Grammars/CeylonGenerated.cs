@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Ceylon.six" at="19.01.2022 18:48:09" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Ceylon.six" at="19.01.2022 19:50:54" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -8,20 +8,20 @@ using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 using Range = Six.Runtime.Matchers.Range;
 using String = Six.Runtime.Matchers.String;
-using static GeneratedParser.CeylonParserAst;
+using static GeneratedParser.CeylonTree;
 
 namespace GeneratedParser
 {
     public partial class CeylonParser : Parser
     {
         public CeylonParser()
-            : base("Ceylon", new __CeylonParserImplementation())
+            : base("Ceylon", new Implementation())
         {
         }
 
-        private class __CeylonParserImplementation : ImplementationCore
+        private class Implementation : ImplementationCore
         {
-            public __CeylonParserImplementation()
+            public Implementation()
                 : base(new Matcher[870])
             {
                 /*   0 StartRuleOp      */ __Matchers[0] = __Start = new StartRule(this, 0, "%start") { Builder = nodes => nodes[0] };
@@ -3123,7 +3123,7 @@ namespace GeneratedParser
         }
     }
 
-    public partial class CeylonParserAst
+    public partial class CeylonTree
     {
         public interface IXStart {}
         public interface IXWhitespace {}

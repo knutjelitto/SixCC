@@ -1,43 +1,17 @@
 ﻿using Six.Runtime;
-using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Six.Ceylon
 {
-    public static class Loader
+    public class CeylonLoader : Loader
     {
-        public static IEnumerable<FileJob> LoadAll()
-        {
-            var assembly = typeof(Loader).Assembly;
-
-            foreach (var resourceName in assembly.GetManifestResourceNames())
-            {
-                var rest = resourceName["Six.Ceylon.".Length..];
-                var name = Path.GetExtension(Path.GetFileNameWithoutExtension(rest))[1..] + Path.GetExtension(rest);
-                var dir = rest[..^name.Length].Replace(".", "/") + name;
-                yield return LoadEmbedded(assembly, resourceName, dir, name);
-            }
-        }
-
-        private static FileJob LoadEmbedded(Assembly assembly, string resourceName, string path, string name)
-        {
-            return new FileJob(path, name, () => LoadEmbedded(assembly, resourceName));
-        }
-
-        private static string LoadEmbedded(Assembly assembly, string resourceName)
-        {
-            var content = string.Empty;
-            using (var stream = assembly.GetManifestResourceStream(resourceName)!)
-            using (var reader = new StreamReader(stream))
-            {
-                content = reader.ReadToEnd();
-            }
-
-            return content;
-        }
-
         public static IEnumerable<Module> GetModules()
         {
-            var files = LoadAll().ToList();
+            var files = LoadAll(typeof(CeylonLoader)).ToList();
 
             foreach (var file in files.Where(f => IsModule(f)))
             {
@@ -81,6 +55,16 @@ namespace Six.Ceylon
             return package;
         }
 
+        public static bool IsModule(FileJob file)
+        {
+            return string.Compare(file.Name, "module.ceylon", true) == 0;
+        }
+
+        public static bool IsPackage(FileJob file)
+        {
+            return string.Compare(file.Name, "package.ceylon", true) == 0;
+        }
+
         public static IEnumerable<FileJob> GetFiles(Package package, List<FileJob> allFiles)
         {
             var packageDir = Path.GetDirectoryName(package.PackageFile.Fullname)!;
@@ -93,17 +77,5 @@ namespace Six.Ceylon
                 }
             }
         }
-
-        public static bool IsModule(FileJob file)
-        {
-            return string.Compare(file.Name, "module.ceylon", true) == 0;
-        }
-
-        public static bool IsPackage(FileJob file)
-        {
-            return string.Compare(file.Name, "package.ceylon", true) == 0;
-        }
-
-
     }
 }

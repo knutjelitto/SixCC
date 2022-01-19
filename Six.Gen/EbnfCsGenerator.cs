@@ -13,13 +13,13 @@ namespace Six.Gen
 
         private readonly NameWalker namer = new();
 
-        public EbnfCsGenerator(string original)
+        public EbnfCsGenerator(string originalPath)
         {
-            Original = original;
+            OriginalPath = originalPath;
         }
 
         public EbnfGrammar? Grammar { get; private set; }
-        public string Original { get; }
+        public string OriginalPath { get; }
 
         public override void Generate(string name, string content)
         {
@@ -35,10 +35,10 @@ namespace Six.Gen
             var dfaGenerator = new DfaCsGenerator(writer, Grammar);
             var typeGenerator = new TypeCsGenerator(writer, Grammar);
             var parserClass = $"{name}Parser";
-            var implementationClass = $"__{parserClass}Implementation";
-            var astClass = $"{parserClass}Ast";
+            var implementationClass = $"Implementation";
+            var astClass = $"{name}Tree";
 
-            wl($"// <generated from={Original.CsString()} at={DateTime.Now.ToString().CsString()} />");
+            wl($"// <generated from={OriginalPath.CsString()} at={DateTime.Now.ToString().CsString()} />");
             wl();
 
             wl("using System.Collections.Generic;");
