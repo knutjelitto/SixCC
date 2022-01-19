@@ -8,9 +8,62 @@ namespace Six.Ceylon
 
         public void BuildModule(Module module)
         {
-            Console.Write("?");
-            var ok = Ok(Parse(module.ModuleFile));
+            Console.Write($"{module.Name, -28}");
+
+            var ok = BuildFile(module.ModuleFile);
+
             Console.WriteLine();
+
+            if (ok)
+            {
+                foreach (var package in module.Packages)
+                {
+                    ok = ok && BuildPackage(package);
+
+                    if (!ok)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        public bool BuildPackage(Package package)
+        {
+            Console.Write($"  {package.Name,-26}");
+            var ok = BuildFile(package.PackageFile);
+
+            if (ok)
+            {
+                foreach (var file in package.Files)
+                {
+                    ok = ok && BuildFile(file);
+
+                    if (!ok)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            Console.WriteLine();
+
+            return ok;
+        }
+
+        public bool BuildFile(SourceFile file)
+        {
+            var ok = Ok(() => Parse(file));
+
+            if (!ok)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"{file.Fullname}");
+            }
+
+            return ok;
         }
 
         private bool Parse(SourceFile file)
@@ -20,8 +73,12 @@ namespace Six.Ceylon
             return parser.Parse(source);
         }
 
-        private bool Ok(bool ok)
+        private bool Ok(Func<bool> action)
         {
+            Console.Write("?");
+
+            var ok = action();
+
             if (ok)
             {
                 Console.Write("\b|");

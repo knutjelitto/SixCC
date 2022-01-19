@@ -210,28 +210,17 @@ Integer parseSuffix(Character suffix) {
     }
 }
 
-native
-Float nativeParseFloat(String string);
+native Float nativeParseFloat(String string);
 
-native("jvm")
-Float nativeParseFloat(String string) {
-    import java.lang {
-        Double {
+native("jvm") Float nativeParseFloat(String string)
+{
+    import java.lang
+    {
+        Double
+        {
             parseDouble
         }
     }
 
     return parseDouble(string);
-}
-
-native("js")
-Float nativeParseFloat(String string) {
-    Float result;
-    dynamic {
-        result = nativeJSParseFloat(string);
-    }
-    if (result == 0.0 && string.occursAt(0, '-')) {
-        return -0.0;
-    }
-    return result; 
 }

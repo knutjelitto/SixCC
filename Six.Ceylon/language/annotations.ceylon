@@ -7,7 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.language.meta.declaration {
+import ceylon.language.meta.declaration
+{
     Module,
     Package,
     Import,
@@ -27,25 +28,22 @@ shared final sealed annotation class AnnotationAnnotation()
                     ClassDeclaration
                   | FunctionDeclaration> {}
 
-"Annotation to mark a class as an *annotation class*, or a 
- top-level function as an *annotation constructor*."
+"Annotation to mark a class as an *annotation class*, or a top-level function as an
+ *annotation constructor*."
 see (interface Annotation)
-shared annotation AnnotationAnnotation annotation()
-        => AnnotationAnnotation();
+shared annotation AnnotationAnnotation annotation() => AnnotationAnnotation();
 
 "The annotation class for the [[shared]] annotation."
 shared final sealed annotation class SharedAnnotation()
-        satisfies OptionalAnnotation<SharedAnnotation,
-                    FunctionOrValueDeclaration
-                  | ClassOrInterfaceDeclaration
-                  | ConstructorDeclaration
-                  | Package | Import> {}
+    satisfies OptionalAnnotation<SharedAnnotation,
+                FunctionOrValueDeclaration
+              | ClassOrInterfaceDeclaration
+              | ConstructorDeclaration
+              | Package | Import> {}
 
-"Annotation to mark a declaration as shared. A `shared` 
- declaration is visible outside the block of code in which 
- it is declared."
-shared annotation SharedAnnotation shared()
-        => SharedAnnotation();
+"Annotation to mark a declaration as shared. A `shared`  declaration is visible
+ outside the block of code in which it is declared."
+shared annotation SharedAnnotation shared() => SharedAnnotation();
 
 "The annotation class for the [[restricted]] annotation."
 since("1.3.3")
@@ -58,10 +56,9 @@ shared final sealed annotation class RestrictedAnnotation(
                   | ConstructorDeclaration
                   | Package> {}
 
-"Annotation to restrict the visibility of a declaration or
- package to a given list of [[modules]]. If no modules are 
- specified, a `restricted` declaration is only visible 
- within the package in which it is defined."
+"Annotation to restrict the visibility of a declaration or package to a given list
+ of [[modules]]. If no modules are specified, a `restricted` declaration is only
+ visible within the package in which it is defined."
 since("1.3.3")
 shared annotation RestrictedAnnotation restricted(
     "The modules to which this declaration is visible."
@@ -73,156 +70,139 @@ shared final sealed annotation class VariableAnnotation()
         satisfies OptionalAnnotation<VariableAnnotation,
                     ValueDeclaration> {}
 
-"Annotation to mark a value as variable. A `variable` value 
- may be assigned multiple times."
-shared annotation VariableAnnotation variable()
-        => VariableAnnotation();
+"Annotation to mark a value as variable. A `variable` value may be assigned
+ multiple times."
+shared annotation VariableAnnotation variable() => VariableAnnotation();
 
 "The annotation class for the [[abstract]] annotation."
 shared final sealed annotation class AbstractAnnotation()
-        satisfies OptionalAnnotation<AbstractAnnotation,
-                    ClassDeclaration
-                  | ConstructorDeclaration> {}
+    satisfies OptionalAnnotation<AbstractAnnotation,
+                ClassDeclaration
+              | ConstructorDeclaration> {}
 
-"Annotation to mark a class as abstract. An `abstract` class
- may have `formal` members, but may not be directly 
- instantiated. An enumerated class must be `abstract`."
-shared annotation AbstractAnnotation abstract()
-        => AbstractAnnotation();
+"Annotation to mark a class as abstract. An `abstract` class may have `formal`
+ members, but may not be directly instantiated. An enumerated class must be
+ `abstract`."
+shared annotation AbstractAnnotation abstract() => AbstractAnnotation();
 
 "The annotation class for the [[final]] annotation."
 shared final sealed annotation class FinalAnnotation()
-        satisfies OptionalAnnotation<FinalAnnotation,
-                    ClassDeclaration> {}
+    satisfies OptionalAnnotation<FinalAnnotation,
+                ClassDeclaration> {}
 
-"Annotation to mark a class as final. A `final` class may 
- not be extended. Marking a class as `final` affects disjoint
- type analysis."
-shared annotation FinalAnnotation final()
-        => FinalAnnotation();
+"Annotation to mark a class as final. A `final` class may not be extended. Marking
+ a class as `final` affects disjoint type analysis."
+shared annotation FinalAnnotation final() => FinalAnnotation();
                 
 "The annotation class for the [[sealed]] annotation."
 since("1.1.0")
 shared final sealed annotation class SealedAnnotation()
-        satisfies OptionalAnnotation<SealedAnnotation,
-                    ClassOrInterfaceDeclaration
-                  | ConstructorDeclaration> {}
-                
-"Annotation to mark an interface, class, or constructor as 
- sealed. A `sealed` interface may not be satisfied outside 
- of the module in which it is defined. A `sealed` class may 
- not be extended or instantiated outside of the module in 
- which it is defined. A `sealed` constructor may not be
- invoked outside of the module in which it is defined."
+    satisfies OptionalAnnotation<SealedAnnotation,
+                ClassOrInterfaceDeclaration
+                | ConstructorDeclaration> {}
+
+"Annotation to mark an interface, class, or constructor as sealed. A `sealed`
+ interface may not be satisfied outside of the module in which it is defined. A
+ `sealed` class may not be extended or instantiated outside of the module in which
+ it is defined. A `sealed` constructor may not be invoked outside of the module in
+ which it is defined."
 since("1.1.0")
-shared annotation SealedAnnotation sealed()
-        => SealedAnnotation();
+shared annotation SealedAnnotation sealed() => SealedAnnotation();
 
 "The annotation class for the [[actual]] annotation."
 shared final sealed annotation class ActualAnnotation()
-        satisfies OptionalAnnotation<ActualAnnotation,
-                    FunctionOrValueDeclaration
-                  | ClassDeclaration> {}
+    satisfies OptionalAnnotation<ActualAnnotation,
+                FunctionOrValueDeclaration
+                | ClassDeclaration> {}
 
-"Annotation to mark a member of a type as refining a member 
- of a supertype."
-shared annotation ActualAnnotation actual()
-        => ActualAnnotation();
+"Annotation to mark a member of a type as refining a member of a supertype."
+shared annotation ActualAnnotation actual() => ActualAnnotation();
 
 "The annotation class for the [[formal]] annotation."
 shared final sealed annotation class FormalAnnotation()
-        satisfies OptionalAnnotation<FormalAnnotation,
-                    FunctionOrValueDeclaration
-                  | ClassDeclaration> {}
+    satisfies OptionalAnnotation<FormalAnnotation,
+                FunctionOrValueDeclaration
+                | ClassDeclaration> {}
 
-"Annotation to mark a member whose implementation must be 
- provided by subtypes."
-shared annotation FormalAnnotation formal()
-        => FormalAnnotation();
+"Annotation to mark a member whose implementation must be provided by subtypes."
+shared annotation FormalAnnotation formal() => FormalAnnotation();
 
 "The annotation class for the [[default]] annotation."
 shared final sealed annotation class DefaultAnnotation()
-        satisfies OptionalAnnotation<DefaultAnnotation,
-                    FunctionOrValueDeclaration
-                  | ClassDeclaration> {}
+    satisfies OptionalAnnotation<DefaultAnnotation,
+                FunctionOrValueDeclaration
+                | ClassDeclaration> {}
 
-"Annotation to mark a member whose implementation may be 
- refined by subtypes. Non-`default` declarations may not be 
- refined."
-shared annotation DefaultAnnotation default()
-        => DefaultAnnotation();
+"Annotation to mark a member whose implementation may be refined by subtypes.
+ Non-`default` declarations may not be refined."
+shared annotation DefaultAnnotation default() => DefaultAnnotation();
 
 "The annotation class for the [[static]] annotation."
 shared final sealed annotation class StaticAnnotation()
-        satisfies OptionalAnnotation<StaticAnnotation,
-                    FunctionOrValueDeclaration
-                  | ClassOrInterfaceDeclaration
-                  | AliasDeclaration> {}
+    satisfies OptionalAnnotation<StaticAnnotation,
+                FunctionOrValueDeclaration
+                | ClassOrInterfaceDeclaration
+                | AliasDeclaration> {}
 
-"Annotation to mark a member of a toplevel class as static. 
- A `static` member does not have access to any current 
- instance of the class, and must occur before all 
- constructor declarations and non-`static` member 
- declarations in the body of the class.
+"Annotation to mark a member of a toplevel class as static. A `static` member does
+ not have access to any current instance of the class, and must occur before all 
+ constructor declarations and non-`static` member declarations in the body of the
+ class.
  
  For example:
  
-     class Hello {
+     class Hello
+     {
          shared static void hello() => print(\"hello\");
          shared new() {}
      }
  
- A `static` member may be invoked or evaluated without any
- receiving instance of the class, by qualifying the member
- by a reference to the class itself.
+ A `static` member may be invoked or evaluated without any receiving instance of
+ the class, by qualifying the member by a reference to the class itself.
  
      shared void run() => Hello.hello();
  
- The type parameters of a generic class are in scope at the
- declaration of a `static` member.
+ The type parameters of a generic class are in scope at the declaration of a
+ `static` member.
  
-     class Box<Element> {
+     class Box<Element>
+     {
          shared static Box<Element>[2] pair(Element x, Element y)
                 => [create(x), create(y)];
          shared new create(Element element) {}
      }
      
      Box<Float>[2] boxes = Box.pair(1.0, 2.0);"
-shared annotation StaticAnnotation static()
-        => StaticAnnotation();
+shared annotation StaticAnnotation static() => StaticAnnotation();
 
 "The annotation class for the [[late]] annotation."
 shared final sealed annotation class LateAnnotation()
-        satisfies OptionalAnnotation<LateAnnotation,
-                    ValueDeclaration> {}
+    satisfies OptionalAnnotation<LateAnnotation,
+                ValueDeclaration> {}
 
-"Annotation to disable definite initialization analysis for 
- an attribute of a class, or for a toplevel value, or to
- specify that an attribute of a class should be initialized
- lazily.
+"Annotation to disable definite initialization analysis for an attribute of a
+ class, or for a toplevel value, or to specify that an attribute of a class should
+ be initialized lazily.
  
- - In the case of a class attribute, the attribute may have 
-   no initializer and may be left unassigned by the class 
-   initializer.
- - In the case of a toplevel value, the value may have no
-   initializer.
+ - In the case of a class attribute, the attribute may have no initializer and may
+   be left unassigned by the class initializer.
+ - In the case of a toplevel value, the value may have no initializer.
  
- If a `late` value does have an initializer, the initializer
- will be executed lazily the first time the value is 
- evaluated, if the value has not already been assigned.
+ If a `late` value does have an initializer, the initializer will be executed
+ lazily the first time the value is evaluated, if the value has not already been
+ assigned.
  
- A `late` value may be assigned by any code to which it is
- visible, but repeated assignment produces an 
- [[InitializationError]].
+ A `late` value may be assigned by any code to which it is visible, but repeated
+ assignment produces an [[InitializationError]].
  
- Evaluation of a `late` value with no initializer cannot be 
- guaranteed sound by the compiler, and so evaluation of a 
- `late` value with no initializer before it has been 
- assigned produces an [[InitializationError]].
+ Evaluation of a `late` value with no initializer cannot be guaranteed sound by
+ the compiler, and so evaluation of a `late` value with no initializer before it
+ has been assigned produces an [[InitializationError]].
  
-     class Lately() {
-     
-         shared interface Calculator {
+     class Lately()
+     {
+         shared interface Calculator
+         {
              shared formal Float calculatePi();
          }
  
@@ -232,48 +212,47 @@ shared final sealed annotation class LateAnnotation()
          //a lazy attribute
          shared late Float pi = calculator.calculatePi();
          
-         shared void init(Calculator calculator) {
+         shared void init(Calculator calculator)
+         {
              //initialize the attribute
              this.calculator = calculator;
          }
          
      }"
-shared annotation LateAnnotation late()
-        => LateAnnotation();
+shared annotation LateAnnotation late() => LateAnnotation();
 
 "The annotation class for the [[native]] annotation."
 shared final sealed annotation class NativeAnnotation(backends)
-        satisfies OptionalAnnotation<NativeAnnotation> {
-    "The compiler backend(s) that this native annotation applies 
-     to, or the empty sequence to declare the annotated element 
-     is a native header."
+    satisfies OptionalAnnotation<NativeAnnotation>
+{
+    "The compiler backend(s) that this native annotation applies to, or the empty
+     sequence to declare the annotated element is a native header."
     since("1.2.0")
     shared String* backends;
 }
 
-"Annotation to mark a module, import, or declaration as 
- platform-native.
+"Annotation to mark a module, import, or declaration as platform-native.
  
- For example, this code defines a native function in a 
- cross-platform module:
+ For example, this code defines a native function in a cross-platform module:
  
      import java.lang { System }
      
      native void hello();
      
-     native (\"jvm\") void hello() {
+     native (\"jvm\") void hello()
+     {
          System.out.println(\"hello\");
      }
      
-     native (\"js\") void hello() {
+     native (\"js\") void hello()
+     {
          dynamic {
              console.log(\"hello\");
          }
      }"
 shared annotation NativeAnnotation native(
     since("1.2.0")
-    String* backends)
-        => NativeAnnotation(*backends);
+    String* backends) => NativeAnnotation(*backends);
 
 /*"The annotation class for [[inherited]]."
 shared final sealed annotation class InheritedAnnotation()

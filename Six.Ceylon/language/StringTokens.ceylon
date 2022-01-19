@@ -7,10 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-native class StringTokens
-    (str, separator, discardSeparators, groupSeparators, limit)
-        satisfies {String+} {
-    
+native class StringTokens(str, separator, discardSeparators, groupSeparators, limit)
+    satisfies {String+}
+{
     String str;
     Boolean separator(Character ch);
     Boolean discardSeparators;
@@ -19,128 +18,7 @@ native class StringTokens
     
     shared actual native Iterator<String> iterator();
     shared actual native Boolean empty;
-    
-}
 
-native("js") class StringTokens
-    (str, separator, discardSeparators, groupSeparators, limit)
-        satisfies {String+} {
-    
-    String str;
-    Boolean separator(Character ch);
-    Boolean discardSeparators;
-    Boolean groupSeparators;
-    Integer? limit;
-    
-    shared actual native("js") Boolean empty => false;
-    
-    shared actual native("js") Iterator<String> iterator() {
-        dynamic str = this.str;
-        
-        return object satisfies Iterator<String> {
-            
-            variable value first = true;
-            variable value lastTokenWasSeparator = false;
-            variable value count = 0;
-            variable value index = 0;
-            
-            Integer currentCodePoint {
-                dynamic {
-                    return str.codePointAt(index);
-                }
-            }
-            
-            Integer currentCharCode {
-                dynamic {
-                    return str.codePointAt(index);
-                }
-            }
-            
-            void advanceToEnd() {
-                dynamic {
-                    index = str.length;
-                }
-            }
-            
-            void advance() {
-                index += #d800 <= currentCharCode <= #dbff
-                                    then 2 else 1;
-            }
-            
-            value eof {
-                dynamic {
-                    return index >= str.length;
-                }
-            }
-            
-            value separator
-                    => !eof
-                    && outer.separator(currentCodePoint.character);
-            
-            value regular
-                    => !eof
-                    && !outer.separator(currentCodePoint.character);
-            
-            String token(Integer start, Boolean separator) {
-                if (!separator) {
-                    count ++;
-                }
-                first = false;
-                lastTokenWasSeparator = separator;
-                dynamic {
-                    return str.substring(start, index);
-                }
-            }
-            
-            function emptyToken() {
-                count ++;
-                first = false;
-                lastTokenWasSeparator = false;
-                return "";
-            }
-            
-            shared actual String|Finished next() {
-                if (!eof) {
-                    if (first || lastTokenWasSeparator,
-                        separator) {
-                        return emptyToken();
-                    }
-                    
-                    if (separator) {
-                        value start = index;
-                        advance();
-                        if (groupSeparators) {
-                            while (separator) {
-                                advance();
-                            }
-                        }
-                        if (!discardSeparators) {
-                            return token(start, true);
-                        }
-                    }
-                    
-                    value start = index;
-                    if (exists limit, count>=limit) {
-                        advanceToEnd();
-                    }
-                    else {
-                        while (regular) {
-                            advance();
-                        }
-                    }
-                    return token(start, true);
-                }
-                else if (lastTokenWasSeparator) {
-                    return emptyToken();
-                }
-                else {
-                    return finished;
-                }
-            }
-            
-        };
-    }
-    
 }
 
 native("jvm") class StringTokens

@@ -25,22 +25,12 @@ shared native("jvm")
 Float exp(Float num)
     =>  JVMMath.exp(num);
 
-shared native("js")
-Float exp(Float num) {
-    dynamic {
-        return Math.exp(num);
-    }
-}
 
-"A more accurate computation of `exp(x)-1.0` for `x` near
- zero."
+"A more accurate computation of `exp(x)-1.0` for `x` near zero."
 native shared Float expm1(Float num);
 
 native("jvm") shared Float expm1(Float num)
     =>  JVMMath.expm1(num);
-
-native("js") shared Float expm1(Float num)
-    =>  exp(num) - 1.0;
 
 "The natural logarithm (base \{#0001D452}) of the
  argument.
@@ -58,13 +48,6 @@ shared native("jvm")
 Float log(Float num)
     =>  JVMMath.log(num);
 
-shared native("js")
-Float log(Float num) {
-    dynamic {
-        return Math.log(num);
-    }
-}
-
 "A more accurate computation of `log(1.0+x)` for `x` near
  zero."
 native shared
@@ -73,10 +56,6 @@ Float log1p(Float num);
 native("jvm") shared
 Float log1p(Float num)
     =>  JVMMath.log1p(num);
-
-native("js") shared
-Float log1p(Float num)
-    =>  log(num + 1.0);
 
 "The base 10 logarithm of the argument.
 
@@ -92,15 +71,6 @@ Float log10(Float num);
 shared native("jvm")
 Float log10(Float num)
     =>  JVMMath.log10(num);
-
-shared native("js")
-Float log10(Float num) {
-    dynamic {
-        Float n = Math.log(num);
-        Float d = Math.\iLN10;
-        return n / d;
-    }
-}
 
 "The given angle (in radians) converted to degrees."
 shared see(`function toRadians`)
@@ -127,16 +97,6 @@ shared native("jvm")
 Float sin(Float num)
     =>  JVMMath.sin(num);
 
-shared native("js")
-Float sin(Float num) {
-    if (num == 0.0 && num.strictlyNegative) {
-        return -0.0;
-    }
-    dynamic {
-        return \iMath.sin(num);
-    }
-}
-
 "The cosine of the given angle specified in radians.
 
  * `cos(-infinity)` is `undefined`,
@@ -149,13 +109,6 @@ Float cos(Float num);
 shared native("jvm")
 Float cos(Float num)
     =>  JVMMath.cos(num);
-
-shared native("js")
-Float cos(Float num) {
-    dynamic {
-        return Math.cos(num);
-    }
-}
 
 "The tangent of the given angle specified in radians.
 
@@ -171,16 +124,6 @@ Float tan(Float num);
 shared native("jvm")
 Float tan(Float num)
     =>  JVMMath.tan(num);
-
-shared native("js")
-Float tan(Float num) {
-    if (num == 0.0 && num.strictlyNegative) {
-        return -0.0;
-    }
-    dynamic {
-        return Math.tan(num);
-    }
-}
 
 "The hyperbolic sine of the given angle specified in
  radians.
@@ -198,12 +141,6 @@ shared native("jvm")
 Float sinh(Float num)
     =>  JVMMath.sinh(num);
 
-shared native("js")
-Float sinh(Float num)
-    =>  if (!num.finite || num.fractionalPart == 0.0)
-        then num
-        else (exp(num) - exp(-num)) / 2;
-
 "The hyperbolic cosine of the given angle specified in
  radians.
 
@@ -218,10 +155,6 @@ Float cosh(Float num);
 shared native("jvm")
 Float cosh(Float num)
     =>  JVMMath.cosh(num);
-
-shared native("js")
-Float cosh(Float num)
-    =>  (exp(num) + exp(-num)) / 2;
 
 "The hyperbolic tangent of the given angle specified in
  radians.
@@ -239,19 +172,6 @@ shared native("jvm")
 Float tanh(Float num)
     =>  JVMMath.tanh(num);
 
-shared native("js")
-Float tanh(Float num) {
-    if (num.infinite) {
-        return num.sign.float;
-    }
-    if (num.fractionalPart == 0.0) {
-        return num;
-    }
-    value pos = exp(num);
-    value neg = exp(-num);
-    return (pos - neg) / (pos + neg);
-}
-
 "The arc sine of the given number.
 
  * `asin(x)` for any x < -1 is `undefined`,
@@ -267,16 +187,6 @@ shared native("jvm")
 Float asin(Float num)
     =>  JVMMath.asin(num);
 
-shared native("js")
-Float asin(Float num) {
-    if (num == 0.0 && num.strictlyNegative) {
-        return -0.0;
-    }
-    dynamic {
-        return Math.asin(num);
-    }
-}
-
 "The arc cosine of the given number.
 
  * `acos(x)` for any x < -1 is `undefined`,
@@ -290,13 +200,6 @@ shared native("jvm")
 Float acos(Float num)
     =>  JVMMath.acos(num);
 
-shared native("js")
-Float acos(Float num) {
-    dynamic {
-        return Math.acos(num);
-    }
-}
-
 "The arc tangent of the given number.
 
  * `atan(-0)` is `-0`,
@@ -309,16 +212,6 @@ Float atan(Float num);
 shared native("jvm")
 Float atan(Float num)
     =>  JVMMath.atan(num);
-
-shared native("js")
-Float atan(Float num) {
-    if (num == 0.0 && num.strictlyNegative) {
-        return -0.0;
-    }
-    dynamic {
-        return Math.atan(num);
-    }
-}
 
 "The angle from converting rectangular coordinates
  `x` and `y` to polar coordinates.
@@ -449,24 +342,6 @@ shared native("jvm")
 Float atan2(Float y, Float x)
     =>  JVMMath.atan2(y, x);
 
-shared native("js")
-Float atan2(Float y, Float x) {
-    if (y == 0.0 && y.strictlyNegative) {
-        if (x.positive) {
-            return -0.0;
-        }
-        else if (x.negative) {
-            return -pi;
-        }
-        else {
-            return undefined;
-        }
-    }
-    dynamic {
-        return Math.atan2(y, x);
-    }
-}
-
 "Returns the length of the hypotenuse of a right angle
  triangle with other sides having lengths `x` and `y`. This 
  function may be more accurate than computing
@@ -484,19 +359,6 @@ shared native("jvm")
 Float hypot(Float x, Float y)
     =>  JVMMath.hypot(x, y);
 
-shared native("js")
-Float hypot(Float x, Float y) {
-    if (x.infinite || y.infinite) {
-        return infinity;
-    }
-    else if (x.undefined || y.undefined) {
-        return undefined;
-    }
-    else {
-        return sqrt((x^2) + (y^2));
-    }
-}
-
 "The positive square root of the given number. This function 
  may be faster and/or more accurate than `num^0.5`.
 
@@ -512,16 +374,6 @@ Float sqrt(Float num);
 shared native("jvm")
 Float sqrt(Float num)
     =>  JVMMath.sqrt(num);
-
-shared native("js")
-Float sqrt(Float num) {
-    if (num == 0.0 && num.strictlyNegative) {
-        return -0.0;
-    }
-    dynamic {
-        return Math.sqrt(num);
-    }
-}
 
 "The cube root of the given number. This function may be
  faster and/or more accurate than `num^(1.0/3.0)`.
@@ -539,15 +391,6 @@ shared native("jvm")
 Float cbrt(Float num)
     =>  JVMMath.cbrt(num);
 
-shared native("js")
-Float cbrt(Float num)
-    =>  if (num.negative) then
-            -(num.negated ^ (1.0/3.0))
-        else if (num == 0.0) then
-            num // positive or negative zero
-        else
-            num ^ (1.0/3.0);
-
 "A number greater than or equal to positive zero and less
  than `1.0`, chosen pseudorandomly and (approximately)
  uniformly distributed."
@@ -557,13 +400,6 @@ Float random();
 shared native("jvm")
 Float random()
     =>  JVMMath.random();
-
-shared native("js")
-Float random() {
-    dynamic {
-        return Math.random();
-    }
-}
 
 "The largest value that is less than or equal to the
  argument and equal to an integer.
@@ -761,12 +597,6 @@ Float scalb(Float x, Integer n);
 shared native("jvm")
 Float scalb(Float x, Integer n)
     =>  JVMMath.scalb(x, n);
-
-shared native("js")
-Float scalb(Float x, Integer n)
-    // faster than other options per
-    // http://jsperf.com/scale-pow2/5
-    =>  x * 2.0 ^ n;
 
 "The remainder, after dividing the [[dividend]] by the 
  [[divisor]]. This function is defined as:

@@ -49,8 +49,8 @@ namespace Six.Ceylon
         {
             var module = new Module(moduleFile);
 
-            var packages = GetPackages(module, allFiles).ToList();
-            module.Packages.AddRange(packages);
+            var packages = GetPackages(module, allFiles);
+            module.Packages.AddRange(packages.OrderBy(p => p.Name));
 
             return module;
         }

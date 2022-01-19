@@ -257,12 +257,3 @@ Float log10(Float num) {
     
     return Math.log10(num);
 }
-
-native("js")
-Float log10(Float num) {
-    dynamic {
-        Float n = Math.log(num);
-        Float d = Math.\iLN10;
-        return n / d;
-    }
-}

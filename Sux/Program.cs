@@ -7,7 +7,10 @@ var modules = Loader.GetModules().ToList();
 //DumpModules(modules);
 
 var compiler = new Compiler();
-compiler.BuildModule(modules.Where(m => m.Name == "language").First());
+foreach (var module in modules)
+{
+    compiler.BuildModule(module);
+}
 
 Wait();
 
