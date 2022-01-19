@@ -23,6 +23,8 @@ namespace Six.Ceylon
 
                 var name = moduleDescriptor.ModuleName.ToString();
 
+                Assert(name == module.Name);
+
                 foreach (var package in module.Packages)
                 {
                     ok = ok && BuildPackage(package);
@@ -79,6 +81,8 @@ namespace Six.Ceylon
             }
 
             job.Tree = TypedBuilder.Build(sppf);
+
+            new DynamicCeylonVisitor().Walk(job.Tree);
 
             return true;
         }

@@ -186,21 +186,3 @@ class AsyncTaskExecutor() extends TaskExecutor() {
     }
     
 }
-
-
-native("js")
-class AsyncTaskExecutor() extends TaskExecutor() {
-    
-    native("js")
-    void executeTask(Anything() task) {
-        dynamic {
-            setTimeout(task, 1);
-        }
-    }
-    
-    native("js")
-    void shutdown() {
-        // noop
-    }
-    
-}

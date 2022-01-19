@@ -248,14 +248,6 @@ shared class HtmlReporter(String reportSubdir, String? reportsDir) satisfies Tes
     native
     String formatTime(Integer timeInMilliseconds);
     
-    native("js")
-    String formatTime(Integer timeInMilliseconds) {
-        dynamic {
-            dynamic t = timeInMilliseconds/1000.0;
-            return t.toFixed(3);
-        }
-    }
-    
     native("jvm")
     String formatTime(Integer timeInMilliseconds) {
         NumberFormat timeFormat = NumberFormat.numberInstance;

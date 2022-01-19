@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
 "A declaration that can have type parameters."
-shared sealed interface GenericDeclaration {
-    
+shared sealed interface GenericDeclaration
+{    
     "The list of type parameters declared on this generic declaration."
     shared formal TypeParameter[] typeParameterDeclarations;
     

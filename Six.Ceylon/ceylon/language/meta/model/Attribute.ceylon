@@ -7,9 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.language.meta.declaration{
-    ValueDeclaration
-}
+import ceylon.language.meta.declaration { ValueDeclaration }
 
 """An attribute model represents the model of a Ceylon attribute that you can read and inspect.
    
@@ -30,14 +28,14 @@ import ceylon.language.meta.declaration{
        }
  """
 shared sealed interface Attribute<in Container=Nothing, out Get=Anything, in Set=Nothing>
-        satisfies ValueModel<Get,Set> & Member<Container, Value<Get,Set>> {
+    satisfies ValueModel<Get,Set> & Member<Container, Value<Get,Set>> {
     
-    "The declaration model of this attribute, 
-     which is necessarily a [[ValueDeclaration]]."
+    "The declaration model of this attribute, which is necessarily a [[ValueDeclaration]]."
     shared actual formal ValueDeclaration declaration;
     
     "Binds this attribute to the given container instance. The instance type is checked at runtime."
-    throws(class StorageException,
+    throws(
+        class StorageException,
         "If this attribute is not stored at runtime, for example if it is neither shared nor captured.")
     shared actual formal Value<Get,Set> bind(Anything container);
 }

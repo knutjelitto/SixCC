@@ -1,8 +1,4 @@
 ﻿using Six.Gen.Ebnf;
-using Six.Gen.Typing;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Six.Gen
 {
@@ -17,6 +13,15 @@ namespace Six.Gen
 
         public void Generate()
         {
+            Interfaces();
+            wl();
+            Concretes();
+            wl();
+            Visitor();
+        }
+
+        private void Interfaces()
+        {
             foreach (var rule in Grammar.Rules)
             {
                 if (rule.Interface == null)
@@ -30,7 +35,10 @@ namespace Six.Gen
                 }
                 wl($"public interface {rule.Interface.TypeName}{ifaces} {{}}");
             }
-            wl();
+        }
+
+        private void Concretes()
+        {
             var more = false;
             foreach (var rule in Grammar.Rules)
             {
@@ -56,7 +64,7 @@ namespace Six.Gen
                         ifaces = $"{ifaces}{rule.Interface.TypeName}";
                     }
                 }
-                
+
                 if (more)
                 {
                     wl();
@@ -69,6 +77,45 @@ namespace Six.Gen
                         Body(rule, rule.Argument);
                     });
             }
+        }
+
+        private void Visitor()
+        {
+            block($"public partial class Dynamic{Grammar.Name}Visitor",
+                () =>
+                {
+                    block("public void Walk(RNode node)",
+                        () =>
+                        {
+                            wl($"Visit((dynamic)node);");
+                        });
+
+                    wl();
+                    block("protected virtual void VisitChildren(RNode element)",
+                        () =>
+                        {
+                            block($"foreach (var childElement in element.Children)",
+                                () =>
+                                {
+                                    wl($"Walk(childElement);");
+                                });
+                        });
+
+                    foreach (var rule in Grammar.Rules)
+                    {
+                        if (rule.Class == null)
+                        {
+                            continue;
+                        }
+
+                        wl();
+                        block($"protected virtual void Visit({rule.Class.TypeName} element)",
+                            () =>
+                            {
+                                wl($"VisitChildren(element);");
+                            });
+                    }
+                });
         }
 
         private void Body(RuleOp rule, CoreOp op)

@@ -14,7 +14,12 @@
         {
             public override string ToString()
             {
-                return GetText();
+                var text = GetText();
+                if (text.StartsWith("'") && text.EndsWith("'"))
+                {
+                    return text[1..^1];
+                }
+                return text;
             }
         }
     }

@@ -27,11 +27,6 @@ SocketFacade? connectSocket(Integer? port) {
     return if (exists port) then SocketFacadeJvm.connect(port) else null;
 }
 
-native("js")
-SocketFacade? connectSocket(Integer? port) {
-    return if (exists port) then SocketFacadeJs.connect(port) else null;
-}
-
 interface SocketFacade {
     
     shared formal void write(String data);
@@ -88,36 +83,6 @@ class SocketFacadeJvm satisfies SocketFacade {
             socket.close();
         } catch (IOException e) {
             // noop
-        }
-    }
-    
-}
-
-native("js")
-class SocketFacadeJs satisfies SocketFacade {
-    
-    dynamic socket;
-    
-    shared new connect(Integer port) {
-        dynamic {
-            dynamic net = require("net");
-            socket = net.connect(port);
-            socket.setNoDelay(true);
-        }
-    }
-    
-    shared actual void write(String data) {
-        dynamic {
-            socket.write(data);
-            socket.write("\{END OF TRANSMISSION}");
-        }
-    }
-    
-    shared actual void close() {
-        dynamic {
-            if (socket exists) {
-                socket.end();
-            }
         }
     }
     
