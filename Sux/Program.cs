@@ -6,7 +6,7 @@ var modules = Loader.GetModules().ToList();
 
 //DumpModules(modules);
 
-var compiler = new Compiler();
+var compiler = new CeylonCompiler();
 foreach (var module in modules.OrderBy(m => m.Name))
 {
     compiler.BuildModule(module);

@@ -38,7 +38,7 @@ namespace Six.Gen
             var implementationClass = $"__{parserClass}Implementation";
             var astClass = $"{parserClass}Ast";
 
-            wl($"// <generated from={Original.CsString()} />");
+            wl($"// <generated from={Original.CsString()} at={DateTime.Now.ToString().CsString()} />");
             wl();
 
             wl("using System.Collections.Generic;");

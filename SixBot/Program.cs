@@ -52,19 +52,6 @@ void RunTests()
     Wait();
 }
 
-void RunCompiler()
-{
-    var compiler = new Compiler<CeylonParser>(16);
-    var timer = new Stopwatch();
-    timer.Start();
-    compiler.Compile(Sampler.LoadCeylon().OrderBy(s => s.Name).Select(s => new Job(s.Name, s.Content)));
-    timer.Stop();
-    var ms = Math.Round(timer.Elapsed.TotalMilliseconds, 0);
-    Console.WriteLine();
-    Console.WriteLine($"elapsed: {ms} ms");
-    Wait();
-}
-
 void RunProfile()
 {
     var num = 881;

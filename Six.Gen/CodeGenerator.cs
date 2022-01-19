@@ -37,7 +37,11 @@ namespace Six.Gen
 
             File.WriteAllText(generatedFile, generated);
 
-            //context.AddSource(fileHint, generated);
+#if true
+            //context.AddSource(fileHint, null);
+#else
+            context.AddSource(fileHint, generated);
+#endif
         }
 
         private static readonly DiagnosticDescriptor CommonError = new(
