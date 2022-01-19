@@ -17,8 +17,9 @@ namespace Six.Runtime
 
         public string Fullname { get; }
         public string Name { get; }
-        public string BaseName => Path.GetFileNameWithoutExtension(Name);
         public Func<string> ContentLoader { get; }
+        public string BaseName => Path.GetFileNameWithoutExtension(Name);
+        public TimeSpan ParseTime { get; set; }
         public string Content => content ??= ContentLoader();
         public Source Source => source ??= Source.FromString(Name, Content);
         public RNode? Tree { get; set; }

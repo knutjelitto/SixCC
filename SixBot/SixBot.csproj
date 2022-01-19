@@ -13,29 +13,26 @@
         <None Remove="Grammars\Ceylon.six" />
         <None Remove="Grammars\Json.six" />
         <None Remove="Grammars\Six.six" />
+        <None Remove="Grammars\T1.six" />
+        <None Remove="Grammars\T2.six" />
+        <None Remove="Grammars\T3.six" />
+        <None Remove="Grammars\T4.six" />
+        <None Remove="Grammars\T5.six" />
+        <None Remove="Grammars\T6.six" />
+        <None Remove="Grammars\T7.six" />
     </ItemGroup>
 
     <ItemGroup>
-		<AdditionalFiles Include="Grammars\Six.six" />
-		<AdditionalFiles Include="Grammars\Ceylon.six" />
+		    <AdditionalFiles Include="Grammars\Six.six" />
+		    <AdditionalFiles Include="Grammars\Ceylon.six" />
         <AdditionalFiles Include="Grammars\Json.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T1.six" Link="Samples\T1.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T2.six" Link="Samples\T2.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T3.six" Link="Samples\T3.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T4.six" Link="Samples\T4.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T5.six" Link="Samples\T5.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T6.six" Link="Samples\T6.six" />
-        <AdditionalFiles Include="..\Six.Samples\Six\T7.six" Link="Samples\T7.six" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T1Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T2Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T3Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T4Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T5Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T6Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\T7Parser.gen.cs" />
-		<None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\CeylonParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\JsonParser.gen.cs" />
-        <None Include="obj\GeneratedFiles\Six.Gen\Six.Gen.SixGen\SixParser.gen.cs" />
+        <AdditionalFiles Include="Grammars\T1.six" />
+        <AdditionalFiles Include="Grammars\T2.six" />
+        <AdditionalFiles Include="Grammars\T3.six" />
+        <AdditionalFiles Include="Grammars\T4.six" />
+        <AdditionalFiles Include="Grammars\T5.six" />
+        <AdditionalFiles Include="Grammars\T6.six" />
+        <AdditionalFiles Include="Grammars\T7.six" />
     </ItemGroup>
 
     <ItemGroup>

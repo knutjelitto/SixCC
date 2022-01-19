@@ -31,7 +31,13 @@ namespace Six.Gen
                 Error(exception, context, additional);
             }
 
-            context.AddSource(fileHint, generated);
+            var generatedDirectory = Path.GetDirectoryName(additional.Path);
+            var generatedFilename = Path.GetFileNameWithoutExtension(additional.Path) + "Generated.cs";
+            var generatedFile = Path.Combine(generatedDirectory, generatedFilename);
+
+            File.WriteAllText(generatedFile, generated);
+
+            //context.AddSource(fileHint, generated);
         }
 
         private static readonly DiagnosticDescriptor CommonError = new(

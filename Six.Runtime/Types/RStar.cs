@@ -2,7 +2,15 @@
 
 namespace Six.Runtime.Types
 {
-    public class RStar<T> : RNode, IReadOnlyList<T>
+    public class RStar : RNode
+    {
+        public RStar(params RNode[] children)
+            : base(children)
+        {
+        }
+    }
+
+    public class RStar<T> : RStar, IReadOnlyList<T>
         where T : class
     {
         public RStar(params RNode[] children)

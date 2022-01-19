@@ -81,15 +81,15 @@ namespace Six.Gen
 
         private void Visitor()
         {
-            block($"public partial class Dynamic{Grammar.Name}Visitor",
+            block($"public partial class Dynamic{Grammar.Name}Visitor : DynamicVisitor",
                 () =>
                 {
-                    block("public void Walk(RNode node)",
+                    block("public override void Walk(RNode node)",
                         () =>
                         {
                             wl($"Visit((dynamic)node);");
                         });
-
+#if false
                     wl();
                     block("protected virtual void VisitChildren(RNode element)",
                         () =>
@@ -100,6 +100,7 @@ namespace Six.Gen
                                     wl($"Walk(childElement);");
                                 });
                         });
+#endif
 
                     foreach (var rule in Grammar.Rules)
                     {

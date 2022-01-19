@@ -7,15 +7,15 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.language.serialization {
-    Outer
-}
+import ceylon.language.serialization { Outer }
 
-"Implementation of [[Outer]], in ceylon.language.impl because although 
- compiled user classes depend on it, it is not part of the public API."
-shared object outerImpl satisfies Outer {
+"Implementation of [[Outer]], in ceylon.language.impl because although compiled user classes depend
+ on it, it is not part of the public API."
+shared object outerImpl satisfies Outer
+{
     "The outer instance of the given member [[instance]]."
-    shared actual Object referred(/*<Instance>*/Object instance) {
+    shared actual Object referred(/*<Instance>*/Object instance)
+    {
         return reach.getObject(instance, this);
     }
     

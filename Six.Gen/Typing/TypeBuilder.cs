@@ -1,6 +1,7 @@
 ﻿using Six.Gen.Ebnf;
 
 #pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0057 // Use range operator
 
 namespace Six.Gen.Typing
 {
@@ -25,8 +26,6 @@ namespace Six.Gen.Typing
 
         private RuleOp? CurrentRule { get; set; }
 
-        private bool More { get; set; }
-
         public EbnfGrammar Walk()
         {
             foreach (var rule in Grammar.Rules)
@@ -44,14 +43,12 @@ namespace Six.Gen.Typing
             }
 
             var loops = 5;
-            More = false;
             while (loops-- > 0)
             {
                 foreach (var rule in Grammar.Rules)
                 {
                     Walk(rule);
                 }
-                More = true;
             }
 
             return Grammar;
@@ -125,7 +122,7 @@ namespace Six.Gen.Typing
             if (op.Class == null)
             {
                 SetClassOf(op, new RuntimeType(className));
-                SetGenericArgument(op);
+                op.Class!.Generic = (TypeCore?)op.Arguments[0].Class ?? op.Arguments[0].Interface;
             }
             else
             {
@@ -164,14 +161,6 @@ namespace Six.Gen.Typing
             else
             {
                 Assert(true);
-            }
-        }
-
-        private void SetGenericArgument(CoreOp op)
-        {
-            if (op.Class != null)
-            {
-                op.Class.Generic = (TypeCore?)op.Arguments[0].Class ?? op.Arguments[0].Interface;
             }
         }
 
@@ -253,8 +242,10 @@ namespace Six.Gen.Typing
                     {
                         Assert(CurrentRule.Interface != null);
 
-                        CurrentRule.Class = new ClassType(CurrentRule.Interface!.Name);
-                        CurrentRule.Class.Base = new RuntimeType(StringBaseClass);
+                        CurrentRule.Class = new ClassType(CurrentRule.Interface!.Name)
+                        {
+                            Base = new RuntimeType(StringBaseClass)
+                        };
                     }
                     else
                     {

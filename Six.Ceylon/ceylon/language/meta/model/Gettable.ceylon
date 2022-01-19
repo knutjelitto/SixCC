@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"""An abstraction of things that have a value which be [[got|get]], 
-   and possibley set.  
-   """
+"""
+An abstraction of things that have a value which be [[got|get]], and possibley set.
+"""
 since("1.2.0")
 shared sealed interface Gettable<out Get=Anything, in Set=Nothing> {
     

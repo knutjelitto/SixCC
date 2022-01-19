@@ -21,7 +21,7 @@ namespace Six.Ceylon
             {
                 var moduleDescriptor = GetModuleDescriptor(module.ModuleFile);
 
-                var name = moduleDescriptor.ModuleName.ToString();
+                var name = moduleDescriptor?.ModuleName.ToString() ?? module.Name;
 
                 Assert(name == module.Name);
 
@@ -91,7 +91,12 @@ namespace Six.Ceylon
         {
             var source = Source.FromString(job.Fullname, job.Content);
             parser.Reset();
-            return parser.Parse(source);
+            var timer = new Stopwatch();
+            timer.Start();
+            var ok = parser.Parse(source);
+            timer.Stop();
+            job.ParseTime = timer.Elapsed;
+            return ok;
         }
 
         private bool Ok(Func<bool> action)
@@ -112,14 +117,14 @@ namespace Six.Ceylon
             return ok;
         }
 
-        private CXStart GetStart(FileJob file)
+        private CXStart? GetStart(FileJob file)
         {
-            return (CXStart)file.Tree!;
+            return file.Tree as CXStart;
         }
 
-        private CModuleDescriptor GetModuleDescriptor(FileJob file)
+        private CModuleDescriptor? GetModuleDescriptor(FileJob file)
         {
-            return (CModuleDescriptor)GetStart(file).CompilationUnit;
+            return GetStart(file)?.CompilationUnit as CModuleDescriptor;
         }
     }
 }

@@ -11,8 +11,8 @@
    
    The Ceylon metamodel allows you to: 
    
-   * dynamically inspect modules, packages, functions, values and types, 
-   * invoke functions, constructors and class initialisers, 
+   * dynamically inspect modules, packages, functions, values and types,
+   * invoke functions, constructors and class initialisers,
    * read and write values, and
    * inspect the annotations on program elements.
    
