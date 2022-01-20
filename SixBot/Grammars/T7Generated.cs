@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="20.01.2022 17:28:20" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="20.01.2022 17:28:56" />
 
 using System.Collections.Generic;
 using Six.Runtime;
