@@ -115,11 +115,18 @@
             return $"{name}({sline},{scolumn}-{eline},{ecolumn})";
         }
 
-        public string LineColumnOffset(int offset)
+        public string NameLineColumnOffset(int offset)
         {
             var name = Name;
             var (line, column) = GetLineAndColumn(offset);
             return $"{name}({line},{column},{offset})";
+        }
+
+        public string NameLineColumn(int offset)
+        {
+            var name = Name;
+            var (line, column) = GetLineAndColumn(offset);
+            return $"{name}({line},{column})";
         }
 
         private List<int> FindLines()

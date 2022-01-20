@@ -7,14 +7,16 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.buffer {
+import ceylon.buffer
+{
     CharacterBuffer,
     ByteBuffer,
     Buffer
 }
 
 Buf convertBuffer<Buf, To, From>(input, error, converter, ofSize, averageSize, maximumSize)
-        given Buf satisfies Buffer<To> {
+    given Buf satisfies Buffer<To>
+{
     {From*} input;
     ErrorStrategy error;
     PieceConvert<To,From>(ErrorStrategy) converter;
@@ -28,8 +30,10 @@ Buf convertBuffer<Buf, To, From>(input, error, converter, ofSize, averageSize, m
             then averageSize(input.size)
             else 256;
     value into = ofSize(initialSize);
-    void add(To element) {
-        if (!into.hasAvailable) {
+    void add(To element)
+    {
+        if (!into.hasAvailable)
+        {
             value newSize =
                 if (isList)
                 then maximumSize(input.size)
@@ -45,10 +49,10 @@ Buf convertBuffer<Buf, To, From>(input, error, converter, ofSize, averageSize, m
     return into;
 }
 
-"Common interface for Codecs that convert between bytes and bytes. Examples:
- gzip, and base64."
+"Common interface for Codecs that convert between bytes and bytes. Examples: gzip, and base64."
 shared interface ByteToByteCodec
-        satisfies IncrementalCodec<ByteBuffer,List<Byte>,Byte,ByteBuffer,List<Byte>,Byte> {
+    satisfies IncrementalCodec<ByteBuffer,List<Byte>,Byte,ByteBuffer,List<Byte>,Byte>
+{
     
     shared actual List<Byte> encode({Byte*} input, ErrorStrategy error)
             => encodeBuffer(input, error).visible;
@@ -56,71 +60,73 @@ shared interface ByteToByteCodec
             => decodeBuffer(input, error).visible;
     
     shared actual ByteBuffer encodeBuffer({Byte*} input, ErrorStrategy error)
-            => convertBuffer(input, error, pieceEncoder, ByteBuffer.ofSize,
-        averageEncodeSize, maximumEncodeSize);
+            => convertBuffer(input, error, pieceEncoder, ByteBuffer.ofSize, averageEncodeSize, maximumEncodeSize);
     shared actual ByteBuffer decodeBuffer({Byte*} input, ErrorStrategy error)
-            => convertBuffer(input, error, pieceDecoder, ByteBuffer.ofSize,
-        averageDecodeSize, maximumDecodeSize);
+            => convertBuffer(input, error, pieceDecoder, ByteBuffer.ofSize, averageDecodeSize, maximumDecodeSize);
     
     shared actual CumulativeConvert<ByteBuffer,{Byte*},Byte,Byte> cumulativeEncoder
             (Integer? inputSize, Float growthFactor, ErrorStrategy error)
-            => CumulativeConvert<ByteBuffer,{Byte*},Byte,Byte> {
-        error = error;
-        converter = pieceEncoder;
-        inputSize = inputSize;
-        averageSize = averageEncodeSize;
-        sizeOf = ByteBuffer.ofSize;
-        growthFactor = growthFactor;
-    };
+            => CumulativeConvert<ByteBuffer,{Byte*},Byte,Byte>
+            {
+                error = error;
+                converter = pieceEncoder;
+                inputSize = inputSize;
+                averageSize = averageEncodeSize;
+                sizeOf = ByteBuffer.ofSize;
+                growthFactor = growthFactor;
+            };
     shared actual CumulativeConvert<ByteBuffer,{Byte*},Byte,Byte> cumulativeDecoder
             (Integer? inputSize, Float growthFactor, ErrorStrategy error)
-            => CumulativeConvert<ByteBuffer,{Byte*},Byte,Byte> {
-        error = error;
-        converter = pieceDecoder;
-        inputSize = inputSize;
-        averageSize = averageDecodeSize;
-        sizeOf = ByteBuffer.ofSize;
-        growthFactor = growthFactor;
-    };
+            => CumulativeConvert<ByteBuffer,{Byte*},Byte,Byte>
+            {
+                error = error;
+                converter = pieceDecoder;
+                inputSize = inputSize;
+                averageSize = averageDecodeSize;
+                sizeOf = ByteBuffer.ofSize;
+                growthFactor = growthFactor;
+            };
 }
 
-"Common interface for Codecs that convert between bytes and characters.
- Examples: utf8, ascii."
+"Common interface for Codecs that convert between bytes and characters. Examples: utf8, ascii."
 shared interface ByteToCharacterCodec
-        satisfies IncrementalCodec<ByteBuffer,List<Byte>,Byte,CharacterBuffer,String,Character> {
-    
+    satisfies IncrementalCodec<ByteBuffer,List<Byte>,Byte,CharacterBuffer,String,Character>
+{
     shared actual List<Byte> encode({Character*} input, ErrorStrategy error)
             => encodeBuffer(input, error).visible;
+    
     shared actual String decode({Byte*} input, ErrorStrategy error)
             => decodeBuffer(input, error).string;
     
     shared actual ByteBuffer encodeBuffer({Character*} input, ErrorStrategy error)
-            => convertBuffer(input, error, pieceEncoder, ByteBuffer.ofSize,
-        averageEncodeSize, maximumEncodeSize);
+            => convertBuffer(input, error, pieceEncoder, ByteBuffer.ofSize, averageEncodeSize, maximumEncodeSize);
+    
     shared actual CharacterBuffer decodeBuffer({Byte*} input, ErrorStrategy error)
-            => convertBuffer(input, error, pieceDecoder, CharacterBuffer.ofSize,
-        averageDecodeSize, maximumDecodeSize);
+            => convertBuffer(input, error, pieceDecoder, CharacterBuffer.ofSize, averageDecodeSize, maximumDecodeSize);
     
     shared actual CumulativeConvert<ByteBuffer,{Character*},Byte,Character> cumulativeEncoder
             (Integer? inputSize, Float growthFactor, ErrorStrategy error)
-            => CumulativeConvert<ByteBuffer,{Character*},Byte,Character> {
-        error = error;
-        converter = pieceEncoder;
-        inputSize = inputSize;
-        averageSize = averageEncodeSize;
-        sizeOf = ByteBuffer.ofSize;
-        growthFactor = growthFactor;
-    };
+            => CumulativeConvert<ByteBuffer,{Character*},Byte,Character>
+            {
+                error = error;
+                converter = pieceEncoder;
+                inputSize = inputSize;
+                averageSize = averageEncodeSize;
+                sizeOf = ByteBuffer.ofSize;
+                growthFactor = growthFactor;
+            };
+    
     shared actual CumulativeConvert<CharacterBuffer,{Byte*},Character,Byte> cumulativeDecoder
             (Integer? inputSize, Float growthFactor, ErrorStrategy error)
-            => CumulativeConvert<CharacterBuffer,{Byte*},Character,Byte> {
-        error = error;
-        converter = pieceDecoder;
-        inputSize = inputSize;
-        averageSize = averageDecodeSize;
-        sizeOf = CharacterBuffer.ofSize;
-        growthFactor = growthFactor;
-    };
+            => CumulativeConvert<CharacterBuffer,{Byte*},Character,Byte>
+            {
+                error = error;
+                converter = pieceDecoder;
+                inputSize = inputSize;
+                averageSize = averageDecodeSize;
+                sizeOf = CharacterBuffer.ofSize;
+                growthFactor = growthFactor;
+            };
 }
 
 "Common interface for Codecs that convert between characters and bytes.

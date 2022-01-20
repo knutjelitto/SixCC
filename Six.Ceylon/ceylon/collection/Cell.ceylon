@@ -18,8 +18,7 @@ serializable class Cell<Element>(element, rest)
     shared Cell<Element> clone() => Cell(element, rest?.clone());
 }
 
-class CellIterator<Element>(iter) 
-    satisfies Iterator<Element>
+class CellIterator<Element>(iter) satisfies Iterator<Element>
 {
     variable Cell<Element>? iter;
     

@@ -14,9 +14,9 @@ import java.nio.file.attribute
     DosFileAttributeView
 }
 
-"""A view-name, attribute-name pair that identifies a file system attribute, for
-   example `["dos", "hidden"]`, `["posix", "group"]`, `["unix", "uid"]`, or 
-   `["basic", "lastAccessTime"]`.
+"""
+A view-name, attribute-name pair that identifies a file system attribute, for example 
+`["dos", "hidden"]`, `["posix", "group"]`, `["unix", "uid"]`, or `["basic", "lastAccessTime"]`.
 """
 see (`interface BasicFileAttributeView`)
 see (`interface PosixFileAttributeView`)

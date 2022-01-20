@@ -41,7 +41,7 @@ import java.nio.file
     {
         isDirectory,
         isRegularFile,
-        isExisting=\iexists,
+        isExisting=exists,
         isSymbolicLink,
         walkFileTree
     }

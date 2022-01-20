@@ -14,12 +14,6 @@ namespace Six.Gen
 
             try
             {
-#if XDEBUG
-                if (!Debugger.IsAttached)
-                {
-                    Debugger.Launch();
-                }
-#endif
                 using (var generator = new EbnfCsGenerator(additional.Path))
                 {
                     generator.Generate(name, content);
@@ -31,9 +25,7 @@ namespace Six.Gen
                 Error(exception, context, additional);
             }
 
-            var generatedDirectory = Path.GetDirectoryName(additional.Path);
-            var generatedFilename = Path.GetFileNameWithoutExtension(additional.Path) + "Generated.cs";
-            var generatedFile = Path.Combine(generatedDirectory, generatedFilename);
+            var generatedFile = Sibling(additional.Path, "Generated.cs");
 
             File.WriteAllText(generatedFile, generated);
 
@@ -42,6 +34,15 @@ namespace Six.Gen
 #else
             context.AddSource(fileHint, generated);
 #endif
+        }
+
+        private static string Sibling(string path, string append)
+        {
+            var directory = Path.GetDirectoryName(path);
+            var filename = Path.GetFileNameWithoutExtension(path) + append;
+            var filepath = Path.Combine(directory, filename);
+
+            return filepath;
         }
 
         private static readonly DiagnosticDescriptor CommonError = new(

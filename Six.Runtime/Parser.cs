@@ -83,7 +83,7 @@ namespace Six.Runtime
             void Report(string what, int offset, double percent)
             {
                 var elapsed = watch.Elapsed;
-                var rep = source.LineColumnOffset(offset);
+                var rep = source.NameLineColumnOffset(offset);
                 var lines = source.GetLineNoFromIndex(offset);
                 var ms = Math.Round(elapsed.TotalMilliseconds, 1);
                 var cps = Math.Round(offset / elapsed.TotalSeconds, 0);

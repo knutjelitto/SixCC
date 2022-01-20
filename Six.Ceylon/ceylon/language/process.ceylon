@@ -108,19 +108,24 @@ shared native object process {
         }
     }
     
-    Boolean namedArgumentPresentInternal(String name) {
-        if (name.empty) {
+    Boolean namedArgumentPresentInternal(String name)
+    {
+        if (name.empty)
+        {
             return false;
         }
-        for (arg in arguments) {
+        for (arg in arguments)
+        {
             if (arg.startsWith("-``name``=") || 
                 arg.startsWith("--``name``=") || 
-                    arg == "-" + name || 
-                    arg == "--" + name) {
+                arg == "-" + name || 
+                arg == "--" + name)
+            {
                 return true;
             }
         }
-        else {
+        else         
+        {
             return false;
         }
     }
@@ -128,14 +133,17 @@ shared native object process {
 }
 
 shared native("jvm") object process {
-    import java.lang {
-        System {
-            output = \iout,
-            input = \iin,
+    import java.lang 
+    {
+        System
+        {
+            output = out,
+            input = in,
             error = err
         }
     }
-    import java.io {
+    import java.io
+    {
         BufferedReader,
         InputStreamReader,
         IOException

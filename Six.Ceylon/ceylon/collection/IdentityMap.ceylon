@@ -7,20 +7,15 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"An identity map implemented as a hash map stored in an 
- [[Array]] of singly linked lists of [[Entry]]s. The hash 
- code of a key is defined by [[identityHash]]. Note that an 
- `IdentityMap` is not a [[Map]], since it does not obey the
- semantics of a `Map`. In particular, it may contain 
- multiple keys which are equal, as determined by the `==` 
- operator."
+"An identity map implemented as a hash map stored in an  [[Array]] of singly linked lists of
+ [[Entry]]s. The hash code of a key is defined by [[identityHash]]. Note that an `IdentityMap` is
+ not a [[Map]], since it does not obey the semantics of a `Map`. In particular, it may contain
+ multiple keys which are equal, as determined by the `==` operator."
 by ("Gavin King")
-shared serializable class IdentityMap<Key, Item>
-        (hashtable=Hashtable(), entries = {})
-        satisfies {<Key->Item>*} & 
-                  Collection<Key->Item> &
-                  Correspondence<Key,Item>
-        given Key satisfies Identifiable {
+shared serializable class IdentityMap<Key, Item>(hashtable=Hashtable(), entries = {})
+    satisfies {<Key->Item>*} & Collection<Key->Item> & Correspondence<Key,Item>
+    given Key satisfies Identifiable
+{
     
     "The initial entries in the map."
     {<Key->Item>*} entries;
@@ -28,9 +23,7 @@ shared serializable class IdentityMap<Key, Item>
     "Performance-related settings for the backing array."
     Hashtable hashtable;
         
-    variable value store 
-                = entryStore<Key,Item>
-                    (hashtable.initialCapacity);
+    variable value store = entryStore<Key,Item>(hashtable.initialCapacity);
     variable Integer length = 0;
     
     // Write
@@ -422,5 +415,4 @@ shared serializable class IdentityMap<Key, Item>
         }
         return false;
     }
-    
 }
