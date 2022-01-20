@@ -89,18 +89,6 @@ namespace Six.Gen
                         {
                             wl($"Visit((dynamic)node);");
                         });
-#if false
-                    wl();
-                    block("protected virtual void VisitChildren(RNode element)",
-                        () =>
-                        {
-                            block($"foreach (var childElement in element.Children)",
-                                () =>
-                                {
-                                    wl($"Walk(childElement);");
-                                });
-                        });
-#endif
 
                     foreach (var rule in Grammar.Rules)
                     {
@@ -113,7 +101,7 @@ namespace Six.Gen
                         block($"protected virtual void Visit({rule.Class.TypeName} element)",
                             () =>
                             {
-                                wl($"VisitChildren(element);");
+                                wl($"DefaultImplementation(element);");
                             });
                     }
                 });

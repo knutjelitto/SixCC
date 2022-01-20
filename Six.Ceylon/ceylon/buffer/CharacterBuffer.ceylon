@@ -9,28 +9,29 @@
  ********************************************************************************/
 "Represents a buffer of [[Character]]s."
 by ("Stéphane Épardaud", "Alex Szczuczko")
-shared class CharacterBuffer extends Buffer<Character> {
+shared class CharacterBuffer extends Buffer<Character>
+{
     variable Array<Character> buf;
     
-    "Allocates a new [[CharacterBuffer]] filled with the given [[initialData]].
-     The capacity of the new buffer will be the number of bytes given. The
-     returned buffer will be ready to be `read`, with its `position` set to `0`
-     and its limit set to the buffer `capacity`."
-    shared new ({Character*} initialData) extends Buffer<Character>() {
+    "Allocates a new [[CharacterBuffer]] filled with the given [[initialData]]. The capacity of the
+     new buffer will be the number of bytes given. The returned buffer will be ready to be `read`,
+     with its `position` set to `0` and its limit set to the buffer `capacity`."
+    shared new ({Character*} initialData) extends Buffer<Character>()
+    {
         buf = Array(initialData);
     }
     
-    "Creates a [[CharacterBuffer]] initally backed by the given
-     [[initialArray]]. The capacity of the new buffer will be the size of the
-     array. The returned buffer will be ready to be `read`, with its `position`
-     set to `0` and its limit set to the buffer `capacity`."
-    shared new ofArray(Array<Character> initialArray) extends Buffer<Character>() {
+    "Creates a [[CharacterBuffer]] initally backed by the given [[initialArray]]. The capacity of
+     the new buffer will be the size of the array. The returned buffer will be ready to be `read`,
+     with its `position` set to `0` and its limit set to the buffer `capacity`."
+    shared new ofArray(Array<Character> initialArray) extends Buffer<Character>()
+    {
         buf = initialArray;
     }
     
-    "Allocates a new zeroed [[CharacterBuffer]] of the given
-     [[initialCapacity]]."
-    shared new ofSize(Integer initialCapacity) extends Buffer<Character>() {
+    "Allocates a new zeroed [[CharacterBuffer]] of the given [[initialCapacity]]."
+    shared new ofSize(Integer initialCapacity) extends Buffer<Character>()
+    {
         buf = Array.ofSize(initialCapacity, 0.character);
     }
     
@@ -42,19 +43,22 @@ shared class CharacterBuffer extends Buffer<Character> {
     
     variable Integer _limit = buf.size;
     shared actual Integer limit => _limit;
-    assign limit {
+    assign limit
+    {
         "Limit must be non-negative"
         assert (limit >= 0);
         "Limit must be no larger than capacity"
         assert (limit <= capacity);
         // Position must be be no larger than the limit
-        if (position > limit) {
+        if (position > limit)
+        {
             position = limit;
         }
         _limit = limit;
     }
     
-    assign position {
+    assign position
+    {
         "Position must be non-negative"
         assert (position >= 0);
         "Position must be no larger than limit"
@@ -62,34 +66,45 @@ shared class CharacterBuffer extends Buffer<Character> {
         _position = position;
     }
     
-    shared actual Character get() {
-        if (exists char = buf[position]) {
+    shared actual Character get()
+    {
+        if (exists char = buf[position])
+        {
             position++;
             return char;
-        } else {
+        }
+        else
+        {
             throw BufferUnderflowException("No Character at position ``position``");
         }
     }
-    shared actual void put(Character element) {
-        if (position > limit) {
+
+    shared actual void put(Character element)
+    {
+        if (position > limit)
+        {
             throw BufferOverflowException("No space at position ``position``");
         }
         buf[position] = element;
         position++;
     }
     
-    shared actual void clear() {
+    shared actual void clear()
+    {
         position = 0;
         limit = capacity;
     }
     
-    shared actual void flip() {
+    shared actual void flip()
+    {
         limit = position;
         position = 0;
     }
     
-    shared actual void resize(Integer newSize, Boolean growLimit) {
-        resizeBuffer {
+    shared actual void resize(Integer newSize, Boolean growLimit)
+    {
+        resizeBuffer
+        {
             newSize = newSize;
             growLimit = growLimit;
             current = this;
@@ -106,7 +121,6 @@ shared class CharacterBuffer extends Buffer<Character> {
     shared actual Array<Character> array => buf;
     shared actual Object? implementation => buf;
     
-    "The concatenation of the [[Character]]s from [[position]] to [[limit]], by
-     repeatedly calling [[get]]."
+    "The concatenation of the [[Character]]s from [[position]] to [[limit]], by repeatedly calling [[get]]."
     shared actual String string => "".join(this);
 }

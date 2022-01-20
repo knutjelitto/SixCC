@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="19.01.2022 20:57:53" />
+// <generated from="C:\\Dev\\Knut\\SixCC\\SixBot\\Grammars\\T7.six" at="20.01.2022 15:51:25" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -108,22 +108,22 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CS element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

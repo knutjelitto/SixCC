@@ -29,13 +29,8 @@ import ceylon.buffer.base {
     Base32PieceDecoderState { ... }
 }
 
-final class Base32PieceEncoderState
-        of
-    b32EncodeFirst |
-    b32EncodeSecond |
-    b32EncodeThird |
-    b32EncodeFourth |
-    b32EncodeFifth {
+final class Base32PieceEncoderState of b32EncodeFirst | b32EncodeSecond | b32EncodeThird | b32EncodeFourth | b32EncodeFifth
+{
     shared new b32EncodeFirst {}
     shared new b32EncodeSecond {}
     shared new b32EncodeThird {}
@@ -43,16 +38,8 @@ final class Base32PieceEncoderState
     shared new b32EncodeFifth {}
 }
 
-final class Base32PieceDecoderState
-        of
-    b32DecodeFirst |
-    b32DecodeSecond |
-    b32DecodeThird |
-    b32DecodeFourth |
-    b32DecodeFifth |
-    b32DecodeSixth |
-    b32DecodeSeventh |
-    b32DecodeEighth {
+final class Base32PieceDecoderState of b32DecodeFirst | b32DecodeSecond | b32DecodeThird | b32DecodeFourth | b32DecodeFifth | b32DecodeSixth | b32DecodeSeventh | b32DecodeEighth
+{
     shared new b32DecodeFirst {}
     shared new b32DecodeSecond {}
     shared new b32DecodeThird {}

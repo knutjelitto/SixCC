@@ -84,39 +84,39 @@ namespace Six.Gen
                                 if (op.Outer != null)
                                 {
                                     Assert(true);
-                                    attributes.Append($"Creator = node => new {op.Outer.TypeName}(node) ");
+                                    attributes.Append($"Creator = node => new {op.Outer.TypeName}(node)");
                                 }
                                 else
                                 {
-                                    attributes.Append($"Creator = node => new {op.Class.TypeName}(node) ");
+                                    attributes.Append($"Creator = node => new {op.Class.TypeName}(node)");
                                 }
                             }
                             else
                             {
                                 if (op.Outer != null)
                                 {
-                                    attributes.Append($"Builder = nodes => new {op.Outer.TypeName}(nodes) ");
+                                    attributes.Append($"Builder = nodes => new {op.Outer.TypeName}(nodes)");
                                 }
                                 else
                                 {
                                     if (op.WithInner)
                                     {
-                                        attributes.Append($"Builder = nodes => nodes[0] ");
+                                        attributes.Append($"Builder = nodes => nodes[0]");
                                     }
                                     else
                                     {
-                                        attributes.Append($"Builder = nodes => new {op.Class.TypeName}(nodes) ");
+                                        attributes.Append($"Builder = nodes => new {op.Class.TypeName}(nodes)");
                                     }
                                 }
                             }
                         }
                         else if (op.Interface != null)
                         {
-                            attributes.Append($"Builder = nodes => nodes[0] ");
+                            attributes.Append($"Builder = nodes => nodes[0]");
                         }
                         if (attributes.Length > 0)
                         {
-                            wl($") {{ {attributes}}};");
+                            wl($") {{ {attributes} }};");
                         }
                         else
                         {

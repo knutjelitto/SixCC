@@ -14,8 +14,8 @@ import ceylon.io.impl {
 
 import java.lang {
     System {
-        javaIn=\iin,
-        javaOut=\iout,
+        javaIn=in,
+        javaOut=out,
         javaErr=err
     }
 }

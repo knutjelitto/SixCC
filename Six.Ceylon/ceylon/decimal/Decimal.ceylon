@@ -7,31 +7,29 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.whole {
+import ceylon.whole
+{
     Whole
 }
 
-shared class DividedWithRemainder(divided, remainder) {
+shared class DividedWithRemainder(divided, remainder)
+{
     shared Decimal divided;
     shared Decimal remainder;
     shared [Decimal,Decimal] pair => [divided,remainder];
 }
 
-"A decimal floating point number. This class provides support 
- for fixed and arbitrary precision numbers. Values are immutable 
- and represented as `unscaled * 10^(-scale)`. Methods without 
- an explicit [[Rounding]] parameter use [[unlimitedPrecision]] 
- (unless documented otherwise) except for `plus()`, `minus()`, 
- `times()`, `divided()` and `power()` whose implicit rounding 
- is subject to the rounding specified in [[implicitlyRounded]]."
+"A decimal floating point number. This class provides support for fixed and arbitrary precision
+ numbers. Values are immutable and represented as `unscaled * 10^(-scale)`. Methods without an
+ explicit [[Rounding]] parameter use [[unlimitedPrecision]] (unless documented otherwise) except
+ for `plus()`, `minus()`, `times()`, `divided()` and `power()` whose implicit rounding is subject
+ to the rounding specified in [[implicitlyRounded]]."
 see(`function implicitlyRounded`)
 see(`class Rounding`)
 see(`value unlimitedPrecision`)
-shared interface Decimal
-        of DecimalImpl
-        satisfies Number<Decimal> & 
-                  Exponentiable<Decimal,Integer> {
-
+shared interface Decimal of DecimalImpl
+    satisfies Number<Decimal> & Exponentiable<Decimal,Integer>
+{
     "The platform-specific implementation object, if any. This 
      is provided for interoperation with the runtime platform."
     shared formal Object? implementation;

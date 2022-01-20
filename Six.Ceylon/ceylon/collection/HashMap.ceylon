@@ -9,37 +9,38 @@
  ********************************************************************************/
 import ceylon.collection { Stability { ... } }
 
-"A [[MutableMap]] implemented as a hash map stored in an 
- [[Array]] of singly linked lists of 
- [[ceylon.language::Entry]]s. Each entry is assigned an 
- index in the array according to the hash code of its key. 
- The hash code of a key is defined by [[Object.hash]].
- 
- The [[stability]] of a `HashMap` controls its iteration
- order:
- 
- - A [[linked]] map has a stable and meaningful order of 
-   iteration. The entries of the map form a linked list, 
-   where new entries are added to the end of the linked 
-   list. Iteration of the map follows this linked list, from 
-   least recently added elements to most recently added 
-   elements.
- - An [[unlinked]] map has an unstable iteration order that 
-   may change when the map is modified. The order itself is 
-   not meaningful to a client.
- 
- The stability is `linked` by default.
- 
- The management of the backing array is controlled by the
- given [[hashtable]]."
+"""
+A [[MutableMap]] implemented as a hash map stored in an 
+[[Array]] of singly linked lists of 
+[[ceylon.language::Entry]]s. Each entry is assigned an 
+index in the array according to the hash code of its key. 
+The hash code of a key is defined by [[Object.hash]].
+
+The [[stability]] of a `HashMap` controls its iteration
+order:
+
+- A [[linked]] map has a stable and meaningful order of 
+iteration. The entries of the map form a linked list, 
+where new entries are added to the end of the linked 
+list. Iteration of the map follows this linked list, from 
+least recently added elements to most recently added 
+elements.
+- An [[unlinked]] map has an unstable iteration order that 
+may change when the map is modified. The order itself is 
+not meaningful to a client.
+
+The stability is `linked` by default.
+
+The management of the backing array is controlled by the
+given [[hashtable]].
+"""
 
 by ("Stéphane Épardaud")
 shared serializable class HashMap<Key, Item>
         satisfies MutableMap<Key, Item>
         given Key satisfies Object {
     
-    "Determines whether this is a linked hash map with a
-     stable iteration order."
+    "Determines whether this is a linked hash map with a stable iteration order."
     Stability stability;
     
     "The initial entries in the map."
@@ -52,23 +53,18 @@ shared serializable class HashMap<Key, Item>
     
     "Array of linked lists where we store the elements.
      
-     Each element is stored in a linked list from this array
-     at the index of the hash code of the element, modulo 
-     the array size."
+     Each element is stored in a linked list from this array at the index of the hash code of the
+     element, modulo the array size."
     variable Array<CachingCell<Key->Item>?> store;
 
     "Number of elements in this map."
     variable Integer length;
     
-    "Head of the traversal linked list if in `linked` mode. 
-     Storage is done in [[store]], but traversal is done 
-     using an alternative linked list maintained to have a 
-     stable iteration order. Note that the cells used are 
-     the same as in the [[store]], except for storage we use 
-     [[CachingCell.rest]] for traversal, while for the stable 
-     iteration we use the 
-     [[LinkedCell.next]]/[[LinkedCell.previous]] attributes 
-     of the same cell."
+    "Head of the traversal linked list if in `linked` mode. Storage is done in [[store]], but
+     traversal is done using an alternative linked list maintained to have a stable iteration order.
+     Note that the cells used are the same as in the [[store]], except for storage we use 
+     [[CachingCell.rest]] for traversal, while for the stable iteration we use the 
+     [[LinkedCell.next]]/[[LinkedCell.previous]] attributes of the same cell."
     variable LinkedCell<Key->Item>? head = null;
     
     "Tip of the traversal linked list if in `linked` mode."
@@ -84,8 +80,8 @@ shared serializable class HashMap<Key, Item>
         Hashtable hashtable = Hashtable(), 
         "The initial entries in the map, defaulting to no
          initial entries."
-        {<Key->Item>*} entries = {}) {
-        
+        {<Key->Item>*} entries = {})
+    {    
         this.stability = stability;
         this.hashtable = hashtable;
         this.entries = entries;

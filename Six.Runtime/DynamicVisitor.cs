@@ -1,9 +1,4 @@
 ﻿using Six.Runtime.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Runtime
 {
@@ -12,6 +7,12 @@ namespace Six.Runtime
         public virtual void Walk(RNode element)
         {
         }
+
+#if false
+        public virtual void Walk(object element)
+        {
+        }
+#endif
 
         protected virtual void Visit(RStar element)
         {
@@ -34,6 +35,11 @@ namespace Six.Runtime
         }
 
         protected virtual void Visit(REof element)
+        {
+            VisitChildren(element);
+        }
+
+        protected virtual void DefaultImplementation(RNode element)
         {
             VisitChildren(element);
         }

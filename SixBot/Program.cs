@@ -7,7 +7,6 @@ using Six.Runtime.Matchers;
 using Six.Runtime.Types;
 
 using GeneratedParser;
-using Six.Runtime.Tree;
 
 #pragma warning disable CS8321 // Local function is declared but never used
 

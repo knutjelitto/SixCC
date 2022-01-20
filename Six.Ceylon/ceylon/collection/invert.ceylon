@@ -7,26 +7,30 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"Invert a [[Map]], producing a map from items to sequences 
- of keys. Since various keys in the [[original map|map]] may 
- map to the same item, the resulting map contains a sequence 
- of keys for each distinct item."
+"Invert a [[Map]], producing a map from items to sequences of keys. Since various keys in the
+ [[original map|map]] may map to the same item, the resulting map contains a sequence of keys for
+ each distinct item."
 Map<Item,[Key+]> invert<Key,Item>(Map<Key,Item> map) 
-        given Key satisfies Object
-        given Item satisfies Object {
+    given Key satisfies Object
+    given Item satisfies Object
+{
     
     value result = HashMap<Item,ArrayList<Key>>();
-    for (key->item in map) {
-        if (exists sb = result[item]) {
+    for (key->item in map)
+    {
+        if (exists sb = result[item])
+        {
             sb.add(key);
         }
-        else {
+        else
+        {
             value list = ArrayList<Key>();
             list.add(key);
             result.put(item, list);
         }
     }
-    [Key+] mapping(Item item, ArrayList<Key> sa) {
+    [Key+] mapping(Item item, ArrayList<Key> sa)
+    {
         assert(is [Key+] result = sa.sequence());
         return result;
     }

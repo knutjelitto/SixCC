@@ -1,15 +1,37 @@
-﻿using Six.Runtime;
+﻿using Six.Runtime.Matchers;
+using Six.Runtime.Sppf;
 using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-        public void BuildModule(ModuleContainer module)
+        private readonly DeclarationVisitor declarationVisitor = new DeclarationVisitor();
+
+        public CeylonCompiler(bool withIndex = false)
+        {
+            if (withIndex)
+            {
+                ruleIndex = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
+            }
+        }
+
+        public void Report()
+        {
+            if (ruleIndex != null)
+            {
+                using (var writer = $"{parser.__Name}-RulesIndex.txt".Writer())
+{
+                    ruleIndex.Dump(writer);
+                }
+            }
+        }
+
+        public bool BuildModule(ModuleContainer module)
         {
             Console.Write($"{module.Name,-28}");
 
-            var ok = BuildFile(module.ModuleFile);
+            var ok = HandleFile(module.ModuleFile);
 
             Console.WriteLine();
 
@@ -31,12 +53,14 @@ namespace Six.Ceylon
                     }
                 }
             }
+
+            return ok;
         }
 
         public bool BuildPackage(PackageContainer package)
         {
             Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
-            var ok = BuildFile(package.PackageFile);
+            var ok = HandleFile(package.PackageFile);
 
             if (ok)
             {
@@ -48,7 +72,7 @@ namespace Six.Ceylon
 
                 foreach (var file in package.Files)
                 {
-                    ok = ok && BuildFile(file);
+                    ok = ok && HandleFile(file);
 
                     if (!ok)
                     {
@@ -58,6 +82,18 @@ namespace Six.Ceylon
             }
 
             Console.WriteLine();
+
+            return ok;
+        }
+
+        private bool HandleFile(FileJob file)
+        {
+            var ok = BuildFile(file);
+
+            if (ok && file.Tree != null)
+            {
+                declarationVisitor.Walk(file.Tree);
+            }
 
             return ok;
         }

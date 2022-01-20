@@ -1,5 +1,5 @@
 ﻿using Six.Core;
-using Six.Runtime;
+using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 
@@ -8,23 +8,54 @@ namespace Six.Runtime
     public abstract class Compiler<TParser>
         where TParser : Parser, new()
     {
-        private readonly TParser parser = new();
+        protected readonly TParser parser = new();
+        protected RuleIndex? ruleIndex;
+
+        protected Compiler()
+        {
+        }
 
         public bool BuildFile(FileJob job)
         {
-            var ok = Compiler<TParser>.Ok(() => Parse(job));
+            var ok = Ok(() => Parse(job));
 
             if (!ok)
             {
-                Console.WriteLine($"parse: {job.Fullname}");
+                var furthest =
+                    (from matcher in parser.__Core.__Matchers
+                     from ctx in matcher.NonMatches()
+                     where ctx != null
+                     orderby ctx.Start.Offset descending
+                     group ctx by ctx.Start.Offset into ctxgroup
+                     select ctxgroup.AsEnumerable())
+                     .First();
+
+                var terminals =
+                    (from ctx in furthest
+                     where ctx.Matcher is Matchers.String
+                     let terminal = ((Matchers.String)ctx.Matcher).Text
+                     orderby terminal
+                     select terminal)
+                    .Distinct()
+                    .ToList();
+
+                var start = furthest.First().Start;
+                var lco = start.Source.NameLineColumn(start.Offset);
+
+                var expected = "'" + string.Join("' | '", terminals) + "'";
+                var message = $"{lco}: expected {expected}";
+
+                Console.WriteLine();
+                Console.WriteLine($"{message}");
 
                 return false;
             }
 
-            var sppf = SppfBuilder.Build(job.Source, parser);
+            var sppf = SppfBuilder.Build(job.Source, parser, ruleIndex);
 
             if (sppf == null)
             {
+                Console.WriteLine();
                 Console.WriteLine($"sppf: {job.Fullname}");
 
                 return false;

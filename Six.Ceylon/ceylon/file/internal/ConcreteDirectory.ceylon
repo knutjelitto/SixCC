@@ -7,13 +7,16 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.file {
+import ceylon.file
+{
     ...
 }
 
-import java.nio.file {
+import java.nio.file
+{
     JPath=Path,
-    Files {
+    Files
+    {
         movePath=move,
         newDirectoryStream,
         deletePath=delete,
@@ -28,16 +31,15 @@ import java.nio.file {
     NoSuchFileException
 }
 
-interface JavaNIODirectory satisfies Directory {
-
+interface JavaNIODirectory satisfies Directory
+{
     shared actual formal ConcretePath path;
 
     shared actual class TemporaryDirectory(String? prefix)
-            extends super.TemporaryDirectory(prefix)
-            satisfies JavaNIODirectory {
-
-        JavaNIODirectory delegate = ConcreteDirectory(
-                createTempDirectory(outer.path.jpath, prefix));
+        extends super.TemporaryDirectory(prefix)
+        satisfies JavaNIODirectory
+    {
+        JavaNIODirectory delegate = ConcreteDirectory(createTempDirectory(outer.path.jpath, prefix));
 
         name => delegate.name;
 

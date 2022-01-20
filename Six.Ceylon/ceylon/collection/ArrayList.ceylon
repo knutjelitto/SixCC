@@ -10,61 +10,50 @@
 "A [[MutableList]] implemented using a backing [[Array]].
  Also:
 
- - a [[Stack]], where the top of the stack is the _last_
-   element of the list, and
- - a [[Queue]], where the front of the queue is the first
-   element of the list and the back of the queue is the
-   last element of the list.
+ - a [[Stack]], where the top of the stack is the _last_ element of the list, and
+ - a [[Queue]], where the front of the queue is the first element of the list and the back of the
+   queue is the last element of the list.
 
- The size of the backing `Array` is called the _capacity_
- of the `ArrayList`. The capacity of a new instance is
- specified by the given [[initialCapacity]]. The capacity is
- increased when [[size]] exceeds the capacity. The new
- capacity is the product of the current capacity and the
- given [[growthFactor]]."
+ The size of the backing `Array` is called the _capacity_ of the `ArrayList`. The capacity of a new
+ instance is specified by the given [[initialCapacity]]. The capacity is increased when [[size]]
+ exceeds the capacity. The new capacity is the product of the current capacity and the given
+ [[growthFactor]]."
 by ("Gavin King")
 shared serializable class ArrayList<Element>
-        satisfies MutableList<Element> &
-                  SearchableList<Element> &
-                  Stack<Element> & Queue<Element> {
-
+    satisfies MutableList<Element> & SearchableList<Element> & Stack<Element> & Queue<Element>
+{
     "The initial size of the backing array."
     Integer initialCapacity;
 
-    "The factor used to determine the new size of the
-     backing array when a new backing array is allocated."
+    "The factor used to determine the new size of the backing array when a new backing array is allocated."
     Float growthFactor;
 
     "The underlying array."
     variable Array<Element?> array;
 
-    "The number of slots of the backing array that actually
-     hold elements of this list."
+    "The number of slots of the backing array that actually hold elements of this list."
     variable Integer length;
 
-    "Create a new `ArrayList` with the given initial
-     [[elements]]."
+    "Create a new `ArrayList` with the given initial [[elements]]."
     shared new (
         "The initial size of the backing array."
         Integer initialCapacity = 0, 
-        "The factor used to determine the new size of the
-         backing array when a new backing array is allocated."
+        "The factor used to determine the new size of the backing array when a new backing array is allocated."
         Float growthFactor = 1.5, 
         "The initial elements of the list."
-        {Element*} elements = {}) {
+        {Element*} elements = {})
+    {
         this.initialCapacity = initialCapacity;
         this.growthFactor = growthFactor;
         array = Array<Element?>(elements);
         length = array.size;
     }
     
-    "Create a new `ArrayList` with the same initial elements 
-     as the given [[arrayList]]."
+    "Create a new `ArrayList` with the same initial elements as the given [[arrayList]]."
     shared new copy(
         "The `ArrayList` to copy."
         ArrayList<Element> arrayList,
-        "The factor used to determine the new size of the
-         backing array when a new backing array is allocated."
+        "The factor used to determine the new size of the backing array when a new backing array is allocated."
         Float growthFactor = 1.5) {
         this.initialCapacity = arrayList.size;
         this.growthFactor = growthFactor;
@@ -72,20 +61,18 @@ shared serializable class ArrayList<Element>
         length = arrayList.size;
     }
     
-    "Create a new `ArrayList` of the given [[size]], 
-     populating every index with the given [[element]]. If 
-     `size<=0`, the new list will have no elements."
+    "Create a new `ArrayList` of the given [[size]], populating every index with the given
+     [[element]]. If `size<=0`, the new list will have no elements."
     shared new ofSize(
-        "The size of the resulting list. If the size is 
-         non-positive, an empty list will be created."
+        "The size of the resulting list. If the size is  non-positive, an empty list will be created."
         Integer size,
-        "The element value with which to populate the list. 
-         All elements of the resulting list will have the 
-         same value."
+        "The element value with which to populate the list. All elements of the resulting list will
+         have the same value."
         Element element,
-        "The factor used to determine the new size of the
-         backing array when a new backing array is allocated."
-        Float growthFactor = 1.5) {
+        "The factor used to determine the new size of the backing array when a new backing array is
+         allocated."
+        Float growthFactor = 1.5)
+    {
         this.initialCapacity = size<0 then 0 else size;
         this.growthFactor = growthFactor;
         array = Array<Element?>.ofSize(size, element);
@@ -106,26 +93,26 @@ shared serializable class ArrayList<Element>
 
     size => length;
 
-    if (length < initialCapacity) {
+    if (length < initialCapacity)
+    {
         value newArray = store(initialCapacity);
         array.copyTo(newArray, 0, 0, length);
         array = newArray;
     }
 
-    void grow(Integer increment) {
+    void grow(Integer increment)
+    {
         value neededCapacity = length + increment;
         value maxArraySize = runtime.maxArraySize;
         if (neededCapacity > maxArraySize) {
             throw OverflowException(); //TODO: give it a message!
         }
-        if (neededCapacity > array.size) {
-            value grownCapacity 
-                    = (neededCapacity * growthFactor).integer;
-            value newCapacity 
-                    = grownCapacity < neededCapacity || 
-                      grownCapacity > maxArraySize
-                        then neededCapacity 
-                        else grownCapacity;
+        if (neededCapacity > array.size)
+        {
+            value grownCapacity = (neededCapacity * growthFactor).integer;
+            value newCapacity = grownCapacity < neededCapacity || grownCapacity > maxArraySize
+                                then neededCapacity 
+                                else grownCapacity;
             value grown = store(newCapacity);
             array.copyTo(grown);
             array = grown;
@@ -837,12 +824,14 @@ shared serializable class ArrayList<Element>
     
     "Reduce the capacity of the list to its current [[size]],
      by allocating a new backing array."
-    shared void shrink() {
-        if (array.size>length) {
+    shared void shrink()
+    {
+        if (array.size>length)
+        {
             value newArray = store(length);
             array.copyTo(newArray, 0, 0, length);
             array = newArray;
         }
     }
-    
+        
 }

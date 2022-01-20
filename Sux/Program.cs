@@ -2,11 +2,21 @@
 
 var modules = CeylonLoader.GetModules().OrderBy(m => m.Name).ToList();
 
-var compiler = new CeylonCompiler();
-foreach (var module in modules)
+var compiler = new CeylonCompiler(withIndex: false);
+
+try
 {
-    compiler.BuildModule(module);
+    foreach (var module in modules)
+    {
+        if (!compiler.BuildModule(module))
+        {
+            break;
+        }
+    }
 }
+catch { }
+
+compiler.Report();
 
 Wait();
 

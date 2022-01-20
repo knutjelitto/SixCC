@@ -29,7 +29,7 @@ module-specifier
     ;
 
 repository
-    | any-name
+    | identifier
     ;
 
 module
@@ -76,7 +76,7 @@ import-module
     ;
 
 import-namespace
-     | import-namespace-name ':'
+     | identifier ':'
      ;
 
 import-declaration
@@ -100,38 +100,24 @@ import-named
     | import-name import-name-specifier? import-elements?
     ;
 
+import-name
+    | identifier
+    ;
+
 import-name-specifier
-    | '=' import-name
+    | '=' identifier
     ;
 
 import-wildcard
     | '...'
     ;
 
-import-name
-    | any-name
+package-name
+    | identifier
     ;
 
 package-path
     | package-name ( '.' package-name )*
-    ;
-
-any-name
-    | lower-identifier
-    | upper-identifier
-    ;
-
-any-nameX
-    : identifier
-    ;
-
-import-namespace-name
-    | lower-identifier
-    | upper-identifier
-    ;
-
-package-name
-    | any-name
     ;
 
 annotation-name
@@ -378,31 +364,31 @@ declaration-or-statement
     ;
 
 declaration
-    | constructor
-    | enumerated-object
+    | constructor-declaration
     | alias-declaration
+    | class-declaration
+    | interface-declaration
     | object-declaration
+    | enumerated-object
     | setter-declaration
     | typed-method-declaration
     | inferred-method-declaration
     | typed-attribute-declaration
     | inferred-attribute-declaration
-    | class-declaration
-    | interface-declaration
     ;
 
-constructor
-    | annotations 'new' member-name? parameters? delegated-constructor? block
+constructor-declaration
+    | annotations 'new' member-name? parameters delegated-constructor? block
+    ;
+
+alias-declaration
+    | annotations 'alias' type-name type-parameters? type-constraints? optional-type-specifier
     ;
 
 enumerated-object
     | annotations 'new' member-name delegated-constructor? block
     ;
     
-alias-declaration
-    | annotations 'alias' type-name type-parameters? type-constraints? optional-type-specifier
-    ;
-
 object-declaration
     | annotations 'object' member-name extended-type? satisfied-types? class-block
     ;
@@ -803,7 +789,7 @@ assignment
     ;
 
 assignment-operator
-    | < '=' | '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '~=' | '&&=' | '||=' >
+    : '=' | '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '~=' | '&&=' | '||='
     ;
 
 then-else-expression
@@ -1363,14 +1349,14 @@ boolean-condition
     ;
 
 control-statement
-    | if-else
+    | if-else-statement
+    | for-else-statement
     | switch-case-else 
     | while-loop
-    | for-else
     | try-catch-finally
     ;
 
-if-else
+if-else-statement
     | if-block else-block?
     ;
 
@@ -1383,7 +1369,7 @@ else-block
     ;
 
 else-block-next
-    | if-else
+    | if-else-statement
     | block
     ;
 
@@ -1436,7 +1422,7 @@ value-case
     | intersection-expression 
     ;
 
-for-else
+for-else-statement
     | for-block fail-block?
     ;
 
@@ -1624,7 +1610,7 @@ reference-path-element-list
     ;
 
 reference-path-element
-    | any-name
+    | identifier
     ;
 
 // keywords

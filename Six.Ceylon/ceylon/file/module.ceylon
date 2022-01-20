@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"API for accessing hierarchical file systems. Clients use [[Path]]s to obtain
- [[Resource]]s representing files or directories.
+"API for accessing hierarchical file systems. Clients use [[Path]]s to obtain [[Resource]]s
+ representing files or directories.
  
  `Path` contains many useful operations for manipulating paths:
  
@@ -17,15 +17,14 @@
      value sibling = child.siblingPath(\"goodbye.txt\");
      value parent = path.parent;
  
- The attribute [[resource|Path.resource]] of `Path` is used to obtain a `Resource`.
- It is usually necessary to narrow a `Resource` to one of the following enumerated
- subtypes before performing operations on it:
+ The attribute [[resource|Path.resource]] of `Path` is used to obtain a `Resource`. It is usually
+ necessary to narrow a `Resource` to one of the following enumerated subtypes before performing
+ operations on it:
  
  - a [[File]] contains data,
  - a [[Directory]] contains other resources, 
  - a [[Link]] is a symbolic link to another resource, or 
- - a [[Nil]] is an unoccupied location in the filesystem where a resource may safely
-   be created.
+ - a [[Nil]] is an unoccupied location in the filesystem where a resource may safely be created.
  
  To create a file named `hello.txt` in the home directory, we could do the following:
  
