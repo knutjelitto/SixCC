@@ -27,8 +27,7 @@ namespace Six.Core
                 ("Lt", new[] {UnicodeCategory.TitlecaseLetter}),
                 ("Lm", new[] {UnicodeCategory.ModifierLetter}),
                 ("Lo", new[] {UnicodeCategory.OtherLetter}),
-                ("L",
-                    new[]
+                ("L",  new[]
                     {
                         UnicodeCategory.UppercaseLetter, UnicodeCategory.LowercaseLetter, UnicodeCategory.TitlecaseLetter,
                         UnicodeCategory.ModifierLetter, UnicodeCategory.OtherLetter
@@ -36,7 +35,10 @@ namespace Six.Core
                 ("Mn", new[] {UnicodeCategory.NonSpacingMark}),
                 ("Mc", new[] {UnicodeCategory.SpacingCombiningMark}),
                 ("Me", new[] {UnicodeCategory.EnclosingMark}),
-                ("M", new[] {UnicodeCategory.NonSpacingMark, UnicodeCategory.SpacingCombiningMark, UnicodeCategory.EnclosingMark}),
+                ("M",  new[]
+                    {
+                        UnicodeCategory.NonSpacingMark, UnicodeCategory.SpacingCombiningMark, UnicodeCategory.EnclosingMark
+                    }),
             };
 
             public Integers? this[string category]

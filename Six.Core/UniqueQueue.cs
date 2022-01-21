@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Six.Core
 {
     public class UniqueQueue<T> where T : notnull

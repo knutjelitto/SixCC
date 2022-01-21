@@ -30,8 +30,8 @@ namespace GeneratedParser
                 /*   3 PlainRuleOp      */ __Matchers[3] = _S = new PlainRule(this, 3, "S") { Builder = nodes => nodes[0] };
                 /*   4 EofOp            */ __Matchers[4] = new Eof(this, 4, "<eof>") { Creator = node => new REof(node) };
                 /*   5 SeqOp            */ __Matchers[5] = new Seq(this, 5, "_(>S,<eof>)") { Builder = nodes => new CXStart(nodes) };
-                /*   6 StringOp         */ __Matchers[6] = new String(this, 6, "'d'", "d") { Creator = node => new RString(node) };
-                /*   7 StarOp           */ __Matchers[7] = new Star(this, 7, "*('d')") { Builder = nodes => new RStar<RString>(nodes) };
+                /*   6 StringOp         */ __Matchers[6] = new String(this, 6, "'d'", "d") { Creator = node => new RLiteral(node) };
+                /*   7 StarOp           */ __Matchers[7] = new Star(this, 7, "*('d')") { Builder = nodes => new RStar<RLiteral>(nodes) };
                 /*   8 SeqOp            */ __Matchers[8] = new Seq(this, 8, "_(*('d'),*('d'))") { Builder = nodes => new CS(nodes) };
 
                 /*   0 StartRuleOp      */ __Start.Set(__Matchers[5]);
@@ -81,12 +81,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -95,8 +95,8 @@ namespace GeneratedParser
         {
             public CS(params RNode[] children) : base(children) {}
 
-            public RStar<RString> StringStar => Get<RStar<RString>>(0);
-            public RStar<RString> String2Star => Get<RStar<RString>>(1);
+            public RStar<RLiteral> StringStar => Get<RStar<RLiteral>>(0);
+            public RStar<RLiteral> String2Star => Get<RStar<RLiteral>>(1);
         }
 
         public partial class DynamicT7Visitor : DynamicVisitor

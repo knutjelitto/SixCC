@@ -1,5 +1,7 @@
 ﻿using Six.Gen.Ebnf;
 
+#pragma warning disable IDE0057 // Use range operator
+
 namespace Six.Gen
 {
     internal static class CsWriter

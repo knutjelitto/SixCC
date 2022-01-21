@@ -131,8 +131,10 @@
 
         private List<int> FindLines()
         {
-            var lines = new List<int>(10000);
-            lines.Add(0);
+            var lines = new List<int>(10000)
+            {
+                0
+            };
             var c2 = '\0';
             for (var i = 0; i != Content.Length; i++)
             {

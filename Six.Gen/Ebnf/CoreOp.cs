@@ -44,14 +44,14 @@ namespace Six.Gen.Ebnf
             {
                 if (Class != null)
                 {
-                    if (Class.TypeName == "RString" || Class.TypeName == "REof")
+                    if (Class.TypeName == "RToken" || Class.TypeName == "RLiteral" || Class.TypeName == "REof")
                     {
                         return true;
                     }
 #if true
                     if (Class.Base != null)
                     {
-                        if (Class.Base.TypeName == "RString" || Class.Base.TypeName == "REof")
+                        if (Class.Base.TypeName == "RToken" || Class.Base.TypeName == "RLiteral" || Class.Base.TypeName == "REof")
                         {
                             return true;
                         }

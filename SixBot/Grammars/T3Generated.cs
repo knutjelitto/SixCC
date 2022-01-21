@@ -33,7 +33,7 @@ namespace GeneratedParser
                 /*   6 EofOp            */ __Matchers[6] = new Eof(this, 6, "<eof>") { Creator = node => new REof(node) };
                 /*   7 SeqOp            */ __Matchers[7] = new Seq(this, 7, "_(>C,<eof>)") { Builder = nodes => new CXStart(nodes) };
                 /*   8 AltOp            */ __Matchers[8] = new Alt(this, 8, "alt(>add|>id)") { Builder = nodes => nodes[0] };
-                /*   9 StringOp         */ __Matchers[9] = new String(this, 9, "'+'", "+") { Creator = node => new RString(node) };
+                /*   9 StringOp         */ __Matchers[9] = new String(this, 9, "'+'", "+") { Creator = node => new RLiteral(node) };
                 /*  10 SeqOp            */ __Matchers[10] = new Seq(this, 10, "_(>C,'+',>C)") { Builder = nodes => new CAdd(nodes) };
 
                 /*   0 StartRuleOp      */ __Start.Set(__Matchers[7]);
@@ -99,12 +99,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -114,11 +114,11 @@ namespace GeneratedParser
             public CAdd(params RNode[] children) : base(children) {}
 
             public IC C => Get<IC>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral String => Get<RLiteral>(1);
             public IC C2 => Get<IC>(2);
         }
 
-        public partial class CId : RString, IId
+        public partial class CId : RLiteral, IId
         {
             public CId(params Node[] children) : base(children) {}
         }

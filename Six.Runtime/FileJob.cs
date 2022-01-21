@@ -8,15 +8,16 @@ namespace Six.Runtime
         private string? content;
         private Source? source;
 
-        public FileJob(string fullname, string name, Func<string> contentLoader)
+        public FileJob(string longPath, string shortPath, Func<string> contentLoader)
         {
-            Fullname = fullname;
-            Name = name;
+            LongPath = longPath;
+            ShortPath = shortPath;
             ContentLoader = contentLoader;
         }
 
-        public string Fullname { get; }
-        public string Name { get; }
+        public string LongPath { get; }
+        public string ShortPath { get; }
+        public string Name => Path.GetFileName(ShortPath);
         public Func<string> ContentLoader { get; }
         public string BaseName => Path.GetFileNameWithoutExtension(Name);
         public TimeSpan ParseTime { get; set; }

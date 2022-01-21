@@ -1,6 +1,8 @@
 ﻿using Six.Gen.Ebnf;
 using Six.Input;
 
+#pragma warning disable IDE0057 // Use range operator
+
 namespace Six.Gen
 {
     public class EbnfCsGenerator : CsGenerator
@@ -41,8 +43,6 @@ namespace Six.Gen
             wl($"// <generated from={OriginalPath.CsString()} at={DateTime.Now.ToString().CsString()} />");
             wl();
 
-            wl("using System.Collections.Generic;");
-            wl("using Six.Runtime;");
             wl("using Six.Runtime.Dfa;");
             wl("using Six.Runtime.Matchers;");
             wl("using Six.Runtime.Sppf;");
@@ -74,7 +74,7 @@ namespace Six.Gen
                     void CreateMatcher(CoreOp op, string? className = null, string? extra = null)
                     { 
                         var arguments = extra == null ? "" : $", {extra}";
-                        className = className ?? ClassName(op);
+                        className ??= ClassName(op);
                         w($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
                         var attributes = new StringBuilder();
                         if (op.Class != null)

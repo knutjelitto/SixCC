@@ -142,7 +142,7 @@ namespace Six.Gen
         {
             if (rule.Class != null)
             {
-                if (rule.Class.Base != null && (rule.Class.Base.TypeName == "RString" || rule.Class.Base.TypeName == "REof"))
+                if (rule.Class.Base != null && (rule.Class.Base.TypeName == "RToken" || rule.Class.Base.TypeName == "RLiteral" || rule.Class.Base.TypeName == "REof"))
                 {
                     wl($"public {rule.Class.TypeName}(params Node[] children) : base(children) {{}}");
                 }

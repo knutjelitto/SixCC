@@ -16,7 +16,7 @@ namespace Six.Ceylon
         {
             public override string ToString()
             {
-                return Text(this);
+                return Text;
             }
         }
 
@@ -24,7 +24,7 @@ namespace Six.Ceylon
         {
             public override string ToString()
             {
-                return Text(this);
+                return Text;
             }
         }
 
@@ -32,11 +32,11 @@ namespace Six.Ceylon
         {
             public override string ToString()
             {
-                return Text(this);
+                return Text;
             }
         }
 
-        private static string Text(RString str)
+        private static string Text(RLiteral str)
         {
             var text = str.GetText();
             if (text.StartsWith("'") && text.EndsWith("'"))

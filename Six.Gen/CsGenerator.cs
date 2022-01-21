@@ -1,4 +1,6 @@
-﻿namespace Six.Gen
+﻿#pragma warning disable IDE1006 // Naming Styles
+
+namespace Six.Gen
 {
     public class CsGenerator : IDisposable
     {
@@ -93,6 +95,7 @@
             if (owns)
             {
                 writer.Dispose();
+                GC.SuppressFinalize(this);
             }
         }
 

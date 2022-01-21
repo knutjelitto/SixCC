@@ -2,72 +2,84 @@
 {
     public class CeylonLoader : Loader
     {
+        private const string packageFile = "package.ceylon";
+        private const string moduleFile = "module.ceylon";
+
         public static IEnumerable<ModuleContainer> GetModules()
         {
-            var files = LoadAll(typeof(CeylonLoader)).ToList();
+            var modules = LoadFiles(s => Path.GetFileName(s) == moduleFile).ToList();
 
-            foreach (var file in files.Where(f => IsModule(f)))
+            foreach (var moduleFile in modules)
             {
-                yield return GetModule(file, files);
+                yield return GetModule(moduleFile);
             }
         }
 
-        public static ModuleContainer GetModule(FileJob moduleFile, List<FileJob> allFiles)
+
+        public static ModuleContainer GetModule(FileJob moduleFile)
         {
             var module = new ModuleContainer(moduleFile);
 
-            var packages = GetPackages(module, allFiles);
-            module.Packages.AddRange(packages.OrderBy(p => p.Name));
+            FindPackages(module);
 
             return module;
         }
 
-        public static IEnumerable<PackageContainer> GetPackages(ModuleContainer module, List<FileJob> allFiles)
+        public static IEnumerable<FileJob> LoadFiles(Func<string, bool>? filter = null)
         {
-            var modDir = Path.GetDirectoryName(module.ModuleFile.Fullname)!;
+            filter ??= n => true;
 
-            foreach (var file in allFiles)
+            var current = Environment.CurrentDirectory;
+            var ceylon = Path.Combine(current, "ceylon");
+            foreach (var fullPath in Directory.EnumerateFiles(ceylon, "*", SearchOption.AllDirectories).Where(n => filter(n)))
             {
-                if (Path.GetDirectoryName(file.Fullname)!.StartsWith(modDir))
-                {
-                    if (IsPackage(file))
-                    {
-                        yield return GetPackage(file, allFiles);
-                    }
-                }
+                var shortPath = fullPath[(current.Length + 1)..].Replace("\\", "/");
+
+                yield return MakeFile(fullPath.Replace("\\", "/"), shortPath);
             }
         }
 
-        public static PackageContainer GetPackage(FileJob packageFile, List<FileJob> allFiles)
+        private static FileJob MakeFile(string fullPath, string shortPath)
         {
-            var package = new PackageContainer(packageFile);
-
-            var files = GetFiles(package, allFiles).ToList();
-            package.Files.AddRange(files);
-
-            return package;
+            return new FileJob(fullPath, shortPath, () => File.ReadAllText(fullPath));
         }
 
-        public static bool IsModule(FileJob file)
-        {
-            return string.Compare(file.Name, "module.ceylon", true) == 0;
-        }
 
-        public static bool IsPackage(FileJob file)
+        private static void FindPackages(ModuleContainer module)
         {
-            return string.Compare(file.Name, "package.ceylon", true) == 0;
-        }
+            var root = Path.GetDirectoryName(module.ModuleFile.LongPath)!;
+            var prefixLength = module.ModuleFile.LongPath.Length - module.ModuleFile.ShortPath.Length;
 
-        public static IEnumerable<FileJob> GetFiles(PackageContainer package, List<FileJob> allFiles)
-        {
-            var packageDir = Path.GetDirectoryName(package.PackageFile.Fullname)!;
-
-            foreach (var file in allFiles)
+            foreach (var dir in Enumerable.Repeat(root, 1).Concat(Directory.EnumerateDirectories(root, "*", SearchOption.AllDirectories)))
             {
-                if (Path.GetDirectoryName(file.Fullname) == packageDir && !IsPackage(file))
+                var fullPath = Path.Combine(dir, packageFile).Replace("\\", "/");
+                var shortPath = dir[prefixLength..].Replace("\\", "/");
+                var packageName = shortPath.Replace("/", ".");
+
+                PackageContainer package;
+
+                if (File.Exists(fullPath))
                 {
-                    yield return file;
+                    package = new PackageContainer(packageName, MakeFile(fullPath, shortPath));
                 }
+                else
+                {
+                    package = new PackageContainer(packageName);
+                }
+
+                foreach (var file in Directory.EnumerateFiles(dir, "*.ceylon", SearchOption.TopDirectoryOnly))
+                {
+                    if (Path.GetFileName(file) == packageFile || Path.GetFileName(file) == moduleFile)
+                    {
+                        continue;
+                    }
+                    fullPath = file.Replace("\\", "/");
+                    shortPath = file[prefixLength..].Replace("\\", "/");
+
+                    package.Files.Add(MakeFile(fullPath, shortPath));
+                }
+
+                module.Packages.Add(package);
             }
         }
     }

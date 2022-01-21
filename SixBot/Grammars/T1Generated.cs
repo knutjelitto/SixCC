@@ -35,9 +35,9 @@ namespace GeneratedParser
                 /*   8 EofOp            */ __Matchers[8] = new Eof(this, 8, "<eof>") { Creator = node => new REof(node) };
                 /*   9 SeqOp            */ __Matchers[9] = new Seq(this, 9, "_(>S,<eof>)") { Builder = nodes => new CXStart(nodes) };
                 /*  10 AltOp            */ __Matchers[10] = new Alt(this, 10, "alt(>Abac|>Bbaa|>CbAc)") { Builder = nodes => nodes[0] };
-                /*  11 StringOp         */ __Matchers[11] = new String(this, 11, "'b'", "b") { Creator = node => new RString(node) };
+                /*  11 StringOp         */ __Matchers[11] = new String(this, 11, "'b'", "b") { Creator = node => new RLiteral(node) };
                 /*  12 StringOp         */ __Matchers[12] = new String(this, 12, "'a'", "a") { Creator = node => new CA(node) };
-                /*  13 StringOp         */ __Matchers[13] = new String(this, 13, "'c'", "c") { Creator = node => new RString(node) };
+                /*  13 StringOp         */ __Matchers[13] = new String(this, 13, "'c'", "c") { Creator = node => new RLiteral(node) };
                 /*  14 SeqOp            */ __Matchers[14] = new Seq(this, 14, "_('b','a','c')") { Builder = nodes => new CAbac(nodes) };
                 /*  15 SeqOp            */ __Matchers[15] = new Seq(this, 15, "_('b','a','a')") { Builder = nodes => new CBbaa(nodes) };
                 /*  16 SeqOp            */ __Matchers[16] = new Seq(this, 16, "_('b',>A,'c')") { Builder = nodes => new CCbac(nodes) };
@@ -103,12 +103,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -117,30 +117,30 @@ namespace GeneratedParser
         {
             public CAbac(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
-            public RString String3 => Get<RString>(2);
+            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral String2 => Get<RLiteral>(1);
+            public RLiteral String3 => Get<RLiteral>(2);
         }
 
         public partial class CBbaa : RSequence, IBbaa
         {
             public CBbaa(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
-            public RString String3 => Get<RString>(2);
+            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral String2 => Get<RLiteral>(1);
+            public RLiteral String3 => Get<RLiteral>(2);
         }
 
         public partial class CCbac : RSequence, ICbac
         {
             public CCbac(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral String => Get<RLiteral>(0);
             public CA A => Get<CA>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral String2 => Get<RLiteral>(2);
         }
 
-        public partial class CA : RString, IA
+        public partial class CA : RLiteral, IA
         {
             public CA(params Node[] children) : base(children) {}
         }

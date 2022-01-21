@@ -46,19 +46,19 @@ namespace GeneratedParser
                 /*  19 StringOp         */ __Matchers[19] = new String(this, 19, "'true'", "true") { Creator = node => new CTrue(node) };
                 /*  20 StringOp         */ __Matchers[20] = new String(this, 20, "'false'", "false") { Creator = node => new CFalse(node) };
                 /*  21 StringOp         */ __Matchers[21] = new String(this, 21, "'null'", "null") { Creator = node => new CNull(node) };
-                /*  22 StringOp         */ __Matchers[22] = new String(this, 22, "'{'", "{") { Creator = node => new RString(node) };
+                /*  22 StringOp         */ __Matchers[22] = new String(this, 22, "'{'", "{") { Creator = node => new RLiteral(node) };
                 /*  23 OptionalOp       */ __Matchers[23] = new Optional(this, 23, "?(>members)") { Builder = nodes => new ROptional<CMembers>(nodes) };
-                /*  24 StringOp         */ __Matchers[24] = new String(this, 24, "'}'", "}") { Creator = node => new RString(node) };
+                /*  24 StringOp         */ __Matchers[24] = new String(this, 24, "'}'", "}") { Creator = node => new RLiteral(node) };
                 /*  25 SeqOp            */ __Matchers[25] = new Seq(this, 25, "_('{',?(>members),'}')") { Builder = nodes => new CObject(nodes) };
-                /*  26 StringOp         */ __Matchers[26] = new String(this, 26, "','", ",") { Creator = node => new RString(node) };
+                /*  26 StringOp         */ __Matchers[26] = new String(this, 26, "','", ",") { Creator = node => new RLiteral(node) };
                 /*  27 SeqOp            */ __Matchers[27] = new Seq(this, 27, "_(',',>member)") { Builder = nodes => new RSequence(nodes) };
                 /*  28 StarOp           */ __Matchers[28] = new Star(this, 28, "*(_(',',>member))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /*  29 SeqOp            */ __Matchers[29] = new Seq(this, 29, "_(>member,*(_(',',>member)))") { Builder = nodes => new CMembers(nodes) };
-                /*  30 StringOp         */ __Matchers[30] = new String(this, 30, "':'", ":") { Creator = node => new RString(node) };
+                /*  30 StringOp         */ __Matchers[30] = new String(this, 30, "':'", ":") { Creator = node => new RLiteral(node) };
                 /*  31 SeqOp            */ __Matchers[31] = new Seq(this, 31, "_(>string,':',>element)") { Builder = nodes => new CMember(nodes) };
-                /*  32 StringOp         */ __Matchers[32] = new String(this, 32, "'['", "[") { Creator = node => new RString(node) };
+                /*  32 StringOp         */ __Matchers[32] = new String(this, 32, "'['", "[") { Creator = node => new RLiteral(node) };
                 /*  33 OptionalOp       */ __Matchers[33] = new Optional(this, 33, "?(>elements)") { Builder = nodes => new ROptional<CElements>(nodes) };
-                /*  34 StringOp         */ __Matchers[34] = new String(this, 34, "']'", "]") { Creator = node => new RString(node) };
+                /*  34 StringOp         */ __Matchers[34] = new String(this, 34, "']'", "]") { Creator = node => new RLiteral(node) };
                 /*  35 SeqOp            */ __Matchers[35] = new Seq(this, 35, "_('[',?(>elements),']')") { Builder = nodes => new CArray(nodes) };
                 /*  36 SeqOp            */ __Matchers[36] = new Seq(this, 36, "_(',',>element)") { Builder = nodes => new RSequence(nodes) };
                 /*  37 StarOp           */ __Matchers[37] = new Star(this, 37, "*(_(',',>element))") { Builder = nodes => new RStar<RSequence>(nodes) };
@@ -245,27 +245,27 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CTrue : RString, ITrue
+        public partial class CTrue : RLiteral, ITrue
         {
             public CTrue(params Node[] children) : base(children) {}
         }
 
-        public partial class CFalse : RString, IFalse
+        public partial class CFalse : RLiteral, IFalse
         {
             public CFalse(params Node[] children) : base(children) {}
         }
 
-        public partial class CNull : RString, INull
+        public partial class CNull : RLiteral, INull
         {
             public CNull(params Node[] children) : base(children) {}
         }
@@ -274,9 +274,9 @@ namespace GeneratedParser
         {
             public CObject(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral String => Get<RLiteral>(0);
             public ROptional<CMembers> MembersOptional => Get<ROptional<CMembers>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral String2 => Get<RLiteral>(2);
         }
 
         public partial class CMembers : RLoop<CMember>, IMembers
@@ -289,7 +289,7 @@ namespace GeneratedParser
             public CMember(params RNode[] children) : base(children) {}
 
             public CString String => Get<CString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral String2 => Get<RLiteral>(1);
             public IElement Element => Get<IElement>(2);
         }
 
@@ -297,9 +297,9 @@ namespace GeneratedParser
         {
             public CArray(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral String => Get<RLiteral>(0);
             public ROptional<CElements> ElementsOptional => Get<ROptional<CElements>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral String2 => Get<RLiteral>(2);
         }
 
         public partial class CElements : RLoop<IElement>, IElements
@@ -307,12 +307,12 @@ namespace GeneratedParser
             public CElements(params RNode[] children) : base(children) {}
         }
 
-        public partial class CString : RString, IString
+        public partial class CString : RLiteral, IString
         {
             public CString(params Node[] children) : base(children) {}
         }
 
-        public partial class CNumber : RString, INumber
+        public partial class CNumber : RLiteral, INumber
         {
             public CNumber(params Node[] children) : base(children) {}
         }

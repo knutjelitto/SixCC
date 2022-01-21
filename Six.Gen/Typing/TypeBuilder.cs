@@ -12,8 +12,8 @@ namespace Six.Gen.Typing
         private const string StarBaseClass = "Star";
         private const string PlusBaseClass = "Plus";
         private const string OptionalBaseClass = "Optional";
-        private const string StringBaseClass = "String";
-        private const string TokenBaseClass = "String";
+        private const string StringBaseClass = "Literal";
+        private const string TokenBaseClass = "Token";
         private const string EofBaseClass = "Eof";
         private const string NotBaseClass = "Not";
 

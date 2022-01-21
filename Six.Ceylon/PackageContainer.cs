@@ -2,14 +2,14 @@
 {
     public class PackageContainer
     {
-        public PackageContainer(FileJob packageFile)
+        public PackageContainer(string name, FileJob? packageFile = null)
         {
+            Name = name;
             PackageFile = packageFile;
         }
 
-        public FileJob PackageFile { get; }
+        public string Name { get; }
+        public FileJob? PackageFile { get; }
         public List<FileJob> Files { get; } = new List<FileJob>();
-
-        public string Name => Path.GetDirectoryName(PackageFile.Fullname)!.Replace("\\", ".");
     }
 }

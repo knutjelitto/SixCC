@@ -23,7 +23,7 @@ namespace Six.Runtime
             WalkChilden(element);
         }
 
-        protected virtual void Visit(RString element)
+        protected virtual void Visit(RLiteral element)
         {
             WalkChilden(element);
         }

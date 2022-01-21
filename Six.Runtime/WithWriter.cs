@@ -1,7 +1,5 @@
 ﻿using Six.Core;
 
-#pragma warning disable IDE1006 // Naming Styles
-
 namespace Six.Runtime
 {
     public class WithWriter : IWithWriter

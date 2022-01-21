@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Ceylon.six" at="21.01.2022 08:19:00" />
+// <generated from="C:\\Dev\\Knut\\SixCC\\SixBot\\Grammars\\Ceylon.six" at="21.01.2022 12:47:55" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -400,31 +398,31 @@ namespace GeneratedParser
                 /* 373 AltOp            */ __Matchers[373] = new Alt(this, 373, "alt(>module-descriptor|>package-descriptor|>unit-elements)") { Builder = nodes => nodes[0] };
                 /* 374 StarOp           */ __Matchers[374] = new Star(this, 374, "*(>unit-element)") { Builder = nodes => new CUnitElements(nodes) };
                 /* 375 AltOp            */ __Matchers[375] = new Alt(this, 375, "alt(>import-declaration|>declaration)") { Builder = nodes => nodes[0] };
-                /* 376 StringOp         */ __Matchers[376] = new Keyword(this, 376, "'module'", "module") { Creator = node => new RString(node) };
+                /* 376 StringOp         */ __Matchers[376] = new Keyword(this, 376, "'module'", "module") { Creator = node => new RLiteral(node) };
                 /* 377 OptionalOp       */ __Matchers[377] = new Optional(this, 377, "?(>module-specifier)") { Builder = nodes => new ROptional<CModuleSpecifier>(nodes) };
                 /* 378 OptionalOp       */ __Matchers[378] = new Optional(this, 378, "?(>version)") { Builder = nodes => new ROptional<IVersion>(nodes) };
                 /* 379 SeqOp            */ __Matchers[379] = new Seq(this, 379, "_(>annotations,'module',>module-name,?(>module-specifier),?(>version),>module-body)") { Builder = nodes => new CModuleDescriptor(nodes) };
-                /* 380 StringOp         */ __Matchers[380] = new String(this, 380, "':'", ":") { Creator = node => new RString(node) };
+                /* 380 StringOp         */ __Matchers[380] = new String(this, 380, "':'", ":") { Creator = node => new RLiteral(node) };
                 /* 381 OptionalOp       */ __Matchers[381] = new Optional(this, 381, "?(>artifact-and-classifier)") { Builder = nodes => new ROptional<CArtifactAndClassifier>(nodes) };
                 /* 382 SeqOp            */ __Matchers[382] = new Seq(this, 382, "_(>repository,':',>module,?(>artifact-and-classifier))") { Builder = nodes => new CModuleSpecifier(nodes) };
                 /* 383 AltOp            */ __Matchers[383] = new Alt(this, 383, "alt(>literal-string|>module-name)") { Builder = nodes => nodes[0] };
                 /* 384 OptionalOp       */ __Matchers[384] = new Optional(this, 384, "?(>classifier)") { Builder = nodes => new ROptional<CClassifier>(nodes) };
                 /* 385 SeqOp            */ __Matchers[385] = new Seq(this, 385, "_(>artifact,?(>classifier))") { Builder = nodes => new CArtifactAndClassifier(nodes) };
                 /* 386 SeqOp            */ __Matchers[386] = new Seq(this, 386, "_(':',>literal-string)") { Builder = nodes => new CClassifier(nodes) };
-                /* 387 StringOp         */ __Matchers[387] = new String(this, 387, "'{'", "{") { Creator = node => new RString(node) };
+                /* 387 StringOp         */ __Matchers[387] = new String(this, 387, "'{'", "{") { Creator = node => new RLiteral(node) };
                 /* 388 StarOp           */ __Matchers[388] = new Star(this, 388, "*(>module-body-element)") { Builder = nodes => new RStar<IModuleBodyElement>(nodes) };
-                /* 389 StringOp         */ __Matchers[389] = new String(this, 389, "'}'", "}") { Creator = node => new RString(node) };
+                /* 389 StringOp         */ __Matchers[389] = new String(this, 389, "'}'", "}") { Creator = node => new RLiteral(node) };
                 /* 390 SeqOp            */ __Matchers[390] = new Seq(this, 390, "_('{',*(>module-body-element),'}')") { Builder = nodes => new CModuleBody(nodes) };
                 /* 391 AltOp            */ __Matchers[391] = new Alt(this, 391, "alt(>inferred-attribute-declaration|>import-module)") { Builder = nodes => nodes[0] };
-                /* 392 StringOp         */ __Matchers[392] = new Keyword(this, 392, "'package'", "package") { Creator = node => new RString(node) };
-                /* 393 StringOp         */ __Matchers[393] = new String(this, 393, "';'", ";") { Creator = node => new RString(node) };
+                /* 392 StringOp         */ __Matchers[392] = new Keyword(this, 392, "'package'", "package") { Creator = node => new RLiteral(node) };
+                /* 393 StringOp         */ __Matchers[393] = new String(this, 393, "';'", ";") { Creator = node => new RLiteral(node) };
                 /* 394 SeqOp            */ __Matchers[394] = new Seq(this, 394, "_(>annotations,'package',>package-path,';')") { Builder = nodes => new CPackageDescriptor(nodes) };
-                /* 395 StringOp         */ __Matchers[395] = new Keyword(this, 395, "'import'", "import") { Creator = node => new RString(node) };
+                /* 395 StringOp         */ __Matchers[395] = new Keyword(this, 395, "'import'", "import") { Creator = node => new RLiteral(node) };
                 /* 396 SeqOp            */ __Matchers[396] = new Seq(this, 396, "_(>annotations,'import',>module,?(>version),';')") { Builder = nodes => new CImportModule(nodes) };
                 /* 397 SeqOp            */ __Matchers[397] = new Seq(this, 397, "_('import',>package-path,>import-elements)") { Builder = nodes => new CImportDeclaration(nodes) };
                 /* 398 OptionalOp       */ __Matchers[398] = new Optional(this, 398, "?(>import-element-list)") { Builder = nodes => new ROptional<CImportElementList>(nodes) };
                 /* 399 SeqOp            */ __Matchers[399] = new Seq(this, 399, "_('{',?(>import-element-list),'}')") { Builder = nodes => new CImportElements(nodes) };
-                /* 400 StringOp         */ __Matchers[400] = new String(this, 400, "','", ",") { Creator = node => new RString(node) };
+                /* 400 StringOp         */ __Matchers[400] = new String(this, 400, "','", ",") { Creator = node => new RLiteral(node) };
                 /* 401 SeqOp            */ __Matchers[401] = new Seq(this, 401, "_(',',>import-element)") { Builder = nodes => new RSequence(nodes) };
                 /* 402 StarOp           */ __Matchers[402] = new Star(this, 402, "*(_(',',>import-element))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 403 SeqOp            */ __Matchers[403] = new Seq(this, 403, "_(>import-element,*(_(',',>import-element)))") { Builder = nodes => new CImportElementList(nodes) };
@@ -432,10 +430,10 @@ namespace GeneratedParser
                 /* 405 OptionalOp       */ __Matchers[405] = new Optional(this, 405, "?(>import-name-specifier)") { Builder = nodes => new ROptional<CImportNameSpecifier>(nodes) };
                 /* 406 OptionalOp       */ __Matchers[406] = new Optional(this, 406, "?(>import-elements)") { Builder = nodes => new ROptional<CImportElements>(nodes) };
                 /* 407 SeqOp            */ __Matchers[407] = new Seq(this, 407, "_(>import-name,?(>import-name-specifier),?(>import-elements))") { Builder = nodes => new CImportNamed(nodes) };
-                /* 408 StringOp         */ __Matchers[408] = new String(this, 408, "'='", "=") { Creator = node => new RString(node) };
+                /* 408 StringOp         */ __Matchers[408] = new String(this, 408, "'='", "=") { Creator = node => new RLiteral(node) };
                 /* 409 SeqOp            */ __Matchers[409] = new Seq(this, 409, "_('=',>import-name)") { Builder = nodes => new CImportNameSpecifier(nodes) };
                 /* 410 StringOp         */ __Matchers[410] = new String(this, 410, "'...'", "...") { Creator = node => new CImportWildcard(node) };
-                /* 411 StringOp         */ __Matchers[411] = new String(this, 411, "'.'", ".") { Creator = node => new RString(node) };
+                /* 411 StringOp         */ __Matchers[411] = new String(this, 411, "'.'", ".") { Creator = node => new RLiteral(node) };
                 /* 412 SeqOp            */ __Matchers[412] = new Seq(this, 412, "_('.',>package-name)") { Builder = nodes => new RSequence(nodes) };
                 /* 413 StarOp           */ __Matchers[413] = new Star(this, 413, "*(_('.',>package-name))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 414 SeqOp            */ __Matchers[414] = new Seq(this, 414, "_(>package-name,*(_('.',>package-name)))") { Builder = nodes => new CPackagePath(nodes) };
@@ -443,11 +441,11 @@ namespace GeneratedParser
                 /* 416 AltOp            */ __Matchers[416] = new Alt(this, 416, "alt(>entry-pattern|>tuple-pattern|>variable-pattern)") { Builder = nodes => nodes[0] };
                 /* 417 AltOp            */ __Matchers[417] = new Alt(this, 417, "alt(>tuple-pattern|>variable-pattern)") { Builder = nodes => nodes[0] };
                 /* 418 AltOp            */ __Matchers[418] = new Alt(this, 418, "alt(>entry-pattern|>tuple-pattern)") { Builder = nodes => nodes[0] };
-                /* 419 StringOp         */ __Matchers[419] = new String(this, 419, "'->'", "->") { Creator = node => new RString(node) };
+                /* 419 StringOp         */ __Matchers[419] = new String(this, 419, "'->'", "->") { Creator = node => new RLiteral(node) };
                 /* 420 SeqOp            */ __Matchers[420] = new Seq(this, 420, "_(>variable-or-tuple-pattern,'->',>variable-or-tuple-pattern)") { Builder = nodes => new CEntryPattern(nodes) };
-                /* 421 StringOp         */ __Matchers[421] = new String(this, 421, "'['", "[") { Creator = node => new RString(node) };
+                /* 421 StringOp         */ __Matchers[421] = new String(this, 421, "'['", "[") { Creator = node => new RLiteral(node) };
                 /* 422 OptionalOp       */ __Matchers[422] = new Optional(this, 422, "?(>variadic-pattern-list)") { Builder = nodes => new ROptional<CVariadicPatternList>(nodes) };
-                /* 423 StringOp         */ __Matchers[423] = new String(this, 423, "']'", "]") { Creator = node => new RString(node) };
+                /* 423 StringOp         */ __Matchers[423] = new String(this, 423, "']'", "]") { Creator = node => new RLiteral(node) };
                 /* 424 SeqOp            */ __Matchers[424] = new Seq(this, 424, "_('[',?(>variadic-pattern-list),']')") { Builder = nodes => new CTuplePattern(nodes) };
                 /* 425 SeqOp            */ __Matchers[425] = new Seq(this, 425, "_(',',>variadic-pattern)") { Builder = nodes => new RSequence(nodes) };
                 /* 426 StarOp           */ __Matchers[426] = new Star(this, 426, "*(_(',',>variadic-pattern))") { Builder = nodes => new RStar<RSequence>(nodes) };
@@ -456,25 +454,25 @@ namespace GeneratedParser
                 /* 429 OptionalOp       */ __Matchers[429] = new Optional(this, 429, "?(>union-type)") { Builder = nodes => new ROptional<IUnionType>(nodes) };
                 /* 430 OptionalOp       */ __Matchers[430] = new Optional(this, 430, "?(>member-name)") { Builder = nodes => new ROptional<IMemberName>(nodes) };
                 /* 431 SeqOp            */ __Matchers[431] = new Seq(this, 431, "_(?(>union-type),>variadic-operator,?(>member-name))") { Builder = nodes => new CVariadicVariable(nodes) };
-                /* 432 StringOp         */ __Matchers[432] = new Keyword(this, 432, "'let'", "let") { Creator = node => new RString(node) };
-                /* 433 StringOp         */ __Matchers[433] = new String(this, 433, "'('", "(") { Creator = node => new RString(node) };
-                /* 434 StringOp         */ __Matchers[434] = new String(this, 434, "')'", ")") { Creator = node => new RString(node) };
+                /* 432 StringOp         */ __Matchers[432] = new Keyword(this, 432, "'let'", "let") { Creator = node => new RLiteral(node) };
+                /* 433 StringOp         */ __Matchers[433] = new String(this, 433, "'('", "(") { Creator = node => new RLiteral(node) };
+                /* 434 StringOp         */ __Matchers[434] = new String(this, 434, "')'", ")") { Creator = node => new RLiteral(node) };
                 /* 435 SeqOp            */ __Matchers[435] = new Seq(this, 435, "_('let','(',>let-variable-list,')')") { Builder = nodes => new CLetStatement(nodes) };
-                /* 436 StringOp         */ __Matchers[436] = new Keyword(this, 436, "'extends'", "extends") { Creator = node => new RString(node) };
+                /* 436 StringOp         */ __Matchers[436] = new Keyword(this, 436, "'extends'", "extends") { Creator = node => new RLiteral(node) };
                 /* 437 SeqOp            */ __Matchers[437] = new Seq(this, 437, "_('extends',>class-instatiation)") { Builder = nodes => new CExtendedType(nodes) };
                 /* 438 OptionalOp       */ __Matchers[438] = new Optional(this, 438, "?(>assertion-message)") { Builder = nodes => new ROptional<IAssertionMessage>(nodes) };
-                /* 439 StringOp         */ __Matchers[439] = new Keyword(this, 439, "'assert'", "assert") { Creator = node => new RString(node) };
+                /* 439 StringOp         */ __Matchers[439] = new Keyword(this, 439, "'assert'", "assert") { Creator = node => new RLiteral(node) };
                 /* 440 SeqOp            */ __Matchers[440] = new Seq(this, 440, "_(?(>assertion-message),'assert',>conditions)") { Builder = nodes => new CAssertionStatement(nodes) };
                 /* 441 StarOp           */ __Matchers[441] = new Star(this, 441, "*(>block-element)") { Builder = nodes => new RStar<IBlockElement>(nodes) };
                 /* 442 SeqOp            */ __Matchers[442] = new Seq(this, 442, "_('{',*(>block-element),'}')") { Builder = nodes => new CBlockElements(nodes) };
                 /* 443 AltOp            */ __Matchers[443] = new Alt(this, 443, "alt(>import-declaration|>declaration-or-statement)") { Builder = nodes => nodes[0] };
-                /* 444 StringOp         */ __Matchers[444] = new String(this, 444, "'=>'", "=>") { Creator = node => new RString(node) };
+                /* 444 StringOp         */ __Matchers[444] = new String(this, 444, "'=>'", "=>") { Creator = node => new RLiteral(node) };
                 /* 445 SeqOp            */ __Matchers[445] = new Seq(this, 445, "_('=>',>class-instatiation)") { Builder = nodes => new CClassSpecifier(nodes) };
                 /* 446 OptionalOp       */ __Matchers[446] = new Optional(this, 446, "?(>arguments)") { Builder = nodes => new ROptional<IArguments>(nodes) };
                 /* 447 SeqOp            */ __Matchers[447] = new Seq(this, 447, "_(>qualified-class,?(>arguments))") { Builder = nodes => new CClassInstatiation(nodes) };
                 /* 448 AltOp            */ __Matchers[448] = new Alt(this, 448, "alt(>package-qualified-class|>super-qualified-class|>un-qualified-class)") { Builder = nodes => nodes[0] };
                 /* 449 SeqOp            */ __Matchers[449] = new Seq(this, 449, "_(>super-qualifier,>base-reference)") { Builder = nodes => new CSuperQualifiedClass(nodes) };
-                /* 450 StringOp         */ __Matchers[450] = new Keyword(this, 450, "'super'", "super") { Creator = node => new RString(node) };
+                /* 450 StringOp         */ __Matchers[450] = new Keyword(this, 450, "'super'", "super") { Creator = node => new RLiteral(node) };
                 /* 451 SeqOp            */ __Matchers[451] = new Seq(this, 451, "_('super','.')") { Builder = nodes => new CSuperQualifier(nodes) };
                 /* 452 SeqOp            */ __Matchers[452] = new Seq(this, 452, "_(>package-qualifier,>un-qualified-class)") { Builder = nodes => new CPackageQualifiedClass(nodes) };
                 /* 453 SeqOp            */ __Matchers[453] = new Seq(this, 453, "_('package','.')") { Builder = nodes => new CPackageQualifier(nodes) };
@@ -483,14 +481,14 @@ namespace GeneratedParser
                 /* 456 SeqOp            */ __Matchers[456] = new Seq(this, 456, "_('.',>type-reference)") { Builder = nodes => new RSequence(nodes) };
                 /* 457 StarOp           */ __Matchers[457] = new Star(this, 457, "*(_('.',>type-reference))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 458 SeqOp            */ __Matchers[458] = new Seq(this, 458, "_(>type-reference,*(_('.',>type-reference)))") { Builder = nodes => new CTypePath(nodes) };
-                /* 459 StringOp         */ __Matchers[459] = new Keyword(this, 459, "'satisfies'", "satisfies") { Creator = node => new RString(node) };
+                /* 459 StringOp         */ __Matchers[459] = new Keyword(this, 459, "'satisfies'", "satisfies") { Creator = node => new RLiteral(node) };
                 /* 460 SeqOp            */ __Matchers[460] = new Seq(this, 460, "_('satisfies',>union-type-list)") { Builder = nodes => new CSatisfiedTypes(nodes) };
                 /* 461 SeqOp            */ __Matchers[461] = new Seq(this, 461, "_(',',>union-type)") { Builder = nodes => new RSequence(nodes) };
                 /* 462 StarOp           */ __Matchers[462] = new Star(this, 462, "*(_(',',>union-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 463 SeqOp            */ __Matchers[463] = new Seq(this, 463, "_(>union-type,*(_(',',>union-type)))") { Builder = nodes => new CUnionTypeList(nodes) };
-                /* 464 StringOp         */ __Matchers[464] = new Keyword(this, 464, "'of'", "of") { Creator = node => new RString(node) };
+                /* 464 StringOp         */ __Matchers[464] = new Keyword(this, 464, "'of'", "of") { Creator = node => new RLiteral(node) };
                 /* 465 SeqOp            */ __Matchers[465] = new Seq(this, 465, "_('of',>case-type-list)") { Builder = nodes => new CCaseTypes(nodes) };
-                /* 466 StringOp         */ __Matchers[466] = new String(this, 466, "'|'", "|") { Creator = node => new RString(node) };
+                /* 466 StringOp         */ __Matchers[466] = new String(this, 466, "'|'", "|") { Creator = node => new RLiteral(node) };
                 /* 467 SeqOp            */ __Matchers[467] = new Seq(this, 467, "_('|',>case-type)") { Builder = nodes => new RSequence(nodes) };
                 /* 468 StarOp           */ __Matchers[468] = new Star(this, 468, "*(_('|',>case-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 469 SeqOp            */ __Matchers[469] = new Seq(this, 469, "_(>case-type,*(_('|',>case-type)))") { Builder = nodes => new CCaseTypeList(nodes) };
@@ -515,8 +513,8 @@ namespace GeneratedParser
                 /* 488 AltOp            */ __Matchers[488] = new Alt(this, 488, "alt(>variadic-type|>kw-void|>kw-function)") { Builder = nodes => nodes[0] };
                 /* 489 SeqOp            */ __Matchers[489] = new Seq(this, 489, "_(>value-parameter-type,>member-name,?(>value-specifier))") { Builder = nodes => new CValueParameterDeclaration(nodes) };
                 /* 490 AltOp            */ __Matchers[490] = new Alt(this, 490, "alt(>variadic-type|>kw-value)") { Builder = nodes => nodes[0] };
-                /* 491 StringOp         */ __Matchers[491] = new String(this, 491, "'<'", "<") { Creator = node => new RString(node) };
-                /* 492 StringOp         */ __Matchers[492] = new String(this, 492, "'>'", ">") { Creator = node => new RString(node) };
+                /* 491 StringOp         */ __Matchers[491] = new String(this, 491, "'<'", "<") { Creator = node => new RLiteral(node) };
+                /* 492 StringOp         */ __Matchers[492] = new String(this, 492, "'>'", ">") { Creator = node => new RLiteral(node) };
                 /* 493 SeqOp            */ __Matchers[493] = new Seq(this, 493, "_('<',>type-parameter-list,'>')") { Builder = nodes => new CTypeParameters(nodes) };
                 /* 494 SeqOp            */ __Matchers[494] = new Seq(this, 494, "_(',',>type-parameter)") { Builder = nodes => new RSequence(nodes) };
                 /* 495 StarOp           */ __Matchers[495] = new Star(this, 495, "*(_(',',>type-parameter))") { Builder = nodes => new RStar<RSequence>(nodes) };
@@ -524,11 +522,11 @@ namespace GeneratedParser
                 /* 497 OptionalOp       */ __Matchers[497] = new Optional(this, 497, "?(>variance)") { Builder = nodes => new ROptional<IVariance>(nodes) };
                 /* 498 OptionalOp       */ __Matchers[498] = new Optional(this, 498, "?(>type-default)") { Builder = nodes => new ROptional<CTypeDefault>(nodes) };
                 /* 499 SeqOp            */ __Matchers[499] = new Seq(this, 499, "_(?(>variance),>type-name,?(>type-default))") { Builder = nodes => new CTypeParameter(nodes) };
-                /* 500 StringOp         */ __Matchers[500] = new Keyword(this, 500, "'in'", "in") { Creator = node => new RString(node) };
-                /* 501 StringOp         */ __Matchers[501] = new Keyword(this, 501, "'out'", "out") { Creator = node => new RString(node) };
+                /* 500 StringOp         */ __Matchers[500] = new Keyword(this, 500, "'in'", "in") { Creator = node => new RLiteral(node) };
+                /* 501 StringOp         */ __Matchers[501] = new Keyword(this, 501, "'out'", "out") { Creator = node => new RLiteral(node) };
                 /* 502 AltOp            */ __Matchers[502] = new Alt(this, 502, "alt('in'|'out')") { Builder = nodes => nodes[0] };
                 /* 503 SeqOp            */ __Matchers[503] = new Seq(this, 503, "_('=',>type)") { Builder = nodes => new CTypeDefault(nodes) };
-                /* 504 StringOp         */ __Matchers[504] = new Keyword(this, 504, "'given'", "given") { Creator = node => new RString(node) };
+                /* 504 StringOp         */ __Matchers[504] = new Keyword(this, 504, "'given'", "given") { Creator = node => new RLiteral(node) };
                 /* 505 OptionalOp       */ __Matchers[505] = new Optional(this, 505, "?(>type-name)") { Builder = nodes => new ROptional<ITypeName>(nodes) };
                 /* 506 OptionalOp       */ __Matchers[506] = new Optional(this, 506, "?(>case-types)") { Builder = nodes => new ROptional<CCaseTypes>(nodes) };
                 /* 507 OptionalOp       */ __Matchers[507] = new Optional(this, 507, "?(>satisfied-types)") { Builder = nodes => new ROptional<CSatisfiedTypes>(nodes) };
@@ -536,18 +534,18 @@ namespace GeneratedParser
                 /* 509 PlusOp           */ __Matchers[509] = new Plus(this, 509, "+(>type-constraint)") { Builder = nodes => new CTypeConstraints(nodes) };
                 /* 510 AltOp            */ __Matchers[510] = new Alt(this, 510, "alt(>declaration|>statement)") { Builder = nodes => nodes[0] };
                 /* 511 AltOp            */ __Matchers[511] = new Alt(this, 511, "alt(>constructor|>enumerated-object|>alias-declaration|>object-declaration|>setter-declaration|>typed-method-declaration|>inferred-method-declaration|>typed-attribute-declaration|>inferred-attribute-declaration|>class-declaration|>interface-declaration)") { Builder = nodes => nodes[0] };
-                /* 512 StringOp         */ __Matchers[512] = new Keyword(this, 512, "'new'", "new") { Creator = node => new RString(node) };
+                /* 512 StringOp         */ __Matchers[512] = new Keyword(this, 512, "'new'", "new") { Creator = node => new RLiteral(node) };
                 /* 513 OptionalOp       */ __Matchers[513] = new Optional(this, 513, "?(>parameters)") { Builder = nodes => new ROptional<CParameters>(nodes) };
                 /* 514 OptionalOp       */ __Matchers[514] = new Optional(this, 514, "?(>delegated-constructor)") { Builder = nodes => new ROptional<CDelegatedConstructor>(nodes) };
                 /* 515 SeqOp            */ __Matchers[515] = new Seq(this, 515, "_(>annotations,'new',?(>member-name),?(>parameters),?(>delegated-constructor),>block)") { Builder = nodes => new CConstructor(nodes) };
                 /* 516 SeqOp            */ __Matchers[516] = new Seq(this, 516, "_(>annotations,'new',>member-name,?(>delegated-constructor),>block)") { Builder = nodes => new CEnumeratedObject(nodes) };
-                /* 517 StringOp         */ __Matchers[517] = new Keyword(this, 517, "'alias'", "alias") { Creator = node => new RString(node) };
+                /* 517 StringOp         */ __Matchers[517] = new Keyword(this, 517, "'alias'", "alias") { Creator = node => new RLiteral(node) };
                 /* 518 OptionalOp       */ __Matchers[518] = new Optional(this, 518, "?(>type-constraints)") { Builder = nodes => new ROptional<CTypeConstraints>(nodes) };
                 /* 519 SeqOp            */ __Matchers[519] = new Seq(this, 519, "_(>annotations,'alias',>type-name,?(>type-parameters),?(>type-constraints),>optional-type-specifier)") { Builder = nodes => new CAliasDeclaration(nodes) };
-                /* 520 StringOp         */ __Matchers[520] = new Keyword(this, 520, "'object'", "object") { Creator = node => new RString(node) };
+                /* 520 StringOp         */ __Matchers[520] = new Keyword(this, 520, "'object'", "object") { Creator = node => new RLiteral(node) };
                 /* 521 OptionalOp       */ __Matchers[521] = new Optional(this, 521, "?(>extended-type)") { Builder = nodes => new ROptional<CExtendedType>(nodes) };
                 /* 522 SeqOp            */ __Matchers[522] = new Seq(this, 522, "_(>annotations,'object',>member-name,?(>extended-type),?(>satisfied-types),>class-block)") { Builder = nodes => new CObjectDeclaration(nodes) };
-                /* 523 StringOp         */ __Matchers[523] = new Keyword(this, 523, "'assign'", "assign") { Creator = node => new RString(node) };
+                /* 523 StringOp         */ __Matchers[523] = new Keyword(this, 523, "'assign'", "assign") { Creator = node => new RLiteral(node) };
                 /* 524 SeqOp            */ __Matchers[524] = new Seq(this, 524, "_(>annotations,'assign',>member-name,>setter-definition)") { Builder = nodes => new CSetterDeclaration(nodes) };
                 /* 525 AltOp            */ __Matchers[525] = new Alt(this, 525, "alt(>block|>needed-function-specifier)") { Builder = nodes => nodes[0] };
                 /* 526 SeqOp            */ __Matchers[526] = new Seq(this, 526, "_(>annotations,>method-type,>parametrized-member,?(>type-constraints),>method-definition)") { Builder = nodes => new CTypedMethodDeclaration(nodes) };
@@ -560,12 +558,12 @@ namespace GeneratedParser
                 /* 533 AltOp            */ __Matchers[533] = new Alt(this, 533, "alt(>block|>optional-any-specifier)") { Builder = nodes => nodes[0] };
                 /* 534 OptionalOp       */ __Matchers[534] = new Optional(this, 534, "?(>any-specifier)") { Builder = nodes => new ROptional<IAnySpecifier>(nodes) };
                 /* 535 SeqOp            */ __Matchers[535] = new Seq(this, 535, "_(?(>any-specifier),';')") { Builder = nodes => new COptionalAnySpecifier(nodes) };
-                /* 536 StringOp         */ __Matchers[536] = new Keyword(this, 536, "'class'", "class") { Creator = node => new RString(node) };
+                /* 536 StringOp         */ __Matchers[536] = new Keyword(this, 536, "'class'", "class") { Creator = node => new RLiteral(node) };
                 /* 537 SeqOp            */ __Matchers[537] = new Seq(this, 537, "_(>annotations,'class',>type-name,?(>type-parameters),?(>parameters),?(>case-types),?(>extended-type),?(>satisfied-types),?(>type-constraints),>class-definition)") { Builder = nodes => new CClassDeclaration(nodes) };
                 /* 538 AltOp            */ __Matchers[538] = new Alt(this, 538, "alt(>class-block|>optional-class-specifier)") { Builder = nodes => nodes[0] };
                 /* 539 OptionalOp       */ __Matchers[539] = new Optional(this, 539, "?(>class-specifier)") { Builder = nodes => new ROptional<CClassSpecifier>(nodes) };
                 /* 540 SeqOp            */ __Matchers[540] = new Seq(this, 540, "_(?(>class-specifier),';')") { Builder = nodes => new COptionalClassSpecifier(nodes) };
-                /* 541 StringOp         */ __Matchers[541] = new Keyword(this, 541, "'interface'", "interface") { Creator = node => new RString(node) };
+                /* 541 StringOp         */ __Matchers[541] = new Keyword(this, 541, "'interface'", "interface") { Creator = node => new RLiteral(node) };
                 /* 542 SeqOp            */ __Matchers[542] = new Seq(this, 542, "_(>annotations,'interface',>type-name,?(>type-parameters),?(>case-types),?(>satisfied-types),?(>type-constraints),>interface-definition)") { Builder = nodes => new CInterfaceDeclaration(nodes) };
                 /* 543 AltOp            */ __Matchers[543] = new Alt(this, 543, "alt(>interface-block|>optional-type-specifier)") { Builder = nodes => nodes[0] };
                 /* 544 OptionalOp       */ __Matchers[544] = new Optional(this, 544, "?(>type-specifier)") { Builder = nodes => new ROptional<CTypeSpecifier>(nodes) };
@@ -575,10 +573,10 @@ namespace GeneratedParser
                 /* 548 AltOp            */ __Matchers[548] = new Alt(this, 548, "alt(>directive-statement|>expression-statement|>specification-statement|>assertion-statement|>let-statement)") { Builder = nodes => nodes[0] };
                 /* 549 SeqOp            */ __Matchers[549] = new Seq(this, 549, "_(>primary,>function-specifier)") { Builder = nodes => new CSpecificationStatement(nodes) };
                 /* 550 AltOp            */ __Matchers[550] = new Alt(this, 550, "alt(>return-directive|>throw-directive|>break-directive|>continue-directive)") { Builder = nodes => nodes[0] };
-                /* 551 StringOp         */ __Matchers[551] = new Keyword(this, 551, "'return'", "return") { Creator = node => new RString(node) };
+                /* 551 StringOp         */ __Matchers[551] = new Keyword(this, 551, "'return'", "return") { Creator = node => new RLiteral(node) };
                 /* 552 OptionalOp       */ __Matchers[552] = new Optional(this, 552, "?(>expression)") { Builder = nodes => new ROptional<IExpression>(nodes) };
                 /* 553 SeqOp            */ __Matchers[553] = new Seq(this, 553, "_('return',?(>expression))") { Builder = nodes => new CReturnDirective(nodes) };
-                /* 554 StringOp         */ __Matchers[554] = new Keyword(this, 554, "'throw'", "throw") { Creator = node => new RString(node) };
+                /* 554 StringOp         */ __Matchers[554] = new Keyword(this, 554, "'throw'", "throw") { Creator = node => new RLiteral(node) };
                 /* 555 SeqOp            */ __Matchers[555] = new Seq(this, 555, "_('throw',?(>expression))") { Builder = nodes => new CThrowDirective(nodes) };
                 /* 556 StringOp         */ __Matchers[556] = new Keyword(this, 556, "'break'", "break") { Creator = node => new CBreakDirective(node) };
                 /* 557 StringOp         */ __Matchers[557] = new Keyword(this, 557, "'continue'", "continue") { Creator = node => new CContinueDirective(node) };
@@ -594,8 +592,8 @@ namespace GeneratedParser
                 /* 567 SeqOp            */ __Matchers[567] = new Seq(this, 567, "_(>member-name,?(>type-arguments))") { Builder = nodes => new CMemberReference(nodes) };
                 /* 568 SeqOp            */ __Matchers[568] = new Seq(this, 568, "_(>type-name,?(>type-arguments))") { Builder = nodes => new CTypeReference(nodes) };
                 /* 569 SeqOp            */ __Matchers[569] = new Seq(this, 569, "_(>self-reference,>member-selection-operator)") { Builder = nodes => new CSelfReferenceSelector(nodes) };
-                /* 570 StringOp         */ __Matchers[570] = new Keyword(this, 570, "'this'", "this") { Creator = node => new RString(node) };
-                /* 571 StringOp         */ __Matchers[571] = new Keyword(this, 571, "'outer'", "outer") { Creator = node => new RString(node) };
+                /* 570 StringOp         */ __Matchers[570] = new Keyword(this, 570, "'this'", "this") { Creator = node => new RLiteral(node) };
+                /* 571 StringOp         */ __Matchers[571] = new Keyword(this, 571, "'outer'", "outer") { Creator = node => new RLiteral(node) };
                 /* 572 AltOp            */ __Matchers[572] = new Alt(this, 572, "alt('this'|'super'|'outer'|'package')") { Builder = nodes => nodes[0] };
                 /* 573 StarOp           */ __Matchers[573] = new Star(this, 573, "*(>declaration-or-statement)") { Builder = nodes => new RStar<IDeclarationOrStatement>(nodes) };
                 /* 574 OptionalOp       */ __Matchers[574] = new Optional(this, 574, "?(>sequenced-arguments)") { Builder = nodes => new ROptional<CSequencedArguments>(nodes) };
@@ -626,7 +624,7 @@ namespace GeneratedParser
                 /* 599 SeqOp            */ __Matchers[599] = new Seq(this, 599, "_(>member-name,>needed-function-specifier)") { Builder = nodes => new CUntypedGetterArgument(nodes) };
                 /* 600 SeqOp            */ __Matchers[600] = new Seq(this, 600, "_('(',?(>sequenced-arguments),')')") { Builder = nodes => new CPositionalArguments(nodes) };
                 /* 601 AltOp            */ __Matchers[601] = new Alt(this, 601, "alt(>expression|>declaration-reference)") { Builder = nodes => nodes[0] };
-                /* 602 StringOp         */ __Matchers[602] = new String(this, 602, "'*'", "*") { Creator = node => new RString(node) };
+                /* 602 StringOp         */ __Matchers[602] = new String(this, 602, "'*'", "*") { Creator = node => new RLiteral(node) };
                 /* 603 SeqOp            */ __Matchers[603] = new Seq(this, 603, "_('*',>union-expression)") { Builder = nodes => new CSpreadArgument(nodes) };
                 /* 604 OptionalOp       */ __Matchers[604] = new Optional(this, 604, "?(>let-variable-list)") { Builder = nodes => new ROptional<CLetVariableList>(nodes) };
                 /* 605 SeqOp            */ __Matchers[605] = new Seq(this, 605, "_('let','(',?(>let-variable-list),')',>conditional-expression)") { Builder = nodes => new CLetExpression(nodes) };
@@ -638,14 +636,14 @@ namespace GeneratedParser
                 /* 611 PlusOp           */ __Matchers[611] = new Plus(this, 611, "+(>case-expression)") { Builder = nodes => new RPlus<CCaseExpression>(nodes) };
                 /* 612 OptionalOp       */ __Matchers[612] = new Optional(this, 612, "?(>else-expression)") { Builder = nodes => new ROptional<CElseExpression>(nodes) };
                 /* 613 SeqOp            */ __Matchers[613] = new Seq(this, 613, "_(+(>case-expression),?(>else-expression))") { Builder = nodes => new CCaseExpressions(nodes) };
-                /* 614 StringOp         */ __Matchers[614] = new Keyword(this, 614, "'else'", "else") { Creator = node => new RString(node) };
-                /* 615 OptionalOp       */ __Matchers[615] = new Optional(this, 615, "?('else')") { Builder = nodes => new ROptional<RString>(nodes) };
-                /* 616 StringOp         */ __Matchers[616] = new Keyword(this, 616, "'case'", "case") { Creator = node => new RString(node) };
+                /* 614 StringOp         */ __Matchers[614] = new Keyword(this, 614, "'else'", "else") { Creator = node => new RLiteral(node) };
+                /* 615 OptionalOp       */ __Matchers[615] = new Optional(this, 615, "?('else')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
+                /* 616 StringOp         */ __Matchers[616] = new Keyword(this, 616, "'case'", "case") { Creator = node => new RLiteral(node) };
                 /* 617 SeqOp            */ __Matchers[617] = new Seq(this, 617, "_(?('else'),'case','(',>case-item,')',>conditional-expression)") { Builder = nodes => new CCaseExpression(nodes) };
-                /* 618 StringOp         */ __Matchers[618] = new Keyword(this, 618, "'if'", "if") { Creator = node => new RString(node) };
+                /* 618 StringOp         */ __Matchers[618] = new Keyword(this, 618, "'if'", "if") { Creator = node => new RLiteral(node) };
                 /* 619 SeqOp            */ __Matchers[619] = new Seq(this, 619, "_('if',>conditions,>then-expression,>else-expression)") { Builder = nodes => new CIfExpression(nodes) };
                 /* 620 SeqOp            */ __Matchers[620] = new Seq(this, 620, "_('else',>conditional-expression)") { Builder = nodes => new CElseExpression(nodes) };
-                /* 621 StringOp         */ __Matchers[621] = new Keyword(this, 621, "'then'", "then") { Creator = node => new RString(node) };
+                /* 621 StringOp         */ __Matchers[621] = new Keyword(this, 621, "'then'", "then") { Creator = node => new RLiteral(node) };
                 /* 622 SeqOp            */ __Matchers[622] = new Seq(this, 622, "_('then',>conditional-expression)") { Builder = nodes => new CThenExpression(nodes) };
                 /* 623 AltOp            */ __Matchers[623] = new Alt(this, 623, "alt(>if-expression|>let-expression|>disjunction-expression)") { Builder = nodes => nodes[0] };
                 /* 624 OptionalOp       */ __Matchers[624] = new Optional(this, 624, "?(>function-expression-type)") { Builder = nodes => new ROptional<IFunctionExpressionType>(nodes) };
@@ -657,7 +655,7 @@ namespace GeneratedParser
                 /* 630 AltOp            */ __Matchers[630] = new Alt(this, 630, "alt(>block|>function-specifier)") { Builder = nodes => nodes[0] };
                 /* 631 AltOp            */ __Matchers[631] = new Alt(this, 631, "alt(>for-comprehension-clause|>if-comprehension-clause)") { Builder = nodes => nodes[0] };
                 /* 632 AltOp            */ __Matchers[632] = new Alt(this, 632, "alt(>for-comprehension-clause|>if-comprehension-clause|>expression-comprehension-clause)") { Builder = nodes => nodes[0] };
-                /* 633 StringOp         */ __Matchers[633] = new Keyword(this, 633, "'for'", "for") { Creator = node => new RString(node) };
+                /* 633 StringOp         */ __Matchers[633] = new Keyword(this, 633, "'for'", "for") { Creator = node => new RLiteral(node) };
                 /* 634 OptionalOp       */ __Matchers[634] = new Optional(this, 634, "?(>for-iterator)") { Builder = nodes => new ROptional<CForIterator>(nodes) };
                 /* 635 SeqOp            */ __Matchers[635] = new Seq(this, 635, "_('for','(',?(>for-iterator),')',>comprehension-clause)") { Builder = nodes => new CForComprehensionClause(nodes) };
                 /* 636 SeqOp            */ __Matchers[636] = new Seq(this, 636, "_('if',>conditions,>comprehension-clause)") { Builder = nodes => new CIfComprehensionClause(nodes) };
@@ -679,9 +677,9 @@ namespace GeneratedParser
                 /* 652 AltOp            */ __Matchers[652] = new Alt(this, 652, "alt(>equality-expression|>model-reference)") { Builder = nodes => nodes[0] };
                 /* 653 AltOp            */ __Matchers[653] = new Alt(this, 653, "alt(>equality|>comparison-expression)") { Builder = nodes => nodes[0] };
                 /* 654 SeqOp            */ __Matchers[654] = new Seq(this, 654, "_(>comparison-expression,>equality-operator,>comparison-expression)") { Builder = nodes => new CEquality(nodes) };
-                /* 655 StringOp         */ __Matchers[655] = new String(this, 655, "'=='", "==") { Creator = node => new RString(node) };
-                /* 656 StringOp         */ __Matchers[656] = new String(this, 656, "'!='", "!=") { Creator = node => new RString(node) };
-                /* 657 StringOp         */ __Matchers[657] = new String(this, 657, "'==='", "===") { Creator = node => new RString(node) };
+                /* 655 StringOp         */ __Matchers[655] = new String(this, 655, "'=='", "==") { Creator = node => new RLiteral(node) };
+                /* 656 StringOp         */ __Matchers[656] = new String(this, 656, "'!='", "!=") { Creator = node => new RLiteral(node) };
+                /* 657 StringOp         */ __Matchers[657] = new String(this, 657, "'==='", "===") { Creator = node => new RLiteral(node) };
                 /* 658 AltOp            */ __Matchers[658] = new Alt(this, 658, "alt('=='|'!='|'===')") { Builder = nodes => nodes[0] };
                 /* 659 AltOp            */ __Matchers[659] = new Alt(this, 659, "alt(>comparison-expr|>larger-expr|>smaller-expr|>larger-bounds-expr|>smaller-bounds-expr|>typecheck-expr|>exists-nonempty-expression)") { Builder = nodes => nodes[0] };
                 /* 660 SeqOp            */ __Matchers[660] = new Seq(this, 660, "_(>exists-nonempty-expression,>comparison-operator,>exists-nonempty-expression)") { Builder = nodes => new CComparisonExpr(nodes) };
@@ -690,35 +688,35 @@ namespace GeneratedParser
                 /* 663 SeqOp            */ __Matchers[663] = new Seq(this, 663, "_(>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression)") { Builder = nodes => new CLargerBoundsExpr(nodes) };
                 /* 664 SeqOp            */ __Matchers[664] = new Seq(this, 664, "_(>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression)") { Builder = nodes => new CSmallerBoundsExpr(nodes) };
                 /* 665 SeqOp            */ __Matchers[665] = new Seq(this, 665, "_(>exists-nonempty-expression,>type-operator,>type)") { Builder = nodes => new CTypecheckExpr(nodes) };
-                /* 666 StringOp         */ __Matchers[666] = new String(this, 666, "'<=>'", "<=>") { Creator = node => new RString(node) };
+                /* 666 StringOp         */ __Matchers[666] = new String(this, 666, "'<=>'", "<=>") { Creator = node => new RLiteral(node) };
                 /* 667 AltOp            */ __Matchers[667] = new Alt(this, 667, "alt('<=>'|'in')") { Builder = nodes => nodes[0] };
-                /* 668 StringOp         */ __Matchers[668] = new String(this, 668, "'<='", "<=") { Creator = node => new RString(node) };
+                /* 668 StringOp         */ __Matchers[668] = new String(this, 668, "'<='", "<=") { Creator = node => new RLiteral(node) };
                 /* 669 AltOp            */ __Matchers[669] = new Alt(this, 669, "alt('<='|'<')") { Builder = nodes => nodes[0] };
-                /* 670 StringOp         */ __Matchers[670] = new String(this, 670, "'>='", ">=") { Creator = node => new RString(node) };
+                /* 670 StringOp         */ __Matchers[670] = new String(this, 670, "'>='", ">=") { Creator = node => new RLiteral(node) };
                 /* 671 AltOp            */ __Matchers[671] = new Alt(this, 671, "alt('>='|'>')") { Builder = nodes => nodes[0] };
-                /* 672 StringOp         */ __Matchers[672] = new Keyword(this, 672, "'is'", "is") { Creator = node => new RString(node) };
+                /* 672 StringOp         */ __Matchers[672] = new Keyword(this, 672, "'is'", "is") { Creator = node => new RLiteral(node) };
                 /* 673 AltOp            */ __Matchers[673] = new Alt(this, 673, "alt('is'|'extends'|'satisfies'|'of')") { Builder = nodes => nodes[0] };
                 /* 674 AltOp            */ __Matchers[674] = new Alt(this, 674, "alt(>exists-expression|>nonempty-expression|>entry-range-expression)") { Builder = nodes => nodes[0] };
-                /* 675 StringOp         */ __Matchers[675] = new Keyword(this, 675, "'exists'", "exists") { Creator = node => new RString(node) };
+                /* 675 StringOp         */ __Matchers[675] = new Keyword(this, 675, "'exists'", "exists") { Creator = node => new RLiteral(node) };
                 /* 676 SeqOp            */ __Matchers[676] = new Seq(this, 676, "_(>entry-range-expression,'exists')") { Builder = nodes => new CExistsExpression(nodes) };
-                /* 677 StringOp         */ __Matchers[677] = new Keyword(this, 677, "'nonempty'", "nonempty") { Creator = node => new RString(node) };
+                /* 677 StringOp         */ __Matchers[677] = new Keyword(this, 677, "'nonempty'", "nonempty") { Creator = node => new RLiteral(node) };
                 /* 678 SeqOp            */ __Matchers[678] = new Seq(this, 678, "_(>entry-range-expression,'nonempty')") { Builder = nodes => new CNonemptyExpression(nodes) };
                 /* 679 AltOp            */ __Matchers[679] = new Alt(this, 679, "alt(>entry-or-range|>additive-expression)") { Builder = nodes => nodes[0] };
                 /* 680 SeqOp            */ __Matchers[680] = new Seq(this, 680, "_(>additive-expression,>range-or-entry-operator,>additive-expression)") { Builder = nodes => new CEntryOrRange(nodes) };
-                /* 681 StringOp         */ __Matchers[681] = new String(this, 681, "'..'", "..") { Creator = node => new RString(node) };
+                /* 681 StringOp         */ __Matchers[681] = new String(this, 681, "'..'", "..") { Creator = node => new RLiteral(node) };
                 /* 682 AltOp            */ __Matchers[682] = new Alt(this, 682, "alt('..'|':'|'->')") { Builder = nodes => nodes[0] };
                 /* 683 AltOp            */ __Matchers[683] = new Alt(this, 683, "alt(>additive-expr|>scale-expression)") { Builder = nodes => nodes[0] };
                 /* 684 SeqOp            */ __Matchers[684] = new Seq(this, 684, "_(>additive-expression,>additive-operator,>scale-expression)") { Builder = nodes => new CAdditiveExpr(nodes) };
-                /* 685 StringOp         */ __Matchers[685] = new String(this, 685, "'+'", "+") { Creator = node => new RString(node) };
-                /* 686 StringOp         */ __Matchers[686] = new String(this, 686, "'-'", "-") { Creator = node => new RString(node) };
+                /* 685 StringOp         */ __Matchers[685] = new String(this, 685, "'+'", "+") { Creator = node => new RLiteral(node) };
+                /* 686 StringOp         */ __Matchers[686] = new String(this, 686, "'-'", "-") { Creator = node => new RLiteral(node) };
                 /* 687 AltOp            */ __Matchers[687] = new Alt(this, 687, "alt('+'|'-')") { Builder = nodes => nodes[0] };
                 /* 688 AltOp            */ __Matchers[688] = new Alt(this, 688, "alt(>scale-expr|>multiplicative-expression)") { Builder = nodes => nodes[0] };
                 /* 689 SeqOp            */ __Matchers[689] = new Seq(this, 689, "_(>multiplicative-expression,>scale-operator,>scale-expression)") { Builder = nodes => new CScaleExpr(nodes) };
                 /* 690 StringOp         */ __Matchers[690] = new String(this, 690, "'**'", "**") { Creator = node => new CScaleOperator(node) };
                 /* 691 AltOp            */ __Matchers[691] = new Alt(this, 691, "alt(>multiplicative-expr|>union-expression)") { Builder = nodes => nodes[0] };
                 /* 692 SeqOp            */ __Matchers[692] = new Seq(this, 692, "_(>multiplicative-expression,>multiplicative-operator,>union-expression)") { Builder = nodes => new CMultiplicativeExpr(nodes) };
-                /* 693 StringOp         */ __Matchers[693] = new String(this, 693, "'/'", "/") { Creator = node => new RString(node) };
-                /* 694 StringOp         */ __Matchers[694] = new String(this, 694, "'%'", "%") { Creator = node => new RString(node) };
+                /* 693 StringOp         */ __Matchers[693] = new String(this, 693, "'/'", "/") { Creator = node => new RLiteral(node) };
+                /* 694 StringOp         */ __Matchers[694] = new String(this, 694, "'%'", "%") { Creator = node => new RLiteral(node) };
                 /* 695 AltOp            */ __Matchers[695] = new Alt(this, 695, "alt('*'|'/'|'%')") { Builder = nodes => nodes[0] };
                 /* 696 AltOp            */ __Matchers[696] = new Alt(this, 696, "alt(>union-expr|>exclusive-expression)") { Builder = nodes => nodes[0] };
                 /* 697 SeqOp            */ __Matchers[697] = new Seq(this, 697, "_(>union-expression,>union-operator,>exclusive-expression)") { Builder = nodes => new CUnionExpr(nodes) };
@@ -733,22 +731,22 @@ namespace GeneratedParser
                 /* 706 AltOp            */ __Matchers[706] = new Alt(this, 706, "alt(>negation-or-complement-expr|>prefix-expression)") { Builder = nodes => nodes[0] };
                 /* 707 SeqOp            */ __Matchers[707] = new Seq(this, 707, "_(>unary-minus-or-complement-operator,>negation-or-complement-expression)") { Builder = nodes => new CNegationOrComplementExpr(nodes) };
                 /* 708 AltOp            */ __Matchers[708] = new Alt(this, 708, "alt(>op-negate|>op-neutral|>op-complement)") { Builder = nodes => nodes[0] };
-                /* 709 NotOp            */ __Matchers[709] = new Not(this, 709, "!('-')") { Builder = nodes => new RNot<RString>(nodes) };
+                /* 709 NotOp            */ __Matchers[709] = new Not(this, 709, "!('-')") { Builder = nodes => new RNot<RLiteral>(nodes) };
                 /* 710 SeqOp            */ __Matchers[710] = new Seq(this, 710, "_('-',!('-'))") { Builder = nodes => new COpNegate(nodes) };
-                /* 711 NotOp            */ __Matchers[711] = new Not(this, 711, "!('+')") { Builder = nodes => new RNot<RString>(nodes) };
+                /* 711 NotOp            */ __Matchers[711] = new Not(this, 711, "!('+')") { Builder = nodes => new RNot<RLiteral>(nodes) };
                 /* 712 SeqOp            */ __Matchers[712] = new Seq(this, 712, "_('+',!('+'))") { Builder = nodes => new COpNeutral(nodes) };
                 /* 713 AltOp            */ __Matchers[713] = new Alt(this, 713, "alt(>prefix-expr|>postfix-expression)") { Builder = nodes => nodes[0] };
                 /* 714 SeqOp            */ __Matchers[714] = new Seq(this, 714, "_(>increment-operator,>prefix-expression)") { Builder = nodes => new CPrefixExpr(nodes) };
                 /* 715 AltOp            */ __Matchers[715] = new Alt(this, 715, "alt(>postfix-expr|>primary)") { Builder = nodes => nodes[0] };
                 /* 716 SeqOp            */ __Matchers[716] = new Seq(this, 716, "_(>postfix-expression,>increment-operator)") { Builder = nodes => new CPostfixExpr(nodes) };
-                /* 717 StringOp         */ __Matchers[717] = new String(this, 717, "'++'", "++") { Creator = node => new RString(node) };
-                /* 718 StringOp         */ __Matchers[718] = new String(this, 718, "'--'", "--") { Creator = node => new RString(node) };
+                /* 717 StringOp         */ __Matchers[717] = new String(this, 717, "'++'", "++") { Creator = node => new RLiteral(node) };
+                /* 718 StringOp         */ __Matchers[718] = new String(this, 718, "'--'", "--") { Creator = node => new RLiteral(node) };
                 /* 719 AltOp            */ __Matchers[719] = new Alt(this, 719, "alt('++'|'--')") { Builder = nodes => nodes[0] };
                 /* 720 AltOp            */ __Matchers[720] = new Alt(this, 720, "alt(>selection-expression|>indexed-expression|>call-expression|>base-expression)") { Builder = nodes => nodes[0] };
                 /* 721 SeqOp            */ __Matchers[721] = new Seq(this, 721, "_(>primary,>qualified-reference)") { Builder = nodes => new CSelectionExpression(nodes) };
                 /* 722 SeqOp            */ __Matchers[722] = new Seq(this, 722, "_(>member-selection-operator,>base-reference)") { Builder = nodes => new CQualifiedReference(nodes) };
-                /* 723 StringOp         */ __Matchers[723] = new String(this, 723, "'?.'", "?.") { Creator = node => new RString(node) };
-                /* 724 StringOp         */ __Matchers[724] = new String(this, 724, "'*.'", "*.") { Creator = node => new RString(node) };
+                /* 723 StringOp         */ __Matchers[723] = new String(this, 723, "'?.'", "?.") { Creator = node => new RLiteral(node) };
+                /* 724 StringOp         */ __Matchers[724] = new String(this, 724, "'*.'", "*.") { Creator = node => new RLiteral(node) };
                 /* 725 AltOp            */ __Matchers[725] = new Alt(this, 725, "alt('.'|'?.'|'*.')") { Builder = nodes => nodes[0] };
                 /* 726 SeqOp            */ __Matchers[726] = new Seq(this, 726, "_(>primary,'[',>index,']')") { Builder = nodes => new CIndexedExpression(nodes) };
                 /* 727 AltOp            */ __Matchers[727] = new Alt(this, 727, "alt(>lower-spanned|>upper-spanned|>spanned|>measured|>expression)") { Builder = nodes => nodes[0] };
@@ -788,7 +786,7 @@ namespace GeneratedParser
                 /* 761 AltOp            */ __Matchers[761] = new Alt(this, 761, "alt(>intersection-type-core|>primary-type)") { Builder = nodes => nodes[0] };
                 /* 762 SeqOp            */ __Matchers[762] = new Seq(this, 762, "_(>intersection-type,'&',>primary-type)") { Builder = nodes => new CIntersectionTypeCore(nodes) };
                 /* 763 AltOp            */ __Matchers[763] = new Alt(this, 763, "alt(>nullable-type|>array-type|>function-type|>tuple-type|>iterable-type|>grouped-type|>qualified-type)") { Builder = nodes => nodes[0] };
-                /* 764 StringOp         */ __Matchers[764] = new String(this, 764, "'?'", "?") { Creator = node => new RString(node) };
+                /* 764 StringOp         */ __Matchers[764] = new String(this, 764, "'?'", "?") { Creator = node => new RLiteral(node) };
                 /* 765 SeqOp            */ __Matchers[765] = new Seq(this, 765, "_(>primary-type,'?')") { Builder = nodes => new CNullableType(nodes) };
                 /* 766 OptionalOp       */ __Matchers[766] = new Optional(this, 766, "?(>literal-natural)") { Builder = nodes => new ROptional<CLiteralNatural>(nodes) };
                 /* 767 SeqOp            */ __Matchers[767] = new Seq(this, 767, "_(>primary-type,'[',?(>literal-natural),']')") { Builder = nodes => new CArrayType(nodes) };
@@ -810,7 +808,7 @@ namespace GeneratedParser
                 /* 783 StarOp           */ __Matchers[783] = new Star(this, 783, "*(_(',',>condition))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 784 SeqOp            */ __Matchers[784] = new Seq(this, 784, "_(>condition,*(_(',',>condition)))") { Builder = nodes => new CConditionList(nodes) };
                 /* 785 AltOp            */ __Matchers[785] = new Alt(this, 785, "alt(>exists-condition|>nonempty-condition|>is-condition|>satisfies-condition|>boolean-condition)") { Builder = nodes => nodes[0] };
-                /* 786 OptionalOp       */ __Matchers[786] = new Optional(this, 786, "?('!')") { Builder = nodes => new ROptional<RString>(nodes) };
+                /* 786 OptionalOp       */ __Matchers[786] = new Optional(this, 786, "?('!')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
                 /* 787 SeqOp            */ __Matchers[787] = new Seq(this, 787, "_(?('!'),'exists',>let-or-expression)") { Builder = nodes => new CExistsCondition(nodes) };
                 /* 788 SeqOp            */ __Matchers[788] = new Seq(this, 788, "_(?('!'),'nonempty',>let-or-expression)") { Builder = nodes => new CNonemptyCondition(nodes) };
                 /* 789 AltOp            */ __Matchers[789] = new Alt(this, 789, "alt(>let-variable|>operator-expression)") { Builder = nodes => nodes[0] };
@@ -824,11 +822,11 @@ namespace GeneratedParser
                 /* 797 AltOp            */ __Matchers[797] = new Alt(this, 797, "alt(>if-else|>block)") { Builder = nodes => nodes[0] };
                 /* 798 PlusOp           */ __Matchers[798] = new Plus(this, 798, "+(>case-block)") { Builder = nodes => new RPlus<CCaseBlock>(nodes) };
                 /* 799 SeqOp            */ __Matchers[799] = new Seq(this, 799, "_(>switch-header,+(>case-block),?(>else-block))") { Builder = nodes => new CSwitchCaseElse(nodes) };
-                /* 800 StringOp         */ __Matchers[800] = new Keyword(this, 800, "'switch'", "switch") { Creator = node => new RString(node) };
+                /* 800 StringOp         */ __Matchers[800] = new Keyword(this, 800, "'switch'", "switch") { Creator = node => new RLiteral(node) };
                 /* 801 SeqOp            */ __Matchers[801] = new Seq(this, 801, "_('switch','(',>switched,')')") { Builder = nodes => new CSwitchHeader(nodes) };
                 /* 802 SeqOp            */ __Matchers[802] = new Seq(this, 802, "_(?('else'),'case','(',>case-item,')',>block)") { Builder = nodes => new CCaseBlock(nodes) };
                 /* 803 AltOp            */ __Matchers[803] = new Alt(this, 803, "alt(>is-case-condition|>satisfies-case-condition|>match-case-condition|>pattern)") { Builder = nodes => nodes[0] };
-                /* 804 OptionalOp       */ __Matchers[804] = new Optional(this, 804, "?('is')") { Builder = nodes => new ROptional<RString>(nodes) };
+                /* 804 OptionalOp       */ __Matchers[804] = new Optional(this, 804, "?('is')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
                 /* 805 SeqOp            */ __Matchers[805] = new Seq(this, 805, "_(?('is'),>type)") { Builder = nodes => new CIsCaseCondition(nodes) };
                 /* 806 SeqOp            */ __Matchers[806] = new Seq(this, 806, "_('satisfies',>type)") { Builder = nodes => new CSatisfiesCaseCondition(nodes) };
                 /* 807 SeqOp            */ __Matchers[807] = new Seq(this, 807, "_(>value-case-separator,>value-case)") { Builder = nodes => new RSequence(nodes) };
@@ -845,19 +843,19 @@ namespace GeneratedParser
                 /* 818 AltOp            */ __Matchers[818] = new Alt(this, 818, "alt(>tuple-or-entry-pattern|>variable)") { Builder = nodes => nodes[0] };
                 /* 819 SeqOp            */ __Matchers[819] = new Seq(this, 819, "_(>containment-operator,>operator-expression)") { Builder = nodes => new CContainment(nodes) };
                 /* 820 AltOp            */ __Matchers[820] = new Alt(this, 820, "alt('in'|':')") { Builder = nodes => nodes[0] };
-                /* 821 StringOp         */ __Matchers[821] = new Keyword(this, 821, "'while'", "while") { Creator = node => new RString(node) };
+                /* 821 StringOp         */ __Matchers[821] = new Keyword(this, 821, "'while'", "while") { Creator = node => new RLiteral(node) };
                 /* 822 SeqOp            */ __Matchers[822] = new Seq(this, 822, "_('while',>conditions,>block)") { Builder = nodes => new CWhileBlock(nodes) };
                 /* 823 StarOp           */ __Matchers[823] = new Star(this, 823, "*(>catch-block)") { Builder = nodes => new RStar<CCatchBlock>(nodes) };
                 /* 824 OptionalOp       */ __Matchers[824] = new Optional(this, 824, "?(>finally-block)") { Builder = nodes => new ROptional<CFinallyBlock>(nodes) };
                 /* 825 SeqOp            */ __Matchers[825] = new Seq(this, 825, "_(>try-block,*(>catch-block),?(>finally-block))") { Builder = nodes => new CTryCatchFinally(nodes) };
-                /* 826 StringOp         */ __Matchers[826] = new Keyword(this, 826, "'try'", "try") { Creator = node => new RString(node) };
+                /* 826 StringOp         */ __Matchers[826] = new Keyword(this, 826, "'try'", "try") { Creator = node => new RLiteral(node) };
                 /* 827 OptionalOp       */ __Matchers[827] = new Optional(this, 827, "?(>resources)") { Builder = nodes => new ROptional<CResources>(nodes) };
                 /* 828 SeqOp            */ __Matchers[828] = new Seq(this, 828, "_('try',?(>resources),>block)") { Builder = nodes => new CTryBlock(nodes) };
-                /* 829 StringOp         */ __Matchers[829] = new Keyword(this, 829, "'catch'", "catch") { Creator = node => new RString(node) };
+                /* 829 StringOp         */ __Matchers[829] = new Keyword(this, 829, "'catch'", "catch") { Creator = node => new RLiteral(node) };
                 /* 830 SeqOp            */ __Matchers[830] = new Seq(this, 830, "_('catch',>catch-variable,>block)") { Builder = nodes => new CCatchBlock(nodes) };
                 /* 831 OptionalOp       */ __Matchers[831] = new Optional(this, 831, "?(>variable)") { Builder = nodes => new ROptional<CVariable>(nodes) };
                 /* 832 SeqOp            */ __Matchers[832] = new Seq(this, 832, "_('(',?(>variable),')')") { Builder = nodes => new CCatchVariable(nodes) };
-                /* 833 StringOp         */ __Matchers[833] = new Keyword(this, 833, "'finally'", "finally") { Creator = node => new RString(node) };
+                /* 833 StringOp         */ __Matchers[833] = new Keyword(this, 833, "'finally'", "finally") { Creator = node => new RLiteral(node) };
                 /* 834 SeqOp            */ __Matchers[834] = new Seq(this, 834, "_('finally',>block)") { Builder = nodes => new CFinallyBlock(nodes) };
                 /* 835 OptionalOp       */ __Matchers[835] = new Optional(this, 835, "?(>resource-list)") { Builder = nodes => new ROptional<CResourceList>(nodes) };
                 /* 836 SeqOp            */ __Matchers[836] = new Seq(this, 836, "_('(',?(>resource-list),')')") { Builder = nodes => new CResources(nodes) };
@@ -871,7 +869,7 @@ namespace GeneratedParser
                 /* 844 SeqOp            */ __Matchers[844] = new Seq(this, 844, "_(?(>variable-type),>member-name,*(>parameters))") { Builder = nodes => new CVariable(nodes) };
                 /* 845 AltOp            */ __Matchers[845] = new Alt(this, 845, "alt(>type|>kw-void|>kw-function|>kw-value)") { Builder = nodes => nodes[0] };
                 /* 846 SeqOp            */ __Matchers[846] = new Seq(this, 846, "_('^',>model-expression)") { Builder = nodes => new CModelReference(nodes) };
-                /* 847 StringOp         */ __Matchers[847] = new String(this, 847, "'`'", "`") { Creator = node => new RString(node) };
+                /* 847 StringOp         */ __Matchers[847] = new String(this, 847, "'`'", "`") { Creator = node => new RLiteral(node) };
                 /* 848 SeqOp            */ __Matchers[848] = new Seq(this, 848, "_('`',>meta-expression,'`')") { Builder = nodes => new CMetaLiteral(nodes) };
                 /* 849 AltOp            */ __Matchers[849] = new Alt(this, 849, "alt(>declaration-reference|>model-expression)") { Builder = nodes => nodes[0] };
                 /* 850 AltOp            */ __Matchers[850] = new Alt(this, 850, "alt(>member-model-expression|>type-model-expression)") { Builder = nodes => nodes[0] };
@@ -3505,12 +3503,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RToken, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RToken, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -3525,7 +3523,7 @@ namespace GeneratedParser
             public CModuleDescriptor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IModuleName ModuleName => Get<IModuleName>(2);
             public ROptional<CModuleSpecifier> ModuleSpecifierOptional => Get<ROptional<CModuleSpecifier>>(3);
             public ROptional<IVersion> VersionOptional => Get<ROptional<IVersion>>(4);
@@ -3537,7 +3535,7 @@ namespace GeneratedParser
             public CModuleSpecifier(params RNode[] children) : base(children) {}
 
             public IRepository Repository => Get<IRepository>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IModule Module => Get<IModule>(2);
             public ROptional<CArtifactAndClassifier> ArtifactAndClassifierOptional => Get<ROptional<CArtifactAndClassifier>>(3);
         }
@@ -3554,7 +3552,7 @@ namespace GeneratedParser
         {
             public CArtifact(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CLiteralString LiteralString => Get<CLiteralString>(1);
         }
 
@@ -3562,7 +3560,7 @@ namespace GeneratedParser
         {
             public CClassifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CLiteralString LiteralString => Get<CLiteralString>(1);
         }
 
@@ -3570,9 +3568,9 @@ namespace GeneratedParser
         {
             public CModuleBody(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public RStar<IModuleBodyElement> ModuleBodyElementStar => Get<RStar<IModuleBodyElement>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CPackageDescriptor : RSequence, IPackageDescriptor
@@ -3580,9 +3578,9 @@ namespace GeneratedParser
             public CPackageDescriptor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CPackagePath PackagePath => Get<CPackagePath>(2);
-            public RString String2 => Get<RString>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
         public partial class CImportModule : RSequence, IImportModule
@@ -3590,17 +3588,17 @@ namespace GeneratedParser
             public CImportModule(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IModule Module => Get<IModule>(2);
             public ROptional<IVersion> VersionOptional => Get<ROptional<IVersion>>(3);
-            public RString String2 => Get<RString>(4);
+            public RLiteral Literal2 => Get<RLiteral>(4);
         }
 
         public partial class CImportDeclaration : RSequence, IImportDeclaration
         {
             public CImportDeclaration(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CPackagePath PackagePath => Get<CPackagePath>(1);
             public CImportElements ImportElements => Get<CImportElements>(2);
         }
@@ -3609,9 +3607,9 @@ namespace GeneratedParser
         {
             public CImportElements(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CImportElementList> ImportElementListOptional => Get<ROptional<CImportElementList>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CImportElementList : RLoop<IImportElement>, IImportElementList
@@ -3632,11 +3630,11 @@ namespace GeneratedParser
         {
             public CImportNameSpecifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IImportName ImportName => Get<IImportName>(1);
         }
 
-        public partial class CImportWildcard : RString, IImportWildcard
+        public partial class CImportWildcard : RLiteral, IImportWildcard
         {
             public CImportWildcard(params Node[] children) : base(children) {}
         }
@@ -3651,7 +3649,7 @@ namespace GeneratedParser
             public CEntryPattern(params RNode[] children) : base(children) {}
 
             public IVariableOrTuplePattern VariableOrTuplePattern => Get<IVariableOrTuplePattern>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IVariableOrTuplePattern VariableOrTuplePattern2 => Get<IVariableOrTuplePattern>(2);
         }
 
@@ -3659,9 +3657,9 @@ namespace GeneratedParser
         {
             public CTuplePattern(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CVariadicPatternList> VariadicPatternListOptional => Get<ROptional<CVariadicPatternList>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CVariadicPatternList : RLoop<IVariadicPattern>, IVariadicPatternList
@@ -3682,17 +3680,17 @@ namespace GeneratedParser
         {
             public CLetStatement(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public CLetVariableList LetVariableList => Get<CLetVariableList>(2);
-            public RString String3 => Get<RString>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3);
         }
 
         public partial class CDelegatedConstructor : RSequence, IDelegatedConstructor
         {
             public CDelegatedConstructor(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
@@ -3701,7 +3699,7 @@ namespace GeneratedParser
             public CAssertionStatement(params RNode[] children) : base(children) {}
 
             public ROptional<IAssertionMessage> AssertionMessageOptional => Get<ROptional<IAssertionMessage>>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CConditions Conditions => Get<CConditions>(2);
         }
 
@@ -3709,16 +3707,16 @@ namespace GeneratedParser
         {
             public CBlockElements(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public RStar<IBlockElement> BlockElementStar => Get<RStar<IBlockElement>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CExtendedType : RSequence, IExtendedType
         {
             public CExtendedType(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
@@ -3726,7 +3724,7 @@ namespace GeneratedParser
         {
             public CClassSpecifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
@@ -3750,8 +3748,8 @@ namespace GeneratedParser
         {
             public CSuperQualifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
         }
 
         public partial class CPackageQualifiedClass : RSequence, IPackageQualifiedClass
@@ -3766,8 +3764,8 @@ namespace GeneratedParser
         {
             public CPackageQualifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
         }
 
         public partial class CMemberPath : RSequence, IMemberPath
@@ -3775,7 +3773,7 @@ namespace GeneratedParser
             public CMemberPath(params RNode[] children) : base(children) {}
 
             public CTypePath TypePath => Get<CTypePath>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
@@ -3788,7 +3786,7 @@ namespace GeneratedParser
         {
             public CSatisfiedTypes(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CUnionTypeList UnionTypeList => Get<CUnionTypeList>(1);
         }
 
@@ -3801,7 +3799,7 @@ namespace GeneratedParser
         {
             public CCaseTypes(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CCaseTypeList CaseTypeList => Get<CCaseTypeList>(1);
         }
 
@@ -3822,9 +3820,9 @@ namespace GeneratedParser
         {
             public CParameters(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CParameterList> ParameterListOptional => Get<ROptional<CParameterList>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CParameterList : RLoop<IParameterDeclarationOrRefPattern>, IParameterList
@@ -3872,9 +3870,9 @@ namespace GeneratedParser
         {
             public CTypeParameters(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CTypeParameterList TypeParameterList => Get<CTypeParameterList>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CTypeParameterList : RLoop<CTypeParameter>, ITypeParameterList
@@ -3891,7 +3889,7 @@ namespace GeneratedParser
             public ROptional<CTypeDefault> TypeDefaultOptional => Get<ROptional<CTypeDefault>>(2);
         }
 
-        public partial class CVariance : RString, IVariance
+        public partial class CVariance : RLiteral, IVariance
         {
             public CVariance(params Node[] children) : base(children) {}
         }
@@ -3900,7 +3898,7 @@ namespace GeneratedParser
         {
             public CTypeDefault(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IType Type => Get<IType>(1);
         }
 
@@ -3908,7 +3906,7 @@ namespace GeneratedParser
         {
             public CTypeConstraint(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<ITypeName> TypeNameOptional => Get<ROptional<ITypeName>>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(3);
@@ -3925,7 +3923,7 @@ namespace GeneratedParser
             public CConstructor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(2);
             public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(3);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(4);
@@ -3937,7 +3935,7 @@ namespace GeneratedParser
             public CEnumeratedObject(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IMemberName MemberName => Get<IMemberName>(2);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(3);
             public IBlock Block => Get<IBlock>(4);
@@ -3948,7 +3946,7 @@ namespace GeneratedParser
             public CAliasDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(4);
@@ -3960,7 +3958,7 @@ namespace GeneratedParser
             public CObjectDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IMemberName MemberName => Get<IMemberName>(2);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(3);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
@@ -3972,7 +3970,7 @@ namespace GeneratedParser
             public CSetterDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IMemberName MemberName => Get<IMemberName>(2);
             public ISetterDefinition SetterDefinition => Get<ISetterDefinition>(3);
         }
@@ -3993,7 +3991,7 @@ namespace GeneratedParser
             public CInferredMethodDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
             public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
@@ -4014,7 +4012,7 @@ namespace GeneratedParser
             public CInferredAttributeDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IMemberName MemberName => Get<IMemberName>(2);
             public IAttributeDefinition AttributeDefinition => Get<IAttributeDefinition>(3);
         }
@@ -4024,7 +4022,7 @@ namespace GeneratedParser
             public COptionalAnySpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<IAnySpecifier> AnySpecifierOptional => Get<ROptional<IAnySpecifier>>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CClassDeclaration : RSequence, IClassDeclaration
@@ -4032,7 +4030,7 @@ namespace GeneratedParser
             public CClassDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(4);
@@ -4048,7 +4046,7 @@ namespace GeneratedParser
             public COptionalClassSpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<CClassSpecifier> ClassSpecifierOptional => Get<ROptional<CClassSpecifier>>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CInterfaceDeclaration : RSequence, IInterfaceDeclaration
@@ -4056,7 +4054,7 @@ namespace GeneratedParser
             public CInterfaceDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(4);
@@ -4070,7 +4068,7 @@ namespace GeneratedParser
             public COptionalTypeSpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<CTypeSpecifier> TypeSpecifierOptional => Get<ROptional<CTypeSpecifier>>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CUnclosedStatement : RSequence, IUnclosedStatement
@@ -4078,7 +4076,7 @@ namespace GeneratedParser
             public CUnclosedStatement(params RNode[] children) : base(children) {}
 
             public IOpenStatement OpenStatement => Get<IOpenStatement>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CSpecificationStatement : RSequence, ISpecificationStatement
@@ -4093,7 +4091,7 @@ namespace GeneratedParser
         {
             public CReturnDirective(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<IExpression> ExpressionOptional => Get<ROptional<IExpression>>(1);
         }
 
@@ -4101,16 +4099,16 @@ namespace GeneratedParser
         {
             public CThrowDirective(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<IExpression> ExpressionOptional => Get<ROptional<IExpression>>(1);
         }
 
-        public partial class CBreakDirective : RString, IBreakDirective
+        public partial class CBreakDirective : RLiteral, IBreakDirective
         {
             public CBreakDirective(params Node[] children) : base(children) {}
         }
 
-        public partial class CContinueDirective : RString, IContinueDirective
+        public partial class CContinueDirective : RLiteral, IContinueDirective
         {
             public CContinueDirective(params Node[] children) : base(children) {}
         }
@@ -4119,7 +4117,7 @@ namespace GeneratedParser
         {
             public CTypeSpecifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IType Type => Get<IType>(1);
         }
 
@@ -4127,7 +4125,7 @@ namespace GeneratedParser
         {
             public CValueSpecifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IExpression Expression => Get<IExpression>(1);
         }
 
@@ -4135,7 +4133,7 @@ namespace GeneratedParser
         {
             public CFunctionSpecifier(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IExpression Expression => Get<IExpression>(1);
         }
 
@@ -4180,7 +4178,7 @@ namespace GeneratedParser
             public CMemberSelectionOperator MemberSelectionOperator => Get<CMemberSelectionOperator>(1);
         }
 
-        public partial class CSelfReference : RString, ISelfReference
+        public partial class CSelfReference : RLiteral, ISelfReference
         {
             public CSelfReference(params Node[] children) : base(children) {}
         }
@@ -4189,29 +4187,29 @@ namespace GeneratedParser
         {
             public CEnumeration(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public RStar<IDeclarationOrStatement> DeclarationOrStatementStar => Get<RStar<IDeclarationOrStatement>>(1);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
-            public RString String2 => Get<RString>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
         public partial class CTuple : RSequence, ITuple
         {
             public CTuple(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CStructuralArguments : RSequence, IStructuralArguments
         {
             public CStructuralArguments(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public RStar<INamedOrAnonymous> NamedOrAnonymousStar => Get<RStar<INamedOrAnonymous>>(1);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
-            public RString String2 => Get<RString>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
         public partial class CNamedSpecifiedArgument : RSequence, INamedSpecifiedArgument
@@ -4220,7 +4218,7 @@ namespace GeneratedParser
 
             public IMemberName MemberName => Get<IMemberName>(0);
             public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
-            public RString String => Get<RString>(2);
+            public RLiteral Literal => Get<RLiteral>(2);
         }
 
         public partial class CSequencedArguments : RLoop<ISequencedArgument>, ISequencedArguments
@@ -4233,14 +4231,14 @@ namespace GeneratedParser
             public CAnonymousArgument(params RNode[] children) : base(children) {}
 
             public IExpression Expression => Get<IExpression>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CObjectArgument : RSequence, IObjectArgument
         {
             public CObjectArgument(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(1);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(2);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(3);
@@ -4261,7 +4259,7 @@ namespace GeneratedParser
             public COptionalFunctionSpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<CFunctionSpecifier> FunctionSpecifierOptional => Get<ROptional<CFunctionSpecifier>>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CNeededFunctionSpecifier : RSequence, INeededFunctionSpecifier
@@ -4269,7 +4267,7 @@ namespace GeneratedParser
             public CNeededFunctionSpecifier(params RNode[] children) : base(children) {}
 
             public CFunctionSpecifier FunctionSpecifier => Get<CFunctionSpecifier>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CTypedGetterArgument : RSequence, ITypedGetterArgument
@@ -4285,7 +4283,7 @@ namespace GeneratedParser
         {
             public CInferredMethodArgument(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public CParameters Parameters => Get<CParameters>(3);
@@ -4296,7 +4294,7 @@ namespace GeneratedParser
         {
             public CInferredGetterArgument(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IMemberName MemberName => Get<IMemberName>(1);
             public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(2);
         }
@@ -4322,16 +4320,16 @@ namespace GeneratedParser
         {
             public CPositionalArguments(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CSpreadArgument : RSequence, ISpreadArgument
         {
             public CSpreadArgument(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IUnionExpression UnionExpression => Get<IUnionExpression>(1);
         }
 
@@ -4339,10 +4337,10 @@ namespace GeneratedParser
         {
             public CLetExpression(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public ROptional<CLetVariableList> LetVariableListOptional => Get<ROptional<CLetVariableList>>(2);
-            public RString String3 => Get<RString>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3);
             public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(4);
         }
 
@@ -4379,11 +4377,11 @@ namespace GeneratedParser
         {
             public CCaseExpression(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
-            public RString String2 => Get<RString>(1);
-            public RString String3 => Get<RString>(2);
+            public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal3 => Get<RLiteral>(2);
             public ICaseItem CaseItem => Get<ICaseItem>(3);
-            public RString String4 => Get<RString>(4);
+            public RLiteral Literal4 => Get<RLiteral>(4);
             public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(5);
         }
 
@@ -4391,7 +4389,7 @@ namespace GeneratedParser
         {
             public CIfExpression(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
             public CThenExpression ThenExpression => Get<CThenExpression>(2);
             public CElseExpression ElseExpression => Get<CElseExpression>(3);
@@ -4401,7 +4399,7 @@ namespace GeneratedParser
         {
             public CElseExpression(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(1);
         }
 
@@ -4409,7 +4407,7 @@ namespace GeneratedParser
         {
             public CThenExpression(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(1);
         }
 
@@ -4423,7 +4421,7 @@ namespace GeneratedParser
             public IFunctionDefinition FunctionDefinition => Get<IFunctionDefinition>(3);
         }
 
-        public partial class CFunctionExpressionType : RString, IFunctionExpressionType
+        public partial class CFunctionExpressionType : RLiteral, IFunctionExpressionType
         {
             public CFunctionExpressionType(params Node[] children) : base(children) {}
         }
@@ -4440,10 +4438,10 @@ namespace GeneratedParser
         {
             public CForComprehensionClause(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
-            public RString String3 => Get<RString>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3);
             public IComprehensionClause ComprehensionClause => Get<IComprehensionClause>(4);
         }
 
@@ -4451,7 +4449,7 @@ namespace GeneratedParser
         {
             public CIfComprehensionClause(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
             public IComprehensionClause ComprehensionClause => Get<IComprehensionClause>(2);
         }
@@ -4465,7 +4463,7 @@ namespace GeneratedParser
             public IExpression Expression => Get<IExpression>(2);
         }
 
-        public partial class CAssignmentOperator : RString, IAssignmentOperator
+        public partial class CAssignmentOperator : RToken, IAssignmentOperator
         {
             public CAssignmentOperator(params Node[] children) : base(children) {}
         }
@@ -4479,7 +4477,7 @@ namespace GeneratedParser
             public IDisjunctionExpression DisjunctionExpression => Get<IDisjunctionExpression>(2);
         }
 
-        public partial class CThenElseOperator : RString, IThenElseOperator
+        public partial class CThenElseOperator : RLiteral, IThenElseOperator
         {
             public CThenElseOperator(params Node[] children) : base(children) {}
         }
@@ -4493,7 +4491,7 @@ namespace GeneratedParser
             public IConjunctionExpression ConjunctionExpression => Get<IConjunctionExpression>(2);
         }
 
-        public partial class CDisjunctionOperator : RString, IDisjunctionOperator
+        public partial class CDisjunctionOperator : RLiteral, IDisjunctionOperator
         {
             public CDisjunctionOperator(params Node[] children) : base(children) {}
         }
@@ -4507,7 +4505,7 @@ namespace GeneratedParser
             public ILogicalNegationExpression LogicalNegationExpression => Get<ILogicalNegationExpression>(2);
         }
 
-        public partial class CConjunctionOperator : RString, IConjunctionOperator
+        public partial class CConjunctionOperator : RLiteral, IConjunctionOperator
         {
             public CConjunctionOperator(params Node[] children) : base(children) {}
         }
@@ -4520,7 +4518,7 @@ namespace GeneratedParser
             public ILogicalNegationExpression LogicalNegationExpression => Get<ILogicalNegationExpression>(1);
         }
 
-        public partial class CNotOperator : RString, INotOperator
+        public partial class CNotOperator : RLiteral, INotOperator
         {
             public CNotOperator(params Node[] children) : base(children) {}
         }
@@ -4534,7 +4532,7 @@ namespace GeneratedParser
             public IComparisonExpression ComparisonExpression2 => Get<IComparisonExpression>(2);
         }
 
-        public partial class CEqualityOperator : RString, IEqualityOperator
+        public partial class CEqualityOperator : RLiteral, IEqualityOperator
         {
             public CEqualityOperator(params Node[] children) : base(children) {}
         }
@@ -4597,22 +4595,22 @@ namespace GeneratedParser
             public IType Type => Get<IType>(2);
         }
 
-        public partial class CComparisonOperator : RString, IComparisonOperator
+        public partial class CComparisonOperator : RLiteral, IComparisonOperator
         {
             public CComparisonOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CSmallerOperator : RString, ISmallerOperator
+        public partial class CSmallerOperator : RLiteral, ISmallerOperator
         {
             public CSmallerOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CLargerOperator : RString, ILargerOperator
+        public partial class CLargerOperator : RLiteral, ILargerOperator
         {
             public CLargerOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CTypeOperator : RString, ITypeOperator
+        public partial class CTypeOperator : RLiteral, ITypeOperator
         {
             public CTypeOperator(params Node[] children) : base(children) {}
         }
@@ -4622,7 +4620,7 @@ namespace GeneratedParser
             public CExistsExpression(params RNode[] children) : base(children) {}
 
             public IEntryRangeExpression EntryRangeExpression => Get<IEntryRangeExpression>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CNonemptyExpression : RSequence, INonemptyExpression
@@ -4630,7 +4628,7 @@ namespace GeneratedParser
             public CNonemptyExpression(params RNode[] children) : base(children) {}
 
             public IEntryRangeExpression EntryRangeExpression => Get<IEntryRangeExpression>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CEntryOrRange : RSequence, IEntryOrRange
@@ -4642,7 +4640,7 @@ namespace GeneratedParser
             public IAdditiveExpression AdditiveExpression2 => Get<IAdditiveExpression>(2);
         }
 
-        public partial class CRangeOrEntryOperator : RString, IRangeOrEntryOperator
+        public partial class CRangeOrEntryOperator : RLiteral, IRangeOrEntryOperator
         {
             public CRangeOrEntryOperator(params Node[] children) : base(children) {}
         }
@@ -4656,7 +4654,7 @@ namespace GeneratedParser
             public IScaleExpression ScaleExpression => Get<IScaleExpression>(2);
         }
 
-        public partial class CAdditiveOperator : RString, IAdditiveOperator
+        public partial class CAdditiveOperator : RLiteral, IAdditiveOperator
         {
             public CAdditiveOperator(params Node[] children) : base(children) {}
         }
@@ -4670,7 +4668,7 @@ namespace GeneratedParser
             public IScaleExpression ScaleExpression => Get<IScaleExpression>(2);
         }
 
-        public partial class CScaleOperator : RString, IScaleOperator
+        public partial class CScaleOperator : RLiteral, IScaleOperator
         {
             public CScaleOperator(params Node[] children) : base(children) {}
         }
@@ -4684,7 +4682,7 @@ namespace GeneratedParser
             public IUnionExpression UnionExpression => Get<IUnionExpression>(2);
         }
 
-        public partial class CMultiplicativeOperator : RString, IMultiplicativeOperator
+        public partial class CMultiplicativeOperator : RLiteral, IMultiplicativeOperator
         {
             public CMultiplicativeOperator(params Node[] children) : base(children) {}
         }
@@ -4698,7 +4696,7 @@ namespace GeneratedParser
             public IExclusiveExpression ExclusiveExpression => Get<IExclusiveExpression>(2);
         }
 
-        public partial class CUnionOperator : RString, IUnionOperator
+        public partial class CUnionOperator : RLiteral, IUnionOperator
         {
             public CUnionOperator(params Node[] children) : base(children) {}
         }
@@ -4712,7 +4710,7 @@ namespace GeneratedParser
             public IIntersectionExpression IntersectionExpression => Get<IIntersectionExpression>(2);
         }
 
-        public partial class CExclusiveOperator : RString, IExclusiveOperator
+        public partial class CExclusiveOperator : RLiteral, IExclusiveOperator
         {
             public CExclusiveOperator(params Node[] children) : base(children) {}
         }
@@ -4726,7 +4724,7 @@ namespace GeneratedParser
             public INegationOrComplementExpression NegationOrComplementExpression => Get<INegationOrComplementExpression>(2);
         }
 
-        public partial class CIntersectionOperator : RString, IIntersectionOperator
+        public partial class CIntersectionOperator : RLiteral, IIntersectionOperator
         {
             public CIntersectionOperator(params Node[] children) : base(children) {}
         }
@@ -4743,19 +4741,19 @@ namespace GeneratedParser
         {
             public COpNegate(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RNot<RString> String2Not => Get<RNot<RString>>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RNot<RLiteral> Literal2Not => Get<RNot<RLiteral>>(1);
         }
 
         public partial class COpNeutral : RSequence, IOpNeutral
         {
             public COpNeutral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RNot<RString> String2Not => Get<RNot<RString>>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RNot<RLiteral> Literal2Not => Get<RNot<RLiteral>>(1);
         }
 
-        public partial class COpComplement : RString, IOpComplement
+        public partial class COpComplement : RLiteral, IOpComplement
         {
             public COpComplement(params Node[] children) : base(children) {}
         }
@@ -4776,7 +4774,7 @@ namespace GeneratedParser
             public CIncrementOperator IncrementOperator => Get<CIncrementOperator>(1);
         }
 
-        public partial class CIncrementOperator : RString, IIncrementOperator
+        public partial class CIncrementOperator : RLiteral, IIncrementOperator
         {
             public CIncrementOperator(params Node[] children) : base(children) {}
         }
@@ -4797,7 +4795,7 @@ namespace GeneratedParser
             public IBaseReference BaseReference => Get<IBaseReference>(1);
         }
 
-        public partial class CMemberSelectionOperator : RString, IMemberSelectionOperator
+        public partial class CMemberSelectionOperator : RLiteral, IMemberSelectionOperator
         {
             public CMemberSelectionOperator(params Node[] children) : base(children) {}
         }
@@ -4807,9 +4805,9 @@ namespace GeneratedParser
             public CIndexedExpression(params RNode[] children) : base(children) {}
 
             public IPrimary Primary => Get<IPrimary>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IIndex Index => Get<IIndex>(2);
-            public RString String2 => Get<RString>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
         public partial class CUpperSpanned : RSequence, IUpperSpanned
@@ -4817,14 +4815,14 @@ namespace GeneratedParser
             public CUpperSpanned(params RNode[] children) : base(children) {}
 
             public IIndexExpression IndexExpression => Get<IIndexExpression>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CLowerSpanned : RSequence, ILowerSpanned
         {
             public CLowerSpanned(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IIndexExpression IndexExpression => Get<IIndexExpression>(1);
         }
 
@@ -4833,7 +4831,7 @@ namespace GeneratedParser
             public CSpanned(params RNode[] children) : base(children) {}
 
             public IIndexExpression IndexExpression => Get<IIndexExpression>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IIndexExpression IndexExpression2 => Get<IIndexExpression>(2);
         }
 
@@ -4842,7 +4840,7 @@ namespace GeneratedParser
             public CMeasured(params RNode[] children) : base(children) {}
 
             public IIndexExpression IndexExpression => Get<IIndexExpression>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IIndexExpression IndexExpression2 => Get<IIndexExpression>(2);
         }
 
@@ -4876,7 +4874,7 @@ namespace GeneratedParser
         {
             public CObjectExpression(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(1);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(2);
             public IClassBlock ClassBlock => Get<IClassBlock>(3);
@@ -4886,18 +4884,18 @@ namespace GeneratedParser
         {
             public CGroupedExpression(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IExpression Expression => Get<IExpression>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CTypeArguments : RSequence, ITypeArguments
         {
             public CTypeArguments(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CTypeArgumentList> TypeArgumentListOptional => Get<ROptional<CTypeArgumentList>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CTypeArgumentList : RLoop<CVariancedType>, ITypeArgumentList
@@ -4923,7 +4921,7 @@ namespace GeneratedParser
             public CDefaultedTypeCore(params RNode[] children) : base(children) {}
 
             public IType Type => Get<IType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CVariadicUnionType : RSequence, IVariadicUnionType
@@ -4934,7 +4932,7 @@ namespace GeneratedParser
             public CVariadicOperator VariadicOperator => Get<CVariadicOperator>(1);
         }
 
-        public partial class CVariadicOperator : RString, IVariadicOperator
+        public partial class CVariadicOperator : RLiteral, IVariadicOperator
         {
             public CVariadicOperator(params Node[] children) : base(children) {}
         }
@@ -4943,7 +4941,7 @@ namespace GeneratedParser
         {
             public CSpreadType(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IUnionType UnionType => Get<IUnionType>(1);
         }
 
@@ -4952,7 +4950,7 @@ namespace GeneratedParser
             public CEntryType(params RNode[] children) : base(children) {}
 
             public IUnionType UnionType => Get<IUnionType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IUnionType UnionType2 => Get<IUnionType>(2);
         }
 
@@ -4961,7 +4959,7 @@ namespace GeneratedParser
             public CUnionTypeCore(params RNode[] children) : base(children) {}
 
             public IUnionType UnionType => Get<IUnionType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IIntersectionType IntersectionType => Get<IIntersectionType>(2);
         }
 
@@ -4970,7 +4968,7 @@ namespace GeneratedParser
             public CIntersectionTypeCore(params RNode[] children) : base(children) {}
 
             public IIntersectionType IntersectionType => Get<IIntersectionType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public IPrimaryType PrimaryType => Get<IPrimaryType>(2);
         }
 
@@ -4979,7 +4977,7 @@ namespace GeneratedParser
             public CNullableType(params RNode[] children) : base(children) {}
 
             public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
         public partial class CArrayType : RSequence, IArrayType
@@ -4987,9 +4985,9 @@ namespace GeneratedParser
             public CArrayType(params RNode[] children) : base(children) {}
 
             public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public ROptional<CLiteralNatural> LiteralNaturalOptional => Get<ROptional<CLiteralNatural>>(2);
-            public RString String2 => Get<RString>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
         public partial class CFunctionType : RSequence, IFunctionType
@@ -4997,36 +4995,36 @@ namespace GeneratedParser
             public CFunctionType(params RNode[] children) : base(children) {}
 
             public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public ROptional<ITypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ITypeTypeArguments>>(2);
-            public RString String2 => Get<RString>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
         public partial class CTupleType : RSequence, ITupleType
         {
             public CTupleType(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<ITypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ITypeTypeArguments>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CIterableType : RSequence, IIterableType
         {
             public CIterableType(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<IVariadicType> VariadicTypeOptional => Get<ROptional<IVariadicType>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CGroupedType : RSequence, IGroupedType
         {
             public CGroupedType(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IType Type => Get<IType>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CQualifiedType : RSequence, IQualifiedType
@@ -5057,9 +5055,9 @@ namespace GeneratedParser
         {
             public CConditions(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CConditionList> ConditionListOptional => Get<ROptional<CConditionList>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CConditionList : RLoop<ICondition>, IConditionList
@@ -5071,8 +5069,8 @@ namespace GeneratedParser
         {
             public CExistsCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
-            public RString String2 => Get<RString>(1);
+            public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public ILetOrExpression LetOrExpression => Get<ILetOrExpression>(2);
         }
 
@@ -5080,8 +5078,8 @@ namespace GeneratedParser
         {
             public CNonemptyCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
-            public RString String2 => Get<RString>(1);
+            public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public ILetOrExpression LetOrExpression => Get<ILetOrExpression>(2);
         }
 
@@ -5089,8 +5087,8 @@ namespace GeneratedParser
         {
             public CIsCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
-            public RString String2 => Get<RString>(1);
+            public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public IType Type => Get<IType>(2);
             public CIsConditionVariable IsConditionVariable => Get<CIsConditionVariable>(3);
         }
@@ -5107,7 +5105,7 @@ namespace GeneratedParser
         {
             public CSatisfiesCondition(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IType Type => Get<IType>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
         }
@@ -5124,7 +5122,7 @@ namespace GeneratedParser
         {
             public CIfBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
             public IBlock Block => Get<IBlock>(2);
         }
@@ -5133,7 +5131,7 @@ namespace GeneratedParser
         {
             public CElseBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IElseBlockNext ElseBlockNext => Get<IElseBlockNext>(1);
         }
 
@@ -5150,21 +5148,21 @@ namespace GeneratedParser
         {
             public CSwitchHeader(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public ISwitched Switched => Get<ISwitched>(2);
-            public RString String3 => Get<RString>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3);
         }
 
         public partial class CCaseBlock : RSequence, ICaseBlock
         {
             public CCaseBlock(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
-            public RString String2 => Get<RString>(1);
-            public RString String3 => Get<RString>(2);
+            public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal3 => Get<RLiteral>(2);
             public ICaseItem CaseItem => Get<ICaseItem>(3);
-            public RString String4 => Get<RString>(4);
+            public RLiteral Literal4 => Get<RLiteral>(4);
             public IBlock Block => Get<IBlock>(5);
         }
 
@@ -5172,7 +5170,7 @@ namespace GeneratedParser
         {
             public CIsCaseCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
+            public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
             public IType Type => Get<IType>(1);
         }
 
@@ -5180,7 +5178,7 @@ namespace GeneratedParser
         {
             public CSatisfiesCaseCondition(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IType Type => Get<IType>(1);
         }
 
@@ -5189,7 +5187,7 @@ namespace GeneratedParser
             public CValueCaseList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CValueCaseSeparator : RString, IValueCaseSeparator
+        public partial class CValueCaseSeparator : RLiteral, IValueCaseSeparator
         {
             public CValueCaseSeparator(params Node[] children) : base(children) {}
         }
@@ -5206,10 +5204,10 @@ namespace GeneratedParser
         {
             public CForBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public RString String2 => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
-            public RString String3 => Get<RString>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3);
             public IBlock Block => Get<IBlock>(4);
         }
 
@@ -5217,7 +5215,7 @@ namespace GeneratedParser
         {
             public CFailBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IBlock Block => Get<IBlock>(1);
         }
 
@@ -5237,7 +5235,7 @@ namespace GeneratedParser
             public IOperatorExpression OperatorExpression => Get<IOperatorExpression>(1);
         }
 
-        public partial class CContainmentOperator : RString, IContainmentOperator
+        public partial class CContainmentOperator : RLiteral, IContainmentOperator
         {
             public CContainmentOperator(params Node[] children) : base(children) {}
         }
@@ -5246,7 +5244,7 @@ namespace GeneratedParser
         {
             public CWhileBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
             public IBlock Block => Get<IBlock>(2);
         }
@@ -5264,7 +5262,7 @@ namespace GeneratedParser
         {
             public CTryBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CResources> ResourcesOptional => Get<ROptional<CResources>>(1);
             public IBlock Block => Get<IBlock>(2);
         }
@@ -5273,7 +5271,7 @@ namespace GeneratedParser
         {
             public CCatchBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CCatchVariable CatchVariable => Get<CCatchVariable>(1);
             public IBlock Block => Get<IBlock>(2);
         }
@@ -5282,16 +5280,16 @@ namespace GeneratedParser
         {
             public CCatchVariable(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CVariable> VariableOptional => Get<ROptional<CVariable>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CFinallyBlock : RSequence, IFinallyBlock
         {
             public CFinallyBlock(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IBlock Block => Get<IBlock>(1);
         }
 
@@ -5299,9 +5297,9 @@ namespace GeneratedParser
         {
             public CResources(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CResourceList> ResourceListOptional => Get<ROptional<CResourceList>>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CResourceList : RLoop<IResource>, IResourceList
@@ -5330,7 +5328,7 @@ namespace GeneratedParser
         {
             public CModelReference(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IModelExpression ModelExpression => Get<IModelExpression>(1);
         }
 
@@ -5338,9 +5336,9 @@ namespace GeneratedParser
         {
             public CMetaLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public IMetaExpression MetaExpression => Get<IMetaExpression>(1);
-            public RString String2 => Get<RString>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
         public partial class CPackageQualifiedMemberReference : RSequence, IPackageQualifiedMemberReference
@@ -5356,7 +5354,7 @@ namespace GeneratedParser
             public CTypeQualifiedMemberReference(params RNode[] children) : base(children) {}
 
             public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
@@ -5364,7 +5362,7 @@ namespace GeneratedParser
         {
             public CModuleLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
@@ -5372,7 +5370,7 @@ namespace GeneratedParser
         {
             public CPackageLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
@@ -5380,7 +5378,7 @@ namespace GeneratedParser
         {
             public CClassLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5388,7 +5386,7 @@ namespace GeneratedParser
         {
             public CInterfaceLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5396,7 +5394,7 @@ namespace GeneratedParser
         {
             public CAliasLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5404,7 +5402,7 @@ namespace GeneratedParser
         {
             public CTypeParameterLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5412,7 +5410,7 @@ namespace GeneratedParser
         {
             public CNewLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5424,7 +5422,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CValueLiteralIntro : RString, IValueLiteralIntro
+        public partial class CValueLiteralIntro : RLiteral, IValueLiteralIntro
         {
             public CValueLiteralIntro(params Node[] children) : base(children) {}
         }
@@ -5433,7 +5431,7 @@ namespace GeneratedParser
         {
             public CFunctionLiteral(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5450,67 +5448,67 @@ namespace GeneratedParser
             public CReferencePathElementList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CKwVoid : RString, IKwVoid
+        public partial class CKwVoid : RLiteral, IKwVoid
         {
             public CKwVoid(params Node[] children) : base(children) {}
         }
 
-        public partial class CKwFunction : RString, IKwFunction
+        public partial class CKwFunction : RLiteral, IKwFunction
         {
             public CKwFunction(params Node[] children) : base(children) {}
         }
 
-        public partial class CKwValue : RString, IKwValue
+        public partial class CKwValue : RLiteral, IKwValue
         {
             public CKwValue(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralFloat : RString, ILiteralFloat
+        public partial class CLiteralFloat : RToken, ILiteralFloat
         {
             public CLiteralFloat(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralNatural : RString, ILiteralNatural
+        public partial class CLiteralNatural : RToken, ILiteralNatural
         {
             public CLiteralNatural(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralChar : RString, ILiteralChar
+        public partial class CLiteralChar : RToken, ILiteralChar
         {
             public CLiteralChar(params Node[] children) : base(children) {}
         }
 
-        public partial class CStringStart : RString, IStringStart
+        public partial class CStringStart : RToken, IStringStart
         {
             public CStringStart(params Node[] children) : base(children) {}
         }
 
-        public partial class CStringMid : RString, IStringMid
+        public partial class CStringMid : RToken, IStringMid
         {
             public CStringMid(params Node[] children) : base(children) {}
         }
 
-        public partial class CStringEnd : RString, IStringEnd
+        public partial class CStringEnd : RToken, IStringEnd
         {
             public CStringEnd(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralString : RString, ILiteralString
+        public partial class CLiteralString : RToken, ILiteralString
         {
             public CLiteralString(params Node[] children) : base(children) {}
         }
 
-        public partial class CVerbatimString : RString, IVerbatimString
+        public partial class CVerbatimString : RToken, IVerbatimString
         {
             public CVerbatimString(params Node[] children) : base(children) {}
         }
 
-        public partial class CLowerIdentifier : RString, ILowerIdentifier
+        public partial class CLowerIdentifier : RToken, ILowerIdentifier
         {
             public CLowerIdentifier(params Node[] children) : base(children) {}
         }
 
-        public partial class CUpperIdentifier : RString, IUpperIdentifier
+        public partial class CUpperIdentifier : RToken, IUpperIdentifier
         {
             public CUpperIdentifier(params Node[] children) : base(children) {}
         }

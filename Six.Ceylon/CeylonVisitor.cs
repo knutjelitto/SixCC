@@ -3,7 +3,7 @@ using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
-    public class DeclarationVisitor : DynamicCeylonVisitor
+    public class CeylonVisitor : DynamicCeylonVisitor
     {
         protected override void DefaultImplementation(RNode element)
         {
@@ -647,11 +647,6 @@ namespace Six.Ceylon
             WalkChilden(element);
         }
 
-        protected override void Visit(CNotOperator element)
-        {
-            WalkChilden(element);
-        }
-
         protected override void Visit(CSpanned element)
         {
             WalkChilden(element);
@@ -805,6 +800,26 @@ namespace Six.Ceylon
         }
 
         protected override void Visit(CValueLiteral element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CAliasLiteral element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CNewLiteral element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CPackageLiteral element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CTypeParameterLiteral element)
         {
             WalkChilden(element);
         }
@@ -1086,6 +1101,12 @@ namespace Six.Ceylon
         /**********************************************************************
          *  Operators
          **********************************************************************/
+
+        protected override void Visit(CNotOperator element)
+        {
+            WalkChilden(element);
+        }
+
         protected override void Visit(CVariadicOperator element)
         {
             WalkChilden(element);

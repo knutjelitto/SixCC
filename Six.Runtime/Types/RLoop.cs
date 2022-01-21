@@ -21,7 +21,7 @@
         {
             return Enumerable.Repeat(children[0], 1).Concat(elements(children[1])).ToArray();
 
-            IEnumerable<RNode> elements(RNode seconds)
+            static IEnumerable<RNode> elements(RNode seconds)
             {
                 foreach (var child in seconds.Children)
                 {
@@ -36,7 +36,7 @@
         {
             return separators(children[1]).ToArray();
 
-            IEnumerable<RNode> separators(RNode seconds)
+            static IEnumerable<RNode> separators(RNode seconds)
             {
                 foreach (var child in seconds.Children)
                 {

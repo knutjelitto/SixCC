@@ -1,4 +1,5 @@
-﻿using Six.Runtime.Sppf;
+﻿using Six.Runtime.Matchers;
+using Six.Runtime.Sppf;
 
 namespace Six.Runtime.Types
 {
@@ -103,6 +104,10 @@ namespace Six.Runtime.Types
 
             if (node.Matcher.Creator != null)
             {
+                if (node.Matcher is DfaRule)
+                {
+                    Assert(true);
+                }
                 yield return node.Matcher.Creator!.Invoke(node);
             }
         }

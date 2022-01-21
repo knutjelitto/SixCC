@@ -3,14 +3,14 @@ using Six.Runtime.Sppf;
 
 namespace Six.Runtime.Types
 {
-    public class RString : RNode
+    public class RLiteral : RNode
     {
-        public RString(params Node[] nodes)
+        public RLiteral(params Node[] nodes)
             : this((Terminal)nodes[0])
         {
         }
 
-        public RString(Terminal terminal)
+        public RLiteral(Terminal terminal)
         {
             Start = terminal.Start.Offset;
             Core = terminal.Core.Offset;

@@ -143,12 +143,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -225,7 +225,7 @@ namespace GeneratedParser
             public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
-        public partial class CD : RString, ID
+        public partial class CD : RLiteral, ID
         {
             public CD(params Node[] children) : base(children) {}
         }

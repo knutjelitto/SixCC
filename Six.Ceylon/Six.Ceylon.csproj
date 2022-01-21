@@ -10,1128 +10,1755 @@
 
     <ItemGroup>
         <None Remove="Ceylon.six" />
-        <None Remove="ceylon\locale\columns.ceylon" />
-        <None Remove="ceylon\locale\Currency.ceylon" />
-        <None Remove="ceylon\locale\DateField.ceylon" />
-        <None Remove="ceylon\locale\Formats.ceylon" />
-        <None Remove="ceylon\locale\Language.ceylon" />
-        <None Remove="ceylon\locale\Locale.ceylon" />
-        <None Remove="ceylon\locale\module.ceylon" />
-        <None Remove="ceylon\locale\package.ceylon" />
-        <None Remove="ceylon\locale\parsePropertiesFile.ceylon" />
-        <None Remove="ceylon\logging\Logger.ceylon" />
-        <None Remove="ceylon\logging\LogWriter.ceylon" />
-        <None Remove="ceylon\logging\module.ceylon" />
-        <None Remove="ceylon\logging\package.ceylon" />
-        <None Remove="ceylon\logging\Priority.ceylon" />
-        <None Remove="ceylon\process\internal\ConcreteProcess.ceylon" />
-        <None Remove="ceylon\process\internal\environment.ceylon" />
-        <None Remove="ceylon\process\internal\IncomingPipe.ceylon" />
-        <None Remove="ceylon\process\internal\OutgoingPipe.ceylon" />
-        <None Remove="ceylon\process\internal\package.ceylon" />
-        <None Remove="ceylon\process\module.ceylon" />
-        <None Remove="ceylon\process\package.ceylon" />
-        <None Remove="ceylon\process\Process.ceylon" />
-        <None Remove="ceylon\promise\addGlobalExecutionListener.ceylon" />
-        <None Remove="ceylon\promise\Completable.ceylon" />
-        <None Remove="ceylon\promise\Completion.ceylon" />
-        <None Remove="ceylon\promise\Conjunction.ceylon" />
-        <None Remove="ceylon\promise\Deferred.ceylon" />
-        <None Remove="ceylon\promise\ExecutionContext.ceylon" />
-        <None Remove="ceylon\promise\ExecutionListener.ceylon" />
-        <None Remove="ceylon\promise\globalExecutionContext.ceylon" />
-        <None Remove="ceylon\promise\internal\AtomicRef.ceylon" />
-        <None Remove="ceylon\promise\internal\package.ceylon" />
-        <None Remove="ceylon\promise\internal\runtimeContext.ceylon" />
-        <None Remove="ceylon\promise\module.ceylon" />
-        <None Remove="ceylon\promise\package.ceylon" />
-        <None Remove="ceylon\promise\Promise.ceylon" />
-        <None Remove="ceylon\promise\Promised.ceylon" />
-        <None Remove="ceylon\promise\Utils.ceylon" />
-        <None Remove="ceylon\language\and.ceylon" />
-        <None Remove="ceylon\language\Annotated.ceylon" />
-        <None Remove="ceylon\language\Annotation.ceylon" />
-        <None Remove="ceylon\language\annotations.ceylon" />
-        <None Remove="ceylon\language\any.ceylon" />
-        <None Remove="ceylon\language\Anything.ceylon" />
-        <None Remove="ceylon\language\apply.ceylon" />
-        <None Remove="ceylon\language\Array.ceylon" />
-        <None Remove="ceylon\language\arrayOfSize.ceylon" />
-        <None Remove="ceylon\language\ArraySequence.ceylon" />
-        <None Remove="ceylon\language\AssertionError.ceylon" />
-        <None Remove="ceylon\language\Basic.ceylon" />
-        <None Remove="ceylon\language\Binary.ceylon" />
-        <None Remove="ceylon\language\Boolean.ceylon" />
-        <None Remove="ceylon\language\byDecreasing.ceylon" />
-        <None Remove="ceylon\language\byIncreasing.ceylon" />
-        <None Remove="ceylon\language\byItem.ceylon" />
-        <None Remove="ceylon\language\byKey.ceylon" />
-        <None Remove="ceylon\language\Byte.ceylon" />
-        <None Remove="ceylon\language\Callable.ceylon" />
-        <None Remove="ceylon\language\Category.ceylon" />
-        <None Remove="ceylon\language\ChainedIterator.ceylon" />
-        <None Remove="ceylon\language\Character.ceylon" />
-        <None Remove="ceylon\language\className.ceylon" />
-        <None Remove="ceylon\language\Collection.ceylon" />
-        <None Remove="ceylon\language\Comparable.ceylon" />
-        <None Remove="ceylon\language\comparing.ceylon" />
-        <None Remove="ceylon\language\Comparison.ceylon" />
-        <None Remove="ceylon\language\compose.ceylon" />
-        <None Remove="ceylon\language\concatenate.ceylon" />
-        <None Remove="ceylon\language\ConstrainedAnnotation.ceylon" />
-        <None Remove="ceylon\language\Contextual.ceylon" />
-        <None Remove="ceylon\language\Correspondence.ceylon" />
-        <None Remove="ceylon\language\corresponding.ceylon" />
-        <None Remove="ceylon\language\count.ceylon" />
-        <None Remove="ceylon\language\curry.ceylon" />
-        <None Remove="ceylon\language\CycledIterator.ceylon" />
-        <None Remove="ceylon\language\Destroyable.ceylon" />
-        <None Remove="ceylon\language\Empty.ceylon" />
-        <None Remove="ceylon\language\emptyOrSingleton.ceylon" />
-        <None Remove="ceylon\language\Entry.ceylon" />
-        <None Remove="ceylon\language\Enumerable.ceylon" />
-        <None Remove="ceylon\language\every.ceylon" />
-        <None Remove="ceylon\language\Exception.ceylon" />
-        <None Remove="ceylon\language\expand.ceylon" />
-        <None Remove="ceylon\language\Exponentiable.ceylon" />
-        <None Remove="ceylon\language\Finished.ceylon" />
-        <None Remove="ceylon\language\flatten.ceylon" />
-        <None Remove="ceylon\language\Float.ceylon" />
-        <None Remove="ceylon\language\forItem.ceylon" />
-        <None Remove="ceylon\language\forKey.ceylon" />
-        <None Remove="ceylon\language\formatFloat.ceylon" />
-        <None Remove="ceylon\language\formatInteger.ceylon" />
-        <None Remove="ceylon\language\functions.ceylon" />
-        <None Remove="ceylon\language\identical.ceylon" />
-        <None Remove="ceylon\language\Identifiable.ceylon" />
-        <None Remove="ceylon\language\identityHash.ceylon" />
-        <None Remove="ceylon\language\impl\bases.ceylon" />
-        <None Remove="ceylon\language\impl\ElementImpl.ceylon" />
-        <None Remove="ceylon\language\impl\MemberImpl.ceylon" />
-        <None Remove="ceylon\language\impl\outerImpl.ceylon" />
-        <None Remove="ceylon\language\impl\package.ceylon" />
-        <None Remove="ceylon\language\impl\reach.ceylon" />
-        <None Remove="ceylon\language\impl\rethrow.ceylon" />
-        <None Remove="ceylon\language\infinity.ceylon" />
-        <None Remove="ceylon\language\InitializationError.ceylon" />
-        <None Remove="ceylon\language\Integer.ceylon" />
-        <None Remove="ceylon\language\Integral.ceylon" />
-        <None Remove="ceylon\language\interleave.ceylon" />
-        <None Remove="ceylon\language\Invertible.ceylon" />
-        <None Remove="ceylon\language\Iterable.ceylon" />
-        <None Remove="ceylon\language\Iterator.ceylon" />
-        <None Remove="ceylon\language\language.ceylon" />
-        <None Remove="ceylon\language\largest.ceylon" />
-        <None Remove="ceylon\language\List.ceylon" />
-        <None Remove="ceylon\language\loop.ceylon" />
-        <None Remove="ceylon\language\Map.ceylon" />
-        <None Remove="ceylon\language\max.ceylon" />
-        <None Remove="ceylon\language\Measure.ceylon" />
-        <None Remove="ceylon\language\meta\annotations.ceylon" />
-        <None Remove="ceylon\language\meta\classDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\AliasDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\AnnotatedDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\CallableConstructorDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ClassDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ClassOrInterfaceDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ClassWithConstructorsDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ClassWithInitializerDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ConstructorDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\Declaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\FunctionalDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\FunctionDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\FunctionOrValueDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\GenericDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\GettableDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\InterfaceDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ModuleAndPackage.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\NestableDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\nothingType.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenClassOrInterfaceType.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenClassType.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenInterfaceType.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenIntersection.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenType.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenTypeArgument.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenTypeVariable.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\OpenUnion.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\package.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\SetterDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\TypedDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\TypeParameter.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ValueConstructorDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\ValueDeclaration.ceylon" />
-        <None Remove="ceylon\language\meta\declaration\Variance.ceylon" />
-        <None Remove="ceylon\language\meta\model\Applicable.ceylon" />
-        <None Remove="ceylon\language\meta\model\Attribute.ceylon" />
-        <None Remove="ceylon\language\meta\model\CallableConstructor.ceylon" />
-        <None Remove="ceylon\language\meta\model\Class.ceylon" />
-        <None Remove="ceylon\language\meta\model\ClassModel.ceylon" />
-        <None Remove="ceylon\language\meta\model\ClassOrInterface.ceylon" />
-        <None Remove="ceylon\language\meta\model\Declared.ceylon" />
-        <None Remove="ceylon\language\meta\model\Function.ceylon" />
-        <None Remove="ceylon\language\meta\model\Functional.ceylon" />
-        <None Remove="ceylon\language\meta\model\FunctionModel.ceylon" />
-        <None Remove="ceylon\language\meta\model\Generic.ceylon" />
-        <None Remove="ceylon\language\meta\model\Gettable.ceylon" />
-        <None Remove="ceylon\language\meta\model\IncompatibleTypeException.ceylon" />
-        <None Remove="ceylon\language\meta\model\Interface.ceylon" />
-        <None Remove="ceylon\language\meta\model\InterfaceModel.ceylon" />
-        <None Remove="ceylon\language\meta\model\IntersectionType.ceylon" />
-        <None Remove="ceylon\language\meta\model\InvocationException.ceylon" />
-        <None Remove="ceylon\language\meta\model\Member.ceylon" />
-        <None Remove="ceylon\language\meta\model\MemberClass.ceylon" />
-        <None Remove="ceylon\language\meta\model\MemberClassCallableConstructor.ceylon" />
-        <None Remove="ceylon\language\meta\model\MemberClassValueConstructor.ceylon" />
-        <None Remove="ceylon\language\meta\model\MemberInterface.ceylon" />
-        <None Remove="ceylon\language\meta\model\Method.ceylon" />
-        <None Remove="ceylon\language\meta\model\Model.ceylon" />
-        <None Remove="ceylon\language\meta\model\MutationException.ceylon" />
-        <None Remove="ceylon\language\meta\model\nothingType.ceylon" />
-        <None Remove="ceylon\language\meta\model\package.ceylon" />
-        <None Remove="ceylon\language\meta\model\Qualified.ceylon" />
-        <None Remove="ceylon\language\meta\model\StorageException.ceylon" />
-        <None Remove="ceylon\language\meta\model\Type.ceylon" />
-        <None Remove="ceylon\language\meta\model\TypeApplicationException.ceylon" />
-        <None Remove="ceylon\language\meta\model\TypeArgument.ceylon" />
-        <None Remove="ceylon\language\meta\model\UnionType.ceylon" />
-        <None Remove="ceylon\language\meta\model\Value.ceylon" />
-        <None Remove="ceylon\language\meta\model\ValueConstructor.ceylon" />
-        <None Remove="ceylon\language\meta\model\ValueModel.ceylon" />
-        <None Remove="ceylon\language\meta\modules.ceylon" />
-        <None Remove="ceylon\language\meta\optionalAnnotation.ceylon" />
-        <None Remove="ceylon\language\meta\package.ceylon" />
-        <None Remove="ceylon\language\meta\sequencedAnnotations.ceylon" />
-        <None Remove="ceylon\language\meta\type.ceylon" />
-        <None Remove="ceylon\language\meta\typeLiteral.ceylon" />
-        <None Remove="ceylon\language\min.ceylon" />
-        <None Remove="ceylon\language\module.ceylon" />
-        <None Remove="ceylon\language\Multiplicable.ceylon" />
-        <None Remove="ceylon\language\not.ceylon" />
-        <None Remove="ceylon\language\nothing.ceylon" />
-        <None Remove="ceylon\language\Null.ceylon" />
-        <None Remove="ceylon\language\Number.ceylon" />
-        <None Remove="ceylon\language\Numeric.ceylon" />
-        <None Remove="ceylon\language\Object.ceylon" />
-        <None Remove="ceylon\language\Obtainable.ceylon" />
-        <None Remove="ceylon\language\operatingSystem.ceylon" />
-        <None Remove="ceylon\language\OptionalAnnotation.ceylon" />
-        <None Remove="ceylon\language\or.ceylon" />
-        <None Remove="ceylon\language\Ordinal.ceylon" />
-        <None Remove="ceylon\language\OverflowException.ceylon" />
-        <None Remove="ceylon\language\package.ceylon" />
-        <None Remove="ceylon\language\pairs.ceylon" />
-        <None Remove="ceylon\language\parseBoolean.ceylon" />
-        <None Remove="ceylon\language\ParseException.ceylon" />
-        <None Remove="ceylon\language\parseFloat.ceylon" />
-        <None Remove="ceylon\language\parseInteger.ceylon" />
-        <None Remove="ceylon\language\plus.ceylon" />
-        <None Remove="ceylon\language\print.ceylon" />
-        <None Remove="ceylon\language\printStackTrace.ceylon" />
-        <None Remove="ceylon\language\process.ceylon" />
-        <None Remove="ceylon\language\product.ceylon" />
-        <None Remove="ceylon\language\Range.ceylon" />
-        <None Remove="ceylon\language\Ranged.ceylon" />
-        <None Remove="ceylon\language\Resource.ceylon" />
-        <None Remove="ceylon\language\runtime.ceylon" />
-        <None Remove="ceylon\language\Scalable.ceylon" />
-        <None Remove="ceylon\language\SearchableList.ceylon" />
-        <None Remove="ceylon\language\Sequence.ceylon" />
-        <None Remove="ceylon\language\SequencedAnnotation.ceylon" />
-        <None Remove="ceylon\language\Sequential.ceylon" />
-        <None Remove="ceylon\language\Set.ceylon" />
-        <None Remove="ceylon\language\shuffle.ceylon" />
-        <None Remove="ceylon\language\Singleton.ceylon" />
-        <None Remove="ceylon\language\smallest.ceylon" />
-        <None Remove="ceylon\language\sort.ceylon" />
-        <None Remove="ceylon\language\Span.ceylon" />
-        <None Remove="ceylon\language\String.ceylon" />
-        <None Remove="ceylon\language\StringBuilder.ceylon" />
-        <None Remove="ceylon\language\StringTokens.ceylon" />
-        <None Remove="ceylon\language\sum.ceylon" />
-        <None Remove="ceylon\language\Summable.ceylon" />
-        <None Remove="ceylon\language\system.ceylon" />
-        <None Remove="ceylon\language\Throwable.ceylon" />
-        <None Remove="ceylon\language\times.ceylon" />
-        <None Remove="ceylon\language\transpose.ceylon" />
-        <None Remove="ceylon\language\Tuple.ceylon" />
-        <None Remove="ceylon\language\unflatten.ceylon" />
-        <None Remove="ceylon\language\unzip.ceylon" />
-        <None Remove="ceylon\language\Usable.ceylon" />
-        <None Remove="ceylon\language\vmArguments.ceylon" />
-        <None Remove="ceylon\language\zip.ceylon" />
-        <None Remove="ceylon\buffer\base\base16.ceylon" />
-        <None Remove="ceylon\buffer\base\base32.ceylon" />
-        <None Remove="ceylon\buffer\base\base64.ceylon" />
-        <None Remove="ceylon\buffer\base\lookup.ceylon" />
-        <None Remove="ceylon\buffer\base\package.ceylon" />
-        <None Remove="ceylon\buffer\Buffer.ceylon" />
-        <None Remove="ceylon\buffer\ByteBuffer.ceylon" />
-        <None Remove="ceylon\buffer\CharacterBuffer.ceylon" />
-        <None Remove="ceylon\buffer\charset\ascii.ceylon" />
-        <None Remove="ceylon\buffer\charset\Charset.ceylon" />
-        <None Remove="ceylon\buffer\charset\iso_8859_1.ceylon" />
-        <None Remove="ceylon\buffer\charset\lookup.ceylon" />
-        <None Remove="ceylon\buffer\charset\package.ceylon" />
-        <None Remove="ceylon\buffer\charset\utf16.ceylon" />
-        <None Remove="ceylon\buffer\charset\utf8.ceylon" />
-        <None Remove="ceylon\buffer\codec\Codec.ceylon" />
-        <None Remove="ceylon\buffer\codec\codecs.ceylon" />
-        <None Remove="ceylon\buffer\codec\IncrementalCodec.ceylon" />
-        <None Remove="ceylon\buffer\codec\lookup.ceylon" />
-        <None Remove="ceylon\buffer\codec\package.ceylon" />
-        <None Remove="ceylon\buffer\codec\StatelessCodec.ceylon" />
-        <None Remove="ceylon\buffer\common.ceylon" />
-        <None Remove="ceylon\buffer\exception.ceylon" />
-        <None Remove="ceylon\buffer\module.ceylon" />
-        <None Remove="ceylon\buffer\package.ceylon" />
-        <None Remove="ceylon\buffer\readers\array.ceylon" />
-        <None Remove="ceylon\buffer\readers\package.ceylon" />
-        <None Remove="ceylon\buffer\readers\Reader.ceylon" />
-        <None Remove="ceylon\buffer\text\caesar.ceylon" />
-        <None Remove="ceylon\buffer\text\package.ceylon" />
-        <None Remove="ceylon\buffer\text\Substitution.ceylon" />
-        <None Remove="ceylon\collection\ArrayList.ceylon" />
-        <None Remove="ceylon\collection\Cell.ceylon" />
-        <None Remove="ceylon\collection\frequencies.ceylon" />
-        <None Remove="ceylon\collection\group.ceylon" />
-        <None Remove="ceylon\collection\HashMap.ceylon" />
-        <None Remove="ceylon\collection\HashSet.ceylon" />
-        <None Remove="ceylon\collection\Hashtable.ceylon" />
-        <None Remove="ceylon\collection\IdentityMap.ceylon" />
-        <None Remove="ceylon\collection\IdentitySet.ceylon" />
-        <None Remove="ceylon\collection\invert.ceylon" />
-        <None Remove="ceylon\collection\LinkedCell.ceylon" />
-        <None Remove="ceylon\collection\LinkedList.ceylon" />
-        <None Remove="ceylon\collection\makeCellArray.ceylon" />
-        <None Remove="ceylon\collection\module.ceylon" />
-        <None Remove="ceylon\collection\MutableList.ceylon" />
-        <None Remove="ceylon\collection\MutableMap.ceylon" />
-        <None Remove="ceylon\collection\MutableSet.ceylon" />
-        <None Remove="ceylon\collection\package.ceylon" />
-        <None Remove="ceylon\collection\partition.ceylon" />
-        <None Remove="ceylon\collection\PriorityQueue.ceylon" />
-        <None Remove="ceylon\collection\Queue.ceylon" />
-        <None Remove="ceylon\collection\SingletonMap.ceylon" />
-        <None Remove="ceylon\collection\SingletonSet.ceylon" />
-        <None Remove="ceylon\collection\SortedMap.ceylon" />
-        <None Remove="ceylon\collection\SortedSet.ceylon" />
-        <None Remove="ceylon\collection\Stability.ceylon" />
-        <None Remove="ceylon\collection\Stack.ceylon" />
-        <None Remove="ceylon\collection\StoreIterator.ceylon" />
-        <None Remove="ceylon\collection\TreeMap.ceylon" />
-        <None Remove="ceylon\collection\TreeSet.ceylon" />
-        <None Remove="ceylon\collection\UnmodifiableList.ceylon" />
-        <None Remove="ceylon\collection\UnmodifiableMap.ceylon" />
-        <None Remove="ceylon\collection\UnmodifiableSet.ceylon" />
-        <None Remove="ceylon\decimal\constants.ceylon" />
-        <None Remove="ceylon\decimal\Decimal.ceylon" />
-        <None Remove="ceylon\decimal\DecimalImpl.ceylon" />
-        <None Remove="ceylon\decimal\decimalNumber.ceylon" />
-        <None Remove="ceylon\decimal\implicitlyRounded.ceylon" />
-        <None Remove="ceylon\decimal\module.ceylon" />
-        <None Remove="ceylon\decimal\package.ceylon" />
-        <None Remove="ceylon\decimal\parseDecimal.ceylon" />
-        <None Remove="ceylon\decimal\Rounding.ceylon" />
-        <None Remove="ceylon\decimal\RoundingImpl.ceylon" />
-        <None Remove="ceylon\decimal\wholeConversion.ceylon" />
-        <None Remove="ceylon\file\Attribute.ceylon" />
-        <None Remove="ceylon\file\Directory.ceylon" />
-        <None Remove="ceylon\file\File.ceylon" />
-        <None Remove="ceylon\file\internal\attributeName.ceylon" />
-        <None Remove="ceylon\file\internal\ConcreteDirectory.ceylon" />
-        <None Remove="ceylon\file\internal\ConcreteFile.ceylon" />
-        <None Remove="ceylon\file\internal\ConcreteLink.ceylon" />
-        <None Remove="ceylon\file\internal\ConcreteNil.ceylon" />
-        <None Remove="ceylon\file\internal\ConcretePath.ceylon" />
-        <None Remove="ceylon\file\internal\ConcreteStore.ceylon" />
-        <None Remove="ceylon\file\internal\ConcreteSystem.ceylon" />
-        <None Remove="ceylon\file\internal\package.ceylon" />
-        <None Remove="ceylon\file\internal\parseCharset.ceylon" />
-        <None Remove="ceylon\file\internal\principal.ceylon" />
-        <None Remove="ceylon\file\internal\temporaryDirectory.ceylon" />
-        <None Remove="ceylon\file\Link.ceylon" />
-        <None Remove="ceylon\file\module.ceylon" />
-        <None Remove="ceylon\file\Nil.ceylon" />
-        <None Remove="ceylon\file\package.ceylon" />
-        <None Remove="ceylon\file\Path.ceylon" />
-        <None Remove="ceylon\file\Reader.ceylon" />
-        <None Remove="ceylon\file\Resource.ceylon" />
-        <None Remove="ceylon\file\Store.ceylon" />
-        <None Remove="ceylon\file\System.ceylon" />
-        <None Remove="ceylon\file\Writer.ceylon" />
-        <None Remove="ceylon\io\FileDescriptor.ceylon" />
-        <None Remove="ceylon\io\impl\debug.ceylon" />
-        <None Remove="ceylon\io\impl\InputStreamAdapter.ceylon" />
-        <None Remove="ceylon\io\impl\OpenFileImpl.ceylon" />
-        <None Remove="ceylon\io\impl\OutputStreamAdapter.ceylon" />
-        <None Remove="ceylon\io\impl\SelectorImpl.ceylon" />
-        <None Remove="ceylon\io\impl\ServerSocketImpl.ceylon" />
-        <None Remove="ceylon\io\impl\SocketConnectorImpl.ceylon" />
-        <None Remove="ceylon\io\impl\SocketImpl.ceylon" />
-        <None Remove="ceylon\io\impl\SslSocketImpl.ceylon" />
-        <None Remove="ceylon\io\module.ceylon" />
-        <None Remove="ceylon\io\OpenFile.ceylon" />
-        <None Remove="ceylon\io\package.ceylon" />
-        <None Remove="ceylon\io\readers\FileDescriptorReader.ceylon" />
-        <None Remove="ceylon\io\readers\package.ceylon" />
-        <None Remove="ceylon\io\SelectableFileDescriptor.ceylon" />
-        <None Remove="ceylon\io\Selector.ceylon" />
-        <None Remove="ceylon\io\ServerSocket.ceylon" />
-        <None Remove="ceylon\io\Socket.ceylon" />
-        <None Remove="ceylon\io\SocketAddress.ceylon" />
-        <None Remove="ceylon\io\SocketConnector.ceylon" />
-        <None Remove="ceylon\io\stdio.ceylon" />
-        <None Remove="ceylon\io\translators.ceylon" />
-        <None Remove="ceylon\io\utils.ceylon" />
-        <None Remove="ceylon\json\Array.ceylon" />
-        <None Remove="ceylon\json\Builder.ceylon" />
-        <None Remove="ceylon\json\Emitter.ceylon" />
-        <None Remove="ceylon\json\InvalidTypeException.ceylon" />
-        <None Remove="ceylon\json\module.ceylon" />
-        <None Remove="ceylon\json\Object.ceylon" />
-        <None Remove="ceylon\json\package.ceylon" />
-        <None Remove="ceylon\json\parse.ceylon" />
-        <None Remove="ceylon\json\ParseException.ceylon" />
-        <None Remove="ceylon\json\Printer.ceylon" />
-        <None Remove="ceylon\json\stream\Builder.ceylon" />
-        <None Remove="ceylon\json\stream\events.ceylon" />
-        <None Remove="ceylon\json\stream\package.ceylon" />
-        <None Remove="ceylon\json\stream\StreamingVisitor.ceylon" />
-        <None Remove="ceylon\json\stream\StreamParser.ceylon" />
-        <None Remove="ceylon\json\StringPrinter.ceylon" />
-        <None Remove="ceylon\json\tokenize.ceylon" />
-        <None Remove="ceylon\json\Value.ceylon" />
-        <None Remove="ceylon\json\Visitor.ceylon" />
-        <None Remove="ceylon\math\decimal\constants.ceylon" />
-        <None Remove="ceylon\math\decimal\Decimal.ceylon" />
-        <None Remove="ceylon\math\decimal\DecimalImpl.ceylon" />
-        <None Remove="ceylon\math\decimal\decimalNumber.ceylon" />
-        <None Remove="ceylon\math\decimal\implicitlyRounded.ceylon" />
-        <None Remove="ceylon\math\decimal\package.ceylon" />
-        <None Remove="ceylon\math\decimal\parseDecimal.ceylon" />
-        <None Remove="ceylon\math\decimal\Rounding.ceylon" />
-        <None Remove="ceylon\math\decimal\RoundingImpl.ceylon" />
-        <None Remove="ceylon\math\float\constants.ceylon" />
-        <None Remove="ceylon\math\float\functions.ceylon" />
-        <None Remove="ceylon\math\float\package.ceylon" />
-        <None Remove="ceylon\math\integer\functions.ceylon" />
-        <None Remove="ceylon\math\integer\package.ceylon" />
-        <None Remove="ceylon\math\module.ceylon" />
-        <None Remove="ceylon\math\package.ceylon" />
-        <None Remove="ceylon\math\whole\constants.ceylon" />
-        <None Remove="ceylon\math\whole\formatWhole.ceylon" />
-        <None Remove="ceylon\math\whole\fromImplementation.ceylon" />
-        <None Remove="ceylon\math\whole\package.ceylon" />
-        <None Remove="ceylon\math\whole\parseWhole.ceylon" />
-        <None Remove="ceylon\math\whole\Whole.ceylon" />
-        <None Remove="ceylon\math\whole\WholeImpl.ceylon" />
-        <None Remove="ceylon\math\whole\wholeNumber.ceylon" />
-        <None Remove="ceylon\numeric\float\constants.ceylon" />
-        <None Remove="ceylon\numeric\float\functions.ceylon" />
-        <None Remove="ceylon\numeric\float\package.ceylon" />
-        <None Remove="ceylon\numeric\integer\functions.ceylon" />
-        <None Remove="ceylon\numeric\integer\package.ceylon" />
-        <None Remove="ceylon\numeric\module.ceylon" />
-        <None Remove="ceylon\numeric\package.ceylon" />
-        <None Remove="ceylon\random\DefaultRandom.ceylon" />
-        <None Remove="ceylon\random\module.ceylon" />
-        <None Remove="ceylon\random\package.ceylon" />
-        <None Remove="ceylon\random\Random.ceylon" />
-        <None Remove="ceylon\random\randomize.ceylon" />
-        <None Remove="ceylon\random\randomizeInPlace.ceylon" />
-        <None Remove="ceylon\random\randomLimits.ceylon" />
-        <None Remove="ceylon\random\stream.ceylon" />
-        <None Remove="ceylon\test\annotations.ceylon" />
-        <None Remove="ceylon\test\annotation\annotations.ceylon" />
-        <None Remove="ceylon\test\annotation\package.ceylon" />
-        <None Remove="ceylon\test\assertions.ceylon" />
-        <None Remove="ceylon\test\assumptions.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultArgumentListResolver.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultLoggingListener.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultTestExecutor.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultTestExtensionResolver.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultTestInstanceProvider.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultTestRunner.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultTestRunResult.ceylon" />
-        <None Remove="ceylon\test\engine\DefaultTestVariantProvider.ceylon" />
-        <None Remove="ceylon\test\engine\exceptions.ceylon" />
-        <None Remove="ceylon\test\engine\internal\BeforeAfterTestRunCallbacksInvoker.ceylon" />
-        <None Remove="ceylon\test\engine\internal\executors.ceylon" />
-        <None Remove="ceylon\test\engine\internal\file.ceylon" />
-        <None Remove="ceylon\test\engine\internal\Options.ceylon" />
-        <None Remove="ceylon\test\engine\internal\package.ceylon" />
-        <None Remove="ceylon\test\engine\internal\Runner.ceylon" />
-        <None Remove="ceylon\test\engine\internal\socket.ceylon" />
-        <None Remove="ceylon\test\engine\internal\TestEventEmitter.ceylon" />
-        <None Remove="ceylon\test\engine\internal\TestEventPublisher.ceylon" />
-        <None Remove="ceylon\test\engine\internal\TestLoggingListener.ceylon" />
-        <None Remove="ceylon\test\engine\internal\utils.ceylon" />
-        <None Remove="ceylon\test\engine\package.ceylon" />
-        <None Remove="ceylon\test\engine\spi\ArgumentListProvider.ceylon" />
-        <None Remove="ceylon\test\engine\spi\ArgumentListResolver.ceylon" />
-        <None Remove="ceylon\test\engine\spi\ArgumentProvider.ceylon" />
-        <None Remove="ceylon\test\engine\spi\ArgumentProviderContext.ceylon" />
-        <None Remove="ceylon\test\engine\spi\package.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestCondition.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestExecutionContext.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestExecutor.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestExtension.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestExtensionResolver.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestInstancePostProcessor.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestInstanceProvider.ceylon" />
-        <None Remove="ceylon\test\engine\spi\TestVariantProvider.ceylon" />
-        <None Remove="ceylon\test\engine\TagFilter.ceylon" />
-        <None Remove="ceylon\test\event\events.ceylon" />
-        <None Remove="ceylon\test\event\package.ceylon" />
-        <None Remove="ceylon\test\module.ceylon" />
-        <None Remove="ceylon\test\package.ceylon" />
-        <None Remove="ceylon\test\reporter\HtmlReporter.ceylon" />
-        <None Remove="ceylon\test\reporter\package.ceylon" />
-        <None Remove="ceylon\test\reporter\TapReporter.ceylon" />
-        <None Remove="ceylon\test\reporter\XmlJUnitReporter.ceylon" />
-        <None Remove="ceylon\test\TestDescription.ceylon" />
-        <None Remove="ceylon\test\TestListener.ceylon" />
-        <None Remove="ceylon\test\TestResult.ceylon" />
-        <None Remove="ceylon\test\TestRunner.ceylon" />
-        <None Remove="ceylon\test\TestRunResult.ceylon" />
-        <None Remove="ceylon\test\TestState.ceylon" />
-        <None Remove="ceylon\test\tool.ceylon" />
-        <None Remove="ceylon\time\base\constants.ceylon" />
-        <None Remove="ceylon\time\base\DateBehavior.ceylon" />
-        <None Remove="ceylon\time\base\DateTimeBehavior.ceylon" />
-        <None Remove="ceylon\time\base\DayOfWeek.ceylon" />
-        <None Remove="ceylon\time\base\Month.ceylon" />
-        <None Remove="ceylon\time\base\MonthBehavior.ceylon" />
-        <None Remove="ceylon\time\base\package.ceylon" />
-        <None Remove="ceylon\time\base\PeriodBehavior.ceylon" />
-        <None Remove="ceylon\time\base\Range.ceylon" />
-        <None Remove="ceylon\time\base\ReadableDate.ceylon" />
-        <None Remove="ceylon\time\base\ReadableDateTime.ceylon" />
-        <None Remove="ceylon\time\base\ReadableDuration.ceylon" />
-        <None Remove="ceylon\time\base\ReadableInstant.ceylon" />
-        <None Remove="ceylon\time\base\ReadableMonth.ceylon" />
-        <None Remove="ceylon\time\base\ReadablePeriod.ceylon" />
-        <None Remove="ceylon\time\base\ReadableTime.ceylon" />
-        <None Remove="ceylon\time\base\ReadableYear.ceylon" />
-        <None Remove="ceylon\time\base\TimeBehavior.ceylon" />
-        <None Remove="ceylon\time\base\YearBehavior.ceylon" />
-        <None Remove="ceylon\time\chronology\Chronology.ceylon" />
-        <None Remove="ceylon\time\chronology\package.ceylon" />
-        <None Remove="ceylon\time\Clock.ceylon" />
-        <None Remove="ceylon\time\Date.ceylon" />
-        <None Remove="ceylon\time\DateRange.ceylon" />
-        <None Remove="ceylon\time\DateTime.ceylon" />
-        <None Remove="ceylon\time\DateTimeRange.ceylon" />
-        <None Remove="ceylon\time\Duration.ceylon" />
-        <None Remove="ceylon\time\Instant.ceylon" />
-        <None Remove="ceylon\time\internal\GregorianDate.ceylon" />
-        <None Remove="ceylon\time\internal\GregorianDateTime.ceylon" />
-        <None Remove="ceylon\time\internal\GregorianYearMonth.ceylon" />
-        <None Remove="ceylon\time\internal\GregorianZonedDateTime.ceylon" />
-        <None Remove="ceylon\time\internal\math\functions.ceylon" />
-        <None Remove="ceylon\time\internal\math\package.ceylon" />
-        <None Remove="ceylon\time\internal\package.ceylon" />
-        <None Remove="ceylon\time\internal\TimeOfDay.ceylon" />
-        <None Remove="ceylon\time\internal\utils.ceylon" />
-        <None Remove="ceylon\time\iso8601\package.ceylon" />
-        <None Remove="ceylon\time\iso8601\parseDate.ceylon" />
-        <None Remove="ceylon\time\iso8601\parseDateTime.ceylon" />
-        <None Remove="ceylon\time\iso8601\parsePeriod.ceylon" />
-        <None Remove="ceylon\time\iso8601\parseTime.ceylon" />
-        <None Remove="ceylon\time\iso8601\parseTimeZone.ceylon" />
-        <None Remove="ceylon\time\iso8601\parseZoneDateTime.ceylon" />
-        <None Remove="ceylon\time\module.ceylon" />
-        <None Remove="ceylon\time\package.ceylon" />
-        <None Remove="ceylon\time\Period.ceylon" />
-        <None Remove="ceylon\time\Time.ceylon" />
-        <None Remove="ceylon\time\TimeRange.ceylon" />
-        <None Remove="ceylon\time\YearMonth.ceylon" />
-        <None Remove="ceylon\unicode\module.ceylon" />
-        <None Remove="ceylon\unicode\package.ceylon" />
-        <None Remove="ceylon\unicode\unicode.ceylon" />
-        <None Remove="ceylon\whole\constants.ceylon" />
-        <None Remove="ceylon\whole\formatWhole.ceylon" />
-        <None Remove="ceylon\whole\gcd.ceylon" />
-        <None Remove="ceylon\whole\internalFunctions.ceylon" />
-        <None Remove="ceylon\whole\module.ceylon" />
-        <None Remove="ceylon\whole\MutableWhole.ceylon" />
-        <None Remove="ceylon\whole\package.ceylon" />
-        <None Remove="ceylon\whole\parseWhole.ceylon" />
-        <None Remove="ceylon\whole\utilities.ceylon" />
-        <None Remove="ceylon\whole\Whole.ceylon" />
-        <None Remove="ceylon\whole\WholeImpl.ceylon" />
-        <None Remove="ceylon\whole\wholeNumber.ceylon" />
-        <None Remove="ceylon\whole\Words.ceylon" />
-    </ItemGroup>
+		<AdditionalFiles Include="Ceylon.six" />
+		<EmbeddedResource Include=".\Ceylon.six" Link="Grammar.six" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <AdditionalFiles Include="Ceylon.six" />
-    </ItemGroup>
-
-    <ItemGroup>
-		    <EmbeddedResource Include="ceylon\locale\columns.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\Currency.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\DateField.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\Formats.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\Language.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\Locale.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\module.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\package.ceylon" />
-		    <EmbeddedResource Include="ceylon\locale\parsePropertiesFile.ceylon" />
-		    <EmbeddedResource Include="ceylon\logging\Logger.ceylon" />
-		    <EmbeddedResource Include="ceylon\logging\LogWriter.ceylon" />
-		    <EmbeddedResource Include="ceylon\logging\module.ceylon" />
-		    <EmbeddedResource Include="ceylon\logging\package.ceylon" />
-		    <EmbeddedResource Include="ceylon\logging\Priority.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\internal\ConcreteProcess.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\internal\environment.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\internal\IncomingPipe.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\internal\OutgoingPipe.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\internal\package.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\module.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\package.ceylon" />
-		    <EmbeddedResource Include="ceylon\process\Process.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\addGlobalExecutionListener.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Completable.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Completion.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Conjunction.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Deferred.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\ExecutionContext.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\ExecutionListener.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\globalExecutionContext.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\internal\AtomicRef.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\internal\package.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\internal\runtimeContext.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\module.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\package.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Promise.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Promised.ceylon" />
-		    <EmbeddedResource Include="ceylon\promise\Utils.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Annotated.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Annotation.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Anything.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Array.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\ArraySequence.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\AssertionError.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Basic.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Binary.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Boolean.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Byte.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Callable.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Category.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\ChainedIterator.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Character.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Comparable.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Comparison.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\Collection.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\and.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\annotations.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\any.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\apply.ceylon" />
-        <EmbeddedResource Include="ceylon\language\arrayOfSize.ceylon" />
-        <EmbeddedResource Include="ceylon\language\byDecreasing.ceylon" />
-        <EmbeddedResource Include="ceylon\language\byIncreasing.ceylon" />
-        <EmbeddedResource Include="ceylon\language\byItem.ceylon" />
-        <EmbeddedResource Include="ceylon\language\byKey.ceylon" />
-        <EmbeddedResource Include="ceylon\language\className.ceylon" />
-		    <EmbeddedResource Include="ceylon\language\comparing.ceylon" />
-        <EmbeddedResource Include="ceylon\language\compose.ceylon" />
-        <EmbeddedResource Include="ceylon\language\concatenate.ceylon" />
-        <EmbeddedResource Include="ceylon\language\ConstrainedAnnotation.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Contextual.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Correspondence.ceylon" />
-        <EmbeddedResource Include="ceylon\language\corresponding.ceylon" />
-        <EmbeddedResource Include="ceylon\language\count.ceylon" />
-        <EmbeddedResource Include="ceylon\language\curry.ceylon" />
-        <EmbeddedResource Include="ceylon\language\CycledIterator.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Destroyable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Empty.ceylon" />
-        <EmbeddedResource Include="ceylon\language\emptyOrSingleton.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Entry.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Enumerable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\every.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Exception.ceylon" />
-        <EmbeddedResource Include="ceylon\language\expand.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Exponentiable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Finished.ceylon" />
-        <EmbeddedResource Include="ceylon\language\flatten.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Float.ceylon" />
-        <EmbeddedResource Include="ceylon\language\forItem.ceylon" />
-        <EmbeddedResource Include="ceylon\language\forKey.ceylon" />
-        <EmbeddedResource Include="ceylon\language\formatFloat.ceylon" />
-        <EmbeddedResource Include="ceylon\language\formatInteger.ceylon" />
-        <EmbeddedResource Include="ceylon\language\functions.ceylon" />
-        <EmbeddedResource Include="ceylon\language\identical.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Identifiable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\identityHash.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\bases.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\ElementImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\MemberImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\outerImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\package.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\reach.ceylon" />
-        <EmbeddedResource Include="ceylon\language\impl\rethrow.ceylon" />
-        <EmbeddedResource Include="ceylon\language\infinity.ceylon" />
-        <EmbeddedResource Include="ceylon\language\InitializationError.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Integer.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Integral.ceylon" />
-        <EmbeddedResource Include="ceylon\language\interleave.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Invertible.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Iterable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Iterator.ceylon" />
-        <EmbeddedResource Include="ceylon\language\language.ceylon" />
-        <EmbeddedResource Include="ceylon\language\largest.ceylon" />
-        <EmbeddedResource Include="ceylon\language\List.ceylon" />
-        <EmbeddedResource Include="ceylon\language\loop.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Map.ceylon" />
-        <EmbeddedResource Include="ceylon\language\max.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Measure.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\annotations.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\classDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\AliasDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\AnnotatedDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\CallableConstructorDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ClassDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ClassOrInterfaceDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ClassWithConstructorsDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ClassWithInitializerDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ConstructorDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\Declaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\FunctionalDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\FunctionDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\FunctionOrValueDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\GenericDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\GettableDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\InterfaceDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ModuleAndPackage.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\NestableDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\nothingType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenClassOrInterfaceType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenClassType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenInterfaceType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenIntersection.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenTypeArgument.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenTypeVariable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\OpenUnion.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\package.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\SetterDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\TypedDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\TypeParameter.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ValueConstructorDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\ValueDeclaration.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\declaration\Variance.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Applicable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Attribute.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\CallableConstructor.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Class.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\ClassModel.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\ClassOrInterface.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Declared.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Function.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Functional.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\FunctionModel.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Generic.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Gettable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\IncompatibleTypeException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Interface.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\InterfaceModel.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\IntersectionType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\InvocationException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Member.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\MemberClass.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\MemberClassCallableConstructor.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\MemberClassValueConstructor.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\MemberInterface.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Method.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Model.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\MutationException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\nothingType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\package.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Qualified.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\StorageException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Type.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\TypeApplicationException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\TypeArgument.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\UnionType.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\Value.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\ValueConstructor.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\model\ValueModel.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\modules.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\optionalAnnotation.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\package.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\sequencedAnnotations.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\type.ceylon" />
-        <EmbeddedResource Include="ceylon\language\meta\typeLiteral.ceylon" />
-        <EmbeddedResource Include="ceylon\language\min.ceylon" />
-        <EmbeddedResource Include="ceylon\language\module.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Multiplicable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\not.ceylon" />
-        <EmbeddedResource Include="ceylon\language\nothing.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Null.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Number.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Numeric.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Object.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Obtainable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\operatingSystem.ceylon" />
-        <EmbeddedResource Include="ceylon\language\OptionalAnnotation.ceylon" />
-        <EmbeddedResource Include="ceylon\language\or.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Ordinal.ceylon" />
-        <EmbeddedResource Include="ceylon\language\OverflowException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\package.ceylon" />
-        <EmbeddedResource Include="ceylon\language\pairs.ceylon" />
-        <EmbeddedResource Include="ceylon\language\parseBoolean.ceylon" />
-        <EmbeddedResource Include="ceylon\language\ParseException.ceylon" />
-        <EmbeddedResource Include="ceylon\language\parseFloat.ceylon" />
-        <EmbeddedResource Include="ceylon\language\parseInteger.ceylon" />
-        <EmbeddedResource Include="ceylon\language\plus.ceylon" />
-        <EmbeddedResource Include="ceylon\language\print.ceylon" />
-        <EmbeddedResource Include="ceylon\language\printStackTrace.ceylon" />
-        <EmbeddedResource Include="ceylon\language\process.ceylon" />
-        <EmbeddedResource Include="ceylon\language\product.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Range.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Ranged.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Resource.ceylon" />
-        <EmbeddedResource Include="ceylon\language\runtime.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Scalable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\SearchableList.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Sequence.ceylon" />
-        <EmbeddedResource Include="ceylon\language\SequencedAnnotation.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Sequential.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Set.ceylon" />
-        <EmbeddedResource Include="ceylon\language\shuffle.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Singleton.ceylon" />
-        <EmbeddedResource Include="ceylon\language\smallest.ceylon" />
-        <EmbeddedResource Include="ceylon\language\sort.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Span.ceylon" />
-        <EmbeddedResource Include="ceylon\language\String.ceylon" />
-        <EmbeddedResource Include="ceylon\language\StringBuilder.ceylon" />
-        <EmbeddedResource Include="ceylon\language\StringTokens.ceylon" />
-        <EmbeddedResource Include="ceylon\language\sum.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Summable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\system.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Throwable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\times.ceylon" />
-        <EmbeddedResource Include="ceylon\language\transpose.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Tuple.ceylon" />
-        <EmbeddedResource Include="ceylon\language\unflatten.ceylon" />
-        <EmbeddedResource Include="ceylon\language\unzip.ceylon" />
-        <EmbeddedResource Include="ceylon\language\Usable.ceylon" />
-        <EmbeddedResource Include="ceylon\language\vmArguments.ceylon" />
-        <EmbeddedResource Include="ceylon\language\zip.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\base\base16.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\base\base32.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\base\base64.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\base\lookup.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\base\package.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\Buffer.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\ByteBuffer.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\CharacterBuffer.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\ascii.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\Charset.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\iso_8859_1.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\lookup.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\package.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\utf16.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\charset\utf8.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\codec\Codec.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\codec\codecs.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\codec\IncrementalCodec.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\codec\lookup.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\codec\package.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\codec\StatelessCodec.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\common.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\exception.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\module.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\package.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\readers\array.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\readers\package.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\readers\Reader.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\text\caesar.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\text\package.ceylon" />
-        <EmbeddedResource Include="ceylon\buffer\text\Substitution.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\ArrayList.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\Cell.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\frequencies.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\group.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\HashMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\HashSet.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\Hashtable.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\IdentityMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\IdentitySet.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\invert.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\LinkedCell.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\LinkedList.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\makeCellArray.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\module.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\MutableList.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\MutableMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\MutableSet.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\package.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\partition.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\PriorityQueue.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\Queue.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\SingletonMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\SingletonSet.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\SortedMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\SortedSet.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\Stability.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\Stack.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\StoreIterator.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\TreeMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\TreeSet.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\UnmodifiableList.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\UnmodifiableMap.ceylon" />
-        <EmbeddedResource Include="ceylon\collection\UnmodifiableSet.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\Decimal.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\DecimalImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\decimalNumber.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\implicitlyRounded.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\module.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\package.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\parseDecimal.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\Rounding.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\RoundingImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\decimal\wholeConversion.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Attribute.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Directory.ceylon" />
-        <EmbeddedResource Include="ceylon\file\File.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\attributeName.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcreteDirectory.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcreteFile.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcreteLink.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcreteNil.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcretePath.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcreteStore.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\ConcreteSystem.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\package.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\parseCharset.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\principal.ceylon" />
-        <EmbeddedResource Include="ceylon\file\internal\temporaryDirectory.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Link.ceylon" />
-        <EmbeddedResource Include="ceylon\file\module.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Nil.ceylon" />
-        <EmbeddedResource Include="ceylon\file\package.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Path.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Reader.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Resource.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Store.ceylon" />
-        <EmbeddedResource Include="ceylon\file\System.ceylon" />
-        <EmbeddedResource Include="ceylon\file\Writer.ceylon" />
-        <EmbeddedResource Include="ceylon\io\FileDescriptor.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\debug.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\InputStreamAdapter.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\OpenFileImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\OutputStreamAdapter.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\SelectorImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\ServerSocketImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\SocketConnectorImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\SocketImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\io\impl\SslSocketImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\io\module.ceylon" />
-        <EmbeddedResource Include="ceylon\io\OpenFile.ceylon" />
-        <EmbeddedResource Include="ceylon\io\package.ceylon" />
-        <EmbeddedResource Include="ceylon\io\readers\FileDescriptorReader.ceylon" />
-        <EmbeddedResource Include="ceylon\io\readers\package.ceylon" />
-        <EmbeddedResource Include="ceylon\io\SelectableFileDescriptor.ceylon" />
-        <EmbeddedResource Include="ceylon\io\Selector.ceylon" />
-        <EmbeddedResource Include="ceylon\io\ServerSocket.ceylon" />
-        <EmbeddedResource Include="ceylon\io\Socket.ceylon" />
-        <EmbeddedResource Include="ceylon\io\SocketAddress.ceylon" />
-        <EmbeddedResource Include="ceylon\io\SocketConnector.ceylon" />
-        <EmbeddedResource Include="ceylon\io\stdio.ceylon" />
-        <EmbeddedResource Include="ceylon\io\translators.ceylon" />
-        <EmbeddedResource Include="ceylon\io\utils.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Array.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Builder.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Emitter.ceylon" />
-        <EmbeddedResource Include="ceylon\json\InvalidTypeException.ceylon" />
-        <EmbeddedResource Include="ceylon\json\module.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Object.ceylon" />
-        <EmbeddedResource Include="ceylon\json\package.ceylon" />
-        <EmbeddedResource Include="ceylon\json\parse.ceylon" />
-        <EmbeddedResource Include="ceylon\json\ParseException.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Printer.ceylon" />
-        <EmbeddedResource Include="ceylon\json\stream\Builder.ceylon" />
-        <EmbeddedResource Include="ceylon\json\stream\events.ceylon" />
-        <EmbeddedResource Include="ceylon\json\stream\package.ceylon" />
-        <EmbeddedResource Include="ceylon\json\stream\StreamingVisitor.ceylon" />
-        <EmbeddedResource Include="ceylon\json\stream\StreamParser.ceylon" />
-        <EmbeddedResource Include="ceylon\json\StringPrinter.ceylon" />
-        <EmbeddedResource Include="ceylon\json\tokenize.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Value.ceylon" />
-        <EmbeddedResource Include="ceylon\json\Visitor.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\Decimal.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\DecimalImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\decimalNumber.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\implicitlyRounded.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\package.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\parseDecimal.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\Rounding.ceylon" />
-        <EmbeddedResource Include="ceylon\math\decimal\RoundingImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\math\float\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\math\float\functions.ceylon" />
-        <EmbeddedResource Include="ceylon\math\float\package.ceylon" />
-        <EmbeddedResource Include="ceylon\math\integer\functions.ceylon" />
-        <EmbeddedResource Include="ceylon\math\integer\package.ceylon" />
-        <EmbeddedResource Include="ceylon\math\module.ceylon" />
-        <EmbeddedResource Include="ceylon\math\package.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\formatWhole.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\fromImplementation.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\package.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\parseWhole.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\Whole.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\WholeImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\math\whole\wholeNumber.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\float\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\float\functions.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\float\package.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\integer\functions.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\integer\package.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\module.ceylon" />
-        <EmbeddedResource Include="ceylon\numeric\package.ceylon" />
-        <EmbeddedResource Include="ceylon\random\DefaultRandom.ceylon" />
-        <EmbeddedResource Include="ceylon\random\module.ceylon" />
-        <EmbeddedResource Include="ceylon\random\package.ceylon" />
-        <EmbeddedResource Include="ceylon\random\Random.ceylon" />
-        <EmbeddedResource Include="ceylon\random\randomize.ceylon" />
-        <EmbeddedResource Include="ceylon\random\randomizeInPlace.ceylon" />
-        <EmbeddedResource Include="ceylon\random\randomLimits.ceylon" />
-        <EmbeddedResource Include="ceylon\random\stream.ceylon" />
-        <EmbeddedResource Include="ceylon\test\annotations.ceylon" />
-        <EmbeddedResource Include="ceylon\test\annotation\annotations.ceylon" />
-        <EmbeddedResource Include="ceylon\test\annotation\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\assertions.ceylon" />
-        <EmbeddedResource Include="ceylon\test\assumptions.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultArgumentListResolver.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultLoggingListener.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultTestExecutor.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultTestExtensionResolver.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultTestInstanceProvider.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultTestRunner.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultTestRunResult.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\DefaultTestVariantProvider.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\exceptions.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\BeforeAfterTestRunCallbacksInvoker.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\executors.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\file.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\Options.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\Runner.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\socket.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\TestEventEmitter.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\TestEventPublisher.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\TestLoggingListener.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\internal\utils.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\ArgumentListProvider.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\ArgumentListResolver.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\ArgumentProvider.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\ArgumentProviderContext.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestCondition.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestExecutionContext.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestExecutor.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestExtension.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestExtensionResolver.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestInstancePostProcessor.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestInstanceProvider.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\spi\TestVariantProvider.ceylon" />
-        <EmbeddedResource Include="ceylon\test\engine\TagFilter.ceylon" />
-        <EmbeddedResource Include="ceylon\test\event\events.ceylon" />
-        <EmbeddedResource Include="ceylon\test\event\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\module.ceylon" />
-        <EmbeddedResource Include="ceylon\test\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\reporter\HtmlReporter.ceylon" />
-        <EmbeddedResource Include="ceylon\test\reporter\package.ceylon" />
-        <EmbeddedResource Include="ceylon\test\reporter\TapReporter.ceylon" />
-        <EmbeddedResource Include="ceylon\test\reporter\XmlJUnitReporter.ceylon" />
-        <EmbeddedResource Include="ceylon\test\TestDescription.ceylon" />
-        <EmbeddedResource Include="ceylon\test\TestListener.ceylon" />
-        <EmbeddedResource Include="ceylon\test\TestResult.ceylon" />
-        <EmbeddedResource Include="ceylon\test\TestRunner.ceylon" />
-        <EmbeddedResource Include="ceylon\test\TestRunResult.ceylon" />
-        <EmbeddedResource Include="ceylon\test\TestState.ceylon" />
-        <EmbeddedResource Include="ceylon\test\tool.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\DateBehavior.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\DateTimeBehavior.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\DayOfWeek.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\Month.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\MonthBehavior.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\package.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\PeriodBehavior.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\Range.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableDate.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableDateTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableDuration.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableInstant.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableMonth.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadablePeriod.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\ReadableYear.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\TimeBehavior.ceylon" />
-        <EmbeddedResource Include="ceylon\time\base\YearBehavior.ceylon" />
-        <EmbeddedResource Include="ceylon\time\chronology\Chronology.ceylon" />
-        <EmbeddedResource Include="ceylon\time\chronology\package.ceylon" />
-        <EmbeddedResource Include="ceylon\time\Clock.ceylon" />
-        <EmbeddedResource Include="ceylon\time\Date.ceylon" />
-        <EmbeddedResource Include="ceylon\time\DateRange.ceylon" />
-        <EmbeddedResource Include="ceylon\time\DateTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\DateTimeRange.ceylon" />
-        <EmbeddedResource Include="ceylon\time\Duration.ceylon" />
-        <EmbeddedResource Include="ceylon\time\Instant.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\GregorianDate.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\GregorianDateTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\GregorianYearMonth.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\GregorianZonedDateTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\math\functions.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\math\package.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\package.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\TimeOfDay.ceylon" />
-        <EmbeddedResource Include="ceylon\time\internal\utils.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\package.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\parseDate.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\parseDateTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\parsePeriod.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\parseTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\parseTimeZone.ceylon" />
-        <EmbeddedResource Include="ceylon\time\iso8601\parseZoneDateTime.ceylon" />
-        <EmbeddedResource Include="ceylon\time\module.ceylon" />
-        <EmbeddedResource Include="ceylon\time\package.ceylon" />
-        <EmbeddedResource Include="ceylon\time\Period.ceylon" />
-        <EmbeddedResource Include="ceylon\time\Time.ceylon" />
-        <EmbeddedResource Include="ceylon\time\TimeRange.ceylon" />
-        <EmbeddedResource Include="ceylon\time\YearMonth.ceylon" />
-        <EmbeddedResource Include="ceylon\unicode\module.ceylon" />
-        <EmbeddedResource Include="ceylon\unicode\package.ceylon" />
-        <EmbeddedResource Include="ceylon\unicode\unicode.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\constants.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\formatWhole.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\gcd.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\internalFunctions.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\module.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\MutableWhole.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\package.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\parseWhole.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\utilities.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\Whole.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\WholeImpl.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\wholeNumber.ceylon" />
-        <EmbeddedResource Include="ceylon\whole\Words.ceylon" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
-		    <ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		    <ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		    <ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		    <ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-		    <ProjectReference Include="..\Six.Rex\Six.Rex.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-	  </ItemGroup>
+		<ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\Six.Rex\Six.Rex.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+	</ItemGroup>
+
+    <ItemGroup>
+      <None Update="ceylon\buffer\base\base16.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\base\base32.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\base\base64.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\base\lookup.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\base\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\Buffer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\ByteBuffer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\CharacterBuffer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\ascii.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\Charset.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\iso_8859_1.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\lookup.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\utf16.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\charset\utf8.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\codec\Codec.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\codec\codecs.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\codec\IncrementalCodec.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\codec\lookup.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\codec\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\codec\StatelessCodec.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\common.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\exception.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\readers\array.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\readers\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\readers\Reader.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\text\caesar.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\text\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\buffer\text\Substitution.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\ArrayList.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\Cell.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\frequencies.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\group.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\HashMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\HashSet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\Hashtable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\IdentityMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\IdentitySet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\invert.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\LinkedCell.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\LinkedList.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\makeCellArray.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\MutableList.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\MutableMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\MutableSet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\partition.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\PriorityQueue.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\Queue.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\SingletonMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\SingletonSet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\SortedMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\SortedSet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\Stability.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\Stack.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\StoreIterator.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\TreeMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\TreeSet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\UnmodifiableList.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\UnmodifiableMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\collection\UnmodifiableSet.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\connections.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\ConnectionStatus.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\module.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\package.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\Sql.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\SqlNull.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\dbc\ThreadLocalConnection.ceylon">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\Decimal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\DecimalImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\decimalNumber.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\implicitlyRounded.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\parseDecimal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\Rounding.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\RoundingImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\decimal\wholeConversion.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Attribute.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Directory.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\File.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\attributeName.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcreteDirectory.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcreteFile.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcreteLink.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcreteNil.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcretePath.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcreteStore.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\ConcreteSystem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\parseCharset.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\principal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\internal\temporaryDirectory.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Link.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Nil.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Path.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Reader.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Resource.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Store.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\System.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\file\Writer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\FileDescriptor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\debug.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\InputStreamAdapter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\OpenFileImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\OutputStreamAdapter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\SelectorImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\ServerSocketImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\SocketConnectorImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\SocketImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\impl\SslSocketImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\OpenFile.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\readers\FileDescriptorReader.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\readers\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\SelectableFileDescriptor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\Selector.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\ServerSocket.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\Socket.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\SocketAddress.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\SocketConnector.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\stdio.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\translators.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\io\utils.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Array.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Builder.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Emitter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\InvalidTypeException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Object.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\parse.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\ParseException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Printer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\stream\Builder.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\stream\events.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\stream\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\stream\StreamingVisitor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\stream\StreamParser.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\StringPrinter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\tokenize.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Value.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\json\Visitor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\and.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Annotated.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Annotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\annotations.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\any.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Anything.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\apply.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Array.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\arrayOfSize.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\ArraySequence.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\AssertionError.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Basic.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Binary.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Boolean.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\byDecreasing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\byIncreasing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\byItem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\byKey.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Byte.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Callable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Category.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\ChainedIterator.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Character.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\className.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Collection.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Comparable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\comparing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Comparison.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\compose.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\concatenate.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\ConstrainedAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Contextual.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Correspondence.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\corresponding.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\count.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\curry.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\CycledIterator.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Destroyable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Empty.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\emptyOrSingleton.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Entry.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Enumerable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\every.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Exception.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\expand.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Exponentiable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Finished.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\flatten.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Float.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\forItem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\forKey.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\formatFloat.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\formatInteger.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\identical.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Identifiable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\identityHash.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\bases.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\ElementImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\MemberImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\outerImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\reach.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\impl\rethrow.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\infinity.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\InitializationError.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Integer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Integral.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\interleave.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Invertible.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Iterable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Iterator.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\language.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\largest.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\List.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\loop.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Map.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\max.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Measure.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\annotations.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\classDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\AliasDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\AnnotatedDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\CallableConstructorDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ClassDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ClassOrInterfaceDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ClassWithConstructorsDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ClassWithInitializerDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ConstructorDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\Declaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\FunctionalDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\FunctionDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\FunctionOrValueDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\GenericDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\GettableDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\InterfaceDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ModuleAndPackage.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\NestableDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\nothingType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenClassOrInterfaceType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenClassType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenInterfaceType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenIntersection.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenTypeArgument.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenTypeVariable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\OpenUnion.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\SetterDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\TypedDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\TypeParameter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ValueConstructorDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\ValueDeclaration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\declaration\Variance.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Applicable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Attribute.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\CallableConstructor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Class.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\ClassModel.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\ClassOrInterface.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Declared.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Function.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Functional.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\FunctionModel.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Generic.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Gettable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\IncompatibleTypeException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Interface.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\InterfaceModel.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\IntersectionType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\InvocationException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Member.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\MemberClass.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\MemberClassCallableConstructor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\MemberClassValueConstructor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\MemberInterface.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Method.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Model.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\MutationException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\nothingType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Qualified.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\StorageException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Type.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\TypeApplicationException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\TypeArgument.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\UnionType.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\Value.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\ValueConstructor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\model\ValueModel.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\modules.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\optionalAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\sequencedAnnotations.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\type.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\meta\typeLiteral.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\min.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Multiplicable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\not.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\nothing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Null.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Number.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Numeric.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Object.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Obtainable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\operatingSystem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\OptionalAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\or.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Ordinal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\OverflowException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\pairs.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\parseBoolean.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\ParseException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\parseFloat.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\parseInteger.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\plus.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\print.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\printStackTrace.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\process.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\product.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Range.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Ranged.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Resource.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\runtime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Scalable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\SearchableList.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Sequence.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\SequencedAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Sequential.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\deserialization.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\DeserializationContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\DeserializationContextImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\DeserializationException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\Element.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\Member.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\NativeDeque.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\NativeMap.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\Outer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\Partial.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\PartialImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\ReachableReference.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\References.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\ReferencesImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\serialization.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\SerializationContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\serialization\SerializationException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Set.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\shuffle.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Singleton.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\smallest.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\sort.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Span.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\String.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\StringBuilder.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\StringTokens.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\sum.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Summable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\system.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Throwable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\times.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\transpose.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Tuple.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\unflatten.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\unzip.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\Usable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\vmArguments.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\language\zip.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\columns.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\Currency.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\DateField.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\Formats.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\Language.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\Locale.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\locale\parsePropertiesFile.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\logging\Logger.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\logging\LogWriter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\logging\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\logging\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\logging\Priority.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\Decimal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\DecimalImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\decimalNumber.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\implicitlyRounded.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\parseDecimal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\Rounding.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\decimal\RoundingImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\float\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\float\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\float\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\integer\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\integer\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\formatWhole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\fromImplementation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\parseWhole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\Whole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\WholeImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\math\whole\wholeNumber.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\float\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\float\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\float\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\integer\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\integer\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\numeric\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\internal\ConcreteProcess.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\internal\environment.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\internal\IncomingPipe.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\internal\OutgoingPipe.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\internal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\process\Process.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\addGlobalExecutionListener.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Completable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Completion.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Conjunction.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Deferred.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\ExecutionContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\ExecutionListener.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\globalExecutionContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\internal\AtomicRef.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\internal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\internal\runtimeContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Promise.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Promised.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\promise\Utils.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\DefaultRandom.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\Random.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\randomize.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\randomizeInPlace.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\randomLimits.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\random\stream.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\annotations.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\annotation\annotations.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\annotation\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\assertions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\assumptions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultArgumentListResolver.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultLoggingListener.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultTestExecutor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultTestExtensionResolver.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultTestInstanceProvider.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultTestRunner.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultTestRunResult.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\DefaultTestVariantProvider.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\exceptions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\BeforeAfterTestRunCallbacksInvoker.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\executors.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\file.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\Options.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\Runner.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\socket.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\TestEventEmitter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\TestEventPublisher.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\TestLoggingListener.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\internal\utils.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\ArgumentListProvider.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\ArgumentListResolver.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\ArgumentProvider.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\ArgumentProviderContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestCondition.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestExecutionContext.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestExecutor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestExtension.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestExtensionResolver.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestInstancePostProcessor.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestInstanceProvider.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\spi\TestVariantProvider.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\engine\TagFilter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\event\events.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\event\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\reporter\HtmlReporter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\reporter\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\reporter\TapReporter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\reporter\XmlJUnitReporter.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\TestDescription.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\TestListener.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\TestResult.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\TestRunner.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\TestRunResult.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\TestState.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\test\tool.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\DateBehavior.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\DateTimeBehavior.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\DayOfWeek.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\Month.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\MonthBehavior.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\PeriodBehavior.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\Range.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableDate.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableDateTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableDuration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableInstant.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableMonth.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadablePeriod.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\ReadableYear.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\TimeBehavior.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\base\YearBehavior.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\chronology\Chronology.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\chronology\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\Clock.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\Date.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\DateRange.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\DateTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\DateTimeRange.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\Duration.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\Instant.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\GregorianDate.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\GregorianDateTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\GregorianYearMonth.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\GregorianZonedDateTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\math\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\math\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\TimeOfDay.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\internal\utils.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\parseDate.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\parseDateTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\parsePeriod.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\parseTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\parseTimeZone.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\iso8601\parseZoneDateTime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\Period.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\Time.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\TimeRange.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\time\YearMonth.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\unicode\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\unicode\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\unicode\unicode.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\constants.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\formatWhole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\gcd.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\internalFunctions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\MutableWhole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\package.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\parseWhole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\utilities.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\Whole.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\WholeImpl.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\wholeNumber.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="ceylon\whole\Words.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 
 </Project>

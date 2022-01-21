@@ -10,6 +10,6 @@
         public FileJob ModuleFile { get; }
         public List<PackageContainer> Packages { get; } = new List<PackageContainer>();
 
-        public string Name => Path.GetDirectoryName(ModuleFile.Fullname)!.Replace("\\", ".");
+        public string Name => Path.GetDirectoryName(ModuleFile.ShortPath)!.Replace("\\", ".");
     }
 }

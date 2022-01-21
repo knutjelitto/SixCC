@@ -6,7 +6,7 @@ namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-        private readonly DeclarationVisitor declarationVisitor = new DeclarationVisitor();
+        private readonly CeylonVisitor declarationVisitor = new CeylonVisitor();
 
         public CeylonCompiler(bool withIndex = false)
         {
@@ -60,16 +60,25 @@ namespace Six.Ceylon
         public bool BuildPackage(PackageContainer package)
         {
             Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
-            var ok = HandleFile(package.PackageFile);
+
+            var ok = true;
+
+            if (package.PackageFile != null)
+            {
+                ok = HandleFile(package.PackageFile);
+
+                if (ok)
+                {
+                    var packageDescriptor = GetPackageDescriptor(package.PackageFile);
+
+                    var name = packageDescriptor?.PackagePath.ToString() ?? package.Name;
+
+                    Assert(name == package.Name);
+                }
+            }
 
             if (ok)
             {
-                var packageDescriptor = GetPackageDescriptor(package.PackageFile);
-
-                var name = packageDescriptor?.PackagePath.ToString() ?? package.Name;
-
-                Assert(name == package.Name);
-
                 foreach (var file in package.Files)
                 {
                     ok = ok && HandleFile(file);

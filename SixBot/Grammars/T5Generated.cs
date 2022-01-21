@@ -35,10 +35,10 @@ namespace GeneratedParser
                 /*   8 SeqOp            */ __Matchers[8] = new Seq(this, 8, "_(>S,<eof>)") { Builder = nodes => new CXStart(nodes) };
                 /*   9 StarOp           */ __Matchers[9] = new Star(this, 9, "*(>E)") { Builder = nodes => new CS(nodes) };
                 /*  10 AltOp            */ __Matchers[10] = new Alt(this, 10, "alt(>R|>P)") { Builder = nodes => nodes[0] };
-                /*  11 StringOp         */ __Matchers[11] = new String(this, 11, "'..'", "..") { Creator = node => new RString(node) };
+                /*  11 StringOp         */ __Matchers[11] = new String(this, 11, "'..'", "..") { Creator = node => new RLiteral(node) };
                 /*  12 SeqOp            */ __Matchers[12] = new Seq(this, 12, "_(>P,'..',>P)") { Builder = nodes => new CR(nodes) };
-                /*  13 StringOp         */ __Matchers[13] = new String(this, 13, "'e'", "e") { Creator = node => new RString(node) };
-                /*  14 StringOp         */ __Matchers[14] = new String(this, 14, "'.'", ".") { Creator = node => new RString(node) };
+                /*  13 StringOp         */ __Matchers[13] = new String(this, 13, "'e'", "e") { Creator = node => new RLiteral(node) };
+                /*  14 StringOp         */ __Matchers[14] = new String(this, 14, "'.'", ".") { Creator = node => new RLiteral(node) };
                 /*  15 AltOp            */ __Matchers[15] = new Alt(this, 15, "alt('e'|'.')") { Builder = nodes => nodes[0] };
 
                 /*   0 StartRuleOp      */ __Start.Set(__Matchers[8]);
@@ -99,12 +99,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -119,11 +119,11 @@ namespace GeneratedParser
             public CR(params RNode[] children) : base(children) {}
 
             public CP P => Get<CP>(0);
-            public RString String => Get<RString>(1);
+            public RLiteral String => Get<RLiteral>(1);
             public CP P2 => Get<CP>(2);
         }
 
-        public partial class CP : RString, IP
+        public partial class CP : RLiteral, IP
         {
             public CP(params Node[] children) : base(children) {}
         }

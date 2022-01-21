@@ -32,9 +32,9 @@ namespace GeneratedParser
                 /*   5 EofOp            */ __Matchers[5] = new Eof(this, 5, "<eof>") { Creator = node => new REof(node) };
                 /*   6 SeqOp            */ __Matchers[6] = new Seq(this, 6, "_(>T,<eof>)") { Builder = nodes => new CXStart(nodes) };
                 /*   7 PlusOp           */ __Matchers[7] = new Plus(this, 7, "+(>E)") { Builder = nodes => new CT(nodes) };
-                /*   8 StringOp         */ __Matchers[8] = new String(this, 8, "'id'", "id") { Creator = node => new RString(node) };
-                /*   9 StringOp         */ __Matchers[9] = new String(this, 9, "'x'", "x") { Creator = node => new RString(node) };
-                /*  10 OptionalOp       */ __Matchers[10] = new Optional(this, 10, "?('x')") { Builder = nodes => new ROptional<RString>(nodes) };
+                /*   8 StringOp         */ __Matchers[8] = new String(this, 8, "'id'", "id") { Creator = node => new RLiteral(node) };
+                /*   9 StringOp         */ __Matchers[9] = new String(this, 9, "'x'", "x") { Creator = node => new RLiteral(node) };
+                /*  10 OptionalOp       */ __Matchers[10] = new Optional(this, 10, "?('x')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
                 /*  11 SeqOp            */ __Matchers[11] = new Seq(this, 11, "_('id',?('x'))") { Builder = nodes => new CE(nodes) };
 
                 /*   0 StartRuleOp      */ __Start.Set(__Matchers[6]);
@@ -88,12 +88,12 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RString, IXWhitespace
+        public partial class CXWhitespace : RLiteral, IXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RString, IXKeywords
+        public partial class CXKeywords : RLiteral, IXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
@@ -107,8 +107,8 @@ namespace GeneratedParser
         {
             public CE(params RNode[] children) : base(children) {}
 
-            public RString String => Get<RString>(0);
-            public ROptional<RString> String2Optional => Get<ROptional<RString>>(1);
+            public RLiteral String => Get<RLiteral>(0);
+            public ROptional<RLiteral> String2Optional => Get<ROptional<RLiteral>>(1);
         }
 
         public partial class DynamicT6Visitor : DynamicVisitor

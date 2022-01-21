@@ -18,7 +18,6 @@ namespace Six.Input
         }
 
         private Token Current => tokens[current];
-        private Token Next => tokens[current + 1];
 
         public AstGrammar Parse()
         {

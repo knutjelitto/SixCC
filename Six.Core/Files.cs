@@ -4,7 +4,7 @@
     {
         public static bool NewerThan(string file1, string file2)
         {
-            return File.GetLastWriteTimeUtc(file1) > File.GetLastWriteTimeUtc(file2);
+            return !File.Exists(file2) || File.GetLastWriteTimeUtc(file1) > File.GetLastWriteTimeUtc(file2);
         }
     }
 }

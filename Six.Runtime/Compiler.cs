@@ -1,5 +1,4 @@
 ﻿using Six.Core;
-using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 
@@ -56,7 +55,7 @@ namespace Six.Runtime
             if (sppf == null)
             {
                 Console.WriteLine();
-                Console.WriteLine($"sppf: {job.Fullname}");
+                Console.WriteLine($"sppf: {job.ShortPath}");
 
                 return false;
             }
@@ -68,7 +67,7 @@ namespace Six.Runtime
 
         private bool Parse(FileJob job)
         {
-            var source = Source.FromString(job.Fullname, job.Content);
+            var source = Source.FromString(job.ShortPath, job.Content);
             parser.Reset();
             var timer = new Stopwatch();
             timer.Start();
