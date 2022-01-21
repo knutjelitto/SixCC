@@ -7,42 +7,56 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.test {
+import ceylon.test
+{
     ...
 }
-import ceylon.test.event {
+
+import ceylon.test.event
+{
     ...
 }
 
 "A [[TestListener]] which prints information about test execution."
 shared class DefaultLoggingListener(
     "A function that log the given line."
-    void write(String line) => print(line)) satisfies TestListener {
-    
-    shared actual void testRunStarted(TestRunStartedEvent event) {
+    void write(String line) => print(line))
+    satisfies TestListener
+{    
+    shared actual void testRunStarted(TestRunStartedEvent event)
+    {
         writeBannerStart();
     }
     
-    shared actual void testRunFinished(TestRunFinishedEvent event) {
+    shared actual void testRunFinished(TestRunFinishedEvent event)
+    {
         writeBannerResults(event.result);
-        if (event.result.results nonempty) {
+        if (event.result.results nonempty)
+        {
             writeSummary(event.result);
-            if (event.result.isSuccess) {
+            if (event.result.isSuccess)
+            {
                 writeBannerSuccess(event.result);
-            } else {
+            }
+            else
+            {
                 writeFailures(event.result);
                 writeBannerFailed(event.result);
             }
         }
     }
     
-    shared actual void testStarted(TestStartedEvent event) {
+    shared actual void testStarted(TestStartedEvent event)
+    {
         write("running: ``event.description.name````event.description.variant else ""``");
     }
     
-    shared actual void testFinished(TestFinishedEvent event) {
-        if (event.result.state == TestState.error || event.result.state == TestState.failure) {
-            if (exists e = event.result.exception) {
+    shared actual void testFinished(TestFinishedEvent event)
+    {
+        if (event.result.state == TestState.error || event.result.state == TestState.failure)
+        {
+            if (exists e = event.result.exception)
+            {
                 e.printStackTrace();
             }
         }

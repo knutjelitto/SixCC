@@ -12,28 +12,29 @@ namespace Six.Gen
             var content = additional.GetText()?.ToString() ?? string.Empty;
             var generated = string.Empty;
 
-            try
-            {
-                using (var generator = new EbnfCsGenerator(additional.Path))
-                {
-                    generator.Generate(name, content);
-                    generated = generator.ToString();
-                }
-            }
-            catch (DiagnosticException exception)
-            {
-                Error(exception, context, additional);
-            }
-
             var generatedFile = Sibling(additional.Path, "Generated.cs");
 
-            File.WriteAllText(generatedFile, generated);
+            if (Files.NewerThan(additional.Path, generatedFile))
+            {
+                try
+                {
+                    using (var generator = new EbnfCsGenerator(additional.Path))
+                    {
+                        generator.Generate(name, content);
+                        generated = generator.ToString();
+                    }
+                }
+                catch (DiagnosticException exception)
+                {
+                    Error(exception, context, additional);
+                }
 
-#if true
-            //context.AddSource(fileHint, null);
-#else
-            context.AddSource(fileHint, generated);
+                File.WriteAllText(generatedFile, generated);
+
+#if false
+                context.AddSource(fileHint, generated);
 #endif
+            }
         }
 
         private static string Sibling(string path, string append)

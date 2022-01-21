@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Samples", "Six.Samples\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Ceylon", "Six.Ceylon\Six.Ceylon.csproj", "{3B8A1350-5AE6-4DB1-A322-1D652E4B4005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sux", "Sux\Sux.csproj", "{83BA835A-51B6-4EA8-92DD-FB742442DCBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sux", "Sux\Sux.csproj", "{83BA835A-51B6-4EA8-92DD-FB742442DCBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,7 +41,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{94EC8D1D-5DD7-41CC-AD0E-ECD5756BF47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94EC8D1D-5DD7-41CC-AD0E-ECD5756BF47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94EC8D1D-5DD7-41CC-AD0E-ECD5756BF47B}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{94EC8D1D-5DD7-41CC-AD0E-ECD5756BF47B}.Debug|x64.Build.0 = Debug|Any CPU
 		{94EC8D1D-5DD7-41CC-AD0E-ECD5756BF47B}.Debug|x86.ActiveCfg = Debug|Any CPU
