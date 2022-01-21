@@ -31,12 +31,6 @@
 
         public override string ToString()
         {
-#if false
-            if (GetType().BaseType != null && GetType().BaseType != typeof(RNode))
-            {
-                return $"{CommonName()}:{CommonName(GetType().BaseType!)}";
-            }
-#endif
             return $"{CommonName()}";
         }
     }

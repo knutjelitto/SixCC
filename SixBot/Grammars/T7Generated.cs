@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="20.01.2022 17:31:06" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="21.01.2022 08:19:00" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -95,8 +95,8 @@ namespace GeneratedParser
         {
             public CS(params RNode[] children) : base(children) {}
 
-            public RStar<RString> String => Get<RStar<RString>>(0);
-            public RStar<RString> String2 => Get<RStar<RString>>(1);
+            public RStar<RString> StringStar => Get<RStar<RString>>(0);
+            public RStar<RString> String2Star => Get<RStar<RString>>(1);
         }
 
         public partial class DynamicT7Visitor : DynamicVisitor
@@ -108,22 +108,22 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CS element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

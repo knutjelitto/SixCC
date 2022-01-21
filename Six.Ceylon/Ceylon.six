@@ -488,25 +488,25 @@ expression-statement
     ;
 
 directive-statement
-    | return-directive
-    | throw-directive
-    | break-directive
-    | continue-directive
+    | return-statement
+    | throw-statement
+    | break-statement
+    | continue-statement
     ;
 
-return-directive
+return-statement
     | 'return' expression?
     ;
 
-throw-directive
+throw-statement
     | 'throw' expression?
     ;
 
-break-directive
+break-statement
     | 'break'
     ;
 
-continue-directive
+continue-statement
     | 'continue'
     ;
 
@@ -566,12 +566,12 @@ self-reference
     | 'package'
     ;
 
-enumeration
+enumeration-expr
     | '{' declaration-or-statement* sequenced-arguments? '}'
     ;
 
-tuple
-    | '[' sequenced-arguments? ']'
+tuple-expr
+    : '[' sequenced-arguments? ']'
     ;
 
 arguments
@@ -602,7 +602,7 @@ sequenced-arguments
     ;
 
 sequenced-argument
-    | comprehension
+    | comprehension-argument
     | positional-argument
     | spread-argument
     ;
@@ -684,7 +684,7 @@ spread-argument
     | '*' union-expression
     ;
 
-let-expression
+let-expr
     | 'let' '(' let-variable-list? ')' conditional-expression
     ;
 
@@ -696,7 +696,7 @@ let-variable
     | pattern value-specifier
     ;
 
-switch-expression
+switch-expr
     | switch-header case-expressions
     ;
 
@@ -708,25 +708,25 @@ case-expression
     | 'else'? 'case' '(' case-item ')' conditional-expression
     ;
 
-if-expression
-    | 'if' conditions then-expression else-expression
+if-expr
+    : 'if' conditions then-expression else-expression
     ;
 
 else-expression
-    | 'else' conditional-expression
+    : 'else' conditional-expression
     ;
 
 then-expression
-    | 'then' conditional-expression
+    : 'then' conditional-expression
     ;
 
 conditional-expression
-    | if-expression
-    | let-expression
+    | if-expr
+    | let-expr
     | disjunction-expression
     ;
 
-function-expression
+function-expr
     | function-expression-type? type-parameters? function-parameters? function-definition
     ;
 
@@ -744,7 +744,7 @@ function-definition
     | function-specifier
     ;
 
-comprehension
+comprehension-argument
     | for-comprehension-clause
     | if-comprehension-clause
     ;
@@ -768,10 +768,10 @@ if-comprehension-clause
     ;
     
 expression
-    | let-expression
-    | if-expression
-    | switch-expression
-    | function-expression
+    | let-expr
+    | if-expr
+    | switch-expr
+    | function-expr
     | operator-expression
     ;
 
@@ -780,11 +780,11 @@ operator-expression
     ;
 
 assignment-expression
-    | assignment
+    | assignment-expr
     | then-else-expression
     ;
 
-assignment
+assignment-expr
     | then-else-expression assignment-operator expression
     ;
 
@@ -793,11 +793,11 @@ assignment-operator
     ;
 
 then-else-expression
-    | then-else
+    | then-else-expr
     | disjunction-expression
     ;
 
-then-else
+then-else-expr
     | then-else-expression then-else-operator disjunction-expression
     ;
 
@@ -807,11 +807,11 @@ then-else-operator
     ;
 
 disjunction-expression
-    | disjunction
+    | disjunction-expr
     | conjunction-expression
     ;
 
-disjunction
+disjunction-expr
     | disjunction-expression disjunction-operator conjunction-expression
     ;
 
@@ -820,11 +820,11 @@ disjunction-operator
     ;
 
 conjunction-expression
-    | conjunction
+    | conjunction-expr
     | logical-negation-expression
     ;
 
-conjunction
+conjunction-expr
     | conjunction-expression conjunction-operator logical-negation-expression
     ;
 
@@ -833,11 +833,11 @@ conjunction-operator
     ;
 
 logical-negation-expression
-    | logical-negation
+    | logical-negation-expr
     | expression-or-meta
     ;
 
-logical-negation
+logical-negation-expr
     | not-operator logical-negation-expression
     ;
 
@@ -851,11 +851,11 @@ expression-or-meta
     ;
 
 equality-expression
-    | equality
+    | equality-expr
     | comparison-expression
     ;
 
-equality
+equality-expr
     | comparison-expression equality-operator comparison-expression
     ;
 
@@ -922,31 +922,39 @@ type-operator
     ;
 
 exists-nonempty-expression
-    | exists-expression
-    | nonempty-expression
+    | exists-expr
+    | nonempty-expr
     | entry-range-expression
     ;
 
-exists-expression
+exists-expr
     | entry-range-expression 'exists'
     ;
 
-nonempty-expression
+nonempty-expr
     | entry-range-expression 'nonempty'
     ;
 
 entry-range-expression
-    | entry-or-range
+    | range-expr
+    | entry-expr
     | additive-expression
     ;
 
-entry-or-range
-    | additive-expression range-or-entry-operator additive-expression
+range-expr
+    | additive-expression range-operator additive-expression
     ;
 
-range-or-entry-operator
+entry-expr
+    | additive-expression entry-operator additive-expression
+    ;
+
+range-operator
     | '..'
     | ':'
+    ;
+
+entry-operator
     | '->'
     ;
 
@@ -1042,20 +1050,20 @@ negation-or-complement-expr
     ;
 
 unary-minus-or-complement-operator
-    | op-negate
-    | op-neutral
-    | op-complement
+    | negate-operator
+    | neutral-operator
+    | complement-operator
     ;
 
-op-negate
+negate-operator
     | '-' !'-'
     ;
 
-op-neutral
+neutral-operator
     | '+' !'+'
     ;
 
-op-complement
+complement-operator
     | '~'
     ;
 
@@ -1083,13 +1091,13 @@ increment-operator
     ;
 
 primary
-    | selection-expression
-    | indexed-expression
-    | call-expression
+    | selection-expr
+    | indexed-expr
+    | call-expr
     | base-expression
     ;
 
-selection-expression
+selection-expr
     | primary qualified-reference
     ;
 
@@ -1103,7 +1111,7 @@ member-selection-operator
     | '*.'
     ;
 
-indexed-expression
+indexed-expr
     | primary '[' index ']'
     ;
 
@@ -1135,7 +1143,7 @@ index-expression
     | additive-expression 
     ;
 
-call-expression
+call-expr
     | primary arguments
     ;
 
@@ -1143,10 +1151,10 @@ base-expression
     | nonstring-literal
     | string-expression
     | meta-literal
-    | enumeration
-    | tuple
-    | object-expression
-    | grouped-expression
+    | enumeration-expr
+    | tuple-expr
+    | object-expr
+    | grouped-expr
     | base-reference-or-parameterized
     ;
 
@@ -1174,11 +1182,11 @@ string-literal
     | verbatim-string
     ;
 
-object-expression
+object-expr
     | 'object' extended-type? satisfied-types? class-block
     ;
 
-grouped-expression
+grouped-expr
     | '(' expression ')'
     ;
         
@@ -1351,9 +1359,9 @@ boolean-condition
 control-statement
     | if-else-statement
     | for-else-statement
-    | switch-case-else 
-    | while-loop
-    | try-catch-finally
+    | switch-statement 
+    | while-statement
+    | try-statement
     ;
 
 if-else-statement
@@ -1373,7 +1381,7 @@ else-block-next
     | block
     ;
 
-switch-case-else
+switch-statement
     | switch-header case-block+ else-block?
     ;
 
@@ -1451,16 +1459,12 @@ containment-operator
     | 'in'
     | ':'
     ;
-    
-while-loop
-    | while-block
-    ;
 
-while-block
+while-statement
     | 'while' conditions block
     ;
 
-try-catch-finally
+try-statement
     | try-block catch-block* finally-block?
     ;
 

@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T2.six" at="20.01.2022 17:31:06" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T2.six" at="21.01.2022 08:19:00" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -114,8 +114,8 @@ namespace GeneratedParser
         {
             public CIds(params RNode[] children) : base(children) {}
 
-            public RPlus<CId> Id => Get<RPlus<CId>>(0);
-            public RStar<CId> Id2 => Get<RStar<CId>>(1);
+            public RPlus<CId> IdPlus => Get<RPlus<CId>>(0);
+            public RStar<CId> Id2Star => Get<RStar<CId>>(1);
         }
 
         public partial class CId : RString, IId
@@ -132,27 +132,27 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIds element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CId element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

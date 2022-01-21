@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T4.six" at="20.01.2022 17:31:06" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T4.six" at="21.01.2022 08:19:00" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -157,72 +157,72 @@ namespace GeneratedParser
         {
             public CQq(params RNode[] children) : base(children) {}
 
-            public ROptional<CD> D => Get<ROptional<CD>>(0);
-            public ROptional<CD> D2 => Get<ROptional<CD>>(1);
+            public ROptional<CD> DOptional => Get<ROptional<CD>>(0);
+            public ROptional<CD> D2Optional => Get<ROptional<CD>>(1);
         }
 
         public partial class CQs : RSequence, IQs
         {
             public CQs(params RNode[] children) : base(children) {}
 
-            public ROptional<CD> D => Get<ROptional<CD>>(0);
-            public RStar<CD> D2 => Get<RStar<CD>>(1);
+            public ROptional<CD> DOptional => Get<ROptional<CD>>(0);
+            public RStar<CD> D2Star => Get<RStar<CD>>(1);
         }
 
         public partial class CQp : RSequence, IQp
         {
             public CQp(params RNode[] children) : base(children) {}
 
-            public ROptional<CD> D => Get<ROptional<CD>>(0);
-            public RPlus<CD> D2 => Get<RPlus<CD>>(1);
+            public ROptional<CD> DOptional => Get<ROptional<CD>>(0);
+            public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
         public partial class CSq : RSequence, ISq
         {
             public CSq(params RNode[] children) : base(children) {}
 
-            public RStar<CD> D => Get<RStar<CD>>(0);
-            public ROptional<CD> D2 => Get<ROptional<CD>>(1);
+            public RStar<CD> DStar => Get<RStar<CD>>(0);
+            public ROptional<CD> D2Optional => Get<ROptional<CD>>(1);
         }
 
         public partial class CSs : RSequence, ISs
         {
             public CSs(params RNode[] children) : base(children) {}
 
-            public RStar<CD> D => Get<RStar<CD>>(0);
-            public RStar<CD> D2 => Get<RStar<CD>>(1);
+            public RStar<CD> DStar => Get<RStar<CD>>(0);
+            public RStar<CD> D2Star => Get<RStar<CD>>(1);
         }
 
         public partial class CSp : RSequence, ISp
         {
             public CSp(params RNode[] children) : base(children) {}
 
-            public RStar<CD> D => Get<RStar<CD>>(0);
-            public RPlus<CD> D2 => Get<RPlus<CD>>(1);
+            public RStar<CD> DStar => Get<RStar<CD>>(0);
+            public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
         public partial class CPq : RSequence, IPq
         {
             public CPq(params RNode[] children) : base(children) {}
 
-            public RPlus<CD> D => Get<RPlus<CD>>(0);
-            public ROptional<CD> D2 => Get<ROptional<CD>>(1);
+            public RPlus<CD> DPlus => Get<RPlus<CD>>(0);
+            public ROptional<CD> D2Optional => Get<ROptional<CD>>(1);
         }
 
         public partial class CPs : RSequence, IPs
         {
             public CPs(params RNode[] children) : base(children) {}
 
-            public RPlus<CD> D => Get<RPlus<CD>>(0);
-            public RStar<CD> D2 => Get<RStar<CD>>(1);
+            public RPlus<CD> DPlus => Get<RPlus<CD>>(0);
+            public RStar<CD> D2Star => Get<RStar<CD>>(1);
         }
 
         public partial class CPp : RSequence, IPp
         {
             public CPp(params RNode[] children) : base(children) {}
 
-            public RPlus<CD> D => Get<RPlus<CD>>(0);
-            public RPlus<CD> D2 => Get<RPlus<CD>>(1);
+            public RPlus<CD> DPlus => Get<RPlus<CD>>(0);
+            public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
         public partial class CD : RString, ID
@@ -239,67 +239,67 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CQq element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CQs element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CQp element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSq element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSs element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSp element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPq element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPs element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPp element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CD element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

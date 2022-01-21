@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Json.six" at="20.01.2022 17:31:06" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Json.six" at="21.01.2022 08:19:00" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -275,7 +275,7 @@ namespace GeneratedParser
             public CObject(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CMembers> Members => Get<ROptional<CMembers>>(1);
+            public ROptional<CMembers> MembersOptional => Get<ROptional<CMembers>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -298,7 +298,7 @@ namespace GeneratedParser
             public CArray(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CElements> Elements => Get<ROptional<CElements>>(1);
+            public ROptional<CElements> ElementsOptional => Get<ROptional<CElements>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -326,67 +326,67 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTrue element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFalse element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNull element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CObject element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMembers element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMember element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CArray element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CElements element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CString element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNumber element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

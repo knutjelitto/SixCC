@@ -209,7 +209,7 @@ namespace Six.Gen
             {
                 if (op.Class.Generic != null)
                 {
-                    return namer.NameOf(op.Class.Generic.Name.CsId());
+                    return namer.NameOf(op.Class.Generic.Name.CsId()) + op.Class.Name.CsId();
                 }
                 return namer.NameOf(op.Class.Name.CsId());
             }

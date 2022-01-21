@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Ceylon.six" at="20.01.2022 17:31:06" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Ceylon.six" at="21.01.2022 08:19:00" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -3527,8 +3527,8 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public IModuleName ModuleName => Get<IModuleName>(2);
-            public ROptional<CModuleSpecifier> ModuleSpecifier => Get<ROptional<CModuleSpecifier>>(3);
-            public ROptional<IVersion> Version => Get<ROptional<IVersion>>(4);
+            public ROptional<CModuleSpecifier> ModuleSpecifierOptional => Get<ROptional<CModuleSpecifier>>(3);
+            public ROptional<IVersion> VersionOptional => Get<ROptional<IVersion>>(4);
             public CModuleBody ModuleBody => Get<CModuleBody>(5);
         }
 
@@ -3539,7 +3539,7 @@ namespace GeneratedParser
             public IRepository Repository => Get<IRepository>(0);
             public RString String => Get<RString>(1);
             public IModule Module => Get<IModule>(2);
-            public ROptional<CArtifactAndClassifier> ArtifactAndClassifier => Get<ROptional<CArtifactAndClassifier>>(3);
+            public ROptional<CArtifactAndClassifier> ArtifactAndClassifierOptional => Get<ROptional<CArtifactAndClassifier>>(3);
         }
 
         public partial class CArtifactAndClassifier : RSequence, IArtifactAndClassifier
@@ -3547,7 +3547,7 @@ namespace GeneratedParser
             public CArtifactAndClassifier(params RNode[] children) : base(children) {}
 
             public CArtifact Artifact => Get<CArtifact>(0);
-            public ROptional<CClassifier> Classifier => Get<ROptional<CClassifier>>(1);
+            public ROptional<CClassifier> ClassifierOptional => Get<ROptional<CClassifier>>(1);
         }
 
         public partial class CArtifact : RSequence, IArtifact
@@ -3571,7 +3571,7 @@ namespace GeneratedParser
             public CModuleBody(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public RStar<IModuleBodyElement> ModuleBodyElement => Get<RStar<IModuleBodyElement>>(1);
+            public RStar<IModuleBodyElement> ModuleBodyElementStar => Get<RStar<IModuleBodyElement>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -3592,7 +3592,7 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public IModule Module => Get<IModule>(2);
-            public ROptional<IVersion> Version => Get<ROptional<IVersion>>(3);
+            public ROptional<IVersion> VersionOptional => Get<ROptional<IVersion>>(3);
             public RString String2 => Get<RString>(4);
         }
 
@@ -3610,7 +3610,7 @@ namespace GeneratedParser
             public CImportElements(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CImportElementList> ImportElementList => Get<ROptional<CImportElementList>>(1);
+            public ROptional<CImportElementList> ImportElementListOptional => Get<ROptional<CImportElementList>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -3624,8 +3624,8 @@ namespace GeneratedParser
             public CImportNamed(params RNode[] children) : base(children) {}
 
             public IImportName ImportName => Get<IImportName>(0);
-            public ROptional<CImportNameSpecifier> ImportNameSpecifier => Get<ROptional<CImportNameSpecifier>>(1);
-            public ROptional<CImportElements> ImportElements => Get<ROptional<CImportElements>>(2);
+            public ROptional<CImportNameSpecifier> ImportNameSpecifierOptional => Get<ROptional<CImportNameSpecifier>>(1);
+            public ROptional<CImportElements> ImportElementsOptional => Get<ROptional<CImportElements>>(2);
         }
 
         public partial class CImportNameSpecifier : RSequence, IImportNameSpecifier
@@ -3660,7 +3660,7 @@ namespace GeneratedParser
             public CTuplePattern(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CVariadicPatternList> VariadicPatternList => Get<ROptional<CVariadicPatternList>>(1);
+            public ROptional<CVariadicPatternList> VariadicPatternListOptional => Get<ROptional<CVariadicPatternList>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -3673,9 +3673,9 @@ namespace GeneratedParser
         {
             public CVariadicVariable(params RNode[] children) : base(children) {}
 
-            public ROptional<IUnionType> UnionType => Get<ROptional<IUnionType>>(0);
+            public ROptional<IUnionType> UnionTypeOptional => Get<ROptional<IUnionType>>(0);
             public CVariadicOperator VariadicOperator => Get<CVariadicOperator>(1);
-            public ROptional<IMemberName> MemberName => Get<ROptional<IMemberName>>(2);
+            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(2);
         }
 
         public partial class CLetStatement : RSequence, ILetStatement
@@ -3700,7 +3700,7 @@ namespace GeneratedParser
         {
             public CAssertionStatement(params RNode[] children) : base(children) {}
 
-            public ROptional<IAssertionMessage> AssertionMessage => Get<ROptional<IAssertionMessage>>(0);
+            public ROptional<IAssertionMessage> AssertionMessageOptional => Get<ROptional<IAssertionMessage>>(0);
             public RString String => Get<RString>(1);
             public CConditions Conditions => Get<CConditions>(2);
         }
@@ -3710,7 +3710,7 @@ namespace GeneratedParser
             public CBlockElements(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public RStar<IBlockElement> BlockElement => Get<RStar<IBlockElement>>(1);
+            public RStar<IBlockElement> BlockElementStar => Get<RStar<IBlockElement>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -3735,7 +3735,7 @@ namespace GeneratedParser
             public CClassInstatiation(params RNode[] children) : base(children) {}
 
             public IQualifiedClass QualifiedClass => Get<IQualifiedClass>(0);
-            public ROptional<IArguments> Arguments => Get<ROptional<IArguments>>(1);
+            public ROptional<IArguments> ArgumentsOptional => Get<ROptional<IArguments>>(1);
         }
 
         public partial class CSuperQualifiedClass : RSequence, ISuperQualifiedClass
@@ -3814,7 +3814,7 @@ namespace GeneratedParser
         {
             public CQualifiedCaseType(params RNode[] children) : base(children) {}
 
-            public ROptional<CPackageQualifier> PackageQualifier => Get<ROptional<CPackageQualifier>>(0);
+            public ROptional<CPackageQualifier> PackageQualifierOptional => Get<ROptional<CPackageQualifier>>(0);
             public IMemberName MemberName => Get<IMemberName>(1);
         }
 
@@ -3823,7 +3823,7 @@ namespace GeneratedParser
             public CParameters(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CParameterList> ParameterList => Get<ROptional<CParameterList>>(1);
+            public ROptional<CParameterList> ParameterListOptional => Get<ROptional<CParameterList>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -3845,7 +3845,7 @@ namespace GeneratedParser
             public CParameterReference(params RNode[] children) : base(children) {}
 
             public IMemberName MemberName => Get<IMemberName>(0);
-            public ROptional<CValueSpecifier> ValueSpecifier => Get<ROptional<CValueSpecifier>>(1);
+            public ROptional<CValueSpecifier> ValueSpecifierOptional => Get<ROptional<CValueSpecifier>>(1);
         }
 
         public partial class CFunctionParameterDeclaration : RSequence, IFunctionParameterDeclaration
@@ -3854,9 +3854,9 @@ namespace GeneratedParser
 
             public IFunctionParameterType FunctionParameterType => Get<IFunctionParameterType>(0);
             public IMemberName MemberName => Get<IMemberName>(1);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(2);
-            public RPlus<CParameters> Parameters => Get<RPlus<CParameters>>(3);
-            public ROptional<CFunctionSpecifier> FunctionSpecifier => Get<ROptional<CFunctionSpecifier>>(4);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(3);
+            public ROptional<CFunctionSpecifier> FunctionSpecifierOptional => Get<ROptional<CFunctionSpecifier>>(4);
         }
 
         public partial class CValueParameterDeclaration : RSequence, IValueParameterDeclaration
@@ -3865,7 +3865,7 @@ namespace GeneratedParser
 
             public IValueParameterType ValueParameterType => Get<IValueParameterType>(0);
             public IMemberName MemberName => Get<IMemberName>(1);
-            public ROptional<CValueSpecifier> ValueSpecifier => Get<ROptional<CValueSpecifier>>(2);
+            public ROptional<CValueSpecifier> ValueSpecifierOptional => Get<ROptional<CValueSpecifier>>(2);
         }
 
         public partial class CTypeParameters : RSequence, ITypeParameters
@@ -3886,9 +3886,9 @@ namespace GeneratedParser
         {
             public CTypeParameter(params RNode[] children) : base(children) {}
 
-            public ROptional<IVariance> Variance => Get<ROptional<IVariance>>(0);
+            public ROptional<IVariance> VarianceOptional => Get<ROptional<IVariance>>(0);
             public ITypeName TypeName => Get<ITypeName>(1);
-            public ROptional<CTypeDefault> TypeDefault => Get<ROptional<CTypeDefault>>(2);
+            public ROptional<CTypeDefault> TypeDefaultOptional => Get<ROptional<CTypeDefault>>(2);
         }
 
         public partial class CVariance : RString, IVariance
@@ -3909,10 +3909,10 @@ namespace GeneratedParser
             public CTypeConstraint(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<ITypeName> TypeName => Get<ROptional<ITypeName>>(1);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(2);
-            public ROptional<CCaseTypes> CaseTypes => Get<ROptional<CCaseTypes>>(3);
-            public ROptional<CSatisfiedTypes> SatisfiedTypes => Get<ROptional<CSatisfiedTypes>>(4);
+            public ROptional<ITypeName> TypeNameOptional => Get<ROptional<ITypeName>>(1);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
+            public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(3);
+            public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
         }
 
         public partial class CTypeConstraints : RPlus<CTypeConstraint>, ITypeConstraints
@@ -3926,9 +3926,9 @@ namespace GeneratedParser
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
-            public ROptional<IMemberName> MemberName => Get<ROptional<IMemberName>>(2);
-            public ROptional<CParameters> Parameters => Get<ROptional<CParameters>>(3);
-            public ROptional<CDelegatedConstructor> DelegatedConstructor => Get<ROptional<CDelegatedConstructor>>(4);
+            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(2);
+            public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(3);
+            public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(4);
             public IBlock Block => Get<IBlock>(5);
         }
 
@@ -3939,7 +3939,7 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public IMemberName MemberName => Get<IMemberName>(2);
-            public ROptional<CDelegatedConstructor> DelegatedConstructor => Get<ROptional<CDelegatedConstructor>>(3);
+            public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(3);
             public IBlock Block => Get<IBlock>(4);
         }
 
@@ -3950,8 +3950,8 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(3);
-            public ROptional<CTypeConstraints> TypeConstraints => Get<ROptional<CTypeConstraints>>(4);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(4);
             public COptionalTypeSpecifier OptionalTypeSpecifier => Get<COptionalTypeSpecifier>(5);
         }
 
@@ -3962,8 +3962,8 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public IMemberName MemberName => Get<IMemberName>(2);
-            public ROptional<CExtendedType> ExtendedType => Get<ROptional<CExtendedType>>(3);
-            public ROptional<CSatisfiedTypes> SatisfiedTypes => Get<ROptional<CSatisfiedTypes>>(4);
+            public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(3);
+            public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
             public IClassBlock ClassBlock => Get<IClassBlock>(5);
         }
 
@@ -3984,7 +3984,7 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public IMethodType MethodType => Get<IMethodType>(1);
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
-            public ROptional<CTypeConstraints> TypeConstraints => Get<ROptional<CTypeConstraints>>(3);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
             public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
         }
 
@@ -3995,7 +3995,7 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
-            public ROptional<CTypeConstraints> TypeConstraints => Get<ROptional<CTypeConstraints>>(3);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
             public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
         }
 
@@ -4023,7 +4023,7 @@ namespace GeneratedParser
         {
             public COptionalAnySpecifier(params RNode[] children) : base(children) {}
 
-            public ROptional<IAnySpecifier> AnySpecifier => Get<ROptional<IAnySpecifier>>(0);
+            public ROptional<IAnySpecifier> AnySpecifierOptional => Get<ROptional<IAnySpecifier>>(0);
             public RString String => Get<RString>(1);
         }
 
@@ -4034,12 +4034,12 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(3);
-            public ROptional<CParameters> Parameters => Get<ROptional<CParameters>>(4);
-            public ROptional<CCaseTypes> CaseTypes => Get<ROptional<CCaseTypes>>(5);
-            public ROptional<CExtendedType> ExtendedType => Get<ROptional<CExtendedType>>(6);
-            public ROptional<CSatisfiedTypes> SatisfiedTypes => Get<ROptional<CSatisfiedTypes>>(7);
-            public ROptional<CTypeConstraints> TypeConstraints => Get<ROptional<CTypeConstraints>>(8);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
+            public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(4);
+            public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(5);
+            public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(6);
+            public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(7);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(8);
             public IClassDefinition ClassDefinition => Get<IClassDefinition>(9);
         }
 
@@ -4047,7 +4047,7 @@ namespace GeneratedParser
         {
             public COptionalClassSpecifier(params RNode[] children) : base(children) {}
 
-            public ROptional<CClassSpecifier> ClassSpecifier => Get<ROptional<CClassSpecifier>>(0);
+            public ROptional<CClassSpecifier> ClassSpecifierOptional => Get<ROptional<CClassSpecifier>>(0);
             public RString String => Get<RString>(1);
         }
 
@@ -4058,10 +4058,10 @@ namespace GeneratedParser
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RString String => Get<RString>(1);
             public ITypeName TypeName => Get<ITypeName>(2);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(3);
-            public ROptional<CCaseTypes> CaseTypes => Get<ROptional<CCaseTypes>>(4);
-            public ROptional<CSatisfiedTypes> SatisfiedTypes => Get<ROptional<CSatisfiedTypes>>(5);
-            public ROptional<CTypeConstraints> TypeConstraints => Get<ROptional<CTypeConstraints>>(6);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
+            public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(4);
+            public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(5);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(6);
             public IInterfaceDefinition InterfaceDefinition => Get<IInterfaceDefinition>(7);
         }
 
@@ -4069,7 +4069,7 @@ namespace GeneratedParser
         {
             public COptionalTypeSpecifier(params RNode[] children) : base(children) {}
 
-            public ROptional<CTypeSpecifier> TypeSpecifier => Get<ROptional<CTypeSpecifier>>(0);
+            public ROptional<CTypeSpecifier> TypeSpecifierOptional => Get<ROptional<CTypeSpecifier>>(0);
             public RString String => Get<RString>(1);
         }
 
@@ -4094,7 +4094,7 @@ namespace GeneratedParser
             public CReturnDirective(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<IExpression> Expression => Get<ROptional<IExpression>>(1);
+            public ROptional<IExpression> ExpressionOptional => Get<ROptional<IExpression>>(1);
         }
 
         public partial class CThrowDirective : RSequence, IThrowDirective
@@ -4102,7 +4102,7 @@ namespace GeneratedParser
             public CThrowDirective(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<IExpression> Expression => Get<ROptional<IExpression>>(1);
+            public ROptional<IExpression> ExpressionOptional => Get<ROptional<IExpression>>(1);
         }
 
         public partial class CBreakDirective : RString, IBreakDirective
@@ -4144,8 +4144,8 @@ namespace GeneratedParser
             public CParametrizedMember(params RNode[] children) : base(children) {}
 
             public IMemberName MemberName => Get<IMemberName>(0);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(1);
-            public RPlus<CParameters> Parameters => Get<RPlus<CParameters>>(2);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(1);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(2);
         }
 
         public partial class CSelfParametrizedMember : RSequence, ISelfParametrizedMember
@@ -4161,7 +4161,7 @@ namespace GeneratedParser
             public CMemberReference(params RNode[] children) : base(children) {}
 
             public IMemberName MemberName => Get<IMemberName>(0);
-            public ROptional<CTypeArguments> TypeArguments => Get<ROptional<CTypeArguments>>(1);
+            public ROptional<CTypeArguments> TypeArgumentsOptional => Get<ROptional<CTypeArguments>>(1);
         }
 
         public partial class CTypeReference : RSequence, ITypeReference
@@ -4169,7 +4169,7 @@ namespace GeneratedParser
             public CTypeReference(params RNode[] children) : base(children) {}
 
             public ITypeName TypeName => Get<ITypeName>(0);
-            public ROptional<CTypeArguments> TypeArguments => Get<ROptional<CTypeArguments>>(1);
+            public ROptional<CTypeArguments> TypeArgumentsOptional => Get<ROptional<CTypeArguments>>(1);
         }
 
         public partial class CSelfReferenceSelector : RSequence, ISelfReferenceSelector
@@ -4190,8 +4190,8 @@ namespace GeneratedParser
             public CEnumeration(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public RStar<IDeclarationOrStatement> DeclarationOrStatement => Get<RStar<IDeclarationOrStatement>>(1);
-            public ROptional<CSequencedArguments> SequencedArguments => Get<ROptional<CSequencedArguments>>(2);
+            public RStar<IDeclarationOrStatement> DeclarationOrStatementStar => Get<RStar<IDeclarationOrStatement>>(1);
+            public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
             public RString String2 => Get<RString>(3);
         }
 
@@ -4200,7 +4200,7 @@ namespace GeneratedParser
             public CTuple(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CSequencedArguments> SequencedArguments => Get<ROptional<CSequencedArguments>>(1);
+            public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -4209,8 +4209,8 @@ namespace GeneratedParser
             public CStructuralArguments(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public RStar<INamedOrAnonymous> NamedOrAnonymous => Get<RStar<INamedOrAnonymous>>(1);
-            public ROptional<CSequencedArguments> SequencedArguments => Get<ROptional<CSequencedArguments>>(2);
+            public RStar<INamedOrAnonymous> NamedOrAnonymousStar => Get<RStar<INamedOrAnonymous>>(1);
+            public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
             public RString String2 => Get<RString>(3);
         }
 
@@ -4241,9 +4241,9 @@ namespace GeneratedParser
             public CObjectArgument(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<IMemberName> MemberName => Get<ROptional<IMemberName>>(1);
-            public ROptional<CExtendedType> ExtendedType => Get<ROptional<CExtendedType>>(2);
-            public ROptional<CSatisfiedTypes> SatisfiedTypes => Get<ROptional<CSatisfiedTypes>>(3);
+            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(1);
+            public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(2);
+            public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(3);
             public IClassBlock ClassBlock => Get<IClassBlock>(4);
         }
 
@@ -4260,7 +4260,7 @@ namespace GeneratedParser
         {
             public COptionalFunctionSpecifier(params RNode[] children) : base(children) {}
 
-            public ROptional<CFunctionSpecifier> FunctionSpecifier => Get<ROptional<CFunctionSpecifier>>(0);
+            public ROptional<CFunctionSpecifier> FunctionSpecifierOptional => Get<ROptional<CFunctionSpecifier>>(0);
             public RString String => Get<RString>(1);
         }
 
@@ -4286,8 +4286,8 @@ namespace GeneratedParser
             public CInferredMethodArgument(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<IMemberName> MemberName => Get<ROptional<IMemberName>>(1);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(2);
+            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(1);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public CParameters Parameters => Get<CParameters>(3);
             public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
         }
@@ -4306,7 +4306,7 @@ namespace GeneratedParser
             public CUntypedMethodArgument(params RNode[] children) : base(children) {}
 
             public IMemberName MemberName => Get<IMemberName>(0);
-            public RPlus<CParameters> Parameters => Get<RPlus<CParameters>>(1);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(1);
             public CNeededFunctionSpecifier NeededFunctionSpecifier => Get<CNeededFunctionSpecifier>(2);
         }
 
@@ -4323,7 +4323,7 @@ namespace GeneratedParser
             public CPositionalArguments(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CSequencedArguments> SequencedArguments => Get<ROptional<CSequencedArguments>>(1);
+            public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -4341,7 +4341,7 @@ namespace GeneratedParser
 
             public RString String => Get<RString>(0);
             public RString String2 => Get<RString>(1);
-            public ROptional<CLetVariableList> LetVariableList => Get<ROptional<CLetVariableList>>(2);
+            public ROptional<CLetVariableList> LetVariableListOptional => Get<ROptional<CLetVariableList>>(2);
             public RString String3 => Get<RString>(3);
             public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(4);
         }
@@ -4371,15 +4371,15 @@ namespace GeneratedParser
         {
             public CCaseExpressions(params RNode[] children) : base(children) {}
 
-            public RPlus<CCaseExpression> CaseExpression => Get<RPlus<CCaseExpression>>(0);
-            public ROptional<CElseExpression> ElseExpression => Get<ROptional<CElseExpression>>(1);
+            public RPlus<CCaseExpression> CaseExpressionPlus => Get<RPlus<CCaseExpression>>(0);
+            public ROptional<CElseExpression> ElseExpressionOptional => Get<ROptional<CElseExpression>>(1);
         }
 
         public partial class CCaseExpression : RSequence, ICaseExpression
         {
             public CCaseExpression(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> String => Get<ROptional<RString>>(0);
+            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
             public RString String2 => Get<RString>(1);
             public RString String3 => Get<RString>(2);
             public ICaseItem CaseItem => Get<ICaseItem>(3);
@@ -4417,9 +4417,9 @@ namespace GeneratedParser
         {
             public CFunctionExpression(params RNode[] children) : base(children) {}
 
-            public ROptional<IFunctionExpressionType> FunctionExpressionType => Get<ROptional<IFunctionExpressionType>>(0);
-            public ROptional<CTypeParameters> TypeParameters => Get<ROptional<CTypeParameters>>(1);
-            public ROptional<CFunctionParameters> FunctionParameters => Get<ROptional<CFunctionParameters>>(2);
+            public ROptional<IFunctionExpressionType> FunctionExpressionTypeOptional => Get<ROptional<IFunctionExpressionType>>(0);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(1);
+            public ROptional<CFunctionParameters> FunctionParametersOptional => Get<ROptional<CFunctionParameters>>(2);
             public IFunctionDefinition FunctionDefinition => Get<IFunctionDefinition>(3);
         }
 
@@ -4432,8 +4432,8 @@ namespace GeneratedParser
         {
             public CFunctionParameters(params RNode[] children) : base(children) {}
 
-            public RPlus<CParameters> Parameters => Get<RPlus<CParameters>>(0);
-            public ROptional<CTypeConstraints> TypeConstraints => Get<ROptional<CTypeConstraints>>(1);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(0);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(1);
         }
 
         public partial class CForComprehensionClause : RSequence, IForComprehensionClause
@@ -4442,7 +4442,7 @@ namespace GeneratedParser
 
             public RString String => Get<RString>(0);
             public RString String2 => Get<RString>(1);
-            public ROptional<CForIterator> ForIterator => Get<ROptional<CForIterator>>(2);
+            public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
             public RString String3 => Get<RString>(3);
             public IComprehensionClause ComprehensionClause => Get<IComprehensionClause>(4);
         }
@@ -4744,7 +4744,7 @@ namespace GeneratedParser
             public COpNegate(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public RNot<RString> String2 => Get<RNot<RString>>(1);
+            public RNot<RString> String2Not => Get<RNot<RString>>(1);
         }
 
         public partial class COpNeutral : RSequence, IOpNeutral
@@ -4752,7 +4752,7 @@ namespace GeneratedParser
             public COpNeutral(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public RNot<RString> String2 => Get<RNot<RString>>(1);
+            public RNot<RString> String2Not => Get<RNot<RString>>(1);
         }
 
         public partial class COpComplement : RString, IOpComplement
@@ -4860,7 +4860,7 @@ namespace GeneratedParser
 
             public CStringStart StringStart => Get<CStringStart>(0);
             public IExpression Expression => Get<IExpression>(1);
-            public RStar<CInterpolationPart> InterpolationPart => Get<RStar<CInterpolationPart>>(2);
+            public RStar<CInterpolationPart> InterpolationPartStar => Get<RStar<CInterpolationPart>>(2);
             public CStringEnd StringEnd => Get<CStringEnd>(3);
         }
 
@@ -4877,8 +4877,8 @@ namespace GeneratedParser
             public CObjectExpression(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CExtendedType> ExtendedType => Get<ROptional<CExtendedType>>(1);
-            public ROptional<CSatisfiedTypes> SatisfiedTypes => Get<ROptional<CSatisfiedTypes>>(2);
+            public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(1);
+            public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(2);
             public IClassBlock ClassBlock => Get<IClassBlock>(3);
         }
 
@@ -4896,7 +4896,7 @@ namespace GeneratedParser
             public CTypeArguments(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CTypeArgumentList> TypeArgumentList => Get<ROptional<CTypeArgumentList>>(1);
+            public ROptional<CTypeArgumentList> TypeArgumentListOptional => Get<ROptional<CTypeArgumentList>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -4909,7 +4909,7 @@ namespace GeneratedParser
         {
             public CVariancedType(params RNode[] children) : base(children) {}
 
-            public ROptional<IVariance> Variance => Get<ROptional<IVariance>>(0);
+            public ROptional<IVariance> VarianceOptional => Get<ROptional<IVariance>>(0);
             public IType Type => Get<IType>(1);
         }
 
@@ -4988,7 +4988,7 @@ namespace GeneratedParser
 
             public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
             public RString String => Get<RString>(1);
-            public ROptional<CLiteralNatural> LiteralNatural => Get<ROptional<CLiteralNatural>>(2);
+            public ROptional<CLiteralNatural> LiteralNaturalOptional => Get<ROptional<CLiteralNatural>>(2);
             public RString String2 => Get<RString>(3);
         }
 
@@ -4998,7 +4998,7 @@ namespace GeneratedParser
 
             public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
             public RString String => Get<RString>(1);
-            public ROptional<ITypeTypeArguments> TypeTypeArguments => Get<ROptional<ITypeTypeArguments>>(2);
+            public ROptional<ITypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ITypeTypeArguments>>(2);
             public RString String2 => Get<RString>(3);
         }
 
@@ -5007,7 +5007,7 @@ namespace GeneratedParser
             public CTupleType(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<ITypeTypeArguments> TypeTypeArguments => Get<ROptional<ITypeTypeArguments>>(1);
+            public ROptional<ITypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ITypeTypeArguments>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -5016,7 +5016,7 @@ namespace GeneratedParser
             public CIterableType(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<IVariadicType> VariadicType => Get<ROptional<IVariadicType>>(1);
+            public ROptional<IVariadicType> VariadicTypeOptional => Get<ROptional<IVariadicType>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -5033,7 +5033,7 @@ namespace GeneratedParser
         {
             public CQualifiedType(params RNode[] children) : base(children) {}
 
-            public ROptional<CPackageQualifier> PackageQualifier => Get<ROptional<CPackageQualifier>>(0);
+            public ROptional<CPackageQualifier> PackageQualifierOptional => Get<ROptional<CPackageQualifier>>(0);
             public CTypePath TypePath => Get<CTypePath>(1);
         }
 
@@ -5041,8 +5041,8 @@ namespace GeneratedParser
         {
             public CAnnotations(params RNode[] children) : base(children) {}
 
-            public ROptional<IStringLiteral> StringLiteral => Get<ROptional<IStringLiteral>>(0);
-            public RStar<CAnnotation> Annotation => Get<RStar<CAnnotation>>(1);
+            public ROptional<IStringLiteral> StringLiteralOptional => Get<ROptional<IStringLiteral>>(0);
+            public RStar<CAnnotation> AnnotationStar => Get<RStar<CAnnotation>>(1);
         }
 
         public partial class CAnnotation : RSequence, IAnnotation
@@ -5050,7 +5050,7 @@ namespace GeneratedParser
             public CAnnotation(params RNode[] children) : base(children) {}
 
             public IAnnotationName AnnotationName => Get<IAnnotationName>(0);
-            public ROptional<IArguments> Arguments => Get<ROptional<IArguments>>(1);
+            public ROptional<IArguments> ArgumentsOptional => Get<ROptional<IArguments>>(1);
         }
 
         public partial class CConditions : RSequence, IConditions
@@ -5058,7 +5058,7 @@ namespace GeneratedParser
             public CConditions(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CConditionList> ConditionList => Get<ROptional<CConditionList>>(1);
+            public ROptional<CConditionList> ConditionListOptional => Get<ROptional<CConditionList>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -5071,7 +5071,7 @@ namespace GeneratedParser
         {
             public CExistsCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> String => Get<ROptional<RString>>(0);
+            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
             public RString String2 => Get<RString>(1);
             public ILetOrExpression LetOrExpression => Get<ILetOrExpression>(2);
         }
@@ -5080,7 +5080,7 @@ namespace GeneratedParser
         {
             public CNonemptyCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> String => Get<ROptional<RString>>(0);
+            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
             public RString String2 => Get<RString>(1);
             public ILetOrExpression LetOrExpression => Get<ILetOrExpression>(2);
         }
@@ -5089,7 +5089,7 @@ namespace GeneratedParser
         {
             public CIsCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> String => Get<ROptional<RString>>(0);
+            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
             public RString String2 => Get<RString>(1);
             public IType Type => Get<IType>(2);
             public CIsConditionVariable IsConditionVariable => Get<CIsConditionVariable>(3);
@@ -5100,7 +5100,7 @@ namespace GeneratedParser
             public CIsConditionVariable(params RNode[] children) : base(children) {}
 
             public IMemberName MemberName => Get<IMemberName>(0);
-            public ROptional<CValueSpecifier> ValueSpecifier => Get<ROptional<CValueSpecifier>>(1);
+            public ROptional<CValueSpecifier> ValueSpecifierOptional => Get<ROptional<CValueSpecifier>>(1);
         }
 
         public partial class CSatisfiesCondition : RSequence, ISatisfiesCondition
@@ -5117,7 +5117,7 @@ namespace GeneratedParser
             public CIfElse(params RNode[] children) : base(children) {}
 
             public CIfBlock IfBlock => Get<CIfBlock>(0);
-            public ROptional<CElseBlock> ElseBlock => Get<ROptional<CElseBlock>>(1);
+            public ROptional<CElseBlock> ElseBlockOptional => Get<ROptional<CElseBlock>>(1);
         }
 
         public partial class CIfBlock : RSequence, IIfBlock
@@ -5142,8 +5142,8 @@ namespace GeneratedParser
             public CSwitchCaseElse(params RNode[] children) : base(children) {}
 
             public CSwitchHeader SwitchHeader => Get<CSwitchHeader>(0);
-            public RPlus<CCaseBlock> CaseBlock => Get<RPlus<CCaseBlock>>(1);
-            public ROptional<CElseBlock> ElseBlock => Get<ROptional<CElseBlock>>(2);
+            public RPlus<CCaseBlock> CaseBlockPlus => Get<RPlus<CCaseBlock>>(1);
+            public ROptional<CElseBlock> ElseBlockOptional => Get<ROptional<CElseBlock>>(2);
         }
 
         public partial class CSwitchHeader : RSequence, ISwitchHeader
@@ -5160,7 +5160,7 @@ namespace GeneratedParser
         {
             public CCaseBlock(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> String => Get<ROptional<RString>>(0);
+            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
             public RString String2 => Get<RString>(1);
             public RString String3 => Get<RString>(2);
             public ICaseItem CaseItem => Get<ICaseItem>(3);
@@ -5172,7 +5172,7 @@ namespace GeneratedParser
         {
             public CIsCaseCondition(params RNode[] children) : base(children) {}
 
-            public ROptional<RString> String => Get<ROptional<RString>>(0);
+            public ROptional<RString> StringOptional => Get<ROptional<RString>>(0);
             public IType Type => Get<IType>(1);
         }
 
@@ -5199,7 +5199,7 @@ namespace GeneratedParser
             public CForElse(params RNode[] children) : base(children) {}
 
             public CForBlock ForBlock => Get<CForBlock>(0);
-            public ROptional<CFailBlock> FailBlock => Get<ROptional<CFailBlock>>(1);
+            public ROptional<CFailBlock> FailBlockOptional => Get<ROptional<CFailBlock>>(1);
         }
 
         public partial class CForBlock : RSequence, IForBlock
@@ -5208,7 +5208,7 @@ namespace GeneratedParser
 
             public RString String => Get<RString>(0);
             public RString String2 => Get<RString>(1);
-            public ROptional<CForIterator> ForIterator => Get<ROptional<CForIterator>>(2);
+            public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
             public RString String3 => Get<RString>(3);
             public IBlock Block => Get<IBlock>(4);
         }
@@ -5226,7 +5226,7 @@ namespace GeneratedParser
             public CForIterator(params RNode[] children) : base(children) {}
 
             public IForVariable ForVariable => Get<IForVariable>(0);
-            public ROptional<CContainment> Containment => Get<ROptional<CContainment>>(1);
+            public ROptional<CContainment> ContainmentOptional => Get<ROptional<CContainment>>(1);
         }
 
         public partial class CContainment : RSequence, IContainment
@@ -5256,8 +5256,8 @@ namespace GeneratedParser
             public CTryCatchFinally(params RNode[] children) : base(children) {}
 
             public CTryBlock TryBlock => Get<CTryBlock>(0);
-            public RStar<CCatchBlock> CatchBlock => Get<RStar<CCatchBlock>>(1);
-            public ROptional<CFinallyBlock> FinallyBlock => Get<ROptional<CFinallyBlock>>(2);
+            public RStar<CCatchBlock> CatchBlockStar => Get<RStar<CCatchBlock>>(1);
+            public ROptional<CFinallyBlock> FinallyBlockOptional => Get<ROptional<CFinallyBlock>>(2);
         }
 
         public partial class CTryBlock : RSequence, ITryBlock
@@ -5265,7 +5265,7 @@ namespace GeneratedParser
             public CTryBlock(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CResources> Resources => Get<ROptional<CResources>>(1);
+            public ROptional<CResources> ResourcesOptional => Get<ROptional<CResources>>(1);
             public IBlock Block => Get<IBlock>(2);
         }
 
@@ -5283,7 +5283,7 @@ namespace GeneratedParser
             public CCatchVariable(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CVariable> Variable => Get<ROptional<CVariable>>(1);
+            public ROptional<CVariable> VariableOptional => Get<ROptional<CVariable>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -5300,7 +5300,7 @@ namespace GeneratedParser
             public CResources(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CResourceList> ResourceList => Get<ROptional<CResourceList>>(1);
+            public ROptional<CResourceList> ResourceListOptional => Get<ROptional<CResourceList>>(1);
             public RString String2 => Get<RString>(2);
         }
 
@@ -5321,9 +5321,9 @@ namespace GeneratedParser
         {
             public CVariable(params RNode[] children) : base(children) {}
 
-            public ROptional<IVariableType> VariableType => Get<ROptional<IVariableType>>(0);
+            public ROptional<IVariableType> VariableTypeOptional => Get<ROptional<IVariableType>>(0);
             public IMemberName MemberName => Get<IMemberName>(1);
-            public RStar<CParameters> Parameters => Get<RStar<CParameters>>(2);
+            public RStar<CParameters> ParametersStar => Get<RStar<CParameters>>(2);
         }
 
         public partial class CModelReference : RSequence, IModelReference
@@ -5365,7 +5365,7 @@ namespace GeneratedParser
             public CModuleLiteral(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CPackagePath> PackagePath => Get<ROptional<CPackagePath>>(1);
+            public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
         public partial class CPackageLiteral : RSequence, IPackageLiteral
@@ -5373,7 +5373,7 @@ namespace GeneratedParser
             public CPackageLiteral(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<CPackagePath> PackagePath => Get<ROptional<CPackagePath>>(1);
+            public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
         public partial class CClassLiteral : RSequence, IClassLiteral
@@ -5441,7 +5441,7 @@ namespace GeneratedParser
         {
             public CReferencePath(params RNode[] children) : base(children) {}
 
-            public ROptional<CPackageQualifier> PackageQualifier => Get<ROptional<CPackageQualifier>>(0);
+            public ROptional<CPackageQualifier> PackageQualifierOptional => Get<ROptional<CPackageQualifier>>(0);
             public CReferencePathElementList ReferencePathElementList => Get<CReferencePathElementList>(1);
         }
 
@@ -5524,1272 +5524,1272 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUnitElements element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CModuleDescriptor element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CModuleSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CArtifactAndClassifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CArtifact element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CClassifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CModuleBody element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPackageDescriptor element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportModule element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportElements element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportElementList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportNamed element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportNameSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CImportWildcard element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPackagePath element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEntryPattern element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTuplePattern element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariadicPatternList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariadicVariable element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLetStatement element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CDelegatedConstructor element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAssertionStatement element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CBlockElements element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CExtendedType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CClassSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CClassInstatiation element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSuperQualifiedClass element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSuperQualifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPackageQualifiedClass element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPackageQualifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMemberPath element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypePath element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSatisfiedTypes element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUnionTypeList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCaseTypes element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCaseTypeList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CQualifiedCaseType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CParameters element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CParameterList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CParameter element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CParameterReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionParameterDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CValueParameterDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeParameters element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeParameterList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeParameter element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariance element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeDefault element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeConstraint element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeConstraints element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CConstructor element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEnumeratedObject element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAliasDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CObjectDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSetterDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypedMethodDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInferredMethodDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypedAttributeDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInferredAttributeDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COptionalAnySpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CClassDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COptionalClassSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInterfaceDeclaration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COptionalTypeSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUnclosedStatement element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSpecificationStatement element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CReturnDirective element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CThrowDirective element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CBreakDirective element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CContinueDirective element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CValueSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CParametrizedMember element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSelfParametrizedMember element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMemberReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSelfReferenceSelector element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSelfReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEnumeration element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTuple element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CStructuralArguments element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNamedSpecifiedArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSequencedArguments element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAnonymousArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CObjectArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypedMethodArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COptionalFunctionSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNeededFunctionSpecifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypedGetterArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInferredMethodArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInferredGetterArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUntypedMethodArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUntypedGetterArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPositionalArguments element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSpreadArgument element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLetExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLetVariableList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLetVariable element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSwitchExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCaseExpressions element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCaseExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIfExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CElseExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CThenExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionExpressionType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionParameters element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CForComprehensionClause element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIfComprehensionClause element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAssignment element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAssignmentOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CThenElse element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CThenElseOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CDisjunction element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CDisjunctionOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CConjunction element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CConjunctionOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLogicalNegation element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNotOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEquality element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEqualityOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CComparisonExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLargerExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSmallerExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLargerBoundsExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSmallerBoundsExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypecheckExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CComparisonOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSmallerOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLargerOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CExistsExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNonemptyExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEntryOrRange element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CRangeOrEntryOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAdditiveExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAdditiveOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CScaleExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CScaleOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMultiplicativeExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMultiplicativeOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUnionExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUnionOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CExclusiveExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CExclusiveOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIntersectionExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIntersectionOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNegationOrComplementExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COpNegate element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COpNeutral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(COpComplement element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPrefixExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPostfixExpr element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIncrementOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSelectionExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CQualifiedReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMemberSelectionOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIndexedExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUpperSpanned element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLowerSpanned element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSpanned element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMeasured element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCallExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CStringInterpolation element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInterpolationPart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CObjectExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CGroupedExpression element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeArguments element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeArgumentList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariancedType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CDefaultedTypeList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CDefaultedTypeCore element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariadicUnionType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariadicOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSpreadType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CEntryType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUnionTypeCore element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIntersectionTypeCore element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNullableType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CArrayType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTupleType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIterableType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CGroupedType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CQualifiedType element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAnnotations element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAnnotation element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CConditions element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CConditionList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CExistsCondition element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNonemptyCondition element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIsCondition element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIsConditionVariable element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSatisfiesCondition element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIfElse element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIfBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CElseBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSwitchCaseElse element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSwitchHeader element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCaseBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CIsCaseCondition element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSatisfiesCaseCondition element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CValueCaseList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CValueCaseSeparator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CForElse element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CForBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFailBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CForIterator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CContainment element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CContainmentOperator element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CWhileBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTryCatchFinally element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTryBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCatchBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CCatchVariable element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFinallyBlock element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CResources element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CResourceList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CSpecifiedVariable element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVariable element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CModelReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CMetaLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPackageQualifiedMemberReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeQualifiedMemberReference element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CModuleLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CPackageLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CClassLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CInterfaceLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CAliasLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CTypeParameterLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CNewLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CValueLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CValueLiteralIntro element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CFunctionLiteral element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CReferencePath element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CReferencePathElementList element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CKwVoid element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CKwFunction element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CKwValue element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLiteralFloat element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLiteralNatural element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLiteralChar element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CStringStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CStringMid element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CStringEnd element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLiteralString element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CVerbatimString element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLowerIdentifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CUpperIdentifier element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

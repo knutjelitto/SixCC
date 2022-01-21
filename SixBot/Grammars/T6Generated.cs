@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T6.six" at="20.01.2022 17:31:06" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T6.six" at="21.01.2022 08:19:00" />
 
 using System.Collections.Generic;
 using Six.Runtime;
@@ -108,7 +108,7 @@ namespace GeneratedParser
             public CE(params RNode[] children) : base(children) {}
 
             public RString String => Get<RString>(0);
-            public ROptional<RString> String2 => Get<ROptional<RString>>(1);
+            public ROptional<RString> String2Optional => Get<ROptional<RString>>(1);
         }
 
         public partial class DynamicT6Visitor : DynamicVisitor
@@ -120,27 +120,27 @@ namespace GeneratedParser
 
             protected virtual void Visit(CXStart element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXWhitespace element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CXKeywords element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CT element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
 
             protected virtual void Visit(CE element)
             {
-                VisitChildren(element);
+                DefaultImplementation(element);
             }
         }
     }

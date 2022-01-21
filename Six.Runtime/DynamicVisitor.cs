@@ -8,43 +8,37 @@ namespace Six.Runtime
         {
         }
 
-#if false
-        public virtual void Walk(object element)
-        {
-        }
-#endif
-
         protected virtual void Visit(RStar element)
         {
-            VisitChildren(element);
+            WalkChilden(element);
         }
 
         protected virtual void Visit(RPlus element)
         {
-            VisitChildren(element);
+            WalkChilden(element);
         }
 
         protected virtual void Visit(ROptional element)
         {
-            VisitChildren(element);
+            WalkChilden(element);
         }
 
         protected virtual void Visit(RString element)
         {
-            VisitChildren(element);
+            WalkChilden(element);
         }
 
         protected virtual void Visit(REof element)
         {
-            VisitChildren(element);
+            WalkChilden(element);
         }
 
         protected virtual void DefaultImplementation(RNode element)
         {
-            VisitChildren(element);
+            WalkChilden(element);
         }
 
-        protected virtual void VisitChildren(RNode element)
+        protected virtual void WalkChilden(RNode element)
         {
             foreach (var child in element.Children)
             {
