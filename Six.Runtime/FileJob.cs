@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 
 namespace Six.Runtime
@@ -10,6 +11,8 @@ namespace Six.Runtime
 
         public FileJob(string longPath, string shortPath, Func<string> contentLoader)
         {
+            Assert(longPath.EndsWith(shortPath));
+
             LongPath = longPath;
             ShortPath = shortPath;
             ContentLoader = contentLoader;
@@ -23,6 +26,7 @@ namespace Six.Runtime
         public TimeSpan ParseTime { get; set; }
         public string Content => content ??= ContentLoader();
         public Source Source => source ??= Source.FromString(Name, Content);
+        public Nonterminal? Sppf { get; set; }
         public RNode? Tree { get; set; }
     }
 }

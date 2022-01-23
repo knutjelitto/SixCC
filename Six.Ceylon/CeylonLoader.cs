@@ -2,21 +2,24 @@
 {
     public class CeylonLoader : Loader
     {
+        public const string CeylonRoot = "ceylon";
+        public const string TestsRoot = "tests";
+
         private const string packageFile = "package.ceylon";
         private const string moduleFile = "module.ceylon";
 
-        public static IEnumerable<ModuleContainer> GetModules()
+        public static IEnumerable<ModuleContainer> GetModules(string fromRoot = CeylonRoot)
         {
-            var modules = LoadFiles(s => Path.GetFileName(s) == moduleFile).ToList();
+            var moduleFiles = LoadFiles(fromRoot, s => Path.GetFileName(s) == moduleFile).ToList();
 
-            foreach (var moduleFile in modules)
+            foreach (var moduleFile in moduleFiles)
             {
                 yield return GetModule(moduleFile);
             }
         }
 
 
-        public static ModuleContainer GetModule(FileJob moduleFile)
+        private static ModuleContainer GetModule(FileJob moduleFile)
         {
             var module = new ModuleContainer(moduleFile);
 
@@ -25,13 +28,13 @@
             return module;
         }
 
-        public static IEnumerable<FileJob> LoadFiles(Func<string, bool>? filter = null)
+        private static IEnumerable<FileJob> LoadFiles(string fromRoot, Func<string, bool>? filter = null)
         {
             filter ??= n => true;
 
             var current = Environment.CurrentDirectory;
-            var ceylon = Path.Combine(current, "ceylon");
-            foreach (var fullPath in Directory.EnumerateFiles(ceylon, "*", SearchOption.AllDirectories).Where(n => filter(n)))
+            var filesRoot = Path.Combine(current, fromRoot);
+            foreach (var fullPath in Directory.EnumerateFiles(filesRoot, "*", SearchOption.AllDirectories).Where(n => filter(n)))
             {
                 var shortPath = fullPath[(current.Length + 1)..].Replace("\\", "/");
 
@@ -53,8 +56,8 @@
             foreach (var dir in Enumerable.Repeat(root, 1).Concat(Directory.EnumerateDirectories(root, "*", SearchOption.AllDirectories)))
             {
                 var fullPath = Path.Combine(dir, packageFile).Replace("\\", "/");
-                var shortPath = dir[prefixLength..].Replace("\\", "/");
-                var packageName = shortPath.Replace("/", ".");
+                var shortPath = fullPath[prefixLength..].Replace("\\", "/");
+                var packageName = dir[prefixLength..].Replace("\\", "/").Replace("/", ".");
 
                 PackageContainer package;
 

@@ -5,14 +5,14 @@
         public static void Run()
         {
             Generator.Run();
-            AllModules();
+            AllModules(fromRoot: CeylonLoader.TestsRoot, withIndex: true);
         }
 
-        private static void AllModules()
+        private static void AllModules(string fromRoot, bool withIndex = false)
         {
-            var modules = CeylonLoader.GetModules().OrderBy(m => m.Name).ToList();
+            var modules = CeylonLoader.GetModules(fromRoot).OrderBy(m => m.Name).ToList();
 
-            var compiler = new CeylonCompiler(withIndex: false);
+            var compiler = new CeylonCompiler(withIndex: withIndex);
 
             try
             {

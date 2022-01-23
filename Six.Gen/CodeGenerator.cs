@@ -14,7 +14,7 @@ namespace Six.Gen
 
             var generatedFile = Sibling(additional.Path, "Generated.cs");
 
-            if (Files.NewerThan(additional.Path, generatedFile) || false)
+            if (Files.NewerThan(additional.Path, generatedFile) || true)
             {
                 try
                 {

@@ -6,7 +6,7 @@
         {
         }
 
-        public override string TypeName => "I" + Name.CsId();
+        public override string TypeName => "IC" + Name.CsId();
 
         public override bool Equals(object obj)
         {

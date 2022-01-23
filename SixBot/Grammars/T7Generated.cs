@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T7.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -68,12 +66,12 @@ namespace GeneratedParser
 
     public partial class T7Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IS {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICS : IRNode {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
@@ -81,27 +79,27 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CS : RSequence, IS
+        public partial class CS : RSequence, ICS
         {
             public CS(params RNode[] children) : base(children) {}
 
-            public RStar<RLiteral> StringStar => Get<RStar<RLiteral>>(0);
-            public RStar<RLiteral> String2Star => Get<RStar<RLiteral>>(1);
+            public RStar<RLiteral> LiteralStar => Get<RStar<RLiteral>>(0);
+            public RStar<RLiteral> Literal2Star => Get<RStar<RLiteral>>(1);
         }
 
         public partial class DynamicT7Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

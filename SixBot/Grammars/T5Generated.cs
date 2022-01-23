@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T5.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T5.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -83,15 +81,15 @@ namespace GeneratedParser
 
     public partial class T5Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IS {}
-        public interface IE {}
-        public interface IR : IE {}
-        public interface IP : IE {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICS : IRNode {}
+        public interface ICE : IRNode {}
+        public interface ICR : ICE {}
+        public interface ICP : ICE {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
@@ -99,38 +97,38 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CS : RStar<IE>, IS
+        public partial class CS : RStar<ICE>, ICS
         {
             public CS(params RNode[] children) : base(children) {}
         }
 
-        public partial class CR : RSequence, IR
+        public partial class CR : RSequence, ICR
         {
             public CR(params RNode[] children) : base(children) {}
 
             public CP P => Get<CP>(0);
-            public RLiteral String => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CP P2 => Get<CP>(2);
         }
 
-        public partial class CP : RLiteral, IP
+        public partial class CP : RLiteral, ICP
         {
             public CP(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicT5Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

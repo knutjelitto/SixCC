@@ -33,6 +33,10 @@ namespace Six.Gen
                 {
                     ifaces = $" : {rule.Interface.InterfaceNames}";
                 }
+                else
+                {
+                    ifaces = $" : IRNode";
+                }
                 wl($"public interface {rule.Interface.TypeName}{ifaces} {{}}");
             }
         }
@@ -84,7 +88,7 @@ namespace Six.Gen
             block($"public partial class Dynamic{Grammar.Name}Visitor : DynamicVisitor",
                 () =>
                 {
-                    block("public override void Walk(RNode node)",
+                    block("public override void Walk(IRNode node)",
                         () =>
                         {
                             wl($"Visit((dynamic)node);");

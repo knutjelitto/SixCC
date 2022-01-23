@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Json.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Json.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -220,106 +218,106 @@ namespace GeneratedParser
 
     public partial class JsonTree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IJson {}
-        public interface IValue : IElement {}
-        public interface ITrue : IValue {}
-        public interface IFalse : IValue {}
-        public interface INull : IValue {}
-        public interface IObject : IValue {}
-        public interface IMembers {}
-        public interface IMember {}
-        public interface IArray : IValue {}
-        public interface IElements {}
-        public interface IElement : IJson {}
-        public interface IString : IValue {}
-        public interface INumber : IValue {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICJson : IRNode {}
+        public interface ICValue : ICElement {}
+        public interface ICTrue : ICValue {}
+        public interface ICFalse : ICValue {}
+        public interface ICNull : ICValue {}
+        public interface ICObject : ICValue {}
+        public interface ICMembers : IRNode {}
+        public interface ICMember : IRNode {}
+        public interface ICArray : ICValue {}
+        public interface ICElements : IRNode {}
+        public interface ICElement : ICJson {}
+        public interface ICString : ICValue {}
+        public interface ICNumber : ICValue {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
-            public IJson Json => Get<IJson>(0);
+            public ICJson Json => Get<ICJson>(0);
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CTrue : RLiteral, ITrue
+        public partial class CTrue : RLiteral, ICTrue
         {
             public CTrue(params Node[] children) : base(children) {}
         }
 
-        public partial class CFalse : RLiteral, IFalse
+        public partial class CFalse : RLiteral, ICFalse
         {
             public CFalse(params Node[] children) : base(children) {}
         }
 
-        public partial class CNull : RLiteral, INull
+        public partial class CNull : RLiteral, ICNull
         {
             public CNull(params Node[] children) : base(children) {}
         }
 
-        public partial class CObject : RSequence, IObject
+        public partial class CObject : RSequence, ICObject
         {
             public CObject(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CMembers> MembersOptional => Get<ROptional<CMembers>>(1);
-            public RLiteral String2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CMembers : RLoop<CMember>, IMembers
+        public partial class CMembers : RLoop<CMember>, ICMembers
         {
             public CMembers(params RNode[] children) : base(children) {}
         }
 
-        public partial class CMember : RSequence, IMember
+        public partial class CMember : RSequence, ICMember
         {
             public CMember(params RNode[] children) : base(children) {}
 
             public CString String => Get<CString>(0);
-            public RLiteral String2 => Get<RLiteral>(1);
-            public IElement Element => Get<IElement>(2);
+            public RLiteral Literal => Get<RLiteral>(1);
+            public ICElement Element => Get<ICElement>(2);
         }
 
-        public partial class CArray : RSequence, IArray
+        public partial class CArray : RSequence, ICArray
         {
             public CArray(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CElements> ElementsOptional => Get<ROptional<CElements>>(1);
-            public RLiteral String2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CElements : RLoop<IElement>, IElements
+        public partial class CElements : RLoop<ICElement>, ICElements
         {
             public CElements(params RNode[] children) : base(children) {}
         }
 
-        public partial class CString : RLiteral, IString
+        public partial class CString : RToken, ICString
         {
             public CString(params Node[] children) : base(children) {}
         }
 
-        public partial class CNumber : RLiteral, INumber
+        public partial class CNumber : RToken, ICNumber
         {
             public CNumber(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicJsonVisitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

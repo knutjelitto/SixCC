@@ -287,11 +287,8 @@ parameter-list
     ;
 
 parameter-declaration-or-ref-pattern
-    | tuple-or-entry-pattern
-    | parameter-declaration-or-ref
-    ;
-
-parameter-declaration-or-ref
+    | entry-pattern
+    | tuple-pattern
     | parameter
     | parameter-reference
     ;

@@ -148,34 +148,44 @@ shared sealed abstract class Base16<ToMutable, ToImmutable, ToSingle>()
 }
 
 {Character+} hexDigits = ('0'..'9').chain('a'..'f');
-Character[][] base16StringEncodeTable = {
+
+Character[][] base16StringEncodeTable =
+{
     for (a in hexDigits)
         for (b in hexDigits) { a, b }.sequence()
 }.sequence();
+
 shared abstract class Base16String()
-        extends Base16<CharacterBuffer,String,Character>()
-        satisfies CharacterToByteCodec {
+    extends Base16<CharacterBuffer,String,Character>()
+    satisfies CharacterToByteCodec
+{
     shared actual Character[][] encodeTable = base16StringEncodeTable;
     
     shared actual Integer decodeToIndex(Character input) => input.integer;
     shared actual Byte[] decodeTableLeft
-            = toDecodeTable {
+            = toDecodeTable
+            {
                 encodeTable = hexDigits;
                 decodeToIndex = decodeToIndex;
                 fiddle = (b) => b.leftLogicalShift(4);
                 split = (Character s) => { s, s.uppercased };
             };
     shared actual Byte[] decodeTableRight
-            = toDecodeTable {
+            = toDecodeTable
+            {
                 encodeTable = hexDigits;
                 decodeToIndex = decodeToIndex;
                 split = (Character s) => { s, s.uppercased };
             };
     
-    shared actual Integer decodeBid({Character*} sample) {
-        if (sample.every((s) => s in hexDigits)) {
+    shared actual Integer decodeBid({Character*} sample)
+    {
+        if (sample.every((s) => s in hexDigits))
+        {
             return 10;
-        } else {
+        }
+        else
+        {
             return 0;
         }
     }

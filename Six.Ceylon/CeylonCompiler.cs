@@ -1,5 +1,6 @@
 ﻿using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
+using Six.Runtime.Types;
 using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
@@ -39,10 +40,6 @@ namespace Six.Ceylon
             {
                 var moduleDescriptor = GetModuleDescriptor(module.ModuleFile);
 
-                var name = moduleDescriptor?.ModuleName.ToString() ?? module.Name;
-
-                Assert(name == module.Name);
-
                 foreach (var package in module.Packages)
                 {
                     ok = ok && BuildPackage(package);
@@ -70,10 +67,6 @@ namespace Six.Ceylon
                 if (ok)
                 {
                     var packageDescriptor = GetPackageDescriptor(package.PackageFile);
-
-                    var name = packageDescriptor?.PackagePath.ToString() ?? package.Name;
-
-                    Assert(name == package.Name);
                 }
             }
 
@@ -99,9 +92,24 @@ namespace Six.Ceylon
         {
             var ok = BuildFile(file);
 
-            if (ok && file.Tree != null)
+            if (ok)
             {
-                declarationVisitor.Walk(file.Tree);
+                if (file.Sppf != null)
+                {
+                    using (var writer = $"{file.ShortPath}.sppf".Writer())
+                    {
+                        SppfDumper.Dump(file.Sppf, writer);
+                    }
+                }
+                if (file.Tree != null)
+                {
+                    using (var writer = $"{file.ShortPath}.tree".Writer())
+                    {
+                        TypedDumper.Dump(file.Tree, writer);
+                    }
+
+                    declarationVisitor.Walk(file.Tree);
+                }
             }
 
             return ok;

@@ -3,18 +3,15 @@ using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
-    public class CeylonVisitor : DynamicCeylonVisitor
+    public partial class CeylonVisitor : DynamicCeylonVisitor
     {
+        private readonly IdentityDictionary<IRNode, object> values = new();
+
         protected override void DefaultImplementation(RNode element)
         {
             Console.WriteLine($"Type ``{element.GetType().Name}´´ not implemented");
 
             throw new NotImplementedException();
-        }
-
-        protected void WalkI(object iface)
-        {
-            Walk((RNode)iface);
         }
 
         protected override void Visit(CXStart element)
@@ -24,29 +21,15 @@ namespace Six.Ceylon
 
         protected override void Visit(CModuleDescriptor element)
         {
-            // main module description
-
             WalkChilden(element);
         }
 
         protected override void Visit(CPackageDescriptor element)
         {
-            // main package description
-
             WalkChilden(element);
         }
 
         protected override void Visit(CUnitElements element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CImportDeclarations element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CImportDeclaration element)
         {
             WalkChilden(element);
         }
@@ -178,32 +161,6 @@ namespace Six.Ceylon
         {
             WalkChilden(element);
         }
-
-        protected override void Visit(CImportElements element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CImportElementList element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CImportNamed element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CImportNameSpecifier element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CImportWildcard element)
-        {
-            WalkChilden(element);
-        }
-
         protected override void Visit(CSuperQualifiedClass element)
         {
             WalkChilden(element);
@@ -217,31 +174,6 @@ namespace Six.Ceylon
         /*---------------------------------------------------------------------
          *  Declaration - Parameters
          *--------------------------------------------------------------------*/
-        protected override void Visit(CParameters element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CParameterList element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CParameter element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CValueParameterDeclaration element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CFunctionParameterDeclaration element)
-        {
-            WalkChilden(element);
-        }
-
         protected override void Visit(CFunctionParameters element)
         {
             WalkChilden(element);

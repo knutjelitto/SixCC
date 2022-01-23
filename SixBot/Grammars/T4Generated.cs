@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T4.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T4.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -120,40 +118,40 @@ namespace GeneratedParser
 
     public partial class T4Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IS {}
-        public interface IQq : IS {}
-        public interface IQs : IS {}
-        public interface IQp : IS {}
-        public interface ISq : IS {}
-        public interface ISs : IS {}
-        public interface ISp : IS {}
-        public interface IPq : IS {}
-        public interface IPs : IS {}
-        public interface IPp : IS {}
-        public interface ID {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICS : IRNode {}
+        public interface ICQq : ICS {}
+        public interface ICQs : ICS {}
+        public interface ICQp : ICS {}
+        public interface ICSq : ICS {}
+        public interface ICSs : ICS {}
+        public interface ICSp : ICS {}
+        public interface ICPq : ICS {}
+        public interface ICPs : ICS {}
+        public interface ICPp : ICS {}
+        public interface ICD : IRNode {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
-            public IS S => Get<IS>(0);
+            public ICS S => Get<ICS>(0);
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CQq : RSequence, IQq
+        public partial class CQq : RSequence, ICQq
         {
             public CQq(params RNode[] children) : base(children) {}
 
@@ -161,7 +159,7 @@ namespace GeneratedParser
             public ROptional<CD> D2Optional => Get<ROptional<CD>>(1);
         }
 
-        public partial class CQs : RSequence, IQs
+        public partial class CQs : RSequence, ICQs
         {
             public CQs(params RNode[] children) : base(children) {}
 
@@ -169,7 +167,7 @@ namespace GeneratedParser
             public RStar<CD> D2Star => Get<RStar<CD>>(1);
         }
 
-        public partial class CQp : RSequence, IQp
+        public partial class CQp : RSequence, ICQp
         {
             public CQp(params RNode[] children) : base(children) {}
 
@@ -177,7 +175,7 @@ namespace GeneratedParser
             public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
-        public partial class CSq : RSequence, ISq
+        public partial class CSq : RSequence, ICSq
         {
             public CSq(params RNode[] children) : base(children) {}
 
@@ -185,7 +183,7 @@ namespace GeneratedParser
             public ROptional<CD> D2Optional => Get<ROptional<CD>>(1);
         }
 
-        public partial class CSs : RSequence, ISs
+        public partial class CSs : RSequence, ICSs
         {
             public CSs(params RNode[] children) : base(children) {}
 
@@ -193,7 +191,7 @@ namespace GeneratedParser
             public RStar<CD> D2Star => Get<RStar<CD>>(1);
         }
 
-        public partial class CSp : RSequence, ISp
+        public partial class CSp : RSequence, ICSp
         {
             public CSp(params RNode[] children) : base(children) {}
 
@@ -201,7 +199,7 @@ namespace GeneratedParser
             public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
-        public partial class CPq : RSequence, IPq
+        public partial class CPq : RSequence, ICPq
         {
             public CPq(params RNode[] children) : base(children) {}
 
@@ -209,7 +207,7 @@ namespace GeneratedParser
             public ROptional<CD> D2Optional => Get<ROptional<CD>>(1);
         }
 
-        public partial class CPs : RSequence, IPs
+        public partial class CPs : RSequence, ICPs
         {
             public CPs(params RNode[] children) : base(children) {}
 
@@ -217,7 +215,7 @@ namespace GeneratedParser
             public RStar<CD> D2Star => Get<RStar<CD>>(1);
         }
 
-        public partial class CPp : RSequence, IPp
+        public partial class CPp : RSequence, ICPp
         {
             public CPp(params RNode[] children) : base(children) {}
 
@@ -225,14 +223,14 @@ namespace GeneratedParser
             public RPlus<CD> D2Plus => Get<RPlus<CD>>(1);
         }
 
-        public partial class CD : RLiteral, ID
+        public partial class CD : RLiteral, ICD
         {
             public CD(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicT4Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

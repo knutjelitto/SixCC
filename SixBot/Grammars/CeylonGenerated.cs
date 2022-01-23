@@ -1,4 +1,4 @@
-// <generated from="C:\\Dev\\Knut\\SixCC\\SixBot\\Grammars\\Ceylon.six" at="21.01.2022 12:47:55" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Ceylon.six" at="23.01.2022 06:18:09" />
 
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
@@ -400,7 +400,7 @@ namespace GeneratedParser
                 /* 375 AltOp            */ __Matchers[375] = new Alt(this, 375, "alt(>import-declaration|>declaration)") { Builder = nodes => nodes[0] };
                 /* 376 StringOp         */ __Matchers[376] = new Keyword(this, 376, "'module'", "module") { Creator = node => new RLiteral(node) };
                 /* 377 OptionalOp       */ __Matchers[377] = new Optional(this, 377, "?(>module-specifier)") { Builder = nodes => new ROptional<CModuleSpecifier>(nodes) };
-                /* 378 OptionalOp       */ __Matchers[378] = new Optional(this, 378, "?(>version)") { Builder = nodes => new ROptional<IVersion>(nodes) };
+                /* 378 OptionalOp       */ __Matchers[378] = new Optional(this, 378, "?(>version)") { Builder = nodes => new ROptional<ICVersion>(nodes) };
                 /* 379 SeqOp            */ __Matchers[379] = new Seq(this, 379, "_(>annotations,'module',>module-name,?(>module-specifier),?(>version),>module-body)") { Builder = nodes => new CModuleDescriptor(nodes) };
                 /* 380 StringOp         */ __Matchers[380] = new String(this, 380, "':'", ":") { Creator = node => new RLiteral(node) };
                 /* 381 OptionalOp       */ __Matchers[381] = new Optional(this, 381, "?(>artifact-and-classifier)") { Builder = nodes => new ROptional<CArtifactAndClassifier>(nodes) };
@@ -410,7 +410,7 @@ namespace GeneratedParser
                 /* 385 SeqOp            */ __Matchers[385] = new Seq(this, 385, "_(>artifact,?(>classifier))") { Builder = nodes => new CArtifactAndClassifier(nodes) };
                 /* 386 SeqOp            */ __Matchers[386] = new Seq(this, 386, "_(':',>literal-string)") { Builder = nodes => new CClassifier(nodes) };
                 /* 387 StringOp         */ __Matchers[387] = new String(this, 387, "'{'", "{") { Creator = node => new RLiteral(node) };
-                /* 388 StarOp           */ __Matchers[388] = new Star(this, 388, "*(>module-body-element)") { Builder = nodes => new RStar<IModuleBodyElement>(nodes) };
+                /* 388 StarOp           */ __Matchers[388] = new Star(this, 388, "*(>module-body-element)") { Builder = nodes => new RStar<ICModuleBodyElement>(nodes) };
                 /* 389 StringOp         */ __Matchers[389] = new String(this, 389, "'}'", "}") { Creator = node => new RLiteral(node) };
                 /* 390 SeqOp            */ __Matchers[390] = new Seq(this, 390, "_('{',*(>module-body-element),'}')") { Builder = nodes => new CModuleBody(nodes) };
                 /* 391 AltOp            */ __Matchers[391] = new Alt(this, 391, "alt(>inferred-attribute-declaration|>import-module)") { Builder = nodes => nodes[0] };
@@ -451,8 +451,8 @@ namespace GeneratedParser
                 /* 426 StarOp           */ __Matchers[426] = new Star(this, 426, "*(_(',',>variadic-pattern))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 427 SeqOp            */ __Matchers[427] = new Seq(this, 427, "_(>variadic-pattern,*(_(',',>variadic-pattern)))") { Builder = nodes => new CVariadicPatternList(nodes) };
                 /* 428 AltOp            */ __Matchers[428] = new Alt(this, 428, "alt(>variadic-variable|>pattern)") { Builder = nodes => nodes[0] };
-                /* 429 OptionalOp       */ __Matchers[429] = new Optional(this, 429, "?(>union-type)") { Builder = nodes => new ROptional<IUnionType>(nodes) };
-                /* 430 OptionalOp       */ __Matchers[430] = new Optional(this, 430, "?(>member-name)") { Builder = nodes => new ROptional<IMemberName>(nodes) };
+                /* 429 OptionalOp       */ __Matchers[429] = new Optional(this, 429, "?(>union-type)") { Builder = nodes => new ROptional<ICUnionType>(nodes) };
+                /* 430 OptionalOp       */ __Matchers[430] = new Optional(this, 430, "?(>member-name)") { Builder = nodes => new ROptional<ICMemberName>(nodes) };
                 /* 431 SeqOp            */ __Matchers[431] = new Seq(this, 431, "_(?(>union-type),>variadic-operator,?(>member-name))") { Builder = nodes => new CVariadicVariable(nodes) };
                 /* 432 StringOp         */ __Matchers[432] = new Keyword(this, 432, "'let'", "let") { Creator = node => new RLiteral(node) };
                 /* 433 StringOp         */ __Matchers[433] = new String(this, 433, "'('", "(") { Creator = node => new RLiteral(node) };
@@ -460,15 +460,15 @@ namespace GeneratedParser
                 /* 435 SeqOp            */ __Matchers[435] = new Seq(this, 435, "_('let','(',>let-variable-list,')')") { Builder = nodes => new CLetStatement(nodes) };
                 /* 436 StringOp         */ __Matchers[436] = new Keyword(this, 436, "'extends'", "extends") { Creator = node => new RLiteral(node) };
                 /* 437 SeqOp            */ __Matchers[437] = new Seq(this, 437, "_('extends',>class-instatiation)") { Builder = nodes => new CExtendedType(nodes) };
-                /* 438 OptionalOp       */ __Matchers[438] = new Optional(this, 438, "?(>assertion-message)") { Builder = nodes => new ROptional<IAssertionMessage>(nodes) };
+                /* 438 OptionalOp       */ __Matchers[438] = new Optional(this, 438, "?(>assertion-message)") { Builder = nodes => new ROptional<ICAssertionMessage>(nodes) };
                 /* 439 StringOp         */ __Matchers[439] = new Keyword(this, 439, "'assert'", "assert") { Creator = node => new RLiteral(node) };
                 /* 440 SeqOp            */ __Matchers[440] = new Seq(this, 440, "_(?(>assertion-message),'assert',>conditions)") { Builder = nodes => new CAssertionStatement(nodes) };
-                /* 441 StarOp           */ __Matchers[441] = new Star(this, 441, "*(>block-element)") { Builder = nodes => new RStar<IBlockElement>(nodes) };
+                /* 441 StarOp           */ __Matchers[441] = new Star(this, 441, "*(>block-element)") { Builder = nodes => new RStar<ICBlockElement>(nodes) };
                 /* 442 SeqOp            */ __Matchers[442] = new Seq(this, 442, "_('{',*(>block-element),'}')") { Builder = nodes => new CBlockElements(nodes) };
                 /* 443 AltOp            */ __Matchers[443] = new Alt(this, 443, "alt(>import-declaration|>declaration-or-statement)") { Builder = nodes => nodes[0] };
                 /* 444 StringOp         */ __Matchers[444] = new String(this, 444, "'=>'", "=>") { Creator = node => new RLiteral(node) };
                 /* 445 SeqOp            */ __Matchers[445] = new Seq(this, 445, "_('=>',>class-instatiation)") { Builder = nodes => new CClassSpecifier(nodes) };
-                /* 446 OptionalOp       */ __Matchers[446] = new Optional(this, 446, "?(>arguments)") { Builder = nodes => new ROptional<IArguments>(nodes) };
+                /* 446 OptionalOp       */ __Matchers[446] = new Optional(this, 446, "?(>arguments)") { Builder = nodes => new ROptional<ICArguments>(nodes) };
                 /* 447 SeqOp            */ __Matchers[447] = new Seq(this, 447, "_(>qualified-class,?(>arguments))") { Builder = nodes => new CClassInstatiation(nodes) };
                 /* 448 AltOp            */ __Matchers[448] = new Alt(this, 448, "alt(>package-qualified-class|>super-qualified-class|>un-qualified-class)") { Builder = nodes => nodes[0] };
                 /* 449 SeqOp            */ __Matchers[449] = new Seq(this, 449, "_(>super-qualifier,>base-reference)") { Builder = nodes => new CSuperQualifiedClass(nodes) };
@@ -519,7 +519,7 @@ namespace GeneratedParser
                 /* 494 SeqOp            */ __Matchers[494] = new Seq(this, 494, "_(',',>type-parameter)") { Builder = nodes => new RSequence(nodes) };
                 /* 495 StarOp           */ __Matchers[495] = new Star(this, 495, "*(_(',',>type-parameter))") { Builder = nodes => new RStar<RSequence>(nodes) };
                 /* 496 SeqOp            */ __Matchers[496] = new Seq(this, 496, "_(>type-parameter,*(_(',',>type-parameter)))") { Builder = nodes => new CTypeParameterList(nodes) };
-                /* 497 OptionalOp       */ __Matchers[497] = new Optional(this, 497, "?(>variance)") { Builder = nodes => new ROptional<IVariance>(nodes) };
+                /* 497 OptionalOp       */ __Matchers[497] = new Optional(this, 497, "?(>variance)") { Builder = nodes => new ROptional<ICVariance>(nodes) };
                 /* 498 OptionalOp       */ __Matchers[498] = new Optional(this, 498, "?(>type-default)") { Builder = nodes => new ROptional<CTypeDefault>(nodes) };
                 /* 499 SeqOp            */ __Matchers[499] = new Seq(this, 499, "_(?(>variance),>type-name,?(>type-default))") { Builder = nodes => new CTypeParameter(nodes) };
                 /* 500 StringOp         */ __Matchers[500] = new Keyword(this, 500, "'in'", "in") { Creator = node => new RLiteral(node) };
@@ -527,7 +527,7 @@ namespace GeneratedParser
                 /* 502 AltOp            */ __Matchers[502] = new Alt(this, 502, "alt('in'|'out')") { Builder = nodes => nodes[0] };
                 /* 503 SeqOp            */ __Matchers[503] = new Seq(this, 503, "_('=',>type)") { Builder = nodes => new CTypeDefault(nodes) };
                 /* 504 StringOp         */ __Matchers[504] = new Keyword(this, 504, "'given'", "given") { Creator = node => new RLiteral(node) };
-                /* 505 OptionalOp       */ __Matchers[505] = new Optional(this, 505, "?(>type-name)") { Builder = nodes => new ROptional<ITypeName>(nodes) };
+                /* 505 OptionalOp       */ __Matchers[505] = new Optional(this, 505, "?(>type-name)") { Builder = nodes => new ROptional<ICTypeName>(nodes) };
                 /* 506 OptionalOp       */ __Matchers[506] = new Optional(this, 506, "?(>case-types)") { Builder = nodes => new ROptional<CCaseTypes>(nodes) };
                 /* 507 OptionalOp       */ __Matchers[507] = new Optional(this, 507, "?(>satisfied-types)") { Builder = nodes => new ROptional<CSatisfiedTypes>(nodes) };
                 /* 508 SeqOp            */ __Matchers[508] = new Seq(this, 508, "_('given',?(>type-name),?(>type-parameters),?(>case-types),?(>satisfied-types))") { Builder = nodes => new CTypeConstraint(nodes) };
@@ -556,7 +556,7 @@ namespace GeneratedParser
                 /* 531 StringOp         */ __Matchers[531] = new Keyword(this, 531, "'value'", "value") { Creator = node => new CKwValue(node) };
                 /* 532 SeqOp            */ __Matchers[532] = new Seq(this, 532, "_(>annotations,'value',>member-name,>attribute-definition)") { Builder = nodes => new CInferredAttributeDeclaration(nodes) };
                 /* 533 AltOp            */ __Matchers[533] = new Alt(this, 533, "alt(>block|>optional-any-specifier)") { Builder = nodes => nodes[0] };
-                /* 534 OptionalOp       */ __Matchers[534] = new Optional(this, 534, "?(>any-specifier)") { Builder = nodes => new ROptional<IAnySpecifier>(nodes) };
+                /* 534 OptionalOp       */ __Matchers[534] = new Optional(this, 534, "?(>any-specifier)") { Builder = nodes => new ROptional<ICAnySpecifier>(nodes) };
                 /* 535 SeqOp            */ __Matchers[535] = new Seq(this, 535, "_(?(>any-specifier),';')") { Builder = nodes => new COptionalAnySpecifier(nodes) };
                 /* 536 StringOp         */ __Matchers[536] = new Keyword(this, 536, "'class'", "class") { Creator = node => new RLiteral(node) };
                 /* 537 SeqOp            */ __Matchers[537] = new Seq(this, 537, "_(>annotations,'class',>type-name,?(>type-parameters),?(>parameters),?(>case-types),?(>extended-type),?(>satisfied-types),?(>type-constraints),>class-definition)") { Builder = nodes => new CClassDeclaration(nodes) };
@@ -574,7 +574,7 @@ namespace GeneratedParser
                 /* 549 SeqOp            */ __Matchers[549] = new Seq(this, 549, "_(>primary,>function-specifier)") { Builder = nodes => new CSpecificationStatement(nodes) };
                 /* 550 AltOp            */ __Matchers[550] = new Alt(this, 550, "alt(>return-directive|>throw-directive|>break-directive|>continue-directive)") { Builder = nodes => nodes[0] };
                 /* 551 StringOp         */ __Matchers[551] = new Keyword(this, 551, "'return'", "return") { Creator = node => new RLiteral(node) };
-                /* 552 OptionalOp       */ __Matchers[552] = new Optional(this, 552, "?(>expression)") { Builder = nodes => new ROptional<IExpression>(nodes) };
+                /* 552 OptionalOp       */ __Matchers[552] = new Optional(this, 552, "?(>expression)") { Builder = nodes => new ROptional<ICExpression>(nodes) };
                 /* 553 SeqOp            */ __Matchers[553] = new Seq(this, 553, "_('return',?(>expression))") { Builder = nodes => new CReturnDirective(nodes) };
                 /* 554 StringOp         */ __Matchers[554] = new Keyword(this, 554, "'throw'", "throw") { Creator = node => new RLiteral(node) };
                 /* 555 SeqOp            */ __Matchers[555] = new Seq(this, 555, "_('throw',?(>expression))") { Builder = nodes => new CThrowDirective(nodes) };
@@ -595,12 +595,12 @@ namespace GeneratedParser
                 /* 570 StringOp         */ __Matchers[570] = new Keyword(this, 570, "'this'", "this") { Creator = node => new RLiteral(node) };
                 /* 571 StringOp         */ __Matchers[571] = new Keyword(this, 571, "'outer'", "outer") { Creator = node => new RLiteral(node) };
                 /* 572 AltOp            */ __Matchers[572] = new Alt(this, 572, "alt('this'|'super'|'outer'|'package')") { Builder = nodes => nodes[0] };
-                /* 573 StarOp           */ __Matchers[573] = new Star(this, 573, "*(>declaration-or-statement)") { Builder = nodes => new RStar<IDeclarationOrStatement>(nodes) };
+                /* 573 StarOp           */ __Matchers[573] = new Star(this, 573, "*(>declaration-or-statement)") { Builder = nodes => new RStar<ICDeclarationOrStatement>(nodes) };
                 /* 574 OptionalOp       */ __Matchers[574] = new Optional(this, 574, "?(>sequenced-arguments)") { Builder = nodes => new ROptional<CSequencedArguments>(nodes) };
                 /* 575 SeqOp            */ __Matchers[575] = new Seq(this, 575, "_('{',*(>declaration-or-statement),?(>sequenced-arguments),'}')") { Builder = nodes => new CEnumeration(nodes) };
                 /* 576 SeqOp            */ __Matchers[576] = new Seq(this, 576, "_('[',?(>sequenced-arguments),']')") { Builder = nodes => new CTuple(nodes) };
                 /* 577 AltOp            */ __Matchers[577] = new Alt(this, 577, "alt(>structural-arguments|>positional-arguments)") { Builder = nodes => nodes[0] };
-                /* 578 StarOp           */ __Matchers[578] = new Star(this, 578, "*(>named-or-anonymous)") { Builder = nodes => new RStar<INamedOrAnonymous>(nodes) };
+                /* 578 StarOp           */ __Matchers[578] = new Star(this, 578, "*(>named-or-anonymous)") { Builder = nodes => new RStar<ICNamedOrAnonymous>(nodes) };
                 /* 579 SeqOp            */ __Matchers[579] = new Seq(this, 579, "_('{',*(>named-or-anonymous),?(>sequenced-arguments),'}')") { Builder = nodes => new CStructuralArguments(nodes) };
                 /* 580 AltOp            */ __Matchers[580] = new Alt(this, 580, "alt(>named-argument|>anonymous-argument)") { Builder = nodes => nodes[0] };
                 /* 581 AltOp            */ __Matchers[581] = new Alt(this, 581, "alt(>named-specified-argument|>named-argument-declaration)") { Builder = nodes => nodes[0] };
@@ -646,7 +646,7 @@ namespace GeneratedParser
                 /* 621 StringOp         */ __Matchers[621] = new Keyword(this, 621, "'then'", "then") { Creator = node => new RLiteral(node) };
                 /* 622 SeqOp            */ __Matchers[622] = new Seq(this, 622, "_('then',>conditional-expression)") { Builder = nodes => new CThenExpression(nodes) };
                 /* 623 AltOp            */ __Matchers[623] = new Alt(this, 623, "alt(>if-expression|>let-expression|>disjunction-expression)") { Builder = nodes => nodes[0] };
-                /* 624 OptionalOp       */ __Matchers[624] = new Optional(this, 624, "?(>function-expression-type)") { Builder = nodes => new ROptional<IFunctionExpressionType>(nodes) };
+                /* 624 OptionalOp       */ __Matchers[624] = new Optional(this, 624, "?(>function-expression-type)") { Builder = nodes => new ROptional<ICFunctionExpressionType>(nodes) };
                 /* 625 OptionalOp       */ __Matchers[625] = new Optional(this, 625, "?(>function-parameters)") { Builder = nodes => new ROptional<CFunctionParameters>(nodes) };
                 /* 626 SeqOp            */ __Matchers[626] = new Seq(this, 626, "_(?(>function-expression-type),?(>type-parameters),?(>function-parameters),>function-definition)") { Builder = nodes => new CFunctionExpression(nodes) };
                 /* 627 StringOp         */ __Matchers[627] = new Keyword(this, 627, "'void'", "void") { Creator = node => new CKwVoid(node) };
@@ -790,15 +790,15 @@ namespace GeneratedParser
                 /* 765 SeqOp            */ __Matchers[765] = new Seq(this, 765, "_(>primary-type,'?')") { Builder = nodes => new CNullableType(nodes) };
                 /* 766 OptionalOp       */ __Matchers[766] = new Optional(this, 766, "?(>literal-natural)") { Builder = nodes => new ROptional<CLiteralNatural>(nodes) };
                 /* 767 SeqOp            */ __Matchers[767] = new Seq(this, 767, "_(>primary-type,'[',?(>literal-natural),']')") { Builder = nodes => new CArrayType(nodes) };
-                /* 768 OptionalOp       */ __Matchers[768] = new Optional(this, 768, "?(>type-type-arguments)") { Builder = nodes => new ROptional<ITypeTypeArguments>(nodes) };
+                /* 768 OptionalOp       */ __Matchers[768] = new Optional(this, 768, "?(>type-type-arguments)") { Builder = nodes => new ROptional<ICTypeTypeArguments>(nodes) };
                 /* 769 SeqOp            */ __Matchers[769] = new Seq(this, 769, "_(>primary-type,'(',?(>type-type-arguments),')')") { Builder = nodes => new CFunctionType(nodes) };
                 /* 770 AltOp            */ __Matchers[770] = new Alt(this, 770, "alt(>spread-type|>defaulted-type-list)") { Builder = nodes => nodes[0] };
                 /* 771 SeqOp            */ __Matchers[771] = new Seq(this, 771, "_('[',?(>type-type-arguments),']')") { Builder = nodes => new CTupleType(nodes) };
-                /* 772 OptionalOp       */ __Matchers[772] = new Optional(this, 772, "?(>variadic-type)") { Builder = nodes => new ROptional<IVariadicType>(nodes) };
+                /* 772 OptionalOp       */ __Matchers[772] = new Optional(this, 772, "?(>variadic-type)") { Builder = nodes => new ROptional<ICVariadicType>(nodes) };
                 /* 773 SeqOp            */ __Matchers[773] = new Seq(this, 773, "_('{',?(>variadic-type),'}')") { Builder = nodes => new CIterableType(nodes) };
                 /* 774 SeqOp            */ __Matchers[774] = new Seq(this, 774, "_('<',>type,'>')") { Builder = nodes => new CGroupedType(nodes) };
                 /* 775 SeqOp            */ __Matchers[775] = new Seq(this, 775, "_(?(>package-qualifier),>type-path)") { Builder = nodes => new CQualifiedType(nodes) };
-                /* 776 OptionalOp       */ __Matchers[776] = new Optional(this, 776, "?(>string-literal)") { Builder = nodes => new ROptional<IStringLiteral>(nodes) };
+                /* 776 OptionalOp       */ __Matchers[776] = new Optional(this, 776, "?(>string-literal)") { Builder = nodes => new ROptional<ICStringLiteral>(nodes) };
                 /* 777 StarOp           */ __Matchers[777] = new Star(this, 777, "*(>annotation)") { Builder = nodes => new RStar<CAnnotation>(nodes) };
                 /* 778 SeqOp            */ __Matchers[778] = new Seq(this, 778, "_(?(>string-literal),*(>annotation))") { Builder = nodes => new CAnnotations(nodes) };
                 /* 779 SeqOp            */ __Matchers[779] = new Seq(this, 779, "_(>annotation-name,?(>arguments))") { Builder = nodes => new CAnnotation(nodes) };
@@ -864,7 +864,7 @@ namespace GeneratedParser
                 /* 839 SeqOp            */ __Matchers[839] = new Seq(this, 839, "_(>resource,*(_(',',>resource)))") { Builder = nodes => new CResourceList(nodes) };
                 /* 840 AltOp            */ __Matchers[840] = new Alt(this, 840, "alt(>specified-variable|>operator-expression)") { Builder = nodes => nodes[0] };
                 /* 841 SeqOp            */ __Matchers[841] = new Seq(this, 841, "_(>variable,>value-specifier)") { Builder = nodes => new CSpecifiedVariable(nodes) };
-                /* 842 OptionalOp       */ __Matchers[842] = new Optional(this, 842, "?(>variable-type)") { Builder = nodes => new ROptional<IVariableType>(nodes) };
+                /* 842 OptionalOp       */ __Matchers[842] = new Optional(this, 842, "?(>variable-type)") { Builder = nodes => new ROptional<ICVariableType>(nodes) };
                 /* 843 StarOp           */ __Matchers[843] = new Star(this, 843, "*(>parameters)") { Builder = nodes => new RStar<CParameters>(nodes) };
                 /* 844 SeqOp            */ __Matchers[844] = new Seq(this, 844, "_(?(>variable-type),>member-name,*(>parameters))") { Builder = nodes => new CVariable(nodes) };
                 /* 845 AltOp            */ __Matchers[845] = new Alt(this, 845, "alt(>type|>kw-void|>kw-function|>kw-value)") { Builder = nodes => nodes[0] };
@@ -3123,424 +3123,424 @@ namespace GeneratedParser
 
     public partial class CeylonTree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface ICompilationUnit {}
-        public interface IUnitElements : ICompilationUnit {}
-        public interface IUnitElement {}
-        public interface IModuleDescriptor : ICompilationUnit {}
-        public interface IModuleSpecifier {}
-        public interface IRepository {}
-        public interface IModule {}
-        public interface IArtifactAndClassifier {}
-        public interface IArtifact {}
-        public interface IClassifier {}
-        public interface IVersion {}
-        public interface IModuleName : IModule {}
-        public interface IModuleBody {}
-        public interface IModuleBodyElement {}
-        public interface IPackageDescriptor : ICompilationUnit {}
-        public interface IImportModule : IModuleBodyElement {}
-        public interface IImportDeclaration : IBlockElement, IUnitElement {}
-        public interface IImportElements {}
-        public interface IImportElementList {}
-        public interface IImportElement {}
-        public interface IImportNamed : IImportElement {}
-        public interface IImportNameSpecifier {}
-        public interface IImportWildcard : IImportElement {}
-        public interface IImportName {}
-        public interface IPackagePath : IModuleName {}
-        public interface IAnyName : IImportName, IPackageName, IReferencePathElement, IRepository {}
-        public interface IPackageName {}
-        public interface IAnnotationName {}
-        public interface IMemberName {}
-        public interface ITypeName {}
-        public interface IPattern : ICaseItem, IVariadicPattern {}
-        public interface IVariableOrTuplePattern {}
-        public interface ITupleOrEntryPattern : IForVariable, IParameterDeclarationOrRefPattern {}
-        public interface IEntryPattern : IPattern, ITupleOrEntryPattern {}
-        public interface ITuplePattern : IPattern, ITupleOrEntryPattern, IVariableOrTuplePattern {}
-        public interface IVariadicPatternList {}
-        public interface IVariadicPattern {}
-        public interface IVariablePattern : IPattern, IVariableOrTuplePattern {}
-        public interface IVariadicVariable : IVariadicPattern {}
-        public interface ILetStatement : IOpenStatement {}
-        public interface IDelegatedConstructor {}
-        public interface IAssertionStatement : IOpenStatement {}
-        public interface IAssertionMessage {}
-        public interface IBlock : IAttributeDefinition, IElseBlockNext, IFunctionDefinition, IMethodDefinition, ISetterDefinition {}
-        public interface IInterfaceBlock : IInterfaceDefinition {}
-        public interface IClassBlock : IClassDefinition {}
-        public interface IBlockElements : IBlock, IClassBlock, IInterfaceBlock {}
-        public interface IBlockElement {}
-        public interface IExtendedType {}
-        public interface IClassSpecifier {}
-        public interface IClassInstatiation {}
-        public interface IQualifiedClass {}
-        public interface ISuperQualifiedClass : IQualifiedClass {}
-        public interface ISuperQualifier {}
-        public interface IPackageQualifiedClass : IQualifiedClass {}
-        public interface IPackageQualifier {}
-        public interface IUnQualifiedClass : IQualifiedClass {}
-        public interface IMemberPath : IUnQualifiedClass {}
-        public interface ITypePath : IUnQualifiedClass {}
-        public interface ISatisfiedTypes {}
-        public interface IUnionTypeList {}
-        public interface ICaseTypes {}
-        public interface ICaseTypeList {}
-        public interface ICaseType {}
-        public interface IQualifiedCaseType : ICaseType {}
-        public interface IParameters {}
-        public interface IParameterList {}
-        public interface IParameterDeclarationOrRefPattern {}
-        public interface IParameterDeclarationOrRef : IParameterDeclarationOrRefPattern {}
-        public interface IParameter : IParameterDeclarationOrRef {}
-        public interface IParameterReference : IParameterDeclarationOrRef {}
-        public interface IParameterDeclaration {}
-        public interface IFunctionParameterDeclaration : IParameterDeclaration {}
-        public interface IFunctionParameterType {}
-        public interface IValueParameterDeclaration : IParameterDeclaration {}
-        public interface IValueParameterType {}
-        public interface ITypeParameters {}
-        public interface ITypeParameterList {}
-        public interface ITypeParameter {}
-        public interface IVariance {}
-        public interface ITypeDefault {}
-        public interface ITypeConstraint {}
-        public interface ITypeConstraints {}
-        public interface IDeclarationOrStatement : IBlockElement {}
-        public interface IDeclaration : IDeclarationOrStatement, IUnitElement {}
-        public interface IConstructor : IDeclaration {}
-        public interface IEnumeratedObject : IDeclaration {}
-        public interface IAliasDeclaration : IDeclaration {}
-        public interface IObjectDeclaration : IDeclaration {}
-        public interface ISetterDeclaration : IDeclaration {}
-        public interface ISetterDefinition {}
-        public interface ITypedMethodDeclaration : IDeclaration {}
-        public interface IMethodType {}
-        public interface IInferredMethodDeclaration : IDeclaration {}
-        public interface ITypedAttributeDeclaration : IDeclaration {}
-        public interface IAttributeType {}
-        public interface IInferredAttributeDeclaration : IDeclaration, IModuleBodyElement {}
-        public interface IAttributeDefinition {}
-        public interface IOptionalAnySpecifier : IAttributeDefinition {}
-        public interface IClassDeclaration : IDeclaration {}
-        public interface IClassDefinition {}
-        public interface IOptionalClassSpecifier : IClassDefinition {}
-        public interface IInterfaceDeclaration : IDeclaration {}
-        public interface IInterfaceDefinition {}
-        public interface IOptionalTypeSpecifier : IInterfaceDefinition {}
-        public interface IStatement : IDeclarationOrStatement {}
-        public interface IUnclosedStatement : IStatement {}
-        public interface IOpenStatement {}
-        public interface ISpecificationStatement : IOpenStatement {}
-        public interface IExpressionStatement : IOpenStatement {}
-        public interface IDirectiveStatement : IOpenStatement {}
-        public interface IReturnDirective : IDirectiveStatement {}
-        public interface IThrowDirective : IDirectiveStatement {}
-        public interface IBreakDirective : IDirectiveStatement {}
-        public interface IContinueDirective : IDirectiveStatement {}
-        public interface ITypeSpecifier {}
-        public interface IValueSpecifier : IAnySpecifier {}
-        public interface IFunctionSpecifier : IAnySpecifier, IFunctionDefinition {}
-        public interface IAnySpecifier {}
-        public interface IBaseReferenceOrParameterized : IBaseExpression {}
-        public interface IBaseReference : IBaseReferenceOrParameterized {}
-        public interface IParametrizedMember : IBaseReferenceOrParameterized {}
-        public interface ISelfParametrizedMember : IBaseReferenceOrParameterized {}
-        public interface IMemberReference : IBaseReference, IMemberModelExpression, IUnQualifiedClass {}
-        public interface ITypeReference : IBaseReference {}
-        public interface ISelfReferenceSelector {}
-        public interface ISelfReference : IBaseReferenceOrParameterized {}
-        public interface IEnumeration : IBaseExpression {}
-        public interface ITuple : IBaseExpression {}
-        public interface IArguments {}
-        public interface IStructuralArguments : IArguments {}
-        public interface INamedOrAnonymous {}
-        public interface INamedArgument : INamedOrAnonymous {}
-        public interface INamedSpecifiedArgument : INamedArgument {}
-        public interface ISequencedArguments {}
-        public interface ISequencedArgument {}
-        public interface IAnonymousArgument : INamedOrAnonymous {}
-        public interface INamedArgumentDeclaration : INamedArgument {}
-        public interface IObjectArgument : INamedArgumentDeclaration {}
-        public interface ITypedMethodArgument : INamedArgumentDeclaration {}
-        public interface IMethodDefinition {}
-        public interface IOptionalFunctionSpecifier : IMethodDefinition {}
-        public interface INeededFunctionSpecifier : ISetterDefinition {}
-        public interface IMethodArgumentType {}
-        public interface ITypedGetterArgument : INamedArgumentDeclaration {}
-        public interface IGetterArgumentType {}
-        public interface IInferredMethodArgument : INamedArgumentDeclaration {}
-        public interface IInferredGetterArgument : INamedArgumentDeclaration {}
-        public interface IUntypedMethodArgument : INamedArgumentDeclaration {}
-        public interface IUntypedGetterArgument : INamedArgumentDeclaration {}
-        public interface IPositionalArguments : IArguments {}
-        public interface IPositionalArgument : ISequencedArgument {}
-        public interface ISpreadArgument : ISequencedArgument {}
-        public interface ILetExpression : IConditionalExpression, IExpression {}
-        public interface ILetVariableList {}
-        public interface ILetVariable : ILetOrExpression {}
-        public interface ISwitchExpression : IExpression {}
-        public interface ICaseExpressions {}
-        public interface ICaseExpression {}
-        public interface IIfExpression : IConditionalExpression, IExpression {}
-        public interface IElseExpression {}
-        public interface IThenExpression {}
-        public interface IConditionalExpression {}
-        public interface IFunctionExpression : IExpression {}
-        public interface IFunctionExpressionType {}
-        public interface IFunctionParameters {}
-        public interface IFunctionDefinition {}
-        public interface IComprehension : ISequencedArgument {}
-        public interface IComprehensionClause {}
-        public interface IExpressionComprehensionClause : IComprehensionClause {}
-        public interface IForComprehensionClause : IComprehension, IComprehensionClause {}
-        public interface IIfComprehensionClause : IComprehension, IComprehensionClause {}
-        public interface IExpression : IBooleanCondition, IExpressionComprehensionClause, IIndex, IPositionalArgument {}
-        public interface IOperatorExpression : IExpression, IExpressionStatement, ILetOrExpression, ISpecifiedOrExpression {}
-        public interface IAssignmentExpression : IOperatorExpression {}
-        public interface IAssignment : IAssignmentExpression {}
-        public interface IAssignmentOperator {}
-        public interface IThenElseExpression : IAssignmentExpression {}
-        public interface IThenElse : IThenElseExpression {}
-        public interface IThenElseOperator {}
-        public interface IDisjunctionExpression : IConditionalExpression, IThenElseExpression {}
-        public interface IDisjunction : IDisjunctionExpression {}
-        public interface IDisjunctionOperator {}
-        public interface IConjunctionExpression : IDisjunctionExpression {}
-        public interface IConjunction : IConjunctionExpression {}
-        public interface IConjunctionOperator {}
-        public interface ILogicalNegationExpression : IConjunctionExpression {}
-        public interface ILogicalNegation : ILogicalNegationExpression {}
-        public interface INotOperator {}
-        public interface IExpressionOrMeta : ILogicalNegationExpression {}
-        public interface IEqualityExpression : IExpressionOrMeta {}
-        public interface IEquality : IEqualityExpression {}
-        public interface IEqualityOperator {}
-        public interface IComparisonExpression : IEqualityExpression {}
-        public interface IComparisonExpr : IComparisonExpression {}
-        public interface ILargerExpr : IComparisonExpression {}
-        public interface ISmallerExpr : IComparisonExpression {}
-        public interface ILargerBoundsExpr : IComparisonExpression {}
-        public interface ISmallerBoundsExpr : IComparisonExpression {}
-        public interface ITypecheckExpr : IComparisonExpression {}
-        public interface IComparisonOperator {}
-        public interface ISmallerOperator {}
-        public interface ILargerOperator {}
-        public interface ITypeOperator {}
-        public interface IExistsNonemptyExpression : IComparisonExpression {}
-        public interface IExistsExpression : IExistsNonemptyExpression {}
-        public interface INonemptyExpression : IExistsNonemptyExpression {}
-        public interface IEntryRangeExpression : IExistsNonemptyExpression {}
-        public interface IEntryOrRange : IEntryRangeExpression {}
-        public interface IRangeOrEntryOperator {}
-        public interface IAdditiveExpression : IEntryRangeExpression, IIndexExpression {}
-        public interface IAdditiveExpr : IAdditiveExpression {}
-        public interface IAdditiveOperator {}
-        public interface IScaleExpression : IAdditiveExpression {}
-        public interface IScaleExpr : IScaleExpression {}
-        public interface IScaleOperator {}
-        public interface IMultiplicativeExpression : IScaleExpression {}
-        public interface IMultiplicativeExpr : IMultiplicativeExpression {}
-        public interface IMultiplicativeOperator {}
-        public interface IUnionExpression : IMultiplicativeExpression {}
-        public interface IUnionExpr : IUnionExpression {}
-        public interface IUnionOperator {}
-        public interface IExclusiveExpression : IUnionExpression {}
-        public interface IExclusiveExpr : IExclusiveExpression {}
-        public interface IExclusiveOperator {}
-        public interface IIntersectionExpression : IExclusiveExpression, IValueCase {}
-        public interface IIntersectionExpr : IIntersectionExpression {}
-        public interface IIntersectionOperator {}
-        public interface INegationOrComplementExpression : IIntersectionExpression {}
-        public interface INegationOrComplementExpr : INegationOrComplementExpression {}
-        public interface IUnaryMinusOrComplementOperator {}
-        public interface IOpNegate : IUnaryMinusOrComplementOperator {}
-        public interface IOpNeutral : IUnaryMinusOrComplementOperator {}
-        public interface IOpComplement : IUnaryMinusOrComplementOperator {}
-        public interface IPrefixExpression : INegationOrComplementExpression {}
-        public interface IPrefixExpr : IPrefixExpression {}
-        public interface IPostfixExpression : IPrefixExpression {}
-        public interface IPostfixExpr : IPostfixExpression {}
-        public interface IIncrementOperator {}
-        public interface IPrimary : IPostfixExpression {}
-        public interface ISelectionExpression : IPrimary {}
-        public interface IQualifiedReference {}
-        public interface IMemberSelectionOperator {}
-        public interface IIndexedExpression : IPrimary {}
-        public interface IIndex {}
-        public interface IUpperSpanned : IIndex {}
-        public interface ILowerSpanned : IIndex {}
-        public interface ISpanned : IIndex {}
-        public interface IMeasured : IIndex {}
-        public interface IIndexExpression {}
-        public interface ICallExpression : IPrimary {}
-        public interface IBaseExpression : IPrimary {}
-        public interface INonstringLiteral : IBaseExpression {}
-        public interface IStringExpression : IAssertionMessage, IBaseExpression {}
-        public interface IStringInterpolation : IStringExpression {}
-        public interface IInterpolationPart {}
-        public interface IStringLiteral : IStringExpression {}
-        public interface IObjectExpression : IBaseExpression {}
-        public interface IGroupedExpression : IBaseExpression {}
-        public interface ITypeArguments {}
-        public interface ITypeArgumentList {}
-        public interface IVariancedType {}
-        public interface IDefaultedTypeList : ITypeTypeArguments {}
-        public interface IDefaultedType {}
-        public interface IDefaultedTypeCore : IDefaultedType {}
-        public interface IVariadicType : IAttributeType, IDefaultedType, IFunctionParameterType, IMethodType, IValueParameterType {}
-        public interface IVariadicUnionType : IVariadicType {}
-        public interface IVariadicOperator {}
-        public interface ISpreadType : ITypeTypeArguments {}
-        public interface IType : IGetterArgumentType, IMethodArgumentType, ITypeModelExpression, IVariableType, IVariadicType {}
-        public interface IEntryType : IType {}
-        public interface IUnionType : IType {}
-        public interface IUnionTypeCore : IUnionType {}
-        public interface IIntersectionType : IUnionType, IValueCase {}
-        public interface IIntersectionTypeCore : IIntersectionType {}
-        public interface IPrimaryType : ICaseType, IIntersectionType {}
-        public interface INullableType : IPrimaryType {}
-        public interface IArrayType : IPrimaryType {}
-        public interface IFunctionType : IPrimaryType {}
-        public interface ITypeTypeArguments {}
-        public interface ITupleType : IPrimaryType {}
-        public interface IIterableType : IPrimaryType {}
-        public interface IGroupedType : IPrimaryType {}
-        public interface IQualifiedType : IPrimaryType {}
-        public interface IAnnotations {}
-        public interface IAnnotation {}
-        public interface IConditions {}
-        public interface IConditionList {}
-        public interface ICondition {}
-        public interface IExistsCondition : ICondition {}
-        public interface INonemptyCondition : ICondition {}
-        public interface ILetOrExpression {}
-        public interface IIsCondition : ICondition {}
-        public interface IIsConditionVariable {}
-        public interface ISatisfiesCondition : ICondition {}
-        public interface IBooleanCondition : ICondition {}
-        public interface IControlStatement : IStatement {}
-        public interface IIfElse : IControlStatement, IElseBlockNext {}
-        public interface IIfBlock {}
-        public interface IElseBlock {}
-        public interface IElseBlockNext {}
-        public interface ISwitchCaseElse : IControlStatement {}
-        public interface ISwitchHeader {}
-        public interface ISwitched {}
-        public interface ICaseBlock {}
-        public interface ICaseItem {}
-        public interface IIsCaseCondition : ICaseItem {}
-        public interface ISatisfiesCaseCondition : ICaseItem {}
-        public interface IMatchCaseCondition : ICaseItem {}
-        public interface IValueCaseList : IMatchCaseCondition {}
-        public interface IValueCaseSeparator {}
-        public interface IValueCase {}
-        public interface IForElse : IControlStatement {}
-        public interface IForBlock {}
-        public interface IFailBlock {}
-        public interface IForIterator {}
-        public interface IForVariable {}
-        public interface IContainment {}
-        public interface IContainmentOperator {}
-        public interface IWhileLoop : IControlStatement {}
-        public interface IWhileBlock : IWhileLoop {}
-        public interface ITryCatchFinally : IControlStatement {}
-        public interface ITryBlock {}
-        public interface ICatchBlock {}
-        public interface ICatchVariable {}
-        public interface IFinallyBlock {}
-        public interface IResources {}
-        public interface IResourceList {}
-        public interface IResource {}
-        public interface ISpecifiedOrExpression : IResource, ISwitched {}
-        public interface ISpecifiedVariable : ISpecifiedOrExpression {}
-        public interface IVariable : IForVariable, IVariablePattern {}
-        public interface IVariableType {}
-        public interface IModelReference : IExpressionOrMeta {}
-        public interface IMetaLiteral : IBaseExpression {}
-        public interface IMetaExpression {}
-        public interface IModelExpression : IMetaExpression {}
-        public interface IMemberModelExpression : IModelExpression {}
-        public interface IPackageQualifiedMemberReference : IMemberModelExpression {}
-        public interface ITypeQualifiedMemberReference : IMemberModelExpression {}
-        public interface ITypeModelExpression : IModelExpression {}
-        public interface IDeclarationReference : IMetaExpression, IPositionalArgument {}
-        public interface IModuleLiteral : IDeclarationReference {}
-        public interface IPackageLiteral : IDeclarationReference {}
-        public interface IClassLiteral : IDeclarationReference {}
-        public interface IInterfaceLiteral : IDeclarationReference {}
-        public interface IAliasLiteral : IDeclarationReference {}
-        public interface ITypeParameterLiteral : IDeclarationReference {}
-        public interface INewLiteral : IDeclarationReference {}
-        public interface IValueLiteral : IDeclarationReference {}
-        public interface IValueLiteralIntro {}
-        public interface IFunctionLiteral : IDeclarationReference {}
-        public interface IReferencePath {}
-        public interface IReferencePathElementList {}
-        public interface IReferencePathElement {}
-        public interface IKwVoid : IFunctionParameterType, IMethodArgumentType, IMethodType, IVariableType {}
-        public interface IKwFunction : IFunctionParameterType, IVariableType {}
-        public interface IKwValue : IValueParameterType, IVariableType {}
-        public interface ILiteralFloat : INonstringLiteral {}
-        public interface ILiteralNatural : INonstringLiteral {}
-        public interface ILiteralChar : INonstringLiteral {}
-        public interface IStringStart {}
-        public interface IStringMid {}
-        public interface IStringEnd {}
-        public interface ILiteralString : IModule, IStringLiteral, IVersion {}
-        public interface IVerbatimString : IStringLiteral {}
-        public interface ILowerIdentifier : IAnnotationName, IAnyName, IMemberName {}
-        public interface IUpperIdentifier : IAnyName, ITypeName {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICCompilationUnit : IRNode {}
+        public interface ICUnitElements : ICCompilationUnit {}
+        public interface ICUnitElement : IRNode {}
+        public interface ICModuleDescriptor : ICCompilationUnit {}
+        public interface ICModuleSpecifier : IRNode {}
+        public interface ICRepository : IRNode {}
+        public interface ICModule : IRNode {}
+        public interface ICArtifactAndClassifier : IRNode {}
+        public interface ICArtifact : IRNode {}
+        public interface ICClassifier : IRNode {}
+        public interface ICVersion : IRNode {}
+        public interface ICModuleName : ICModule {}
+        public interface ICModuleBody : IRNode {}
+        public interface ICModuleBodyElement : IRNode {}
+        public interface ICPackageDescriptor : ICCompilationUnit {}
+        public interface ICImportModule : ICModuleBodyElement {}
+        public interface ICImportDeclaration : ICBlockElement, ICUnitElement {}
+        public interface ICImportElements : IRNode {}
+        public interface ICImportElementList : IRNode {}
+        public interface ICImportElement : IRNode {}
+        public interface ICImportNamed : ICImportElement {}
+        public interface ICImportNameSpecifier : IRNode {}
+        public interface ICImportWildcard : ICImportElement {}
+        public interface ICImportName : IRNode {}
+        public interface ICPackagePath : ICModuleName {}
+        public interface ICAnyName : ICImportName, ICPackageName, ICReferencePathElement, ICRepository {}
+        public interface ICPackageName : IRNode {}
+        public interface ICAnnotationName : IRNode {}
+        public interface ICMemberName : IRNode {}
+        public interface ICTypeName : IRNode {}
+        public interface ICPattern : ICCaseItem, ICVariadicPattern {}
+        public interface ICVariableOrTuplePattern : IRNode {}
+        public interface ICTupleOrEntryPattern : ICForVariable, ICParameterDeclarationOrRefPattern {}
+        public interface ICEntryPattern : ICPattern, ICTupleOrEntryPattern {}
+        public interface ICTuplePattern : ICPattern, ICTupleOrEntryPattern, ICVariableOrTuplePattern {}
+        public interface ICVariadicPatternList : IRNode {}
+        public interface ICVariadicPattern : IRNode {}
+        public interface ICVariablePattern : ICPattern, ICVariableOrTuplePattern {}
+        public interface ICVariadicVariable : ICVariadicPattern {}
+        public interface ICLetStatement : ICOpenStatement {}
+        public interface ICDelegatedConstructor : IRNode {}
+        public interface ICAssertionStatement : ICOpenStatement {}
+        public interface ICAssertionMessage : IRNode {}
+        public interface ICBlock : ICAttributeDefinition, ICElseBlockNext, ICFunctionDefinition, ICMethodDefinition, ICSetterDefinition {}
+        public interface ICInterfaceBlock : ICInterfaceDefinition {}
+        public interface ICClassBlock : ICClassDefinition {}
+        public interface ICBlockElements : ICBlock, ICClassBlock, ICInterfaceBlock {}
+        public interface ICBlockElement : IRNode {}
+        public interface ICExtendedType : IRNode {}
+        public interface ICClassSpecifier : IRNode {}
+        public interface ICClassInstatiation : IRNode {}
+        public interface ICQualifiedClass : IRNode {}
+        public interface ICSuperQualifiedClass : ICQualifiedClass {}
+        public interface ICSuperQualifier : IRNode {}
+        public interface ICPackageQualifiedClass : ICQualifiedClass {}
+        public interface ICPackageQualifier : IRNode {}
+        public interface ICUnQualifiedClass : ICQualifiedClass {}
+        public interface ICMemberPath : ICUnQualifiedClass {}
+        public interface ICTypePath : ICUnQualifiedClass {}
+        public interface ICSatisfiedTypes : IRNode {}
+        public interface ICUnionTypeList : IRNode {}
+        public interface ICCaseTypes : IRNode {}
+        public interface ICCaseTypeList : IRNode {}
+        public interface ICCaseType : IRNode {}
+        public interface ICQualifiedCaseType : ICCaseType {}
+        public interface ICParameters : IRNode {}
+        public interface ICParameterList : IRNode {}
+        public interface ICParameterDeclarationOrRefPattern : IRNode {}
+        public interface ICParameterDeclarationOrRef : ICParameterDeclarationOrRefPattern {}
+        public interface ICParameter : ICParameterDeclarationOrRef {}
+        public interface ICParameterReference : ICParameterDeclarationOrRef {}
+        public interface ICParameterDeclaration : IRNode {}
+        public interface ICFunctionParameterDeclaration : ICParameterDeclaration {}
+        public interface ICFunctionParameterType : IRNode {}
+        public interface ICValueParameterDeclaration : ICParameterDeclaration {}
+        public interface ICValueParameterType : IRNode {}
+        public interface ICTypeParameters : IRNode {}
+        public interface ICTypeParameterList : IRNode {}
+        public interface ICTypeParameter : IRNode {}
+        public interface ICVariance : IRNode {}
+        public interface ICTypeDefault : IRNode {}
+        public interface ICTypeConstraint : IRNode {}
+        public interface ICTypeConstraints : IRNode {}
+        public interface ICDeclarationOrStatement : ICBlockElement {}
+        public interface ICDeclaration : ICDeclarationOrStatement, ICUnitElement {}
+        public interface ICConstructor : ICDeclaration {}
+        public interface ICEnumeratedObject : ICDeclaration {}
+        public interface ICAliasDeclaration : ICDeclaration {}
+        public interface ICObjectDeclaration : ICDeclaration {}
+        public interface ICSetterDeclaration : ICDeclaration {}
+        public interface ICSetterDefinition : IRNode {}
+        public interface ICTypedMethodDeclaration : ICDeclaration {}
+        public interface ICMethodType : IRNode {}
+        public interface ICInferredMethodDeclaration : ICDeclaration {}
+        public interface ICTypedAttributeDeclaration : ICDeclaration {}
+        public interface ICAttributeType : IRNode {}
+        public interface ICInferredAttributeDeclaration : ICDeclaration, ICModuleBodyElement {}
+        public interface ICAttributeDefinition : IRNode {}
+        public interface ICOptionalAnySpecifier : ICAttributeDefinition {}
+        public interface ICClassDeclaration : ICDeclaration {}
+        public interface ICClassDefinition : IRNode {}
+        public interface ICOptionalClassSpecifier : ICClassDefinition {}
+        public interface ICInterfaceDeclaration : ICDeclaration {}
+        public interface ICInterfaceDefinition : IRNode {}
+        public interface ICOptionalTypeSpecifier : ICInterfaceDefinition {}
+        public interface ICStatement : ICDeclarationOrStatement {}
+        public interface ICUnclosedStatement : ICStatement {}
+        public interface ICOpenStatement : IRNode {}
+        public interface ICSpecificationStatement : ICOpenStatement {}
+        public interface ICExpressionStatement : ICOpenStatement {}
+        public interface ICDirectiveStatement : ICOpenStatement {}
+        public interface ICReturnDirective : ICDirectiveStatement {}
+        public interface ICThrowDirective : ICDirectiveStatement {}
+        public interface ICBreakDirective : ICDirectiveStatement {}
+        public interface ICContinueDirective : ICDirectiveStatement {}
+        public interface ICTypeSpecifier : IRNode {}
+        public interface ICValueSpecifier : ICAnySpecifier {}
+        public interface ICFunctionSpecifier : ICAnySpecifier, ICFunctionDefinition {}
+        public interface ICAnySpecifier : IRNode {}
+        public interface ICBaseReferenceOrParameterized : ICBaseExpression {}
+        public interface ICBaseReference : ICBaseReferenceOrParameterized {}
+        public interface ICParametrizedMember : ICBaseReferenceOrParameterized {}
+        public interface ICSelfParametrizedMember : ICBaseReferenceOrParameterized {}
+        public interface ICMemberReference : ICBaseReference, ICMemberModelExpression, ICUnQualifiedClass {}
+        public interface ICTypeReference : ICBaseReference {}
+        public interface ICSelfReferenceSelector : IRNode {}
+        public interface ICSelfReference : ICBaseReferenceOrParameterized {}
+        public interface ICEnumeration : ICBaseExpression {}
+        public interface ICTuple : ICBaseExpression {}
+        public interface ICArguments : IRNode {}
+        public interface ICStructuralArguments : ICArguments {}
+        public interface ICNamedOrAnonymous : IRNode {}
+        public interface ICNamedArgument : ICNamedOrAnonymous {}
+        public interface ICNamedSpecifiedArgument : ICNamedArgument {}
+        public interface ICSequencedArguments : IRNode {}
+        public interface ICSequencedArgument : IRNode {}
+        public interface ICAnonymousArgument : ICNamedOrAnonymous {}
+        public interface ICNamedArgumentDeclaration : ICNamedArgument {}
+        public interface ICObjectArgument : ICNamedArgumentDeclaration {}
+        public interface ICTypedMethodArgument : ICNamedArgumentDeclaration {}
+        public interface ICMethodDefinition : IRNode {}
+        public interface ICOptionalFunctionSpecifier : ICMethodDefinition {}
+        public interface ICNeededFunctionSpecifier : ICSetterDefinition {}
+        public interface ICMethodArgumentType : IRNode {}
+        public interface ICTypedGetterArgument : ICNamedArgumentDeclaration {}
+        public interface ICGetterArgumentType : IRNode {}
+        public interface ICInferredMethodArgument : ICNamedArgumentDeclaration {}
+        public interface ICInferredGetterArgument : ICNamedArgumentDeclaration {}
+        public interface ICUntypedMethodArgument : ICNamedArgumentDeclaration {}
+        public interface ICUntypedGetterArgument : ICNamedArgumentDeclaration {}
+        public interface ICPositionalArguments : ICArguments {}
+        public interface ICPositionalArgument : ICSequencedArgument {}
+        public interface ICSpreadArgument : ICSequencedArgument {}
+        public interface ICLetExpression : ICConditionalExpression, ICExpression {}
+        public interface ICLetVariableList : IRNode {}
+        public interface ICLetVariable : ICLetOrExpression {}
+        public interface ICSwitchExpression : ICExpression {}
+        public interface ICCaseExpressions : IRNode {}
+        public interface ICCaseExpression : IRNode {}
+        public interface ICIfExpression : ICConditionalExpression, ICExpression {}
+        public interface ICElseExpression : IRNode {}
+        public interface ICThenExpression : IRNode {}
+        public interface ICConditionalExpression : IRNode {}
+        public interface ICFunctionExpression : ICExpression {}
+        public interface ICFunctionExpressionType : IRNode {}
+        public interface ICFunctionParameters : IRNode {}
+        public interface ICFunctionDefinition : IRNode {}
+        public interface ICComprehension : ICSequencedArgument {}
+        public interface ICComprehensionClause : IRNode {}
+        public interface ICExpressionComprehensionClause : ICComprehensionClause {}
+        public interface ICForComprehensionClause : ICComprehension, ICComprehensionClause {}
+        public interface ICIfComprehensionClause : ICComprehension, ICComprehensionClause {}
+        public interface ICExpression : ICBooleanCondition, ICExpressionComprehensionClause, ICIndex, ICPositionalArgument {}
+        public interface ICOperatorExpression : ICExpression, ICExpressionStatement, ICLetOrExpression, ICSpecifiedOrExpression {}
+        public interface ICAssignmentExpression : ICOperatorExpression {}
+        public interface ICAssignment : ICAssignmentExpression {}
+        public interface ICAssignmentOperator : IRNode {}
+        public interface ICThenElseExpression : ICAssignmentExpression {}
+        public interface ICThenElse : ICThenElseExpression {}
+        public interface ICThenElseOperator : IRNode {}
+        public interface ICDisjunctionExpression : ICConditionalExpression, ICThenElseExpression {}
+        public interface ICDisjunction : ICDisjunctionExpression {}
+        public interface ICDisjunctionOperator : IRNode {}
+        public interface ICConjunctionExpression : ICDisjunctionExpression {}
+        public interface ICConjunction : ICConjunctionExpression {}
+        public interface ICConjunctionOperator : IRNode {}
+        public interface ICLogicalNegationExpression : ICConjunctionExpression {}
+        public interface ICLogicalNegation : ICLogicalNegationExpression {}
+        public interface ICNotOperator : IRNode {}
+        public interface ICExpressionOrMeta : ICLogicalNegationExpression {}
+        public interface ICEqualityExpression : ICExpressionOrMeta {}
+        public interface ICEquality : ICEqualityExpression {}
+        public interface ICEqualityOperator : IRNode {}
+        public interface ICComparisonExpression : ICEqualityExpression {}
+        public interface ICComparisonExpr : ICComparisonExpression {}
+        public interface ICLargerExpr : ICComparisonExpression {}
+        public interface ICSmallerExpr : ICComparisonExpression {}
+        public interface ICLargerBoundsExpr : ICComparisonExpression {}
+        public interface ICSmallerBoundsExpr : ICComparisonExpression {}
+        public interface ICTypecheckExpr : ICComparisonExpression {}
+        public interface ICComparisonOperator : IRNode {}
+        public interface ICSmallerOperator : IRNode {}
+        public interface ICLargerOperator : IRNode {}
+        public interface ICTypeOperator : IRNode {}
+        public interface ICExistsNonemptyExpression : ICComparisonExpression {}
+        public interface ICExistsExpression : ICExistsNonemptyExpression {}
+        public interface ICNonemptyExpression : ICExistsNonemptyExpression {}
+        public interface ICEntryRangeExpression : ICExistsNonemptyExpression {}
+        public interface ICEntryOrRange : ICEntryRangeExpression {}
+        public interface ICRangeOrEntryOperator : IRNode {}
+        public interface ICAdditiveExpression : ICEntryRangeExpression, ICIndexExpression {}
+        public interface ICAdditiveExpr : ICAdditiveExpression {}
+        public interface ICAdditiveOperator : IRNode {}
+        public interface ICScaleExpression : ICAdditiveExpression {}
+        public interface ICScaleExpr : ICScaleExpression {}
+        public interface ICScaleOperator : IRNode {}
+        public interface ICMultiplicativeExpression : ICScaleExpression {}
+        public interface ICMultiplicativeExpr : ICMultiplicativeExpression {}
+        public interface ICMultiplicativeOperator : IRNode {}
+        public interface ICUnionExpression : ICMultiplicativeExpression {}
+        public interface ICUnionExpr : ICUnionExpression {}
+        public interface ICUnionOperator : IRNode {}
+        public interface ICExclusiveExpression : ICUnionExpression {}
+        public interface ICExclusiveExpr : ICExclusiveExpression {}
+        public interface ICExclusiveOperator : IRNode {}
+        public interface ICIntersectionExpression : ICExclusiveExpression, ICValueCase {}
+        public interface ICIntersectionExpr : ICIntersectionExpression {}
+        public interface ICIntersectionOperator : IRNode {}
+        public interface ICNegationOrComplementExpression : ICIntersectionExpression {}
+        public interface ICNegationOrComplementExpr : ICNegationOrComplementExpression {}
+        public interface ICUnaryMinusOrComplementOperator : IRNode {}
+        public interface ICOpNegate : ICUnaryMinusOrComplementOperator {}
+        public interface ICOpNeutral : ICUnaryMinusOrComplementOperator {}
+        public interface ICOpComplement : ICUnaryMinusOrComplementOperator {}
+        public interface ICPrefixExpression : ICNegationOrComplementExpression {}
+        public interface ICPrefixExpr : ICPrefixExpression {}
+        public interface ICPostfixExpression : ICPrefixExpression {}
+        public interface ICPostfixExpr : ICPostfixExpression {}
+        public interface ICIncrementOperator : IRNode {}
+        public interface ICPrimary : ICPostfixExpression {}
+        public interface ICSelectionExpression : ICPrimary {}
+        public interface ICQualifiedReference : IRNode {}
+        public interface ICMemberSelectionOperator : IRNode {}
+        public interface ICIndexedExpression : ICPrimary {}
+        public interface ICIndex : IRNode {}
+        public interface ICUpperSpanned : ICIndex {}
+        public interface ICLowerSpanned : ICIndex {}
+        public interface ICSpanned : ICIndex {}
+        public interface ICMeasured : ICIndex {}
+        public interface ICIndexExpression : IRNode {}
+        public interface ICCallExpression : ICPrimary {}
+        public interface ICBaseExpression : ICPrimary {}
+        public interface ICNonstringLiteral : ICBaseExpression {}
+        public interface ICStringExpression : ICAssertionMessage, ICBaseExpression {}
+        public interface ICStringInterpolation : ICStringExpression {}
+        public interface ICInterpolationPart : IRNode {}
+        public interface ICStringLiteral : ICStringExpression {}
+        public interface ICObjectExpression : ICBaseExpression {}
+        public interface ICGroupedExpression : ICBaseExpression {}
+        public interface ICTypeArguments : IRNode {}
+        public interface ICTypeArgumentList : IRNode {}
+        public interface ICVariancedType : IRNode {}
+        public interface ICDefaultedTypeList : ICTypeTypeArguments {}
+        public interface ICDefaultedType : IRNode {}
+        public interface ICDefaultedTypeCore : ICDefaultedType {}
+        public interface ICVariadicType : ICAttributeType, ICDefaultedType, ICFunctionParameterType, ICMethodType, ICValueParameterType {}
+        public interface ICVariadicUnionType : ICVariadicType {}
+        public interface ICVariadicOperator : IRNode {}
+        public interface ICSpreadType : ICTypeTypeArguments {}
+        public interface ICType : ICGetterArgumentType, ICMethodArgumentType, ICTypeModelExpression, ICVariableType, ICVariadicType {}
+        public interface ICEntryType : ICType {}
+        public interface ICUnionType : ICType {}
+        public interface ICUnionTypeCore : ICUnionType {}
+        public interface ICIntersectionType : ICUnionType, ICValueCase {}
+        public interface ICIntersectionTypeCore : ICIntersectionType {}
+        public interface ICPrimaryType : ICCaseType, ICIntersectionType {}
+        public interface ICNullableType : ICPrimaryType {}
+        public interface ICArrayType : ICPrimaryType {}
+        public interface ICFunctionType : ICPrimaryType {}
+        public interface ICTypeTypeArguments : IRNode {}
+        public interface ICTupleType : ICPrimaryType {}
+        public interface ICIterableType : ICPrimaryType {}
+        public interface ICGroupedType : ICPrimaryType {}
+        public interface ICQualifiedType : ICPrimaryType {}
+        public interface ICAnnotations : IRNode {}
+        public interface ICAnnotation : IRNode {}
+        public interface ICConditions : IRNode {}
+        public interface ICConditionList : IRNode {}
+        public interface ICCondition : IRNode {}
+        public interface ICExistsCondition : ICCondition {}
+        public interface ICNonemptyCondition : ICCondition {}
+        public interface ICLetOrExpression : IRNode {}
+        public interface ICIsCondition : ICCondition {}
+        public interface ICIsConditionVariable : IRNode {}
+        public interface ICSatisfiesCondition : ICCondition {}
+        public interface ICBooleanCondition : ICCondition {}
+        public interface ICControlStatement : ICStatement {}
+        public interface ICIfElse : ICControlStatement, ICElseBlockNext {}
+        public interface ICIfBlock : IRNode {}
+        public interface ICElseBlock : IRNode {}
+        public interface ICElseBlockNext : IRNode {}
+        public interface ICSwitchCaseElse : ICControlStatement {}
+        public interface ICSwitchHeader : IRNode {}
+        public interface ICSwitched : IRNode {}
+        public interface ICCaseBlock : IRNode {}
+        public interface ICCaseItem : IRNode {}
+        public interface ICIsCaseCondition : ICCaseItem {}
+        public interface ICSatisfiesCaseCondition : ICCaseItem {}
+        public interface ICMatchCaseCondition : ICCaseItem {}
+        public interface ICValueCaseList : ICMatchCaseCondition {}
+        public interface ICValueCaseSeparator : IRNode {}
+        public interface ICValueCase : IRNode {}
+        public interface ICForElse : ICControlStatement {}
+        public interface ICForBlock : IRNode {}
+        public interface ICFailBlock : IRNode {}
+        public interface ICForIterator : IRNode {}
+        public interface ICForVariable : IRNode {}
+        public interface ICContainment : IRNode {}
+        public interface ICContainmentOperator : IRNode {}
+        public interface ICWhileLoop : ICControlStatement {}
+        public interface ICWhileBlock : ICWhileLoop {}
+        public interface ICTryCatchFinally : ICControlStatement {}
+        public interface ICTryBlock : IRNode {}
+        public interface ICCatchBlock : IRNode {}
+        public interface ICCatchVariable : IRNode {}
+        public interface ICFinallyBlock : IRNode {}
+        public interface ICResources : IRNode {}
+        public interface ICResourceList : IRNode {}
+        public interface ICResource : IRNode {}
+        public interface ICSpecifiedOrExpression : ICResource, ICSwitched {}
+        public interface ICSpecifiedVariable : ICSpecifiedOrExpression {}
+        public interface ICVariable : ICForVariable, ICVariablePattern {}
+        public interface ICVariableType : IRNode {}
+        public interface ICModelReference : ICExpressionOrMeta {}
+        public interface ICMetaLiteral : ICBaseExpression {}
+        public interface ICMetaExpression : IRNode {}
+        public interface ICModelExpression : ICMetaExpression {}
+        public interface ICMemberModelExpression : ICModelExpression {}
+        public interface ICPackageQualifiedMemberReference : ICMemberModelExpression {}
+        public interface ICTypeQualifiedMemberReference : ICMemberModelExpression {}
+        public interface ICTypeModelExpression : ICModelExpression {}
+        public interface ICDeclarationReference : ICMetaExpression, ICPositionalArgument {}
+        public interface ICModuleLiteral : ICDeclarationReference {}
+        public interface ICPackageLiteral : ICDeclarationReference {}
+        public interface ICClassLiteral : ICDeclarationReference {}
+        public interface ICInterfaceLiteral : ICDeclarationReference {}
+        public interface ICAliasLiteral : ICDeclarationReference {}
+        public interface ICTypeParameterLiteral : ICDeclarationReference {}
+        public interface ICNewLiteral : ICDeclarationReference {}
+        public interface ICValueLiteral : ICDeclarationReference {}
+        public interface ICValueLiteralIntro : IRNode {}
+        public interface ICFunctionLiteral : ICDeclarationReference {}
+        public interface ICReferencePath : IRNode {}
+        public interface ICReferencePathElementList : IRNode {}
+        public interface ICReferencePathElement : IRNode {}
+        public interface ICKwVoid : ICFunctionParameterType, ICMethodArgumentType, ICMethodType, ICVariableType {}
+        public interface ICKwFunction : ICFunctionParameterType, ICVariableType {}
+        public interface ICKwValue : ICValueParameterType, ICVariableType {}
+        public interface ICLiteralFloat : ICNonstringLiteral {}
+        public interface ICLiteralNatural : ICNonstringLiteral {}
+        public interface ICLiteralChar : ICNonstringLiteral {}
+        public interface ICStringStart : IRNode {}
+        public interface ICStringMid : IRNode {}
+        public interface ICStringEnd : IRNode {}
+        public interface ICLiteralString : ICModule, ICStringLiteral, ICVersion {}
+        public interface ICVerbatimString : ICStringLiteral {}
+        public interface ICLowerIdentifier : ICAnnotationName, ICAnyName, ICMemberName {}
+        public interface ICUpperIdentifier : ICAnyName, ICTypeName {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
-            public ICompilationUnit CompilationUnit => Get<ICompilationUnit>(0);
+            public ICCompilationUnit CompilationUnit => Get<ICCompilationUnit>(0);
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RToken, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RToken, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CUnitElements : RStar<IUnitElement>, IUnitElements
+        public partial class CUnitElements : RStar<ICUnitElement>, ICUnitElements
         {
             public CUnitElements(params RNode[] children) : base(children) {}
         }
 
-        public partial class CModuleDescriptor : RSequence, IModuleDescriptor
+        public partial class CModuleDescriptor : RSequence, ICModuleDescriptor
         {
             public CModuleDescriptor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IModuleName ModuleName => Get<IModuleName>(2);
+            public ICModuleName ModuleName => Get<ICModuleName>(2);
             public ROptional<CModuleSpecifier> ModuleSpecifierOptional => Get<ROptional<CModuleSpecifier>>(3);
-            public ROptional<IVersion> VersionOptional => Get<ROptional<IVersion>>(4);
+            public ROptional<ICVersion> VersionOptional => Get<ROptional<ICVersion>>(4);
             public CModuleBody ModuleBody => Get<CModuleBody>(5);
         }
 
-        public partial class CModuleSpecifier : RSequence, IModuleSpecifier
+        public partial class CModuleSpecifier : RSequence, ICModuleSpecifier
         {
             public CModuleSpecifier(params RNode[] children) : base(children) {}
 
-            public IRepository Repository => Get<IRepository>(0);
+            public ICRepository Repository => Get<ICRepository>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IModule Module => Get<IModule>(2);
+            public ICModule Module => Get<ICModule>(2);
             public ROptional<CArtifactAndClassifier> ArtifactAndClassifierOptional => Get<ROptional<CArtifactAndClassifier>>(3);
         }
 
-        public partial class CArtifactAndClassifier : RSequence, IArtifactAndClassifier
+        public partial class CArtifactAndClassifier : RSequence, ICArtifactAndClassifier
         {
             public CArtifactAndClassifier(params RNode[] children) : base(children) {}
 
@@ -3548,7 +3548,7 @@ namespace GeneratedParser
             public ROptional<CClassifier> ClassifierOptional => Get<ROptional<CClassifier>>(1);
         }
 
-        public partial class CArtifact : RSequence, IArtifact
+        public partial class CArtifact : RSequence, ICArtifact
         {
             public CArtifact(params RNode[] children) : base(children) {}
 
@@ -3556,7 +3556,7 @@ namespace GeneratedParser
             public CLiteralString LiteralString => Get<CLiteralString>(1);
         }
 
-        public partial class CClassifier : RSequence, IClassifier
+        public partial class CClassifier : RSequence, ICClassifier
         {
             public CClassifier(params RNode[] children) : base(children) {}
 
@@ -3564,16 +3564,16 @@ namespace GeneratedParser
             public CLiteralString LiteralString => Get<CLiteralString>(1);
         }
 
-        public partial class CModuleBody : RSequence, IModuleBody
+        public partial class CModuleBody : RSequence, ICModuleBody
         {
             public CModuleBody(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public RStar<IModuleBodyElement> ModuleBodyElementStar => Get<RStar<IModuleBodyElement>>(1);
+            public RStar<ICModuleBodyElement> ModuleBodyElementStar => Get<RStar<ICModuleBodyElement>>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CPackageDescriptor : RSequence, IPackageDescriptor
+        public partial class CPackageDescriptor : RSequence, ICPackageDescriptor
         {
             public CPackageDescriptor(params RNode[] children) : base(children) {}
 
@@ -3583,18 +3583,18 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CImportModule : RSequence, IImportModule
+        public partial class CImportModule : RSequence, ICImportModule
         {
             public CImportModule(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IModule Module => Get<IModule>(2);
-            public ROptional<IVersion> VersionOptional => Get<ROptional<IVersion>>(3);
+            public ICModule Module => Get<ICModule>(2);
+            public ROptional<ICVersion> VersionOptional => Get<ROptional<ICVersion>>(3);
             public RLiteral Literal2 => Get<RLiteral>(4);
         }
 
-        public partial class CImportDeclaration : RSequence, IImportDeclaration
+        public partial class CImportDeclaration : RSequence, ICImportDeclaration
         {
             public CImportDeclaration(params RNode[] children) : base(children) {}
 
@@ -3603,7 +3603,7 @@ namespace GeneratedParser
             public CImportElements ImportElements => Get<CImportElements>(2);
         }
 
-        public partial class CImportElements : RSequence, IImportElements
+        public partial class CImportElements : RSequence, ICImportElements
         {
             public CImportElements(params RNode[] children) : base(children) {}
 
@@ -3612,48 +3612,48 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CImportElementList : RLoop<IImportElement>, IImportElementList
+        public partial class CImportElementList : RLoop<ICImportElement>, ICImportElementList
         {
             public CImportElementList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CImportNamed : RSequence, IImportNamed
+        public partial class CImportNamed : RSequence, ICImportNamed
         {
             public CImportNamed(params RNode[] children) : base(children) {}
 
-            public IImportName ImportName => Get<IImportName>(0);
+            public ICImportName ImportName => Get<ICImportName>(0);
             public ROptional<CImportNameSpecifier> ImportNameSpecifierOptional => Get<ROptional<CImportNameSpecifier>>(1);
             public ROptional<CImportElements> ImportElementsOptional => Get<ROptional<CImportElements>>(2);
         }
 
-        public partial class CImportNameSpecifier : RSequence, IImportNameSpecifier
+        public partial class CImportNameSpecifier : RSequence, ICImportNameSpecifier
         {
             public CImportNameSpecifier(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IImportName ImportName => Get<IImportName>(1);
+            public ICImportName ImportName => Get<ICImportName>(1);
         }
 
-        public partial class CImportWildcard : RLiteral, IImportWildcard
+        public partial class CImportWildcard : RLiteral, ICImportWildcard
         {
             public CImportWildcard(params Node[] children) : base(children) {}
         }
 
-        public partial class CPackagePath : RLoop<IPackageName>, IPackagePath
+        public partial class CPackagePath : RLoop<ICPackageName>, ICPackagePath
         {
             public CPackagePath(params RNode[] children) : base(children) {}
         }
 
-        public partial class CEntryPattern : RSequence, IEntryPattern
+        public partial class CEntryPattern : RSequence, ICEntryPattern
         {
             public CEntryPattern(params RNode[] children) : base(children) {}
 
-            public IVariableOrTuplePattern VariableOrTuplePattern => Get<IVariableOrTuplePattern>(0);
+            public ICVariableOrTuplePattern VariableOrTuplePattern => Get<ICVariableOrTuplePattern>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IVariableOrTuplePattern VariableOrTuplePattern2 => Get<IVariableOrTuplePattern>(2);
+            public ICVariableOrTuplePattern VariableOrTuplePattern2 => Get<ICVariableOrTuplePattern>(2);
         }
 
-        public partial class CTuplePattern : RSequence, ITuplePattern
+        public partial class CTuplePattern : RSequence, ICTuplePattern
         {
             public CTuplePattern(params RNode[] children) : base(children) {}
 
@@ -3662,21 +3662,21 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CVariadicPatternList : RLoop<IVariadicPattern>, IVariadicPatternList
+        public partial class CVariadicPatternList : RLoop<ICVariadicPattern>, ICVariadicPatternList
         {
             public CVariadicPatternList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CVariadicVariable : RSequence, IVariadicVariable
+        public partial class CVariadicVariable : RSequence, ICVariadicVariable
         {
             public CVariadicVariable(params RNode[] children) : base(children) {}
 
-            public ROptional<IUnionType> UnionTypeOptional => Get<ROptional<IUnionType>>(0);
+            public ROptional<ICUnionType> UnionTypeOptional => Get<ROptional<ICUnionType>>(0);
             public CVariadicOperator VariadicOperator => Get<CVariadicOperator>(1);
-            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(2);
+            public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(2);
         }
 
-        public partial class CLetStatement : RSequence, ILetStatement
+        public partial class CLetStatement : RSequence, ICLetStatement
         {
             public CLetStatement(params RNode[] children) : base(children) {}
 
@@ -3686,7 +3686,7 @@ namespace GeneratedParser
             public RLiteral Literal3 => Get<RLiteral>(3);
         }
 
-        public partial class CDelegatedConstructor : RSequence, IDelegatedConstructor
+        public partial class CDelegatedConstructor : RSequence, ICDelegatedConstructor
         {
             public CDelegatedConstructor(params RNode[] children) : base(children) {}
 
@@ -3694,25 +3694,25 @@ namespace GeneratedParser
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
-        public partial class CAssertionStatement : RSequence, IAssertionStatement
+        public partial class CAssertionStatement : RSequence, ICAssertionStatement
         {
             public CAssertionStatement(params RNode[] children) : base(children) {}
 
-            public ROptional<IAssertionMessage> AssertionMessageOptional => Get<ROptional<IAssertionMessage>>(0);
+            public ROptional<ICAssertionMessage> AssertionMessageOptional => Get<ROptional<ICAssertionMessage>>(0);
             public RLiteral Literal => Get<RLiteral>(1);
             public CConditions Conditions => Get<CConditions>(2);
         }
 
-        public partial class CBlockElements : RSequence, IBlockElements
+        public partial class CBlockElements : RSequence, ICBlockElements
         {
             public CBlockElements(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public RStar<IBlockElement> BlockElementStar => Get<RStar<IBlockElement>>(1);
+            public RStar<ICBlockElement> BlockElementStar => Get<RStar<ICBlockElement>>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CExtendedType : RSequence, IExtendedType
+        public partial class CExtendedType : RSequence, ICExtendedType
         {
             public CExtendedType(params RNode[] children) : base(children) {}
 
@@ -3720,7 +3720,7 @@ namespace GeneratedParser
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
-        public partial class CClassSpecifier : RSequence, IClassSpecifier
+        public partial class CClassSpecifier : RSequence, ICClassSpecifier
         {
             public CClassSpecifier(params RNode[] children) : base(children) {}
 
@@ -3728,23 +3728,23 @@ namespace GeneratedParser
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
-        public partial class CClassInstatiation : RSequence, IClassInstatiation
+        public partial class CClassInstatiation : RSequence, ICClassInstatiation
         {
             public CClassInstatiation(params RNode[] children) : base(children) {}
 
-            public IQualifiedClass QualifiedClass => Get<IQualifiedClass>(0);
-            public ROptional<IArguments> ArgumentsOptional => Get<ROptional<IArguments>>(1);
+            public ICQualifiedClass QualifiedClass => Get<ICQualifiedClass>(0);
+            public ROptional<ICArguments> ArgumentsOptional => Get<ROptional<ICArguments>>(1);
         }
 
-        public partial class CSuperQualifiedClass : RSequence, ISuperQualifiedClass
+        public partial class CSuperQualifiedClass : RSequence, ICSuperQualifiedClass
         {
             public CSuperQualifiedClass(params RNode[] children) : base(children) {}
 
             public CSuperQualifier SuperQualifier => Get<CSuperQualifier>(0);
-            public IBaseReference BaseReference => Get<IBaseReference>(1);
+            public ICBaseReference BaseReference => Get<ICBaseReference>(1);
         }
 
-        public partial class CSuperQualifier : RSequence, ISuperQualifier
+        public partial class CSuperQualifier : RSequence, ICSuperQualifier
         {
             public CSuperQualifier(params RNode[] children) : base(children) {}
 
@@ -3752,15 +3752,15 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(1);
         }
 
-        public partial class CPackageQualifiedClass : RSequence, IPackageQualifiedClass
+        public partial class CPackageQualifiedClass : RSequence, ICPackageQualifiedClass
         {
             public CPackageQualifiedClass(params RNode[] children) : base(children) {}
 
             public CPackageQualifier PackageQualifier => Get<CPackageQualifier>(0);
-            public IUnQualifiedClass UnQualifiedClass => Get<IUnQualifiedClass>(1);
+            public ICUnQualifiedClass UnQualifiedClass => Get<ICUnQualifiedClass>(1);
         }
 
-        public partial class CPackageQualifier : RSequence, IPackageQualifier
+        public partial class CPackageQualifier : RSequence, ICPackageQualifier
         {
             public CPackageQualifier(params RNode[] children) : base(children) {}
 
@@ -3768,7 +3768,7 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(1);
         }
 
-        public partial class CMemberPath : RSequence, IMemberPath
+        public partial class CMemberPath : RSequence, ICMemberPath
         {
             public CMemberPath(params RNode[] children) : base(children) {}
 
@@ -3777,12 +3777,12 @@ namespace GeneratedParser
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
-        public partial class CTypePath : RLoop<CTypeReference>, ITypePath
+        public partial class CTypePath : RLoop<CTypeReference>, ICTypePath
         {
             public CTypePath(params RNode[] children) : base(children) {}
         }
 
-        public partial class CSatisfiedTypes : RSequence, ISatisfiedTypes
+        public partial class CSatisfiedTypes : RSequence, ICSatisfiedTypes
         {
             public CSatisfiedTypes(params RNode[] children) : base(children) {}
 
@@ -3790,12 +3790,12 @@ namespace GeneratedParser
             public CUnionTypeList UnionTypeList => Get<CUnionTypeList>(1);
         }
 
-        public partial class CUnionTypeList : RLoop<IUnionType>, IUnionTypeList
+        public partial class CUnionTypeList : RLoop<ICUnionType>, ICUnionTypeList
         {
             public CUnionTypeList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CCaseTypes : RSequence, ICaseTypes
+        public partial class CCaseTypes : RSequence, ICCaseTypes
         {
             public CCaseTypes(params RNode[] children) : base(children) {}
 
@@ -3803,20 +3803,20 @@ namespace GeneratedParser
             public CCaseTypeList CaseTypeList => Get<CCaseTypeList>(1);
         }
 
-        public partial class CCaseTypeList : RLoop<ICaseType>, ICaseTypeList
+        public partial class CCaseTypeList : RLoop<ICCaseType>, ICCaseTypeList
         {
             public CCaseTypeList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CQualifiedCaseType : RSequence, IQualifiedCaseType
+        public partial class CQualifiedCaseType : RSequence, ICQualifiedCaseType
         {
             public CQualifiedCaseType(params RNode[] children) : base(children) {}
 
             public ROptional<CPackageQualifier> PackageQualifierOptional => Get<ROptional<CPackageQualifier>>(0);
-            public IMemberName MemberName => Get<IMemberName>(1);
+            public ICMemberName MemberName => Get<ICMemberName>(1);
         }
 
-        public partial class CParameters : RSequence, IParameters
+        public partial class CParameters : RSequence, ICParameters
         {
             public CParameters(params RNode[] children) : base(children) {}
 
@@ -3825,48 +3825,48 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CParameterList : RLoop<IParameterDeclarationOrRefPattern>, IParameterList
+        public partial class CParameterList : RLoop<ICParameterDeclarationOrRefPattern>, ICParameterList
         {
             public CParameterList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CParameter : RSequence, IParameter
+        public partial class CParameter : RSequence, ICParameter
         {
             public CParameter(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public IParameterDeclaration ParameterDeclaration => Get<IParameterDeclaration>(1);
+            public ICParameterDeclaration ParameterDeclaration => Get<ICParameterDeclaration>(1);
         }
 
-        public partial class CParameterReference : RSequence, IParameterReference
+        public partial class CParameterReference : RSequence, ICParameterReference
         {
             public CParameterReference(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public ROptional<CValueSpecifier> ValueSpecifierOptional => Get<ROptional<CValueSpecifier>>(1);
         }
 
-        public partial class CFunctionParameterDeclaration : RSequence, IFunctionParameterDeclaration
+        public partial class CFunctionParameterDeclaration : RSequence, ICFunctionParameterDeclaration
         {
             public CFunctionParameterDeclaration(params RNode[] children) : base(children) {}
 
-            public IFunctionParameterType FunctionParameterType => Get<IFunctionParameterType>(0);
-            public IMemberName MemberName => Get<IMemberName>(1);
+            public ICFunctionParameterType FunctionParameterType => Get<ICFunctionParameterType>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(3);
             public ROptional<CFunctionSpecifier> FunctionSpecifierOptional => Get<ROptional<CFunctionSpecifier>>(4);
         }
 
-        public partial class CValueParameterDeclaration : RSequence, IValueParameterDeclaration
+        public partial class CValueParameterDeclaration : RSequence, ICValueParameterDeclaration
         {
             public CValueParameterDeclaration(params RNode[] children) : base(children) {}
 
-            public IValueParameterType ValueParameterType => Get<IValueParameterType>(0);
-            public IMemberName MemberName => Get<IMemberName>(1);
+            public ICValueParameterType ValueParameterType => Get<ICValueParameterType>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(1);
             public ROptional<CValueSpecifier> ValueSpecifierOptional => Get<ROptional<CValueSpecifier>>(2);
         }
 
-        public partial class CTypeParameters : RSequence, ITypeParameters
+        public partial class CTypeParameters : RSequence, ICTypeParameters
         {
             public CTypeParameters(params RNode[] children) : base(children) {}
 
@@ -3875,118 +3875,118 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CTypeParameterList : RLoop<CTypeParameter>, ITypeParameterList
+        public partial class CTypeParameterList : RLoop<CTypeParameter>, ICTypeParameterList
         {
             public CTypeParameterList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CTypeParameter : RSequence, ITypeParameter
+        public partial class CTypeParameter : RSequence, ICTypeParameter
         {
             public CTypeParameter(params RNode[] children) : base(children) {}
 
-            public ROptional<IVariance> VarianceOptional => Get<ROptional<IVariance>>(0);
-            public ITypeName TypeName => Get<ITypeName>(1);
+            public ROptional<ICVariance> VarianceOptional => Get<ROptional<ICVariance>>(0);
+            public ICTypeName TypeName => Get<ICTypeName>(1);
             public ROptional<CTypeDefault> TypeDefaultOptional => Get<ROptional<CTypeDefault>>(2);
         }
 
-        public partial class CVariance : RLiteral, IVariance
+        public partial class CVariance : RLiteral, ICVariance
         {
             public CVariance(params Node[] children) : base(children) {}
         }
 
-        public partial class CTypeDefault : RSequence, ITypeDefault
+        public partial class CTypeDefault : RSequence, ICTypeDefault
         {
             public CTypeDefault(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IType Type => Get<IType>(1);
+            public ICType Type => Get<ICType>(1);
         }
 
-        public partial class CTypeConstraint : RSequence, ITypeConstraint
+        public partial class CTypeConstraint : RSequence, ICTypeConstraint
         {
             public CTypeConstraint(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<ITypeName> TypeNameOptional => Get<ROptional<ITypeName>>(1);
+            public ROptional<ICTypeName> TypeNameOptional => Get<ROptional<ICTypeName>>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(3);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
         }
 
-        public partial class CTypeConstraints : RPlus<CTypeConstraint>, ITypeConstraints
+        public partial class CTypeConstraints : RPlus<CTypeConstraint>, ICTypeConstraints
         {
             public CTypeConstraints(params RNode[] children) : base(children) {}
         }
 
-        public partial class CConstructor : RSequence, IConstructor
+        public partial class CConstructor : RSequence, ICConstructor
         {
             public CConstructor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(2);
+            public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(2);
             public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(3);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(4);
-            public IBlock Block => Get<IBlock>(5);
+            public ICBlock Block => Get<ICBlock>(5);
         }
 
-        public partial class CEnumeratedObject : RSequence, IEnumeratedObject
+        public partial class CEnumeratedObject : RSequence, ICEnumeratedObject
         {
             public CEnumeratedObject(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IMemberName MemberName => Get<IMemberName>(2);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(3);
-            public IBlock Block => Get<IBlock>(4);
+            public ICBlock Block => Get<ICBlock>(4);
         }
 
-        public partial class CAliasDeclaration : RSequence, IAliasDeclaration
+        public partial class CAliasDeclaration : RSequence, ICAliasDeclaration
         {
             public CAliasDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public ITypeName TypeName => Get<ITypeName>(2);
+            public ICTypeName TypeName => Get<ICTypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(4);
             public COptionalTypeSpecifier OptionalTypeSpecifier => Get<COptionalTypeSpecifier>(5);
         }
 
-        public partial class CObjectDeclaration : RSequence, IObjectDeclaration
+        public partial class CObjectDeclaration : RSequence, ICObjectDeclaration
         {
             public CObjectDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IMemberName MemberName => Get<IMemberName>(2);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(3);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
-            public IClassBlock ClassBlock => Get<IClassBlock>(5);
+            public ICClassBlock ClassBlock => Get<ICClassBlock>(5);
         }
 
-        public partial class CSetterDeclaration : RSequence, ISetterDeclaration
+        public partial class CSetterDeclaration : RSequence, ICSetterDeclaration
         {
             public CSetterDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IMemberName MemberName => Get<IMemberName>(2);
-            public ISetterDefinition SetterDefinition => Get<ISetterDefinition>(3);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
+            public ICSetterDefinition SetterDefinition => Get<ICSetterDefinition>(3);
         }
 
-        public partial class CTypedMethodDeclaration : RSequence, ITypedMethodDeclaration
+        public partial class CTypedMethodDeclaration : RSequence, ICTypedMethodDeclaration
         {
             public CTypedMethodDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public IMethodType MethodType => Get<IMethodType>(1);
+            public ICMethodType MethodType => Get<ICMethodType>(1);
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
-            public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
         }
 
-        public partial class CInferredMethodDeclaration : RSequence, IInferredMethodDeclaration
+        public partial class CInferredMethodDeclaration : RSequence, ICInferredMethodDeclaration
         {
             public CInferredMethodDeclaration(params RNode[] children) : base(children) {}
 
@@ -3994,54 +3994,54 @@ namespace GeneratedParser
             public RLiteral Literal => Get<RLiteral>(1);
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
-            public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
         }
 
-        public partial class CTypedAttributeDeclaration : RSequence, ITypedAttributeDeclaration
+        public partial class CTypedAttributeDeclaration : RSequence, ICTypedAttributeDeclaration
         {
             public CTypedAttributeDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public IAttributeType AttributeType => Get<IAttributeType>(1);
-            public IMemberName MemberName => Get<IMemberName>(2);
-            public IAttributeDefinition AttributeDefinition => Get<IAttributeDefinition>(3);
+            public ICAttributeType AttributeType => Get<ICAttributeType>(1);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
+            public ICAttributeDefinition AttributeDefinition => Get<ICAttributeDefinition>(3);
         }
 
-        public partial class CInferredAttributeDeclaration : RSequence, IInferredAttributeDeclaration
+        public partial class CInferredAttributeDeclaration : RSequence, ICInferredAttributeDeclaration
         {
             public CInferredAttributeDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IMemberName MemberName => Get<IMemberName>(2);
-            public IAttributeDefinition AttributeDefinition => Get<IAttributeDefinition>(3);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
+            public ICAttributeDefinition AttributeDefinition => Get<ICAttributeDefinition>(3);
         }
 
-        public partial class COptionalAnySpecifier : RSequence, IOptionalAnySpecifier
+        public partial class COptionalAnySpecifier : RSequence, ICOptionalAnySpecifier
         {
             public COptionalAnySpecifier(params RNode[] children) : base(children) {}
 
-            public ROptional<IAnySpecifier> AnySpecifierOptional => Get<ROptional<IAnySpecifier>>(0);
+            public ROptional<ICAnySpecifier> AnySpecifierOptional => Get<ROptional<ICAnySpecifier>>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CClassDeclaration : RSequence, IClassDeclaration
+        public partial class CClassDeclaration : RSequence, ICClassDeclaration
         {
             public CClassDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public ITypeName TypeName => Get<ITypeName>(2);
+            public ICTypeName TypeName => Get<ICTypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(4);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(5);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(6);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(7);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(8);
-            public IClassDefinition ClassDefinition => Get<IClassDefinition>(9);
+            public ICClassDefinition ClassDefinition => Get<ICClassDefinition>(9);
         }
 
-        public partial class COptionalClassSpecifier : RSequence, IOptionalClassSpecifier
+        public partial class COptionalClassSpecifier : RSequence, ICOptionalClassSpecifier
         {
             public COptionalClassSpecifier(params RNode[] children) : base(children) {}
 
@@ -4049,21 +4049,21 @@ namespace GeneratedParser
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CInterfaceDeclaration : RSequence, IInterfaceDeclaration
+        public partial class CInterfaceDeclaration : RSequence, ICInterfaceDeclaration
         {
             public CInterfaceDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public ITypeName TypeName => Get<ITypeName>(2);
+            public ICTypeName TypeName => Get<ICTypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(4);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(5);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(6);
-            public IInterfaceDefinition InterfaceDefinition => Get<IInterfaceDefinition>(7);
+            public ICInterfaceDefinition InterfaceDefinition => Get<ICInterfaceDefinition>(7);
         }
 
-        public partial class COptionalTypeSpecifier : RSequence, IOptionalTypeSpecifier
+        public partial class COptionalTypeSpecifier : RSequence, ICOptionalTypeSpecifier
         {
             public COptionalTypeSpecifier(params RNode[] children) : base(children) {}
 
@@ -4071,82 +4071,82 @@ namespace GeneratedParser
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CUnclosedStatement : RSequence, IUnclosedStatement
+        public partial class CUnclosedStatement : RSequence, ICUnclosedStatement
         {
             public CUnclosedStatement(params RNode[] children) : base(children) {}
 
-            public IOpenStatement OpenStatement => Get<IOpenStatement>(0);
+            public ICOpenStatement OpenStatement => Get<ICOpenStatement>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CSpecificationStatement : RSequence, ISpecificationStatement
+        public partial class CSpecificationStatement : RSequence, ICSpecificationStatement
         {
             public CSpecificationStatement(params RNode[] children) : base(children) {}
 
-            public IPrimary Primary => Get<IPrimary>(0);
+            public ICPrimary Primary => Get<ICPrimary>(0);
             public CFunctionSpecifier FunctionSpecifier => Get<CFunctionSpecifier>(1);
         }
 
-        public partial class CReturnDirective : RSequence, IReturnDirective
+        public partial class CReturnDirective : RSequence, ICReturnDirective
         {
             public CReturnDirective(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<IExpression> ExpressionOptional => Get<ROptional<IExpression>>(1);
+            public ROptional<ICExpression> ExpressionOptional => Get<ROptional<ICExpression>>(1);
         }
 
-        public partial class CThrowDirective : RSequence, IThrowDirective
+        public partial class CThrowDirective : RSequence, ICThrowDirective
         {
             public CThrowDirective(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<IExpression> ExpressionOptional => Get<ROptional<IExpression>>(1);
+            public ROptional<ICExpression> ExpressionOptional => Get<ROptional<ICExpression>>(1);
         }
 
-        public partial class CBreakDirective : RLiteral, IBreakDirective
+        public partial class CBreakDirective : RLiteral, ICBreakDirective
         {
             public CBreakDirective(params Node[] children) : base(children) {}
         }
 
-        public partial class CContinueDirective : RLiteral, IContinueDirective
+        public partial class CContinueDirective : RLiteral, ICContinueDirective
         {
             public CContinueDirective(params Node[] children) : base(children) {}
         }
 
-        public partial class CTypeSpecifier : RSequence, ITypeSpecifier
+        public partial class CTypeSpecifier : RSequence, ICTypeSpecifier
         {
             public CTypeSpecifier(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IType Type => Get<IType>(1);
+            public ICType Type => Get<ICType>(1);
         }
 
-        public partial class CValueSpecifier : RSequence, IValueSpecifier
+        public partial class CValueSpecifier : RSequence, ICValueSpecifier
         {
             public CValueSpecifier(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IExpression Expression => Get<IExpression>(1);
+            public ICExpression Expression => Get<ICExpression>(1);
         }
 
-        public partial class CFunctionSpecifier : RSequence, IFunctionSpecifier
+        public partial class CFunctionSpecifier : RSequence, ICFunctionSpecifier
         {
             public CFunctionSpecifier(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IExpression Expression => Get<IExpression>(1);
+            public ICExpression Expression => Get<ICExpression>(1);
         }
 
-        public partial class CParametrizedMember : RSequence, IParametrizedMember
+        public partial class CParametrizedMember : RSequence, ICParametrizedMember
         {
             public CParametrizedMember(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(1);
             public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(2);
         }
 
-        public partial class CSelfParametrizedMember : RSequence, ISelfParametrizedMember
+        public partial class CSelfParametrizedMember : RSequence, ICSelfParametrizedMember
         {
             public CSelfParametrizedMember(params RNode[] children) : base(children) {}
 
@@ -4154,23 +4154,23 @@ namespace GeneratedParser
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(1);
         }
 
-        public partial class CMemberReference : RSequence, IMemberReference
+        public partial class CMemberReference : RSequence, ICMemberReference
         {
             public CMemberReference(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public ROptional<CTypeArguments> TypeArgumentsOptional => Get<ROptional<CTypeArguments>>(1);
         }
 
-        public partial class CTypeReference : RSequence, ITypeReference
+        public partial class CTypeReference : RSequence, ICTypeReference
         {
             public CTypeReference(params RNode[] children) : base(children) {}
 
-            public ITypeName TypeName => Get<ITypeName>(0);
+            public ICTypeName TypeName => Get<ICTypeName>(0);
             public ROptional<CTypeArguments> TypeArgumentsOptional => Get<ROptional<CTypeArguments>>(1);
         }
 
-        public partial class CSelfReferenceSelector : RSequence, ISelfReferenceSelector
+        public partial class CSelfReferenceSelector : RSequence, ICSelfReferenceSelector
         {
             public CSelfReferenceSelector(params RNode[] children) : base(children) {}
 
@@ -4178,22 +4178,22 @@ namespace GeneratedParser
             public CMemberSelectionOperator MemberSelectionOperator => Get<CMemberSelectionOperator>(1);
         }
 
-        public partial class CSelfReference : RLiteral, ISelfReference
+        public partial class CSelfReference : RLiteral, ICSelfReference
         {
             public CSelfReference(params Node[] children) : base(children) {}
         }
 
-        public partial class CEnumeration : RSequence, IEnumeration
+        public partial class CEnumeration : RSequence, ICEnumeration
         {
             public CEnumeration(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public RStar<IDeclarationOrStatement> DeclarationOrStatementStar => Get<RStar<IDeclarationOrStatement>>(1);
+            public RStar<ICDeclarationOrStatement> DeclarationOrStatementStar => Get<RStar<ICDeclarationOrStatement>>(1);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
             public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CTuple : RSequence, ITuple
+        public partial class CTuple : RSequence, ICTuple
         {
             public CTuple(params RNode[] children) : base(children) {}
 
@@ -4202,59 +4202,59 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CStructuralArguments : RSequence, IStructuralArguments
+        public partial class CStructuralArguments : RSequence, ICStructuralArguments
         {
             public CStructuralArguments(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public RStar<INamedOrAnonymous> NamedOrAnonymousStar => Get<RStar<INamedOrAnonymous>>(1);
+            public RStar<ICNamedOrAnonymous> NamedOrAnonymousStar => Get<RStar<ICNamedOrAnonymous>>(1);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
             public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CNamedSpecifiedArgument : RSequence, INamedSpecifiedArgument
+        public partial class CNamedSpecifiedArgument : RSequence, ICNamedSpecifiedArgument
         {
             public CNamedSpecifiedArgument(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
             public RLiteral Literal => Get<RLiteral>(2);
         }
 
-        public partial class CSequencedArguments : RLoop<ISequencedArgument>, ISequencedArguments
+        public partial class CSequencedArguments : RLoop<ICSequencedArgument>, ICSequencedArguments
         {
             public CSequencedArguments(params RNode[] children) : base(children) {}
         }
 
-        public partial class CAnonymousArgument : RSequence, IAnonymousArgument
+        public partial class CAnonymousArgument : RSequence, ICAnonymousArgument
         {
             public CAnonymousArgument(params RNode[] children) : base(children) {}
 
-            public IExpression Expression => Get<IExpression>(0);
+            public ICExpression Expression => Get<ICExpression>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CObjectArgument : RSequence, IObjectArgument
+        public partial class CObjectArgument : RSequence, ICObjectArgument
         {
             public CObjectArgument(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(1);
+            public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(1);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(2);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(3);
-            public IClassBlock ClassBlock => Get<IClassBlock>(4);
+            public ICClassBlock ClassBlock => Get<ICClassBlock>(4);
         }
 
-        public partial class CTypedMethodArgument : RSequence, ITypedMethodArgument
+        public partial class CTypedMethodArgument : RSequence, ICTypedMethodArgument
         {
             public CTypedMethodArgument(params RNode[] children) : base(children) {}
 
-            public IMethodArgumentType MethodArgumentType => Get<IMethodArgumentType>(0);
+            public ICMethodArgumentType MethodArgumentType => Get<ICMethodArgumentType>(0);
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(1);
-            public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(2);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(2);
         }
 
-        public partial class COptionalFunctionSpecifier : RSequence, IOptionalFunctionSpecifier
+        public partial class COptionalFunctionSpecifier : RSequence, ICOptionalFunctionSpecifier
         {
             public COptionalFunctionSpecifier(params RNode[] children) : base(children) {}
 
@@ -4262,7 +4262,7 @@ namespace GeneratedParser
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CNeededFunctionSpecifier : RSequence, INeededFunctionSpecifier
+        public partial class CNeededFunctionSpecifier : RSequence, ICNeededFunctionSpecifier
         {
             public CNeededFunctionSpecifier(params RNode[] children) : base(children) {}
 
@@ -4270,53 +4270,53 @@ namespace GeneratedParser
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CTypedGetterArgument : RSequence, ITypedGetterArgument
+        public partial class CTypedGetterArgument : RSequence, ICTypedGetterArgument
         {
             public CTypedGetterArgument(params RNode[] children) : base(children) {}
 
-            public IGetterArgumentType GetterArgumentType => Get<IGetterArgumentType>(0);
-            public IMemberName MemberName => Get<IMemberName>(1);
-            public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(2);
+            public ICGetterArgumentType GetterArgumentType => Get<ICGetterArgumentType>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(1);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(2);
         }
 
-        public partial class CInferredMethodArgument : RSequence, IInferredMethodArgument
+        public partial class CInferredMethodArgument : RSequence, ICInferredMethodArgument
         {
             public CInferredMethodArgument(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<IMemberName> MemberNameOptional => Get<ROptional<IMemberName>>(1);
+            public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public CParameters Parameters => Get<CParameters>(3);
-            public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(4);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
         }
 
-        public partial class CInferredGetterArgument : RSequence, IInferredGetterArgument
+        public partial class CInferredGetterArgument : RSequence, ICInferredGetterArgument
         {
             public CInferredGetterArgument(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IMemberName MemberName => Get<IMemberName>(1);
-            public IMethodDefinition MethodDefinition => Get<IMethodDefinition>(2);
+            public ICMemberName MemberName => Get<ICMemberName>(1);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(2);
         }
 
-        public partial class CUntypedMethodArgument : RSequence, IUntypedMethodArgument
+        public partial class CUntypedMethodArgument : RSequence, ICUntypedMethodArgument
         {
             public CUntypedMethodArgument(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(1);
             public CNeededFunctionSpecifier NeededFunctionSpecifier => Get<CNeededFunctionSpecifier>(2);
         }
 
-        public partial class CUntypedGetterArgument : RSequence, IUntypedGetterArgument
+        public partial class CUntypedGetterArgument : RSequence, ICUntypedGetterArgument
         {
             public CUntypedGetterArgument(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public CNeededFunctionSpecifier NeededFunctionSpecifier => Get<CNeededFunctionSpecifier>(1);
         }
 
-        public partial class CPositionalArguments : RSequence, IPositionalArguments
+        public partial class CPositionalArguments : RSequence, ICPositionalArguments
         {
             public CPositionalArguments(params RNode[] children) : base(children) {}
 
@@ -4325,15 +4325,15 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CSpreadArgument : RSequence, ISpreadArgument
+        public partial class CSpreadArgument : RSequence, ICSpreadArgument
         {
             public CSpreadArgument(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IUnionExpression UnionExpression => Get<IUnionExpression>(1);
+            public ICUnionExpression UnionExpression => Get<ICUnionExpression>(1);
         }
 
-        public partial class CLetExpression : RSequence, ILetExpression
+        public partial class CLetExpression : RSequence, ICLetExpression
         {
             public CLetExpression(params RNode[] children) : base(children) {}
 
@@ -4341,23 +4341,23 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(1);
             public ROptional<CLetVariableList> LetVariableListOptional => Get<ROptional<CLetVariableList>>(2);
             public RLiteral Literal3 => Get<RLiteral>(3);
-            public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(4);
+            public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(4);
         }
 
-        public partial class CLetVariableList : RLoop<CLetVariable>, ILetVariableList
+        public partial class CLetVariableList : RLoop<CLetVariable>, ICLetVariableList
         {
             public CLetVariableList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CLetVariable : RSequence, ILetVariable
+        public partial class CLetVariable : RSequence, ICLetVariable
         {
             public CLetVariable(params RNode[] children) : base(children) {}
 
-            public IPattern Pattern => Get<IPattern>(0);
+            public ICPattern Pattern => Get<ICPattern>(0);
             public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
         }
 
-        public partial class CSwitchExpression : RSequence, ISwitchExpression
+        public partial class CSwitchExpression : RSequence, ICSwitchExpression
         {
             public CSwitchExpression(params RNode[] children) : base(children) {}
 
@@ -4365,7 +4365,7 @@ namespace GeneratedParser
             public CCaseExpressions CaseExpressions => Get<CCaseExpressions>(1);
         }
 
-        public partial class CCaseExpressions : RSequence, ICaseExpressions
+        public partial class CCaseExpressions : RSequence, ICCaseExpressions
         {
             public CCaseExpressions(params RNode[] children) : base(children) {}
 
@@ -4373,19 +4373,19 @@ namespace GeneratedParser
             public ROptional<CElseExpression> ElseExpressionOptional => Get<ROptional<CElseExpression>>(1);
         }
 
-        public partial class CCaseExpression : RSequence, ICaseExpression
+        public partial class CCaseExpression : RSequence, ICCaseExpression
         {
             public CCaseExpression(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
             public RLiteral Literal2 => Get<RLiteral>(1);
             public RLiteral Literal3 => Get<RLiteral>(2);
-            public ICaseItem CaseItem => Get<ICaseItem>(3);
+            public ICCaseItem CaseItem => Get<ICCaseItem>(3);
             public RLiteral Literal4 => Get<RLiteral>(4);
-            public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(5);
+            public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(5);
         }
 
-        public partial class CIfExpression : RSequence, IIfExpression
+        public partial class CIfExpression : RSequence, ICIfExpression
         {
             public CIfExpression(params RNode[] children) : base(children) {}
 
@@ -4395,38 +4395,38 @@ namespace GeneratedParser
             public CElseExpression ElseExpression => Get<CElseExpression>(3);
         }
 
-        public partial class CElseExpression : RSequence, IElseExpression
+        public partial class CElseExpression : RSequence, ICElseExpression
         {
             public CElseExpression(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(1);
+            public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(1);
         }
 
-        public partial class CThenExpression : RSequence, IThenExpression
+        public partial class CThenExpression : RSequence, ICThenExpression
         {
             public CThenExpression(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IConditionalExpression ConditionalExpression => Get<IConditionalExpression>(1);
+            public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(1);
         }
 
-        public partial class CFunctionExpression : RSequence, IFunctionExpression
+        public partial class CFunctionExpression : RSequence, ICFunctionExpression
         {
             public CFunctionExpression(params RNode[] children) : base(children) {}
 
-            public ROptional<IFunctionExpressionType> FunctionExpressionTypeOptional => Get<ROptional<IFunctionExpressionType>>(0);
+            public ROptional<ICFunctionExpressionType> FunctionExpressionTypeOptional => Get<ROptional<ICFunctionExpressionType>>(0);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(1);
             public ROptional<CFunctionParameters> FunctionParametersOptional => Get<ROptional<CFunctionParameters>>(2);
-            public IFunctionDefinition FunctionDefinition => Get<IFunctionDefinition>(3);
+            public ICFunctionDefinition FunctionDefinition => Get<ICFunctionDefinition>(3);
         }
 
-        public partial class CFunctionExpressionType : RLiteral, IFunctionExpressionType
+        public partial class CFunctionExpressionType : RLiteral, ICFunctionExpressionType
         {
             public CFunctionExpressionType(params Node[] children) : base(children) {}
         }
 
-        public partial class CFunctionParameters : RSequence, IFunctionParameters
+        public partial class CFunctionParameters : RSequence, ICFunctionParameters
         {
             public CFunctionParameters(params RNode[] children) : base(children) {}
 
@@ -4434,7 +4434,7 @@ namespace GeneratedParser
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(1);
         }
 
-        public partial class CForComprehensionClause : RSequence, IForComprehensionClause
+        public partial class CForComprehensionClause : RSequence, ICForComprehensionClause
         {
             public CForComprehensionClause(params RNode[] children) : base(children) {}
 
@@ -4442,302 +4442,302 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(1);
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
             public RLiteral Literal3 => Get<RLiteral>(3);
-            public IComprehensionClause ComprehensionClause => Get<IComprehensionClause>(4);
+            public ICComprehensionClause ComprehensionClause => Get<ICComprehensionClause>(4);
         }
 
-        public partial class CIfComprehensionClause : RSequence, IIfComprehensionClause
+        public partial class CIfComprehensionClause : RSequence, ICIfComprehensionClause
         {
             public CIfComprehensionClause(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
-            public IComprehensionClause ComprehensionClause => Get<IComprehensionClause>(2);
+            public ICComprehensionClause ComprehensionClause => Get<ICComprehensionClause>(2);
         }
 
-        public partial class CAssignment : RSequence, IAssignment
+        public partial class CAssignment : RSequence, ICAssignment
         {
             public CAssignment(params RNode[] children) : base(children) {}
 
-            public IThenElseExpression ThenElseExpression => Get<IThenElseExpression>(0);
+            public ICThenElseExpression ThenElseExpression => Get<ICThenElseExpression>(0);
             public CAssignmentOperator AssignmentOperator => Get<CAssignmentOperator>(1);
-            public IExpression Expression => Get<IExpression>(2);
+            public ICExpression Expression => Get<ICExpression>(2);
         }
 
-        public partial class CAssignmentOperator : RToken, IAssignmentOperator
+        public partial class CAssignmentOperator : RToken, ICAssignmentOperator
         {
             public CAssignmentOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CThenElse : RSequence, IThenElse
+        public partial class CThenElse : RSequence, ICThenElse
         {
             public CThenElse(params RNode[] children) : base(children) {}
 
-            public IThenElseExpression ThenElseExpression => Get<IThenElseExpression>(0);
+            public ICThenElseExpression ThenElseExpression => Get<ICThenElseExpression>(0);
             public CThenElseOperator ThenElseOperator => Get<CThenElseOperator>(1);
-            public IDisjunctionExpression DisjunctionExpression => Get<IDisjunctionExpression>(2);
+            public ICDisjunctionExpression DisjunctionExpression => Get<ICDisjunctionExpression>(2);
         }
 
-        public partial class CThenElseOperator : RLiteral, IThenElseOperator
+        public partial class CThenElseOperator : RLiteral, ICThenElseOperator
         {
             public CThenElseOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CDisjunction : RSequence, IDisjunction
+        public partial class CDisjunction : RSequence, ICDisjunction
         {
             public CDisjunction(params RNode[] children) : base(children) {}
 
-            public IDisjunctionExpression DisjunctionExpression => Get<IDisjunctionExpression>(0);
+            public ICDisjunctionExpression DisjunctionExpression => Get<ICDisjunctionExpression>(0);
             public CDisjunctionOperator DisjunctionOperator => Get<CDisjunctionOperator>(1);
-            public IConjunctionExpression ConjunctionExpression => Get<IConjunctionExpression>(2);
+            public ICConjunctionExpression ConjunctionExpression => Get<ICConjunctionExpression>(2);
         }
 
-        public partial class CDisjunctionOperator : RLiteral, IDisjunctionOperator
+        public partial class CDisjunctionOperator : RLiteral, ICDisjunctionOperator
         {
             public CDisjunctionOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CConjunction : RSequence, IConjunction
+        public partial class CConjunction : RSequence, ICConjunction
         {
             public CConjunction(params RNode[] children) : base(children) {}
 
-            public IConjunctionExpression ConjunctionExpression => Get<IConjunctionExpression>(0);
+            public ICConjunctionExpression ConjunctionExpression => Get<ICConjunctionExpression>(0);
             public CConjunctionOperator ConjunctionOperator => Get<CConjunctionOperator>(1);
-            public ILogicalNegationExpression LogicalNegationExpression => Get<ILogicalNegationExpression>(2);
+            public ICLogicalNegationExpression LogicalNegationExpression => Get<ICLogicalNegationExpression>(2);
         }
 
-        public partial class CConjunctionOperator : RLiteral, IConjunctionOperator
+        public partial class CConjunctionOperator : RLiteral, ICConjunctionOperator
         {
             public CConjunctionOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CLogicalNegation : RSequence, ILogicalNegation
+        public partial class CLogicalNegation : RSequence, ICLogicalNegation
         {
             public CLogicalNegation(params RNode[] children) : base(children) {}
 
             public CNotOperator NotOperator => Get<CNotOperator>(0);
-            public ILogicalNegationExpression LogicalNegationExpression => Get<ILogicalNegationExpression>(1);
+            public ICLogicalNegationExpression LogicalNegationExpression => Get<ICLogicalNegationExpression>(1);
         }
 
-        public partial class CNotOperator : RLiteral, INotOperator
+        public partial class CNotOperator : RLiteral, ICNotOperator
         {
             public CNotOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CEquality : RSequence, IEquality
+        public partial class CEquality : RSequence, ICEquality
         {
             public CEquality(params RNode[] children) : base(children) {}
 
-            public IComparisonExpression ComparisonExpression => Get<IComparisonExpression>(0);
+            public ICComparisonExpression ComparisonExpression => Get<ICComparisonExpression>(0);
             public CEqualityOperator EqualityOperator => Get<CEqualityOperator>(1);
-            public IComparisonExpression ComparisonExpression2 => Get<IComparisonExpression>(2);
+            public ICComparisonExpression ComparisonExpression2 => Get<ICComparisonExpression>(2);
         }
 
-        public partial class CEqualityOperator : RLiteral, IEqualityOperator
+        public partial class CEqualityOperator : RLiteral, ICEqualityOperator
         {
             public CEqualityOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CComparisonExpr : RSequence, IComparisonExpr
+        public partial class CComparisonExpr : RSequence, ICComparisonExpr
         {
             public CComparisonExpr(params RNode[] children) : base(children) {}
 
-            public IExistsNonemptyExpression ExistsNonemptyExpression => Get<IExistsNonemptyExpression>(0);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression => Get<ICExistsNonemptyExpression>(0);
             public CComparisonOperator ComparisonOperator => Get<CComparisonOperator>(1);
-            public IExistsNonemptyExpression ExistsNonemptyExpression2 => Get<IExistsNonemptyExpression>(2);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression2 => Get<ICExistsNonemptyExpression>(2);
         }
 
-        public partial class CLargerExpr : RSequence, ILargerExpr
+        public partial class CLargerExpr : RSequence, ICLargerExpr
         {
             public CLargerExpr(params RNode[] children) : base(children) {}
 
-            public IExistsNonemptyExpression ExistsNonemptyExpression => Get<IExistsNonemptyExpression>(0);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression => Get<ICExistsNonemptyExpression>(0);
             public CLargerOperator LargerOperator => Get<CLargerOperator>(1);
-            public IExistsNonemptyExpression ExistsNonemptyExpression2 => Get<IExistsNonemptyExpression>(2);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression2 => Get<ICExistsNonemptyExpression>(2);
         }
 
-        public partial class CSmallerExpr : RSequence, ISmallerExpr
+        public partial class CSmallerExpr : RSequence, ICSmallerExpr
         {
             public CSmallerExpr(params RNode[] children) : base(children) {}
 
-            public IExistsNonemptyExpression ExistsNonemptyExpression => Get<IExistsNonemptyExpression>(0);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression => Get<ICExistsNonemptyExpression>(0);
             public CSmallerOperator SmallerOperator => Get<CSmallerOperator>(1);
-            public IExistsNonemptyExpression ExistsNonemptyExpression2 => Get<IExistsNonemptyExpression>(2);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression2 => Get<ICExistsNonemptyExpression>(2);
         }
 
-        public partial class CLargerBoundsExpr : RSequence, ILargerBoundsExpr
+        public partial class CLargerBoundsExpr : RSequence, ICLargerBoundsExpr
         {
             public CLargerBoundsExpr(params RNode[] children) : base(children) {}
 
-            public IExistsNonemptyExpression ExistsNonemptyExpression => Get<IExistsNonemptyExpression>(0);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression => Get<ICExistsNonemptyExpression>(0);
             public CLargerOperator LargerOperator => Get<CLargerOperator>(1);
-            public IExistsNonemptyExpression ExistsNonemptyExpression2 => Get<IExistsNonemptyExpression>(2);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression2 => Get<ICExistsNonemptyExpression>(2);
             public CLargerOperator LargerOperator2 => Get<CLargerOperator>(3);
-            public IExistsNonemptyExpression ExistsNonemptyExpression3 => Get<IExistsNonemptyExpression>(4);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression3 => Get<ICExistsNonemptyExpression>(4);
         }
 
-        public partial class CSmallerBoundsExpr : RSequence, ISmallerBoundsExpr
+        public partial class CSmallerBoundsExpr : RSequence, ICSmallerBoundsExpr
         {
             public CSmallerBoundsExpr(params RNode[] children) : base(children) {}
 
-            public IExistsNonemptyExpression ExistsNonemptyExpression => Get<IExistsNonemptyExpression>(0);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression => Get<ICExistsNonemptyExpression>(0);
             public CSmallerOperator SmallerOperator => Get<CSmallerOperator>(1);
-            public IExistsNonemptyExpression ExistsNonemptyExpression2 => Get<IExistsNonemptyExpression>(2);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression2 => Get<ICExistsNonemptyExpression>(2);
             public CSmallerOperator SmallerOperator2 => Get<CSmallerOperator>(3);
-            public IExistsNonemptyExpression ExistsNonemptyExpression3 => Get<IExistsNonemptyExpression>(4);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression3 => Get<ICExistsNonemptyExpression>(4);
         }
 
-        public partial class CTypecheckExpr : RSequence, ITypecheckExpr
+        public partial class CTypecheckExpr : RSequence, ICTypecheckExpr
         {
             public CTypecheckExpr(params RNode[] children) : base(children) {}
 
-            public IExistsNonemptyExpression ExistsNonemptyExpression => Get<IExistsNonemptyExpression>(0);
+            public ICExistsNonemptyExpression ExistsNonemptyExpression => Get<ICExistsNonemptyExpression>(0);
             public CTypeOperator TypeOperator => Get<CTypeOperator>(1);
-            public IType Type => Get<IType>(2);
+            public ICType Type => Get<ICType>(2);
         }
 
-        public partial class CComparisonOperator : RLiteral, IComparisonOperator
+        public partial class CComparisonOperator : RLiteral, ICComparisonOperator
         {
             public CComparisonOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CSmallerOperator : RLiteral, ISmallerOperator
+        public partial class CSmallerOperator : RLiteral, ICSmallerOperator
         {
             public CSmallerOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CLargerOperator : RLiteral, ILargerOperator
+        public partial class CLargerOperator : RLiteral, ICLargerOperator
         {
             public CLargerOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CTypeOperator : RLiteral, ITypeOperator
+        public partial class CTypeOperator : RLiteral, ICTypeOperator
         {
             public CTypeOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CExistsExpression : RSequence, IExistsExpression
+        public partial class CExistsExpression : RSequence, ICExistsExpression
         {
             public CExistsExpression(params RNode[] children) : base(children) {}
 
-            public IEntryRangeExpression EntryRangeExpression => Get<IEntryRangeExpression>(0);
+            public ICEntryRangeExpression EntryRangeExpression => Get<ICEntryRangeExpression>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CNonemptyExpression : RSequence, INonemptyExpression
+        public partial class CNonemptyExpression : RSequence, ICNonemptyExpression
         {
             public CNonemptyExpression(params RNode[] children) : base(children) {}
 
-            public IEntryRangeExpression EntryRangeExpression => Get<IEntryRangeExpression>(0);
+            public ICEntryRangeExpression EntryRangeExpression => Get<ICEntryRangeExpression>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CEntryOrRange : RSequence, IEntryOrRange
+        public partial class CEntryOrRange : RSequence, ICEntryOrRange
         {
             public CEntryOrRange(params RNode[] children) : base(children) {}
 
-            public IAdditiveExpression AdditiveExpression => Get<IAdditiveExpression>(0);
+            public ICAdditiveExpression AdditiveExpression => Get<ICAdditiveExpression>(0);
             public CRangeOrEntryOperator RangeOrEntryOperator => Get<CRangeOrEntryOperator>(1);
-            public IAdditiveExpression AdditiveExpression2 => Get<IAdditiveExpression>(2);
+            public ICAdditiveExpression AdditiveExpression2 => Get<ICAdditiveExpression>(2);
         }
 
-        public partial class CRangeOrEntryOperator : RLiteral, IRangeOrEntryOperator
+        public partial class CRangeOrEntryOperator : RLiteral, ICRangeOrEntryOperator
         {
             public CRangeOrEntryOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CAdditiveExpr : RSequence, IAdditiveExpr
+        public partial class CAdditiveExpr : RSequence, ICAdditiveExpr
         {
             public CAdditiveExpr(params RNode[] children) : base(children) {}
 
-            public IAdditiveExpression AdditiveExpression => Get<IAdditiveExpression>(0);
+            public ICAdditiveExpression AdditiveExpression => Get<ICAdditiveExpression>(0);
             public CAdditiveOperator AdditiveOperator => Get<CAdditiveOperator>(1);
-            public IScaleExpression ScaleExpression => Get<IScaleExpression>(2);
+            public ICScaleExpression ScaleExpression => Get<ICScaleExpression>(2);
         }
 
-        public partial class CAdditiveOperator : RLiteral, IAdditiveOperator
+        public partial class CAdditiveOperator : RLiteral, ICAdditiveOperator
         {
             public CAdditiveOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CScaleExpr : RSequence, IScaleExpr
+        public partial class CScaleExpr : RSequence, ICScaleExpr
         {
             public CScaleExpr(params RNode[] children) : base(children) {}
 
-            public IMultiplicativeExpression MultiplicativeExpression => Get<IMultiplicativeExpression>(0);
+            public ICMultiplicativeExpression MultiplicativeExpression => Get<ICMultiplicativeExpression>(0);
             public CScaleOperator ScaleOperator => Get<CScaleOperator>(1);
-            public IScaleExpression ScaleExpression => Get<IScaleExpression>(2);
+            public ICScaleExpression ScaleExpression => Get<ICScaleExpression>(2);
         }
 
-        public partial class CScaleOperator : RLiteral, IScaleOperator
+        public partial class CScaleOperator : RLiteral, ICScaleOperator
         {
             public CScaleOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CMultiplicativeExpr : RSequence, IMultiplicativeExpr
+        public partial class CMultiplicativeExpr : RSequence, ICMultiplicativeExpr
         {
             public CMultiplicativeExpr(params RNode[] children) : base(children) {}
 
-            public IMultiplicativeExpression MultiplicativeExpression => Get<IMultiplicativeExpression>(0);
+            public ICMultiplicativeExpression MultiplicativeExpression => Get<ICMultiplicativeExpression>(0);
             public CMultiplicativeOperator MultiplicativeOperator => Get<CMultiplicativeOperator>(1);
-            public IUnionExpression UnionExpression => Get<IUnionExpression>(2);
+            public ICUnionExpression UnionExpression => Get<ICUnionExpression>(2);
         }
 
-        public partial class CMultiplicativeOperator : RLiteral, IMultiplicativeOperator
+        public partial class CMultiplicativeOperator : RLiteral, ICMultiplicativeOperator
         {
             public CMultiplicativeOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CUnionExpr : RSequence, IUnionExpr
+        public partial class CUnionExpr : RSequence, ICUnionExpr
         {
             public CUnionExpr(params RNode[] children) : base(children) {}
 
-            public IUnionExpression UnionExpression => Get<IUnionExpression>(0);
+            public ICUnionExpression UnionExpression => Get<ICUnionExpression>(0);
             public CUnionOperator UnionOperator => Get<CUnionOperator>(1);
-            public IExclusiveExpression ExclusiveExpression => Get<IExclusiveExpression>(2);
+            public ICExclusiveExpression ExclusiveExpression => Get<ICExclusiveExpression>(2);
         }
 
-        public partial class CUnionOperator : RLiteral, IUnionOperator
+        public partial class CUnionOperator : RLiteral, ICUnionOperator
         {
             public CUnionOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CExclusiveExpr : RSequence, IExclusiveExpr
+        public partial class CExclusiveExpr : RSequence, ICExclusiveExpr
         {
             public CExclusiveExpr(params RNode[] children) : base(children) {}
 
-            public IExclusiveExpression ExclusiveExpression => Get<IExclusiveExpression>(0);
+            public ICExclusiveExpression ExclusiveExpression => Get<ICExclusiveExpression>(0);
             public CExclusiveOperator ExclusiveOperator => Get<CExclusiveOperator>(1);
-            public IIntersectionExpression IntersectionExpression => Get<IIntersectionExpression>(2);
+            public ICIntersectionExpression IntersectionExpression => Get<ICIntersectionExpression>(2);
         }
 
-        public partial class CExclusiveOperator : RLiteral, IExclusiveOperator
+        public partial class CExclusiveOperator : RLiteral, ICExclusiveOperator
         {
             public CExclusiveOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CIntersectionExpr : RSequence, IIntersectionExpr
+        public partial class CIntersectionExpr : RSequence, ICIntersectionExpr
         {
             public CIntersectionExpr(params RNode[] children) : base(children) {}
 
-            public IIntersectionExpression IntersectionExpression => Get<IIntersectionExpression>(0);
+            public ICIntersectionExpression IntersectionExpression => Get<ICIntersectionExpression>(0);
             public CIntersectionOperator IntersectionOperator => Get<CIntersectionOperator>(1);
-            public INegationOrComplementExpression NegationOrComplementExpression => Get<INegationOrComplementExpression>(2);
+            public ICNegationOrComplementExpression NegationOrComplementExpression => Get<ICNegationOrComplementExpression>(2);
         }
 
-        public partial class CIntersectionOperator : RLiteral, IIntersectionOperator
+        public partial class CIntersectionOperator : RLiteral, ICIntersectionOperator
         {
             public CIntersectionOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CNegationOrComplementExpr : RSequence, INegationOrComplementExpr
+        public partial class CNegationOrComplementExpr : RSequence, ICNegationOrComplementExpr
         {
             public CNegationOrComplementExpr(params RNode[] children) : base(children) {}
 
-            public IUnaryMinusOrComplementOperator UnaryMinusOrComplementOperator => Get<IUnaryMinusOrComplementOperator>(0);
-            public INegationOrComplementExpression NegationOrComplementExpression => Get<INegationOrComplementExpression>(1);
+            public ICUnaryMinusOrComplementOperator UnaryMinusOrComplementOperator => Get<ICUnaryMinusOrComplementOperator>(0);
+            public ICNegationOrComplementExpression NegationOrComplementExpression => Get<ICNegationOrComplementExpression>(1);
         }
 
-        public partial class COpNegate : RSequence, IOpNegate
+        public partial class COpNegate : RSequence, ICOpNegate
         {
             public COpNegate(params RNode[] children) : base(children) {}
 
@@ -4745,7 +4745,7 @@ namespace GeneratedParser
             public RNot<RLiteral> Literal2Not => Get<RNot<RLiteral>>(1);
         }
 
-        public partial class COpNeutral : RSequence, IOpNeutral
+        public partial class COpNeutral : RSequence, ICOpNeutral
         {
             public COpNeutral(params RNode[] children) : base(children) {}
 
@@ -4753,143 +4753,143 @@ namespace GeneratedParser
             public RNot<RLiteral> Literal2Not => Get<RNot<RLiteral>>(1);
         }
 
-        public partial class COpComplement : RLiteral, IOpComplement
+        public partial class COpComplement : RLiteral, ICOpComplement
         {
             public COpComplement(params Node[] children) : base(children) {}
         }
 
-        public partial class CPrefixExpr : RSequence, IPrefixExpr
+        public partial class CPrefixExpr : RSequence, ICPrefixExpr
         {
             public CPrefixExpr(params RNode[] children) : base(children) {}
 
             public CIncrementOperator IncrementOperator => Get<CIncrementOperator>(0);
-            public IPrefixExpression PrefixExpression => Get<IPrefixExpression>(1);
+            public ICPrefixExpression PrefixExpression => Get<ICPrefixExpression>(1);
         }
 
-        public partial class CPostfixExpr : RSequence, IPostfixExpr
+        public partial class CPostfixExpr : RSequence, ICPostfixExpr
         {
             public CPostfixExpr(params RNode[] children) : base(children) {}
 
-            public IPostfixExpression PostfixExpression => Get<IPostfixExpression>(0);
+            public ICPostfixExpression PostfixExpression => Get<ICPostfixExpression>(0);
             public CIncrementOperator IncrementOperator => Get<CIncrementOperator>(1);
         }
 
-        public partial class CIncrementOperator : RLiteral, IIncrementOperator
+        public partial class CIncrementOperator : RLiteral, ICIncrementOperator
         {
             public CIncrementOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CSelectionExpression : RSequence, ISelectionExpression
+        public partial class CSelectionExpression : RSequence, ICSelectionExpression
         {
             public CSelectionExpression(params RNode[] children) : base(children) {}
 
-            public IPrimary Primary => Get<IPrimary>(0);
+            public ICPrimary Primary => Get<ICPrimary>(0);
             public CQualifiedReference QualifiedReference => Get<CQualifiedReference>(1);
         }
 
-        public partial class CQualifiedReference : RSequence, IQualifiedReference
+        public partial class CQualifiedReference : RSequence, ICQualifiedReference
         {
             public CQualifiedReference(params RNode[] children) : base(children) {}
 
             public CMemberSelectionOperator MemberSelectionOperator => Get<CMemberSelectionOperator>(0);
-            public IBaseReference BaseReference => Get<IBaseReference>(1);
+            public ICBaseReference BaseReference => Get<ICBaseReference>(1);
         }
 
-        public partial class CMemberSelectionOperator : RLiteral, IMemberSelectionOperator
+        public partial class CMemberSelectionOperator : RLiteral, ICMemberSelectionOperator
         {
             public CMemberSelectionOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CIndexedExpression : RSequence, IIndexedExpression
+        public partial class CIndexedExpression : RSequence, ICIndexedExpression
         {
             public CIndexedExpression(params RNode[] children) : base(children) {}
 
-            public IPrimary Primary => Get<IPrimary>(0);
+            public ICPrimary Primary => Get<ICPrimary>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IIndex Index => Get<IIndex>(2);
+            public ICIndex Index => Get<ICIndex>(2);
             public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CUpperSpanned : RSequence, IUpperSpanned
+        public partial class CUpperSpanned : RSequence, ICUpperSpanned
         {
             public CUpperSpanned(params RNode[] children) : base(children) {}
 
-            public IIndexExpression IndexExpression => Get<IIndexExpression>(0);
+            public ICIndexExpression IndexExpression => Get<ICIndexExpression>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CLowerSpanned : RSequence, ILowerSpanned
+        public partial class CLowerSpanned : RSequence, ICLowerSpanned
         {
             public CLowerSpanned(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IIndexExpression IndexExpression => Get<IIndexExpression>(1);
+            public ICIndexExpression IndexExpression => Get<ICIndexExpression>(1);
         }
 
-        public partial class CSpanned : RSequence, ISpanned
+        public partial class CSpanned : RSequence, ICSpanned
         {
             public CSpanned(params RNode[] children) : base(children) {}
 
-            public IIndexExpression IndexExpression => Get<IIndexExpression>(0);
+            public ICIndexExpression IndexExpression => Get<ICIndexExpression>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IIndexExpression IndexExpression2 => Get<IIndexExpression>(2);
+            public ICIndexExpression IndexExpression2 => Get<ICIndexExpression>(2);
         }
 
-        public partial class CMeasured : RSequence, IMeasured
+        public partial class CMeasured : RSequence, ICMeasured
         {
             public CMeasured(params RNode[] children) : base(children) {}
 
-            public IIndexExpression IndexExpression => Get<IIndexExpression>(0);
+            public ICIndexExpression IndexExpression => Get<ICIndexExpression>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IIndexExpression IndexExpression2 => Get<IIndexExpression>(2);
+            public ICIndexExpression IndexExpression2 => Get<ICIndexExpression>(2);
         }
 
-        public partial class CCallExpression : RSequence, ICallExpression
+        public partial class CCallExpression : RSequence, ICCallExpression
         {
             public CCallExpression(params RNode[] children) : base(children) {}
 
-            public IPrimary Primary => Get<IPrimary>(0);
-            public IArguments Arguments => Get<IArguments>(1);
+            public ICPrimary Primary => Get<ICPrimary>(0);
+            public ICArguments Arguments => Get<ICArguments>(1);
         }
 
-        public partial class CStringInterpolation : RSequence, IStringInterpolation
+        public partial class CStringInterpolation : RSequence, ICStringInterpolation
         {
             public CStringInterpolation(params RNode[] children) : base(children) {}
 
             public CStringStart StringStart => Get<CStringStart>(0);
-            public IExpression Expression => Get<IExpression>(1);
+            public ICExpression Expression => Get<ICExpression>(1);
             public RStar<CInterpolationPart> InterpolationPartStar => Get<RStar<CInterpolationPart>>(2);
             public CStringEnd StringEnd => Get<CStringEnd>(3);
         }
 
-        public partial class CInterpolationPart : RSequence, IInterpolationPart
+        public partial class CInterpolationPart : RSequence, ICInterpolationPart
         {
             public CInterpolationPart(params RNode[] children) : base(children) {}
 
             public CStringMid StringMid => Get<CStringMid>(0);
-            public IExpression Expression => Get<IExpression>(1);
+            public ICExpression Expression => Get<ICExpression>(1);
         }
 
-        public partial class CObjectExpression : RSequence, IObjectExpression
+        public partial class CObjectExpression : RSequence, ICObjectExpression
         {
             public CObjectExpression(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(1);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(2);
-            public IClassBlock ClassBlock => Get<IClassBlock>(3);
+            public ICClassBlock ClassBlock => Get<ICClassBlock>(3);
         }
 
-        public partial class CGroupedExpression : RSequence, IGroupedExpression
+        public partial class CGroupedExpression : RSequence, ICGroupedExpression
         {
             public CGroupedExpression(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IExpression Expression => Get<IExpression>(1);
+            public ICExpression Expression => Get<ICExpression>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CTypeArguments : RSequence, ITypeArguments
+        public partial class CTypeArguments : RSequence, ICTypeArguments
         {
             public CTypeArguments(params RNode[] children) : base(children) {}
 
@@ -4898,136 +4898,136 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CTypeArgumentList : RLoop<CVariancedType>, ITypeArgumentList
+        public partial class CTypeArgumentList : RLoop<CVariancedType>, ICTypeArgumentList
         {
             public CTypeArgumentList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CVariancedType : RSequence, IVariancedType
+        public partial class CVariancedType : RSequence, ICVariancedType
         {
             public CVariancedType(params RNode[] children) : base(children) {}
 
-            public ROptional<IVariance> VarianceOptional => Get<ROptional<IVariance>>(0);
-            public IType Type => Get<IType>(1);
+            public ROptional<ICVariance> VarianceOptional => Get<ROptional<ICVariance>>(0);
+            public ICType Type => Get<ICType>(1);
         }
 
-        public partial class CDefaultedTypeList : RLoop<IDefaultedType>, IDefaultedTypeList
+        public partial class CDefaultedTypeList : RLoop<ICDefaultedType>, ICDefaultedTypeList
         {
             public CDefaultedTypeList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CDefaultedTypeCore : RSequence, IDefaultedTypeCore
+        public partial class CDefaultedTypeCore : RSequence, ICDefaultedTypeCore
         {
             public CDefaultedTypeCore(params RNode[] children) : base(children) {}
 
-            public IType Type => Get<IType>(0);
+            public ICType Type => Get<ICType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CVariadicUnionType : RSequence, IVariadicUnionType
+        public partial class CVariadicUnionType : RSequence, ICVariadicUnionType
         {
             public CVariadicUnionType(params RNode[] children) : base(children) {}
 
-            public IUnionType UnionType => Get<IUnionType>(0);
+            public ICUnionType UnionType => Get<ICUnionType>(0);
             public CVariadicOperator VariadicOperator => Get<CVariadicOperator>(1);
         }
 
-        public partial class CVariadicOperator : RLiteral, IVariadicOperator
+        public partial class CVariadicOperator : RLiteral, ICVariadicOperator
         {
             public CVariadicOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CSpreadType : RSequence, ISpreadType
+        public partial class CSpreadType : RSequence, ICSpreadType
         {
             public CSpreadType(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IUnionType UnionType => Get<IUnionType>(1);
+            public ICUnionType UnionType => Get<ICUnionType>(1);
         }
 
-        public partial class CEntryType : RSequence, IEntryType
+        public partial class CEntryType : RSequence, ICEntryType
         {
             public CEntryType(params RNode[] children) : base(children) {}
 
-            public IUnionType UnionType => Get<IUnionType>(0);
+            public ICUnionType UnionType => Get<ICUnionType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IUnionType UnionType2 => Get<IUnionType>(2);
+            public ICUnionType UnionType2 => Get<ICUnionType>(2);
         }
 
-        public partial class CUnionTypeCore : RSequence, IUnionTypeCore
+        public partial class CUnionTypeCore : RSequence, ICUnionTypeCore
         {
             public CUnionTypeCore(params RNode[] children) : base(children) {}
 
-            public IUnionType UnionType => Get<IUnionType>(0);
+            public ICUnionType UnionType => Get<ICUnionType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IIntersectionType IntersectionType => Get<IIntersectionType>(2);
+            public ICIntersectionType IntersectionType => Get<ICIntersectionType>(2);
         }
 
-        public partial class CIntersectionTypeCore : RSequence, IIntersectionTypeCore
+        public partial class CIntersectionTypeCore : RSequence, ICIntersectionTypeCore
         {
             public CIntersectionTypeCore(params RNode[] children) : base(children) {}
 
-            public IIntersectionType IntersectionType => Get<IIntersectionType>(0);
+            public ICIntersectionType IntersectionType => Get<ICIntersectionType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public IPrimaryType PrimaryType => Get<IPrimaryType>(2);
+            public ICPrimaryType PrimaryType => Get<ICPrimaryType>(2);
         }
 
-        public partial class CNullableType : RSequence, INullableType
+        public partial class CNullableType : RSequence, ICNullableType
         {
             public CNullableType(params RNode[] children) : base(children) {}
 
-            public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
+            public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CArrayType : RSequence, IArrayType
+        public partial class CArrayType : RSequence, ICArrayType
         {
             public CArrayType(params RNode[] children) : base(children) {}
 
-            public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
+            public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
             public ROptional<CLiteralNatural> LiteralNaturalOptional => Get<ROptional<CLiteralNatural>>(2);
             public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CFunctionType : RSequence, IFunctionType
+        public partial class CFunctionType : RSequence, ICFunctionType
         {
             public CFunctionType(params RNode[] children) : base(children) {}
 
-            public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
+            public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
-            public ROptional<ITypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ITypeTypeArguments>>(2);
+            public ROptional<ICTypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ICTypeTypeArguments>>(2);
             public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CTupleType : RSequence, ITupleType
+        public partial class CTupleType : RSequence, ICTupleType
         {
             public CTupleType(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<ITypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ITypeTypeArguments>>(1);
+            public ROptional<ICTypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ICTypeTypeArguments>>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CIterableType : RSequence, IIterableType
+        public partial class CIterableType : RSequence, ICIterableType
         {
             public CIterableType(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public ROptional<IVariadicType> VariadicTypeOptional => Get<ROptional<IVariadicType>>(1);
+            public ROptional<ICVariadicType> VariadicTypeOptional => Get<ROptional<ICVariadicType>>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CGroupedType : RSequence, IGroupedType
+        public partial class CGroupedType : RSequence, ICGroupedType
         {
             public CGroupedType(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IType Type => Get<IType>(1);
+            public ICType Type => Get<ICType>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CQualifiedType : RSequence, IQualifiedType
+        public partial class CQualifiedType : RSequence, ICQualifiedType
         {
             public CQualifiedType(params RNode[] children) : base(children) {}
 
@@ -5035,23 +5035,23 @@ namespace GeneratedParser
             public CTypePath TypePath => Get<CTypePath>(1);
         }
 
-        public partial class CAnnotations : RSequence, IAnnotations
+        public partial class CAnnotations : RSequence, ICAnnotations
         {
             public CAnnotations(params RNode[] children) : base(children) {}
 
-            public ROptional<IStringLiteral> StringLiteralOptional => Get<ROptional<IStringLiteral>>(0);
+            public ROptional<ICStringLiteral> StringLiteralOptional => Get<ROptional<ICStringLiteral>>(0);
             public RStar<CAnnotation> AnnotationStar => Get<RStar<CAnnotation>>(1);
         }
 
-        public partial class CAnnotation : RSequence, IAnnotation
+        public partial class CAnnotation : RSequence, ICAnnotation
         {
             public CAnnotation(params RNode[] children) : base(children) {}
 
-            public IAnnotationName AnnotationName => Get<IAnnotationName>(0);
-            public ROptional<IArguments> ArgumentsOptional => Get<ROptional<IArguments>>(1);
+            public ICAnnotationName AnnotationName => Get<ICAnnotationName>(0);
+            public ROptional<ICArguments> ArgumentsOptional => Get<ROptional<ICArguments>>(1);
         }
 
-        public partial class CConditions : RSequence, IConditions
+        public partial class CConditions : RSequence, ICConditions
         {
             public CConditions(params RNode[] children) : base(children) {}
 
@@ -5060,57 +5060,57 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CConditionList : RLoop<ICondition>, IConditionList
+        public partial class CConditionList : RLoop<ICCondition>, ICConditionList
         {
             public CConditionList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CExistsCondition : RSequence, IExistsCondition
+        public partial class CExistsCondition : RSequence, ICExistsCondition
         {
             public CExistsCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
             public RLiteral Literal2 => Get<RLiteral>(1);
-            public ILetOrExpression LetOrExpression => Get<ILetOrExpression>(2);
+            public ICLetOrExpression LetOrExpression => Get<ICLetOrExpression>(2);
         }
 
-        public partial class CNonemptyCondition : RSequence, INonemptyCondition
+        public partial class CNonemptyCondition : RSequence, ICNonemptyCondition
         {
             public CNonemptyCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
             public RLiteral Literal2 => Get<RLiteral>(1);
-            public ILetOrExpression LetOrExpression => Get<ILetOrExpression>(2);
+            public ICLetOrExpression LetOrExpression => Get<ICLetOrExpression>(2);
         }
 
-        public partial class CIsCondition : RSequence, IIsCondition
+        public partial class CIsCondition : RSequence, ICIsCondition
         {
             public CIsCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
             public RLiteral Literal2 => Get<RLiteral>(1);
-            public IType Type => Get<IType>(2);
+            public ICType Type => Get<ICType>(2);
             public CIsConditionVariable IsConditionVariable => Get<CIsConditionVariable>(3);
         }
 
-        public partial class CIsConditionVariable : RSequence, IIsConditionVariable
+        public partial class CIsConditionVariable : RSequence, ICIsConditionVariable
         {
             public CIsConditionVariable(params RNode[] children) : base(children) {}
 
-            public IMemberName MemberName => Get<IMemberName>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(0);
             public ROptional<CValueSpecifier> ValueSpecifierOptional => Get<ROptional<CValueSpecifier>>(1);
         }
 
-        public partial class CSatisfiesCondition : RSequence, ISatisfiesCondition
+        public partial class CSatisfiesCondition : RSequence, ICSatisfiesCondition
         {
             public CSatisfiesCondition(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IType Type => Get<IType>(1);
-            public ITypeName TypeName => Get<ITypeName>(2);
+            public ICType Type => Get<ICType>(1);
+            public ICTypeName TypeName => Get<ICTypeName>(2);
         }
 
-        public partial class CIfElse : RSequence, IIfElse
+        public partial class CIfElse : RSequence, ICIfElse
         {
             public CIfElse(params RNode[] children) : base(children) {}
 
@@ -5118,24 +5118,24 @@ namespace GeneratedParser
             public ROptional<CElseBlock> ElseBlockOptional => Get<ROptional<CElseBlock>>(1);
         }
 
-        public partial class CIfBlock : RSequence, IIfBlock
+        public partial class CIfBlock : RSequence, ICIfBlock
         {
             public CIfBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
-            public IBlock Block => Get<IBlock>(2);
+            public ICBlock Block => Get<ICBlock>(2);
         }
 
-        public partial class CElseBlock : RSequence, IElseBlock
+        public partial class CElseBlock : RSequence, ICElseBlock
         {
             public CElseBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IElseBlockNext ElseBlockNext => Get<IElseBlockNext>(1);
+            public ICElseBlockNext ElseBlockNext => Get<ICElseBlockNext>(1);
         }
 
-        public partial class CSwitchCaseElse : RSequence, ISwitchCaseElse
+        public partial class CSwitchCaseElse : RSequence, ICSwitchCaseElse
         {
             public CSwitchCaseElse(params RNode[] children) : base(children) {}
 
@@ -5144,55 +5144,55 @@ namespace GeneratedParser
             public ROptional<CElseBlock> ElseBlockOptional => Get<ROptional<CElseBlock>>(2);
         }
 
-        public partial class CSwitchHeader : RSequence, ISwitchHeader
+        public partial class CSwitchHeader : RSequence, ICSwitchHeader
         {
             public CSwitchHeader(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public RLiteral Literal2 => Get<RLiteral>(1);
-            public ISwitched Switched => Get<ISwitched>(2);
+            public ICSwitched Switched => Get<ICSwitched>(2);
             public RLiteral Literal3 => Get<RLiteral>(3);
         }
 
-        public partial class CCaseBlock : RSequence, ICaseBlock
+        public partial class CCaseBlock : RSequence, ICCaseBlock
         {
             public CCaseBlock(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
             public RLiteral Literal2 => Get<RLiteral>(1);
             public RLiteral Literal3 => Get<RLiteral>(2);
-            public ICaseItem CaseItem => Get<ICaseItem>(3);
+            public ICCaseItem CaseItem => Get<ICCaseItem>(3);
             public RLiteral Literal4 => Get<RLiteral>(4);
-            public IBlock Block => Get<IBlock>(5);
+            public ICBlock Block => Get<ICBlock>(5);
         }
 
-        public partial class CIsCaseCondition : RSequence, IIsCaseCondition
+        public partial class CIsCaseCondition : RSequence, ICIsCaseCondition
         {
             public CIsCaseCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
-            public IType Type => Get<IType>(1);
+            public ICType Type => Get<ICType>(1);
         }
 
-        public partial class CSatisfiesCaseCondition : RSequence, ISatisfiesCaseCondition
+        public partial class CSatisfiesCaseCondition : RSequence, ICSatisfiesCaseCondition
         {
             public CSatisfiesCaseCondition(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IType Type => Get<IType>(1);
+            public ICType Type => Get<ICType>(1);
         }
 
-        public partial class CValueCaseList : RLoop<IValueCase>, IValueCaseList
+        public partial class CValueCaseList : RLoop<ICValueCase>, ICValueCaseList
         {
             public CValueCaseList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CValueCaseSeparator : RLiteral, IValueCaseSeparator
+        public partial class CValueCaseSeparator : RLiteral, ICValueCaseSeparator
         {
             public CValueCaseSeparator(params Node[] children) : base(children) {}
         }
 
-        public partial class CForElse : RSequence, IForElse
+        public partial class CForElse : RSequence, ICForElse
         {
             public CForElse(params RNode[] children) : base(children) {}
 
@@ -5200,7 +5200,7 @@ namespace GeneratedParser
             public ROptional<CFailBlock> FailBlockOptional => Get<ROptional<CFailBlock>>(1);
         }
 
-        public partial class CForBlock : RSequence, IForBlock
+        public partial class CForBlock : RSequence, ICForBlock
         {
             public CForBlock(params RNode[] children) : base(children) {}
 
@@ -5208,48 +5208,48 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(1);
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
             public RLiteral Literal3 => Get<RLiteral>(3);
-            public IBlock Block => Get<IBlock>(4);
+            public ICBlock Block => Get<ICBlock>(4);
         }
 
-        public partial class CFailBlock : RSequence, IFailBlock
+        public partial class CFailBlock : RSequence, ICFailBlock
         {
             public CFailBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IBlock Block => Get<IBlock>(1);
+            public ICBlock Block => Get<ICBlock>(1);
         }
 
-        public partial class CForIterator : RSequence, IForIterator
+        public partial class CForIterator : RSequence, ICForIterator
         {
             public CForIterator(params RNode[] children) : base(children) {}
 
-            public IForVariable ForVariable => Get<IForVariable>(0);
+            public ICForVariable ForVariable => Get<ICForVariable>(0);
             public ROptional<CContainment> ContainmentOptional => Get<ROptional<CContainment>>(1);
         }
 
-        public partial class CContainment : RSequence, IContainment
+        public partial class CContainment : RSequence, ICContainment
         {
             public CContainment(params RNode[] children) : base(children) {}
 
             public CContainmentOperator ContainmentOperator => Get<CContainmentOperator>(0);
-            public IOperatorExpression OperatorExpression => Get<IOperatorExpression>(1);
+            public ICOperatorExpression OperatorExpression => Get<ICOperatorExpression>(1);
         }
 
-        public partial class CContainmentOperator : RLiteral, IContainmentOperator
+        public partial class CContainmentOperator : RLiteral, ICContainmentOperator
         {
             public CContainmentOperator(params Node[] children) : base(children) {}
         }
 
-        public partial class CWhileBlock : RSequence, IWhileBlock
+        public partial class CWhileBlock : RSequence, ICWhileBlock
         {
             public CWhileBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public CConditions Conditions => Get<CConditions>(1);
-            public IBlock Block => Get<IBlock>(2);
+            public ICBlock Block => Get<ICBlock>(2);
         }
 
-        public partial class CTryCatchFinally : RSequence, ITryCatchFinally
+        public partial class CTryCatchFinally : RSequence, ICTryCatchFinally
         {
             public CTryCatchFinally(params RNode[] children) : base(children) {}
 
@@ -5258,25 +5258,25 @@ namespace GeneratedParser
             public ROptional<CFinallyBlock> FinallyBlockOptional => Get<ROptional<CFinallyBlock>>(2);
         }
 
-        public partial class CTryBlock : RSequence, ITryBlock
+        public partial class CTryBlock : RSequence, ICTryBlock
         {
             public CTryBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public ROptional<CResources> ResourcesOptional => Get<ROptional<CResources>>(1);
-            public IBlock Block => Get<IBlock>(2);
+            public ICBlock Block => Get<ICBlock>(2);
         }
 
-        public partial class CCatchBlock : RSequence, ICatchBlock
+        public partial class CCatchBlock : RSequence, ICCatchBlock
         {
             public CCatchBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
             public CCatchVariable CatchVariable => Get<CCatchVariable>(1);
-            public IBlock Block => Get<IBlock>(2);
+            public ICBlock Block => Get<ICBlock>(2);
         }
 
-        public partial class CCatchVariable : RSequence, ICatchVariable
+        public partial class CCatchVariable : RSequence, ICCatchVariable
         {
             public CCatchVariable(params RNode[] children) : base(children) {}
 
@@ -5285,15 +5285,15 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CFinallyBlock : RSequence, IFinallyBlock
+        public partial class CFinallyBlock : RSequence, ICFinallyBlock
         {
             public CFinallyBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IBlock Block => Get<IBlock>(1);
+            public ICBlock Block => Get<ICBlock>(1);
         }
 
-        public partial class CResources : RSequence, IResources
+        public partial class CResources : RSequence, ICResources
         {
             public CResources(params RNode[] children) : base(children) {}
 
@@ -5302,12 +5302,12 @@ namespace GeneratedParser
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CResourceList : RLoop<IResource>, IResourceList
+        public partial class CResourceList : RLoop<ICResource>, ICResourceList
         {
             public CResourceList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CSpecifiedVariable : RSequence, ISpecifiedVariable
+        public partial class CSpecifiedVariable : RSequence, ICSpecifiedVariable
         {
             public CSpecifiedVariable(params RNode[] children) : base(children) {}
 
@@ -5315,33 +5315,33 @@ namespace GeneratedParser
             public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
         }
 
-        public partial class CVariable : RSequence, IVariable
+        public partial class CVariable : RSequence, ICVariable
         {
             public CVariable(params RNode[] children) : base(children) {}
 
-            public ROptional<IVariableType> VariableTypeOptional => Get<ROptional<IVariableType>>(0);
-            public IMemberName MemberName => Get<IMemberName>(1);
+            public ROptional<ICVariableType> VariableTypeOptional => Get<ROptional<ICVariableType>>(0);
+            public ICMemberName MemberName => Get<ICMemberName>(1);
             public RStar<CParameters> ParametersStar => Get<RStar<CParameters>>(2);
         }
 
-        public partial class CModelReference : RSequence, IModelReference
+        public partial class CModelReference : RSequence, ICModelReference
         {
             public CModelReference(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IModelExpression ModelExpression => Get<IModelExpression>(1);
+            public ICModelExpression ModelExpression => Get<ICModelExpression>(1);
         }
 
-        public partial class CMetaLiteral : RSequence, IMetaLiteral
+        public partial class CMetaLiteral : RSequence, ICMetaLiteral
         {
             public CMetaLiteral(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0);
-            public IMetaExpression MetaExpression => Get<IMetaExpression>(1);
+            public ICMetaExpression MetaExpression => Get<ICMetaExpression>(1);
             public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CPackageQualifiedMemberReference : RSequence, IPackageQualifiedMemberReference
+        public partial class CPackageQualifiedMemberReference : RSequence, ICPackageQualifiedMemberReference
         {
             public CPackageQualifiedMemberReference(params RNode[] children) : base(children) {}
 
@@ -5349,16 +5349,16 @@ namespace GeneratedParser
             public CMemberReference MemberReference => Get<CMemberReference>(1);
         }
 
-        public partial class CTypeQualifiedMemberReference : RSequence, ITypeQualifiedMemberReference
+        public partial class CTypeQualifiedMemberReference : RSequence, ICTypeQualifiedMemberReference
         {
             public CTypeQualifiedMemberReference(params RNode[] children) : base(children) {}
 
-            public IPrimaryType PrimaryType => Get<IPrimaryType>(0);
+            public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
             public RLiteral Literal => Get<RLiteral>(1);
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
-        public partial class CModuleLiteral : RSequence, IModuleLiteral
+        public partial class CModuleLiteral : RSequence, ICModuleLiteral
         {
             public CModuleLiteral(params RNode[] children) : base(children) {}
 
@@ -5366,7 +5366,7 @@ namespace GeneratedParser
             public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
-        public partial class CPackageLiteral : RSequence, IPackageLiteral
+        public partial class CPackageLiteral : RSequence, ICPackageLiteral
         {
             public CPackageLiteral(params RNode[] children) : base(children) {}
 
@@ -5374,7 +5374,7 @@ namespace GeneratedParser
             public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
-        public partial class CClassLiteral : RSequence, IClassLiteral
+        public partial class CClassLiteral : RSequence, ICClassLiteral
         {
             public CClassLiteral(params RNode[] children) : base(children) {}
 
@@ -5382,7 +5382,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CInterfaceLiteral : RSequence, IInterfaceLiteral
+        public partial class CInterfaceLiteral : RSequence, ICInterfaceLiteral
         {
             public CInterfaceLiteral(params RNode[] children) : base(children) {}
 
@@ -5390,7 +5390,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CAliasLiteral : RSequence, IAliasLiteral
+        public partial class CAliasLiteral : RSequence, ICAliasLiteral
         {
             public CAliasLiteral(params RNode[] children) : base(children) {}
 
@@ -5398,7 +5398,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CTypeParameterLiteral : RSequence, ITypeParameterLiteral
+        public partial class CTypeParameterLiteral : RSequence, ICTypeParameterLiteral
         {
             public CTypeParameterLiteral(params RNode[] children) : base(children) {}
 
@@ -5406,7 +5406,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CNewLiteral : RSequence, INewLiteral
+        public partial class CNewLiteral : RSequence, ICNewLiteral
         {
             public CNewLiteral(params RNode[] children) : base(children) {}
 
@@ -5414,7 +5414,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CValueLiteral : RSequence, IValueLiteral
+        public partial class CValueLiteral : RSequence, ICValueLiteral
         {
             public CValueLiteral(params RNode[] children) : base(children) {}
 
@@ -5422,12 +5422,12 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CValueLiteralIntro : RLiteral, IValueLiteralIntro
+        public partial class CValueLiteralIntro : RLiteral, ICValueLiteralIntro
         {
             public CValueLiteralIntro(params Node[] children) : base(children) {}
         }
 
-        public partial class CFunctionLiteral : RSequence, IFunctionLiteral
+        public partial class CFunctionLiteral : RSequence, ICFunctionLiteral
         {
             public CFunctionLiteral(params RNode[] children) : base(children) {}
 
@@ -5435,7 +5435,7 @@ namespace GeneratedParser
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
-        public partial class CReferencePath : RSequence, IReferencePath
+        public partial class CReferencePath : RSequence, ICReferencePath
         {
             public CReferencePath(params RNode[] children) : base(children) {}
 
@@ -5443,79 +5443,79 @@ namespace GeneratedParser
             public CReferencePathElementList ReferencePathElementList => Get<CReferencePathElementList>(1);
         }
 
-        public partial class CReferencePathElementList : RLoop<IReferencePathElement>, IReferencePathElementList
+        public partial class CReferencePathElementList : RLoop<ICReferencePathElement>, ICReferencePathElementList
         {
             public CReferencePathElementList(params RNode[] children) : base(children) {}
         }
 
-        public partial class CKwVoid : RLiteral, IKwVoid
+        public partial class CKwVoid : RLiteral, ICKwVoid
         {
             public CKwVoid(params Node[] children) : base(children) {}
         }
 
-        public partial class CKwFunction : RLiteral, IKwFunction
+        public partial class CKwFunction : RLiteral, ICKwFunction
         {
             public CKwFunction(params Node[] children) : base(children) {}
         }
 
-        public partial class CKwValue : RLiteral, IKwValue
+        public partial class CKwValue : RLiteral, ICKwValue
         {
             public CKwValue(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralFloat : RToken, ILiteralFloat
+        public partial class CLiteralFloat : RToken, ICLiteralFloat
         {
             public CLiteralFloat(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralNatural : RToken, ILiteralNatural
+        public partial class CLiteralNatural : RToken, ICLiteralNatural
         {
             public CLiteralNatural(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralChar : RToken, ILiteralChar
+        public partial class CLiteralChar : RToken, ICLiteralChar
         {
             public CLiteralChar(params Node[] children) : base(children) {}
         }
 
-        public partial class CStringStart : RToken, IStringStart
+        public partial class CStringStart : RToken, ICStringStart
         {
             public CStringStart(params Node[] children) : base(children) {}
         }
 
-        public partial class CStringMid : RToken, IStringMid
+        public partial class CStringMid : RToken, ICStringMid
         {
             public CStringMid(params Node[] children) : base(children) {}
         }
 
-        public partial class CStringEnd : RToken, IStringEnd
+        public partial class CStringEnd : RToken, ICStringEnd
         {
             public CStringEnd(params Node[] children) : base(children) {}
         }
 
-        public partial class CLiteralString : RToken, ILiteralString
+        public partial class CLiteralString : RToken, ICLiteralString
         {
             public CLiteralString(params Node[] children) : base(children) {}
         }
 
-        public partial class CVerbatimString : RToken, IVerbatimString
+        public partial class CVerbatimString : RToken, ICVerbatimString
         {
             public CVerbatimString(params Node[] children) : base(children) {}
         }
 
-        public partial class CLowerIdentifier : RToken, ILowerIdentifier
+        public partial class CLowerIdentifier : RToken, ICLowerIdentifier
         {
             public CLowerIdentifier(params Node[] children) : base(children) {}
         }
 
-        public partial class CUpperIdentifier : RToken, IUpperIdentifier
+        public partial class CUpperIdentifier : RToken, ICUpperIdentifier
         {
             public CUpperIdentifier(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicCeylonVisitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

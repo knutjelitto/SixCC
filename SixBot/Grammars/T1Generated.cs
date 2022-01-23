@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T1.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T1.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -86,68 +84,68 @@ namespace GeneratedParser
 
     public partial class T1Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IS {}
-        public interface IAbac : IS {}
-        public interface IBbaa : IS {}
-        public interface ICbac : IS {}
-        public interface IA {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICS : IRNode {}
+        public interface ICAbac : ICS {}
+        public interface ICBbaa : ICS {}
+        public interface ICCbac : ICS {}
+        public interface ICA : IRNode {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
-            public IS S => Get<IS>(0);
+            public ICS S => Get<ICS>(0);
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CAbac : RSequence, IAbac
+        public partial class CAbac : RSequence, ICAbac
         {
             public CAbac(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
-            public RLiteral String2 => Get<RLiteral>(1);
-            public RLiteral String3 => Get<RLiteral>(2);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal3 => Get<RLiteral>(2);
         }
 
-        public partial class CBbaa : RSequence, IBbaa
+        public partial class CBbaa : RSequence, ICBbaa
         {
             public CBbaa(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
-            public RLiteral String2 => Get<RLiteral>(1);
-            public RLiteral String3 => Get<RLiteral>(2);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal3 => Get<RLiteral>(2);
         }
 
-        public partial class CCbac : RSequence, ICbac
+        public partial class CCbac : RSequence, ICCbac
         {
             public CCbac(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CA A => Get<CA>(1);
-            public RLiteral String2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CA : RLiteral, IA
+        public partial class CA : RLiteral, ICA
         {
             public CA(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicT1Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

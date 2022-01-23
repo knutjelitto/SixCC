@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T3.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T3.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -84,48 +82,48 @@ namespace GeneratedParser
 
     public partial class T3Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IC {}
-        public interface IAdd : IC {}
-        public interface IId : IC {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICC : IRNode {}
+        public interface ICAdd : ICC {}
+        public interface ICId : ICC {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
-            public IC C => Get<IC>(0);
+            public ICC C => Get<ICC>(0);
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CAdd : RSequence, IAdd
+        public partial class CAdd : RSequence, ICAdd
         {
             public CAdd(params RNode[] children) : base(children) {}
 
-            public IC C => Get<IC>(0);
-            public RLiteral String => Get<RLiteral>(1);
-            public IC C2 => Get<IC>(2);
+            public ICC C => Get<ICC>(0);
+            public RLiteral Literal => Get<RLiteral>(1);
+            public ICC C2 => Get<ICC>(2);
         }
 
-        public partial class CId : RLiteral, IId
+        public partial class CId : RToken, ICId
         {
             public CId(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicT3Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

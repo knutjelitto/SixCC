@@ -4,7 +4,7 @@ namespace Six.Runtime
 {
     public abstract class DynamicVisitor
     {
-        public virtual void Walk(RNode element)
+        public virtual void Walk(IRNode element)
         {
         }
 

@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T6.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T6.six" at="23.01.2022 06:18:09" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -74,13 +72,13 @@ namespace GeneratedParser
 
     public partial class T6Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IT {}
-        public interface IE {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICT : IRNode {}
+        public interface ICE : IRNode {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
@@ -88,32 +86,32 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CT : RPlus<CE>, IT
+        public partial class CT : RPlus<CE>, ICT
         {
             public CT(params RNode[] children) : base(children) {}
         }
 
-        public partial class CE : RSequence, IE
+        public partial class CE : RSequence, ICE
         {
             public CE(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
-            public ROptional<RLiteral> String2Optional => Get<ROptional<RLiteral>>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public ROptional<RLiteral> Literal2Optional => Get<ROptional<RLiteral>>(1);
         }
 
         public partial class DynamicT6Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

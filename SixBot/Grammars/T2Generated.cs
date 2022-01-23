@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T2.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T2.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -85,32 +83,32 @@ namespace GeneratedParser
 
     public partial class T2Tree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IB {}
-        public interface IIds : IB {}
-        public interface IId {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICB : IRNode {}
+        public interface ICIds : ICB {}
+        public interface ICId : IRNode {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
-            public IB B => Get<IB>(0);
+            public ICB B => Get<ICB>(0);
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CIds : RSequence, IIds
+        public partial class CIds : RSequence, ICIds
         {
             public CIds(params RNode[] children) : base(children) {}
 
@@ -118,14 +116,14 @@ namespace GeneratedParser
             public RStar<CId> Id2Star => Get<RStar<CId>>(1);
         }
 
-        public partial class CId : RLiteral, IId
+        public partial class CId : RToken, ICId
         {
             public CId(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicT2Visitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

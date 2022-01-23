@@ -2,22 +2,23 @@
 {
     internal class ReachWalker : EbnfPredicator
     {
-        public ReachWalker()
+        public ReachWalker(EbnfGrammar grammar)
             : base(op => op.IsReached, (op, value) => op.IsReached = value)
         {
+            Grammar = grammar;
         }
 
-        public void Reach(EbnfGrammar grammar)
+        public EbnfGrammar Grammar { get; }
+
+        public EbnfGrammar Walk()
         {
-            Walk(grammar);
+            Walk(Grammar.StartRule);
+            Walk(Grammar.WhitespaceRule);
+            Walk(Grammar.KeywordsRule);
+
+            return Grammar;
         }
 
-        protected override void Walk(EbnfGrammar grammar)
-        {
-            Walk(grammar.StartRule);
-            Walk(grammar.WhitespaceRule);
-            Walk(grammar.KeywordsRule);
-        }
 
         protected override void Visit(AltOp op)
         {

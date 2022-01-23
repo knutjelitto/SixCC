@@ -15,7 +15,15 @@
 
         public string BaseName => Base == null ? string.Empty : Base.TypeName;
 
-        public string InterfaceNames => $"{string.Join(", ", Interfaces.Select(b => b.TypeName))}";
+        public string InterfaceNames
+        {
+            get
+            {
+                var names = $"{string.Join(", ", Interfaces.Select(b => b.TypeName))}";
+
+                return names;
+            }
+        }
 
         public override string ToString()
         {

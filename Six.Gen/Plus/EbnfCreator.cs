@@ -79,8 +79,14 @@ namespace Six.Gen.Ebnf
             if (namespaceSymbol != null)
             {
                 var expression = Create(namespaceSymbol.Expression);
-                Assert(expression is StringOp);
-                @namespace = (expression as StringOp)!.Text;
+                if (expression is StringOp stringOp)
+                {
+                    @namespace = stringOp.Text;
+                }
+                else
+                {
+                    Assert(false);
+                }
             }
 
             Ebnf.Namespace = @namespace;
@@ -113,23 +119,17 @@ namespace Six.Gen.Ebnf
                 }
             }
 
-            var id = 0;
             foreach (var op in Inners)
             {
-                Assert(op.Id == id);
-
-                id++;
-
                 Ebnf.Add(op);
             }
 
-            new ReachWalker().Reach(Ebnf);
-
+            Ebnf = new ReachWalker(Ebnf).Walk();
             Ebnf = new SetTransformer(Ebnf).Transform();
             Ebnf = new RexTransformer(Ebnf).Transform();
 
             var final = new List<CoreOp>();
-            id = 0;
+            var id = 0;
             // all reached rules
             foreach (var op in Ebnf.Rules.Where(op => op.IsReached))
             {
@@ -211,18 +211,21 @@ namespace Six.Gen.Ebnf
         private T Add<T>(T newOp)
             where T : CoreOp
         {
+            newOp.Id = currentId;
+
             var name = Namer.NameOf(newOp);
 
             if (!Inners.TryGetValue(name, out var coreOp))
             {
                 coreOp = newOp;
-                coreOp.Id = currentId++;
                 Inners.Add(coreOp);
 
                 if (coreOp is RefOp refOp)
                 {
                     References.Add(refOp);
                 }
+
+                currentId++;
             }
 
             return (T)coreOp;

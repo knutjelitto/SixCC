@@ -60,6 +60,8 @@ namespace Six.Runtime
                 return false;
             }
 
+            job.Sppf = sppf;
+
             job.Tree = TypedBuilder.Build(sppf);
 
             return true;

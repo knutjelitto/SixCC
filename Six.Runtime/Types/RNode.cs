@@ -1,6 +1,6 @@
 ﻿namespace Six.Runtime.Types
 {
-    public class RNode
+    public class RNode : IRNode
     {
         public RNode(params RNode[] children)
         {

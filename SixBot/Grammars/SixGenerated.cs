@@ -1,7 +1,5 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\Six.six" at="21.01.2022 08:19:00" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\Six.six" at="23.01.2022 06:18:08" />
 
-using System.Collections.Generic;
-using Six.Runtime;
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -319,33 +317,33 @@ namespace GeneratedParser
 
     public partial class SixTree
     {
-        public interface IXStart {}
-        public interface IXWhitespace {}
-        public interface IXKeywords {}
-        public interface IGrammar {}
-        public interface IOptions {}
-        public interface IOption {}
-        public interface IRules {}
-        public interface IRule {}
-        public interface IDefine {}
-        public interface IExpression {}
-        public interface ISequence {}
-        public interface IElement {}
-        public interface IRange : IElement {}
-        public interface IDiff : IElement {}
-        public interface IStar : IElement {}
-        public interface IPlus : IElement {}
-        public interface IOptional : IElement {}
-        public interface IComplement : IElement {}
-        public interface INot : IElement {}
-        public interface IAtom : IElement {}
-        public interface IGroupedExpression : IAtom {}
-        public interface ITokenExpression : IAtom {}
-        public interface ISpecialIdentifier {}
-        public interface IIdentifier : IAtom {}
-        public interface IString : IAtom {}
+        public interface ICXStart : IRNode {}
+        public interface ICXWhitespace : IRNode {}
+        public interface ICXKeywords : IRNode {}
+        public interface ICGrammar : IRNode {}
+        public interface ICOptions : IRNode {}
+        public interface ICOption : IRNode {}
+        public interface ICRules : IRNode {}
+        public interface ICRule : IRNode {}
+        public interface ICDefine : IRNode {}
+        public interface ICExpression : IRNode {}
+        public interface ICSequence : IRNode {}
+        public interface ICElement : IRNode {}
+        public interface ICRange : ICElement {}
+        public interface ICDiff : ICElement {}
+        public interface ICStar : ICElement {}
+        public interface ICPlus : ICElement {}
+        public interface ICOptional : ICElement {}
+        public interface ICComplement : ICElement {}
+        public interface ICNot : ICElement {}
+        public interface ICAtom : ICElement {}
+        public interface ICGroupedExpression : ICAtom {}
+        public interface ICTokenExpression : ICAtom {}
+        public interface ICSpecialIdentifier : IRNode {}
+        public interface ICIdentifier : ICAtom {}
+        public interface ICString : ICAtom {}
 
-        public partial class CXStart : RSequence, IXStart
+        public partial class CXStart : RSequence, ICXStart
         {
             public CXStart(params RNode[] children) : base(children) {}
 
@@ -353,166 +351,166 @@ namespace GeneratedParser
             public REof Eof => Get<REof>(1);
         }
 
-        public partial class CXWhitespace : RLiteral, IXWhitespace
+        public partial class CXWhitespace : RToken, ICXWhitespace
         {
             public CXWhitespace(params Node[] children) : base(children) {}
         }
 
-        public partial class CXKeywords : RLiteral, IXKeywords
+        public partial class CXKeywords : RToken, ICXKeywords
         {
             public CXKeywords(params Node[] children) : base(children) {}
         }
 
-        public partial class CGrammar : RSequence, IGrammar
+        public partial class CGrammar : RSequence, ICGrammar
         {
             public CGrammar(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CIdentifier Identifier => Get<CIdentifier>(1);
-            public RLiteral String2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
             public COptions Options => Get<COptions>(3);
             public CRules Rules => Get<CRules>(4);
         }
 
-        public partial class COptions : RStar<COption>, IOptions
+        public partial class COptions : RStar<COption>, ICOptions
         {
             public COptions(params RNode[] children) : base(children) {}
         }
 
-        public partial class COption : RSequence, IOption
+        public partial class COption : RSequence, ICOption
         {
             public COption(params RNode[] children) : base(children) {}
 
             public CSpecialIdentifier SpecialIdentifier => Get<CSpecialIdentifier>(0);
-            public RLiteral String => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1);
             public CExpression Expression => Get<CExpression>(2);
-            public RLiteral String2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3);
         }
 
-        public partial class CRules : RStar<CRule>, IRules
+        public partial class CRules : RStar<CRule>, ICRules
         {
             public CRules(params RNode[] children) : base(children) {}
         }
 
-        public partial class CRule : RSequence, IRule
+        public partial class CRule : RSequence, ICRule
         {
             public CRule(params RNode[] children) : base(children) {}
 
             public CIdentifier Identifier => Get<CIdentifier>(0);
             public CDefine Define => Get<CDefine>(1);
             public CExpression Expression => Get<CExpression>(2);
-            public RLiteral String => Get<RLiteral>(3);
+            public RLiteral Literal => Get<RLiteral>(3);
         }
 
-        public partial class CDefine : RLiteral, IDefine
+        public partial class CDefine : RLiteral, ICDefine
         {
             public CDefine(params Node[] children) : base(children) {}
         }
 
-        public partial class CExpression : RLoop<CSequence>, IExpression
+        public partial class CExpression : RLoop<CSequence>, ICExpression
         {
             public CExpression(params RNode[] children) : base(children) {}
         }
 
-        public partial class CSequence : RStar<IElement>, ISequence
+        public partial class CSequence : RStar<ICElement>, ICSequence
         {
             public CSequence(params RNode[] children) : base(children) {}
         }
 
-        public partial class CRange : RSequence, IRange
+        public partial class CRange : RSequence, ICRange
         {
             public CRange(params RNode[] children) : base(children) {}
 
-            public IAtom Atom => Get<IAtom>(0);
-            public RLiteral String => Get<RLiteral>(1);
-            public IAtom Atom2 => Get<IAtom>(2);
+            public ICAtom Atom => Get<ICAtom>(0);
+            public RLiteral Literal => Get<RLiteral>(1);
+            public ICAtom Atom2 => Get<ICAtom>(2);
         }
 
-        public partial class CDiff : RSequence, IDiff
+        public partial class CDiff : RSequence, ICDiff
         {
             public CDiff(params RNode[] children) : base(children) {}
 
-            public IAtom Atom => Get<IAtom>(0);
-            public RLiteral String => Get<RLiteral>(1);
-            public IAtom Atom2 => Get<IAtom>(2);
+            public ICAtom Atom => Get<ICAtom>(0);
+            public RLiteral Literal => Get<RLiteral>(1);
+            public ICAtom Atom2 => Get<ICAtom>(2);
         }
 
-        public partial class CStar : RSequence, IStar
+        public partial class CStar : RSequence, ICStar
         {
             public CStar(params RNode[] children) : base(children) {}
 
-            public IAtom Atom => Get<IAtom>(0);
-            public RLiteral String => Get<RLiteral>(1);
+            public ICAtom Atom => Get<ICAtom>(0);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CPlus : RSequence, IPlus
+        public partial class CPlus : RSequence, ICPlus
         {
             public CPlus(params RNode[] children) : base(children) {}
 
-            public IAtom Atom => Get<IAtom>(0);
-            public RLiteral String => Get<RLiteral>(1);
+            public ICAtom Atom => Get<ICAtom>(0);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class COptional : RSequence, IOptional
+        public partial class COptional : RSequence, ICOptional
         {
             public COptional(params RNode[] children) : base(children) {}
 
-            public IAtom Atom => Get<IAtom>(0);
-            public RLiteral String => Get<RLiteral>(1);
+            public ICAtom Atom => Get<ICAtom>(0);
+            public RLiteral Literal => Get<RLiteral>(1);
         }
 
-        public partial class CComplement : RSequence, IComplement
+        public partial class CComplement : RSequence, ICComplement
         {
             public CComplement(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
-            public IAtom Atom => Get<IAtom>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public ICAtom Atom => Get<ICAtom>(1);
         }
 
-        public partial class CNot : RSequence, INot
+        public partial class CNot : RSequence, ICNot
         {
             public CNot(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
-            public IAtom Atom => Get<IAtom>(1);
+            public RLiteral Literal => Get<RLiteral>(0);
+            public ICAtom Atom => Get<ICAtom>(1);
         }
 
-        public partial class CGroupedExpression : RSequence, IGroupedExpression
+        public partial class CGroupedExpression : RSequence, ICGroupedExpression
         {
             public CGroupedExpression(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CExpression Expression => Get<CExpression>(1);
-            public RLiteral String2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CTokenExpression : RSequence, ITokenExpression
+        public partial class CTokenExpression : RSequence, ICTokenExpression
         {
             public CTokenExpression(params RNode[] children) : base(children) {}
 
-            public RLiteral String => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0);
             public CExpression Expression => Get<CExpression>(1);
-            public RLiteral String2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2);
         }
 
-        public partial class CSpecialIdentifier : RLiteral, ISpecialIdentifier
+        public partial class CSpecialIdentifier : RToken, ICSpecialIdentifier
         {
             public CSpecialIdentifier(params Node[] children) : base(children) {}
         }
 
-        public partial class CIdentifier : RLiteral, IIdentifier
+        public partial class CIdentifier : RToken, ICIdentifier
         {
             public CIdentifier(params Node[] children) : base(children) {}
         }
 
-        public partial class CString : RLiteral, IString
+        public partial class CString : RToken, ICString
         {
             public CString(params Node[] children) : base(children) {}
         }
 
         public partial class DynamicSixVisitor : DynamicVisitor
         {
-            public override void Walk(RNode node)
+            public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
             }

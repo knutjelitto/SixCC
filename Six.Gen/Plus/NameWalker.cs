@@ -90,7 +90,10 @@ namespace Six.Gen.Ebnf
 
         protected override void Visit(SeqOp op)
         {
-            Left("_");
+            Write("_");
+            Assert(op.Id != -1);
+            Write($"{op.Id}:");
+            Write(LeftParent);
             Arguments(op, Comma);
             Right();
         }
