@@ -18,7 +18,7 @@ shared Directory temporaryDirectory()
     if (!exists tempDirString)
     {
         throw AssertionError(
-            "Cannot determine system temporary directory path; \
+            "Cannot determine system temporary directory path;
              system property 'java.io.tmpdir' is not set.");
     }
     value directory = parsePath(tempDirString).resource.linkedResource;

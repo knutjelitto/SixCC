@@ -30,29 +30,32 @@ namespace Six.Ceylon
 
         protected override void Visit(CLiteralString element)
         {
+            element.Value = new StandardString(element);
         }
 
         protected override void Visit(CLiteralChar element)
         {
+            element.Value = new CharString(element);
         }
 
         protected override void Visit(CVerbatimString element)
         {
+            element.Value = new VerbatimString(element);
         }
 
         protected override void Visit(CStringStart element)
         {
-            Assert(element.Text.StartsWith("\"") && element.Text.EndsWith("``"));
+            element.Value = new StartInterpolationString(element);
         }
 
         protected override void Visit(CStringEnd element)
         {
-            Assert(element.Text.StartsWith("``") && element.Text.EndsWith("\""));
+            element.Value = new EndInterpolationString(element);
         }
 
         protected override void Visit(CStringMid element)
         {
-            Assert(element.Text.StartsWith("``") && element.Text.EndsWith("``"));
+            element.Value = new MidInterpolationString(element);
         }
     }
 }

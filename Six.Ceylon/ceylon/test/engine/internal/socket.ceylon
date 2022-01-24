@@ -69,7 +69,7 @@ class SocketFacadeJvm satisfies SocketFacade {
     
     shared actual void write(String data) {
         writer.write(data);
-        writer.write('\{END OF TRANSMISSION}'.integer);
+        writer.write('\{#0004}'.integer); // '\{END OF TRANSMISSION}'
         writer.flush();
     }
     

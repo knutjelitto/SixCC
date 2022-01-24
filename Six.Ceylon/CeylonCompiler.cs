@@ -8,8 +8,8 @@ namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-        private readonly CeylonVisitor declarationVisitor = new();
         private readonly CompilerConfiguration configuration;
+        private readonly World world;
 
         public CeylonCompiler(CompilerConfiguration configuration)
         {
@@ -19,6 +19,8 @@ namespace Six.Ceylon
             }
 
             this.configuration = configuration;
+
+            world = new World();
         }
 
         public void Report()
@@ -98,6 +100,12 @@ namespace Six.Ceylon
 
             if (ok)
             {
+                if (file.Tree != null)
+                {
+                    var visitor = new CeylonVisitor(world);
+                    visitor.Walk(file.Tree);
+                }
+
                 if (configuration.DumpSppf && file.Sppf != null)
                 {
                     using (var writer = $"{file.ShortPath}.sppf".Writer())
@@ -111,8 +119,6 @@ namespace Six.Ceylon
                     {
                         TypedDumper.Dump(file.Tree, writer);
                     }
-
-                    declarationVisitor.Walk(file.Tree);
                 }
             }
 

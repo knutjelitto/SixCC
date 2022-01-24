@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Ceylon\\Ceylon.six" at="24.01.2022 07:48:45" />
+// <generated from="C:\\Dev\\Knut\\SixCC\\Six.Ceylon\\Ceylon.six" at="24.01.2022 14:15:03" />
 
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
@@ -161,7 +161,7 @@ namespace Six.Ceylon
                 /* 136 PlainRuleOp      */ __Matchers[136] = _typedMethodArgument = new PlainRule(this, 136, "typed-method-argument") { Builder = nodes => nodes[0] };
                 /* 137 PlainRuleOp      */ __Matchers[137] = _methodDefinition = new PlainRule(this, 137, "method-definition") { Builder = nodes => nodes[0] };
                 /* 138 PlainRuleOp      */ __Matchers[138] = _optionalFunctionSpecifier = new PlainRule(this, 138, "optional-function-specifier") { Builder = nodes => nodes[0] };
-                /* 139 PlainRuleOp      */ __Matchers[139] = _neededFunctionSpecifier = new PlainRule(this, 139, "needed-function-specifier") { Builder = nodes => nodes[0] };
+                /* 139 PlainRuleOp      */ __Matchers[139] = _requiredFunctionSpecifier = new PlainRule(this, 139, "required-function-specifier") { Builder = nodes => nodes[0] };
                 /* 140 PlainRuleOp      */ __Matchers[140] = _methodArgumentType = new PlainRule(this, 140, "method-argument-type") { Builder = nodes => nodes[0] };
                 /* 141 PlainRuleOp      */ __Matchers[141] = _typedGetterArgument = new PlainRule(this, 141, "typed-getter-argument") { Builder = nodes => nodes[0] };
                 /* 142 PlainRuleOp      */ __Matchers[142] = _getterArgumentType = new PlainRule(this, 142, "getter-argument-type") { Builder = nodes => nodes[0] };
@@ -541,7 +541,7 @@ namespace Six.Ceylon
                 /* 516 SeqOp            */ __Matchers[516] = new Seq(this, 516, "_516:(>annotations,'object',>member-name,?(>extended-type),?(>satisfied-types),>class-block)") { Builder = nodes => new CObjectDeclaration(nodes) };
                 /* 517 StringOp         */ __Matchers[517] = new Keyword(this, 517, "'assign'", "assign") { Creator = node => new RLiteral(node) };
                 /* 518 SeqOp            */ __Matchers[518] = new Seq(this, 518, "_518:(>annotations,'assign',>member-name,>setter-definition)") { Builder = nodes => new CSetterDeclaration(nodes) };
-                /* 519 AltOp            */ __Matchers[519] = new Alt(this, 519, "alt(>block|>needed-function-specifier)") { Builder = nodes => nodes[0] };
+                /* 519 AltOp            */ __Matchers[519] = new Alt(this, 519, "alt(>block|>required-function-specifier)") { Builder = nodes => nodes[0] };
                 /* 520 SeqOp            */ __Matchers[520] = new Seq(this, 520, "_520:(>annotations,>variadic-type,>parametrized-member,?(>type-constraints),>method-definition)") { Builder = nodes => new CTypedMethodDeclaration(nodes) };
                 /* 521 StringOp         */ __Matchers[521] = new Keyword(this, 521, "'void'", "void") { Creator = node => new CKwVoid(node) };
                 /* 522 SeqOp            */ __Matchers[522] = new Seq(this, 522, "_522:(>annotations,'void',>parametrized-member,?(>type-constraints),>method-definition)") { Builder = nodes => new CVoidMethodDeclaration(nodes) };
@@ -610,13 +610,13 @@ namespace Six.Ceylon
                 /* 585 SeqOp            */ __Matchers[585] = new Seq(this, 585, "_585:(>method-argument-type,>parametrized-member,>method-definition)") { Builder = nodes => new CTypedMethodArgument(nodes) };
                 /* 586 AltOp            */ __Matchers[586] = new Alt(this, 586, "alt(>block|>optional-function-specifier)") { Builder = nodes => nodes[0] };
                 /* 587 SeqOp            */ __Matchers[587] = new Seq(this, 587, "_587:(?(>function-specifier),';')") { Builder = nodes => new COptionalFunctionSpecifier(nodes) };
-                /* 588 SeqOp            */ __Matchers[588] = new Seq(this, 588, "_588:(>function-specifier,';')") { Builder = nodes => new CNeededFunctionSpecifier(nodes) };
+                /* 588 SeqOp            */ __Matchers[588] = new Seq(this, 588, "_588:(>function-specifier,';')") { Builder = nodes => new CRequiredFunctionSpecifier(nodes) };
                 /* 589 AltOp            */ __Matchers[589] = new Alt(this, 589, "alt(>type|>kw-void)") { Builder = nodes => nodes[0] };
                 /* 590 SeqOp            */ __Matchers[590] = new Seq(this, 590, "_590:(>getter-argument-type,>member-name,>method-definition)") { Builder = nodes => new CTypedGetterArgument(nodes) };
                 /* 591 SeqOp            */ __Matchers[591] = new Seq(this, 591, "_591:('function',?(>member-name),?(>type-parameters),>parameters,>method-definition)") { Builder = nodes => new CInferredMethodArgument(nodes) };
                 /* 592 SeqOp            */ __Matchers[592] = new Seq(this, 592, "_592:('value',>member-name,>method-definition)") { Builder = nodes => new CInferredGetterArgument(nodes) };
-                /* 593 SeqOp            */ __Matchers[593] = new Seq(this, 593, "_593:(>member-name,+(>parameters),>needed-function-specifier)") { Builder = nodes => new CUntypedMethodArgument(nodes) };
-                /* 594 SeqOp            */ __Matchers[594] = new Seq(this, 594, "_594:(>member-name,>needed-function-specifier)") { Builder = nodes => new CUntypedGetterArgument(nodes) };
+                /* 593 SeqOp            */ __Matchers[593] = new Seq(this, 593, "_593:(>member-name,+(>parameters),>required-function-specifier)") { Builder = nodes => new CUntypedMethodArgument(nodes) };
+                /* 594 SeqOp            */ __Matchers[594] = new Seq(this, 594, "_594:(>member-name,>required-function-specifier)") { Builder = nodes => new CUntypedGetterArgument(nodes) };
                 /* 595 SeqOp            */ __Matchers[595] = new Seq(this, 595, "_595:('(',?(>sequenced-arguments),')')") { Builder = nodes => new CPositionalArguments(nodes) };
                 /* 596 AltOp            */ __Matchers[596] = new Alt(this, 596, "alt(>expression|>declaration-reference)") { Builder = nodes => nodes[0] };
                 /* 597 StringOp         */ __Matchers[597] = new String(this, 597, "'*'", "*") { Creator = node => new RLiteral(node) };
@@ -1040,7 +1040,7 @@ namespace Six.Ceylon
                 /* 136 PlainRuleOp      */ _typedMethodArgument.Set(__Matchers[585]);
                 /* 137 PlainRuleOp      */ _methodDefinition.Set(__Matchers[586]);
                 /* 138 PlainRuleOp      */ _optionalFunctionSpecifier.Set(__Matchers[587]);
-                /* 139 PlainRuleOp      */ _neededFunctionSpecifier.Set(__Matchers[588]);
+                /* 139 PlainRuleOp      */ _requiredFunctionSpecifier.Set(__Matchers[588]);
                 /* 140 PlainRuleOp      */ _methodArgumentType.Set(__Matchers[589]);
                 /* 141 PlainRuleOp      */ _typedGetterArgument.Set(__Matchers[590]);
                 /* 142 PlainRuleOp      */ _getterArgumentType.Set(_type);
@@ -1386,7 +1386,7 @@ namespace Six.Ceylon
                 /* 515 OptionalOp       */ __Matchers[515].Set(_extendedType);
                 /* 516 SeqOp            */ __Matchers[516].Set(_annotations, __Matchers[514], _memberName, __Matchers[515], __Matchers[501], _classBlock);
                 /* 518 SeqOp            */ __Matchers[518].Set(_annotations, __Matchers[517], _memberName, _setterDefinition);
-                /* 519 AltOp            */ __Matchers[519].Set(_block, _neededFunctionSpecifier);
+                /* 519 AltOp            */ __Matchers[519].Set(_block, _requiredFunctionSpecifier);
                 /* 520 SeqOp            */ __Matchers[520].Set(_annotations, _variadicType, _parametrizedMember, __Matchers[511], _methodDefinition);
                 /* 522 SeqOp            */ __Matchers[522].Set(_annotations, __Matchers[521], _parametrizedMember, __Matchers[511], _methodDefinition);
                 /* 524 SeqOp            */ __Matchers[524].Set(_annotations, __Matchers[523], _parametrizedMember, __Matchers[511], _methodDefinition);
@@ -1449,8 +1449,8 @@ namespace Six.Ceylon
                 /* 590 SeqOp            */ __Matchers[590].Set(_getterArgumentType, _memberName, _methodDefinition);
                 /* 591 SeqOp            */ __Matchers[591].Set(__Matchers[523], __Matchers[507], __Matchers[478], _parameters, _methodDefinition);
                 /* 592 SeqOp            */ __Matchers[592].Set(__Matchers[526], _memberName, _methodDefinition);
-                /* 593 SeqOp            */ __Matchers[593].Set(_memberName, __Matchers[479], _neededFunctionSpecifier);
-                /* 594 SeqOp            */ __Matchers[594].Set(_memberName, _neededFunctionSpecifier);
+                /* 593 SeqOp            */ __Matchers[593].Set(_memberName, __Matchers[479], _requiredFunctionSpecifier);
+                /* 594 SeqOp            */ __Matchers[594].Set(_memberName, _requiredFunctionSpecifier);
                 /* 595 SeqOp            */ __Matchers[595].Set(__Matchers[429], __Matchers[569], __Matchers[430]);
                 /* 596 AltOp            */ __Matchers[596].Set(_expression, _declarationReference);
                 /* 598 SeqOp            */ __Matchers[598].Set(__Matchers[597], _unionExpression);
@@ -2859,7 +2859,7 @@ namespace Six.Ceylon
             private PlainRule _typedMethodArgument;
             private PlainRule _methodDefinition;
             private PlainRule _optionalFunctionSpecifier;
-            private PlainRule _neededFunctionSpecifier;
+            private PlainRule _requiredFunctionSpecifier;
             private PlainRule _methodArgumentType;
             private PlainRule _typedGetterArgument;
             private PlainRule _getterArgumentType;
@@ -3247,7 +3247,7 @@ namespace Six.Ceylon
         public interface ICTypedMethodArgument : ICNamedArgumentDeclaration {}
         public interface ICMethodDefinition : IRNode {}
         public interface ICOptionalFunctionSpecifier : ICMethodDefinition {}
-        public interface ICNeededFunctionSpecifier : ICSetterDefinition {}
+        public interface ICRequiredFunctionSpecifier : ICSetterDefinition {}
         public interface ICMethodArgumentType : IRNode {}
         public interface ICTypedGetterArgument : ICNamedArgumentDeclaration {}
         public interface ICGetterArgumentType : IRNode {}
@@ -3518,7 +3518,7 @@ namespace Six.Ceylon
             public CModuleDescriptor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'module'
             public ICModuleName ModuleName => Get<ICModuleName>(2);
             public ROptional<CModuleSpecifier> ModuleSpecifierOptional => Get<ROptional<CModuleSpecifier>>(3);
             public ROptional<ICVersion> VersionOptional => Get<ROptional<ICVersion>>(4);
@@ -3531,7 +3531,7 @@ namespace Six.Ceylon
             public CModuleSpecifier(params RNode[] children) : base(children) {}
 
             public ICRepository Repository => Get<ICRepository>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ':'
             public ICModule Module => Get<ICModule>(2);
             public ROptional<CArtifactAndClassifier> ArtifactAndClassifierOptional => Get<ROptional<CArtifactAndClassifier>>(3);
         }
@@ -3550,7 +3550,7 @@ namespace Six.Ceylon
             // sequence
             public CArtifact(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // ':'
             public CLiteralString LiteralString => Get<CLiteralString>(1);
         }
 
@@ -3559,7 +3559,7 @@ namespace Six.Ceylon
             // sequence
             public CClassifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // ':'
             public CLiteralString LiteralString => Get<CLiteralString>(1);
         }
 
@@ -3568,9 +3568,9 @@ namespace Six.Ceylon
             // sequence
             public CModuleBody(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '{'
             public RStar<ICModuleBodyElement> ModuleBodyElementStar => Get<RStar<ICModuleBodyElement>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '}'
         }
 
         public partial class CPackageDescriptor : RSequence, ICPackageDescriptor
@@ -3579,9 +3579,9 @@ namespace Six.Ceylon
             public CPackageDescriptor(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'package'
             public CPackagePath PackagePath => Get<CPackagePath>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // ';'
         }
 
         public partial class CImportModule : RSequence, ICImportModule
@@ -3590,10 +3590,10 @@ namespace Six.Ceylon
             public CImportModule(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'import'
             public ICModule Module => Get<ICModule>(2);
             public ROptional<ICVersion> VersionOptional => Get<ROptional<ICVersion>>(3);
-            public RLiteral Literal2 => Get<RLiteral>(4);
+            public RLiteral Literal2 => Get<RLiteral>(4); // ';'
         }
 
         public partial class CImportDeclaration : RSequence, ICImportDeclaration
@@ -3601,7 +3601,7 @@ namespace Six.Ceylon
             // sequence
             public CImportDeclaration(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'import'
             public CPackagePath PackagePath => Get<CPackagePath>(1);
             public CImportElements ImportElements => Get<CImportElements>(2);
         }
@@ -3611,9 +3611,9 @@ namespace Six.Ceylon
             // sequence
             public CImportElements(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '{'
             public ROptional<CImportElementList> ImportElementListOptional => Get<ROptional<CImportElementList>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '}'
         }
 
         public partial class CImportElementList : RLoop<ICImportElement>, ICImportElementList
@@ -3637,7 +3637,7 @@ namespace Six.Ceylon
             // sequence
             public CImportNameSpecifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '='
             public CIdentifier Identifier => Get<CIdentifier>(1);
         }
 
@@ -3659,7 +3659,7 @@ namespace Six.Ceylon
             public CEntryPattern(params RNode[] children) : base(children) {}
 
             public ICVariableOrTuplePattern VariableOrTuplePattern => Get<ICVariableOrTuplePattern>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '->'
             public ICVariableOrTuplePattern VariableOrTuplePattern2 => Get<ICVariableOrTuplePattern>(2);
         }
 
@@ -3668,9 +3668,9 @@ namespace Six.Ceylon
             // sequence
             public CTuplePattern(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '['
             public ROptional<CVariadicPatternList> VariadicPatternListOptional => Get<ROptional<CVariadicPatternList>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ']'
         }
 
         public partial class CVariadicPatternList : RLoop<ICVariadicPattern>, ICVariadicPatternList
@@ -3694,10 +3694,10 @@ namespace Six.Ceylon
             // sequence
             public CLetStatement(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'let'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '('
             public CLetVariableList LetVariableList => Get<CLetVariableList>(2);
-            public RLiteral Literal3 => Get<RLiteral>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3); // ')'
         }
 
         public partial class CDelegatedConstructor : RSequence, ICDelegatedConstructor
@@ -3705,7 +3705,7 @@ namespace Six.Ceylon
             // sequence
             public CDelegatedConstructor(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'extends'
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
@@ -3715,7 +3715,7 @@ namespace Six.Ceylon
             public CAssertionStatement(params RNode[] children) : base(children) {}
 
             public ROptional<ICAssertionMessage> AssertionMessageOptional => Get<ROptional<ICAssertionMessage>>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'assert'
             public CConditions Conditions => Get<CConditions>(2);
         }
 
@@ -3724,10 +3724,10 @@ namespace Six.Ceylon
             // sequence
             public CBlockElements(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '{'
             public CImportDeclarations ImportDeclarations => Get<CImportDeclarations>(1);
             public RStar<ICDeclarationOrStatement> DeclarationOrStatementStar => Get<RStar<ICDeclarationOrStatement>>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // '}'
         }
 
         public partial class CExtendedType : RSequence, ICExtendedType
@@ -3735,7 +3735,7 @@ namespace Six.Ceylon
             // sequence
             public CExtendedType(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'extends'
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
@@ -3744,7 +3744,7 @@ namespace Six.Ceylon
             // sequence
             public CClassSpecifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '=>'
             public CClassInstatiation ClassInstatiation => Get<CClassInstatiation>(1);
         }
 
@@ -3762,8 +3762,8 @@ namespace Six.Ceylon
             // sequence
             public CSuperQualifiedClass(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'super'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
             public ICBaseReference BaseReference => Get<ICBaseReference>(2);
         }
 
@@ -3772,8 +3772,8 @@ namespace Six.Ceylon
             // sequence
             public CPackageQualifiedClass(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'package'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
             public ICUnQualifiedClass UnQualifiedClass => Get<ICUnQualifiedClass>(2);
         }
 
@@ -3782,8 +3782,8 @@ namespace Six.Ceylon
             // sequence
             public CPackageQualifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'package'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
         }
 
         public partial class CMemberPath : RSequence, ICMemberPath
@@ -3792,7 +3792,7 @@ namespace Six.Ceylon
             public CMemberPath(params RNode[] children) : base(children) {}
 
             public CTypePath TypePath => Get<CTypePath>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '.'
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
@@ -3807,7 +3807,7 @@ namespace Six.Ceylon
             // sequence
             public CSatisfiedTypes(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'satisfies'
             public CUnionTypeList UnionTypeList => Get<CUnionTypeList>(1);
         }
 
@@ -3822,7 +3822,7 @@ namespace Six.Ceylon
             // sequence
             public CCaseTypes(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'of'
             public CCaseTypeList CaseTypeList => Get<CCaseTypeList>(1);
         }
 
@@ -3846,9 +3846,9 @@ namespace Six.Ceylon
             // sequence
             public CParameters(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '('
             public ROptional<CParameterList> ParameterListOptional => Get<ROptional<CParameterList>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
         }
 
         public partial class CParameterList : RLoop<ICParameterDeclarationOrRefPattern>, ICParameterList
@@ -3902,9 +3902,9 @@ namespace Six.Ceylon
             // sequence
             public CTypeParameters(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '<'
             public CTypeParameterList TypeParameterList => Get<CTypeParameterList>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '>'
         }
 
         public partial class CTypeParameterList : RLoop<CTypeParameter>, ICTypeParameterList
@@ -3934,7 +3934,7 @@ namespace Six.Ceylon
             // sequence
             public CTypeDefault(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '='
             public ICType Type => Get<ICType>(1);
         }
 
@@ -3943,7 +3943,7 @@ namespace Six.Ceylon
             // sequence
             public CTypeConstraint(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'given'
             public ROptional<ICTypeName> TypeNameOptional => Get<ROptional<ICTypeName>>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(3);
@@ -3962,7 +3962,7 @@ namespace Six.Ceylon
             public CConstructorDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'new'
             public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(2);
             public CParameters Parameters => Get<CParameters>(3);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(4);
@@ -3975,7 +3975,7 @@ namespace Six.Ceylon
             public CAliasDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'alias'
             public ICTypeName TypeName => Get<ICTypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(4);
@@ -3988,7 +3988,7 @@ namespace Six.Ceylon
             public CEnumeratedObjectDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'new'
             public ICMemberName MemberName => Get<ICMemberName>(2);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(3);
             public ICBlock Block => Get<ICBlock>(4);
@@ -4000,7 +4000,7 @@ namespace Six.Ceylon
             public CObjectDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'object'
             public ICMemberName MemberName => Get<ICMemberName>(2);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(3);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
@@ -4013,7 +4013,7 @@ namespace Six.Ceylon
             public CSetterDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'assign'
             public ICMemberName MemberName => Get<ICMemberName>(2);
             public ICSetterDefinition SetterDefinition => Get<ICSetterDefinition>(3);
         }
@@ -4036,7 +4036,7 @@ namespace Six.Ceylon
             public CVoidMethodDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'void'
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
             public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
@@ -4048,7 +4048,7 @@ namespace Six.Ceylon
             public CInferredMethodDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'function'
             public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
             public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
             public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
@@ -4071,7 +4071,7 @@ namespace Six.Ceylon
             public CInferredAttributeDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'value'
             public ICMemberName MemberName => Get<ICMemberName>(2);
             public ICAttributeDefinition AttributeDefinition => Get<ICAttributeDefinition>(3);
         }
@@ -4082,7 +4082,7 @@ namespace Six.Ceylon
             public COptionalAnySpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<ICAnySpecifier> AnySpecifierOptional => Get<ROptional<ICAnySpecifier>>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
         public partial class CClassDeclaration : RSequence, ICClassDeclaration
@@ -4091,7 +4091,7 @@ namespace Six.Ceylon
             public CClassDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'class'
             public ICTypeName TypeName => Get<ICTypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CParameters> ParametersOptional => Get<ROptional<CParameters>>(4);
@@ -4108,7 +4108,7 @@ namespace Six.Ceylon
             public COptionalClassSpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<CClassSpecifier> ClassSpecifierOptional => Get<ROptional<CClassSpecifier>>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
         public partial class CInterfaceDeclaration : RSequence, ICInterfaceDeclaration
@@ -4117,7 +4117,7 @@ namespace Six.Ceylon
             public CInterfaceDeclaration(params RNode[] children) : base(children) {}
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'interface'
             public ICTypeName TypeName => Get<ICTypeName>(2);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
             public ROptional<CCaseTypes> CaseTypesOptional => Get<ROptional<CCaseTypes>>(4);
@@ -4132,7 +4132,7 @@ namespace Six.Ceylon
             public COptionalTypeSpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<CTypeSpecifier> TypeSpecifierOptional => Get<ROptional<CTypeSpecifier>>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
         public partial class CUnclosedStatement : RSequence, ICUnclosedStatement
@@ -4141,7 +4141,7 @@ namespace Six.Ceylon
             public CUnclosedStatement(params RNode[] children) : base(children) {}
 
             public ICOpenStatement OpenStatement => Get<ICOpenStatement>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
         public partial class CSpecificationStatement : RSequence, ICSpecificationStatement
@@ -4158,7 +4158,7 @@ namespace Six.Ceylon
             // sequence
             public CReturnStatement(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'return'
             public ROptional<ICExpression> ExpressionOptional => Get<ROptional<ICExpression>>(1);
         }
 
@@ -4167,7 +4167,7 @@ namespace Six.Ceylon
             // sequence
             public CThrowStatement(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'throw'
             public ROptional<ICExpression> ExpressionOptional => Get<ROptional<ICExpression>>(1);
         }
 
@@ -4188,7 +4188,7 @@ namespace Six.Ceylon
             // sequence
             public CTypeSpecifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '=>'
             public ICType Type => Get<ICType>(1);
         }
 
@@ -4197,7 +4197,7 @@ namespace Six.Ceylon
             // sequence
             public CValueSpecifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '='
             public ICExpression Expression => Get<ICExpression>(1);
         }
 
@@ -4206,7 +4206,7 @@ namespace Six.Ceylon
             // sequence
             public CFunctionSpecifier(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '=>'
             public ICExpression Expression => Get<ICExpression>(1);
         }
 
@@ -4267,10 +4267,10 @@ namespace Six.Ceylon
             // sequence
             public CEnumerationExpr(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '{'
             public RStar<ICDeclarationOrStatement> DeclarationOrStatementStar => Get<RStar<ICDeclarationOrStatement>>(1);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // '}'
         }
 
         public partial class CTupleExpr : RSequence, ICTupleExpr
@@ -4278,9 +4278,9 @@ namespace Six.Ceylon
             // sequence
             public CTupleExpr(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '['
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ']'
         }
 
         public partial class CStructuralArguments : RSequence, ICStructuralArguments
@@ -4288,10 +4288,10 @@ namespace Six.Ceylon
             // sequence
             public CStructuralArguments(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '{'
             public RStar<ICNamedOrAnonymous> NamedOrAnonymousStar => Get<RStar<ICNamedOrAnonymous>>(1);
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // '}'
         }
 
         public partial class CAnonymousArgument : RSequence, ICAnonymousArgument
@@ -4300,7 +4300,7 @@ namespace Six.Ceylon
             public CAnonymousArgument(params RNode[] children) : base(children) {}
 
             public ICExpression Expression => Get<ICExpression>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
         public partial class CNamedSpecifiedArgument : RSequence, ICNamedSpecifiedArgument
@@ -4310,7 +4310,7 @@ namespace Six.Ceylon
 
             public ICMemberName MemberName => Get<ICMemberName>(0);
             public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
-            public RLiteral Literal => Get<RLiteral>(2);
+            public RLiteral Literal => Get<RLiteral>(2); // ';'
         }
 
         public partial class CSequencedArguments : RLoop<ICSequencedArgument>, ICSequencedArguments
@@ -4324,7 +4324,7 @@ namespace Six.Ceylon
             // sequence
             public CObjectArgument(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'object'
             public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(1);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(2);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(3);
@@ -4347,16 +4347,16 @@ namespace Six.Ceylon
             public COptionalFunctionSpecifier(params RNode[] children) : base(children) {}
 
             public ROptional<CFunctionSpecifier> FunctionSpecifierOptional => Get<ROptional<CFunctionSpecifier>>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
-        public partial class CNeededFunctionSpecifier : RSequence, ICNeededFunctionSpecifier
+        public partial class CRequiredFunctionSpecifier : RSequence, ICRequiredFunctionSpecifier
         {
             // sequence
-            public CNeededFunctionSpecifier(params RNode[] children) : base(children) {}
+            public CRequiredFunctionSpecifier(params RNode[] children) : base(children) {}
 
             public CFunctionSpecifier FunctionSpecifier => Get<CFunctionSpecifier>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ';'
         }
 
         public partial class CTypedGetterArgument : RSequence, ICTypedGetterArgument
@@ -4374,7 +4374,7 @@ namespace Six.Ceylon
             // sequence
             public CInferredMethodArgument(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'function'
             public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(1);
             public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(2);
             public CParameters Parameters => Get<CParameters>(3);
@@ -4386,7 +4386,7 @@ namespace Six.Ceylon
             // sequence
             public CInferredGetterArgument(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'value'
             public ICMemberName MemberName => Get<ICMemberName>(1);
             public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(2);
         }
@@ -4398,7 +4398,7 @@ namespace Six.Ceylon
 
             public ICMemberName MemberName => Get<ICMemberName>(0);
             public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(1);
-            public CNeededFunctionSpecifier NeededFunctionSpecifier => Get<CNeededFunctionSpecifier>(2);
+            public CRequiredFunctionSpecifier RequiredFunctionSpecifier => Get<CRequiredFunctionSpecifier>(2);
         }
 
         public partial class CUntypedGetterArgument : RSequence, ICUntypedGetterArgument
@@ -4407,7 +4407,7 @@ namespace Six.Ceylon
             public CUntypedGetterArgument(params RNode[] children) : base(children) {}
 
             public ICMemberName MemberName => Get<ICMemberName>(0);
-            public CNeededFunctionSpecifier NeededFunctionSpecifier => Get<CNeededFunctionSpecifier>(1);
+            public CRequiredFunctionSpecifier RequiredFunctionSpecifier => Get<CRequiredFunctionSpecifier>(1);
         }
 
         public partial class CPositionalArguments : RSequence, ICPositionalArguments
@@ -4415,9 +4415,9 @@ namespace Six.Ceylon
             // sequence
             public CPositionalArguments(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '('
             public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
         }
 
         public partial class CSpreadArgument : RSequence, ICSpreadArgument
@@ -4425,7 +4425,7 @@ namespace Six.Ceylon
             // sequence
             public CSpreadArgument(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '*'
             public ICUnionExpression UnionExpression => Get<ICUnionExpression>(1);
         }
 
@@ -4434,10 +4434,10 @@ namespace Six.Ceylon
             // sequence
             public CLetExpr(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'let'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '('
             public ROptional<CLetVariableList> LetVariableListOptional => Get<ROptional<CLetVariableList>>(2);
-            public RLiteral Literal3 => Get<RLiteral>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3); // ')'
             public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(4);
         }
 
@@ -4480,10 +4480,10 @@ namespace Six.Ceylon
             public CCaseExpression(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
-            public RLiteral Literal3 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(1); // 'case'
+            public RLiteral Literal3 => Get<RLiteral>(2); // '('
             public ICCaseItem CaseItem => Get<ICCaseItem>(3);
-            public RLiteral Literal4 => Get<RLiteral>(4);
+            public RLiteral Literal4 => Get<RLiteral>(4); // ')'
             public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(5);
         }
 
@@ -4492,7 +4492,7 @@ namespace Six.Ceylon
             // sequence
             public CIfExpr(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'if'
             public CConditions Conditions => Get<CConditions>(1);
             public CThenExpression ThenExpression => Get<CThenExpression>(2);
             public CElseExpression ElseExpression => Get<CElseExpression>(3);
@@ -4503,7 +4503,7 @@ namespace Six.Ceylon
             // sequence
             public CElseExpression(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'else'
             public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(1);
         }
 
@@ -4512,7 +4512,7 @@ namespace Six.Ceylon
             // sequence
             public CThenExpression(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'then'
             public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(1);
         }
 
@@ -4547,10 +4547,10 @@ namespace Six.Ceylon
             // sequence
             public CForComprehensionClause(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'for'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '('
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
-            public RLiteral Literal3 => Get<RLiteral>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3); // ')'
             public ICComprehensionClause ComprehensionClause => Get<ICComprehensionClause>(4);
         }
 
@@ -4559,7 +4559,7 @@ namespace Six.Ceylon
             // sequence
             public CIfComprehensionClause(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'if'
             public CConditions Conditions => Get<CConditions>(1);
             public ICComprehensionClause ComprehensionClause => Get<ICComprehensionClause>(2);
         }
@@ -4753,7 +4753,7 @@ namespace Six.Ceylon
             public CExistsExpr(params RNode[] children) : base(children) {}
 
             public ICEntryRangeExpression EntryRangeExpression => Get<ICEntryRangeExpression>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'exists'
         }
 
         public partial class CNonemptyExpr : RSequence, ICNonemptyExpr
@@ -4762,7 +4762,7 @@ namespace Six.Ceylon
             public CNonemptyExpr(params RNode[] children) : base(children) {}
 
             public ICEntryRangeExpression EntryRangeExpression => Get<ICEntryRangeExpression>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // 'nonempty'
         }
 
         public partial class CRangeExpr : RSequence, ICRangeExpr
@@ -4907,7 +4907,7 @@ namespace Six.Ceylon
             // sequence
             public CNegateOperator(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '-'
             public RNot<RLiteral> Literal2Not => Get<RNot<RLiteral>>(1);
         }
 
@@ -4916,7 +4916,7 @@ namespace Six.Ceylon
             // sequence
             public CNeutralOperator(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '+'
             public RNot<RLiteral> Literal2Not => Get<RNot<RLiteral>>(1);
         }
 
@@ -4980,9 +4980,9 @@ namespace Six.Ceylon
             public CIndexedExpr(params RNode[] children) : base(children) {}
 
             public ICPrimary Primary => Get<ICPrimary>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '['
             public ICIndex Index => Get<ICIndex>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // ']'
         }
 
         public partial class CUpperSpanned : RSequence, ICUpperSpanned
@@ -4991,7 +4991,7 @@ namespace Six.Ceylon
             public CUpperSpanned(params RNode[] children) : base(children) {}
 
             public ICIndexExpression IndexExpression => Get<ICIndexExpression>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '...'
         }
 
         public partial class CLowerSpanned : RSequence, ICLowerSpanned
@@ -4999,7 +4999,7 @@ namespace Six.Ceylon
             // sequence
             public CLowerSpanned(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '...'
             public ICIndexExpression IndexExpression => Get<ICIndexExpression>(1);
         }
 
@@ -5009,7 +5009,7 @@ namespace Six.Ceylon
             public CSpanned(params RNode[] children) : base(children) {}
 
             public ICIndexExpression IndexExpression => Get<ICIndexExpression>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '..'
             public ICIndexExpression IndexExpression2 => Get<ICIndexExpression>(2);
         }
 
@@ -5019,7 +5019,7 @@ namespace Six.Ceylon
             public CMeasured(params RNode[] children) : base(children) {}
 
             public ICIndexExpression IndexExpression => Get<ICIndexExpression>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // ':'
             public ICIndexExpression IndexExpression2 => Get<ICIndexExpression>(2);
         }
 
@@ -5057,7 +5057,7 @@ namespace Six.Ceylon
             // sequence
             public CObjectExpr(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'object'
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(1);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(2);
             public ICClassBlock ClassBlock => Get<ICClassBlock>(3);
@@ -5068,9 +5068,9 @@ namespace Six.Ceylon
             // sequence
             public CGroupedExpr(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '('
             public ICExpression Expression => Get<ICExpression>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
         }
 
         public partial class CTypeArguments : RSequence, ICTypeArguments
@@ -5078,9 +5078,9 @@ namespace Six.Ceylon
             // sequence
             public CTypeArguments(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '<'
             public ROptional<CTypeArgumentList> TypeArgumentListOptional => Get<ROptional<CTypeArgumentList>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '>'
         }
 
         public partial class CTypeArgumentList : RLoop<CVariancedType>, ICTypeArgumentList
@@ -5110,7 +5110,7 @@ namespace Six.Ceylon
             public CDefaultedTypeCore(params RNode[] children) : base(children) {}
 
             public ICType Type => Get<ICType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '='
         }
 
         public partial class CVariadicUnionType : RSequence, ICVariadicUnionType
@@ -5133,7 +5133,7 @@ namespace Six.Ceylon
             // sequence
             public CSpreadType(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '*'
             public ICUnionType UnionType => Get<ICUnionType>(1);
         }
 
@@ -5143,7 +5143,7 @@ namespace Six.Ceylon
             public CEntryType(params RNode[] children) : base(children) {}
 
             public ICUnionType UnionType => Get<ICUnionType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '->'
             public ICUnionType UnionType2 => Get<ICUnionType>(2);
         }
 
@@ -5153,7 +5153,7 @@ namespace Six.Ceylon
             public CUnionTypeCore(params RNode[] children) : base(children) {}
 
             public ICUnionType UnionType => Get<ICUnionType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '|'
             public ICIntersectionType IntersectionType => Get<ICIntersectionType>(2);
         }
 
@@ -5163,7 +5163,7 @@ namespace Six.Ceylon
             public CIntersectionTypeCore(params RNode[] children) : base(children) {}
 
             public ICIntersectionType IntersectionType => Get<ICIntersectionType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '&'
             public ICPrimaryType PrimaryType => Get<ICPrimaryType>(2);
         }
 
@@ -5173,7 +5173,7 @@ namespace Six.Ceylon
             public CNullableType(params RNode[] children) : base(children) {}
 
             public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '?'
         }
 
         public partial class CArrayType : RSequence, ICArrayType
@@ -5182,9 +5182,9 @@ namespace Six.Ceylon
             public CArrayType(params RNode[] children) : base(children) {}
 
             public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '['
             public ROptional<CLiteralNatural> LiteralNaturalOptional => Get<ROptional<CLiteralNatural>>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // ']'
         }
 
         public partial class CFunctionType : RSequence, ICFunctionType
@@ -5193,9 +5193,9 @@ namespace Six.Ceylon
             public CFunctionType(params RNode[] children) : base(children) {}
 
             public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '('
             public ROptional<ICTypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ICTypeTypeArguments>>(2);
-            public RLiteral Literal2 => Get<RLiteral>(3);
+            public RLiteral Literal2 => Get<RLiteral>(3); // ')'
         }
 
         public partial class CTupleType : RSequence, ICTupleType
@@ -5203,9 +5203,9 @@ namespace Six.Ceylon
             // sequence
             public CTupleType(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '['
             public ROptional<ICTypeTypeArguments> TypeTypeArgumentsOptional => Get<ROptional<ICTypeTypeArguments>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ']'
         }
 
         public partial class CIterableType : RSequence, ICIterableType
@@ -5213,9 +5213,9 @@ namespace Six.Ceylon
             // sequence
             public CIterableType(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '{'
             public ROptional<ICVariadicType> VariadicTypeOptional => Get<ROptional<ICVariadicType>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '}'
         }
 
         public partial class CGroupedType : RSequence, ICGroupedType
@@ -5223,9 +5223,9 @@ namespace Six.Ceylon
             // sequence
             public CGroupedType(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '<'
             public ICType Type => Get<ICType>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '>'
         }
 
         public partial class CPackageQualifiedType : RSequence, ICPackageQualifiedType
@@ -5233,8 +5233,8 @@ namespace Six.Ceylon
             // sequence
             public CPackageQualifiedType(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'package'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
             public CTypePath TypePath => Get<CTypePath>(2);
         }
 
@@ -5261,9 +5261,9 @@ namespace Six.Ceylon
             // sequence
             public CConditions(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '('
             public ROptional<CConditionList> ConditionListOptional => Get<ROptional<CConditionList>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
         }
 
         public partial class CConditionList : RLoop<ICCondition>, ICConditionList
@@ -5278,7 +5278,7 @@ namespace Six.Ceylon
             public CExistsCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal2 => Get<RLiteral>(1); // 'exists'
             public ICLetOrExpression LetOrExpression => Get<ICLetOrExpression>(2);
         }
 
@@ -5288,7 +5288,7 @@ namespace Six.Ceylon
             public CNonemptyCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal2 => Get<RLiteral>(1); // 'nonempty'
             public ICLetOrExpression LetOrExpression => Get<ICLetOrExpression>(2);
         }
 
@@ -5298,7 +5298,7 @@ namespace Six.Ceylon
             public CIsCondition(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal2 => Get<RLiteral>(1); // 'is'
             public ICType Type => Get<ICType>(2);
             public CIsConditionVariable IsConditionVariable => Get<CIsConditionVariable>(3);
         }
@@ -5317,7 +5317,7 @@ namespace Six.Ceylon
             // sequence
             public CSatisfiesCondition(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'satisfies'
             public ICType Type => Get<ICType>(1);
             public ICTypeName TypeName => Get<ICTypeName>(2);
         }
@@ -5336,7 +5336,7 @@ namespace Six.Ceylon
             // sequence
             public CIfBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'if'
             public CConditions Conditions => Get<CConditions>(1);
             public ICBlock Block => Get<ICBlock>(2);
         }
@@ -5346,7 +5346,7 @@ namespace Six.Ceylon
             // sequence
             public CElseBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'else'
             public ICElseBlockNext ElseBlockNext => Get<ICElseBlockNext>(1);
         }
 
@@ -5365,10 +5365,10 @@ namespace Six.Ceylon
             // sequence
             public CSwitchHeader(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'switch'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '('
             public ICSwitched Switched => Get<ICSwitched>(2);
-            public RLiteral Literal3 => Get<RLiteral>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3); // ')'
         }
 
         public partial class CCaseBlock : RSequence, ICCaseBlock
@@ -5377,10 +5377,10 @@ namespace Six.Ceylon
             public CCaseBlock(params RNode[] children) : base(children) {}
 
             public ROptional<RLiteral> LiteralOptional => Get<ROptional<RLiteral>>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
-            public RLiteral Literal3 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(1); // 'case'
+            public RLiteral Literal3 => Get<RLiteral>(2); // '('
             public ICCaseItem CaseItem => Get<ICCaseItem>(3);
-            public RLiteral Literal4 => Get<RLiteral>(4);
+            public RLiteral Literal4 => Get<RLiteral>(4); // ')'
             public ICBlock Block => Get<ICBlock>(5);
         }
 
@@ -5398,7 +5398,7 @@ namespace Six.Ceylon
             // sequence
             public CSatisfiesCaseCondition(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'satisfies'
             public ICType Type => Get<ICType>(1);
         }
 
@@ -5428,10 +5428,10 @@ namespace Six.Ceylon
             // sequence
             public CForBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'for'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '('
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
-            public RLiteral Literal3 => Get<RLiteral>(3);
+            public RLiteral Literal3 => Get<RLiteral>(3); // ')'
             public ICBlock Block => Get<ICBlock>(4);
         }
 
@@ -5440,7 +5440,7 @@ namespace Six.Ceylon
             // sequence
             public CFailBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'else'
             public ICBlock Block => Get<ICBlock>(1);
         }
 
@@ -5473,7 +5473,7 @@ namespace Six.Ceylon
             // sequence
             public CWhileStatement(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'while'
             public CConditions Conditions => Get<CConditions>(1);
             public ICBlock Block => Get<ICBlock>(2);
         }
@@ -5493,7 +5493,7 @@ namespace Six.Ceylon
             // sequence
             public CTryBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'try'
             public ROptional<CResources> ResourcesOptional => Get<ROptional<CResources>>(1);
             public ICBlock Block => Get<ICBlock>(2);
         }
@@ -5503,7 +5503,7 @@ namespace Six.Ceylon
             // sequence
             public CCatchBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'catch'
             public CCatchVariable CatchVariable => Get<CCatchVariable>(1);
             public ICBlock Block => Get<ICBlock>(2);
         }
@@ -5513,9 +5513,9 @@ namespace Six.Ceylon
             // sequence
             public CCatchVariable(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '('
             public ROptional<CVariable> VariableOptional => Get<ROptional<CVariable>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
         }
 
         public partial class CFinallyBlock : RSequence, ICFinallyBlock
@@ -5523,7 +5523,7 @@ namespace Six.Ceylon
             // sequence
             public CFinallyBlock(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'finally'
             public ICBlock Block => Get<ICBlock>(1);
         }
 
@@ -5532,9 +5532,9 @@ namespace Six.Ceylon
             // sequence
             public CResources(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '('
             public ROptional<CResourceList> ResourceListOptional => Get<ROptional<CResourceList>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
         }
 
         public partial class CResourceList : RLoop<ICResource>, ICResourceList
@@ -5567,7 +5567,7 @@ namespace Six.Ceylon
             // sequence
             public CModelReference(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '^'
             public ICModelExpression ModelExpression => Get<ICModelExpression>(1);
         }
 
@@ -5576,9 +5576,9 @@ namespace Six.Ceylon
             // sequence
             public CMetaLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // '`'
             public ICMetaExpression MetaExpression => Get<ICMetaExpression>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2);
+            public RLiteral Literal2 => Get<RLiteral>(2); // '`'
         }
 
         public partial class CPackageQualifiedMemberReference : RSequence, ICPackageQualifiedMemberReference
@@ -5586,8 +5586,8 @@ namespace Six.Ceylon
             // sequence
             public CPackageQualifiedMemberReference(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
-            public RLiteral Literal2 => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(0); // 'package'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
@@ -5597,7 +5597,7 @@ namespace Six.Ceylon
             public CTypeQualifiedMemberReference(params RNode[] children) : base(children) {}
 
             public ICPrimaryType PrimaryType => Get<ICPrimaryType>(0);
-            public RLiteral Literal => Get<RLiteral>(1);
+            public RLiteral Literal => Get<RLiteral>(1); // '.'
             public CMemberReference MemberReference => Get<CMemberReference>(2);
         }
 
@@ -5606,7 +5606,7 @@ namespace Six.Ceylon
             // sequence
             public CModuleLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'module'
             public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
@@ -5615,7 +5615,7 @@ namespace Six.Ceylon
             // sequence
             public CPackageLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'package'
             public ROptional<CPackagePath> PackagePathOptional => Get<ROptional<CPackagePath>>(1);
         }
 
@@ -5624,7 +5624,7 @@ namespace Six.Ceylon
             // sequence
             public CClassLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'class'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5633,7 +5633,7 @@ namespace Six.Ceylon
             // sequence
             public CInterfaceLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'interface'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5642,7 +5642,7 @@ namespace Six.Ceylon
             // sequence
             public CAliasLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'alias'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5651,7 +5651,7 @@ namespace Six.Ceylon
             // sequence
             public CTypeParameterLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'given'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5660,7 +5660,7 @@ namespace Six.Ceylon
             // sequence
             public CNewLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'new'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5684,7 +5684,7 @@ namespace Six.Ceylon
             // sequence
             public CFunctionLiteral(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0);
+            public RLiteral Literal => Get<RLiteral>(0); // 'function'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
         }
 
@@ -5789,6 +5789,11 @@ namespace Six.Ceylon
 
         public partial class DynamicCeylonVisitor : DynamicVisitor
         {
+            public void Walk(FileJob file)
+            {
+
+            }
+
             public override void Walk(IRNode node)
             {
                 Visit((dynamic)node);
@@ -6259,7 +6264,7 @@ namespace Six.Ceylon
                 DefaultImplementation(element);
             }
 
-            protected virtual void Visit(CNeededFunctionSpecifier element)
+            protected virtual void Visit(CRequiredFunctionSpecifier element)
             {
                 DefaultImplementation(element);
             }

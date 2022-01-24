@@ -109,8 +109,8 @@ class TestEventPublisher(void publishEvent(String json)) satisfies TestListener 
     String escape(String s) {
         value sb = StringBuilder();
         for (c in s) {
-            if (c == '\'' || c == '"' || c == '\\' || c == '/' ||
-                c == '\{END OF TRANSMISSION}') {
+            if (c == '\'' || c == '"' || c == '\\' || c == '/' || c == '\{#0004}') // '\{#0004}' = '\{END OF TRANSMISSION}'
+            {
                 sb.appendCharacter('\\').appendCharacter(c);
             } else if (c == '\b') {
                 sb.appendCharacter('\\').appendCharacter('b');

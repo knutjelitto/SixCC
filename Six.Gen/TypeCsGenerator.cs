@@ -180,7 +180,13 @@ namespace Six.Gen
             {
                 var element = op.Arguments[index];
 
-                wl($"public {TypeOf(element)} {NameOf(namer, element)} => Get<{TypeOf(element)}>({index});");
+                w($"public {TypeOf(element)} {NameOf(namer, element)} => Get<{TypeOf(element)}>({index});");
+
+                if (element is StringOp str)
+                {
+                    w($" // {str.Text.Esc()}");
+                }
+                wl();
             }
         }
 

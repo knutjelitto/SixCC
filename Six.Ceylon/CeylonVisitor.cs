@@ -1,11 +1,14 @@
-﻿using Six.Runtime.Types;
+﻿using Six.Ceylon.Ast;
+using Six.Runtime.Types;
 using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
     public partial class CeylonVisitor : DynamicCeylonVisitor
     {
-        private readonly IdentityDictionary<IRNode, object> values = new();
+        public CeylonVisitor(World world)
+        {
+        }
 
         protected override void DefaultImplementation(RNode element)
         {
@@ -39,12 +42,17 @@ namespace Six.Ceylon
             WalkChilden(element);
         }
 
+        protected override void Visit(CFunctionSpecifier element)
+        {
+            WalkChilden(element);
+        }
+
         protected override void Visit(COptionalFunctionSpecifier element)
         {
             WalkChilden(element);
         }
 
-        protected override void Visit(CNeededFunctionSpecifier element)
+        protected override void Visit(CRequiredFunctionSpecifier element)
         {
             WalkChilden(element);
         }
@@ -54,17 +62,12 @@ namespace Six.Ceylon
             WalkChilden(element);
         }
 
-        protected override void Visit(CFunctionSpecifier element)
+        protected override void Visit(CClassSpecifier element)
         {
             WalkChilden(element);
         }
 
         protected override void Visit(CValueSpecifier element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CClassSpecifier element)
         {
             WalkChilden(element);
         }

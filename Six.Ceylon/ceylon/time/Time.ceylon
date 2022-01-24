@@ -10,14 +10,15 @@
 import ceylon.time.base { ReadableTime, TimeBehavior, h=hours, min=minutes, sec=seconds, ms=milliseconds, ReadableTimePeriod }
 import ceylon.time.internal { TimeOfDay }
 
-"""Time of day like _6pm_ or _8.30am_.
+"""
+Time of day like _6pm_ or _8.30am_.
 
-   This type contains only information about an abstract _time of day_ without 
-   referencing any date or timezone.
+This type contains only information about an abstract _time of day_ without 
+referencing any date or timezone.
 
-   You use Time to specify something that has to occur on a specific time of day
-   like _"lunch hour starts at 1pm"_ or _"shop opens at 10am"_.
-   """
+You use Time to specify something that has to occur on a specific time of day
+like _"lunch hour starts at 1pm"_ or _"shop opens at 10am"_.
+"""
 shared interface Time
         satisfies ReadableTime 
                 & TimeBehavior<Time>
@@ -26,16 +27,12 @@ shared interface Time
 
     "Adds a period of time to this time of day value.
      
-     Result of this operation is another time of day,
-     wrapping around 12 a.m. (midnight) if necessary.
-     "
+     Result of this operation is another time of day, wrapping around 12 a.m. (midnight) if necessary."
     shared formal Time plus(ReadableTimePeriod period);
 
     "Subtracts a period of time to this time of day value.
      
-     Result of this operation is another time of day,
-     wrapping around 12 a.m. (midnight) if necessary.
-     "
+     Result of this operation is another time of day, wrapping around 12 a.m. (midnight) if necessary."
     shared formal Time minus(ReadableTimePeriod period);
 
     "Returns the period between this and the given time.

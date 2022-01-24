@@ -389,7 +389,7 @@ setter-declaration
 
 setter-definition
     | block
-    | needed-function-specifier
+    | required-function-specifier
     ;
 
 typed-method-declaration
@@ -623,7 +623,7 @@ optional-function-specifier
     | function-specifier? ';'
     ;
 
-needed-function-specifier
+required-function-specifier
     | function-specifier ';'
     ;
 
@@ -649,11 +649,11 @@ inferred-getter-argument
     ;
 
 untyped-method-argument
-    | member-name parameters+ needed-function-specifier
+    | member-name parameters+ required-function-specifier
     ;
 
 untyped-getter-argument
-    | member-name needed-function-specifier
+    | member-name required-function-specifier
     ;
 
 positional-arguments

@@ -11,15 +11,14 @@ import ceylon.time.base { ReadableDate, Month, DateBehavior, ReadableDatePeriod 
 import ceylon.time.internal { gregorianDate }
 import ceylon.time.timezone { TimeZone, tz = timeZone }
 
-"An interface for date objects in the ISO-8601 calendar system.
- 
- A date is often viewed as triple of year-month-day values. 
- This interface also defines access to other date fields such as 
- day-of-year, day-of-week and week-of-year."
-shared interface Date
-       satisfies ReadableDate & DateBehavior<Date>
-               & Ordinal<Date> & Comparable<Date> & Enumerable<Date> {
+"""
+An interface for date objects in the ISO-8601 calendar system.
 
+A date is often viewed as triple of year-month-day values. This interface also defines access to
+other date fields such as day-of-year, day-of-week and week-of-year.
+"""
+shared interface Date satisfies ReadableDate & DateBehavior<Date> & Ordinal<Date> & Comparable<Date> & Enumerable<Date>
+{
     "Adds a specified period to this date."
     shared formal Date plus( ReadableDatePeriod period );
 
@@ -42,7 +41,8 @@ shared interface Date
     "Returns the [[DateRange]] between this and given [[Date]]."
     shared formal DateRange rangeTo( Date other );
     
-    "Checks if this date is equal to another date.\n
+    "Checks if this date is equal to another date.
+     
      Compares this Date with another ensuring that the date both objects refer to is the same."
     shared actual default Boolean equals(Object other) {
         if (is Date other) {
@@ -53,7 +53,8 @@ shared interface Date
         return false;
     }
     
-    "Implementation compatible with [[equals]] method.\n
+    "Implementation compatible with [[equals]] method.
+     
      This implementation respect the constraint that if `x==y` then `x.hash==y.hash`."
     shared actual default Integer hash {
         value prime = 31;

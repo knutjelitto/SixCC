@@ -111,7 +111,7 @@
     };
     for (person in data.getTomlArray("people")) {
         assert (is TomlTable person);
-        print("``person.getString("lastName")``, \
+        print("``person.getString("lastName")``,
                ``person.getString("firstName")``");
     }
     ```

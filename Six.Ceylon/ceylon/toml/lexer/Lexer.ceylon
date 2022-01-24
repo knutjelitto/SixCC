@@ -7,22 +7,27 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-shared class Lexer({Character*} characters) {
+shared class Lexer({Character*} characters)
+{
     shared variable LexerMode mode = LexerMode.key;
     value t = Tokenizer(characters);
 
-    shared T inMode<T>(LexerMode mode, T() do) {
+    shared T inMode<T>(LexerMode mode, T() do)
+    {
         value save = this.mode;
-        try {
+        try
+        {
             this.mode = mode;
             return do();
         }
-        finally {
+        finally
+        {
             this.mode = save;
         }
     }
 
-    shared Token | Finished next() {
+    shared Token | Finished next()
+    {
         switch (c = t.advance())
         case (null) { return finished; }
         case ('{') { return t.newToken(openBrace); }
@@ -32,28 +37,36 @@ shared class Lexer({Character*} characters) {
         case ('.') { return t.newToken(period); }
         case (':') { return t.newToken(colon); }
         case ('+') { return t.newToken(plus); }
-        case ('[') {
-            return t.newToken {
+        case ('[')
+        {
+            return t.newToken
+            {
                 if (mode == LexerMode.key && t.accept('['))
                 then doubleOpenBracket
                 else openBracket;
             };
         }
-        case (']') {
-            return t.newToken {
+        case (']')
+        {
+            return t.newToken
+            {
                 if (mode == LexerMode.key && t.accept(']'))
                 then doubleCloseBracket
                 else closeBracket;
             };
         }
-        case ('#') {
+        case ('#')
+        {
             t.acceptRun(isCommentCharacter);
             return t.newToken(comment);
         }
-        case ('"') {
-            if (t.accept('"')) {
+        case ('"')
+        {
+            if (t.accept('"'))
+            {
                 // empty string or start of multiline string
-                if (t.accept('"')) {
+                if (t.accept('"'))
+                {
                     // multi-line
                     value unescaped = acceptStringContent(false, true);
                     return t.newToken(multilineBasicString, unescaped);
@@ -65,10 +78,13 @@ shared class Lexer({Character*} characters) {
             value unescaped = acceptStringContent(false, false);
             return t.newToken(basicString, unescaped);
         }
-        case ('\'') {
-            if (t.accept('\'')) {
+        case ('\'')
+        {
+            if (t.accept('\''))
+            {
                 // empty string or start of multiline string
-                if (t.accept('\'')) {
+                if (t.accept('\''))
+                {
                     //  multi-line
                     value unescaped = acceptStringContent(true, true);
                     return t.newToken(multilineLiteralString, unescaped);
@@ -80,25 +96,31 @@ shared class Lexer({Character*} characters) {
             value unescaped = acceptStringContent(true, false);
             return t.newToken(literalString, unescaped);
         }
-        else if (c == '\r' || c == '\n') {
+        else if (c == '\r' || c == '\n')
+        {
             t.acceptRun("\r\n");
             return t.newToken(newline);
         }
-        else if (c == '\t' || c == ' ') {
+        else if (c == '\t' || c == ' ')
+        {
             t.acceptRun("\t ");
             t.ignore();
             return next();
         }
-        else if (mode == LexerMode.key) {
-            if (isBareKeyCharacter(c)) {
+        else if (mode == LexerMode.key)
+        {
+            if (isBareKeyCharacter(c))
+            {
                 t.acceptRun(isBareKeyCharacter);
                 return t.newToken(bareKey);
             }
-            else {
+            else
+            {
                 return t.newToken(error);
             }
         }
-        else { // mode == LexerMode.val
+        else
+        {  // mode == LexerMode.val
             switch (c)
             case ('-') { return t.newToken(minus); }
             case ('_') { return t.newToken(underscore); }
@@ -123,11 +145,13 @@ shared class Lexer({Character*} characters) {
         }
     }
 
-    String acceptStringContent(Boolean literal, Boolean multiLine) {
+    String acceptStringContent(Boolean literal, Boolean multiLine)
+    {
         value sb = StringBuilder();
         value quoteChar = literal then '\'' else '"';
         variable value lastWasSlash = false;
-        if (multiLine, exists c = t.peek(), c in "\r\n") {
+        if (multiLine, exists c = t.peek(), c in "\r\n")
+        {
             // ignore immediate newline
             t.accept('\r');
             t.accept('\n');
@@ -148,8 +172,7 @@ shared class Lexer({Character*} characters) {
                     value expected = c == 'u' then 4 else 8;
                     value digits = t.read(isHexDigit, expected);
                     if (digits.size != expected) {
-                        t.error("``expected`` hex digits expected but only \
-                                 found ``digits.size``", t.line, t.column);
+                        t.error("``expected`` hex digits expected but only found ``digits.size``", t.line, t.column);
                     }
                     else {
                         assert (is Integer int = Integer.parse(digits, 16));

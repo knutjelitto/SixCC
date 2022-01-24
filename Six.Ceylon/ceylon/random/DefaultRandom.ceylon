@@ -125,8 +125,7 @@ shared final class DefaultRandom (
             return result;
         }
         else {
-            throw Exception("bits cannot be greater than \
-                             ``randomLimits.maxBits`` on this platform");
+            throw Exception("bits cannot be greater than ``randomLimits.maxBits`` on this platform");
         }
     }
 

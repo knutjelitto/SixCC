@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace Six.Tools
+namespace Six.Core
 {
     public class Disposable : IDisposable
     {

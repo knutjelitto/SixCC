@@ -43,6 +43,10 @@ namespace Six.Ceylon
 
         private static FileJob MakeFile(string fullPath, string shortPath)
         {
+            if (shortPath == packageFile || shortPath == moduleFile)
+            {
+                Assert(true);
+            }
             return new FileJob(fullPath, shortPath, () => File.ReadAllText(fullPath));
         }
 

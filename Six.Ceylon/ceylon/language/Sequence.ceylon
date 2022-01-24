@@ -7,123 +7,99 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"A nonempty, immutable sequence of values. The type 
- `Sequence<Element>` may be abbreviated `[Element+]`.
- 
- Given a possibly-empty sequence of type `[Element*]`, the 
- `if (nonempty ...)` construct, or, alternatively, 
- `assert (nonempty ...)`, may be used to narrow to a 
- sequence type to a nonempty sequence type:
- 
-     [Integer*] nums = ... ;
-     if (nonempty nums) {
-         Integer first = nums.first;
-         Integer max = max(nums);
-         [Integer+] squares = nums.collect((Integer i) => i**2));
-         [Integer+] sorted = nums.sort(byIncreasing((Integer i) => i));
-     }
- 
- Operations like `first`, `max()`, `collect()`, and `sort()`, 
- which polymorphically produce a nonempty or non-null output 
- when given a nonempty input are called 
- _emptiness-preserving_.
- 
- `Sequence` has the following subtypes:
- 
- - [[ArraySequence]], a sequence backed by an [[Array]],
- - [[Range]], an efficient representation of a sequence of 
-   adjacent [[enumerable values|Enumerable]],
- - [[Tuple]], a typed linked list, and
- - [[Singleton]], a sequence of just one element."
-see (interface Empty, 
-       interface Sequential,
-       class ArraySequence, 
-       class Range, 
-       class Tuple, 
-       class Singleton)
+"""
+A nonempty, immutable sequence of values. The type `Sequence<Element>` may be abbreviated
+`[Element+]`.
+
+Given a possibly-empty sequence of type `[Element*]`, the `if (nonempty ...)` construct, or,
+alternatively, `assert (nonempty ...)`, may be used to narrow to a sequence type to a nonempty
+sequence type:
+
+    [Integer*] nums = ... ;
+    if (nonempty nums)
+    {
+        Integer first = nums.first;
+        Integer max = max(nums);
+        [Integer+] squares = nums.collect((Integer i) => i**2));
+        [Integer+] sorted = nums.sort(byIncreasing((Integer i) => i));
+    }
+
+Operations like `first`, `max()`, `collect()`, and `sort()`, which polymorphically produce a
+nonempty or non-null output when given a nonempty input are called _emptiness-preserving_.
+
+`Sequence` has the following subtypes:
+
+- [[ArraySequence]], a sequence backed by an [[Array]],
+- [[Range]], an efficient representation of a sequence of adjacent [[enumerable values|Enumerable]],
+- [[Tuple]], a typed linked list, and
+- [[Singleton]], a sequence of just one element.
+"""
+see (interface Empty, interface Sequential, class ArraySequence, class Range, class Tuple, class Singleton)
 by ("Gavin")
 tagged("Sequences")
-shared sealed interface Sequence<out Element=Anything>
-        satisfies Element[] 
-                & {Element+} {
-    
-    "The first element of the sequence, that is, the element
-     with index `0`."
+shared sealed interface Sequence<out Element=Anything> satisfies Element[] & {Element+}
+{    
+    "The first element of the sequence, that is, the element with index `0`."
     shared actual formal Element first;
 
-    "The last element of the sequence, that is, the element
-     with index `sequence.lastIndex`."
+    "The last element of the sequence, that is, the element with index `sequence.lastIndex`."
     shared actual formal Element last;
     
-    "Returns `false`, since every `Sequence` contains at
-     least one element."
+    "Returns `false`, since every `Sequence` contains at least one element."
     shared actual Boolean empty => false;
     
-    "The non-negative length of this sequence, that is, the
-     number of elements in this sequence."
+    "The non-negative length of this sequence, that is, the number of elements in this sequence."
     shared actual formal Integer size;
     
     "The index of the last element of the sequence."
     see (value size)
     shared actual default Integer lastIndex => size-1;
     
-    "An integer [[Range]] containing all indexes of this 
-     sequence, that is, the range `0..sequence.lastIndex`."
+    "An integer [[Range]] containing all indexes of this sequence, that is, the range `0..sequence.lastIndex`."
     shared actual default Range<Integer> keys => indexes();
     
-    "An integer [[Range]] containing all indexes of this 
-     sequence, that is, the range `0..sequence.lastIndex`."
-    shared actual default Range<Integer> indexes() 
-            => 0..lastIndex;
+    "An integer [[Range]] containing all indexes of this sequence, that is, the range `0..sequence.lastIndex`."
+    shared actual default Range<Integer> indexes() => 0..lastIndex;
     
     "This nonempty sequence."
     shared actual default [Element+] sequence() => this;
     
-    since("1.3.3")
-    shared actual default [Element+] tuple() 
-            => arrayToTuple(Array(this));
+    shared actual default [Element+] tuple() => arrayToTuple(Array(this));
     
     "The rest of the sequence, without the first element."
     shared actual default Element[] rest 
-            => size > 1 
-            then Subsequence(1, lastIndex) 
-            else [];
+        => size > 1 
+        then Subsequence(1, lastIndex) 
+        else [];
     
     "This sequence, without the last element."
-    since("1.3.3")
     shared actual default Element[] exceptLast 
-            => size > 1 
-            then Subsequence(0, lastIndex-1) 
-            else [];
+        => size > 1 
+        then Subsequence(0, lastIndex-1) 
+        else [];
     
-    since("1.3.3")
     shared actual default 
     Element[] sublist(Integer from, Integer to) 
-            => from<=to && from<=lastIndex && to>=0
-            then Subsequence {
-                from = Integer.largest(0, from);
-                to = Integer.smallest(lastIndex, to); 
-            }
-            else [];
+        => from<=to && from<=lastIndex && to>=0
+        then Subsequence {
+            from = Integer.largest(0, from);
+            to = Integer.smallest(lastIndex, to); 
+        }
+        else [];
+    
+    shared actual default 
+    Element[] sublistTo(Integer to) => sublist(0, to);
     
     since("1.3.3")
     shared actual default 
-    Element[] sublistTo(Integer to) 
-            => sublist(0, to);
+    Element[] sublistFrom(Integer from) => sublist(from, size-1);
     
-    since("1.3.3")
-    shared actual default 
-    Element[] sublistFrom(Integer from)
-            => sublist(from, size-1);
-    
-    "A sequence containing the elements of this sequence in
-     reverse order to the order in which they occur in this
-     sequence."
+    "A sequence containing the elements of this sequence in reverse order to the order in which
+     they occur in this sequence."
     shared default actual [Element+] reversed => Reverse();
     
-    "Produces a sequence formed by repeating the elements of
-     this sequence the given [[number of times|times]], or
-     the [[empty sequence|empty]] if `times<=0`."
+    "Produces a sequence formed by repeating the elements of this sequence the given
+     [[number of times|times]], or the [[empty sequence|empty]] if `times<=0`."
     shared default actual Element[] repeat(Integer times) 
             => switch (times<=>1) 
             case (smaller) []

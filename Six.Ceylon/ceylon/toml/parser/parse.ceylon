@@ -221,7 +221,7 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
                 if (!aet == elementType) {
                     // log the error, but don't throw; continue parsing
                     error(tokenForError,
-                        "found value of type '``elementType``' but expected '``aet``'; \
+                        "found value of type '``elementType``' but expected '``aet``';
                          Array data types may not be mixed");
                 }
             }
@@ -597,8 +597,7 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
                 currentTable = TomlTable(); // ignore subsequent key/value pairs
                 // TODO properly format/escape path in error msg
                 throw error(openToken,
-                        "a value already exists for the key \
-                            '``".".join(path.take(index+1))``'");
+                        "a value already exists for the key '``".".join(path.take(index+1))``'");
             }
         });
         if (!createdButNotDefined.remove(currentTable)) {
@@ -629,8 +628,7 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
             else if (is TomlArray obj, obj in staticallyDefinedArrays) {
                 // TODO properly format/escape path in error msg
                 throw error(openToken,
-                        "a statically defined array already exists for the key \
-                         '``".".join(path.take(index+1))``'");
+                        "a statically defined array already exists for the key '``".".join(path.take(index+1))``'");
             }
             else if (is TomlArray obj, is TomlTable last = obj.last) {
                 // for [[whatever.key1.key2]] following [[whatever.key1]]
@@ -641,8 +639,7 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
                 currentTable = TomlTable(); // ignore subsequent key/value pairs
                 // TODO properly format/escape path in error msg
                 throw error(openToken,
-                        "a value already exists for the key \
-                         '``".".join(path.take(index+1))``'");
+                        "a value already exists for the key '``".".join(path.take(index+1))``'");
             }
         });
         TomlArray array;
@@ -651,15 +648,14 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
             if (obj in staticallyDefinedArrays) {
                 // TODO properly format/escape path in error msg
                 throw error(openToken,
-                        "a statically defined array already exists for the key \
-                         '``".".join(path)``'");
+                        "a statically defined array already exists for the key '``".".join(path)``'");
             }
             if (exists first = obj.first) {
                 value firstType = elementTypeOf(first);
                 if (firstType != TomlValueType.table) {
                     throw error(openToken,
-                        "cannot add a Table to an array containing a value of type \
-                         '``firstType``' for the key '``".".join(path)``'; Array \
+                        "cannot add a Table to an array containing a value of type
+                         '``firstType``' for the key '``".".join(path)``'; Array
                          data types may not be mixed");
                 }
             }
@@ -672,8 +668,7 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
         else {
             // TODO properly format/escape path in error msg
             throw error(openToken,
-                    "a non-array value already exists for the key \
-                     '``".".join(path)``'");
+                    "a non-array value already exists for the key '``".".join(path)``'");
         }
 
         currentTable = TomlTable();
@@ -732,8 +727,7 @@ shared [TomlTable, ParseException*] parse({Character*} input) =>
         if (!key.every(validChar)) {
             throw badTokenError {
                 token;
-                "bare keys may only contain the characters \
-                 'A-Z', 'a-z', '0-9', '_', and '-'";
+                "bare keys may only contain the characters 'A-Z', 'a-z', '0-9', '_', and '-'";
             };
         }
     }

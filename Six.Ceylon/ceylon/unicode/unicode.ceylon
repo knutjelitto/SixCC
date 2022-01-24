@@ -7,14 +7,18 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import java.lang {
-    Types {
+import java.lang
+{
+    Types
+    {
         nativeString
     },
-    JSystem=System {
+    JSystem=System
+    {
         jgetSystemProperty=getProperty
     },
-    JChar=Character {
+    JChar=Character
+    {
         getName,
         getType,
         getDirectionality,
@@ -70,33 +74,33 @@ import java.lang {
         gcUPPERCASE_LETTER=uppercaseLetter
     }
 }
-import java.text {
-    BreakIterator {
+import java.text
+{
+    BreakIterator
+    {
         done,
         getSentenceInstance,
         getWordInstance,
         getCharacterInstance
     }
 }
-import java.util {
+import java.util
+{
     Locale
 }
 
 import ceylon.unicode { Directionality { ... } }
 
-"The version of the Unicode standard being used, or `null` 
- if this information was not available."
-shared String? unicodeVersion {
-    value jreVersion
-            = jgetSystemProperty("java.version")
-            else "";
+"The version of the Unicode standard being used, or `null` if this information was not available."
+shared String? unicodeVersion
+{
+    value jreVersion = jgetSystemProperty("java.version") else "";
     return if (jreVersion.startsWith("1.7")) then "6.0.0"
     else if (jreVersion.startsWith("1.8")) then "6.2.0"
     else null;
 }
 
-"Enumerates the *Directionalities* defined by the Unicode 
- specification."
+"Enumerates the *Directionalities* defined by the Unicode specification."
 shared class Directionality
         of arabicNumber 
          | boundaryNeutral
@@ -597,12 +601,15 @@ shared {String*} words(
         breakIterator.setText(text);
         value str = nativeString(text); //BreakIterator indexes by Java char
         variable value start = breakIterator.first();
-        shared actual String|Finished next() {
+        shared actual String|Finished next()
+        {
             value end = breakIterator.next();
-            if (end==done) {
+            if (end==done)
+            {
                 return finished;
             }
-            else {
+            else
+            {
                 value result = str.substring(start, end);
                 start = end;
                 return result.every(Character.whitespace)
@@ -623,22 +630,25 @@ shared {String*} sentences(
     "The IETF BCP 47 language tag string of the locale." 
     String tag = system.locale) 
         => object satisfies {String*} {
-    iterator() => object satisfies Iterator<String> {
+    iterator() => object satisfies Iterator<String>
+    {
         value breakIterator = 
                 getSentenceInstance(locale(tag));
         breakIterator.setText(text);
         value str = nativeString(text); //BreakIterator indexes by Java char
         variable value start = breakIterator.first();
-        shared actual String|Finished next() {
+        shared actual String|Finished next()
+        {
             value end = breakIterator.next();
-            if (end==done) {
+            if (end == done)
+            {
                 return finished;
             }
-            else {
+            else
+            {
                 value result = str.substring(start, end).trimmed;
                 start = end;
-                return result.empty 
-                    then next() else result;
+                return result.empty then next() else result;
             }
         }
     };

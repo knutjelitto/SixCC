@@ -149,7 +149,7 @@ shared String formatToml(Map<String, Object> tomlTable)
             if (exists aet = arrayElementType) {
                 if (!elementType == aet) {
                     throw error(
-                        "found value of type '``elementType``' but expected '``aet``'; \
+                        "found value of type '``elementType``' but expected '``aet``';
                          Array data types may not be mixed");
                 }
                 sb.append(", "); // not first
@@ -279,7 +279,7 @@ shared String formatToml(Map<String, Object> tomlTable)
                 tablePath.add(escapeKey(key));
                 for (t in item) {
                     if (!is Map<Anything, Anything> t) {
-                        throw error("all values in an Array of Tables must be Tables; \
+                        throw error("all values in an Array of Tables must be Tables;
                                      ``className(t)`` is not allowed");
                     }
                     emitTable(t, true);
