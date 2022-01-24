@@ -7,71 +7,64 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"An exact representation of a positive whole number, 
- negative whole number, or zero. The largest and smallest 
- representable values are platform-dependent:
- 
- - For the JVM runtime, integer values between
-   -2<sup>63</sup> and 2<sup>63</sup>-1 may be represented 
-   without overflow.
- - For the JavaScript runtime, integer values with a
-   magnitude no greater than 2<sup>53</sup> may be
-   represented without loss of precision.
- 
- Overflow or loss of precision occurs silently (with no 
- exception raised).
- 
- An integer is considered equal to its [[float]] 
- representation, if that exists. That is, for every integer 
- `int`, either `int.float` throws an [[OverflowException]], 
- or the expression `int.float==int` evaluates to `true`.
- 
- An integer is representable as a sequence of bits. Not all 
- of the bits in the representation may be addressed by the 
- methods inherited from [[Binary]]:
- 
- - For the JVM runtime, the bits at all indices (0 to 63) 
-   are addressable.
- - For the JavaScript runtime, the bits at indices 0 to 31 
-   are addressable.
- 
- Literal integers may be written in decimal, hexadecimal, or
- binary notation:
- 
-     8660
-     #21D4
-     $10000111010100
- 
- Underscores may be used to group digits:
- 
-     8660
-     #21_D4
-     $10_0001_1101_0100"
+"""
+An exact representation of a positive whole number, negative whole number, or zero. The largest
+and smallest representable values are platform-dependent:
+
+- For the JVM runtime, integer values between -2<sup>63</sup> and 2<sup>63</sup>-1 may be
+represented without overflow.
+- For the JavaScript runtime, integer values with a magnitude no greater than 2<sup>53</sup> may
+be represented without loss of precision.
+
+Overflow or loss of precision occurs silently (with no exception raised).
+
+An integer is considered equal to its [[float]] representation, if that exists. That is, for every
+integer `int`, either `int.float` throws an [[OverflowException]], or the expression `int.float==int`
+evaluates to `true`.
+
+An integer is representable as a sequence of bits. Not all of the bits in the representation may
+be addressed by the methods inherited from [[Binary]]:
+
+- For the JVM runtime, the bits at all indices (0 to 63) are addressable.
+- For the JavaScript runtime, the bits at indices 0 to 31 are addressable.
+
+Literal integers may be written in decimal, hexadecimal, or binary notation:
+
+    8660
+    #21D4
+    $10000111010100
+
+Underscores may be used to group digits:
+
+    8660
+    #21_D4
+    $10_0001_1101_0100
+"""
 see (value runtime.integerSize)
 tagged("Basic types", "Numbers")
 shared native final class Integer
-        extends Object
-        satisfies Integral<Integer> 
-                & Binary<Integer> 
-                & Exponentiable<Integer,Integer> {
-    
-    "The sum of all the integers in the given stream, or
-     `0` if the stream is empty."
+    extends Object
+    satisfies Integral<Integer> & Binary<Integer> & Exponentiable<Integer,Integer>
+{
+    "The sum of all the integers in the given stream, or `0` if the stream is empty."
     since("1.3.2")
-    shared static Integer sum({Integer*} integers) {
+    shared static Integer sum({Integer*} integers)
+    {
         variable value sum = 0;
-        for (int in integers) {
+        for (int in integers)
+        {
             sum += int;
         }
         return sum;
     }
     
-    "The product of all the integers in the given stream, or
-     `1` if the stream is empty."
+    "The product of all the integers in the given stream, or `1` if the stream is empty."
     since("1.3.2")
-    shared static Integer product({Integer*} integers) {
+    shared static Integer product({Integer*} integers)
+    {
         variable value product = 1;
-        for (int in integers) {
+        for (int in integers)
+        {
             product *= int;
         }
         return product;

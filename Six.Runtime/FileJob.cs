@@ -13,6 +13,11 @@ namespace Six.Runtime
         {
             Assert(longPath.EndsWith(shortPath));
 
+            if (shortPath == "package.ceylon")
+            {
+                Assert(true);
+            }
+
             LongPath = longPath;
             ShortPath = shortPath;
             ContentLoader = contentLoader;

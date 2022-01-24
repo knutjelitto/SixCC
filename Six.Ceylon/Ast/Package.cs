@@ -1,8 +1,8 @@
-﻿namespace Six.Ceylon
+﻿namespace Six.Ceylon.Ast
 {
-    public class PackageContainer
+    public class Package
     {
-        public PackageContainer(string name, FileJob? packageFile = null)
+        public Package(string name, FileJob? packageFile = null)
         {
             Name = name;
             PackageFile = packageFile;

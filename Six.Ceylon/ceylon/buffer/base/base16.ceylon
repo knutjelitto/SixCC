@@ -68,7 +68,7 @@ Byte[] toDecodeTable<ToSingle>(
 }
 
 shared sealed abstract class Base16<ToMutable, ToImmutable, ToSingle>()
-    satisfies IncrementalCodec<ToMutable,ToImmutable,ToSingle,ByteBuffer,List<Byte>,Byte>
+    satisfies IncrementalCodec<ToMutable, ToImmutable, ToSingle, ByteBuffer, List<Byte>, Byte>
     given ToMutable satisfies Buffer<ToSingle>
     given ToImmutable satisfies {ToSingle*}
     given ToSingle satisfies Object
@@ -107,38 +107,51 @@ shared sealed abstract class Base16<ToMutable, ToImmutable, ToSingle>()
 
             shared actual {Byte*} more(ToSingle input)
             {
-                if (exists left = leftwardNibble) {
+                if (exists left = leftwardNibble)
+                {
                     value right = decodeTableRight[decodeToIndex(input)];
-                    if (exists right, right != 255.byte) {
+                    if (exists right, right != 255.byte)
+                    {
                         leftwardNibble = null;
                         return { left.or(right) };
                     }
-                } else {
+                }
+                else
+                {
                     value left = decodeTableLeft[decodeToIndex(input)];
-                    if (exists left, left != 255.byte) {
+                    if (exists left, left != 255.byte)
+                    {
                         leftwardNibble = left;
                         return empty;
                     }
                 }
                 switch (error)
-                case (strict) {
-                    throw DecodeException {
+                case (strict)
+                {
+                    throw DecodeException
+                    {
                         "Input element ``input`` is not valid ASCII hex";
                     };
                 }
-                case (ignore) {
+                case (ignore)
+                {
                 }
-                case (reset) {
+                case (reset)
+                {
                     leftwardNibble = null;
                 }
                 return empty;
             }
             
-            shared actual {Byte*} done() {
+            shared actual {Byte*} done()
+            {
                 {Byte*} ret;
-                if (exists left = leftwardNibble) {
+                if (exists left = leftwardNibble)
+                {
                     ret = { left };
-                } else {
+                }
+                else
+                {
                     ret = empty;
                 }
                 leftwardNibble = null;
@@ -192,45 +205,55 @@ shared abstract class Base16String()
 }
 
 {Byte+} hexDigitsByte = hexDigits*.integer*.byte;
-Byte[][] base16ByteEncodeTable = {
+Byte[][] base16ByteEncodeTable =
+{
     for (a in hexDigitsByte)
         for (b in hexDigitsByte) { a, b }.sequence()
 }.sequence();
 shared abstract class Base16Byte()
-        extends Base16<ByteBuffer,List<Byte>,Byte>()
-        satisfies ByteToByteCodec {
+    extends Base16<ByteBuffer,List<Byte>,Byte>()
+    satisfies ByteToByteCodec
+{
     shared actual Byte[][] encodeTable = base16ByteEncodeTable;
     
     shared actual Integer decodeToIndex(Byte input) => input.unsigned;
     shared actual Byte[] decodeTableLeft
-            = toDecodeTable {
+            = toDecodeTable
+            {
                 encodeTable = hexDigitsByte;
                 decodeToIndex = decodeToIndex;
                 fiddle = (b) => b.leftLogicalShift(4);
                 split = (Byte s) => { s, s.unsigned.character.uppercased.integer.byte };
             };
     shared actual Byte[] decodeTableRight
-            = toDecodeTable {
+            = toDecodeTable
+            {
                 encodeTable = hexDigitsByte;
                 decodeToIndex = decodeToIndex;
                 split = (Byte s) => { s, s.unsigned.character.uppercased.integer.byte };
             };
     
-    shared actual Integer decodeBid({Byte*} sample) {
-        if (sample.every((s) => s in hexDigitsByte)) {
+    shared actual Integer decodeBid({Byte*} sample)
+    {
+        if (sample.every((s) => s in hexDigitsByte))
+        {
             return 10;
-        } else {
+        }
+        else
+        {
             return 0;
         }
     }
 }
 
-shared object base16String extends Base16String() {
+shared object base16String extends Base16String()
+{
     shared actual [String+] aliases = ["base16", "base-16", "base_16"];
     shared actual Integer encodeBid({Byte*} sample) => 5;
 }
 
-shared object base16Byte extends Base16Byte() {
+shared object base16Byte extends Base16Byte()
+{
     shared actual [String+] aliases = ["base16", "base-16", "base_16"];
     shared actual Integer encodeBid({Byte*} sample) => 5;
 }

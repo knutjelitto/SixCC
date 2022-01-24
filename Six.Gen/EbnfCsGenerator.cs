@@ -79,7 +79,7 @@ namespace Six.Gen
                         var attributes = new StringBuilder();
                         if (op.Class != null)
                         {
-                            if (op.IsTokenType)
+                            if (op.IsBottomType)
                             {
                                 if (op.Outer != null)
                                 {

@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\SixBot\\Grammars\\T2.six" at="23.01.2022 06:18:08" />
+// <generated from="D:\\Six\\SixBot\\Grammars\\T2.six" at="23.01.2022 06:31:45" />
 
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;

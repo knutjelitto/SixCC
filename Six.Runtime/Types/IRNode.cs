@@ -8,5 +8,8 @@ namespace Six.Runtime.Types
 {
     public interface IRNode
     {
+        RNode[] Children { get; }
+
+        public T? GetValue<T>() where T : class;
     }
 }

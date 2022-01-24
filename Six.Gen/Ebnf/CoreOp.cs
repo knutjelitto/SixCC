@@ -38,7 +38,7 @@ namespace Six.Gen.Ebnf
         public ClassType? Outer { get; set; }
         public bool WithInner { get; set; }
 
-        public bool IsTokenType
+        public bool IsBottomType
         {
             get
             {
@@ -48,7 +48,6 @@ namespace Six.Gen.Ebnf
                     {
                         return true;
                     }
-#if true
                     if (Class.Base != null)
                     {
                         if (Class.Base.TypeName == "RToken" || Class.Base.TypeName == "RLiteral" || Class.Base.TypeName == "REof")
@@ -56,7 +55,6 @@ namespace Six.Gen.Ebnf
                             return true;
                         }
                     }
-#endif
                 }
 
                 return false;

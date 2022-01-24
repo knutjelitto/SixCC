@@ -83,7 +83,6 @@ import ceylon.language.meta
    constructors.
 """
 see(interface OptionalAnnotation, interface SequencedAnnotation,
-    function annotations, function optionalAnnotation, 
-    function sequencedAnnotations)
+    function annotations, function optionalAnnotation, function sequencedAnnotations)
 shared interface Annotation 
         of ConstrainedAnnotation<> {}

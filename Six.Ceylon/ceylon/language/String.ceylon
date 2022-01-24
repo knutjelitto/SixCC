@@ -7,73 +7,63 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"""A string of characters. Each character in the string 
-   is a [[32-bit Unicode character|Character]]. The 
-   UTF-16 encoding of the underlying native string is 
-   hidden from clients.
-   
-   Literal strings may be written between double quotes:
-   
-       "hello world"
-       "\r\n"
-       "\{#03C0} \{#2248} 3.14159"
-       "\{GREEK SMALL LETTER PI} \{ALMOST EQUAL TO} 3.14159"
-   
-   Alternatively, a _verbatim string_ may be written 
-   between tripled double quotes.
-   
-   The _empty string_, `""`, is a string with no 
-   characters.
-   
-   A string is a [[Category]] of its [[characters]], and 
-   of its substrings:
-   
-       'w' in greeting 
-       "hello" in greeting
-   
-   Strings are [[summable|Summable]]:
-   
-       String greeting = "hello" + " " + "world";
-   
-   They are efficiently [[iterable|Iterable]]:
-   
-       for (char in "hello world") { ... }
-   
-   They are [[lists|List]] of [[characters|Character]]:
-   
-       value char = "hello world"[5];
-   
-   They are [[ranged|Ranged]]:
-   
-       String who = "hello world"[6...];
-   
-   Note that since `string[index]` evaluates to the 
-   optional type `Character?`, it is often more 
-   convenient to write `string[index..index]`, which 
-   evaluates to a `String` containing a single character, 
-   or to the empty string `""` if `index` refers to a 
-   position outside the string.
-   
-   It is easy to use comprehensions to transform strings:
-   
-       String { for (s in "hello world") if (s.letter) s.uppercased }
-   
-   Since a `String` has an underlying UTF-16-encoded 
-   native string, certain operations are expensive, 
-   requiring iteration of the characters of the string. 
-   In particular, [[size]] requires iteration of the 
-   whole string, and `get()`, `span()`, and `measure()` 
-   require iteration from the beginning of the string to 
-   the given index."""
+"""
+A string of characters. Each character in the string is a [[32-bit Unicode character|Character]].
+The UTF-16 encoding of the underlying native string is hidden from clients.
+
+Literal strings may be written between double quotes:
+
+    "hello world"
+    "\r\n"
+    "\{#03C0} \{#2248} 3.14159"
+    "\{GREEK SMALL LETTER PI} \{ALMOST EQUAL TO} 3.14159"
+
+Alternatively, a _verbatim string_ may be written between tripled double quotes.
+
+The _empty string_, `""`, is a string with no characters.
+
+A string is a [[Category]] of its [[characters]], and of its substrings:
+
+    'w' in greeting 
+    "hello" in greeting
+
+Strings are [[summable|Summable]]:
+
+    String greeting = "hello" + " " + "world";
+
+They are efficiently [[iterable|Iterable]]:
+
+    for (char in "hello world") { ... }
+
+They are [[lists|List]] of [[characters|Character]]:
+
+    value char = "hello world"[5];
+
+They are [[ranged|Ranged]]:
+
+    String who = "hello world"[6...];
+
+Note that since `string[index]` evaluates to the optional type `Character?`, it is often more 
+convenient to write `string[index..index]`, which evaluates to a `String` containing a single
+character, or to the empty string `""` if `index` refers to a position outside the string.
+
+It is easy to use comprehensions to transform strings:
+
+    String { for (s in "hello world") if (s.letter) s.uppercased }
+
+Since a `String` has an underlying UTF-16-encoded native string, certain operations are expensive,
+requiring iteration of the characters of the string. In particular, [[size]] requires iteration of
+the whole string, and `get()`, `span()`, and `measure()` require iteration from the beginning of
+the string to the given index.
+"""
 by ("Gavin")
 tagged("Basic types", "Strings")
-shared native final class String
-        extends Object
-        satisfies SearchableList<Character> 
-                & Comparable<String> 
-                & Summable<String> 
-                & Ranged<Integer,Character,String> {
-    
+shared native final class String extends Object
+    satisfies SearchableList<Character> 
+            & Comparable<String> 
+            & Summable<String> 
+            & Ranged<Integer,Character,String>
+{
     "The concatenation of the given [[strings]]."
     see (class StringBuilder)
     shared static String sum({String*} strings) {
@@ -256,37 +246,26 @@ shared native final class String
     see (value lines)
     since("1.1.0")
     shared native {String+} linesWithBreaks
-            => split('\n'.equals, false, false)
-            .partition(2)
-            .map(([line, *rest])
-                    => if (nonempty rest)
-                    then line + rest[0]
-                    else line);
+        => split('\n'.equals, false, false)
+        .partition(2)
+        .map( ([line, *rest]) => if (nonempty rest) then line + rest[0] else line );
     
-    "A string containing the characters of this string, 
-     after discarding [[whitespace|Character.whitespace]] 
-     from the beginning and end of the string."
-    shared native String trimmed
-            => trim(Character.whitespace);
+    "A string containing the characters of this string, after discarding
+     [[whitespace|Character.whitespace]] from the beginning and end of the string."
+    shared native String trimmed => trim(Character.whitespace);
     
-    "A string containing the characters of this string, 
-     after discarding the characters matching the given 
-     [[predicate function|trimming]] from the beginning 
-     and end of the string.
+    "A string containing the characters of this string, after discarding the characters matching
+     the given [[predicate function|trimming]] from the beginning and end of the string.
      
          value trimmed = name.trim('_'.equals);
      
-     A character is removed from the string if it 
-     matches the given predicate and if either:
+     A character is removed from the string if it matches the given predicate and if either:
      
-     - every character occurring earlier in the string 
-       also matches the predicate, or
-     - every character occurring later in the string 
-       also matches the predicate."
+     - every character occurring earlier in the string also matches the predicate, or
+     - every character occurring later in the string also matches the predicate."
     shared actual native String trim(
-            "A predicate that determines whether a 
-             character occurring near the start or end 
-             of the string should be trimmed."
+            "A predicate that determines whether a character occurring near the start or end of the
+             string should be trimmed."
             Boolean trimming(Character element))
             => if (exists from
                     = firstIndexWhere(not(trimming)),
@@ -295,58 +274,48 @@ shared native final class String
             then this[from..to]
             else "";
     
-    "A string containing the characters of this string, 
-     after discarding the characters matching the given 
-     [[predicate function|trimming]] from the beginning 
-     of the string.
+    "A string containing the characters of this string, after discarding the characters matching
+     the given [[predicate function|trimming]] from the beginning of the string.
      
-     A character is removed from the string if it 
-     matches the given predicate and every character 
-     occurring earlier in the string also matches the 
-     predicate."
+     A character is removed from the string if it matches the given predicate and every character
+     occurring earlier in the string also matches the predicate."
     shared actual native String trimLeading(
-            "A predicate that determines whether a 
-             character occurring near the start of the 
-             string should be trimmed."
-            Boolean trimming(Character element))
-            => if (exists from
-                    = firstIndexWhere(not(trimming))) 
-            then this[from...]
-            else "";
+        "A predicate that determines whether a character occurring near the start of the string
+         should be trimmed."
+        Boolean trimming(Character element))
+        => if (exists from = firstIndexWhere(not(trimming))) 
+        then this[from...]
+        else "";
     
-    "A string containing the characters of this string, 
-     after discarding the characters matching the given 
-     [[predicate function|trimming]] from the end of the 
-     string.
+    "A string containing the characters of this string, after discarding the characters matching
+     the given [[predicate function|trimming]] from the end of the string.
      
-     A character is removed from the string if it 
-     matches the given predicate and every character 
-     occurring later in the string also matches the 
-     predicate."
+     A character is removed from the string if it matches the given predicate and every character
+     occurring later in the string also matches the predicate."
     shared actual native String trimTrailing(
-            "The predicate that determines whether a 
-             character occurring near the end of the
-             string should be trimmed."
-            Boolean trimming(Character element))
-            => if (exists to
-                    = lastIndexWhere(not(trimming))) 
-            then this[...to]
-            else "";
+        "The predicate that determines whether a character occurring near the end of the string
+         should be trimmed."
+        Boolean trimming(Character element))
+        => if (exists to = lastIndexWhere(not(trimming))) 
+           then this[...to]
+           else "";
 
-    "A string containing the characters of this string 
-     after collapsing strings of adjacent 
-     [[whitespace|Character.whitespace]] characters into 
-     single space characters and discarding whitespace 
-     from the beginning and end of the string."
-    shared native String normalized {
+    "A string containing the characters of this string after collapsing strings of adjacent 
+     [[whitespace|Character.whitespace]] characters into single space characters and discarding
+     whitespace from the beginning and end of the string."
+    shared native String normalized
+    {
         value result = StringBuilder();
         variable value previousWasWs = false;
-        for (ch in this) {
+        for (ch in this)
+        {
             value currentIsWs = ch.whitespace;
-            if (!currentIsWs) {
+            if (!currentIsWs)
+            {
                 result.appendCharacter(ch);
             }
-            else if (!previousWasWs) {
+            else if (!previousWasWs)
+            {
                 result.appendCharacter(' ');
             }
             previousWasWs = currentIsWs;
@@ -354,25 +323,21 @@ shared native final class String
         return result.string.trimmed;
     }
     
-    "A string containing the characters of this string, 
-     with the characters in reverse order."
+    "A string containing the characters of this string, with the characters in reverse order."
     shared native actual String reversed 
-            => StringBuilder()
-                .append(this)
-                .reverseInPlace()
-                .string;
+        => StringBuilder()
+        .append(this)
+        .reverseInPlace()
+        .string;
     
-    "Determine if this string contains only 
-     [[whitespace characters|Character.whitespace]]. 
-     Returns `false` if the string contains at least one 
-     character which is not a whitespace character."
+    "Determine if this string contains only [[whitespace characters|Character.whitespace]]. Returns
+     `false` if the string contains at least one character which is not a whitespace character."
     shared native Boolean whitespace
-            => every(Character.whitespace);
+        => every(Character.whitespace);
     
-    "Determines if this string contains a character at 
-     the given [[index]], that is, if `0<=index<size`."
+    "Determines if this string contains a character at the given [[index]], that is, if `0<=index<size`."
     shared native actual Boolean defines(Integer index)
-            => 0<=index<size;
+        => 0<=index<size;
     
     "A string containing the characters of this string 
      occurring between the given indexes. If the 
@@ -393,9 +358,8 @@ shared native final class String
      Using the [[span operator|Ranged.span]], 
      `string.span(to, from)` may be written as 
      `string[from..to]`."
-    shared actual native String span(Integer from, 
-                                     Integer to)
-            => String(characters.take(to).skip(from));
+    shared actual native String span(Integer from, Integer to)
+        => String(characters.take(to).skip(from));
     
     "A string containing the characters of this string 
      from the given [[start index|from]] inclusive to 
@@ -408,7 +372,7 @@ shared native final class String
      `string.spanFrom(from)` may be written as 
      `string[from...]`."
     shared actual native String spanFrom(Integer from)
-            => from<size then span(from, size) else "";
+        => from<size then span(from, size) else "";
     
     "A string containing the characters of this string 
      from the start of the string up to and including 
@@ -421,7 +385,7 @@ shared native final class String
      `string.spanTo(to)` may be written as 
      `string[...to]`."
     shared actual native String spanTo(Integer to)
-            => to>=0 then span(0, to) else "";
+        => to >= 0 then span(0, to) else "";
     
     "A string containing the characters of this string 
      beginning at the given [[start index|from]], 
@@ -437,11 +401,10 @@ shared native final class String
      Using the [[measure operator|Ranged.measure]], 
      `string.measure(from, length)` may be written as
      `string[from:length]`."
-    shared native actual String measure(Integer from, 
-                                        Integer length)
-            => length > 0 
-            then span(from, from+length-1) 
-            else "";
+    shared native actual String measure(Integer from, Integer length)
+        => length > 0 
+        then span(from, from+length-1) 
+        else "";
     
     "Select the first characters of this string, 
      returning a string no longer than the given 
@@ -449,7 +412,7 @@ shared native final class String
      given length, return this string. Otherwise, return 
      a string of the given length."
     shared native actual String initial(Integer length)
-            => this[0:length];
+        => this[0:length];
     
     "Select the last characters of the string, returning 
      a string no longer than the given [[length]]. If 
@@ -457,7 +420,7 @@ shared native final class String
      return this string. Otherwise, return a string of 
      the given length."
     shared native actual String terminal(Integer length)
-            => this[size-length:length];
+        => this[size-length:length];
     
     "Return two strings, the first containing the 
      characters that occur before the given [[index]], 
@@ -466,7 +429,7 @@ shared native final class String
      range of indices of this string, one of the 
      returned strings will be empty."
     shared native actual String[2] slice(Integer index)
-            => [this[...index-1], this[index...]];
+        => [this[...index-1], this[index...]];
     
     "The length of the string (the number of characters 
      it contains). In the case of the empty string, the 
@@ -488,11 +451,11 @@ shared native final class String
      
          string.lastIndex == string.size-1"
     shared actual native Integer? lastIndex 
-            => !empty then size-1;
+        => !empty then size-1;
     
     "An iterator for the characters of the string."
     shared actual native Iterator<Character> iterator()
-            => characters.iterator();
+        => characters.iterator();
     
     "Returns the character at the given [[index]] in the 
      string, or `null` if the index is before the start 

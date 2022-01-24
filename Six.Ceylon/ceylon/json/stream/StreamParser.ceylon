@@ -7,11 +7,14 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.collection {
+import ceylon.collection
+{
     ArrayList,
     HashSet
 }
-import ceylon.json {
+
+import ceylon.json
+{
     ParseException,
     Tokenizer,
     parseNumber,
@@ -23,8 +26,8 @@ import ceylon.json {
 }
 
 "Package-private class used by [[StreamParser]] to track state."
-class StreamState(parent, last, keys) {
-    
+class StreamState(parent, last, keys)
+{
     "The number of events yielded so far"
     shared variable Integer num = 0;
     
@@ -34,228 +37,231 @@ class StreamState(parent, last, keys) {
     
     shared HashSet<String>? keys;
     
-    shared actual String string 
-        => "``parent else "<top>"``, ``last else "<null>"``";
+    shared actual String string  => "``parent else "<top>"``, ``last else "<null>"``";
 }
 
 
-"""A parser for JSON data as specified by 
-   [RFC 7159] [1] which produces a stream of [[events|Event]] 
-   to be handled by the caller. The parser produces events as it reads the 
-   source [[input]], so it's possible to start parsing JSON while it's 
-   still being received.
-   
-   This parser does not enforce uniqueness of keys within 
-   JSON objects. It is usually not onerous for the caller to do so if 
-   they require such enforcement.
-   
-   By default [[ParseException]]s will propagate out of calls to [[next]] 
-   when a error is detected. You can use [[errorReporting]] 
-   to report errors as [[Exception]]s within the stream.
-   
-   ## Example
-   
-   Suppose we have the domain model:
-   
-       class Order(address, items) {
-           shared String address;
-           shared Item[] items;
-       }
-       class Item(sku, quantity) {
-           shared String sku;
-           shared Integer quantity;
-       }
-       
-    And we want to parse JSON that looks like this:
+"""
+A parser for JSON data as specified by [RFC 7159] [1] which produces a stream of [[events|Event]]
+to be handled by the caller. The parser produces events as it reads the source [[input]], so it's possible to start parsing JSON while it's 
+still being received.
+
+This parser does not enforce uniqueness of keys within 
+JSON objects. It is usually not onerous for the caller to do so if 
+they require such enforcement.
+
+By default [[ParseException]]s will propagate out of calls to [[next]] 
+when a error is detected. You can use [[errorReporting]] 
+to report errors as [[Exception]]s within the stream.
+
+## Example
+
+Suppose we have the domain model:
+
+    class Order(address, items) {
+        shared String address;
+        shared Item[] items;
+    }
+    class Item(sku, quantity) {
+        shared String sku;
+        shared Integer quantity;
+    }
     
-    ```javascript
-       {
-         "address":"",
-         "items":[
-           {
-             "sku":"123-456-789",
-             "quantity":4
-           },
-           {
-             "sku":"456-789",
-             "quantity":20
-           }
-         ]
-       }
-    ```
-    
-    Then we might write a parser like this:
-    
-        class OrderParser() {
-            
-            late variable LookAhead<Event> stream;
-           
-            String missingKey(String container, String key) {
-                return "``container``: '``key``' missing at line ``stream.line``'";
+And we want to parse JSON that looks like this:
+
+```javascript
+    {
+        "address":"",
+        "items":[
+        {
+            "sku":"123-456-789",
+            "quantity":4
+        },
+        {
+            "sku":"456-789",
+            "quantity":20
+        }
+        ]
+    }
+```
+
+Then we might write a parser like this:
+
+    class OrderParser() {
+        
+        late variable LookAhead<Event> stream;
+        
+        String missingKey(String container, String key) {
+            return "``container``: '``key``' missing at line ``stream.line``'";
+        }
+        String duplicateKey(String container, String key) {
+            return "``container``: '``key``' occurs more than once at line ``stream.line``'";
+        }
+        String keyType(String container, String key, String expectedType) {
+            return "``container``: '``key``' key is supposed to be of ``expectedType`` type at line ``stream.line``";
+        }
+        String unexpectedKey(String container, String key) {
+            return "``container``: '``key``' key not supported at line ``stream.line``";
+        }
+        String unexpectedEvent(String container, Event|Finished event) {
+            return "``container``: unexpected event ``event else "null"`` at line ``stream.line``";
+        }
+        
+        "Parses an item from events read from the given parser.
+            Returns the item or an error explanation."
+        Item|String parseItem() {
+            if (!(stream.next() is ObjectStartEvent)) {
+                return "Item: should be a JSON object";
             }
-            String duplicateKey(String container, String key) {
-                return "``container``: '``key``' occurs more than once at line ``stream.line``'";
-            }
-            String keyType(String container, String key, String expectedType) {
-                return "``container``: '``key``' key is supposed to be of ``expectedType`` type at line ``stream.line``";
-            }
-            String unexpectedKey(String container, String key) {
-                return "``container``: '``key``' key not supported at line ``stream.line``";
-            }
-            String unexpectedEvent(String container, Event|Finished event) {
-                return "``container``: unexpected event ``event else "null"`` at line ``stream.line``";
-            }
-            
-            "Parses an item from events read from the given parser.
-             Returns the item or an error explanation."
-            Item|String parseItem() {
-                if (!(stream.next() is ObjectStartEvent)) {
-                    return "Item: should be a JSON object";
-                }
-                variable String? sku = null;
-                variable Integer? quantity = null;
-                while(true) {
-                    switch(event=stream.next())
-                    case (KeyEvent) {
-                        switch(key=event.key) 
-                        case ("sku") {
-                            if (is String s = stream.next()) {
-                                if (sku exists) {
-                                    return duplicateKey("Item", "sku");
-                                }
-                                sku = s;
-                            } else {
-                                return keyType("Item", "sku", "String");
+            variable String? sku = null;
+            variable Integer? quantity = null;
+            while(true) {
+                switch(event=stream.next())
+                case (KeyEvent) {
+                    switch(key=event.key) 
+                    case ("sku") {
+                        if (is String s = stream.next()) {
+                            if (sku exists) {
+                                return duplicateKey("Item", "sku");
                             }
-                        }
-                        case ("quantity") {
-                            if (is Integer s = stream.next()) {
-                                if (quantity exists) {
-                                    return duplicateKey("Item", "quantity");
-                                }
-                                quantity = s;
-                            } else {
-                                return keyType("Item", "sku", "Integer");
-                            }
-                        }
-                        else {
-                            return unexpectedKey("Item", key);
+                            sku = s;
+                        } else {
+                            return keyType("Item", "sku", "String");
                         }
                     }
-                    case (ObjectEndEvent) {
-                        if (exists s=sku) {
-                            if (exists q=quantity) {
-                                return Item(s, q);
+                    case ("quantity") {
+                        if (is Integer s = stream.next()) {
+                            if (quantity exists) {
+                                return duplicateKey("Item", "quantity");
                             }
-                            return missingKey("Item", "quantity");
+                            quantity = s;
+                        } else {
+                            return keyType("Item", "sku", "Integer");
                         }
-                        return missingKey("Item", "sku");
                     }
                     else {
-                        return unexpectedEvent("Item", event);
+                        return unexpectedKey("Item", key);
                     }
                 }
-            }
-            
-            "Parses an order from events read from the given parser.
-             Returns the order or an error explanation."
-            Order|String parseOrder() {
-                if (!(stream.next() is ObjectStartEvent)) {
-                    return "Order: should be a JSON object";
+                case (ObjectEndEvent) {
+                    if (exists s=sku) {
+                        if (exists q=quantity) {
+                            return Item(s, q);
+                        }
+                        return missingKey("Item", "quantity");
+                    }
+                    return missingKey("Item", "sku");
                 }
-                variable String? address = null;
-                value items = ArrayList<Item>();
-                while(true) {
-                    switch(event=stream.next())
-                    case (KeyEvent) {
-                        switch(key=event.key) 
-                        case ("address") {
-                            if (is String s = stream.next()) {
-                                if (address exists) {
-                                    return duplicateKey("Order", "address");
-                                }
-                                address = s;
-                            } else {
-                                return keyType("Order", "address", "String");
-                            }
-                        }
-                        case ("items") {
-                            if (!items.empty) {
-                                return duplicateKey("Order", "items");
-                            }
-                            if (!stream.next() is ArrayStartEvent) {
-                                return keyType("Order", "items", "Array");
-                            }
-                            while (stream.peek() is ObjectStartEvent) {
-                                switch (item=parseItem())
-                                case (String) {
-                                    return item;
-                                }
-                                case (Item) {
-                                    items.add(item);
-                                }
-                            }
-                            assert(stream.next() is ArrayEndEvent);
-                        }
-                        else {
-                            return unexpectedKey("Order", key);
-                        }
-                    }
-                    case (ObjectEndEvent) {
-                        if (exists a=address) {
-                            return Order(a, items.sequence());
-                        }
-                        return missingKey("Order", "address");
-                    }
-                    else {
-                        return unexpectedEvent("Item", event);
-                    }
+                else {
+                    return unexpectedEvent("Item", event);
                 }
-            }
-            
-            shared Order|String parse(String json) {
-                stream = LookAhead(StreamParser(StringTokenizer(json)));
-                return parseOrder();
             }
         }
-   
-   While this is certainly verbose it's extremely readable and regular.
-   
-   [1]: https://tools.ietf.org/html/rfc7159
-   """
-shared class StreamParser(input, trackKeys=false) 
-        satisfies Iterator<Event>&Positioned {
-    
+        
+        "Parses an order from events read from the given parser.
+            Returns the order or an error explanation."
+        Order|String parseOrder() {
+            if (!(stream.next() is ObjectStartEvent)) {
+                return "Order: should be a JSON object";
+            }
+            variable String? address = null;
+            value items = ArrayList<Item>();
+            while(true) {
+                switch(event=stream.next())
+                case (KeyEvent) {
+                    switch(key=event.key) 
+                    case ("address") {
+                        if (is String s = stream.next()) {
+                            if (address exists) {
+                                return duplicateKey("Order", "address");
+                            }
+                            address = s;
+                        } else {
+                            return keyType("Order", "address", "String");
+                        }
+                    }
+                    case ("items") {
+                        if (!items.empty) {
+                            return duplicateKey("Order", "items");
+                        }
+                        if (!stream.next() is ArrayStartEvent) {
+                            return keyType("Order", "items", "Array");
+                        }
+                        while (stream.peek() is ObjectStartEvent) {
+                            switch (item=parseItem())
+                            case (String) {
+                                return item;
+                            }
+                            case (Item) {
+                                items.add(item);
+                            }
+                        }
+                        assert(stream.next() is ArrayEndEvent);
+                    }
+                    else {
+                        return unexpectedKey("Order", key);
+                    }
+                }
+                case (ObjectEndEvent) {
+                    if (exists a=address) {
+                        return Order(a, items.sequence());
+                    }
+                    return missingKey("Order", "address");
+                }
+                else {
+                    return unexpectedEvent("Item", event);
+                }
+            }
+        }
+        
+        shared Order|String parse(String json) {
+            stream = LookAhead(StreamParser(StringTokenizer(json)));
+            return parseOrder();
+        }
+    }
+
+While this is certainly verbose it's extremely readable and regular.
+
+[1]: https://tools.ietf.org/html/rfc7159
+"""
+shared class StreamParser(input, trackKeys=false) satisfies Iterator<Event> & Positioned
+{
     "The tokenizer to read input from"
     Tokenizer input;
     
     "Whether to validate the uniqueness of keys"
     Boolean trackKeys;
     
-    StreamState pushState(StreamState? parent, Event? last) {
+    StreamState pushState(StreamState? parent, Event? last)
+    {
         HashSet<String>? keys;
-        if (trackKeys && last is ObjectStartEvent) {
+        if (trackKeys && last is ObjectStartEvent)
+        {
             keys= HashSet<String>();
-        } else { 
+        }
+        else
+        { 
             keys = null;
         }
         StreamState result = StreamState(parent, last, keys);
-        if (trackKeys, is KeyEvent l=last) {
+        if (trackKeys, is KeyEvent l = last)
+        {
             assert (exists p=parent);
-            if (exists k=p.keys, !k.add(l.key)) {
+            if (exists k=p.keys, !k.add(l.key))
+            {
                 throw ParseException("Duplicate key: '``l.key``'", input.line, input.column);
             }
         }
         return result;
     }
     
-    "A stack (singly linked list) of states for all objects and arrays which 
-     have been started, but not finished."
+    "A stack (singly linked list) of states for all objects and arrays which have been started, but not finished."
     variable value state = pushState(null, null);
     
     
     "Parse any JSON value and return an event"
-    Event parseValue() {
+    Event parseValue()
+    {
         input.eatSpaces();
         switch(ch = input.character())
         case ('{') {

@@ -7,44 +7,58 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.json {
+import ceylon.json
+{
     Visitor,
     JsonValue=Value,
     JsonArray=Array,
     JsonObject=Object
 }
-import ceylon.collection {
+import ceylon.collection
+{
     ArrayList
 }
+
 "Calls a visitor according to the events obtained from a stream."
-shared void streamToVisitor(Iterator<Event> stream, Visitor visitor) {
-    while (!is Finished event=stream.next()) {
+shared void streamToVisitor(Iterator<Event> stream, Visitor visitor)
+{
+    while (!is Finished event = stream.next())
+    {
         switch(event)
-        case (ObjectStartEvent) {
+        case (ObjectStartEvent)
+        {
             visitor.onStartObject();
         }
-        case (KeyEvent) {
+        case (KeyEvent)
+        {
             visitor.onKey(event.key);
         }
-        case (ObjectEndEvent) {
+        case (ObjectEndEvent)
+        {
             visitor.onEndObject();
         }
-        case (ArrayStartEvent) {
+        case (ArrayStartEvent)
+        {
             visitor.onStartArray();
         }
-        case (ArrayEndEvent) {
+        case (ArrayEndEvent)
+        {
             visitor.onEndArray();
         }
-        case (String) {
+        case (String)
+        {
             visitor.onString(event);
         }
-        case (Boolean) {
+        case (Boolean)
+        {
             visitor.onBoolean(event);
         }
-        case (Integer|Float) {
+        case (Integer|Float)
+        {
             visitor.onNumber(event);
         }
-        case (null) {
+        case (null)
+        {
             visitor.onNull();
         }
     }
@@ -54,52 +68,67 @@ shared void streamToVisitor(Iterator<Event> stream, Visitor visitor) {
 abstract class None() of none {}
 object none extends None() {}
 
-class PushIterator<out T>(Iterator<T> it) satisfies Iterator<T> {
+class PushIterator<out T>(Iterator<T> it) satisfies Iterator<T>
+{
     variable T|None pushed = none;
-    shared void push(Anything pushed) {
+    shared void push(Anything pushed)
+    {
         "cannot push more than one item"
         assert (is None p=pushed);
         assert (is T p);
         this.pushed = p;
     }
-    shared actual T|Finished next() {
-        if (!is None p=pushed) {
+    shared actual T|Finished next()
+    {
+        if (!is None p = pushed)
+        {
             pushed = none;
             return p;
-        } else {
+        }
+        else
+        {
             return it.next();
         }
     }
 }
 
 "Produces a stream of events from the descendents of the given root value."
-shared class StreamingVisitor(JsonValue root) satisfies Iterator<Event> {
+shared class StreamingVisitor(JsonValue root) satisfies Iterator<Event>
+{
     value stack = ArrayList<PushIterator<JsonValue|<String->JsonValue>>>();
     value pi = PushIterator<JsonValue|<String->JsonValue>>(emptyIterator);
     pi.push(root);
     stack.push(pi);
-    shared actual Event|Finished next() {
-        if (exists p = stack.pop()) {
+    shared actual Event|Finished next()
+    {
+        if (exists p = stack.pop())
+        {
             value n = p.next();
             switch(n)
-            case (String|Boolean|Integer|Float|Null) {
+            case (String|Boolean|Integer|Float|Null)
+            {
                 return n;
             }
-            case (JsonObject) {
+            case (JsonObject)
+            {
                 stack.push(PushIterator(n.iterator()));
                 return objectStart;
             } 
-            case (JsonArray) {
+            case (JsonArray)
+            {
                 stack.push(PushIterator(n.iterator()));
                 return arrayStart;
             }
-            case (String->JsonValue) {
+            case (String->JsonValue)
+            {
                 p.push(n.item);
                 return KeyEvent(n.key);
             }
-            case (Finished) {
+            case (Finished)
+            {
                 switch (p)
-                case (Iterator<String|Boolean|Integer|Float|JsonObject|JsonArray|Null>) {
+                case (Iterator<String|Boolean|Integer|Float|JsonObject|JsonArray|Null>)
+                {
                     return arrayEnd;
                 }
                 else {
@@ -107,7 +136,9 @@ shared class StreamingVisitor(JsonValue root) satisfies Iterator<Event> {
                 }
                 
             }
-        } else {
+        }
+        else
+        {
             return finished;
         }
     }

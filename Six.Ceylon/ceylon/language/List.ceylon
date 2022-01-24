@@ -58,81 +58,75 @@
    [[tuples|Tuple]], and [[arrays|Array]] are all `List`s,
    and are all of fixed length. Variable-length mutable
    `List`s are also possible."""
-see (interface Sequence, 
-     interface Empty, 
-     class Array)
+see (interface Sequence, interface Empty, class Array)
 tagged("Collections")
 shared interface List<out Element=Anything>
-        satisfies Collection<Element> 
-                & Correspondence<Integer,Element> 
-                & Ranged<Integer,Element,List<Element>> {
-    
+    satisfies Collection<Element> 
+            & Correspondence<Integer,Element> 
+            & Ranged<Integer,Element,List<Element>>
+{
     "The first element of this `List`, if any."
     shared actual default Element? first => getFromFirst(0);
     
     "The last element of this `List`, if any."
     shared actual default Element? last => getFromLast(0);
     
-    "Returns the element of this list with the given 
-     [[index]] if the index refers to an element of this
-     list, that is, if `0<=index<=list.lastIndex`, or `null` 
-     otherwise. The first element of the list has index `0`,
-     and the last element has index [[lastIndex]]."
+    "Returns the element of this list with the given [[index]] if the index refers to an element of
+     this list, that is, if `0<=index<=list.lastIndex`, or `null` otherwise. The first element of
+     the list has index `0`, and the last element has index [[lastIndex]]."
     shared actual Element? get(Integer index) 
-            => getFromFirst(index);
+        => getFromFirst(index);
     
-    "Returns the element of this list with the given 
-     [[index]] if the index refers to an element of this
-     list, that is, if `0<=index<=list.lastIndex`, or `null` 
-     otherwise. The first element of the list has index `0`, 
-     and the last element has index [[lastIndex]]."
+    "Returns the element of this list with the given [[index]] if the index refers to an element of
+     this list, that is, if `0<=index<=list.lastIndex`, or `null` otherwise. The first element of
+     the list has index `0`, and the last element has index [[lastIndex]]."
     see (function getFromLast)
     shared actual formal Element? getFromFirst(Integer index);
     
-    "Returns the element of this list with the given 
-     [[index]], where the list is indexed from the _end_ of 
-     the list instead of from the start, if the index refers
-     to an element of this list, or `null` otherwise. The
-     last element of the list has index `0`, and the first
-     element has index [[lastIndex]]."
+    "Returns the element of this list with the given [[index]], where the list is indexed from the
+     _end_ of the list instead of from the start, if the index refers to an element of this list,
+     or `null` otherwise. The last element of the list has index `0`, and the first element has
+     index [[lastIndex]]."
     since("1.1.0")
     shared default Element? getFromLast(Integer index)
-            => getFromFirst(size-1-index);
+        => getFromFirst(size-1-index);
     
-    Element getElement(Integer index) {
-        if (exists element = getFromFirst(index)) { 
+    Element getElement(Integer index)
+    {
+        if (exists element = getFromFirst(index))
+        { 
             return element;
         }
-        else {
+        else
+        {
             assert (is Element null);
             return null; 
         }
     }
     
-    "The index of the last element of the list, or `null` if 
-     the list is empty. Always `size>0 then size-1`."
+    "The index of the last element of the list, or `null` if the list is empty. Always
+    `size>0 then size-1`."
     see (value List.size)
     shared formal Integer? lastIndex;
     
-    "The number of elements in this list, always
-     `1 + (lastIndex else -1)`."
+    "The number of elements in this list, always `1 + (lastIndex else -1)`."
     see (value List.lastIndex)
     shared actual default Integer size 
-            => 1 + (lastIndex else -1);
+        => 1 + (lastIndex else -1);
     
-    "Determines if the given index refers to an element of 
-     this list, that is, if `0<=index<=list.lastIndex`."
+    "Determines if the given index refers to an element of this list, that is, if
+     `0 <= index <= list.lastIndex`."
     shared actual default Boolean defines(Integer index) 
-            => 0 <= index < size;
+        => 0 <= index < size;
         
     "The rest of the list, without the first element.
      
      This is a lazy operation returning a view of this list."
     shared actual default List<Element> rest 
-            => size>1 then Sublist(1,size-1) else [];
+        => size>1 then Sublist(1,size-1) else [];
     
     shared actual default List<Element> exceptLast 
-            => size>1 then Sublist(0, size-2) else [];
+        => size>1 then Sublist(0, size-2) else [];
     
     "A list containing all indexes of this list.
      
@@ -140,90 +134,101 @@ shared interface List<out Element=Anything>
     see (function indexes)
     shared actual default List<Integer> keys => Indexes();
     
-    "A list containing the elements of this list in reverse 
-     order to the order in which they occur in this list. 
-     For every `index` of a reversed `list`:
+    "A list containing the elements of this list in reverse order to the order in which they occur
+     in this list. For every `index` of a reversed `list`:
      
          list.reversed[index]==list[size-1-index]
      
      This is a lazy operation returning a view of this list."
     shared default List<Element> reversed => Reversed();
     
-    "A shallow copy of this list, that is, a list with the
-     same elements as this list, which do not change if the
-     elements of this list change."
+    "A shallow copy of this list, that is, a list with the same elements as this list, which do not
+     change if the elements of this list change."
     shared actual default List<Element> clone() 
-            => sequence();
+        => sequence();
     
-    shared actual default Iterator<Element> iterator() {
-        if (size>0) {
-            return object
-                    satisfies Iterator<Element> {
+    shared actual default Iterator<Element> iterator()
+    {
+        if (size > 0)
+        {
+            return object satisfies Iterator<Element>
+            {
                 variable Integer index = 0;
                 value size = outer.size;
                 next() => index>=size
-                    then finished
-                    else getElement(index++);
+                       then finished
+                       else getElement(index++);
                 string => outer.string + ".iterator()";
             };
         }
-        else {
+        else
+        {
             return emptyIterator;
         }
     }
     
-    "Two `List`s are considered equal iff they have the 
-     same `size` and _entry sets_. The entry set of a list 
-     `list` is the set of elements of `list.indexed`. This 
-     definition is equivalent to the more intuitive notion 
-     that two lists are equal iff they have the same `size` 
-     and for every index either:
+    "Two `List`s are considered equal iff they have the same `size` and _entry sets_. The entry set
+     of a list `list` is the set of elements of `list.indexed`. This definition is equivalent to the
+     more intuitive notion that two lists are equal iff they have the same `size` and for every
+     index either:
      
      - the lists both have the element `null`, or
-     - the lists both have a non-null element, and the
-       two elements are equal.
+     - the lists both have a non-null element, and the two elements are equal.
      
-     As a special exception, a [[String]] is not equal to 
-     any list which is not also a [[String]]."
-    shared actual default Boolean equals(Object that) {
-        if (is String that) {
+     As a special exception, a [[String]] is not equal to any list which is not also a [[String]]."
+    shared actual default Boolean equals(Object that)
+    {
+        if (is String that)
+        {
             return false;
         }
-        else if (is List<> that) {
-            if (this.size != that.size) {
+        else if (is List<> that)
+        {
+            if (this.size != that.size)
+            {
                 return false;
             }
             value thisIterator = this.iterator();
             value thatIterator = that.iterator();
-            for (_ in 0:size) {
+            for (_ in 0:size)
+            {
                 value thisElement = thisIterator.next();
                 value thatElement = thatIterator.next();
-                if (exists thisElement) {
-                    if (!exists thatElement) {
+                if (exists thisElement)
+                {
+                    if (!exists thatElement)
+                    {
                         return false;
                     }
-                    else if (thisElement != thatElement) {
+                    else if (thisElement != thatElement)
+                    {
                         return false;
                     }
                 }
-                else if (thatElement exists) {
+                else if (thatElement exists)
+                {
                     return false;
                 }
             }
-            else {
+            else
+            {
                 return true;
             } 
         }
-        else {
+        else
+        {
             return false;
         }
     }
     
-    shared actual default Integer hash {
+    shared actual default Integer hash
+    {
         variable value hash = 1;
-        for (elem in this) {
+        for (elem in this)
+        {
             hash *= 31;
-            if (exists elem) {
+            if (exists elem)
+            {
                 hash += elem.hash;
             }
         }
@@ -236,27 +241,29 @@ shared interface List<out Element=Anything>
     shared actual default 
     Boolean longerThan(Integer length) => size>length;
     
-    "A list containing the elements of this list repeated 
-     the [[given number of times|times]], or an empty list
-     if `times<=0`. For every `index` of a repeated `list`:
+    "A list containing the elements of this list repeated the [[given number of times|times]], or
+     an empty list if `times<=0`. For every `index` of a repeated `list`:
      
          list.repeat(n)[index]==list[index%n]
      
      This is a lazy operation returning a view of this list."
     shared actual default 
     List<Element> repeat(Integer times)
-            => switch (times<=>1) 
-            case (smaller) []
-            case (equal) this
-            case (larger) Repeat(times);
+        => switch (times<=>1) 
+        case (smaller) []
+        case (equal) this
+        case (larger) Repeat(times);
     
     shared default actual 
-    Element? find(
-            Boolean selecting(Element&Object elem)) {
+    Element? find(Boolean selecting(Element&Object elem))
+    {
         variable value index = 0;
-        while (index<size) {
-            if (exists elem = getFromFirst(index++)) {
-                if (selecting(elem)) {
+        while (index<size)
+        {
+            if (exists elem = getFromFirst(index++))
+            {
+                if (selecting(elem))
+                {
                     return elem;
                 }
             }
@@ -265,99 +272,84 @@ shared interface List<out Element=Anything>
     }
     
     shared default actual 
-    Element? findLast(
-            Boolean selecting(Element&Object elem)) {
+    Element? findLast(Boolean selecting(Element&Object elem))
+    {
         variable value index = size-1;
-        while (index >= 0) {
-            if (exists elem = getFromFirst(index--), 
-                    selecting(elem)) {
+        while (index >= 0)
+        {
+            if (exists elem = getFromFirst(index--), selecting(elem))
+            {
                 return elem;
             }
         }
         return null;
     }
     
-    "A sublist of this list, starting at the element with
-     the given [[index|from]].
+    "A sublist of this list, starting at the element with the given [[index|from]].
      
      This is a lazy operation, returning a view of this list."
-    see (function skip, 
-         function sublistTo)
+    see (function skip, function sublistTo)
     since("1.1.0")
     shared default 
-    List<Element> sublistFrom(Integer from) 
-            => sublist(from, size-1);
+    List<Element> sublistFrom(Integer from) => sublist(from, size-1);
     
-    "A sublist of this list, ending at the element with the 
-     given [[index|to]].
+    "A sublist of this list, ending at the element with the given [[index|to]].
      
      This is a lazy operation, returning a view of this list."
-    see (function take,
-        function initial,
-        function sublistFrom)
+    see (function take, function initial, function sublistFrom)
     since("1.1.0")
     shared default 
     List<Element> sublistTo(Integer to) 
-            => sublist(0, to);
+        => sublist(0, to);
     
-    "A sublist of this list, starting at the element with
-     index [[from]], ending at the element with the index 
-     [[to]].
+    "A sublist of this list, starting at the element with index [[from]], ending at the element
+     with the index [[to]].
      
      This is a lazy operation, returning a view of this list."
     see(function sublistTo, function sublistFrom)
     since("1.1.0")
     shared default 
     List<Element> sublist(Integer from, Integer to)
-            => from<=to && from<size && to>=0
-            then Sublist {
-                from = Integer.largest(0, from); 
-                to = Integer.smallest(size-1, to);
-            }
-            else [];
+        => from <= to && from < size && to >= 0
+        then Sublist
+        {
+            from = Integer.largest(0, from); 
+            to = Integer.smallest(size-1, to);
+        }
+        else [];
     
-    "Return a list formed by patching the given [[list]] 
-     in place of a segment of this list identified by the
-     given [[starting index|from]] and [[length]].
+    "Return a list formed by patching the given [[list]] in place of a segment of this list
+     identified by the given [[starting index|from]] and [[length]].
      
-     This is a lazy operations, returning a view over this 
-     list and the given list.
+     This is a lazy operations, returning a view over this list and the given list.
      
      Four special cases are interesting:
      
-     - If `length==0`, the patched list has the given values 
-       \"inserted\" into this list at the given index `from`.
-     - If the given `list` is empty, the patched list has 
-       the measure of this list identified by `from:length` 
-       \"deleted\".
-     - If `from==size`, the patched list is formed by
-       appending the given list.
-     - If `from==0`, the patched list is formed by 
-       prepending the given list.
+     - If `length==0`, the patched list has the given values \"inserted\" into this list at the
+       given index `from`.
+     - If the given `list` is empty, the patched list has the measure of this list identified by
+       `from:length` \"deleted\".
+     - If `from==size`, the patched list is formed by appending the given list.
+     - If `from==0`, the patched list is formed by prepending the given list.
      
      For example:
      
      - `(-2..2).patch([], 1, 3)` produces the list `{-2, 2}`,
-     - `[-2, 2].patch(-1..1, 1)` produces the list 
-       `{-2, -1, 0, 1, 2}`, and
-     - `0:3.patch(2..0)` produces the list 
-       `{0, 1, 2, 2, 1, 0}`.
+     - `[-2, 2].patch(-1..1, 1)` produces the list `{-2, -1, 0, 1, 2}`, and
+     - `0:3.patch(2..0)` produces the list `{0, 1, 2, 2, 1, 0}`.
      
-     Finally, to patch a single element, leaving the `size`
-     of the list unchanged, explicitly specify `length==1`:
+     Finally, to patch a single element, leaving the `size` of the list unchanged, explicitly
+     specify `length==1`:
      
-     - `[0, 1, 0, 1].patch([-1], 2, 1)` produces the list
-       `{0, 1, -1, 1}`.
+     - `[0, 1, 0, 1].patch([-1], 2, 1)` produces the list `{0, 1, -1, 1}`.
      
-     If `length<0`, or if `from` is outside the range 
-     `0..size`, return this list."
+     If `length<0`, or if `from` is outside the range `0..size`, return this list."
     since("1.1.0")
     shared default 
     List<Element|Other> patch<Other>(
         "The list of new elements."
         List<Other> list,
-        "The index at which the elements will occur, and
-         the start index of the segment to replace."
+        "The index at which the elements will occur, and the start index of the segment to replace."
         Integer from=size,
         "The length of the segment to replace." 
         Integer length=0)
@@ -365,8 +357,7 @@ shared interface List<out Element=Anything>
             then Patch(list, from, length)
             else this;
     
-    "Determine if the given [[list|sublist]] occurs at the 
-     start of this list."
+    "Determine if the given [[list|sublist]] occurs at the start of this list."
     see (function endsWith)
     shared default 
     Boolean startsWith(List<> sublist) 
@@ -377,8 +368,7 @@ shared interface List<out Element=Anything>
                         then first==second
                         else first exists == second exists);
     
-    "Determine if the given [[list|sublist]] occurs at the 
-     end of this list."
+    "Determine if the given [[list|sublist]] occurs at the end of this list."
     see (function startsWith)
     shared default 
     Boolean endsWith(List<> sublist)
@@ -390,15 +380,13 @@ shared interface List<out Element=Anything>
                         then first==second
                         else first exists == second exists);
     
-    "The indexes in this list for which the element is not
-     null and satisfies the given 
+    "The indexes in this list for which the element is not null and satisfies the given
      [[predicate function|selecting]]."
     see (function locations)
     since("1.1.0")
     shared default 
     {Integer*} indexesWhere(
-        "The predicate function the indexed elements must 
-         satisfy."
+        "The predicate function the indexed elements must satisfy."
         Boolean selecting(Element&Object element)) 
             => { for (index in 0:size) 
                     if (exists element=getFromFirst(index), 

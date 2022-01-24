@@ -142,11 +142,17 @@ namespace Six.Gen
             }
         }
 
+        private void Intro(RuleOp rule, CoreOp op)
+        {
+            Comment(op);
+            Constructor(rule);
+        }
+
         private void Constructor(RuleOp rule)
         {
             if (rule.Class != null)
             {
-                if (rule.Class.Base != null && (rule.Class.Base.TypeName == "RToken" || rule.Class.Base.TypeName == "RLiteral" || rule.Class.Base.TypeName == "REof"))
+                if (rule.IsBottomType)
                 {
                     wl($"public {rule.Class.TypeName}(params Node[] children) : base(children) {{}}");
                 }
@@ -157,16 +163,22 @@ namespace Six.Gen
             }
         }
 
-        private void SequenceBody(RuleOp rule, SeqOp inner)
+        private void Comment(CoreOp op)
         {
-            Constructor(rule);
+            wl($"// {op}");
+        }
+
+        private void SequenceBody(RuleOp rule, SeqOp op)
+        {
+            Intro(rule, op);
+
             wl();
 
-            var namer = new Namer();
+            var namer = new NameCounter();
 
-            for (var index = 0; index < inner.Arguments.Count; index++)
+            for (var index = 0; index < op.Arguments.Count; index++)
             {
-                var element = inner.Arguments[index];
+                var element = op.Arguments[index];
 
                 wl($"public {TypeOf(element)} {NameOf(namer, element)} => Get<{TypeOf(element)}>({index});");
             }
@@ -174,32 +186,32 @@ namespace Six.Gen
 
         private void LoopBody(RuleOp rule, SeqOp op)
         {
-            Constructor(rule);
+            Intro(rule, op);
         }
 
         private void StarBody(RuleOp rule, StarOp op)
         {
-            Constructor(rule);
+            Intro(rule, op);
         }
 
         private void PlusBody(RuleOp rule, PlusOp op)
         {
-            Constructor(rule);
+            Intro(rule, op);
         }
 
         private void StringBody(RuleOp rule, StringOp op)
         {
-            Constructor(rule);
+            Intro(rule, op);
         }
 
         private void TokenBody(RuleOp rule, TokenOp op)
         {
-            Constructor(rule);
+            Intro(rule, op);
         }
 
         private void AltBody(RuleOp rule, AltOp op)
         {
-            Constructor(rule);
+            Intro(rule, op);
         }
 
         private string? TypeOf(CoreOp op)
@@ -207,7 +219,7 @@ namespace Six.Gen
             return op.Class?.TypeName ?? op.Interface?.TypeName;
         }
 
-        private string? NameOf(Namer namer, CoreOp op)
+        private string? NameOf(NameCounter namer, CoreOp op)
         {
             if (op.Class != null)
             {
@@ -225,7 +237,7 @@ namespace Six.Gen
             return null;
         }
 
-        private class Namer
+        private class NameCounter
         {
             private readonly Dictionary<string, int> names = new();
 

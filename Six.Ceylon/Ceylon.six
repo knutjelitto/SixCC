@@ -120,10 +120,6 @@ package-path
     | package-name ( '.' package-name )*
     ;
 
-annotation-name
-    | lower-identifier
-    ;
-
 member-name
     | lower-identifier
     ;
@@ -170,7 +166,7 @@ variable-pattern
     ;
 
 variadic-variable
-    | union-type? variadic-operator member-name?
+    | union-type? variadic-operator member-name
     ;
 
 let-statement
@@ -190,15 +186,15 @@ assertion-message
     ;
 
 block
-    | block-elements
+    : block-elements
     ;
 
 interface-block
-    | block-elements
+    : block-elements
     ;
 
 class-block
-    | block-elements
+    : block-elements
     ;
 
 block-elements
@@ -224,15 +220,11 @@ qualified-class
     ;
 
 super-qualified-class
-    | super-qualifier base-reference
-    ;
-
-super-qualifier
-    | 'super' '.'
+    | 'super' '.' base-reference
     ;
 
 package-qualified-class
-    | package-qualifier un-qualified-class
+    | 'package' '.' un-qualified-class
     ;
 
 package-qualifier
@@ -347,11 +339,11 @@ type-default
     ;
 
 type-constraint
-    | 'given' type-name? type-parameters? case-types? satisfied-types?
+    : 'given' type-name? type-parameters? case-types? satisfied-types?
     ;
 
 type-constraints
-    | type-constraint+
+    : type-constraint+
     ;
     
 
@@ -361,14 +353,15 @@ declaration-or-statement
     ;
 
 declaration
-    | constructor-declaration
-    | alias-declaration
     | class-declaration
     | interface-declaration
+    | alias-declaration
     | object-declaration
-    | enumerated-object
+    | constructor-declaration
+    | enumerated-object-declaration
     | setter-declaration
     | typed-method-declaration
+    | void-method-declaration
     | inferred-method-declaration
     | typed-attribute-declaration
     | inferred-attribute-declaration
@@ -382,7 +375,7 @@ alias-declaration
     | annotations 'alias' type-name type-parameters? type-constraints? optional-type-specifier
     ;
 
-enumerated-object
+enumerated-object-declaration
     | annotations 'new' member-name delegated-constructor? block
     ;
     
@@ -400,12 +393,11 @@ setter-definition
     ;
 
 typed-method-declaration
-    | annotations method-type parametrized-member type-constraints? method-definition
+    | annotations variadic-type parametrized-member type-constraints? method-definition
     ;
 
-method-type
-    | variadic-type
-    | kw-void
+void-method-declaration
+    | annotations 'void' parametrized-member type-constraints? method-definition
     ;
 
 inferred-method-declaration
@@ -413,11 +405,7 @@ inferred-method-declaration
     ;
 
 typed-attribute-declaration
-    | annotations attribute-type member-name attribute-definition
-    ;
-
-attribute-type
-    | variadic-type
+    | annotations variadic-type member-name attribute-definition
     ;
 
 inferred-attribute-declaration
@@ -590,6 +578,10 @@ named-argument
     | named-argument-declaration
     ;
 
+anonymous-argument
+    | expression ';'
+    ;
+
 named-specified-argument
     | member-name value-specifier ';'
     ;
@@ -602,10 +594,6 @@ sequenced-argument
     | comprehension-argument
     | positional-argument
     | spread-argument
-    ;
-
-anonymous-argument
-    | expression ';'
     ;
 
 named-argument-declaration
@@ -1264,7 +1252,8 @@ primary-type
     | tuple-type
     | iterable-type
     | grouped-type
-    | qualified-type
+    | package-qualified-type
+    | type-path
     ;
 
 nullable-type
@@ -1296,8 +1285,8 @@ grouped-type
     | '<' type '>'
     ;
 
-qualified-type
-    | package-qualifier? type-path
+package-qualified-type
+    | 'package' '.' type-path
     ;
     
 annotations
@@ -1305,7 +1294,7 @@ annotations
     ;
 
 annotation
-    | annotation-name arguments?
+    | member-name arguments?
     ;
 
 conditions
@@ -1538,7 +1527,7 @@ member-model-expression
     ;
 
 package-qualified-member-reference
-    | package-qualifier member-reference
+    | 'package' '.' member-reference
     ;
 
 type-qualified-member-reference

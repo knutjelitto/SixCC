@@ -9,6 +9,10 @@
 
         public RNode[] Children { get; }
 
+        public object? Value { private get; set; } = null;
+
+        public T? GetValue<T>() where T : class => Value as T;
+
         public T Get<T>(int index) => (T)(object)Children[index];
 
         protected string CommonName()

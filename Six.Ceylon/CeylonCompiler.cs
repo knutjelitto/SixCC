@@ -1,4 +1,5 @@
-﻿using Six.Runtime.Matchers;
+﻿using Six.Ceylon.Ast;
+using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 using static Six.Ceylon.CeylonTree;
@@ -7,14 +8,17 @@ namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-        private readonly CeylonVisitor declarationVisitor = new CeylonVisitor();
+        private readonly CeylonVisitor declarationVisitor = new();
+        private readonly CompilerConfiguration configuration;
 
-        public CeylonCompiler(bool withIndex = false)
+        public CeylonCompiler(CompilerConfiguration configuration)
         {
-            if (withIndex)
+            if (configuration.WithRuleIndex)
             {
                 ruleIndex = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
             }
+
+            this.configuration = configuration;
         }
 
         public void Report()
@@ -28,7 +32,7 @@ namespace Six.Ceylon
             }
         }
 
-        public bool BuildModule(ModuleContainer module)
+        public bool BuildModule(Module module)
         {
             Console.Write($"{module.Name,-28}");
 
@@ -38,7 +42,7 @@ namespace Six.Ceylon
 
             if (ok)
             {
-                var moduleDescriptor = GetModuleDescriptor(module.ModuleFile);
+                _ = GetModuleDescriptor(module.ModuleFile);
 
                 foreach (var package in module.Packages)
                 {
@@ -54,7 +58,7 @@ namespace Six.Ceylon
             return ok;
         }
 
-        public bool BuildPackage(PackageContainer package)
+        public bool BuildPackage(Package package)
         {
             Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
 
@@ -94,14 +98,14 @@ namespace Six.Ceylon
 
             if (ok)
             {
-                if (file.Sppf != null)
+                if (configuration.DumpSppf && file.Sppf != null)
                 {
                     using (var writer = $"{file.ShortPath}.sppf".Writer())
                     {
                         SppfDumper.Dump(file.Sppf, writer);
                     }
                 }
-                if (file.Tree != null)
+                if (configuration.DumpTree && file.Tree != null)
                 {
                     using (var writer = $"{file.ShortPath}.tree".Writer())
                     {
@@ -115,17 +119,17 @@ namespace Six.Ceylon
             return ok;
         }
 
-        private CXStart? GetStart(FileJob file)
+        private static CXStart? GetStart(FileJob file)
         {
             return file.Tree as CXStart;
         }
 
-        private CModuleDescriptor? GetModuleDescriptor(FileJob file)
+        private static CModuleDescriptor? GetModuleDescriptor(FileJob file)
         {
             return GetStart(file)?.CompilationUnit as CModuleDescriptor;
         }
 
-        private CPackageDescriptor? GetPackageDescriptor(FileJob file)
+        private static CPackageDescriptor? GetPackageDescriptor(FileJob file)
         {
             return GetStart(file)?.CompilationUnit as CPackageDescriptor;
         }

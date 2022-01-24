@@ -28,8 +28,7 @@ shared final sealed annotation class AnnotationAnnotation()
                     ClassDeclaration
                   | FunctionDeclaration> {}
 
-"Annotation to mark a class as an *annotation class*, or a top-level function as an
- *annotation constructor*."
+"Annotation to mark a class as an *annotation class*, or a top-level function as an *annotation constructor*."
 see (interface Annotation)
 shared annotation AnnotationAnnotation annotation() => AnnotationAnnotation();
 
@@ -41,8 +40,8 @@ shared final sealed annotation class SharedAnnotation()
               | ConstructorDeclaration
               | Package | Import> {}
 
-"Annotation to mark a declaration as shared. A `shared`  declaration is visible
- outside the block of code in which it is declared."
+"Annotation to mark a declaration as shared. A `shared`  declaration is visible outside the block of
+ code in which it is declared."
 shared annotation SharedAnnotation shared() => SharedAnnotation();
 
 "The annotation class for the [[restricted]] annotation."

@@ -50,7 +50,7 @@ namespace Six.Runtime.Sppf
                     foreach (var location in rules[name])
                     {
                         writer.WriteLine(location);
-                        if (++count >= 10000)
+                        if (++count >= 100000)
                         {
                             break;
                         }

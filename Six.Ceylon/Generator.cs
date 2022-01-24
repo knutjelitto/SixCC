@@ -22,7 +22,7 @@ namespace Six.Ceylon
 
                 using (var writer = $"{ast.Name}-ast.txt".Writer())
                 {
-                    var dumper = new Ast.AstDumper(writer, ast);
+                    var dumper = new Six.Ast.AstDumper(writer, ast);
                     dumper.Dump();
                 }
 
@@ -41,7 +41,7 @@ namespace Six.Ceylon
 
                         var generated = generator.ToString();
 
-                        using (var writer = $"{ebnf.Name}.gen.cs".Writer())
+                        using (var writer = $"{ebnf.Name}Generated.cs".Writer())
                         {
                             writer.Write(generated);
                         }

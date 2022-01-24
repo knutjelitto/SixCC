@@ -1,14 +1,13 @@
-﻿namespace Six.Ceylon
+﻿using Six.Ceylon.Ast;
+
+namespace Six.Ceylon
 {
     public class CeylonLoader : Loader
     {
-        public const string CeylonRoot = "ceylon";
-        public const string TestsRoot = "tests";
-
         private const string packageFile = "package.ceylon";
         private const string moduleFile = "module.ceylon";
 
-        public static IEnumerable<ModuleContainer> GetModules(string fromRoot = CeylonRoot)
+        public static IEnumerable<Module> GetModules(string fromRoot)
         {
             var moduleFiles = LoadFiles(fromRoot, s => Path.GetFileName(s) == moduleFile).ToList();
 
@@ -19,9 +18,9 @@
         }
 
 
-        private static ModuleContainer GetModule(FileJob moduleFile)
+        private static Module GetModule(FileJob moduleFile)
         {
-            var module = new ModuleContainer(moduleFile);
+            var module = new Module(moduleFile);
 
             FindPackages(module);
 
@@ -48,7 +47,7 @@
         }
 
 
-        private static void FindPackages(ModuleContainer module)
+        private static void FindPackages(Module module)
         {
             var root = Path.GetDirectoryName(module.ModuleFile.LongPath)!;
             var prefixLength = module.ModuleFile.LongPath.Length - module.ModuleFile.ShortPath.Length;
@@ -59,15 +58,15 @@
                 var shortPath = fullPath[prefixLength..].Replace("\\", "/");
                 var packageName = dir[prefixLength..].Replace("\\", "/").Replace("/", ".");
 
-                PackageContainer package;
+                Package package;
 
                 if (File.Exists(fullPath))
                 {
-                    package = new PackageContainer(packageName, MakeFile(fullPath, shortPath));
+                    package = new Package(packageName, MakeFile(fullPath, shortPath));
                 }
                 else
                 {
-                    package = new PackageContainer(packageName);
+                    package = new Package(packageName);
                 }
 
                 foreach (var file in Directory.EnumerateFiles(dir, "*.ceylon", SearchOption.TopDirectoryOnly))
