@@ -7,16 +7,19 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"A declaration which can be contained in a [[Package]] or in another [[NestableDeclaration]].
+"""
+A declaration which can be contained in a [[Package]] or in another [[NestableDeclaration]].
  
- Functions, values, classes, interfaces and aliases are such declarations."
-shared sealed interface NestableDeclaration of 
-                                        FunctionOrValueDeclaration |
-                                        ClassOrInterfaceDeclaration |
-                                        ConstructorDeclaration |
-                                        SetterDeclaration |
-                                        AliasDeclaration
-        satisfies AnnotatedDeclaration & TypedDeclaration {
+Functions, values, classes, interfaces and aliases are such declarations.
+"""
+shared sealed interface NestableDeclaration
+    of  FunctionOrValueDeclaration |
+        ClassOrInterfaceDeclaration |
+        ConstructorDeclaration |
+        SetterDeclaration |
+        AliasDeclaration
+        satisfies AnnotatedDeclaration & TypedDeclaration
+{
 
     "True if this declaration is annotated with [[actual|ceylon.language::actual]]."
     shared formal Boolean actual;

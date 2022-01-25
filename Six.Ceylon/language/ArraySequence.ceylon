@@ -7,28 +7,25 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"A [[Sequence]] backed by an [[Array]]. 
- 
- Since [[Array]]s are mutable, this class is private to the
- language module, where we can be sure the `Array` is not
- modified after the `ArraySequence` has been initialized."
+"""
+A [[Sequence]] backed by an [[Array]]. 
+
+Since [[Array]]s are mutable, this class is private to the language module, where we can be sure
+the `Array` is not modified after the `ArraySequence` has been initialized.
+"""
 by ("Tom")
 shared sealed final
 serializable
 tagged("Collections", "Sequences")
-class ArraySequence<out Element>(array)
-        extends Object()
-        satisfies [Element+] {
-    
+class ArraySequence<out Element>(array) extends Object() satisfies [Element+]
+{    
     Array<Element> array;
     
     assert (!array.empty);
     
-    getFromFirst(Integer index) 
-            => array.getFromFirst(index);
+    getFromFirst(Integer index) => array.getFromFirst(index);
     
-    contains(Object element) 
-            => array.contains(element);
+    contains(Object element) => array.contains(element);
     
     size => array.size;
     
@@ -58,25 +55,19 @@ class ArraySequence<out Element>(array)
     
     each(void step(Element element)) => array.each(step);
     
-    count(Boolean selecting(Element element))
-            => array.count(selecting);
+    count(Boolean selecting(Element element)) => array.count(selecting);
     
-    every(Boolean selecting(Element element))
-            => array.every(selecting);
+    every(Boolean selecting(Element element)) => array.every(selecting);
     
-    any(Boolean selecting(Element element))
-            => array.any(selecting);
+    any(Boolean selecting(Element element)) => array.any(selecting);
     
-    find(Boolean selecting(Element&Object element))
-            => array.find(selecting);
+    find(Boolean selecting(Element&Object element)) => array.find(selecting);
     
-    findLast(Boolean selecting(Element&Object element))
-            => array.findLast(selecting);
+    findLast(Boolean selecting(Element&Object element)) => array.findLast(selecting);
     
     shared actual 
     Result|Element reduce<Result>(
-        Result accumulating(Result|Element partial, 
-                            Element element)) {
+        Result accumulating(Result|Element partial, Element element)) {
         // cannot follow std pattern of narrowing null
         // https://github.com/ceylon/ceylon/issues/7021
         value result = array.reduce(accumulating);

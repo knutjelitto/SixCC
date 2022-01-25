@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class AnyIdentifier : Identifier
+    public sealed class AnyIdentifier : Identifier
     {
         public AnyIdentifier(RToken token)
             : base(token, token.Text)

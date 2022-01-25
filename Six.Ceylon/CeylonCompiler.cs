@@ -30,9 +30,14 @@ namespace Six.Ceylon
             if (ruleIndex != null)
             {
                 using (var writer = $"{parser.__Name}-RulesIndex.txt".Writer())
-{
+                {
                     ruleIndex.Dump(writer);
                 }
+            }
+
+            using (var writer = $"{parser.__Name}-Namespaces.txt".Writer())
+            {
+                world.Global.Dump(writer);
             }
         }
 

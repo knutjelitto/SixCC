@@ -7,8 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"A [[Sequence]] with exactly one [[element]], which may be 
- null."
+"A [[Sequence]] with exactly one [[element]], which may be null."
 tagged("Sequences")
 shared final serializable class Singleton<out Element>
         (Element element)

@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Ceylon\\Ceylon.six" at="24.01.2022 21:11:14" />
+// <generated from="C:\\Dev\\Knut\\SixCC\\Six.Ceylon\\Ceylon.six" at="25.01.2022 14:54:11" />
 
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
@@ -396,7 +396,7 @@ namespace Six.Ceylon
                 /* 371 SeqOp            */ __Matchers[371] = new Seq(this, 371, "_371:(>imports,>namespace,>declarations)") { Builder = nodes => new CCodeUnit(nodes) };
                 /* 372 StringOp         */ __Matchers[372] = new Keyword(this, 372, "'namespace'", "namespace") { Creator = node => new RLiteral(node) };
                 /* 373 StringOp         */ __Matchers[373] = new String(this, 373, "';'", ";") { Creator = node => new RLiteral(node) };
-                /* 374 SeqOp            */ __Matchers[374] = new Seq(this, 374, "_374:('namespace',>namespace-path,';')") { Builder = nodes => new CNamespace(nodes) };
+                /* 374 SeqOp            */ __Matchers[374] = new Seq(this, 374, "_374:(>annotations,'namespace',>namespace-path,';')") { Builder = nodes => new CNamespace(nodes) };
                 /* 375 StringOp         */ __Matchers[375] = new String(this, 375, "'.'", ".") { Creator = node => new RLiteral(node) };
                 /* 376 SeqOp            */ __Matchers[376] = new Seq(this, 376, "_376:('.',>identifier)") { Builder = nodes => new RSequence(nodes) };
                 /* 377 StarOp           */ __Matchers[377] = new Star(this, 377, "*(_376:('.',>identifier))") { Builder = nodes => new RStar<RSequence>(nodes) };
@@ -548,11 +548,11 @@ namespace Six.Ceylon
                 /* 523 StringOp         */ __Matchers[523] = new Keyword(this, 523, "'assign'", "assign") { Creator = node => new RLiteral(node) };
                 /* 524 SeqOp            */ __Matchers[524] = new Seq(this, 524, "_524:(>annotations,'assign',>member-name,>setter-definition)") { Builder = nodes => new CSetterDeclaration(nodes) };
                 /* 525 AltOp            */ __Matchers[525] = new Alt(this, 525, "alt(>block|>required-function-specifier)") { Builder = nodes => nodes[0] };
-                /* 526 SeqOp            */ __Matchers[526] = new Seq(this, 526, "_526:(>annotations,>variadic-type,>parametrized-member,?(>type-constraints),>method-definition)") { Builder = nodes => new CTypedMethodDeclaration(nodes) };
+                /* 526 SeqOp            */ __Matchers[526] = new Seq(this, 526, "_526:(>annotations,>variadic-type,>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CTypedMethodDeclaration(nodes) };
                 /* 527 StringOp         */ __Matchers[527] = new Keyword(this, 527, "'void'", "void") { Creator = node => new CKwVoid(node) };
-                /* 528 SeqOp            */ __Matchers[528] = new Seq(this, 528, "_528:(>annotations,'void',>parametrized-member,?(>type-constraints),>method-definition)") { Builder = nodes => new CVoidMethodDeclaration(nodes) };
+                /* 528 SeqOp            */ __Matchers[528] = new Seq(this, 528, "_528:(>annotations,'void',>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CVoidMethodDeclaration(nodes) };
                 /* 529 StringOp         */ __Matchers[529] = new Keyword(this, 529, "'function'", "function") { Creator = node => new CKwFunction(node) };
-                /* 530 SeqOp            */ __Matchers[530] = new Seq(this, 530, "_530:(>annotations,'function',>parametrized-member,?(>type-constraints),>method-definition)") { Builder = nodes => new CInferredMethodDeclaration(nodes) };
+                /* 530 SeqOp            */ __Matchers[530] = new Seq(this, 530, "_530:(>annotations,'function',>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CInferredMethodDeclaration(nodes) };
                 /* 531 SeqOp            */ __Matchers[531] = new Seq(this, 531, "_531:(>annotations,>variadic-type,>member-name,>attribute-definition)") { Builder = nodes => new CTypedAttributeDeclaration(nodes) };
                 /* 532 StringOp         */ __Matchers[532] = new Keyword(this, 532, "'value'", "value") { Creator = node => new CKwValue(node) };
                 /* 533 SeqOp            */ __Matchers[533] = new Seq(this, 533, "_533:(>annotations,'value',>member-name,>attribute-definition)") { Builder = nodes => new CInferredAttributeDeclaration(nodes) };
@@ -1278,7 +1278,7 @@ namespace Six.Ceylon
                 /* 369 SeqOp            */ __Matchers[369].Set(_compilationUnit, __Matchers[368]);
                 /* 370 AltOp            */ __Matchers[370].Set(_moduleDescriptor, _packageDescriptor, _codeUnit);
                 /* 371 SeqOp            */ __Matchers[371].Set(_imports, _namespace, _declarations);
-                /* 374 SeqOp            */ __Matchers[374].Set(__Matchers[372], _namespacePath, __Matchers[373]);
+                /* 374 SeqOp            */ __Matchers[374].Set(_annotations, __Matchers[372], _namespacePath, __Matchers[373]);
                 /* 376 SeqOp            */ __Matchers[376].Set(__Matchers[375], _identifier);
                 /* 377 StarOp           */ __Matchers[377].Set(__Matchers[376]);
                 /* 378 SeqOp            */ __Matchers[378].Set(_identifier, __Matchers[377]);
@@ -1398,9 +1398,9 @@ namespace Six.Ceylon
                 /* 522 SeqOp            */ __Matchers[522].Set(_annotations, __Matchers[520], _memberName, __Matchers[521], __Matchers[506], _block);
                 /* 524 SeqOp            */ __Matchers[524].Set(_annotations, __Matchers[523], _memberName, _setterDefinition);
                 /* 525 AltOp            */ __Matchers[525].Set(_block, _requiredFunctionSpecifier);
-                /* 526 SeqOp            */ __Matchers[526].Set(_annotations, _variadicType, _parametrizedMember, __Matchers[517], _methodDefinition);
-                /* 528 SeqOp            */ __Matchers[528].Set(_annotations, __Matchers[527], _parametrizedMember, __Matchers[517], _methodDefinition);
-                /* 530 SeqOp            */ __Matchers[530].Set(_annotations, __Matchers[529], _parametrizedMember, __Matchers[517], _methodDefinition);
+                /* 526 SeqOp            */ __Matchers[526].Set(_annotations, _variadicType, _memberName, __Matchers[483], __Matchers[484], __Matchers[517], _methodDefinition);
+                /* 528 SeqOp            */ __Matchers[528].Set(_annotations, __Matchers[527], _memberName, __Matchers[483], __Matchers[484], __Matchers[517], _methodDefinition);
+                /* 530 SeqOp            */ __Matchers[530].Set(_annotations, __Matchers[529], _memberName, __Matchers[483], __Matchers[484], __Matchers[517], _methodDefinition);
                 /* 531 SeqOp            */ __Matchers[531].Set(_annotations, _variadicType, _memberName, _attributeDefinition);
                 /* 533 SeqOp            */ __Matchers[533].Set(_annotations, __Matchers[532], _memberName, _attributeDefinition);
                 /* 534 AltOp            */ __Matchers[534].Set(_block, _optionalAnySpecifier);
@@ -3546,9 +3546,10 @@ namespace Six.Ceylon
             // sequence
             public CNamespace(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0); // 'namespace'
-            public CNamespacePath NamespacePath => Get<CNamespacePath>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2); // ';'
+            public CAnnotations Annotations => Get<CAnnotations>(0);
+            public RLiteral Literal => Get<RLiteral>(1); // 'namespace'
+            public CNamespacePath NamespacePath => Get<CNamespacePath>(2);
+            public RLiteral Literal2 => Get<RLiteral>(3); // ';'
         }
 
         public partial class CNamespacePath : RLoop<CIdentifier>, ICNamespacePath
@@ -4082,9 +4083,11 @@ namespace Six.Ceylon
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public ICVariadicType VariadicType => Get<ICVariadicType>(1);
-            public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
-            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
-            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(4);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(5);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(6);
         }
 
         public partial class CVoidMethodDeclaration : RSequence, ICVoidMethodDeclaration
@@ -4094,9 +4097,11 @@ namespace Six.Ceylon
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1); // 'void'
-            public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
-            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
-            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(4);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(5);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(6);
         }
 
         public partial class CInferredMethodDeclaration : RSequence, ICInferredMethodDeclaration
@@ -4106,9 +4111,11 @@ namespace Six.Ceylon
 
             public CAnnotations Annotations => Get<CAnnotations>(0);
             public RLiteral Literal => Get<RLiteral>(1); // 'function'
-            public CParametrizedMember ParametrizedMember => Get<CParametrizedMember>(2);
-            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(3);
-            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(4);
+            public ICMemberName MemberName => Get<ICMemberName>(2);
+            public ROptional<CTypeParameters> TypeParametersOptional => Get<ROptional<CTypeParameters>>(3);
+            public RPlus<CParameters> ParametersPlus => Get<RPlus<CParameters>>(4);
+            public ROptional<CTypeConstraints> TypeConstraintsOptional => Get<ROptional<CTypeConstraints>>(5);
+            public ICMethodDefinition MethodDefinition => Get<ICMethodDefinition>(6);
         }
 
         public partial class CTypedAttributeDeclaration : RSequence, ICTypedAttributeDeclaration

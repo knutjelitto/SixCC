@@ -1,13 +1,8 @@
 ﻿using Six.Runtime.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class UpperIdentifier : Identifier
+    public sealed class UpperIdentifier : Identifier
     {
         public UpperIdentifier(RToken token)
             : base(token, GetText(token))

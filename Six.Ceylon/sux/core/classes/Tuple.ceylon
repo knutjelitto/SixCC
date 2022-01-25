@@ -50,7 +50,7 @@ Here, `point` is an unterminated tuple:
     String[] allLabels = point[2...];
 """
 by ("Gavin")
-tagged("Sequences", "Basic types", "Collections")
+tagged("Basic types", "Sequences", "Collections")
 shared final serializable native 
 class Tuple<out Element, out First, out Rest = []>(first, rest)
     extends Object()
@@ -160,8 +160,7 @@ class Tuple<out Element, out First, out Rest = []>(first, rest)
         then true
         else element in rest;
     
-    "Return a new tuple that starts with the specified
-     [[element]], followed by the elements of this tuple."
+    "Return a new tuple that starts with the specified [[element]], followed by the elements of this tuple."
     shared actual native
     Tuple<Element|Other,Other,Tuple<Element,First,Rest>>
     withLeading<Other>(
@@ -169,16 +168,14 @@ class Tuple<out Element, out First, out Rest = []>(first, rest)
             Other element)
             => Tuple(element, this);
     
-    "Return a new tuple containing the elements of this 
-     tuple, followed by the given [[element]]."
+    "Return a new tuple containing the elements of this tuple, followed by the given [[element]]."
     shared actual native
     [First,Element|Other+] withTrailing<Other>(
             "The last element of the resulting tuple."
             Other element) 
             => Tuple(first, rest.withTrailing(element));
     
-    "Return a tuple containing the elements of this 
-     tuple, followed by the given [[elements]]."
+    "Return a tuple containing the elements of this tuple, followed by the given [[elements]]."
     shared actual native
     [First,Element|Other*] append<Other>(
             "The list of elements to be appended."
@@ -187,11 +184,12 @@ class Tuple<out Element, out First, out Rest = []>(first, rest)
 }
 
 "Efficiently repackage the given array as a [[Tuple]]."
-throws (class AssertionError, 
-        "if the given array is empty")
-native [Element+] arrayToTuple<Element>(Array<Element> array) {
+throws (class AssertionError, "if the given array is empty")
+native [Element+] arrayToTuple<Element>(Array<Element> array)
+{
     variable Element[] tuple = [];
-    for (element in array.reversed) {
+    for (element in array.reversed)
+    {
         tuple = [element, *tuple];
     }
     "array must not be empty"

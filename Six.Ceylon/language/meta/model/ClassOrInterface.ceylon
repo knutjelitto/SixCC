@@ -7,30 +7,36 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.language.meta.declaration { ClassOrInterfaceDeclaration }
-import ceylon.language.meta.model { ClosedType = Type }
+import ceylon.language.meta.declaration
+{ 
+        ClassOrInterfaceDeclaration
+}
+import ceylon.language.meta.model
+{ 
+        ClosedType = Type
+}
 
-"Model of a class or interface that you can inspect.
+"""
+Model of a class or interface that you can inspect.
  
- The models of classes and interfaces are also closed types."
+The models of classes and interfaces are also closed types.
+"""
 shared sealed interface ClassOrInterface<out Type=Anything> 
     of ClassModel<Type, Nothing> | InterfaceModel<Type>
-    satisfies Model & Generic & ClosedType<Type> {
+    satisfies Model & Generic & ClosedType<Type>
+{
     
     "The declaration for this class or interface."
     shared formal actual ClassOrInterfaceDeclaration declaration;
 
-    "The extended closed type for this class or interface. Note that the
-     [[Anything|ceylon.language::Anything]] type has no extended type since it is the top of the
-     type hierarchy."
+    "The extended closed type for this class or interface. Note that the [[Anything|ceylon.language::Anything]]
+     type has no extended type since it is the top of the type hierarchy."
     shared formal ClassModel<>? extendedType;
     
     "The list of closed types that this class or interface satisfies."
     shared formal InterfaceModel<>[] satisfiedTypes;
 
-    "The list of case values for this type. This omits any case type to 
-     only contain case values."
-    since("1.1.0")
+    "The list of case values for this type. This omits any case type to only contain case values."
     shared formal Type[] caseValues;
 
     // FIXME: move all these to Type
@@ -45,19 +51,16 @@ shared sealed interface ClassOrInterface<out Type=Anything>
      - If it is the current type or a subtype, and the attribute exists in this type, then the attribute
        of the current type is returned. For example, looking up 'unit' in [[Integer]] with [[Integer]] as [[Container]]
        will return [[Integer.unit]].
-     - If it is a supertype of this type, and that supertype defines this attribute, then that supertype's
-       attribute is returned. For example, looking up 'hash' in [[Integer]] with [[Object]] as [[Container]] will return [[Object.hash]].
-     - If it is a type that is disjoint from this type, the attribute will be looked up in the common supertype
-       between that type and this type. For example, looking up 'hash' in [[Integer]] with [[String]] as [[Container]] 
-       will return [[Object.hash]].
+     - If it is a supertype of this type, and that supertype defines this attribute, then that
+       supertype's attribute is returned. For example, looking up 'hash' in [[Integer]] with
+       [[Object]] as [[Container]] will return [[Object.hash]].
+     - If it is a type that is disjoint from this type, the attribute will be looked up in the
+       common supertype between that type and this type. For example, looking up 'hash' in
+       [[Integer]] with [[String]] as [[Container]] will return [[Object.hash]].
      - If the common supertype between this type and the [[Container]] type has no such member, `null` is returned.
     "
-    throws(
-       class IncompatibleTypeException, 
-       "If the specified `Kind` type argument is not compatible with the actual result.")
-    throws(
-       class TypeApplicationException, 
-       "If the specified closed type argument values are not compatible with the actual result's type parameters.")
+    throws(class IncompatibleTypeException, "If the specified `Kind` type argument is not compatible with the actual result.")
+    throws(class TypeApplicationException, "If the specified closed type argument values are not compatible with the actual result's type parameters.")
     shared formal Member<Container, Kind>? getClassOrInterface<Container=Nothing, Kind=ClassOrInterface<>>(String name, ClosedType<Anything>* types)
         given Kind satisfies ClassOrInterface<Anything>;
 
@@ -72,12 +75,8 @@ shared sealed interface ClassOrInterface<out Type=Anything>
        be thrown.
      - If this type has no such member, `null` is returned.
      "
-    throws(
-       class IncompatibleTypeException, 
-       "If the specified `Container` or `Kind` type arguments are not compatible with the actual result.")
-    throws(
-       class TypeApplicationException, 
-       "If the specified closed type argument values are not compatible with the actual result's type parameters.")
+    throws(class IncompatibleTypeException, "If the specified `Container` or `Kind` type arguments are not compatible with the actual result.")
+    throws(class TypeApplicationException, "If the specified closed type argument values are not compatible with the actual result's type parameters.")
     shared formal Member<Container, Kind>? getDeclaredClassOrInterface<Container=Nothing, Kind=ClassOrInterface<>>(String name, ClosedType<Anything>* types)
         given Kind satisfies ClassOrInterface<Anything>;
 

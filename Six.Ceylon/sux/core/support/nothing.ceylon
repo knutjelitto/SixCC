@@ -7,6 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+namespace sux.core;
+
 """
 A value getter of type `Nothing`. The expression `nothing` is formally assignable to any type, but
 produces an exception when evaluated.

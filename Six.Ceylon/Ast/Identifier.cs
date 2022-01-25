@@ -1,13 +1,8 @@
 ﻿using Six.Runtime.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract class Identifier
+    public abstract class Identifier : IComparable<Identifier>
     {
         public Identifier(RToken token, string text)
         {
@@ -17,6 +12,11 @@ namespace Six.Ceylon.Ast
 
         public RToken Token { get; }
         public string Text { get; }
+
+        public int CompareTo(Identifier? other)
+        {
+            return Text.CompareTo(other!.Text ?? string.Empty);
+        }
 
         public override bool Equals(object? obj)
         {

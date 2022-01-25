@@ -17,7 +17,7 @@ code-unit
     ;
 
 namespace
-    : 'namespace' namespace-path ';'
+    : annotations 'namespace' namespace-path ';'
     ;
 
 namespace-path
@@ -401,15 +401,15 @@ setter-definition
     ;
 
 typed-method-declaration
-    | annotations variadic-type parametrized-member type-constraints? method-definition
+    | annotations variadic-type member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
 void-method-declaration
-    | annotations 'void' parametrized-member type-constraints? method-definition
+    | annotations 'void' member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
 inferred-method-declaration
-    | annotations 'function' parametrized-member type-constraints? method-definition
+    | annotations 'function' member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
 typed-attribute-declaration

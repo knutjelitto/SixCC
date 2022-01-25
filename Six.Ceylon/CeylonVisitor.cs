@@ -45,17 +45,28 @@ namespace Six.Ceylon
 
         protected override void Visit(CCodeUnit element)
         {
-            WalkChilden(element);
+            Walk(element.Imports);
+            Walk(element.Namespace);
+
+            var path = element.Namespace.NamespacePath.GetValue<Identifiers>()!;
+
+            using (World.CreateNamespace(path))
+            {
+                Walk(element.Declarations);
+            }
         }
 
         protected override void Visit(CNamespace element)
         {
             WalkChilden(element);
+
         }
 
         protected override void Visit(CNamespacePath element)
         {
             WalkChilden(element);
+
+            element.Value = new Identifiers(element.Elements.Select(e => e.GetValue<Identifier>()!));
         }
 
         protected override void Visit(CDeclarations element)

@@ -7,29 +7,21 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-
 namespace sux.core;
 
 """
-The [[Float]] value of the given 
-[[string representation|string]] of a decimal floating 
-point number, or `null` if the string does not represent a 
-decimal floating point number.
+The [[Float]] value of the given [[string representation|string]] of a decimal floating point
+number, or `null` if the string does not represent a decimal floating point number.
 
-If the given string representation contains more digits
-than can be represented by a `Float`, then the least 
-significant digits are ignored.
+If the given string representation contains more digits than can be represented by a `Float`, then
+the least significant digits are ignored.
 
-The syntax accepted by this method is the same as the 
-syntax for a `Float` literal in the Ceylon language 
-except that it may optionally begin with a sign 
-character (`+` or `-`) and may not contain grouping 
-underscore characters. That is, an optional sign character,
-followed by a string of decimal digits, followed by an
-optional decimal point and string of decimal digits, 
-followed by an optional decimal exponent, for example 
-`e+10` or `E-5`, or SI magnitude, `k`, `M`, `G`, `T`, `P`, 
-`m`, `u`, `n`, `p`, or `f`.
+The syntax accepted by this method is the same as the syntax for a `Float` literal in the Ceylon
+language except that it may optionally begin with a sign character (`+` or `-`) and may not contain
+grouping underscore characters. That is, an optional sign character, followed by a string of decimal
+digits, followed by an optional decimal point and string of decimal digits, followed by an optional
+decimal exponent, for example `e+10` or `E-5`, or SI magnitude, `k`, `M`, `G`, `T`, `P`, `m`, `u`,
+`n`, `p`, or `f`.
 
     Float: Sign? Digits ('.' Digits)? (Magnitude|Exponent)
     Sign: '+' | '-'
@@ -40,25 +32,23 @@ followed by an optional decimal exponent, for example
 see (function Float.parse)
 tagged("Numbers", "Basic types")
 shared Float? parseFloat(String? string)
-        => if (exists string,
-               is Float result 
-                    = parseFloatInternal(string))
+    =>  if (exists string, is Float result = parseFloatInternal(string))
         then result
         else null;
 
-final class ParseFloatState 
-        of start 
-         | afterPlusMinus 
-         | digitsBeforeDecimal 
-         | afterJustDecimal 
-         | afterDecimal 
-         | digitsAfterDecimal 
-         | afterE 
-         | exponentDigits 
-         | afterEPlusMinus 
-         | afterSuffix 
-         | invalid {
-    
+final class ParseFloatState
+    of  start |
+        afterPlusMinus |
+        digitsBeforeDecimal |
+        afterJustDecimal |
+        afterDecimal |
+        digitsAfterDecimal |
+        afterE |
+        exponentDigits |
+        afterEPlusMinus |
+        afterSuffix |
+        invalid
+{
     shared new start {}
     shared new afterPlusMinus {}
     shared new digitsBeforeDecimal {}
@@ -72,10 +62,12 @@ final class ParseFloatState
     shared new invalid {}
 }
 
-Float|ParseException parseFloatInternal(String string) {
-
-    import ceylon.language {
-        ParseFloatState {
+Float|ParseException parseFloatInternal(String string)
+{
+    import ceylon.language
+    {
+        ParseFloatState
+        {
             start, afterPlusMinus, digitsBeforeDecimal,
             afterJustDecimal, afterDecimal, digitsAfterDecimal,
             afterE, exponentDigits, afterEPlusMinus,
@@ -91,7 +83,8 @@ Float|ParseException parseFloatInternal(String string) {
     variable value size = 0;
     variable Integer? suffixExponent = null;
 
-    for (ch in string) {
+    for (ch in string)
+    {
         size++;
         state = switch (state)
         case (start)
@@ -147,69 +140,56 @@ Float|ParseException parseFloatInternal(String string) {
         case (invalid)
             invalid;
 
-        if (state == afterSuffix) {
+        if (state == afterSuffix)
+        {
             suffixExponent = parseSuffix(ch);
         }
 
-        if (state == invalid) {
+        if (state == invalid)
+        {
             return ParseException("illegal format for Float: unexpected character '``ch``'");
         }
     }
 
-    if (!state in [digitsBeforeDecimal,
-            afterDecimal, digitsAfterDecimal,
-            exponentDigits, afterSuffix]) {
+    if (!state in [digitsBeforeDecimal, afterDecimal, digitsAfterDecimal, exponentDigits, afterSuffix])
+    {
         return ParseException("illegal format for Float: unexpected end of string");
     }
 
-    try {
-        if (exists exponent = suffixExponent) {
+    try
+    {
+        if (exists exponent = suffixExponent)
+        {
             // Ceylon style magnitude suffix
             return nativeParseFloat(string[0:size-1] + "E" + exponent.string);
         }
-        else {
+        else
+        {
             // may or may not have exponent
             return nativeParseFloat(string);
         }
     }
-    catch (e) {
+    catch (e)
+    {
         return ParseException("illegal format for Float: " + e.message);
     }
 }
 
-Integer parseSuffix(Character suffix) {
+Integer parseSuffix(Character suffix)
+{
     switch (suffix)
-    case ('P') {
-        return 15;
-    }
-    case ('T') {
-        return 12;
-    }
-    case ('G') {
-        return 9;
-    }
-    case ('M') {
-        return 6;
-    }
-    case ('k') {
-        return 3;
-    }
-    case ('m') {
-        return -3;
-    }
-    case ('u') {
-        return -6;
-    }
-    case ('n') {
-        return -9;
-    }
-    case ('p') {
-        return -12;
-    }
-    case ('f') {
-        return -15;
-    }
-    else {
+    case ('P') { return 15; }
+    case ('T') { return 12; }
+    case ('G') { return 9; }
+    case ('M') { return 6; }
+    case ('k') { return 3; }
+    case ('m') { return -3; }
+    case ('u') { return -6; }
+    case ('n') { return -9; }
+    case ('p') { return -12; }
+    case ('f') { return -15; }
+    else
+    {
         "unrecognized SI magnitude"
         assert (false);
     }
@@ -217,15 +197,3 @@ Integer parseSuffix(Character suffix) {
 
 native Float nativeParseFloat(String string);
 
-native("jvm") Float nativeParseFloat(String string)
-{
-    import java.lang
-    {
-        Double
-        {
-            parseDouble
-        }
-    }
-
-    return parseDouble(string);
-}

@@ -7,30 +7,48 @@ namespace Six.Ceylon
     {
         protected override void Visit(CClassDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            Walk(element.TypeName);
+            Walk(element.TypeParametersOptional);
+            Walk(element.ParametersOptional);
+            Walk(element.CaseTypesOptional);
+            Walk(element.ExtendedTypeOptional);
+            Walk(element.SatisfiedTypesOptional);
+            Walk(element.TypeConstraintsOptional);
+            //Walk(element.ClassDefinition);
 
-            var name = element.TypeName.GetValue<UpperIdentifier>();
+            Add(element, new Class(element.TypeName.GetId()));
         }
 
         protected override void Visit(CInterfaceDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            Walk(element.TypeName);
 
-            var name = element.TypeName.GetValue<UpperIdentifier>();
+            Walk(element.TypeParametersOptional);
+            Walk(element.CaseTypesOptional);
+            Walk(element.SatisfiedTypesOptional);
+            Walk(element.TypeConstraintsOptional);
+            //Walk(element.InterfaceDefinition);
+
+            Add(element, new Interface(element.TypeName.GetId()));
         }
 
         protected override void Visit(CAliasDeclaration element)
         {
             WalkChilden(element);
-
-            var name = element.TypeName.GetValue<UpperIdentifier>();
         }
 
         protected override void Visit(CObjectDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            Walk(element.MemberName);
 
-            var name = element.MemberName.GetValue<LowerIdentifier>();
+            Walk(element.ExtendedTypeOptional);
+            Walk(element.SatisfiedTypesOptional);
+            //Walk(element.Block);
+
+            Add(element, new Ast.Object(element.MemberName.GetId()));
         }
 
         protected override void Visit(CConstructorDeclaration element)
@@ -41,33 +59,67 @@ namespace Six.Ceylon
         protected override void Visit(CEnumeratedObjectDeclaration element)
         {
             WalkChilden(element);
-
-            var name = element.MemberName.GetValue<LowerIdentifier>();
         }
 
         protected override void Visit(CTypedMethodDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            Walk(element.VariadicType);
+            Walk(element.MemberName);
+
+            using (World.Use(Add(element, new Method(element.MemberName.GetId()))))
+            {
+                Walk(element.TypeParametersOptional);
+                Walk(element.ParametersPlus);
+                Walk(element.TypeConstraintsOptional);
+                Walk(element.MethodDefinition);
+            }
         }
 
         protected override void Visit(CVoidMethodDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            // 'void'
+            Walk(element.MemberName);
+            Walk(element.TypeParametersOptional);
+            Walk(element.ParametersPlus);
+            Walk(element.TypeConstraintsOptional);
+            //Walk(element.MethodDefinition);
+
+            Add(element, new Method(element.MemberName.GetId()));
         }
 
         protected override void Visit(CInferredMethodDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            // 'function'
+            Walk(element.MemberName);
+            Walk(element.TypeParametersOptional);
+            Walk(element.ParametersPlus);
+            Walk(element.TypeConstraintsOptional);
+            //Walk(element.MethodDefinition);
+
+            Add(element, new Method(element.MemberName.GetId()));
         }
 
         protected override void Visit(CTypedAttributeDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            Walk(element.VariadicType);
+            Walk(element.MemberName);
+            //Walk(element.AttributeDefinition);
+
+            Add(element, new Ast.Attribute(element.MemberName.GetId()));
         }
 
         protected override void Visit(CInferredAttributeDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            /* 'value' */
+            Walk(element.MemberName);
+            //Walk(element.AttributeDefinition);
+
+            Add(element, new Ast.Attribute(element.MemberName.GetId()));
         }
 
         protected override void Visit(CSetterDeclaration element)

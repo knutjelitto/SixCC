@@ -985,7 +985,7 @@
       <None Update="language\not.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\nothing.ceylon">
+      <None Update="sux\core\support\nothing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="sux\core\classes\Byte.ceylon">
@@ -1027,16 +1027,16 @@
       <None Update="language\pairs.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\parseBoolean.ceylon">
+      <None Update="sux\core\support\parseBoolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\ParseException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\parseFloat.ceylon">
+      <None Update="sux\core\support\parseFloat.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\parseInteger.ceylon">
+      <None Update="sux\core\support\parseInteger.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\plus.ceylon">

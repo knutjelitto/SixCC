@@ -57,22 +57,17 @@
  
  - the _span operator_, written `first..last`, or 
  - the _segment operator_, written `first:length`."
-see (class Range, 
-     function span, function measure)
+see (class Range, function span, function measure)
 shared interface Enumerable<Other> of Other
-        satisfies Ordinal<Other>
-        given Other satisfies Enumerable<Other> {
-    
-    "The indirect successor or predecessor at the given
-     [[offset]], where:
+    satisfies Ordinal<Other>
+    given Other satisfies Enumerable<Other>
+{    
+    "The indirect successor or predecessor at the given [[offset]], where:
      
      - `x.neighbour(0) == x`,
      - `x.neighbour(i+1) == x.neighbour(i).successor`, and
      - `x.neighbour(i-1) == x.neighbour(i).predecessor`."
-    throws (class OverflowException, 
-            "if the neighbour cannot be represented as an 
-             instance of the type")
-    since("1.1.0")
+    throws (class OverflowException, "if the neighbour cannot be represented as an instance of the type")
     shared formal Other neighbour(Integer offset);
     
     shared actual default Other successor => neighbour(1);
@@ -82,15 +77,9 @@ shared interface Enumerable<Other> of Other
      
      - `x.offset(x) == 0`, and
      - `x.successor.offset(x) == 1` if `x!=x.successor`."
-    throws (class OverflowException,
-            "if the offset cannot be represented as an 
-             integer")
-    since("1.1.0")
+    throws (class OverflowException, "if the offset cannot be represented as an integer")
     shared formal Integer offset(Other other);
     
     "The sign of the offset from the given value."
-    since("1.1.0")
-    shared default Integer offsetSign(Other other)
-            => offset(other).sign;
-    
+    shared default Integer offsetSign(Other other) => offset(other).sign;
 }
