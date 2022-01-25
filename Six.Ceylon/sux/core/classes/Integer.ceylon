@@ -7,6 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+
+namespace sux.core;
+
 """
 An exact representation of a positive whole number, negative whole number, or zero. The largest
 and smallest representable values are platform-dependent:

@@ -7,31 +7,36 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"The [[Float]] value of the given 
- [[string representation|string]] of a decimal floating 
- point number, or `null` if the string does not represent a 
- decimal floating point number.
- 
- If the given string representation contains more digits
- than can be represented by a `Float`, then the least 
- significant digits are ignored.
- 
- The syntax accepted by this method is the same as the 
- syntax for a `Float` literal in the Ceylon language 
- except that it may optionally begin with a sign 
- character (`+` or `-`) and may not contain grouping 
- underscore characters. That is, an optional sign character,
- followed by a string of decimal digits, followed by an
- optional decimal point and string of decimal digits, 
- followed by an optional decimal exponent, for example 
- `e+10` or `E-5`, or SI magnitude, `k`, `M`, `G`, `T`, `P`, 
- `m`, `u`, `n`, `p`, or `f`.
- 
-     Float: Sign? Digits ('.' Digits)? (Magnitude|Exponent)
-     Sign: '+' | '-'
-     Magnitude: 'k' | 'M' | 'G' | 'T' | 'P' | 'm' | 'u' | 'n' | 'p' | 'f'
-     Exponent: ('e'|'E') Sign? Digits
-     Digits: ('0'..'9')+"
+
+namespace sux.core;
+
+"""
+The [[Float]] value of the given 
+[[string representation|string]] of a decimal floating 
+point number, or `null` if the string does not represent a 
+decimal floating point number.
+
+If the given string representation contains more digits
+than can be represented by a `Float`, then the least 
+significant digits are ignored.
+
+The syntax accepted by this method is the same as the 
+syntax for a `Float` literal in the Ceylon language 
+except that it may optionally begin with a sign 
+character (`+` or `-`) and may not contain grouping 
+underscore characters. That is, an optional sign character,
+followed by a string of decimal digits, followed by an
+optional decimal point and string of decimal digits, 
+followed by an optional decimal exponent, for example 
+`e+10` or `E-5`, or SI magnitude, `k`, `M`, `G`, `T`, `P`, 
+`m`, `u`, `n`, `p`, or `f`.
+
+    Float: Sign? Digits ('.' Digits)? (Magnitude|Exponent)
+    Sign: '+' | '-'
+    Magnitude: 'k' | 'M' | 'G' | 'T' | 'P' | 'm' | 'u' | 'n' | 'p' | 'f'
+    Exponent: ('e'|'E') Sign? Digits
+    Digits: ('0'..'9')+
+"""
 see (function Float.parse)
 tagged("Numbers", "Basic types")
 shared Float? parseFloat(String? string)
