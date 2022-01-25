@@ -14,7 +14,7 @@ namespace Six.Runtime
         {
         }
 
-        public bool BuildFile(FileJob job)
+        public bool BuildFile(SourceFile job)
         {
             var ok = Ok(() => Parse(job));
 
@@ -67,7 +67,7 @@ namespace Six.Runtime
             return true;
         }
 
-        private bool Parse(FileJob job)
+        private bool Parse(SourceFile job)
         {
             var source = Source.FromString(job.ShortPath, job.Content);
             parser.Reset();

@@ -7,9 +7,16 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"Abstract supertype of resources whose lifecyle may be
- managed by the `try` statement."
+"""
+A value getter of type `Nothing`. The expression `nothing` is formally assignable to any type, but
+produces an exception when evaluated.
+
+(This is most useful for tool-generated implementations of `formal` members.)
+"""
+throws (class AssertionError, "when evaluated")
 tagged("Basic types")
-since("1.1.0")
-shared interface Usable 
-        of Destroyable | Obtainable {}
+shared Nothing nothing
+{
+    "nothing may not be evaluated"
+    assert (false);
+}

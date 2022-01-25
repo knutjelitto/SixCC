@@ -7,16 +7,15 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-"A value getter of type `Nothing`. The expression `nothing`
- is formally assignable to any type, but produces an 
- exception when evaluated.
+
+ namespace sux.core;
  
- (This is most useful for tool-generated implementations of
- `formal` members.)"
-throws (class AssertionError, 
-        "when evaluated")
+"The abstract supertype of all types. A value of type `Anything` may be a definite value of type
+ [[Object]], or it may be the [[null]] value. A method declared `void` is considered to have the
+ return type `Anything`.
+ 
+ Note that the bottom type `Nothing`, representing the intersection of all types, is a subtype of
+ all types."
+by ("Gavin")
 tagged("Basic types")
-shared Nothing nothing {
-    "nothing may not be evaluated"
-    assert (false);
-}
+shared abstract class Anything() of Object | Null {}

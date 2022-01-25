@@ -9,14 +9,22 @@
 compilation-unit
     | module-descriptor
     | package-descriptor
-    | unit-elements
+    | code-unit
     ;
 
-unit-elements
-    : import-declarations declaration*
+code-unit
+    : imports namespace declarations
     ;
 
-import-declarations
+namespace
+    : 'namespace' namespace-path ';'
+    ;
+
+namespace-path
+    : identifier ('.' identifier)*
+    ;
+
+imports
     : import-declaration*
     ;
 
@@ -189,16 +197,12 @@ block
     : block-elements
     ;
 
-interface-block
-    : block-elements
-    ;
-
-class-block
+class-block 
     : block-elements
     ;
 
 block-elements
-    | '{' import-declarations declaration-or-statement* '}'
+    | '{' imports declaration-or-statement* '}'
     ;
 
 extended-type
@@ -352,6 +356,10 @@ declaration-or-statement
     | statement
     ;
 
+declarations
+    : declaration*
+    ;
+
 declaration
     | class-declaration
     | interface-declaration
@@ -380,7 +388,7 @@ enumerated-object-declaration
     ;
     
 object-declaration
-    | annotations 'object' member-name extended-type? satisfied-types? class-block
+    | annotations 'object' member-name extended-type? satisfied-types? block
     ;
 
 setter-declaration
@@ -426,7 +434,7 @@ class-declaration
     ;
 
 class-definition
-    | class-block
+    | block
     | optional-class-specifier
     ;
 
@@ -439,7 +447,7 @@ interface-declaration
     ;
 
 interface-definition
-    | interface-block
+    | block
     | optional-type-specifier
     ;
 
@@ -607,7 +615,7 @@ named-argument-declaration
     ;
 
 object-argument
-    | 'object' member-name? extended-type? satisfied-types? class-block
+    | 'object' member-name? extended-type? satisfied-types? block
     ;
 
 typed-method-argument
@@ -1168,7 +1176,7 @@ string-literal
     ;
 
 object-expr
-    | 'object' extended-type? satisfied-types? class-block
+    | 'object' extended-type? satisfied-types? block
     ;
 
 grouped-expr

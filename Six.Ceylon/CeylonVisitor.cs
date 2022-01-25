@@ -8,6 +8,17 @@ namespace Six.Ceylon
     {
         public CeylonVisitor(World world)
         {
+            World = world;
+        }
+
+        public World World { get; }
+
+        public void Walk(SourceFile source)
+        {
+            if (source.Tree != null)
+            {
+                Walk(source.Tree);
+            }
         }
 
         protected override void DefaultImplementation(RNode element)
@@ -32,7 +43,22 @@ namespace Six.Ceylon
             WalkChilden(element);
         }
 
-        protected override void Visit(CUnitElements element)
+        protected override void Visit(CCodeUnit element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CNamespace element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CNamespacePath element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CDeclarations element)
         {
             WalkChilden(element);
         }

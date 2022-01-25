@@ -7,6 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+
+ namespace sux.core;
+ 
 "An IEEE 754 64-bit [floating point number][]. A `Float` is 
  capable of approximately representing numeric values 
  between:

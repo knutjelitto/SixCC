@@ -10,6 +10,7 @@ namespace Six.Ceylon
     {
         private readonly CompilerConfiguration configuration;
         private readonly World world;
+        private readonly CeylonVisitor visitor;
 
         public CeylonCompiler(CompilerConfiguration configuration)
         {
@@ -21,6 +22,7 @@ namespace Six.Ceylon
             this.configuration = configuration;
 
             world = new World();
+            visitor = new CeylonVisitor(world);
         }
 
         public void Report()
@@ -38,73 +40,75 @@ namespace Six.Ceylon
         {
             Console.Write($"{module.Name,-28}");
 
-            var ok = HandleFile(module.ModuleFile);
-
-            Console.WriteLine();
-
-            if (ok)
+            using (world.Use(module))
             {
-                _ = GetModuleDescriptor(module.ModuleFile);
+                var ok = HandleFile(module.ModuleFile);
 
-                foreach (var package in module.Packages)
+                Console.WriteLine();
+
+                if (ok)
                 {
-                    ok = ok && BuildPackage(package);
+                    _ = GetModuleDescriptor(module.ModuleFile);
 
-                    if (!ok)
+                    foreach (var package in module.Packages)
                     {
-                        break;
+                        ok = ok && BuildPackage(package);
+
+                        if (!ok)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
 
-            return ok;
+                return ok;
+            }
         }
 
         public bool BuildPackage(Package package)
         {
             Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
 
-            var ok = true;
-
-            if (package.PackageFile != null)
+            using (world.Use(package))
             {
-                ok = HandleFile(package.PackageFile);
+                var ok = true;
+
+                if (package.PackageFile != null)
+                {
+                    ok = HandleFile(package.PackageFile);
+
+                    if (ok)
+                    {
+                        var packageDescriptor = GetPackageDescriptor(package.PackageFile);
+                    }
+                }
 
                 if (ok)
                 {
-                    var packageDescriptor = GetPackageDescriptor(package.PackageFile);
-                }
-            }
-
-            if (ok)
-            {
-                foreach (var file in package.Files)
-                {
-                    ok = ok && HandleFile(file);
-
-                    if (!ok)
+                    foreach (var file in package.Files)
                     {
-                        break;
+                        ok = ok && HandleFile(file);
+
+                        if (!ok)
+                        {
+                            break;
+                        }
                     }
                 }
+
+                Console.WriteLine();
+
+                return ok;
             }
-
-            Console.WriteLine();
-
-            return ok;
         }
 
-        private bool HandleFile(FileJob file)
+        private bool HandleFile(SourceFile file)
         {
             var ok = BuildFile(file);
 
             if (ok)
             {
-                if (file.Tree != null)
-                {
-                    var visitor = new CeylonVisitor(world);
-                    visitor.Walk(file.Tree);
-                }
+                visitor.Walk(file);
 
                 if (configuration.DumpSppf && file.Sppf != null)
                 {
@@ -125,17 +129,17 @@ namespace Six.Ceylon
             return ok;
         }
 
-        private static CXStart? GetStart(FileJob file)
+        private static CXStart? GetStart(SourceFile file)
         {
             return file.Tree as CXStart;
         }
 
-        private static CModuleDescriptor? GetModuleDescriptor(FileJob file)
+        private static CModuleDescriptor? GetModuleDescriptor(SourceFile file)
         {
             return GetStart(file)?.CompilationUnit as CModuleDescriptor;
         }
 
-        private static CPackageDescriptor? GetPackageDescriptor(FileJob file)
+        private static CPackageDescriptor? GetPackageDescriptor(SourceFile file)
         {
             return GetStart(file)?.CompilationUnit as CPackageDescriptor;
         }

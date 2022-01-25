@@ -4,12 +4,12 @@ using Six.Runtime.Types;
 
 namespace Six.Runtime
 {
-    public class FileJob
+    public class SourceFile
     {
         private string? content;
         private Source? source;
 
-        public FileJob(string longPath, string shortPath, Func<string> contentLoader)
+        public SourceFile(string longPath, string shortPath, Func<string> contentLoader)
         {
             Assert(longPath.EndsWith(shortPath));
 

@@ -2,14 +2,16 @@
 {
     public class Package
     {
-        public Package(string name, FileJob? packageFile = null)
+        public Package(Module module, string name, SourceFile? packageFile = null)
         {
+            Module = module;
             Name = name;
             PackageFile = packageFile;
         }
 
+        public Module Module { get; }
         public string Name { get; }
-        public FileJob? PackageFile { get; }
-        public List<FileJob> Files { get; } = new List<FileJob>();
+        public SourceFile? PackageFile { get; }
+        public List<SourceFile> Files { get; } = new List<SourceFile>();
     }
 }

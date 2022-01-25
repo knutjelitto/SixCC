@@ -4,7 +4,7 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
-        protected override void Visit(CImportDeclarations element)
+        protected override void Visit(CImports element)
         {
             WalkChilden(element);
         }

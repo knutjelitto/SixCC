@@ -6,10 +6,24 @@ namespace Six.Ceylon
     {
         private readonly Stack<Module> moduleStack = new Stack<Module>();
         private readonly Stack<Package> packageStack = new Stack<Package>();
-        private readonly Stack<FileJob> fileStack = new Stack<FileJob>();
+
+        public World()
+        {
+        }
 
         public Module CurrentModule => moduleStack.Peek();
         public Package CurrentPackage => packageStack.Peek();
-        public FileJob CurrentFile => fileStack.Peek();
+
+        public IDisposable Use(Module module)
+        {
+            moduleStack.Push(module);
+            return new Disposable(() => moduleStack.Pop());
+        }
+
+        public IDisposable Use(Package package)
+        {
+            packageStack.Push(package);
+            return new Disposable(() => packageStack.Pop());
+        }
     }
 }

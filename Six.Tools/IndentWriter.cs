@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Core;
+using System;
 
 namespace Six.Tools
 {

@@ -475,694 +475,718 @@
       <None Update="ceylon\json\Visitor.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\and.ceylon">
+      <None Update="language\and.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Annotated.ceylon">
+      <None Update="language\Annotated.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Annotation.ceylon">
+      <None Update="language\Annotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\annotations.ceylon">
+      <None Update="language\annotations.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\any.ceylon">
+      <None Update="language\any.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Anything.ceylon">
+      <None Update="sux\core\classes\Character.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\apply.ceylon">
+      <None Update="sux\core\classes\Float.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Array.ceylon">
+      <None Update="sux\core\classes\Integer.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\arrayOfSize.ceylon">
+      <None Update="sux\core\interfaces\Destroyable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\ArraySequence.ceylon">
+      <None Update="sux\core\interfaces\Identifiable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\AssertionError.ceylon">
+      <None Update="sux\core\interfaces\Obtainable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Basic.ceylon">
+      <None Update="sux\core\interfaces\Usable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Binary.ceylon">
+      <None Update="sux\core\classes\Anything.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Boolean.ceylon">
+      <None Update="language\apply.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\byDecreasing.ceylon">
+      <None Update="language\Array.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\byIncreasing.ceylon">
+      <None Update="language\arrayOfSize.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\byItem.ceylon">
+      <None Update="language\ArraySequence.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\byKey.ceylon">
+      <None Update="language\AssertionError.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Byte.ceylon">
+      <None Update="language\Basic.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Callable.ceylon">
+      <None Update="language\Binary.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Category.ceylon">
+      <None Update="sux\core\classes\Boolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\ChainedIterator.ceylon">
+      <None Update="language\byDecreasing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Character.ceylon">
+      <None Update="language\byIncreasing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\className.ceylon">
+      <None Update="language\byItem.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Collection.ceylon">
+      <None Update="language\byKey.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Comparable.ceylon">
+      <None Update="language\Byte.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\comparing.ceylon">
+      <None Update="language\Callable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Comparison.ceylon">
+      <None Update="language\Category.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\compose.ceylon">
+      <None Update="language\ChainedIterator.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\concatenate.ceylon">
+      <None Update="language\Character.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\ConstrainedAnnotation.ceylon">
+      <None Update="language\className.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Contextual.ceylon">
+      <None Update="language\Collection.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Correspondence.ceylon">
+      <None Update="language\Comparable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\corresponding.ceylon">
+      <None Update="language\comparing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\count.ceylon">
+      <None Update="language\Comparison.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\curry.ceylon">
+      <None Update="language\compose.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\CycledIterator.ceylon">
+      <None Update="language\concatenate.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Destroyable.ceylon">
+      <None Update="language\ConstrainedAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Empty.ceylon">
+      <None Update="language\Contextual.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\emptyOrSingleton.ceylon">
+      <None Update="language\Correspondence.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Entry.ceylon">
+      <None Update="language\corresponding.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Enumerable.ceylon">
+      <None Update="language\count.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\every.ceylon">
+      <None Update="language\curry.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Exception.ceylon">
+      <None Update="language\CycledIterator.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\expand.ceylon">
+      <None Update="language\Destroyable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Exponentiable.ceylon">
+      <None Update="language\Empty.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Finished.ceylon">
+      <None Update="language\emptyOrSingleton.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\flatten.ceylon">
+      <None Update="language\Entry.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Float.ceylon">
+      <None Update="language\Enumerable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\forItem.ceylon">
+      <None Update="language\every.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\forKey.ceylon">
+      <None Update="language\Exception.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\formatFloat.ceylon">
+      <None Update="language\expand.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\formatInteger.ceylon">
+      <None Update="language\Exponentiable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\functions.ceylon">
+      <None Update="language\Finished.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\identical.ceylon">
+      <None Update="language\flatten.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Identifiable.ceylon">
+      <None Update="language\Float.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\identityHash.ceylon">
+      <None Update="language\forItem.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\bases.ceylon">
+      <None Update="language\forKey.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\ElementImpl.ceylon">
+      <None Update="language\formatFloat.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\MemberImpl.ceylon">
+      <None Update="language\formatInteger.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\outerImpl.ceylon">
+      <None Update="language\functions.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\package.ceylon">
+      <None Update="language\identical.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\reach.ceylon">
+      <None Update="language\Identifiable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\impl\rethrow.ceylon">
+      <None Update="language\identityHash.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\infinity.ceylon">
+      <None Update="language\impl\bases.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\InitializationError.ceylon">
+      <None Update="language\impl\ElementImpl.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Integer.ceylon">
+      <None Update="language\impl\MemberImpl.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Integral.ceylon">
+      <None Update="language\impl\outerImpl.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\interleave.ceylon">
+      <None Update="language\impl\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Invertible.ceylon">
+      <None Update="language\impl\reach.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Iterable.ceylon">
+      <None Update="language\impl\rethrow.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Iterator.ceylon">
+      <None Update="language\infinity.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\language.ceylon">
+      <None Update="language\InitializationError.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\largest.ceylon">
+      <None Update="language\Integer.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\List.ceylon">
+      <None Update="language\Integral.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\loop.ceylon">
+      <None Update="language\interleave.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Map.ceylon">
+      <None Update="language\Invertible.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\max.ceylon">
+      <None Update="language\Iterable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Measure.ceylon">
+      <None Update="language\Iterator.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\annotations.ceylon">
+      <None Update="language\language.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\classDeclaration.ceylon">
+      <None Update="language\largest.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\AliasDeclaration.ceylon">
+      <None Update="language\List.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\AnnotatedDeclaration.ceylon">
+      <None Update="language\loop.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\CallableConstructorDeclaration.ceylon">
+      <None Update="language\Map.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ClassDeclaration.ceylon">
+      <None Update="language\max.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ClassOrInterfaceDeclaration.ceylon">
+      <None Update="language\Measure.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ClassWithConstructorsDeclaration.ceylon">
+      <None Update="language\meta\annotations.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ClassWithInitializerDeclaration.ceylon">
+      <None Update="language\meta\classDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ConstructorDeclaration.ceylon">
+      <None Update="language\meta\declaration\AliasDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\Declaration.ceylon">
+      <None Update="language\meta\declaration\AnnotatedDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\FunctionalDeclaration.ceylon">
+      <None Update="language\meta\declaration\CallableConstructorDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\FunctionDeclaration.ceylon">
+      <None Update="language\meta\declaration\ClassDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\FunctionOrValueDeclaration.ceylon">
+      <None Update="language\meta\declaration\ClassOrInterfaceDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\GenericDeclaration.ceylon">
+      <None Update="language\meta\declaration\ClassWithConstructorsDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\GettableDeclaration.ceylon">
+      <None Update="language\meta\declaration\ClassWithInitializerDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\InterfaceDeclaration.ceylon">
+      <None Update="language\meta\declaration\ConstructorDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ModuleAndPackage.ceylon">
+      <None Update="language\meta\declaration\Declaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\NestableDeclaration.ceylon">
+      <None Update="language\meta\declaration\FunctionalDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\nothingType.ceylon">
+      <None Update="language\meta\declaration\FunctionDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenClassOrInterfaceType.ceylon">
+      <None Update="language\meta\declaration\FunctionOrValueDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenClassType.ceylon">
+      <None Update="language\meta\declaration\GenericDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenInterfaceType.ceylon">
+      <None Update="language\meta\declaration\GettableDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenIntersection.ceylon">
+      <None Update="language\meta\declaration\InterfaceDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenType.ceylon">
+      <None Update="language\meta\declaration\ModuleAndPackage.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenTypeArgument.ceylon">
+      <None Update="language\meta\declaration\NestableDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenTypeVariable.ceylon">
+      <None Update="language\meta\declaration\nothingType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\OpenUnion.ceylon">
+      <None Update="language\meta\declaration\OpenClassOrInterfaceType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\package.ceylon">
+      <None Update="language\meta\declaration\OpenClassType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\SetterDeclaration.ceylon">
+      <None Update="language\meta\declaration\OpenInterfaceType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\TypedDeclaration.ceylon">
+      <None Update="language\meta\declaration\OpenIntersection.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\TypeParameter.ceylon">
+      <None Update="language\meta\declaration\OpenType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ValueConstructorDeclaration.ceylon">
+      <None Update="language\meta\declaration\OpenTypeArgument.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\ValueDeclaration.ceylon">
+      <None Update="language\meta\declaration\OpenTypeVariable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\declaration\Variance.ceylon">
+      <None Update="language\meta\declaration\OpenUnion.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Applicable.ceylon">
+      <None Update="language\meta\declaration\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Attribute.ceylon">
+      <None Update="language\meta\declaration\SetterDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\CallableConstructor.ceylon">
+      <None Update="language\meta\declaration\TypedDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Class.ceylon">
+      <None Update="language\meta\declaration\TypeParameter.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\ClassModel.ceylon">
+      <None Update="language\meta\declaration\ValueConstructorDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\ClassOrInterface.ceylon">
+      <None Update="language\meta\declaration\ValueDeclaration.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Declared.ceylon">
+      <None Update="language\meta\declaration\Variance.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Function.ceylon">
+      <None Update="language\meta\model\Applicable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Functional.ceylon">
+      <None Update="language\meta\model\Attribute.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\FunctionModel.ceylon">
+      <None Update="language\meta\model\CallableConstructor.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Generic.ceylon">
+      <None Update="language\meta\model\Class.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Gettable.ceylon">
+      <None Update="language\meta\model\ClassModel.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\IncompatibleTypeException.ceylon">
+      <None Update="language\meta\model\ClassOrInterface.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Interface.ceylon">
+      <None Update="language\meta\model\Declared.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\InterfaceModel.ceylon">
+      <None Update="language\meta\model\Function.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\IntersectionType.ceylon">
+      <None Update="language\meta\model\Functional.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\InvocationException.ceylon">
+      <None Update="language\meta\model\FunctionModel.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Member.ceylon">
+      <None Update="language\meta\model\Generic.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\MemberClass.ceylon">
+      <None Update="language\meta\model\Gettable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\MemberClassCallableConstructor.ceylon">
+      <None Update="language\meta\model\IncompatibleTypeException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\MemberClassValueConstructor.ceylon">
+      <None Update="language\meta\model\Interface.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\MemberInterface.ceylon">
+      <None Update="language\meta\model\InterfaceModel.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Method.ceylon">
+      <None Update="language\meta\model\IntersectionType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Model.ceylon">
+      <None Update="language\meta\model\InvocationException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\MutationException.ceylon">
+      <None Update="language\meta\model\Member.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\nothingType.ceylon">
+      <None Update="language\meta\model\MemberClass.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\package.ceylon">
+      <None Update="language\meta\model\MemberClassCallableConstructor.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Qualified.ceylon">
+      <None Update="language\meta\model\MemberClassValueConstructor.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\StorageException.ceylon">
+      <None Update="language\meta\model\MemberInterface.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Type.ceylon">
+      <None Update="language\meta\model\Method.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\TypeApplicationException.ceylon">
+      <None Update="language\meta\model\Model.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\TypeArgument.ceylon">
+      <None Update="language\meta\model\MutationException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\UnionType.ceylon">
+      <None Update="language\meta\model\nothingType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\Value.ceylon">
+      <None Update="language\meta\model\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\ValueConstructor.ceylon">
+      <None Update="language\meta\model\Qualified.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\model\ValueModel.ceylon">
+      <None Update="language\meta\model\StorageException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\modules.ceylon">
+      <None Update="language\meta\model\Type.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\optionalAnnotation.ceylon">
+      <None Update="language\meta\model\TypeApplicationException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\package.ceylon">
+      <None Update="language\meta\model\TypeArgument.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\sequencedAnnotations.ceylon">
+      <None Update="language\meta\model\UnionType.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\type.ceylon">
+      <None Update="language\meta\model\Value.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\meta\typeLiteral.ceylon">
+      <None Update="language\meta\model\ValueConstructor.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\min.ceylon">
+      <None Update="language\meta\model\ValueModel.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\module.ceylon">
+      <None Update="language\meta\modules.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Multiplicable.ceylon">
+      <None Update="language\meta\optionalAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\not.ceylon">
+      <None Update="language\meta\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\nothing.ceylon">
+      <None Update="language\meta\sequencedAnnotations.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Null.ceylon">
+      <None Update="language\meta\type.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Number.ceylon">
+      <None Update="language\meta\typeLiteral.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Numeric.ceylon">
+      <None Update="language\min.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Object.ceylon">
+      <None Update="language\module.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Obtainable.ceylon">
+      <None Update="language\Multiplicable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\operatingSystem.ceylon">
+      <None Update="language\not.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\OptionalAnnotation.ceylon">
+      <None Update="language\nothing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\or.ceylon">
+      <None Update="sux\core\classes\Byte.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Ordinal.ceylon">
+      <None Update="sux\core\classes\Null.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\OverflowException.ceylon">
+      <None Update="language\Number.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\package.ceylon">
+      <None Update="language\Numeric.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\pairs.ceylon">
+      <None Update="sux\core\classes\Object.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\parseBoolean.ceylon">
+      <None Update="language\Obtainable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\ParseException.ceylon">
+      <None Update="language\operatingSystem.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\parseFloat.ceylon">
+      <None Update="language\OptionalAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\parseInteger.ceylon">
+      <None Update="language\or.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\plus.ceylon">
+      <None Update="language\Ordinal.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\print.ceylon">
+      <None Update="language\OverflowException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\printStackTrace.ceylon">
+      <None Update="language\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\process.ceylon">
+      <None Update="language\pairs.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\product.ceylon">
+      <None Update="language\parseBoolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Range.ceylon">
+      <None Update="language\ParseException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Ranged.ceylon">
+      <None Update="language\parseFloat.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Resource.ceylon">
+      <None Update="language\parseInteger.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\runtime.ceylon">
+      <None Update="language\plus.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Scalable.ceylon">
+      <None Update="language\print.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\SearchableList.ceylon">
+      <None Update="language\printStackTrace.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Sequence.ceylon">
+      <None Update="language\process.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\SequencedAnnotation.ceylon">
+      <None Update="language\product.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Sequential.ceylon">
+      <None Update="language\Range.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\deserialization.ceylon">
+      <None Update="language\Ranged.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\DeserializationContext.ceylon">
+      <None Update="language\Resource.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\DeserializationContextImpl.ceylon">
+      <None Update="language\runtime.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\DeserializationException.ceylon">
+      <None Update="language\Scalable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\Element.ceylon">
+      <None Update="language\SearchableList.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\Member.ceylon">
+      <None Update="language\Sequence.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\NativeDeque.ceylon">
+      <None Update="language\SequencedAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\NativeMap.ceylon">
+      <None Update="language\Sequential.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\Outer.ceylon">
+      <None Update="language\serialization\deserialization.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\package.ceylon">
+      <None Update="language\serialization\DeserializationContext.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\Partial.ceylon">
+      <None Update="language\serialization\DeserializationContextImpl.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\PartialImpl.ceylon">
+      <None Update="language\serialization\DeserializationException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\ReachableReference.ceylon">
+      <None Update="language\serialization\Element.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\References.ceylon">
+      <None Update="language\serialization\Member.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\ReferencesImpl.ceylon">
+      <None Update="language\serialization\NativeDeque.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\serialization.ceylon">
+      <None Update="language\serialization\NativeMap.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\SerializationContext.ceylon">
+      <None Update="language\serialization\Outer.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\serialization\SerializationException.ceylon">
+      <None Update="language\serialization\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Set.ceylon">
+      <None Update="language\serialization\Partial.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\shuffle.ceylon">
+      <None Update="language\serialization\PartialImpl.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Singleton.ceylon">
+      <None Update="language\serialization\ReachableReference.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\smallest.ceylon">
+      <None Update="language\serialization\References.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\sort.ceylon">
+      <None Update="language\serialization\ReferencesImpl.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Span.ceylon">
+      <None Update="language\serialization\serialization.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\String.ceylon">
+      <None Update="language\serialization\SerializationContext.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\StringBuilder.ceylon">
+      <None Update="language\serialization\SerializationException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\StringTokens.ceylon">
+      <None Update="language\Set.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\sum.ceylon">
+      <None Update="language\shuffle.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Summable.ceylon">
+      <None Update="language\Singleton.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\system.ceylon">
+      <None Update="language\smallest.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Throwable.ceylon">
+      <None Update="language\sort.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\times.ceylon">
+      <None Update="language\Span.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\transpose.ceylon">
+      <None Update="language\String.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Tuple.ceylon">
+      <None Update="language\StringBuilder.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\unflatten.ceylon">
+      <None Update="language\StringTokens.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\unzip.ceylon">
+      <None Update="language\sum.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\Usable.ceylon">
+      <None Update="language\Summable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\vmArguments.ceylon">
+      <None Update="language\system.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="ceylon\language\zip.ceylon">
+      <None Update="language\Throwable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\times.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\transpose.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\Tuple.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\unflatten.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\unzip.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\Usable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\vmArguments.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="language\zip.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="ceylon\locale\columns.ceylon">
@@ -1757,6 +1781,12 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="ceylon\whole\Words.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="sux\core\module.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="sux\core\classes\Throwable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="tests\basics\functions.ceylon">

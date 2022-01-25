@@ -7,6 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+
+namespace sux.core;
+
 """
 A string of characters. Each character in the string is a [[32-bit Unicode character|Character]].
 The UTF-16 encoding of the underlying native string is hidden from clients.
@@ -75,8 +78,7 @@ shared native final class String extends Object
     "The characters that form this string."
     {Character*} characters;
     
-    "Capture the given stream of characters as a stream
-     backed by an immutable native String."
+    "Capture the given stream of characters as a stream backed by an immutable native String."
     native {Character*} capture({Character*} characters);
     
     "A new string with the given [[characters]]."

@@ -7,6 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+
+namespace sux.core;
+
 """
 A 32-bit [Unicode][] character.
 

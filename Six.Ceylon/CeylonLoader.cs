@@ -17,8 +17,7 @@ namespace Six.Ceylon
             }
         }
 
-
-        private static Module GetModule(FileJob moduleFile)
+        private static Module GetModule(SourceFile moduleFile)
         {
             var module = new Module(moduleFile);
 
@@ -27,7 +26,7 @@ namespace Six.Ceylon
             return module;
         }
 
-        private static IEnumerable<FileJob> LoadFiles(string fromRoot, Func<string, bool>? filter = null)
+        private static IEnumerable<SourceFile> LoadFiles(string fromRoot, Func<string, bool>? filter = null)
         {
             filter ??= n => true;
 
@@ -41,13 +40,13 @@ namespace Six.Ceylon
             }
         }
 
-        private static FileJob MakeFile(string fullPath, string shortPath)
+        private static SourceFile MakeFile(string fullPath, string shortPath)
         {
             if (shortPath == packageFile || shortPath == moduleFile)
             {
                 Assert(true);
             }
-            return new FileJob(fullPath, shortPath, () => File.ReadAllText(fullPath));
+            return new SourceFile(fullPath, shortPath, () => File.ReadAllText(fullPath));
         }
 
 
@@ -58,6 +57,13 @@ namespace Six.Ceylon
 
             foreach (var dir in Enumerable.Repeat(root, 1).Concat(Directory.EnumerateDirectories(root, "*", SearchOption.AllDirectories)))
             {
+                var hasFiles = Directory.EnumerateFiles(dir, "*.ceylon", SearchOption.TopDirectoryOnly)
+                    .Where(file => !IsPackageOrModule(file))
+                    .Any();
+
+                if (!hasFiles)
+                    continue;
+
                 var fullPath = Path.Combine(dir, packageFile).Replace("\\", "/");
                 var shortPath = fullPath[prefixLength..].Replace("\\", "/");
                 var packageName = dir[prefixLength..].Replace("\\", "/").Replace("/", ".");
@@ -66,16 +72,16 @@ namespace Six.Ceylon
 
                 if (File.Exists(fullPath))
                 {
-                    package = new Package(packageName, MakeFile(fullPath, shortPath));
+                    package = new Package(module, packageName, MakeFile(fullPath, shortPath));
                 }
                 else
                 {
-                    package = new Package(packageName);
+                    package = new Package(module, packageName);
                 }
 
                 foreach (var file in Directory.EnumerateFiles(dir, "*.ceylon", SearchOption.TopDirectoryOnly))
                 {
-                    if (Path.GetFileName(file) == packageFile || Path.GetFileName(file) == moduleFile)
+                    if (IsPackageOrModule(file))
                     {
                         continue;
                     }
@@ -87,6 +93,11 @@ namespace Six.Ceylon
 
                 module.Packages.Add(package);
             }
+        }
+
+        private static bool IsPackageOrModule(string file)
+        {
+            return Path.GetFileName(file) == packageFile || Path.GetFileName(file) == moduleFile;
         }
     }
 }
