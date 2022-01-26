@@ -26,12 +26,12 @@ namespace Six.Ceylon
 
             using (Use(element, new Class(name!)))
             {
-                //TODO: Visitor
+                //TODO: uncomment
                 //Walk(element.TypeParametersOptional);
                 //Walk(element.ParametersOptional);
                 //Walk(element.CaseTypesOptional);
                 //Walk(element.ExtendedTypeOptional);
-                //Walk(element.SatisfiedTypesOptional);
+                var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
                 //Walk(element.TypeConstraintsOptional);
                 Walk(element.ClassDefinition);
             }
@@ -44,10 +44,10 @@ namespace Six.Ceylon
 
             using (Use(element, new Interface(name!)))
             {
-                //TODO: Visitor
+                //TODO: uncomment
                 //Walk(element.TypeParametersOptional);
                 //Walk(element.CaseTypesOptional);
-                //Walk(element.SatisfiedTypesOptional);
+                var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
                 //Walk(element.TypeConstraintsOptional);
                 Walk(element.InterfaceDefinition);
             }
@@ -60,9 +60,9 @@ namespace Six.Ceylon
 
             using (Use(element, new Ast.Object(name!)))
             {
-                //TODO: Visitor
-                //Walk(element.ExtendedTypeOptional);
-                //Walk(element.SatisfiedTypesOptional);
+                //TODO: uncomment
+                Walk(element.ExtendedTypeOptional);
+                var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
                 Walk(element.Block);
             }
         }

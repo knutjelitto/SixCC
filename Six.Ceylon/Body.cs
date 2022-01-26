@@ -14,6 +14,7 @@ namespace Six.Ceylon
 
         public IBodyOwner Owner { get; }
 
+        public int Count => statements.Count;
         public int StatementCount => statements.Count - declarations.Count;
         public int DeclarationCount => declarations.Count;
 
@@ -23,6 +24,10 @@ namespace Six.Ceylon
             if (statement is Declaration declaration)
             {
                 Add(declaration);
+            }
+            else
+            {
+
             }
         }
 

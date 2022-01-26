@@ -1,28 +1,20 @@
-﻿using static Six.Ceylon.CeylonTree;
+﻿using Six.Ceylon.Ast;
+using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
-        protected override void Visit(CTypeDefault element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CTypePath element)
-        {
-            //TODO: Visitor
-            element.Value = new Ast.Type();
-        }
-
         protected override void Visit(CSatisfiedTypes element)
         {
-            WalkChilden(element);
+            var types = Walk<TypeList>(element.UnionTypeList);
+            element.Value = new Satisfied(types!);
         }
 
         protected override void Visit(CExtendedType element)
         {
-            WalkChilden(element);
+            // 'extends'
+            var instatiation = Walk<Instantiation>(element.ClassInstatiation);
         }
 
         protected override void Visit(CTypeConstraints element)
@@ -33,6 +25,32 @@ namespace Six.Ceylon
         protected override void Visit(CTypeConstraint element)
         {
             WalkChilden(element);
+        }
+
+        protected override void Visit(CCaseTypes element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CCaseTypeList element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CQualifiedCaseType element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CTypeDefault element)
+        {
+            WalkChilden(element);
+        }
+
+        protected override void Visit(CTypePath element)
+        {
+            //TODO: Type
+            element.Value = new Ast.Type();
         }
 
         protected override void Visit(CUnionTypeList element)
@@ -127,21 +145,6 @@ namespace Six.Ceylon
         }
 
         protected override void Visit(CTypeParameter element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CCaseTypes element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CCaseTypeList element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CQualifiedCaseType element)
         {
             WalkChilden(element);
         }

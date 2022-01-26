@@ -82,13 +82,14 @@ namespace Six.Ceylon
 
         protected override void Visit(CFunctionSpecifier element)
         {
-            WalkChilden(element);
+            // '=>'
+            element.Value = Walk<Expression>(element.Expression);
         }
 
         protected override void Visit(COptionalFunctionSpecifier element)
         {
-            //TODO
-            base.WalkChilden(element);
+            element.Value = Walk<Expression>(element.FunctionSpecifierOptional);
+            // ';'
         }
 
         protected override void Visit(CRequiredFunctionSpecifier element)
@@ -113,7 +114,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CClassInstatiation element)
         {
-            WalkChilden(element);
+            //TODO
+            Walk(element.QualifiedClass);
+            var arguments = Walk<Arguments>(element.ArgumentsOptional);
         }
 
         protected override void Visit(CBlockElements element)

@@ -6,6 +6,7 @@ namespace Six.Ceylon
     {
         IBodyOwner Owner { get; }
         void Add(Statement statement);
+        int Count { get; }
         int StatementCount { get; }
         int DeclarationCount { get; }
         void Dump(Writer writer);

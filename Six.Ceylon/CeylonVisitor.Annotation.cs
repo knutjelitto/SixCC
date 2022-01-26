@@ -7,13 +7,17 @@ namespace Six.Ceylon
     {
         protected override void Visit(CAnnotations element)
         {
-            //TODO: Annotations
-            element.Value = new Annotations();
+            var doc = Walk<Ast.String>(element.StringLiteralOptional);
+            var annotations = element.AnnotationStar.Children.Select(child => Walk<Annotation>(child));
+            element.Value = new Annotations(doc, annotations!);
         }
 
         protected override void Visit(CAnnotation element)
         {
-            WalkChilden(element);
+            var name = Walk<Identifier>(element.MemberName);
+            var arguments = Walk<Arguments>(element.ArgumentsOptional);
+
+            element.Value = new Annotation(name!, arguments);
         }
     }
 }

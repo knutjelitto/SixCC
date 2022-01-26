@@ -12,147 +12,176 @@ namespace Six.Ceylon
 
         protected override void Visit(CCallExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CLargerExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CSmallerExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CAdditiveExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CIfExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CSelectionExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CTupleExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CFunctionExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CIndexedExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CPostfixExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CPrefixExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CEntryExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CMultiplicativeExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CObjectExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CGroupedExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CRangeExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CEnumerationExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CTypecheckExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CThenElseExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CExistsExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CNonemptyExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CLogicalNegationExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CSwitchExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CLetExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CEqualityExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CConjunctionExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CNegationOrComplementExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CComparisonExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CExclusiveExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CDisjunctionExpr element)

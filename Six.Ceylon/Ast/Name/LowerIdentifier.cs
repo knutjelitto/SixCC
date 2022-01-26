@@ -4,8 +4,8 @@ namespace Six.Ceylon.Ast
 {
     public sealed class LowerIdentifier : Identifier
     {
-        public LowerIdentifier(RToken token)
-            : base(token, GetText(token))
+        public LowerIdentifier(RToken token, string? text = null)
+            : base(token, text ?? GetText(token))
         {
         }
 

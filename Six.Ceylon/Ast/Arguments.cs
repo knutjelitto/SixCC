@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Type
+    public class Arguments
     {
         //TODO
     }
