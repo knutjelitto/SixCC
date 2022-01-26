@@ -11,7 +11,8 @@ namespace Six.Ceylon
 
         protected override void Visit(CTypePath element)
         {
-            WalkChilden(element);
+            //TODO: Visitor
+            element.Value = new Ast.Type();
         }
 
         protected override void Visit(CSatisfiedTypes element)
@@ -56,7 +57,8 @@ namespace Six.Ceylon
 
         protected override void Visit(CUnionTypeCore element)
         {
-            WalkChilden(element);
+            //TODO: Visitor
+            element.Value = new Ast.Type();
         }
 
         protected override void Visit(CIterableType element)

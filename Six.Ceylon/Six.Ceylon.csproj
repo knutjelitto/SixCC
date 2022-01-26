@@ -490,37 +490,37 @@
       <None Update="language\any.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Basic.ceylon">
+      <None Update="six\core\classes\Basic.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Character.ceylon">
+      <None Update="six\core\classes\Character.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Float.ceylon">
+      <None Update="six\core\classes\Float.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Integer.ceylon">
+      <None Update="six\core\classes\Integer.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\String.ceylon">
+      <None Update="six\core\classes\String.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Tuple.ceylon">
+      <None Update="six\core\classes\Tuple.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\interfaces\Destroyable.ceylon">
+      <None Update="six\core\interfaces\Destroyable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\interfaces\Identifiable.ceylon">
+      <None Update="six\core\interfaces\Identifiable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\interfaces\Obtainable.ceylon">
+      <None Update="six\core\interfaces\Obtainable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\interfaces\Usable.ceylon">
+      <None Update="six\core\interfaces\Usable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Anything.ceylon">
+      <None Update="six\core\classes\Anything.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\apply.ceylon">
@@ -544,7 +544,7 @@
       <None Update="language\Binary.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Boolean.ceylon">
+      <None Update="six\core\classes\Boolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\byDecreasing.ceylon">
@@ -985,13 +985,13 @@
       <None Update="language\not.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\support\nothing.ceylon">
+      <None Update="six\core\support\nothing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Byte.ceylon">
+      <None Update="six\core\classes\Byte.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Null.ceylon">
+      <None Update="six\core\classes\Null.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Number.ceylon">
@@ -1000,7 +1000,7 @@
       <None Update="language\Numeric.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Object.ceylon">
+      <None Update="six\core\classes\Object.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Obtainable.ceylon">
@@ -1027,16 +1027,16 @@
       <None Update="language\pairs.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\support\parseBoolean.ceylon">
+      <None Update="six\core\support\parseBoolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\ParseException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\support\parseFloat.ceylon">
+      <None Update="six\core\support\parseFloat.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\support\parseInteger.ceylon">
+      <None Update="six\core\support\parseInteger.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\plus.ceylon">
@@ -1792,10 +1792,10 @@
       <None Update="ceylon\whole\Words.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\module.ceylon">
+      <None Update="six\core\module.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="sux\core\classes\Throwable.ceylon">
+      <None Update="six\core\classes\Throwable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="tests\basics\functions.ceylon">

@@ -5,50 +5,66 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
+        protected override void Visit(CAliasDeclaration element)
+        {
+            Walk(element.Annotations);
+            // 'alias'
+            var name = Walk<Identifier>(element.TypeName);
+
+            using (Use(element, new Alias(name!)))
+            {
+                Walk(element.TypeParametersOptional);
+                Walk(element.TypeConstraintsOptional);
+                Walk(element.OptionalTypeSpecifier);
+            }
+        }
+
         protected override void Visit(CClassDeclaration element)
         {
             Walk(element.Annotations);
-            Walk(element.TypeName);
-            Walk(element.TypeParametersOptional);
-            Walk(element.ParametersOptional);
-            Walk(element.CaseTypesOptional);
-            Walk(element.ExtendedTypeOptional);
-            Walk(element.SatisfiedTypesOptional);
-            Walk(element.TypeConstraintsOptional);
-            //Walk(element.ClassDefinition);
+            var name = Walk<Identifier>(element.TypeName);
 
-            Add(element, new Class(element.TypeName.GetId()));
+            using (Use(element, new Class(name!)))
+            {
+                //TODO: Visitor
+                //Walk(element.TypeParametersOptional);
+                //Walk(element.ParametersOptional);
+                //Walk(element.CaseTypesOptional);
+                //Walk(element.ExtendedTypeOptional);
+                //Walk(element.SatisfiedTypesOptional);
+                //Walk(element.TypeConstraintsOptional);
+                Walk(element.ClassDefinition);
+            }
         }
 
         protected override void Visit(CInterfaceDeclaration element)
         {
             Walk(element.Annotations);
-            Walk(element.TypeName);
+            var name = Walk<Identifier>(element.TypeName);
 
-            Walk(element.TypeParametersOptional);
-            Walk(element.CaseTypesOptional);
-            Walk(element.SatisfiedTypesOptional);
-            Walk(element.TypeConstraintsOptional);
-            //Walk(element.InterfaceDefinition);
-
-            Add(element, new Interface(element.TypeName.GetId()));
-        }
-
-        protected override void Visit(CAliasDeclaration element)
-        {
-            WalkChilden(element);
+            using (Use(element, new Interface(name!)))
+            {
+                //TODO: Visitor
+                //Walk(element.TypeParametersOptional);
+                //Walk(element.CaseTypesOptional);
+                //Walk(element.SatisfiedTypesOptional);
+                //Walk(element.TypeConstraintsOptional);
+                Walk(element.InterfaceDefinition);
+            }
         }
 
         protected override void Visit(CObjectDeclaration element)
         {
             Walk(element.Annotations);
-            Walk(element.MemberName);
+            var name = Walk<Identifier>(element.MemberName);
 
-            Walk(element.ExtendedTypeOptional);
-            Walk(element.SatisfiedTypesOptional);
-            //Walk(element.Block);
-
-            Add(element, new Ast.Object(element.MemberName.GetId()));
+            using (Use(element, new Ast.Object(name!)))
+            {
+                //TODO: Visitor
+                //Walk(element.ExtendedTypeOptional);
+                //Walk(element.SatisfiedTypesOptional);
+                Walk(element.Block);
+            }
         }
 
         protected override void Visit(CConstructorDeclaration element)
@@ -58,20 +74,29 @@ namespace Six.Ceylon
 
         protected override void Visit(CEnumeratedObjectDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            // 'new'
+            var name = Walk<Identifier>(element.MemberName);
+
+            using (Use(element, new Enumerated(name!)))
+            {
+                Walk(element.DelegatedConstructorOptional);
+                Walk(element.Block);
+            }
         }
 
         protected override void Visit(CTypedMethodDeclaration element)
         {
             Walk(element.Annotations);
             Walk(element.VariadicType);
-            Walk(element.MemberName);
+            var name = Walk<Identifier>(element.MemberName);
 
-            using (World.Use(Add(element, new Method(element.MemberName.GetId()))))
+            using (Use(element, new Method(name!)))
             {
-                Walk(element.TypeParametersOptional);
-                Walk(element.ParametersPlus);
-                Walk(element.TypeConstraintsOptional);
+                //TODO: Visitor
+                //Walk(element.TypeParametersOptional);
+                //Walk(element.ParametersPlus);
+                //Walk(element.TypeConstraintsOptional);
                 Walk(element.MethodDefinition);
             }
         }
@@ -80,46 +105,56 @@ namespace Six.Ceylon
         {
             Walk(element.Annotations);
             // 'void'
-            Walk(element.MemberName);
-            Walk(element.TypeParametersOptional);
-            Walk(element.ParametersPlus);
-            Walk(element.TypeConstraintsOptional);
-            //Walk(element.MethodDefinition);
+            var name = Walk<Identifier>(element.MemberName);
 
-            Add(element, new Method(element.MemberName.GetId()));
+            using (Use(element, new Method(name!)))
+            {
+                //TODO: Visitor
+                //Walk(element.TypeParametersOptional);
+                //Walk(element.ParametersPlus);
+                //Walk(element.TypeConstraintsOptional);
+                Walk(element.MethodDefinition);
+            }
         }
 
         protected override void Visit(CInferredMethodDeclaration element)
         {
             Walk(element.Annotations);
             // 'function'
-            Walk(element.MemberName);
-            Walk(element.TypeParametersOptional);
-            Walk(element.ParametersPlus);
-            Walk(element.TypeConstraintsOptional);
-            //Walk(element.MethodDefinition);
+            var name = Walk<Identifier>(element.MemberName);
 
-            Add(element, new Method(element.MemberName.GetId()));
+            using (Use(element, new Method(name!)))
+            {
+                //TODO: Visitor
+                //Walk(element.TypeParametersOptional);
+                //Walk(element.ParametersPlus);
+                //Walk(element.TypeConstraintsOptional);
+                Walk(element.MethodDefinition);
+            }
         }
 
         protected override void Visit(CTypedAttributeDeclaration element)
         {
             Walk(element.Annotations);
             Walk(element.VariadicType);
-            Walk(element.MemberName);
-            //Walk(element.AttributeDefinition);
+            var name = Walk<Identifier>(element.MemberName);
 
-            Add(element, new Ast.Attribute(element.MemberName.GetId()));
+            using (Use(element, new Ast.Attribute(name!)))
+            {
+                Walk(element.AttributeDefinition);
+            }
         }
 
         protected override void Visit(CInferredAttributeDeclaration element)
         {
             Walk(element.Annotations);
-            /* 'value' */
-            Walk(element.MemberName);
-            //Walk(element.AttributeDefinition);
+            // 'value'
+            var name = Walk<Identifier>(element.MemberName);
 
-            Add(element, new Ast.Attribute(element.MemberName.GetId()));
+            using (Use(element, new Ast.Attribute(name!)))
+            {
+                Walk(element.AttributeDefinition);
+            }
         }
 
         protected override void Visit(CSetterDeclaration element)

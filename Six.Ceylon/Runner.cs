@@ -4,7 +4,7 @@
     {
         //public const string CeylonRoot = "ceylon";
         public const string CeylonRoot = "ceylon/language";
-        public const string SuxRoot = "sux";
+        public const string SixRoot = "six";
         public const string TestsRoot = "tests";
 
         public static void Run()
@@ -12,7 +12,7 @@
             Generator.Run();
             //AllModules(fromRoot: TestsRoot, new CompilerConfiguration { WithRuleIndex = false });
             //AllModules(fromRoot: CeylonRoot, new CompilerConfiguration { WithRuleIndex = true, DumpTree = true });
-            AllModules(fromRoot: SuxRoot, new CompilerConfiguration { WithRuleIndex = true, DumpTree = true });
+            AllModules(fromRoot: SixRoot, new CompilerConfiguration { WithRuleIndex = true, DumpTree = true });
         }
 
         private static void AllModules(string fromRoot, CompilerConfiguration configuration)

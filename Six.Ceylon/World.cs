@@ -6,7 +6,7 @@ namespace Six.Ceylon
     {
         private readonly Stack<Module> moduleStack = new Stack<Module>();
         private readonly Stack<Package> packageStack = new Stack<Package>();
-        private readonly Stack<IDeclarationsOwner> ownerStack = new Stack<IDeclarationsOwner>();
+        private readonly Stack<IBodyOwner> ownerStack = new Stack<IBodyOwner>();
 
         public readonly INamespace Global = new Namespace();
 
@@ -16,7 +16,7 @@ namespace Six.Ceylon
 
         public Module CurrentModule => moduleStack.Peek();
         public Package CurrentPackage => packageStack.Peek();
-        public IDeclarationsOwner Owner => ownerStack.Peek();
+        public IBodyOwner Owner => ownerStack.Peek();
 
         public IDisposable CreateNamespace(Identifiers identifiers)
         {
@@ -31,7 +31,7 @@ namespace Six.Ceylon
         public void AddDeclaration(Declaration declaration)
         {
             Assert(ownerStack.Count > 0);
-            Owner.Declarations.Add(declaration);
+            Owner.Body.Add(declaration);
         }
 
         public IDisposable Use(Module module)
@@ -46,7 +46,7 @@ namespace Six.Ceylon
             return new Disposable(() => packageStack.Pop());
         }
 
-        public IDisposable Use(IDeclarationsOwner owner)
+        public IDisposable Use(IBodyOwner owner)
         {
             ownerStack.Push(owner);
             return new Disposable(() => ownerStack.Pop());

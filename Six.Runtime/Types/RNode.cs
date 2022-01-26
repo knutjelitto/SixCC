@@ -9,7 +9,7 @@
 
         public RNode[] Children { get; }
 
-        public object? Value { private get; set; } = null;
+        public object? Value { get; set; } = null;
 
         public T? GetValue<T>() where T : class => Value as T;
 

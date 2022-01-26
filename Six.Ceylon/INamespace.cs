@@ -2,7 +2,7 @@
 
 namespace Six.Ceylon
 {
-    public interface INamespace : IDeclarationsOwner, IDumpable, IEnumerable<INamespace>
+    public interface INamespace : IBodyOwner, IDumpable, IEnumerable<INamespace>
     {
         Identifier? Name { get; }
 

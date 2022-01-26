@@ -1,4 +1,5 @@
-﻿using static Six.Ceylon.CeylonTree;
+﻿using Six.Ceylon.Ast;
+using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
@@ -6,7 +7,8 @@ namespace Six.Ceylon
     {
         protected override void Visit(CImports element)
         {
-            WalkChilden(element);
+            //TODO: Visitor
+            element.Value = new Imports();
         }
 
         protected override void Visit(CImportDeclaration element)

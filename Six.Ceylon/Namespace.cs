@@ -2,19 +2,19 @@
 
 namespace Six.Ceylon
 {
-    public class Namespace : INamespace, IDeclarationsOwner
+    public class Namespace : INamespace, IBodyOwner
     {
         private readonly Dictionary<Identifier, Namespace> children = new();
 
         public Namespace(Identifier? name = null)
         {
             Name = name;
-            Declarations = new DeclarationBag(this);
+            Body = new Body(this);
         }
 
         public Identifier? Name { get; }
 
-        public IDeclarationBag Declarations { get; }
+        public IBody Body { get; }
 
         public INamespace Create(Identifier name)
         {
@@ -36,12 +36,12 @@ namespace Six.Ceylon
 
         protected void Dump(Writer writer, string prefix)
         {
-            if (Declarations.Count > 0)
+            if (Body.DeclarationCount > 0)
             {
                 writer.WriteLine($"{prefix}");
                 using (writer.Indent())
                 {
-                    Declarations.Dump(writer);
+                    Body.Dump(writer);
                 }
             }
 

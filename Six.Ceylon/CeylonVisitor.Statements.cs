@@ -4,6 +4,11 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
+        protected override void Visit(CStatements element)
+        {
+            base.WalkChilden(element);
+        }
+
         protected override void Visit(CUnclosedStatement element)
         {
             WalkChilden(element);
@@ -16,7 +21,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CAssertionStatement element)
         {
-            WalkChilden(element);
+            var message = Walk<Ast.String>(element.AssertionMessageOptional);
+            // 'assert'
+            Walk(element.Conditions);
         }
 
         protected override void Visit(CIfElseStatement element)

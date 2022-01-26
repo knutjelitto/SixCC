@@ -21,6 +21,12 @@ namespace Six.Runtime
         protected virtual void Visit(ROptional element)
         {
             WalkChilden(element);
+
+            if (element.Children.Length > 0)
+            {
+                Assert(element.Children.Length == 1);
+                element.Value = element.Children[0].Value;
+            }
         }
 
         protected virtual void Visit(RLiteral element)

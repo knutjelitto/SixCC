@@ -30,22 +30,22 @@ namespace Six.Ceylon
 
         protected override void Visit(CXStart element)
         {
-            WalkChilden(element);
+            Walk(element.CompilationUnit);
         }
 
         protected override void Visit(CModuleDescriptor element)
         {
-            WalkChilden(element);
+            //TODO: Visitor
         }
 
         protected override void Visit(CPackageDescriptor element)
         {
-            WalkChilden(element);
+            //TODO: Visitor
         }
 
         protected override void Visit(CCodeUnit element)
         {
-            Walk(element.Imports);
+            var imports = Walk<Imports>(element.Imports);
             Walk(element.Namespace);
 
             var path = element.Namespace.NamespacePath.GetValue<Identifiers>()!;
@@ -58,20 +58,21 @@ namespace Six.Ceylon
 
         protected override void Visit(CNamespace element)
         {
-            WalkChilden(element);
-
+            //TODO: Visitor - Annotations
+            //Walk(element.Annotations);
+            Walk(element.NamespacePath);
         }
 
         protected override void Visit(CNamespacePath element)
         {
-            WalkChilden(element);
+            base.WalkChilden(element);
 
             element.Value = new Identifiers(element.Elements.Select(e => e.GetValue<Identifier>()!));
         }
 
         protected override void Visit(CDeclarations element)
         {
-            WalkChilden(element);
+            base.WalkChilden(element);
         }
 
         protected override void Visit(COptionalAnySpecifier element)
@@ -86,7 +87,8 @@ namespace Six.Ceylon
 
         protected override void Visit(COptionalFunctionSpecifier element)
         {
-            WalkChilden(element);
+            //TODO
+            base.WalkChilden(element);
         }
 
         protected override void Visit(CRequiredFunctionSpecifier element)
@@ -116,7 +118,10 @@ namespace Six.Ceylon
 
         protected override void Visit(CBlockElements element)
         {
-            WalkChilden(element);
+            // '{'
+            Walk(element.Imports);
+            Walk(element.Statements);
+            // '}'
         }
 
         protected override void Visit(COptionalTypeSpecifier element)
@@ -167,16 +172,6 @@ namespace Six.Ceylon
         /*---------------------------------------------------------------------
          *  Annotations
          *--------------------------------------------------------------------*/
-        protected override void Visit(CAnnotations element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CAnnotation element)
-        {
-            WalkChilden(element);
-        }
-
         /**********************************************************************
          *  Patterns / Variables
          **********************************************************************/
@@ -358,37 +353,6 @@ namespace Six.Ceylon
         {
             WalkChilden(element);
         }
-
-        protected override void Visit(CConditions element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CConditionList element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CExistsCondition element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CNonemptyCondition element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CIsCondition element)
-        {
-            WalkChilden(element);
-        }
-
-        protected override void Visit(CIsConditionVariable element)
-        {
-            WalkChilden(element);
-        }
-
         protected override void Visit(CValueCaseList element)
         {
             WalkChilden(element);

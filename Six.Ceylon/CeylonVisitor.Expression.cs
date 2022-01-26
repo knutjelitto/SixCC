@@ -1,4 +1,5 @@
-﻿using static Six.Ceylon.CeylonTree;
+﻿using Six.Ceylon.Ast;
+using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
 {
@@ -156,7 +157,8 @@ namespace Six.Ceylon
 
         protected override void Visit(CDisjunctionExpr element)
         {
-            WalkChilden(element);
+            //TODO
+            element.Value = new Expression();
         }
     }
 }

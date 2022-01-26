@@ -202,7 +202,7 @@ class-block
     ;
 
 block-elements
-    | '{' imports declaration-or-statement* '}'
+    | '{' imports statements '}'
     ;
 
 extended-type
@@ -351,11 +351,6 @@ type-constraints
     ;
     
 
-declaration-or-statement
-    | declaration
-    | statement
-    ;
-
 declarations
     : declaration*
     ;
@@ -455,9 +450,18 @@ optional-type-specifier
     | type-specifier? ';'
     ;
 
+statements
+    : statement*
+    ;
+
 statement
+    | declaration-statement
     | unclosed-statement
     | control-statement
+    ;
+
+declaration-statement
+    : declaration
     ;
 
 unclosed-statement
@@ -560,7 +564,7 @@ self-reference
     ;
 
 enumeration-expr
-    | '{' declaration-or-statement* sequenced-arguments? '}'
+    | '{' statements sequenced-arguments? '}'
     ;
 
 tuple-expr
@@ -1171,7 +1175,7 @@ interpolation-part
     ;
 
 string-literal
-    | literal-string 
+    | literal-string
     | verbatim-string
     ;
 
