@@ -10,12 +10,18 @@ namespace Six.Runtime
 
         protected virtual void Visit(RStar element)
         {
-            WalkChildren(element);
+            foreach (var child in element.Children)
+            {
+                Walk(child);
+            }
         }
 
         protected virtual void Visit(RPlus element)
         {
-            WalkChildren(element);
+            foreach (var child in element.Children)
+            {
+                Walk(child);
+            }
         }
 
         protected virtual void Visit(ROptional element)
@@ -38,7 +44,6 @@ namespace Six.Runtime
 
         protected virtual void Visit(REof element)
         {
-            WalkChildren(element);
         }
 
         protected virtual void DefaultImplementation(RNode element)

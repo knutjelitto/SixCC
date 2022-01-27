@@ -82,10 +82,10 @@ namespace Six.Ceylon
 
         protected override void Visit(CUnionTypeCore element)
         {
-            WalkChildren(element);
+            var left = Walk<Ast.Type>(element.UnionType);
+            var right = Walk<Ast.Type>(element.IntersectionType);
 
-            //TODO: Visitor
-            element.Value = new Ast.Type();
+            element.Value = new Ast.Type.Union(left, right);
         }
 
         protected override void Visit(CIterableType element)

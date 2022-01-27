@@ -15,7 +15,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CCallExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();

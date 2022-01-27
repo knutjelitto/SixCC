@@ -18,7 +18,7 @@ namespace Six.Ceylon
         public Package CurrentPackage => packageStack.Peek();
         public IBodyOwner Owner => ownerStack.Peek();
 
-        public IDisposable CreateNamespace(Identifiers identifiers)
+        public IDisposable CreateNamespace(IdentifierList identifiers)
         {
             var current = Global;
             foreach (var identifier in identifiers)

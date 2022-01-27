@@ -7,7 +7,7 @@ namespace Six.Ceylon
     {
         protected override void Visit(CImports element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new ImportList(Enumerable.Empty<Import>());

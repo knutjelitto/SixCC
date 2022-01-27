@@ -6,7 +6,7 @@ namespace Six.Ceylon
     {
         protected override void Visit(CParameters element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CParameterList element)

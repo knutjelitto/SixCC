@@ -1355,20 +1355,15 @@ control-statement
     ;
 
 if-else-statement
-    | if-block else-block?
+    | 'if' conditions block else-if* else-block?
     ;
 
-if-block
-    | 'if' conditions block
+else-if
+    : 'else' 'if' conditions block
     ;
 
 else-block
-    | 'else' else-block-next
-    ;
-
-else-block-next
-    | if-else-statement
-    | block
+    | 'else' block
     ;
 
 switch-statement

@@ -21,6 +21,19 @@ namespace Six.Ceylon
             }
         }
 
+        private void WalkChildrenTodo(RNode element)
+        {
+            foreach (var child in element.Children)
+            {
+                Walk(child);
+            }
+        }
+
+        protected override void WalkChildren(RNode element)
+        {
+            base.WalkChildren(element);
+        }
+
         protected override void DefaultImplementation(RNode element)
         {
             Console.WriteLine($"Type ``{element.GetType().Name}´´ not implemented");
@@ -30,17 +43,17 @@ namespace Six.Ceylon
 
         protected override void Visit(CXStart element)
         {
-            Walk(element.CompilationUnit);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CModuleDescriptor element)
         {
-            //TODO: Visitor
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CPackageDescriptor element)
         {
-            //TODO: Visitor
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CCodeUnit element)
@@ -49,7 +62,7 @@ namespace Six.Ceylon
             var imports = Walk<ImportList>(element.Imports);
             Walk(element.Namespace);
 
-            var path = element.Namespace.NamespacePath.GetValue<Identifiers>()!;
+            var path = element.Namespace.NamespacePath.GetValue<IdentifierList>()!;
 
             using (World.CreateNamespace(path))
             {
@@ -67,12 +80,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CNamespacePath element)
         {
-            element.Value = new Identifiers(element.Children.Select(child => Walk<Identifier>(child)));
+            element.Value = new IdentifierList(element.Children.Select(child => Walk<Identifier>(child)));
         }
 
         protected override void Visit(CDeclarations element)
         {
-            WalkChildren(element);
+            element.Value = new DeclarationList(element.Children.Select(child => Walk<Declaration>(child)));
         }
 
         protected override void Visit(COptionalAnySpecifier element)
@@ -136,6 +149,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CTypeSpecifier element)
         {
+            //TODO
+
+            // '=>' type
             WalkChildren(element);
         }
 
@@ -149,12 +165,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CModuleBody element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CImportModule element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
         protected override void Visit(CSuperQualifiedClass element)
         {
@@ -290,12 +306,12 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CPositionalArguments element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CSequencedArguments element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CStructuralArguments element)
@@ -417,7 +433,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CPackagePath element)
         {
-            WalkChildren(element);
+            var names = element.Elements.Select(child => Walk<Identifier>(child));
+
+            element.Value = new IdentifierList(names);
         }
 
         protected override void Visit(CReferencePath element)
