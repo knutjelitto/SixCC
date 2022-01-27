@@ -60,7 +60,6 @@ classifier
 version
     | literal-string
     ;
-
    
 module-name
     | package-path
@@ -109,19 +108,19 @@ import-named
     ;
 
 import-name
-    | identifier
+    : identifier
     ;
 
 import-name-specifier
-    | '=' identifier
+    : '=' identifier
     ;
 
 import-wildcard
-    | '...'
+    : '...'
     ;
 
 package-name
-    | identifier
+    : identifier
     ;
 
 package-path
@@ -181,6 +180,14 @@ let-statement
     | 'let' '(' let-variable-list ')'
     ;
 
+let-variable-list
+    | let-variable (',' let-variable)*
+    ;
+
+let-variable
+    | pattern value-specifier
+    ;
+
 delegated-constructor
     | 'extends' class-instatiation
     ;
@@ -194,15 +201,7 @@ assertion-message
     ;
 
 block
-    : block-elements
-    ;
-
-class-block 
-    : block-elements
-    ;
-
-block-elements
-    | '{' imports statements '}'
+    : '{' imports statements '}'
     ;
 
 extended-type
@@ -223,16 +222,13 @@ qualified-class
     | un-qualified-class
     ;
 
-super-qualified-class
-    | 'super' '.' base-reference
-    ;
 
 package-qualified-class
     | 'package' '.' un-qualified-class
     ;
 
-package-qualifier
-    | 'package' '.'
+super-qualified-class
+    | 'super' '.' base-reference
     ;
 
 un-qualified-class
@@ -481,7 +477,7 @@ specification-statement
     ;
     
 expression-statement
-    | operator-expression
+    : operator-expression
     ;
 
 directive-statement
@@ -580,18 +576,22 @@ structural-arguments
     | '{' named-or-anonymous* sequenced-arguments? '}'
     ;
 
+positional-arguments
+    : '(' sequenced-arguments? ')'
+    ;
+
 named-or-anonymous
-    | named-argument
     | anonymous-argument
+    | named-argument
+    ;
+
+anonymous-argument
+    | expression ';'
     ;
 
 named-argument
     | named-specified-argument
     | named-argument-declaration
-    ;
-
-anonymous-argument
-    | expression ';'
     ;
 
 named-specified-argument
@@ -661,36 +661,28 @@ inferred-getter-argument
     ;
 
 untyped-method-argument
-    | member-name parameters+ required-function-specifier
+    : member-name parameters+ required-function-specifier
     ;
 
 untyped-getter-argument
-    | member-name required-function-specifier
-    ;
-
-positional-arguments
-    | '(' sequenced-arguments? ')'
+    : member-name required-function-specifier
     ;
 
 positional-argument
-    | expression
+    | expression-argument
     | declaration-reference
     ;
 
+expression-argument
+    : expression
+    ;
+
 spread-argument
-    | '*' union-expression
+    : '*' union-expression
     ;
 
 let-expr
-    | 'let' '(' let-variable-list? ')' conditional-expression
-    ;
-
-let-variable-list
-    | let-variable (',' let-variable)*
-    ;
-
-let-variable
-    | pattern value-specifier
+    : 'let' '(' let-variable-list? ')' conditional-expression
     ;
 
 switch-expr
@@ -1602,6 +1594,10 @@ value-literal-intro
 
 function-literal
     | 'function' reference-path
+    ;
+
+package-qualifier
+    | 'package' '.'
     ;
 
 reference-path

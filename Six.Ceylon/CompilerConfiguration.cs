@@ -11,5 +11,6 @@ namespace Six.Ceylon
         public bool WithRuleIndex { get; init; }
         public bool DumpSppf { get; init; }
         public bool DumpTree { get; init; }
+        public bool BuildAst { get; init; }
     }
 }

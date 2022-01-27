@@ -10,8 +10,6 @@
 
         public Identifier Name { get; }
 
-        public abstract string ItemKind { get; }
-
         public IBody Body { get; }
 
         public string Location()

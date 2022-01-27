@@ -10,41 +10,43 @@ namespace Six.Runtime
 
         protected virtual void Visit(RStar element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected virtual void Visit(RPlus element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected virtual void Visit(ROptional element)
         {
-            WalkChilden(element);
-
-            if (element.Children.Length > 0)
+            if (element.Children.Length == 1)
             {
-                Assert(element.Children.Length == 1);
+                Walk(element.Children[0]);
                 element.Value = element.Children[0].Value;
+            }
+            else
+            {
+                Assert(element.Children.Length == 0);
+                element.Value = null;
             }
         }
 
         protected virtual void Visit(RLiteral element)
         {
-            WalkChilden(element);
         }
 
         protected virtual void Visit(REof element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected virtual void DefaultImplementation(RNode element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
-        protected virtual void WalkChilden(RNode element)
+        protected virtual void WalkChildren(RNode element)
         {
             foreach (var child in element.Children)
             {

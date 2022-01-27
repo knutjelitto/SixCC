@@ -7,38 +7,40 @@ namespace Six.Ceylon
     {
         protected override void Visit(CImports element)
         {
-            //TODO: Visitor
-            element.Value = new Imports();
+            WalkChildren(element);
+
+            //TODO
+            element.Value = new ImportList(Enumerable.Empty<Import>());
         }
 
         protected override void Visit(CImportDeclaration element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CImportElements element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CImportElementList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CImportNamed element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CImportNameSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CImportWildcard element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
     }
 }

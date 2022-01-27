@@ -10,6 +10,8 @@ namespace Six.Runtime.Types
     {
         RNode[] Children { get; }
 
-        public T? GetValue<T>() where T : class;
+        T? GetValue<T>() where T : class;
+
+        object? Value { get; set; }
     }
 }

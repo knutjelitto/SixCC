@@ -11,7 +11,7 @@ namespace Six.Ceylon
             // 'alias'
             var name = Walk<Identifier>(element.TypeName);
 
-            using (Use(element, new Alias(name!)))
+            using (Use(element, new Alias(name)))
             {
                 Walk(element.TypeParametersOptional);
                 Walk(element.TypeConstraintsOptional);
@@ -24,7 +24,7 @@ namespace Six.Ceylon
             Walk(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
 
-            using (Use(element, new Class(name!)))
+            using (Use(element, new Class(name)))
             {
                 //TODO: uncomment
                 //Walk(element.TypeParametersOptional);
@@ -42,7 +42,7 @@ namespace Six.Ceylon
             Walk(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
 
-            using (Use(element, new Interface(name!)))
+            using (Use(element, new Interface(name)))
             {
                 //TODO: uncomment
                 //Walk(element.TypeParametersOptional);
@@ -58,10 +58,10 @@ namespace Six.Ceylon
             Walk(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Ast.Object(name!)))
+            using (Use(element, new Ast.Object(name)))
             {
                 //TODO: uncomment
-                Walk(element.ExtendedTypeOptional);
+                //Walk(element.ExtendedTypeOptional);
                 var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
                 Walk(element.Block);
             }
@@ -69,7 +69,17 @@ namespace Six.Ceylon
 
         protected override void Visit(CConstructorDeclaration element)
         {
-            WalkChilden(element);
+            Walk(element.Annotations);
+            // 'new'
+            var name = Walk<Identifier>(element.MemberNameOptional);
+
+            using (Use(element, new Constructor(name)))
+            {
+                //TODO: uncomment
+                Walk(element.Parameters);
+                Walk(element.DelegatedConstructorOptional);
+                Walk(element.Block);
+            }
         }
 
         protected override void Visit(CEnumeratedObjectDeclaration element)
@@ -78,7 +88,7 @@ namespace Six.Ceylon
             // 'new'
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Enumerated(name!)))
+            using (Use(element, new Enumerated(name)))
             {
                 Walk(element.DelegatedConstructorOptional);
                 Walk(element.Block);
@@ -91,7 +101,7 @@ namespace Six.Ceylon
             Walk(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Method(name!)))
+            using (Use(element, new Method(name)))
             {
                 //TODO: Visitor
                 //Walk(element.TypeParametersOptional);
@@ -107,7 +117,7 @@ namespace Six.Ceylon
             // 'void'
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Method(name!)))
+            using (Use(element, new Method(name)))
             {
                 //TODO: Visitor
                 //Walk(element.TypeParametersOptional);
@@ -123,7 +133,7 @@ namespace Six.Ceylon
             // 'function'
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Method(name!)))
+            using (Use(element, new Method(name)))
             {
                 //TODO: Visitor
                 //Walk(element.TypeParametersOptional);
@@ -139,7 +149,7 @@ namespace Six.Ceylon
             Walk(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Ast.Attribute(name!)))
+            using (Use(element, new Ast.Attribute(name)))
             {
                 Walk(element.AttributeDefinition);
             }
@@ -151,7 +161,7 @@ namespace Six.Ceylon
             // 'value'
             var name = Walk<Identifier>(element.MemberName);
 
-            using (Use(element, new Ast.Attribute(name!)))
+            using (Use(element, new Ast.Attribute(name)))
             {
                 Walk(element.AttributeDefinition);
             }
@@ -159,7 +169,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CSetterDeclaration element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
     }
 }

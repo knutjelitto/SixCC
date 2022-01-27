@@ -2,7 +2,7 @@
 
 namespace Six.Ceylon.Ast
 {
-    public class StandardString : String
+    public class StandardString : String, IExpression
     {
         public StandardString(RToken token)
             : base(GetText(token))

@@ -6,32 +6,32 @@ namespace Six.Ceylon
     {
         protected override void Visit(CParameters element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CParameterList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CValueParameterDeclaration element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CFunctionParameterDeclaration element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CParameter element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CParameterReference element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
     }
 }

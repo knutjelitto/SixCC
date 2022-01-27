@@ -113,7 +113,10 @@ namespace Six.Ceylon
 
             if (ok)
             {
-                visitor.Walk(file);
+                if (configuration.BuildAst)
+                {
+                    visitor.Walk(file);
+                }
 
                 if (configuration.DumpSppf && file.Sppf != null)
                 {

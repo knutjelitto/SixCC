@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract class Condition : IExpression
+    public class TypeArguments : TypeList
     {
+        public TypeArguments(IEnumerable<Type> types) : base(types)
+        {
+        }
     }
 }

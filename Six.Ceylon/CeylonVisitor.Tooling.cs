@@ -5,16 +5,34 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
-        private T? Walk<T>(IRNode node)
+        private T Walk<T>(IRNode node)
             where T : class
         {
             Walk(node);
 
-            return node.GetValue<T>();
+            Assert(node.Value != null);
+
+            var value = node.GetValue<T>();
+
+            Assert(value != null && typeof(T).IsAssignableFrom(value.GetType()));
+
+            return value;
+        }
+
+        private T? Walk<T>(ROptional node)
+            where T : class
+        {
+            Walk(node);
+
+            var value = node.GetValue<T>();
+
+            Assert(value == null || typeof(T).IsAssignableFrom(value.GetType()));
+
+            return value;
         }
 
         private T Add<T>(RNode node, T declaration)
-            where T : Declaration
+            where T : Statement
         {
             node.Value = declaration;
             World.AddDeclaration(declaration);
@@ -23,7 +41,7 @@ namespace Six.Ceylon
         }
 
         private IDisposable Use<T>(RNode node, T declaration)
-            where T : Declaration
+            where T : Statement, IBodyOwner
         {
             return World.Use(Add<T>(node, declaration));
         }

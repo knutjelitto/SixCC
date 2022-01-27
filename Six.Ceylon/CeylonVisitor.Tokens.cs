@@ -22,10 +22,13 @@ namespace Six.Ceylon
 
         protected override void Visit(CLiteralNatural element)
         {
+            //TODO
+            element.Value = new NaturalNumber();
         }
 
         protected override void Visit(CLiteralFloat element)
         {
+            //TODO
         }
 
         protected override void Visit(CLiteralString element)

@@ -1,7 +1,7 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class ConditionList : ReadOnlyList<Condition>
+    public class ConditionList : ReadOnlyList<IExpression>
     {
-        public ConditionList(IEnumerable<Condition> items) : base(items) {}
+        public ConditionList(IEnumerable<IExpression> items) : base(items) {}
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract class Condition : IExpression
+    public class Argument
     {
     }
 }

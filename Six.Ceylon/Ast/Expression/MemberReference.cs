@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class Variable
+    public class MemberReference : IExpression
     {
-        public Variable(Identifier name, IExpression? value)
+        public MemberReference(Identifier name, TypeArguments? arguments)
         {
             Name = name;
-            Value = value;
+            Arguments = arguments;
         }
 
         public Identifier Name { get; }
-        public IExpression? Value { get; }
+        public TypeArguments? Arguments { get; }
     }
 }

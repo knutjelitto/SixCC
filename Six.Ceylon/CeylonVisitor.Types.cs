@@ -7,44 +7,46 @@ namespace Six.Ceylon
     {
         protected override void Visit(CSatisfiedTypes element)
         {
+            // 'satisfies'
             var types = Walk<TypeList>(element.UnionTypeList);
-            element.Value = new Satisfied(types!);
+            element.Value = new Satisfied(types);
         }
 
         protected override void Visit(CExtendedType element)
         {
             // 'extends'
-            var instatiation = Walk<Instantiation>(element.ClassInstatiation);
+            var instantiation = Walk<Instantiation>(element.ClassInstatiation);
+            element.Value = new Extended(instantiation);
         }
 
         protected override void Visit(CTypeConstraints element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeConstraint element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CCaseTypes element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CCaseTypeList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CQualifiedCaseType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeDefault element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypePath element)
@@ -55,98 +57,108 @@ namespace Six.Ceylon
 
         protected override void Visit(CUnionTypeList element)
         {
-            WalkChilden(element);
+            var types = element.Elements.Select(child => Walk<Ast.Type>(child));
+
+            element.Value = new TypeList(types);
         }
 
         protected override void Visit(CPackageQualifiedType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CEntryType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CIntersectionTypeCore element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
+
+            //TODO: Visitor
+            element.Value = new Ast.Type();
         }
 
         protected override void Visit(CUnionTypeCore element)
         {
+            WalkChildren(element);
+
             //TODO: Visitor
             element.Value = new Ast.Type();
         }
 
         protected override void Visit(CIterableType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CGroupedType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTupleType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
+
+            //TODO: Visitor
+            element.Value = new Ast.Type();
         }
 
         protected override void Visit(CArrayType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CNullableType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CFunctionType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CVariancedType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CVariadicUnionType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSpreadType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CFunctionExpressionType element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CDefaultedTypeList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeParameters element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeParameterList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeParameter element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
     }
 }

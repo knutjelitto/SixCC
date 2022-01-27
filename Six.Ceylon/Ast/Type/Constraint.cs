@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Constraint : Expression
+    public class Constraint : IExpression
     {
     }
 }

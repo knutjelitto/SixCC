@@ -1,7 +1,7 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public sealed class ConstraintList : ReadOnlyList<Expression>
+    public sealed class ConstraintList : ReadOnlyList<IExpression>
     {
-        public ConstraintList(IEnumerable<Expression> items) : base(items) { }
+        public ConstraintList(IEnumerable<IExpression> items) : base(items) { }
     }
 }

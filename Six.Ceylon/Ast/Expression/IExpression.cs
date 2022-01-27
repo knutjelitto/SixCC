@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class Imports
+    public interface IExpression
     {
-        private readonly List<Import> items;
+    }
 
-        public Imports()
-        {
-            items = new List<Import>();
-        }
+    public class Expression : IExpression
+    {
     }
 }

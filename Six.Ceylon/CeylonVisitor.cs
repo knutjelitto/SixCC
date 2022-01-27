@@ -45,7 +45,8 @@ namespace Six.Ceylon
 
         protected override void Visit(CCodeUnit element)
         {
-            var imports = Walk<Imports>(element.Imports);
+#if true
+            var imports = Walk<ImportList>(element.Imports);
             Walk(element.Namespace);
 
             var path = element.Namespace.NamespacePath.GetValue<Identifiers>()!;
@@ -54,6 +55,7 @@ namespace Six.Ceylon
             {
                 Walk(element.Declarations);
             }
+#endif
         }
 
         protected override void Visit(CNamespace element)
@@ -65,51 +67,49 @@ namespace Six.Ceylon
 
         protected override void Visit(CNamespacePath element)
         {
-            base.WalkChilden(element);
-
-            element.Value = new Identifiers(element.Elements.Select(e => e.GetValue<Identifier>()!));
+            element.Value = new Identifiers(element.Children.Select(child => Walk<Identifier>(child)));
         }
 
         protected override void Visit(CDeclarations element)
         {
-            base.WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(COptionalAnySpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CFunctionSpecifier element)
         {
             // '=>'
-            element.Value = Walk<Expression>(element.Expression);
+            element.Value = Walk<IExpression>(element.Expression);
         }
 
         protected override void Visit(COptionalFunctionSpecifier element)
         {
-            element.Value = Walk<Expression>(element.FunctionSpecifierOptional);
+            element.Value = Walk<IExpression>(element.FunctionSpecifierOptional);
             // ';'
         }
 
         protected override void Visit(CRequiredFunctionSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(COptionalClassSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CClassSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CValueSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CClassInstatiation element)
@@ -119,22 +119,24 @@ namespace Six.Ceylon
             var arguments = Walk<Arguments>(element.ArgumentsOptional);
         }
 
-        protected override void Visit(CBlockElements element)
+        protected override void Visit(CBlock element)
         {
             // '{'
-            Walk(element.Imports);
-            Walk(element.Statements);
+            var imports = Walk<ImportList>(element.Imports);
+            var statements = Walk<StatementList>(element.Statements);
             // '}'
+
+            element.Value = new Block(imports, statements);
         }
 
         protected override void Visit(COptionalTypeSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         /*---------------------------------------------------------------------
@@ -142,26 +144,26 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CModuleSpecifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CModuleBody element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CImportModule element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
         protected override void Visit(CSuperQualifiedClass element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CDelegatedConstructor element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         /*---------------------------------------------------------------------
@@ -169,7 +171,7 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CFunctionParameters element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         /*---------------------------------------------------------------------
@@ -180,113 +182,106 @@ namespace Six.Ceylon
          **********************************************************************/
         protected override void Visit(CVariable element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CVariadicVariable element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CLetVariable element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
+
+            //TODO
+            element.Value = new Expression();
         }
 
         protected override void Visit(CEntryPattern element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTuplePattern element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CVariadicPatternList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         /**********************************************************************
          *  Expression
          **********************************************************************/
-        protected override void Visit(CSmallerBoundsExpr element)
-        {
-            WalkChilden(element);
-        }
-
         protected override void Visit(CParametrizedMember element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         /*---------------------------------------------------------------------
          *  Expression - Inners
          *--------------------------------------------------------------------*/
-        protected override void Visit(CStringInterpolation element)
-        {
-            WalkChilden(element);
-        }
-
         protected override void Visit(CThenExpression element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CElseExpression element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CQualifiedReference element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSwitchHeader element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CCaseExpressions element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CCaseExpression element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CIsCaseCondition element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CLetVariableList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSpanned element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CMeasured element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CLowerSpanned element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CUpperSpanned element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
 
@@ -295,57 +290,57 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CPositionalArguments element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSequencedArguments element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CStructuralArguments element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSpreadArgument element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CNamedSpecifiedArgument element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CAnonymousArgument element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CUntypedMethodArgument element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CInferredMethodArgument element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypedMethodArgument element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CForComprehensionClause element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CIfComprehensionClause element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
 
@@ -354,11 +349,11 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CSpecifiedVariable element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
         protected override void Visit(CValueCaseList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
 
@@ -367,126 +362,137 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CMetaLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CModuleLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CClassLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CInterfaceLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CFunctionLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CValueLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CAliasLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CNewLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CPackageLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeParameterLiteral element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CValueLiteralIntro element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CPackagePath element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CReferencePath element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CReferencePathElementList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CMemberReference element)
         {
-            WalkChilden(element);
+            //TODO
+            var name = Walk<Identifier>(element.MemberName);
+            if (element.TypeArgumentsOptional.Children.Length > 0)
+            {
+                Assert(true);
+            }
+            var arguments = Walk<TypeArguments>(element.TypeArgumentsOptional);
+
+            element.Value = new MemberReference(name, arguments);
         }
 
         protected override void Visit(CTypeReference element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeArguments element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeArgumentList element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSelfReference element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
+
+            //TODO
+            element.Value = new Expression();
         }
         protected override void Visit(CInterpolationPart element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CVariance element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CPackageQualifier element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CKwVoid element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CKwValue element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CKwFunction element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         /**********************************************************************
@@ -495,107 +501,107 @@ namespace Six.Ceylon
 
         protected override void Visit(CNotOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CVariadicOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CEntryOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CLargerOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CSmallerOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CIncrementOperator element)
-        {
-            WalkChilden(element);
+        {   
+            WalkChildren(element);
         }
 
         protected override void Visit(CConjunctionOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CAdditiveOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CMultiplicativeOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CMemberSelectionOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CEqualityOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CContainmentOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CRangeOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CAssignmentOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CComparisonOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CDisjunctionOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CTypeOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CThenElseOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CIntersectionOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CNegateOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
 
         protected override void Visit(CExclusiveOperator element)
         {
-            WalkChilden(element);
+            WalkChildren(element);
         }
     }
 }

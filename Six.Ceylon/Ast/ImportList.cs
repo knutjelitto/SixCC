@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract class Condition : IExpression
+    public sealed class ImportList : ReadOnlyList<Import>
     {
+        public ImportList(IEnumerable<Import> items) : base(items)
+        {
+        }
     }
 }

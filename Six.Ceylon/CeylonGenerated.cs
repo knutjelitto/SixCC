@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Ceylon\\Ceylon.six" at="25.01.2022 20:24:19" />
+// <generated from="D:\\Six\\Six.Ceylon\\Ceylon.six" at="27.01.2022 07:11:22" />
 
 using Six.Runtime.Dfa;
 using Six.Runtime.Matchers;
@@ -65,18 +65,18 @@ namespace Six.Ceylon
                 /*  40 PlainRuleOp      */ __Matchers[40] = _variablePattern = new PlainRule(this, 40, "variable-pattern") { Builder = nodes => nodes[0] };
                 /*  41 PlainRuleOp      */ __Matchers[41] = _variadicVariable = new PlainRule(this, 41, "variadic-variable") { Builder = nodes => nodes[0] };
                 /*  42 PlainRuleOp      */ __Matchers[42] = _letStatement = new PlainRule(this, 42, "let-statement") { Builder = nodes => nodes[0] };
-                /*  43 PlainRuleOp      */ __Matchers[43] = _delegatedConstructor = new PlainRule(this, 43, "delegated-constructor") { Builder = nodes => nodes[0] };
-                /*  44 PlainRuleOp      */ __Matchers[44] = _assertionStatement = new PlainRule(this, 44, "assertion-statement") { Builder = nodes => nodes[0] };
-                /*  45 PlainRuleOp      */ __Matchers[45] = _assertionMessage = new PlainRule(this, 45, "assertion-message") { Builder = nodes => nodes[0] };
-                /*  46 PlainRuleOp      */ __Matchers[46] = _block = new PlainRule(this, 46, "block") { Builder = nodes => nodes[0] };
-                /*  47 PlainRuleOp      */ __Matchers[47] = _blockElements = new PlainRule(this, 47, "block-elements") { Builder = nodes => nodes[0] };
-                /*  48 PlainRuleOp      */ __Matchers[48] = _extendedType = new PlainRule(this, 48, "extended-type") { Builder = nodes => nodes[0] };
-                /*  49 PlainRuleOp      */ __Matchers[49] = _classSpecifier = new PlainRule(this, 49, "class-specifier") { Builder = nodes => nodes[0] };
-                /*  50 PlainRuleOp      */ __Matchers[50] = _classInstatiation = new PlainRule(this, 50, "class-instatiation") { Builder = nodes => nodes[0] };
-                /*  51 PlainRuleOp      */ __Matchers[51] = _qualifiedClass = new PlainRule(this, 51, "qualified-class") { Builder = nodes => nodes[0] };
-                /*  52 PlainRuleOp      */ __Matchers[52] = _superQualifiedClass = new PlainRule(this, 52, "super-qualified-class") { Builder = nodes => nodes[0] };
+                /*  43 PlainRuleOp      */ __Matchers[43] = _letVariableList = new PlainRule(this, 43, "let-variable-list") { Builder = nodes => nodes[0] };
+                /*  44 PlainRuleOp      */ __Matchers[44] = _letVariable = new PlainRule(this, 44, "let-variable") { Builder = nodes => nodes[0] };
+                /*  45 PlainRuleOp      */ __Matchers[45] = _delegatedConstructor = new PlainRule(this, 45, "delegated-constructor") { Builder = nodes => nodes[0] };
+                /*  46 PlainRuleOp      */ __Matchers[46] = _assertionStatement = new PlainRule(this, 46, "assertion-statement") { Builder = nodes => nodes[0] };
+                /*  47 PlainRuleOp      */ __Matchers[47] = _assertionMessage = new PlainRule(this, 47, "assertion-message") { Builder = nodes => nodes[0] };
+                /*  48 PlainRuleOp      */ __Matchers[48] = _block = new PlainRule(this, 48, "block") { Builder = nodes => nodes[0] };
+                /*  49 PlainRuleOp      */ __Matchers[49] = _extendedType = new PlainRule(this, 49, "extended-type") { Builder = nodes => nodes[0] };
+                /*  50 PlainRuleOp      */ __Matchers[50] = _classSpecifier = new PlainRule(this, 50, "class-specifier") { Builder = nodes => nodes[0] };
+                /*  51 PlainRuleOp      */ __Matchers[51] = _classInstatiation = new PlainRule(this, 51, "class-instatiation") { Builder = nodes => nodes[0] };
+                /*  52 PlainRuleOp      */ __Matchers[52] = _qualifiedClass = new PlainRule(this, 52, "qualified-class") { Builder = nodes => nodes[0] };
                 /*  53 PlainRuleOp      */ __Matchers[53] = _packageQualifiedClass = new PlainRule(this, 53, "package-qualified-class") { Builder = nodes => nodes[0] };
-                /*  54 PlainRuleOp      */ __Matchers[54] = _packageQualifier = new PlainRule(this, 54, "package-qualifier") { Builder = nodes => nodes[0] };
+                /*  54 PlainRuleOp      */ __Matchers[54] = _superQualifiedClass = new PlainRule(this, 54, "super-qualified-class") { Builder = nodes => nodes[0] };
                 /*  55 PlainRuleOp      */ __Matchers[55] = _unQualifiedClass = new PlainRule(this, 55, "un-qualified-class") { Builder = nodes => nodes[0] };
                 /*  56 PlainRuleOp      */ __Matchers[56] = _memberPath = new PlainRule(this, 56, "member-path") { Builder = nodes => nodes[0] };
                 /*  57 PlainRuleOp      */ __Matchers[57] = _typePath = new PlainRule(this, 57, "type-path") { Builder = nodes => nodes[0] };
@@ -152,228 +152,228 @@ namespace Six.Ceylon
                 /* 127 PlainRuleOp      */ __Matchers[127] = _tupleExpr = new PlainRule(this, 127, "tuple-expr") { Builder = nodes => nodes[0] };
                 /* 128 PlainRuleOp      */ __Matchers[128] = _arguments = new PlainRule(this, 128, "arguments") { Builder = nodes => nodes[0] };
                 /* 129 PlainRuleOp      */ __Matchers[129] = _structuralArguments = new PlainRule(this, 129, "structural-arguments") { Builder = nodes => nodes[0] };
-                /* 130 PlainRuleOp      */ __Matchers[130] = _namedOrAnonymous = new PlainRule(this, 130, "named-or-anonymous") { Builder = nodes => nodes[0] };
-                /* 131 PlainRuleOp      */ __Matchers[131] = _namedArgument = new PlainRule(this, 131, "named-argument") { Builder = nodes => nodes[0] };
+                /* 130 PlainRuleOp      */ __Matchers[130] = _positionalArguments = new PlainRule(this, 130, "positional-arguments") { Builder = nodes => nodes[0] };
+                /* 131 PlainRuleOp      */ __Matchers[131] = _namedOrAnonymous = new PlainRule(this, 131, "named-or-anonymous") { Builder = nodes => nodes[0] };
                 /* 132 PlainRuleOp      */ __Matchers[132] = _anonymousArgument = new PlainRule(this, 132, "anonymous-argument") { Builder = nodes => nodes[0] };
-                /* 133 PlainRuleOp      */ __Matchers[133] = _namedSpecifiedArgument = new PlainRule(this, 133, "named-specified-argument") { Builder = nodes => nodes[0] };
-                /* 134 PlainRuleOp      */ __Matchers[134] = _sequencedArguments = new PlainRule(this, 134, "sequenced-arguments") { Builder = nodes => nodes[0] };
-                /* 135 PlainRuleOp      */ __Matchers[135] = _sequencedArgument = new PlainRule(this, 135, "sequenced-argument") { Builder = nodes => nodes[0] };
-                /* 136 PlainRuleOp      */ __Matchers[136] = _namedArgumentDeclaration = new PlainRule(this, 136, "named-argument-declaration") { Builder = nodes => nodes[0] };
-                /* 137 PlainRuleOp      */ __Matchers[137] = _objectArgument = new PlainRule(this, 137, "object-argument") { Builder = nodes => nodes[0] };
-                /* 138 PlainRuleOp      */ __Matchers[138] = _typedMethodArgument = new PlainRule(this, 138, "typed-method-argument") { Builder = nodes => nodes[0] };
-                /* 139 PlainRuleOp      */ __Matchers[139] = _methodDefinition = new PlainRule(this, 139, "method-definition") { Builder = nodes => nodes[0] };
-                /* 140 PlainRuleOp      */ __Matchers[140] = _optionalFunctionSpecifier = new PlainRule(this, 140, "optional-function-specifier") { Builder = nodes => nodes[0] };
-                /* 141 PlainRuleOp      */ __Matchers[141] = _requiredFunctionSpecifier = new PlainRule(this, 141, "required-function-specifier") { Builder = nodes => nodes[0] };
-                /* 142 PlainRuleOp      */ __Matchers[142] = _methodArgumentType = new PlainRule(this, 142, "method-argument-type") { Builder = nodes => nodes[0] };
-                /* 143 PlainRuleOp      */ __Matchers[143] = _typedGetterArgument = new PlainRule(this, 143, "typed-getter-argument") { Builder = nodes => nodes[0] };
-                /* 144 PlainRuleOp      */ __Matchers[144] = _getterArgumentType = new PlainRule(this, 144, "getter-argument-type") { Builder = nodes => nodes[0] };
-                /* 145 PlainRuleOp      */ __Matchers[145] = _inferredMethodArgument = new PlainRule(this, 145, "inferred-method-argument") { Builder = nodes => nodes[0] };
-                /* 146 PlainRuleOp      */ __Matchers[146] = _inferredGetterArgument = new PlainRule(this, 146, "inferred-getter-argument") { Builder = nodes => nodes[0] };
-                /* 147 PlainRuleOp      */ __Matchers[147] = _untypedMethodArgument = new PlainRule(this, 147, "untyped-method-argument") { Builder = nodes => nodes[0] };
-                /* 148 PlainRuleOp      */ __Matchers[148] = _untypedGetterArgument = new PlainRule(this, 148, "untyped-getter-argument") { Builder = nodes => nodes[0] };
-                /* 149 PlainRuleOp      */ __Matchers[149] = _positionalArguments = new PlainRule(this, 149, "positional-arguments") { Builder = nodes => nodes[0] };
+                /* 133 PlainRuleOp      */ __Matchers[133] = _namedArgument = new PlainRule(this, 133, "named-argument") { Builder = nodes => nodes[0] };
+                /* 134 PlainRuleOp      */ __Matchers[134] = _namedSpecifiedArgument = new PlainRule(this, 134, "named-specified-argument") { Builder = nodes => nodes[0] };
+                /* 135 PlainRuleOp      */ __Matchers[135] = _sequencedArguments = new PlainRule(this, 135, "sequenced-arguments") { Builder = nodes => nodes[0] };
+                /* 136 PlainRuleOp      */ __Matchers[136] = _sequencedArgument = new PlainRule(this, 136, "sequenced-argument") { Builder = nodes => nodes[0] };
+                /* 137 PlainRuleOp      */ __Matchers[137] = _namedArgumentDeclaration = new PlainRule(this, 137, "named-argument-declaration") { Builder = nodes => nodes[0] };
+                /* 138 PlainRuleOp      */ __Matchers[138] = _objectArgument = new PlainRule(this, 138, "object-argument") { Builder = nodes => nodes[0] };
+                /* 139 PlainRuleOp      */ __Matchers[139] = _typedMethodArgument = new PlainRule(this, 139, "typed-method-argument") { Builder = nodes => nodes[0] };
+                /* 140 PlainRuleOp      */ __Matchers[140] = _methodDefinition = new PlainRule(this, 140, "method-definition") { Builder = nodes => nodes[0] };
+                /* 141 PlainRuleOp      */ __Matchers[141] = _optionalFunctionSpecifier = new PlainRule(this, 141, "optional-function-specifier") { Builder = nodes => nodes[0] };
+                /* 142 PlainRuleOp      */ __Matchers[142] = _requiredFunctionSpecifier = new PlainRule(this, 142, "required-function-specifier") { Builder = nodes => nodes[0] };
+                /* 143 PlainRuleOp      */ __Matchers[143] = _methodArgumentType = new PlainRule(this, 143, "method-argument-type") { Builder = nodes => nodes[0] };
+                /* 144 PlainRuleOp      */ __Matchers[144] = _typedGetterArgument = new PlainRule(this, 144, "typed-getter-argument") { Builder = nodes => nodes[0] };
+                /* 145 PlainRuleOp      */ __Matchers[145] = _getterArgumentType = new PlainRule(this, 145, "getter-argument-type") { Builder = nodes => nodes[0] };
+                /* 146 PlainRuleOp      */ __Matchers[146] = _inferredMethodArgument = new PlainRule(this, 146, "inferred-method-argument") { Builder = nodes => nodes[0] };
+                /* 147 PlainRuleOp      */ __Matchers[147] = _inferredGetterArgument = new PlainRule(this, 147, "inferred-getter-argument") { Builder = nodes => nodes[0] };
+                /* 148 PlainRuleOp      */ __Matchers[148] = _untypedMethodArgument = new PlainRule(this, 148, "untyped-method-argument") { Builder = nodes => nodes[0] };
+                /* 149 PlainRuleOp      */ __Matchers[149] = _untypedGetterArgument = new PlainRule(this, 149, "untyped-getter-argument") { Builder = nodes => nodes[0] };
                 /* 150 PlainRuleOp      */ __Matchers[150] = _positionalArgument = new PlainRule(this, 150, "positional-argument") { Builder = nodes => nodes[0] };
-                /* 151 PlainRuleOp      */ __Matchers[151] = _spreadArgument = new PlainRule(this, 151, "spread-argument") { Builder = nodes => nodes[0] };
-                /* 152 PlainRuleOp      */ __Matchers[152] = _letExpr = new PlainRule(this, 152, "let-expr") { Builder = nodes => nodes[0] };
-                /* 153 PlainRuleOp      */ __Matchers[153] = _letVariableList = new PlainRule(this, 153, "let-variable-list") { Builder = nodes => nodes[0] };
-                /* 154 PlainRuleOp      */ __Matchers[154] = _letVariable = new PlainRule(this, 154, "let-variable") { Builder = nodes => nodes[0] };
-                /* 155 PlainRuleOp      */ __Matchers[155] = _switchExpr = new PlainRule(this, 155, "switch-expr") { Builder = nodes => nodes[0] };
-                /* 156 PlainRuleOp      */ __Matchers[156] = _caseExpressions = new PlainRule(this, 156, "case-expressions") { Builder = nodes => nodes[0] };
-                /* 157 PlainRuleOp      */ __Matchers[157] = _caseExpression = new PlainRule(this, 157, "case-expression") { Builder = nodes => nodes[0] };
-                /* 158 PlainRuleOp      */ __Matchers[158] = _ifExpr = new PlainRule(this, 158, "if-expr") { Builder = nodes => nodes[0] };
-                /* 159 PlainRuleOp      */ __Matchers[159] = _elseExpression = new PlainRule(this, 159, "else-expression") { Builder = nodes => nodes[0] };
-                /* 160 PlainRuleOp      */ __Matchers[160] = _thenExpression = new PlainRule(this, 160, "then-expression") { Builder = nodes => nodes[0] };
-                /* 161 PlainRuleOp      */ __Matchers[161] = _conditionalExpression = new PlainRule(this, 161, "conditional-expression") { Builder = nodes => nodes[0] };
-                /* 162 PlainRuleOp      */ __Matchers[162] = _functionExpr = new PlainRule(this, 162, "function-expr") { Builder = nodes => nodes[0] };
-                /* 163 PlainRuleOp      */ __Matchers[163] = _functionExpressionType = new PlainRule(this, 163, "function-expression-type") { Creator = node => new CFunctionExpressionType(node) };
-                /* 164 PlainRuleOp      */ __Matchers[164] = _functionParameters = new PlainRule(this, 164, "function-parameters") { Builder = nodes => nodes[0] };
-                /* 165 PlainRuleOp      */ __Matchers[165] = _functionDefinition = new PlainRule(this, 165, "function-definition") { Builder = nodes => nodes[0] };
-                /* 166 PlainRuleOp      */ __Matchers[166] = _comprehensionArgument = new PlainRule(this, 166, "comprehension-argument") { Builder = nodes => nodes[0] };
-                /* 167 PlainRuleOp      */ __Matchers[167] = _comprehensionClause = new PlainRule(this, 167, "comprehension-clause") { Builder = nodes => nodes[0] };
-                /* 168 PlainRuleOp      */ __Matchers[168] = _expressionComprehensionClause = new PlainRule(this, 168, "expression-comprehension-clause") { Builder = nodes => nodes[0] };
-                /* 169 PlainRuleOp      */ __Matchers[169] = _forComprehensionClause = new PlainRule(this, 169, "for-comprehension-clause") { Builder = nodes => nodes[0] };
-                /* 170 PlainRuleOp      */ __Matchers[170] = _ifComprehensionClause = new PlainRule(this, 170, "if-comprehension-clause") { Builder = nodes => nodes[0] };
-                /* 171 PlainRuleOp      */ __Matchers[171] = _expression = new PlainRule(this, 171, "expression") { Builder = nodes => nodes[0] };
-                /* 172 PlainRuleOp      */ __Matchers[172] = _operatorExpression = new PlainRule(this, 172, "operator-expression") { Builder = nodes => nodes[0] };
-                /* 173 PlainRuleOp      */ __Matchers[173] = _assignmentExpression = new PlainRule(this, 173, "assignment-expression") { Builder = nodes => nodes[0] };
-                /* 174 PlainRuleOp      */ __Matchers[174] = _assignmentExpr = new PlainRule(this, 174, "assignment-expr") { Builder = nodes => nodes[0] };
-                /* 175 PlainRuleOp      */ __Matchers[175] = _assignmentOperator = new PlainRule(this, 175, "assignment-operator") { Creator = node => new CAssignmentOperator(node) };
-                /* 176 PlainRuleOp      */ __Matchers[176] = _thenElseExpression = new PlainRule(this, 176, "then-else-expression") { Builder = nodes => nodes[0] };
-                /* 177 PlainRuleOp      */ __Matchers[177] = _thenElseExpr = new PlainRule(this, 177, "then-else-expr") { Builder = nodes => nodes[0] };
-                /* 178 PlainRuleOp      */ __Matchers[178] = _thenElseOperator = new PlainRule(this, 178, "then-else-operator") { Creator = node => new CThenElseOperator(node) };
-                /* 179 PlainRuleOp      */ __Matchers[179] = _disjunctionExpression = new PlainRule(this, 179, "disjunction-expression") { Builder = nodes => nodes[0] };
-                /* 180 PlainRuleOp      */ __Matchers[180] = _disjunctionExpr = new PlainRule(this, 180, "disjunction-expr") { Builder = nodes => nodes[0] };
-                /* 181 PlainRuleOp      */ __Matchers[181] = _disjunctionOperator = new PlainRule(this, 181, "disjunction-operator") { Creator = node => new CDisjunctionOperator(node) };
-                /* 182 PlainRuleOp      */ __Matchers[182] = _conjunctionExpression = new PlainRule(this, 182, "conjunction-expression") { Builder = nodes => nodes[0] };
-                /* 183 PlainRuleOp      */ __Matchers[183] = _conjunctionExpr = new PlainRule(this, 183, "conjunction-expr") { Builder = nodes => nodes[0] };
-                /* 184 PlainRuleOp      */ __Matchers[184] = _conjunctionOperator = new PlainRule(this, 184, "conjunction-operator") { Creator = node => new CConjunctionOperator(node) };
-                /* 185 PlainRuleOp      */ __Matchers[185] = _logicalNegationExpression = new PlainRule(this, 185, "logical-negation-expression") { Builder = nodes => nodes[0] };
-                /* 186 PlainRuleOp      */ __Matchers[186] = _logicalNegationExpr = new PlainRule(this, 186, "logical-negation-expr") { Builder = nodes => nodes[0] };
-                /* 187 PlainRuleOp      */ __Matchers[187] = _notOperator = new PlainRule(this, 187, "not-operator") { Creator = node => new CNotOperator(node) };
-                /* 188 PlainRuleOp      */ __Matchers[188] = _expressionOrMeta = new PlainRule(this, 188, "expression-or-meta") { Builder = nodes => nodes[0] };
-                /* 189 PlainRuleOp      */ __Matchers[189] = _equalityExpression = new PlainRule(this, 189, "equality-expression") { Builder = nodes => nodes[0] };
-                /* 190 PlainRuleOp      */ __Matchers[190] = _equalityExpr = new PlainRule(this, 190, "equality-expr") { Builder = nodes => nodes[0] };
-                /* 191 PlainRuleOp      */ __Matchers[191] = _equalityOperator = new PlainRule(this, 191, "equality-operator") { Creator = node => new CEqualityOperator(node) };
-                /* 192 PlainRuleOp      */ __Matchers[192] = _comparisonExpression = new PlainRule(this, 192, "comparison-expression") { Builder = nodes => nodes[0] };
-                /* 193 PlainRuleOp      */ __Matchers[193] = _comparisonExpr = new PlainRule(this, 193, "comparison-expr") { Builder = nodes => nodes[0] };
-                /* 194 PlainRuleOp      */ __Matchers[194] = _largerExpr = new PlainRule(this, 194, "larger-expr") { Builder = nodes => nodes[0] };
-                /* 195 PlainRuleOp      */ __Matchers[195] = _smallerExpr = new PlainRule(this, 195, "smaller-expr") { Builder = nodes => nodes[0] };
-                /* 196 PlainRuleOp      */ __Matchers[196] = _largerBoundsExpr = new PlainRule(this, 196, "larger-bounds-expr") { Builder = nodes => nodes[0] };
-                /* 197 PlainRuleOp      */ __Matchers[197] = _smallerBoundsExpr = new PlainRule(this, 197, "smaller-bounds-expr") { Builder = nodes => nodes[0] };
-                /* 198 PlainRuleOp      */ __Matchers[198] = _typecheckExpr = new PlainRule(this, 198, "typecheck-expr") { Builder = nodes => nodes[0] };
-                /* 199 PlainRuleOp      */ __Matchers[199] = _comparisonOperator = new PlainRule(this, 199, "comparison-operator") { Creator = node => new CComparisonOperator(node) };
-                /* 200 PlainRuleOp      */ __Matchers[200] = _smallerOperator = new PlainRule(this, 200, "smaller-operator") { Creator = node => new CSmallerOperator(node) };
-                /* 201 PlainRuleOp      */ __Matchers[201] = _largerOperator = new PlainRule(this, 201, "larger-operator") { Creator = node => new CLargerOperator(node) };
-                /* 202 PlainRuleOp      */ __Matchers[202] = _typeOperator = new PlainRule(this, 202, "type-operator") { Creator = node => new CTypeOperator(node) };
-                /* 203 PlainRuleOp      */ __Matchers[203] = _existsNonemptyExpression = new PlainRule(this, 203, "exists-nonempty-expression") { Builder = nodes => nodes[0] };
-                /* 204 PlainRuleOp      */ __Matchers[204] = _existsExpr = new PlainRule(this, 204, "exists-expr") { Builder = nodes => nodes[0] };
-                /* 205 PlainRuleOp      */ __Matchers[205] = _nonemptyExpr = new PlainRule(this, 205, "nonempty-expr") { Builder = nodes => nodes[0] };
-                /* 206 PlainRuleOp      */ __Matchers[206] = _entryRangeExpression = new PlainRule(this, 206, "entry-range-expression") { Builder = nodes => nodes[0] };
-                /* 207 PlainRuleOp      */ __Matchers[207] = _rangeExpr = new PlainRule(this, 207, "range-expr") { Builder = nodes => nodes[0] };
-                /* 208 PlainRuleOp      */ __Matchers[208] = _entryExpr = new PlainRule(this, 208, "entry-expr") { Builder = nodes => nodes[0] };
-                /* 209 PlainRuleOp      */ __Matchers[209] = _rangeOperator = new PlainRule(this, 209, "range-operator") { Creator = node => new CRangeOperator(node) };
-                /* 210 PlainRuleOp      */ __Matchers[210] = _entryOperator = new PlainRule(this, 210, "entry-operator") { Creator = node => new CEntryOperator(node) };
-                /* 211 PlainRuleOp      */ __Matchers[211] = _additiveExpression = new PlainRule(this, 211, "additive-expression") { Builder = nodes => nodes[0] };
-                /* 212 PlainRuleOp      */ __Matchers[212] = _additiveExpr = new PlainRule(this, 212, "additive-expr") { Builder = nodes => nodes[0] };
-                /* 213 PlainRuleOp      */ __Matchers[213] = _additiveOperator = new PlainRule(this, 213, "additive-operator") { Creator = node => new CAdditiveOperator(node) };
-                /* 214 PlainRuleOp      */ __Matchers[214] = _scaleExpression = new PlainRule(this, 214, "scale-expression") { Builder = nodes => nodes[0] };
-                /* 215 PlainRuleOp      */ __Matchers[215] = _scaleExpr = new PlainRule(this, 215, "scale-expr") { Builder = nodes => nodes[0] };
-                /* 216 PlainRuleOp      */ __Matchers[216] = _scaleOperator = new PlainRule(this, 216, "scale-operator") { Creator = node => new CScaleOperator(node) };
-                /* 217 PlainRuleOp      */ __Matchers[217] = _multiplicativeExpression = new PlainRule(this, 217, "multiplicative-expression") { Builder = nodes => nodes[0] };
-                /* 218 PlainRuleOp      */ __Matchers[218] = _multiplicativeExpr = new PlainRule(this, 218, "multiplicative-expr") { Builder = nodes => nodes[0] };
-                /* 219 PlainRuleOp      */ __Matchers[219] = _multiplicativeOperator = new PlainRule(this, 219, "multiplicative-operator") { Creator = node => new CMultiplicativeOperator(node) };
-                /* 220 PlainRuleOp      */ __Matchers[220] = _unionExpression = new PlainRule(this, 220, "union-expression") { Builder = nodes => nodes[0] };
-                /* 221 PlainRuleOp      */ __Matchers[221] = _unionExpr = new PlainRule(this, 221, "union-expr") { Builder = nodes => nodes[0] };
-                /* 222 PlainRuleOp      */ __Matchers[222] = _unionOperator = new PlainRule(this, 222, "union-operator") { Creator = node => new CUnionOperator(node) };
-                /* 223 PlainRuleOp      */ __Matchers[223] = _exclusiveExpression = new PlainRule(this, 223, "exclusive-expression") { Builder = nodes => nodes[0] };
-                /* 224 PlainRuleOp      */ __Matchers[224] = _exclusiveExpr = new PlainRule(this, 224, "exclusive-expr") { Builder = nodes => nodes[0] };
-                /* 225 PlainRuleOp      */ __Matchers[225] = _exclusiveOperator = new PlainRule(this, 225, "exclusive-operator") { Creator = node => new CExclusiveOperator(node) };
-                /* 226 PlainRuleOp      */ __Matchers[226] = _intersectionExpression = new PlainRule(this, 226, "intersection-expression") { Builder = nodes => nodes[0] };
-                /* 227 PlainRuleOp      */ __Matchers[227] = _intersectionExpr = new PlainRule(this, 227, "intersection-expr") { Builder = nodes => nodes[0] };
-                /* 228 PlainRuleOp      */ __Matchers[228] = _intersectionOperator = new PlainRule(this, 228, "intersection-operator") { Creator = node => new CIntersectionOperator(node) };
-                /* 229 PlainRuleOp      */ __Matchers[229] = _negationOrComplementExpression = new PlainRule(this, 229, "negation-or-complement-expression") { Builder = nodes => nodes[0] };
-                /* 230 PlainRuleOp      */ __Matchers[230] = _negationOrComplementExpr = new PlainRule(this, 230, "negation-or-complement-expr") { Builder = nodes => nodes[0] };
-                /* 231 PlainRuleOp      */ __Matchers[231] = _unaryMinusOrComplementOperator = new PlainRule(this, 231, "unary-minus-or-complement-operator") { Builder = nodes => nodes[0] };
-                /* 232 PlainRuleOp      */ __Matchers[232] = _negateOperator = new PlainRule(this, 232, "negate-operator") { Builder = nodes => nodes[0] };
-                /* 233 PlainRuleOp      */ __Matchers[233] = _neutralOperator = new PlainRule(this, 233, "neutral-operator") { Builder = nodes => nodes[0] };
-                /* 234 PlainRuleOp      */ __Matchers[234] = _complementOperator = new PlainRule(this, 234, "complement-operator") { Creator = node => new CComplementOperator(node) };
-                /* 235 PlainRuleOp      */ __Matchers[235] = _prefixExpression = new PlainRule(this, 235, "prefix-expression") { Builder = nodes => nodes[0] };
-                /* 236 PlainRuleOp      */ __Matchers[236] = _prefixExpr = new PlainRule(this, 236, "prefix-expr") { Builder = nodes => nodes[0] };
-                /* 237 PlainRuleOp      */ __Matchers[237] = _postfixExpression = new PlainRule(this, 237, "postfix-expression") { Builder = nodes => nodes[0] };
-                /* 238 PlainRuleOp      */ __Matchers[238] = _postfixExpr = new PlainRule(this, 238, "postfix-expr") { Builder = nodes => nodes[0] };
-                /* 239 PlainRuleOp      */ __Matchers[239] = _incrementOperator = new PlainRule(this, 239, "increment-operator") { Creator = node => new CIncrementOperator(node) };
-                /* 240 PlainRuleOp      */ __Matchers[240] = _primary = new PlainRule(this, 240, "primary") { Builder = nodes => nodes[0] };
-                /* 241 PlainRuleOp      */ __Matchers[241] = _selectionExpr = new PlainRule(this, 241, "selection-expr") { Builder = nodes => nodes[0] };
-                /* 242 PlainRuleOp      */ __Matchers[242] = _qualifiedReference = new PlainRule(this, 242, "qualified-reference") { Builder = nodes => nodes[0] };
-                /* 243 PlainRuleOp      */ __Matchers[243] = _memberSelectionOperator = new PlainRule(this, 243, "member-selection-operator") { Creator = node => new CMemberSelectionOperator(node) };
-                /* 244 PlainRuleOp      */ __Matchers[244] = _indexedExpr = new PlainRule(this, 244, "indexed-expr") { Builder = nodes => nodes[0] };
-                /* 245 PlainRuleOp      */ __Matchers[245] = _index = new PlainRule(this, 245, "index") { Builder = nodes => nodes[0] };
-                /* 246 PlainRuleOp      */ __Matchers[246] = _upperSpanned = new PlainRule(this, 246, "upper-spanned") { Builder = nodes => nodes[0] };
-                /* 247 PlainRuleOp      */ __Matchers[247] = _lowerSpanned = new PlainRule(this, 247, "lower-spanned") { Builder = nodes => nodes[0] };
-                /* 248 PlainRuleOp      */ __Matchers[248] = _spanned = new PlainRule(this, 248, "spanned") { Builder = nodes => nodes[0] };
-                /* 249 PlainRuleOp      */ __Matchers[249] = _measured = new PlainRule(this, 249, "measured") { Builder = nodes => nodes[0] };
-                /* 250 PlainRuleOp      */ __Matchers[250] = _indexExpression = new PlainRule(this, 250, "index-expression") { Builder = nodes => nodes[0] };
-                /* 251 PlainRuleOp      */ __Matchers[251] = _callExpr = new PlainRule(this, 251, "call-expr") { Builder = nodes => nodes[0] };
-                /* 252 PlainRuleOp      */ __Matchers[252] = _baseExpression = new PlainRule(this, 252, "base-expression") { Builder = nodes => nodes[0] };
-                /* 253 PlainRuleOp      */ __Matchers[253] = _nonstringLiteral = new PlainRule(this, 253, "nonstring-literal") { Builder = nodes => nodes[0] };
-                /* 254 PlainRuleOp      */ __Matchers[254] = _stringExpression = new PlainRule(this, 254, "string-expression") { Builder = nodes => nodes[0] };
-                /* 255 PlainRuleOp      */ __Matchers[255] = _stringInterpolation = new PlainRule(this, 255, "string-interpolation") { Builder = nodes => nodes[0] };
-                /* 256 PlainRuleOp      */ __Matchers[256] = _interpolationPart = new PlainRule(this, 256, "interpolation-part") { Builder = nodes => nodes[0] };
-                /* 257 PlainRuleOp      */ __Matchers[257] = _stringLiteral = new PlainRule(this, 257, "string-literal") { Builder = nodes => nodes[0] };
-                /* 258 PlainRuleOp      */ __Matchers[258] = _objectExpr = new PlainRule(this, 258, "object-expr") { Builder = nodes => nodes[0] };
-                /* 259 PlainRuleOp      */ __Matchers[259] = _groupedExpr = new PlainRule(this, 259, "grouped-expr") { Builder = nodes => nodes[0] };
-                /* 260 PlainRuleOp      */ __Matchers[260] = _typeArguments = new PlainRule(this, 260, "type-arguments") { Builder = nodes => nodes[0] };
-                /* 261 PlainRuleOp      */ __Matchers[261] = _typeArgumentList = new PlainRule(this, 261, "type-argument-list") { Builder = nodes => nodes[0] };
-                /* 262 PlainRuleOp      */ __Matchers[262] = _variancedType = new PlainRule(this, 262, "varianced-type") { Builder = nodes => nodes[0] };
-                /* 263 PlainRuleOp      */ __Matchers[263] = _defaultedTypeList = new PlainRule(this, 263, "defaulted-type-list") { Builder = nodes => nodes[0] };
-                /* 264 PlainRuleOp      */ __Matchers[264] = _defaultedType = new PlainRule(this, 264, "defaulted-type") { Builder = nodes => nodes[0] };
-                /* 265 PlainRuleOp      */ __Matchers[265] = _defaultedTypeCore = new PlainRule(this, 265, "defaulted-type-core") { Builder = nodes => nodes[0] };
-                /* 266 PlainRuleOp      */ __Matchers[266] = _variadicType = new PlainRule(this, 266, "variadic-type") { Builder = nodes => nodes[0] };
-                /* 267 PlainRuleOp      */ __Matchers[267] = _variadicUnionType = new PlainRule(this, 267, "variadic-union-type") { Builder = nodes => nodes[0] };
-                /* 268 PlainRuleOp      */ __Matchers[268] = _variadicOperator = new PlainRule(this, 268, "variadic-operator") { Creator = node => new CVariadicOperator(node) };
-                /* 269 PlainRuleOp      */ __Matchers[269] = _spreadType = new PlainRule(this, 269, "spread-type") { Builder = nodes => nodes[0] };
-                /* 270 PlainRuleOp      */ __Matchers[270] = _type = new PlainRule(this, 270, "type") { Builder = nodes => nodes[0] };
-                /* 271 PlainRuleOp      */ __Matchers[271] = _entryType = new PlainRule(this, 271, "entry-type") { Builder = nodes => nodes[0] };
-                /* 272 PlainRuleOp      */ __Matchers[272] = _unionType = new PlainRule(this, 272, "union-type") { Builder = nodes => nodes[0] };
-                /* 273 PlainRuleOp      */ __Matchers[273] = _unionTypeCore = new PlainRule(this, 273, "union-type-core") { Builder = nodes => nodes[0] };
-                /* 274 PlainRuleOp      */ __Matchers[274] = _intersectionType = new PlainRule(this, 274, "intersection-type") { Builder = nodes => nodes[0] };
-                /* 275 PlainRuleOp      */ __Matchers[275] = _intersectionTypeCore = new PlainRule(this, 275, "intersection-type-core") { Builder = nodes => nodes[0] };
-                /* 276 PlainRuleOp      */ __Matchers[276] = _primaryType = new PlainRule(this, 276, "primary-type") { Builder = nodes => nodes[0] };
-                /* 277 PlainRuleOp      */ __Matchers[277] = _nullableType = new PlainRule(this, 277, "nullable-type") { Builder = nodes => nodes[0] };
-                /* 278 PlainRuleOp      */ __Matchers[278] = _arrayType = new PlainRule(this, 278, "array-type") { Builder = nodes => nodes[0] };
-                /* 279 PlainRuleOp      */ __Matchers[279] = _functionType = new PlainRule(this, 279, "function-type") { Builder = nodes => nodes[0] };
-                /* 280 PlainRuleOp      */ __Matchers[280] = _typeTypeArguments = new PlainRule(this, 280, "type-type-arguments") { Builder = nodes => nodes[0] };
-                /* 281 PlainRuleOp      */ __Matchers[281] = _tupleType = new PlainRule(this, 281, "tuple-type") { Builder = nodes => nodes[0] };
-                /* 282 PlainRuleOp      */ __Matchers[282] = _iterableType = new PlainRule(this, 282, "iterable-type") { Builder = nodes => nodes[0] };
-                /* 283 PlainRuleOp      */ __Matchers[283] = _groupedType = new PlainRule(this, 283, "grouped-type") { Builder = nodes => nodes[0] };
-                /* 284 PlainRuleOp      */ __Matchers[284] = _packageQualifiedType = new PlainRule(this, 284, "package-qualified-type") { Builder = nodes => nodes[0] };
-                /* 285 PlainRuleOp      */ __Matchers[285] = _annotations = new PlainRule(this, 285, "annotations") { Builder = nodes => nodes[0] };
-                /* 286 PlainRuleOp      */ __Matchers[286] = _annotation = new PlainRule(this, 286, "annotation") { Builder = nodes => nodes[0] };
-                /* 287 PlainRuleOp      */ __Matchers[287] = _conditions = new PlainRule(this, 287, "conditions") { Builder = nodes => nodes[0] };
-                /* 288 PlainRuleOp      */ __Matchers[288] = _conditionList = new PlainRule(this, 288, "condition-list") { Builder = nodes => nodes[0] };
-                /* 289 PlainRuleOp      */ __Matchers[289] = _condition = new PlainRule(this, 289, "condition") { Builder = nodes => nodes[0] };
-                /* 290 PlainRuleOp      */ __Matchers[290] = _existsCondition = new PlainRule(this, 290, "exists-condition") { Builder = nodes => nodes[0] };
-                /* 291 PlainRuleOp      */ __Matchers[291] = _nonemptyCondition = new PlainRule(this, 291, "nonempty-condition") { Builder = nodes => nodes[0] };
-                /* 292 PlainRuleOp      */ __Matchers[292] = _letOrExpression = new PlainRule(this, 292, "let-or-expression") { Builder = nodes => nodes[0] };
-                /* 293 PlainRuleOp      */ __Matchers[293] = _isCondition = new PlainRule(this, 293, "is-condition") { Builder = nodes => nodes[0] };
-                /* 294 PlainRuleOp      */ __Matchers[294] = _isConditionVariable = new PlainRule(this, 294, "is-condition-variable") { Builder = nodes => nodes[0] };
-                /* 295 PlainRuleOp      */ __Matchers[295] = _satisfiesCondition = new PlainRule(this, 295, "satisfies-condition") { Builder = nodes => nodes[0] };
-                /* 296 PlainRuleOp      */ __Matchers[296] = _booleanCondition = new PlainRule(this, 296, "boolean-condition") { Builder = nodes => nodes[0] };
-                /* 297 PlainRuleOp      */ __Matchers[297] = _controlStatement = new PlainRule(this, 297, "control-statement") { Builder = nodes => nodes[0] };
-                /* 298 PlainRuleOp      */ __Matchers[298] = _ifElseStatement = new PlainRule(this, 298, "if-else-statement") { Builder = nodes => nodes[0] };
-                /* 299 PlainRuleOp      */ __Matchers[299] = _ifBlock = new PlainRule(this, 299, "if-block") { Builder = nodes => nodes[0] };
-                /* 300 PlainRuleOp      */ __Matchers[300] = _elseBlock = new PlainRule(this, 300, "else-block") { Builder = nodes => nodes[0] };
-                /* 301 PlainRuleOp      */ __Matchers[301] = _elseBlockNext = new PlainRule(this, 301, "else-block-next") { Builder = nodes => nodes[0] };
-                /* 302 PlainRuleOp      */ __Matchers[302] = _switchStatement = new PlainRule(this, 302, "switch-statement") { Builder = nodes => nodes[0] };
-                /* 303 PlainRuleOp      */ __Matchers[303] = _switchHeader = new PlainRule(this, 303, "switch-header") { Builder = nodes => nodes[0] };
-                /* 304 PlainRuleOp      */ __Matchers[304] = _switched = new PlainRule(this, 304, "switched") { Builder = nodes => nodes[0] };
-                /* 305 PlainRuleOp      */ __Matchers[305] = _caseBlock = new PlainRule(this, 305, "case-block") { Builder = nodes => nodes[0] };
-                /* 306 PlainRuleOp      */ __Matchers[306] = _caseItem = new PlainRule(this, 306, "case-item") { Builder = nodes => nodes[0] };
-                /* 307 PlainRuleOp      */ __Matchers[307] = _isCaseCondition = new PlainRule(this, 307, "is-case-condition") { Builder = nodes => nodes[0] };
-                /* 308 PlainRuleOp      */ __Matchers[308] = _satisfiesCaseCondition = new PlainRule(this, 308, "satisfies-case-condition") { Builder = nodes => nodes[0] };
-                /* 309 PlainRuleOp      */ __Matchers[309] = _matchCaseCondition = new PlainRule(this, 309, "match-case-condition") { Builder = nodes => nodes[0] };
-                /* 310 PlainRuleOp      */ __Matchers[310] = _valueCaseList = new PlainRule(this, 310, "value-case-list") { Builder = nodes => nodes[0] };
-                /* 311 PlainRuleOp      */ __Matchers[311] = _valueCaseSeparator = new PlainRule(this, 311, "value-case-separator") { Creator = node => new CValueCaseSeparator(node) };
-                /* 312 PlainRuleOp      */ __Matchers[312] = _valueCase = new PlainRule(this, 312, "value-case") { Builder = nodes => nodes[0] };
-                /* 313 PlainRuleOp      */ __Matchers[313] = _forElseStatement = new PlainRule(this, 313, "for-else-statement") { Builder = nodes => nodes[0] };
-                /* 314 PlainRuleOp      */ __Matchers[314] = _forBlock = new PlainRule(this, 314, "for-block") { Builder = nodes => nodes[0] };
-                /* 315 PlainRuleOp      */ __Matchers[315] = _failBlock = new PlainRule(this, 315, "fail-block") { Builder = nodes => nodes[0] };
-                /* 316 PlainRuleOp      */ __Matchers[316] = _forIterator = new PlainRule(this, 316, "for-iterator") { Builder = nodes => nodes[0] };
-                /* 317 PlainRuleOp      */ __Matchers[317] = _forVariable = new PlainRule(this, 317, "for-variable") { Builder = nodes => nodes[0] };
-                /* 318 PlainRuleOp      */ __Matchers[318] = _containment = new PlainRule(this, 318, "containment") { Builder = nodes => nodes[0] };
-                /* 319 PlainRuleOp      */ __Matchers[319] = _containmentOperator = new PlainRule(this, 319, "containment-operator") { Creator = node => new CContainmentOperator(node) };
-                /* 320 PlainRuleOp      */ __Matchers[320] = _whileStatement = new PlainRule(this, 320, "while-statement") { Builder = nodes => nodes[0] };
-                /* 321 PlainRuleOp      */ __Matchers[321] = _tryStatement = new PlainRule(this, 321, "try-statement") { Builder = nodes => nodes[0] };
-                /* 322 PlainRuleOp      */ __Matchers[322] = _tryBlock = new PlainRule(this, 322, "try-block") { Builder = nodes => nodes[0] };
-                /* 323 PlainRuleOp      */ __Matchers[323] = _catchBlock = new PlainRule(this, 323, "catch-block") { Builder = nodes => nodes[0] };
-                /* 324 PlainRuleOp      */ __Matchers[324] = _catchVariable = new PlainRule(this, 324, "catch-variable") { Builder = nodes => nodes[0] };
-                /* 325 PlainRuleOp      */ __Matchers[325] = _finallyBlock = new PlainRule(this, 325, "finally-block") { Builder = nodes => nodes[0] };
-                /* 326 PlainRuleOp      */ __Matchers[326] = _resources = new PlainRule(this, 326, "resources") { Builder = nodes => nodes[0] };
-                /* 327 PlainRuleOp      */ __Matchers[327] = _resourceList = new PlainRule(this, 327, "resource-list") { Builder = nodes => nodes[0] };
-                /* 328 PlainRuleOp      */ __Matchers[328] = _resource = new PlainRule(this, 328, "resource") { Builder = nodes => nodes[0] };
-                /* 329 PlainRuleOp      */ __Matchers[329] = _specifiedOrExpression = new PlainRule(this, 329, "specified-or-expression") { Builder = nodes => nodes[0] };
-                /* 330 PlainRuleOp      */ __Matchers[330] = _specifiedVariable = new PlainRule(this, 330, "specified-variable") { Builder = nodes => nodes[0] };
-                /* 331 PlainRuleOp      */ __Matchers[331] = _variable = new PlainRule(this, 331, "variable") { Builder = nodes => nodes[0] };
-                /* 332 PlainRuleOp      */ __Matchers[332] = _variableType = new PlainRule(this, 332, "variable-type") { Builder = nodes => nodes[0] };
-                /* 333 PlainRuleOp      */ __Matchers[333] = _modelReference = new PlainRule(this, 333, "model-reference") { Builder = nodes => nodes[0] };
-                /* 334 PlainRuleOp      */ __Matchers[334] = _metaLiteral = new PlainRule(this, 334, "meta-literal") { Builder = nodes => nodes[0] };
-                /* 335 PlainRuleOp      */ __Matchers[335] = _metaExpression = new PlainRule(this, 335, "meta-expression") { Builder = nodes => nodes[0] };
-                /* 336 PlainRuleOp      */ __Matchers[336] = _modelExpression = new PlainRule(this, 336, "model-expression") { Builder = nodes => nodes[0] };
-                /* 337 PlainRuleOp      */ __Matchers[337] = _memberModelExpression = new PlainRule(this, 337, "member-model-expression") { Builder = nodes => nodes[0] };
-                /* 338 PlainRuleOp      */ __Matchers[338] = _packageQualifiedMemberReference = new PlainRule(this, 338, "package-qualified-member-reference") { Builder = nodes => nodes[0] };
-                /* 339 PlainRuleOp      */ __Matchers[339] = _typeQualifiedMemberReference = new PlainRule(this, 339, "type-qualified-member-reference") { Builder = nodes => nodes[0] };
-                /* 340 PlainRuleOp      */ __Matchers[340] = _typeModelExpression = new PlainRule(this, 340, "type-model-expression") { Builder = nodes => nodes[0] };
-                /* 341 PlainRuleOp      */ __Matchers[341] = _declarationReference = new PlainRule(this, 341, "declaration-reference") { Builder = nodes => nodes[0] };
-                /* 342 PlainRuleOp      */ __Matchers[342] = _moduleLiteral = new PlainRule(this, 342, "module-literal") { Builder = nodes => nodes[0] };
-                /* 343 PlainRuleOp      */ __Matchers[343] = _packageLiteral = new PlainRule(this, 343, "package-literal") { Builder = nodes => nodes[0] };
-                /* 344 PlainRuleOp      */ __Matchers[344] = _classLiteral = new PlainRule(this, 344, "class-literal") { Builder = nodes => nodes[0] };
-                /* 345 PlainRuleOp      */ __Matchers[345] = _interfaceLiteral = new PlainRule(this, 345, "interface-literal") { Builder = nodes => nodes[0] };
-                /* 346 PlainRuleOp      */ __Matchers[346] = _aliasLiteral = new PlainRule(this, 346, "alias-literal") { Builder = nodes => nodes[0] };
-                /* 347 PlainRuleOp      */ __Matchers[347] = _typeParameterLiteral = new PlainRule(this, 347, "type-parameter-literal") { Builder = nodes => nodes[0] };
-                /* 348 PlainRuleOp      */ __Matchers[348] = _newLiteral = new PlainRule(this, 348, "new-literal") { Builder = nodes => nodes[0] };
-                /* 349 PlainRuleOp      */ __Matchers[349] = _valueLiteral = new PlainRule(this, 349, "value-literal") { Builder = nodes => nodes[0] };
-                /* 350 PlainRuleOp      */ __Matchers[350] = _valueLiteralIntro = new PlainRule(this, 350, "value-literal-intro") { Creator = node => new CValueLiteralIntro(node) };
-                /* 351 PlainRuleOp      */ __Matchers[351] = _functionLiteral = new PlainRule(this, 351, "function-literal") { Builder = nodes => nodes[0] };
+                /* 151 PlainRuleOp      */ __Matchers[151] = _expressionArgument = new PlainRule(this, 151, "expression-argument") { Builder = nodes => nodes[0] };
+                /* 152 PlainRuleOp      */ __Matchers[152] = _spreadArgument = new PlainRule(this, 152, "spread-argument") { Builder = nodes => nodes[0] };
+                /* 153 PlainRuleOp      */ __Matchers[153] = _letExpr = new PlainRule(this, 153, "let-expr") { Builder = nodes => nodes[0] };
+                /* 154 PlainRuleOp      */ __Matchers[154] = _switchExpr = new PlainRule(this, 154, "switch-expr") { Builder = nodes => nodes[0] };
+                /* 155 PlainRuleOp      */ __Matchers[155] = _caseExpressions = new PlainRule(this, 155, "case-expressions") { Builder = nodes => nodes[0] };
+                /* 156 PlainRuleOp      */ __Matchers[156] = _caseExpression = new PlainRule(this, 156, "case-expression") { Builder = nodes => nodes[0] };
+                /* 157 PlainRuleOp      */ __Matchers[157] = _ifExpr = new PlainRule(this, 157, "if-expr") { Builder = nodes => nodes[0] };
+                /* 158 PlainRuleOp      */ __Matchers[158] = _elseExpression = new PlainRule(this, 158, "else-expression") { Builder = nodes => nodes[0] };
+                /* 159 PlainRuleOp      */ __Matchers[159] = _thenExpression = new PlainRule(this, 159, "then-expression") { Builder = nodes => nodes[0] };
+                /* 160 PlainRuleOp      */ __Matchers[160] = _conditionalExpression = new PlainRule(this, 160, "conditional-expression") { Builder = nodes => nodes[0] };
+                /* 161 PlainRuleOp      */ __Matchers[161] = _functionExpr = new PlainRule(this, 161, "function-expr") { Builder = nodes => nodes[0] };
+                /* 162 PlainRuleOp      */ __Matchers[162] = _functionExpressionType = new PlainRule(this, 162, "function-expression-type") { Creator = node => new CFunctionExpressionType(node) };
+                /* 163 PlainRuleOp      */ __Matchers[163] = _functionParameters = new PlainRule(this, 163, "function-parameters") { Builder = nodes => nodes[0] };
+                /* 164 PlainRuleOp      */ __Matchers[164] = _functionDefinition = new PlainRule(this, 164, "function-definition") { Builder = nodes => nodes[0] };
+                /* 165 PlainRuleOp      */ __Matchers[165] = _comprehensionArgument = new PlainRule(this, 165, "comprehension-argument") { Builder = nodes => nodes[0] };
+                /* 166 PlainRuleOp      */ __Matchers[166] = _comprehensionClause = new PlainRule(this, 166, "comprehension-clause") { Builder = nodes => nodes[0] };
+                /* 167 PlainRuleOp      */ __Matchers[167] = _expressionComprehensionClause = new PlainRule(this, 167, "expression-comprehension-clause") { Builder = nodes => nodes[0] };
+                /* 168 PlainRuleOp      */ __Matchers[168] = _forComprehensionClause = new PlainRule(this, 168, "for-comprehension-clause") { Builder = nodes => nodes[0] };
+                /* 169 PlainRuleOp      */ __Matchers[169] = _ifComprehensionClause = new PlainRule(this, 169, "if-comprehension-clause") { Builder = nodes => nodes[0] };
+                /* 170 PlainRuleOp      */ __Matchers[170] = _expression = new PlainRule(this, 170, "expression") { Builder = nodes => nodes[0] };
+                /* 171 PlainRuleOp      */ __Matchers[171] = _operatorExpression = new PlainRule(this, 171, "operator-expression") { Builder = nodes => nodes[0] };
+                /* 172 PlainRuleOp      */ __Matchers[172] = _assignmentExpression = new PlainRule(this, 172, "assignment-expression") { Builder = nodes => nodes[0] };
+                /* 173 PlainRuleOp      */ __Matchers[173] = _assignmentExpr = new PlainRule(this, 173, "assignment-expr") { Builder = nodes => nodes[0] };
+                /* 174 PlainRuleOp      */ __Matchers[174] = _assignmentOperator = new PlainRule(this, 174, "assignment-operator") { Creator = node => new CAssignmentOperator(node) };
+                /* 175 PlainRuleOp      */ __Matchers[175] = _thenElseExpression = new PlainRule(this, 175, "then-else-expression") { Builder = nodes => nodes[0] };
+                /* 176 PlainRuleOp      */ __Matchers[176] = _thenElseExpr = new PlainRule(this, 176, "then-else-expr") { Builder = nodes => nodes[0] };
+                /* 177 PlainRuleOp      */ __Matchers[177] = _thenElseOperator = new PlainRule(this, 177, "then-else-operator") { Creator = node => new CThenElseOperator(node) };
+                /* 178 PlainRuleOp      */ __Matchers[178] = _disjunctionExpression = new PlainRule(this, 178, "disjunction-expression") { Builder = nodes => nodes[0] };
+                /* 179 PlainRuleOp      */ __Matchers[179] = _disjunctionExpr = new PlainRule(this, 179, "disjunction-expr") { Builder = nodes => nodes[0] };
+                /* 180 PlainRuleOp      */ __Matchers[180] = _disjunctionOperator = new PlainRule(this, 180, "disjunction-operator") { Creator = node => new CDisjunctionOperator(node) };
+                /* 181 PlainRuleOp      */ __Matchers[181] = _conjunctionExpression = new PlainRule(this, 181, "conjunction-expression") { Builder = nodes => nodes[0] };
+                /* 182 PlainRuleOp      */ __Matchers[182] = _conjunctionExpr = new PlainRule(this, 182, "conjunction-expr") { Builder = nodes => nodes[0] };
+                /* 183 PlainRuleOp      */ __Matchers[183] = _conjunctionOperator = new PlainRule(this, 183, "conjunction-operator") { Creator = node => new CConjunctionOperator(node) };
+                /* 184 PlainRuleOp      */ __Matchers[184] = _logicalNegationExpression = new PlainRule(this, 184, "logical-negation-expression") { Builder = nodes => nodes[0] };
+                /* 185 PlainRuleOp      */ __Matchers[185] = _logicalNegationExpr = new PlainRule(this, 185, "logical-negation-expr") { Builder = nodes => nodes[0] };
+                /* 186 PlainRuleOp      */ __Matchers[186] = _notOperator = new PlainRule(this, 186, "not-operator") { Creator = node => new CNotOperator(node) };
+                /* 187 PlainRuleOp      */ __Matchers[187] = _expressionOrMeta = new PlainRule(this, 187, "expression-or-meta") { Builder = nodes => nodes[0] };
+                /* 188 PlainRuleOp      */ __Matchers[188] = _equalityExpression = new PlainRule(this, 188, "equality-expression") { Builder = nodes => nodes[0] };
+                /* 189 PlainRuleOp      */ __Matchers[189] = _equalityExpr = new PlainRule(this, 189, "equality-expr") { Builder = nodes => nodes[0] };
+                /* 190 PlainRuleOp      */ __Matchers[190] = _equalityOperator = new PlainRule(this, 190, "equality-operator") { Creator = node => new CEqualityOperator(node) };
+                /* 191 PlainRuleOp      */ __Matchers[191] = _comparisonExpression = new PlainRule(this, 191, "comparison-expression") { Builder = nodes => nodes[0] };
+                /* 192 PlainRuleOp      */ __Matchers[192] = _comparisonExpr = new PlainRule(this, 192, "comparison-expr") { Builder = nodes => nodes[0] };
+                /* 193 PlainRuleOp      */ __Matchers[193] = _largerExpr = new PlainRule(this, 193, "larger-expr") { Builder = nodes => nodes[0] };
+                /* 194 PlainRuleOp      */ __Matchers[194] = _smallerExpr = new PlainRule(this, 194, "smaller-expr") { Builder = nodes => nodes[0] };
+                /* 195 PlainRuleOp      */ __Matchers[195] = _largerBoundsExpr = new PlainRule(this, 195, "larger-bounds-expr") { Builder = nodes => nodes[0] };
+                /* 196 PlainRuleOp      */ __Matchers[196] = _smallerBoundsExpr = new PlainRule(this, 196, "smaller-bounds-expr") { Builder = nodes => nodes[0] };
+                /* 197 PlainRuleOp      */ __Matchers[197] = _typecheckExpr = new PlainRule(this, 197, "typecheck-expr") { Builder = nodes => nodes[0] };
+                /* 198 PlainRuleOp      */ __Matchers[198] = _comparisonOperator = new PlainRule(this, 198, "comparison-operator") { Creator = node => new CComparisonOperator(node) };
+                /* 199 PlainRuleOp      */ __Matchers[199] = _smallerOperator = new PlainRule(this, 199, "smaller-operator") { Creator = node => new CSmallerOperator(node) };
+                /* 200 PlainRuleOp      */ __Matchers[200] = _largerOperator = new PlainRule(this, 200, "larger-operator") { Creator = node => new CLargerOperator(node) };
+                /* 201 PlainRuleOp      */ __Matchers[201] = _typeOperator = new PlainRule(this, 201, "type-operator") { Creator = node => new CTypeOperator(node) };
+                /* 202 PlainRuleOp      */ __Matchers[202] = _existsNonemptyExpression = new PlainRule(this, 202, "exists-nonempty-expression") { Builder = nodes => nodes[0] };
+                /* 203 PlainRuleOp      */ __Matchers[203] = _existsExpr = new PlainRule(this, 203, "exists-expr") { Builder = nodes => nodes[0] };
+                /* 204 PlainRuleOp      */ __Matchers[204] = _nonemptyExpr = new PlainRule(this, 204, "nonempty-expr") { Builder = nodes => nodes[0] };
+                /* 205 PlainRuleOp      */ __Matchers[205] = _entryRangeExpression = new PlainRule(this, 205, "entry-range-expression") { Builder = nodes => nodes[0] };
+                /* 206 PlainRuleOp      */ __Matchers[206] = _rangeExpr = new PlainRule(this, 206, "range-expr") { Builder = nodes => nodes[0] };
+                /* 207 PlainRuleOp      */ __Matchers[207] = _entryExpr = new PlainRule(this, 207, "entry-expr") { Builder = nodes => nodes[0] };
+                /* 208 PlainRuleOp      */ __Matchers[208] = _rangeOperator = new PlainRule(this, 208, "range-operator") { Creator = node => new CRangeOperator(node) };
+                /* 209 PlainRuleOp      */ __Matchers[209] = _entryOperator = new PlainRule(this, 209, "entry-operator") { Creator = node => new CEntryOperator(node) };
+                /* 210 PlainRuleOp      */ __Matchers[210] = _additiveExpression = new PlainRule(this, 210, "additive-expression") { Builder = nodes => nodes[0] };
+                /* 211 PlainRuleOp      */ __Matchers[211] = _additiveExpr = new PlainRule(this, 211, "additive-expr") { Builder = nodes => nodes[0] };
+                /* 212 PlainRuleOp      */ __Matchers[212] = _additiveOperator = new PlainRule(this, 212, "additive-operator") { Creator = node => new CAdditiveOperator(node) };
+                /* 213 PlainRuleOp      */ __Matchers[213] = _scaleExpression = new PlainRule(this, 213, "scale-expression") { Builder = nodes => nodes[0] };
+                /* 214 PlainRuleOp      */ __Matchers[214] = _scaleExpr = new PlainRule(this, 214, "scale-expr") { Builder = nodes => nodes[0] };
+                /* 215 PlainRuleOp      */ __Matchers[215] = _scaleOperator = new PlainRule(this, 215, "scale-operator") { Creator = node => new CScaleOperator(node) };
+                /* 216 PlainRuleOp      */ __Matchers[216] = _multiplicativeExpression = new PlainRule(this, 216, "multiplicative-expression") { Builder = nodes => nodes[0] };
+                /* 217 PlainRuleOp      */ __Matchers[217] = _multiplicativeExpr = new PlainRule(this, 217, "multiplicative-expr") { Builder = nodes => nodes[0] };
+                /* 218 PlainRuleOp      */ __Matchers[218] = _multiplicativeOperator = new PlainRule(this, 218, "multiplicative-operator") { Creator = node => new CMultiplicativeOperator(node) };
+                /* 219 PlainRuleOp      */ __Matchers[219] = _unionExpression = new PlainRule(this, 219, "union-expression") { Builder = nodes => nodes[0] };
+                /* 220 PlainRuleOp      */ __Matchers[220] = _unionExpr = new PlainRule(this, 220, "union-expr") { Builder = nodes => nodes[0] };
+                /* 221 PlainRuleOp      */ __Matchers[221] = _unionOperator = new PlainRule(this, 221, "union-operator") { Creator = node => new CUnionOperator(node) };
+                /* 222 PlainRuleOp      */ __Matchers[222] = _exclusiveExpression = new PlainRule(this, 222, "exclusive-expression") { Builder = nodes => nodes[0] };
+                /* 223 PlainRuleOp      */ __Matchers[223] = _exclusiveExpr = new PlainRule(this, 223, "exclusive-expr") { Builder = nodes => nodes[0] };
+                /* 224 PlainRuleOp      */ __Matchers[224] = _exclusiveOperator = new PlainRule(this, 224, "exclusive-operator") { Creator = node => new CExclusiveOperator(node) };
+                /* 225 PlainRuleOp      */ __Matchers[225] = _intersectionExpression = new PlainRule(this, 225, "intersection-expression") { Builder = nodes => nodes[0] };
+                /* 226 PlainRuleOp      */ __Matchers[226] = _intersectionExpr = new PlainRule(this, 226, "intersection-expr") { Builder = nodes => nodes[0] };
+                /* 227 PlainRuleOp      */ __Matchers[227] = _intersectionOperator = new PlainRule(this, 227, "intersection-operator") { Creator = node => new CIntersectionOperator(node) };
+                /* 228 PlainRuleOp      */ __Matchers[228] = _negationOrComplementExpression = new PlainRule(this, 228, "negation-or-complement-expression") { Builder = nodes => nodes[0] };
+                /* 229 PlainRuleOp      */ __Matchers[229] = _negationOrComplementExpr = new PlainRule(this, 229, "negation-or-complement-expr") { Builder = nodes => nodes[0] };
+                /* 230 PlainRuleOp      */ __Matchers[230] = _unaryMinusOrComplementOperator = new PlainRule(this, 230, "unary-minus-or-complement-operator") { Builder = nodes => nodes[0] };
+                /* 231 PlainRuleOp      */ __Matchers[231] = _negateOperator = new PlainRule(this, 231, "negate-operator") { Builder = nodes => nodes[0] };
+                /* 232 PlainRuleOp      */ __Matchers[232] = _neutralOperator = new PlainRule(this, 232, "neutral-operator") { Builder = nodes => nodes[0] };
+                /* 233 PlainRuleOp      */ __Matchers[233] = _complementOperator = new PlainRule(this, 233, "complement-operator") { Creator = node => new CComplementOperator(node) };
+                /* 234 PlainRuleOp      */ __Matchers[234] = _prefixExpression = new PlainRule(this, 234, "prefix-expression") { Builder = nodes => nodes[0] };
+                /* 235 PlainRuleOp      */ __Matchers[235] = _prefixExpr = new PlainRule(this, 235, "prefix-expr") { Builder = nodes => nodes[0] };
+                /* 236 PlainRuleOp      */ __Matchers[236] = _postfixExpression = new PlainRule(this, 236, "postfix-expression") { Builder = nodes => nodes[0] };
+                /* 237 PlainRuleOp      */ __Matchers[237] = _postfixExpr = new PlainRule(this, 237, "postfix-expr") { Builder = nodes => nodes[0] };
+                /* 238 PlainRuleOp      */ __Matchers[238] = _incrementOperator = new PlainRule(this, 238, "increment-operator") { Creator = node => new CIncrementOperator(node) };
+                /* 239 PlainRuleOp      */ __Matchers[239] = _primary = new PlainRule(this, 239, "primary") { Builder = nodes => nodes[0] };
+                /* 240 PlainRuleOp      */ __Matchers[240] = _selectionExpr = new PlainRule(this, 240, "selection-expr") { Builder = nodes => nodes[0] };
+                /* 241 PlainRuleOp      */ __Matchers[241] = _qualifiedReference = new PlainRule(this, 241, "qualified-reference") { Builder = nodes => nodes[0] };
+                /* 242 PlainRuleOp      */ __Matchers[242] = _memberSelectionOperator = new PlainRule(this, 242, "member-selection-operator") { Creator = node => new CMemberSelectionOperator(node) };
+                /* 243 PlainRuleOp      */ __Matchers[243] = _indexedExpr = new PlainRule(this, 243, "indexed-expr") { Builder = nodes => nodes[0] };
+                /* 244 PlainRuleOp      */ __Matchers[244] = _index = new PlainRule(this, 244, "index") { Builder = nodes => nodes[0] };
+                /* 245 PlainRuleOp      */ __Matchers[245] = _upperSpanned = new PlainRule(this, 245, "upper-spanned") { Builder = nodes => nodes[0] };
+                /* 246 PlainRuleOp      */ __Matchers[246] = _lowerSpanned = new PlainRule(this, 246, "lower-spanned") { Builder = nodes => nodes[0] };
+                /* 247 PlainRuleOp      */ __Matchers[247] = _spanned = new PlainRule(this, 247, "spanned") { Builder = nodes => nodes[0] };
+                /* 248 PlainRuleOp      */ __Matchers[248] = _measured = new PlainRule(this, 248, "measured") { Builder = nodes => nodes[0] };
+                /* 249 PlainRuleOp      */ __Matchers[249] = _indexExpression = new PlainRule(this, 249, "index-expression") { Builder = nodes => nodes[0] };
+                /* 250 PlainRuleOp      */ __Matchers[250] = _callExpr = new PlainRule(this, 250, "call-expr") { Builder = nodes => nodes[0] };
+                /* 251 PlainRuleOp      */ __Matchers[251] = _baseExpression = new PlainRule(this, 251, "base-expression") { Builder = nodes => nodes[0] };
+                /* 252 PlainRuleOp      */ __Matchers[252] = _nonstringLiteral = new PlainRule(this, 252, "nonstring-literal") { Builder = nodes => nodes[0] };
+                /* 253 PlainRuleOp      */ __Matchers[253] = _stringExpression = new PlainRule(this, 253, "string-expression") { Builder = nodes => nodes[0] };
+                /* 254 PlainRuleOp      */ __Matchers[254] = _stringInterpolation = new PlainRule(this, 254, "string-interpolation") { Builder = nodes => nodes[0] };
+                /* 255 PlainRuleOp      */ __Matchers[255] = _interpolationPart = new PlainRule(this, 255, "interpolation-part") { Builder = nodes => nodes[0] };
+                /* 256 PlainRuleOp      */ __Matchers[256] = _stringLiteral = new PlainRule(this, 256, "string-literal") { Builder = nodes => nodes[0] };
+                /* 257 PlainRuleOp      */ __Matchers[257] = _objectExpr = new PlainRule(this, 257, "object-expr") { Builder = nodes => nodes[0] };
+                /* 258 PlainRuleOp      */ __Matchers[258] = _groupedExpr = new PlainRule(this, 258, "grouped-expr") { Builder = nodes => nodes[0] };
+                /* 259 PlainRuleOp      */ __Matchers[259] = _typeArguments = new PlainRule(this, 259, "type-arguments") { Builder = nodes => nodes[0] };
+                /* 260 PlainRuleOp      */ __Matchers[260] = _typeArgumentList = new PlainRule(this, 260, "type-argument-list") { Builder = nodes => nodes[0] };
+                /* 261 PlainRuleOp      */ __Matchers[261] = _variancedType = new PlainRule(this, 261, "varianced-type") { Builder = nodes => nodes[0] };
+                /* 262 PlainRuleOp      */ __Matchers[262] = _defaultedTypeList = new PlainRule(this, 262, "defaulted-type-list") { Builder = nodes => nodes[0] };
+                /* 263 PlainRuleOp      */ __Matchers[263] = _defaultedType = new PlainRule(this, 263, "defaulted-type") { Builder = nodes => nodes[0] };
+                /* 264 PlainRuleOp      */ __Matchers[264] = _defaultedTypeCore = new PlainRule(this, 264, "defaulted-type-core") { Builder = nodes => nodes[0] };
+                /* 265 PlainRuleOp      */ __Matchers[265] = _variadicType = new PlainRule(this, 265, "variadic-type") { Builder = nodes => nodes[0] };
+                /* 266 PlainRuleOp      */ __Matchers[266] = _variadicUnionType = new PlainRule(this, 266, "variadic-union-type") { Builder = nodes => nodes[0] };
+                /* 267 PlainRuleOp      */ __Matchers[267] = _variadicOperator = new PlainRule(this, 267, "variadic-operator") { Creator = node => new CVariadicOperator(node) };
+                /* 268 PlainRuleOp      */ __Matchers[268] = _spreadType = new PlainRule(this, 268, "spread-type") { Builder = nodes => nodes[0] };
+                /* 269 PlainRuleOp      */ __Matchers[269] = _type = new PlainRule(this, 269, "type") { Builder = nodes => nodes[0] };
+                /* 270 PlainRuleOp      */ __Matchers[270] = _entryType = new PlainRule(this, 270, "entry-type") { Builder = nodes => nodes[0] };
+                /* 271 PlainRuleOp      */ __Matchers[271] = _unionType = new PlainRule(this, 271, "union-type") { Builder = nodes => nodes[0] };
+                /* 272 PlainRuleOp      */ __Matchers[272] = _unionTypeCore = new PlainRule(this, 272, "union-type-core") { Builder = nodes => nodes[0] };
+                /* 273 PlainRuleOp      */ __Matchers[273] = _intersectionType = new PlainRule(this, 273, "intersection-type") { Builder = nodes => nodes[0] };
+                /* 274 PlainRuleOp      */ __Matchers[274] = _intersectionTypeCore = new PlainRule(this, 274, "intersection-type-core") { Builder = nodes => nodes[0] };
+                /* 275 PlainRuleOp      */ __Matchers[275] = _primaryType = new PlainRule(this, 275, "primary-type") { Builder = nodes => nodes[0] };
+                /* 276 PlainRuleOp      */ __Matchers[276] = _nullableType = new PlainRule(this, 276, "nullable-type") { Builder = nodes => nodes[0] };
+                /* 277 PlainRuleOp      */ __Matchers[277] = _arrayType = new PlainRule(this, 277, "array-type") { Builder = nodes => nodes[0] };
+                /* 278 PlainRuleOp      */ __Matchers[278] = _functionType = new PlainRule(this, 278, "function-type") { Builder = nodes => nodes[0] };
+                /* 279 PlainRuleOp      */ __Matchers[279] = _typeTypeArguments = new PlainRule(this, 279, "type-type-arguments") { Builder = nodes => nodes[0] };
+                /* 280 PlainRuleOp      */ __Matchers[280] = _tupleType = new PlainRule(this, 280, "tuple-type") { Builder = nodes => nodes[0] };
+                /* 281 PlainRuleOp      */ __Matchers[281] = _iterableType = new PlainRule(this, 281, "iterable-type") { Builder = nodes => nodes[0] };
+                /* 282 PlainRuleOp      */ __Matchers[282] = _groupedType = new PlainRule(this, 282, "grouped-type") { Builder = nodes => nodes[0] };
+                /* 283 PlainRuleOp      */ __Matchers[283] = _packageQualifiedType = new PlainRule(this, 283, "package-qualified-type") { Builder = nodes => nodes[0] };
+                /* 284 PlainRuleOp      */ __Matchers[284] = _annotations = new PlainRule(this, 284, "annotations") { Builder = nodes => nodes[0] };
+                /* 285 PlainRuleOp      */ __Matchers[285] = _annotation = new PlainRule(this, 285, "annotation") { Builder = nodes => nodes[0] };
+                /* 286 PlainRuleOp      */ __Matchers[286] = _conditions = new PlainRule(this, 286, "conditions") { Builder = nodes => nodes[0] };
+                /* 287 PlainRuleOp      */ __Matchers[287] = _conditionList = new PlainRule(this, 287, "condition-list") { Builder = nodes => nodes[0] };
+                /* 288 PlainRuleOp      */ __Matchers[288] = _condition = new PlainRule(this, 288, "condition") { Builder = nodes => nodes[0] };
+                /* 289 PlainRuleOp      */ __Matchers[289] = _existsCondition = new PlainRule(this, 289, "exists-condition") { Builder = nodes => nodes[0] };
+                /* 290 PlainRuleOp      */ __Matchers[290] = _nonemptyCondition = new PlainRule(this, 290, "nonempty-condition") { Builder = nodes => nodes[0] };
+                /* 291 PlainRuleOp      */ __Matchers[291] = _letOrExpression = new PlainRule(this, 291, "let-or-expression") { Builder = nodes => nodes[0] };
+                /* 292 PlainRuleOp      */ __Matchers[292] = _isCondition = new PlainRule(this, 292, "is-condition") { Builder = nodes => nodes[0] };
+                /* 293 PlainRuleOp      */ __Matchers[293] = _isConditionVariable = new PlainRule(this, 293, "is-condition-variable") { Builder = nodes => nodes[0] };
+                /* 294 PlainRuleOp      */ __Matchers[294] = _satisfiesCondition = new PlainRule(this, 294, "satisfies-condition") { Builder = nodes => nodes[0] };
+                /* 295 PlainRuleOp      */ __Matchers[295] = _booleanCondition = new PlainRule(this, 295, "boolean-condition") { Builder = nodes => nodes[0] };
+                /* 296 PlainRuleOp      */ __Matchers[296] = _controlStatement = new PlainRule(this, 296, "control-statement") { Builder = nodes => nodes[0] };
+                /* 297 PlainRuleOp      */ __Matchers[297] = _ifElseStatement = new PlainRule(this, 297, "if-else-statement") { Builder = nodes => nodes[0] };
+                /* 298 PlainRuleOp      */ __Matchers[298] = _ifBlock = new PlainRule(this, 298, "if-block") { Builder = nodes => nodes[0] };
+                /* 299 PlainRuleOp      */ __Matchers[299] = _elseBlock = new PlainRule(this, 299, "else-block") { Builder = nodes => nodes[0] };
+                /* 300 PlainRuleOp      */ __Matchers[300] = _elseBlockNext = new PlainRule(this, 300, "else-block-next") { Builder = nodes => nodes[0] };
+                /* 301 PlainRuleOp      */ __Matchers[301] = _switchStatement = new PlainRule(this, 301, "switch-statement") { Builder = nodes => nodes[0] };
+                /* 302 PlainRuleOp      */ __Matchers[302] = _switchHeader = new PlainRule(this, 302, "switch-header") { Builder = nodes => nodes[0] };
+                /* 303 PlainRuleOp      */ __Matchers[303] = _switched = new PlainRule(this, 303, "switched") { Builder = nodes => nodes[0] };
+                /* 304 PlainRuleOp      */ __Matchers[304] = _caseBlock = new PlainRule(this, 304, "case-block") { Builder = nodes => nodes[0] };
+                /* 305 PlainRuleOp      */ __Matchers[305] = _caseItem = new PlainRule(this, 305, "case-item") { Builder = nodes => nodes[0] };
+                /* 306 PlainRuleOp      */ __Matchers[306] = _isCaseCondition = new PlainRule(this, 306, "is-case-condition") { Builder = nodes => nodes[0] };
+                /* 307 PlainRuleOp      */ __Matchers[307] = _satisfiesCaseCondition = new PlainRule(this, 307, "satisfies-case-condition") { Builder = nodes => nodes[0] };
+                /* 308 PlainRuleOp      */ __Matchers[308] = _matchCaseCondition = new PlainRule(this, 308, "match-case-condition") { Builder = nodes => nodes[0] };
+                /* 309 PlainRuleOp      */ __Matchers[309] = _valueCaseList = new PlainRule(this, 309, "value-case-list") { Builder = nodes => nodes[0] };
+                /* 310 PlainRuleOp      */ __Matchers[310] = _valueCaseSeparator = new PlainRule(this, 310, "value-case-separator") { Creator = node => new CValueCaseSeparator(node) };
+                /* 311 PlainRuleOp      */ __Matchers[311] = _valueCase = new PlainRule(this, 311, "value-case") { Builder = nodes => nodes[0] };
+                /* 312 PlainRuleOp      */ __Matchers[312] = _forElseStatement = new PlainRule(this, 312, "for-else-statement") { Builder = nodes => nodes[0] };
+                /* 313 PlainRuleOp      */ __Matchers[313] = _forBlock = new PlainRule(this, 313, "for-block") { Builder = nodes => nodes[0] };
+                /* 314 PlainRuleOp      */ __Matchers[314] = _failBlock = new PlainRule(this, 314, "fail-block") { Builder = nodes => nodes[0] };
+                /* 315 PlainRuleOp      */ __Matchers[315] = _forIterator = new PlainRule(this, 315, "for-iterator") { Builder = nodes => nodes[0] };
+                /* 316 PlainRuleOp      */ __Matchers[316] = _forVariable = new PlainRule(this, 316, "for-variable") { Builder = nodes => nodes[0] };
+                /* 317 PlainRuleOp      */ __Matchers[317] = _containment = new PlainRule(this, 317, "containment") { Builder = nodes => nodes[0] };
+                /* 318 PlainRuleOp      */ __Matchers[318] = _containmentOperator = new PlainRule(this, 318, "containment-operator") { Creator = node => new CContainmentOperator(node) };
+                /* 319 PlainRuleOp      */ __Matchers[319] = _whileStatement = new PlainRule(this, 319, "while-statement") { Builder = nodes => nodes[0] };
+                /* 320 PlainRuleOp      */ __Matchers[320] = _tryStatement = new PlainRule(this, 320, "try-statement") { Builder = nodes => nodes[0] };
+                /* 321 PlainRuleOp      */ __Matchers[321] = _tryBlock = new PlainRule(this, 321, "try-block") { Builder = nodes => nodes[0] };
+                /* 322 PlainRuleOp      */ __Matchers[322] = _catchBlock = new PlainRule(this, 322, "catch-block") { Builder = nodes => nodes[0] };
+                /* 323 PlainRuleOp      */ __Matchers[323] = _catchVariable = new PlainRule(this, 323, "catch-variable") { Builder = nodes => nodes[0] };
+                /* 324 PlainRuleOp      */ __Matchers[324] = _finallyBlock = new PlainRule(this, 324, "finally-block") { Builder = nodes => nodes[0] };
+                /* 325 PlainRuleOp      */ __Matchers[325] = _resources = new PlainRule(this, 325, "resources") { Builder = nodes => nodes[0] };
+                /* 326 PlainRuleOp      */ __Matchers[326] = _resourceList = new PlainRule(this, 326, "resource-list") { Builder = nodes => nodes[0] };
+                /* 327 PlainRuleOp      */ __Matchers[327] = _resource = new PlainRule(this, 327, "resource") { Builder = nodes => nodes[0] };
+                /* 328 PlainRuleOp      */ __Matchers[328] = _specifiedOrExpression = new PlainRule(this, 328, "specified-or-expression") { Builder = nodes => nodes[0] };
+                /* 329 PlainRuleOp      */ __Matchers[329] = _specifiedVariable = new PlainRule(this, 329, "specified-variable") { Builder = nodes => nodes[0] };
+                /* 330 PlainRuleOp      */ __Matchers[330] = _variable = new PlainRule(this, 330, "variable") { Builder = nodes => nodes[0] };
+                /* 331 PlainRuleOp      */ __Matchers[331] = _variableType = new PlainRule(this, 331, "variable-type") { Builder = nodes => nodes[0] };
+                /* 332 PlainRuleOp      */ __Matchers[332] = _modelReference = new PlainRule(this, 332, "model-reference") { Builder = nodes => nodes[0] };
+                /* 333 PlainRuleOp      */ __Matchers[333] = _metaLiteral = new PlainRule(this, 333, "meta-literal") { Builder = nodes => nodes[0] };
+                /* 334 PlainRuleOp      */ __Matchers[334] = _metaExpression = new PlainRule(this, 334, "meta-expression") { Builder = nodes => nodes[0] };
+                /* 335 PlainRuleOp      */ __Matchers[335] = _modelExpression = new PlainRule(this, 335, "model-expression") { Builder = nodes => nodes[0] };
+                /* 336 PlainRuleOp      */ __Matchers[336] = _memberModelExpression = new PlainRule(this, 336, "member-model-expression") { Builder = nodes => nodes[0] };
+                /* 337 PlainRuleOp      */ __Matchers[337] = _packageQualifiedMemberReference = new PlainRule(this, 337, "package-qualified-member-reference") { Builder = nodes => nodes[0] };
+                /* 338 PlainRuleOp      */ __Matchers[338] = _typeQualifiedMemberReference = new PlainRule(this, 338, "type-qualified-member-reference") { Builder = nodes => nodes[0] };
+                /* 339 PlainRuleOp      */ __Matchers[339] = _typeModelExpression = new PlainRule(this, 339, "type-model-expression") { Builder = nodes => nodes[0] };
+                /* 340 PlainRuleOp      */ __Matchers[340] = _declarationReference = new PlainRule(this, 340, "declaration-reference") { Builder = nodes => nodes[0] };
+                /* 341 PlainRuleOp      */ __Matchers[341] = _moduleLiteral = new PlainRule(this, 341, "module-literal") { Builder = nodes => nodes[0] };
+                /* 342 PlainRuleOp      */ __Matchers[342] = _packageLiteral = new PlainRule(this, 342, "package-literal") { Builder = nodes => nodes[0] };
+                /* 343 PlainRuleOp      */ __Matchers[343] = _classLiteral = new PlainRule(this, 343, "class-literal") { Builder = nodes => nodes[0] };
+                /* 344 PlainRuleOp      */ __Matchers[344] = _interfaceLiteral = new PlainRule(this, 344, "interface-literal") { Builder = nodes => nodes[0] };
+                /* 345 PlainRuleOp      */ __Matchers[345] = _aliasLiteral = new PlainRule(this, 345, "alias-literal") { Builder = nodes => nodes[0] };
+                /* 346 PlainRuleOp      */ __Matchers[346] = _typeParameterLiteral = new PlainRule(this, 346, "type-parameter-literal") { Builder = nodes => nodes[0] };
+                /* 347 PlainRuleOp      */ __Matchers[347] = _newLiteral = new PlainRule(this, 347, "new-literal") { Builder = nodes => nodes[0] };
+                /* 348 PlainRuleOp      */ __Matchers[348] = _valueLiteral = new PlainRule(this, 348, "value-literal") { Builder = nodes => nodes[0] };
+                /* 349 PlainRuleOp      */ __Matchers[349] = _valueLiteralIntro = new PlainRule(this, 349, "value-literal-intro") { Creator = node => new CValueLiteralIntro(node) };
+                /* 350 PlainRuleOp      */ __Matchers[350] = _functionLiteral = new PlainRule(this, 350, "function-literal") { Builder = nodes => nodes[0] };
+                /* 351 PlainRuleOp      */ __Matchers[351] = _packageQualifier = new PlainRule(this, 351, "package-qualifier") { Builder = nodes => nodes[0] };
                 /* 352 PlainRuleOp      */ __Matchers[352] = _referencePath = new PlainRule(this, 352, "reference-path") { Builder = nodes => nodes[0] };
                 /* 353 PlainRuleOp      */ __Matchers[353] = _referencePathElementList = new PlainRule(this, 353, "reference-path-element-list") { Builder = nodes => nodes[0] };
                 /* 354 PlainRuleOp      */ __Matchers[354] = _referencePathElement = new PlainRule(this, 354, "reference-path-element") { Builder = nodes => nodes[0] };
@@ -460,448 +460,448 @@ namespace Six.Ceylon
                 /* 435 StringOp         */ __Matchers[435] = new String(this, 435, "'('", "(") { Creator = node => new RLiteral(node) };
                 /* 436 StringOp         */ __Matchers[436] = new String(this, 436, "')'", ")") { Creator = node => new RLiteral(node) };
                 /* 437 SeqOp            */ __Matchers[437] = new Seq(this, 437, "_437:('let','(',>let-variable-list,')')") { Builder = nodes => new CLetStatement(nodes) };
-                /* 438 StringOp         */ __Matchers[438] = new Keyword(this, 438, "'extends'", "extends") { Creator = node => new RLiteral(node) };
-                /* 439 SeqOp            */ __Matchers[439] = new Seq(this, 439, "_439:('extends',>class-instatiation)") { Builder = nodes => new CDelegatedConstructor(nodes) };
-                /* 440 OptionalOp       */ __Matchers[440] = new Optional(this, 440, "?(>assertion-message)") { Builder = nodes => new ROptional<ICAssertionMessage>(nodes) };
-                /* 441 StringOp         */ __Matchers[441] = new Keyword(this, 441, "'assert'", "assert") { Creator = node => new RLiteral(node) };
-                /* 442 SeqOp            */ __Matchers[442] = new Seq(this, 442, "_442:(?(>assertion-message),'assert',>conditions)") { Builder = nodes => new CAssertionStatement(nodes) };
-                /* 443 SeqOp            */ __Matchers[443] = new Seq(this, 443, "_443:('{',>imports,>statements,'}')") { Builder = nodes => new CBlockElements(nodes) };
-                /* 444 SeqOp            */ __Matchers[444] = new Seq(this, 444, "_444:('extends',>class-instatiation)") { Builder = nodes => new CExtendedType(nodes) };
-                /* 445 StringOp         */ __Matchers[445] = new String(this, 445, "'=>'", "=>") { Creator = node => new RLiteral(node) };
-                /* 446 SeqOp            */ __Matchers[446] = new Seq(this, 446, "_446:('=>',>class-instatiation)") { Builder = nodes => new CClassSpecifier(nodes) };
-                /* 447 OptionalOp       */ __Matchers[447] = new Optional(this, 447, "?(>arguments)") { Builder = nodes => new ROptional<ICArguments>(nodes) };
-                /* 448 SeqOp            */ __Matchers[448] = new Seq(this, 448, "_448:(>qualified-class,?(>arguments))") { Builder = nodes => new CClassInstatiation(nodes) };
-                /* 449 AltOp            */ __Matchers[449] = new Alt(this, 449, "alt(>package-qualified-class|>super-qualified-class|>un-qualified-class)") { Builder = nodes => nodes[0] };
-                /* 450 StringOp         */ __Matchers[450] = new Keyword(this, 450, "'super'", "super") { Creator = node => new RLiteral(node) };
-                /* 451 SeqOp            */ __Matchers[451] = new Seq(this, 451, "_451:('super','.',>base-reference)") { Builder = nodes => new CSuperQualifiedClass(nodes) };
-                /* 452 SeqOp            */ __Matchers[452] = new Seq(this, 452, "_452:('package','.',>un-qualified-class)") { Builder = nodes => new CPackageQualifiedClass(nodes) };
-                /* 453 SeqOp            */ __Matchers[453] = new Seq(this, 453, "_453:('package','.')") { Builder = nodes => new CPackageQualifier(nodes) };
-                /* 454 AltOp            */ __Matchers[454] = new Alt(this, 454, "alt(>member-path|>type-path|>member-reference)") { Builder = nodes => nodes[0] };
-                /* 455 SeqOp            */ __Matchers[455] = new Seq(this, 455, "_455:(>type-path,'.',>member-reference)") { Builder = nodes => new CMemberPath(nodes) };
-                /* 456 SeqOp            */ __Matchers[456] = new Seq(this, 456, "_456:('.',>type-reference)") { Builder = nodes => new RSequence(nodes) };
-                /* 457 StarOp           */ __Matchers[457] = new Star(this, 457, "*(_456:('.',>type-reference))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 458 SeqOp            */ __Matchers[458] = new Seq(this, 458, "_458:(>type-reference,*(_456:('.',>type-reference)))") { Builder = nodes => new CTypePath(nodes) };
-                /* 459 StringOp         */ __Matchers[459] = new Keyword(this, 459, "'satisfies'", "satisfies") { Creator = node => new RLiteral(node) };
-                /* 460 SeqOp            */ __Matchers[460] = new Seq(this, 460, "_460:('satisfies',>union-type-list)") { Builder = nodes => new CSatisfiedTypes(nodes) };
-                /* 461 SeqOp            */ __Matchers[461] = new Seq(this, 461, "_461:(',',>union-type)") { Builder = nodes => new RSequence(nodes) };
-                /* 462 StarOp           */ __Matchers[462] = new Star(this, 462, "*(_461:(',',>union-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 463 SeqOp            */ __Matchers[463] = new Seq(this, 463, "_463:(>union-type,*(_461:(',',>union-type)))") { Builder = nodes => new CUnionTypeList(nodes) };
-                /* 464 StringOp         */ __Matchers[464] = new Keyword(this, 464, "'of'", "of") { Creator = node => new RLiteral(node) };
-                /* 465 SeqOp            */ __Matchers[465] = new Seq(this, 465, "_465:('of',>case-type-list)") { Builder = nodes => new CCaseTypes(nodes) };
-                /* 466 StringOp         */ __Matchers[466] = new String(this, 466, "'|'", "|") { Creator = node => new RLiteral(node) };
-                /* 467 SeqOp            */ __Matchers[467] = new Seq(this, 467, "_467:('|',>case-type)") { Builder = nodes => new RSequence(nodes) };
-                /* 468 StarOp           */ __Matchers[468] = new Star(this, 468, "*(_467:('|',>case-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 469 SeqOp            */ __Matchers[469] = new Seq(this, 469, "_469:(>case-type,*(_467:('|',>case-type)))") { Builder = nodes => new CCaseTypeList(nodes) };
-                /* 470 AltOp            */ __Matchers[470] = new Alt(this, 470, "alt(>primary-type|>qualified-case-type)") { Builder = nodes => nodes[0] };
-                /* 471 OptionalOp       */ __Matchers[471] = new Optional(this, 471, "?(>package-qualifier)") { Builder = nodes => new ROptional<CPackageQualifier>(nodes) };
-                /* 472 SeqOp            */ __Matchers[472] = new Seq(this, 472, "_472:(?(>package-qualifier),>member-name)") { Builder = nodes => new CQualifiedCaseType(nodes) };
-                /* 473 OptionalOp       */ __Matchers[473] = new Optional(this, 473, "?(>parameter-list)") { Builder = nodes => new ROptional<CParameterList>(nodes) };
-                /* 474 SeqOp            */ __Matchers[474] = new Seq(this, 474, "_474:('(',?(>parameter-list),')')") { Builder = nodes => new CParameters(nodes) };
-                /* 475 SeqOp            */ __Matchers[475] = new Seq(this, 475, "_475:(',',>parameter-declaration-or-ref-pattern)") { Builder = nodes => new RSequence(nodes) };
-                /* 476 StarOp           */ __Matchers[476] = new Star(this, 476, "*(_475:(',',>parameter-declaration-or-ref-pattern))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 477 SeqOp            */ __Matchers[477] = new Seq(this, 477, "_477:(>parameter-declaration-or-ref-pattern,*(_475:(',',>parameter-declaration-or-ref-pattern)))") { Builder = nodes => new CParameterList(nodes) };
-                /* 478 AltOp            */ __Matchers[478] = new Alt(this, 478, "alt(>entry-pattern|>tuple-pattern|>parameter|>parameter-reference)") { Builder = nodes => nodes[0] };
-                /* 479 SeqOp            */ __Matchers[479] = new Seq(this, 479, "_479:(>annotations,>parameter-declaration)") { Builder = nodes => new CParameter(nodes) };
-                /* 480 OptionalOp       */ __Matchers[480] = new Optional(this, 480, "?(>value-specifier)") { Builder = nodes => new ROptional<CValueSpecifier>(nodes) };
-                /* 481 SeqOp            */ __Matchers[481] = new Seq(this, 481, "_481:(>member-name,?(>value-specifier))") { Builder = nodes => new CParameterReference(nodes) };
-                /* 482 AltOp            */ __Matchers[482] = new Alt(this, 482, "alt(>function-parameter-declaration|>value-parameter-declaration)") { Builder = nodes => nodes[0] };
-                /* 483 OptionalOp       */ __Matchers[483] = new Optional(this, 483, "?(>type-parameters)") { Builder = nodes => new ROptional<CTypeParameters>(nodes) };
-                /* 484 PlusOp           */ __Matchers[484] = new Plus(this, 484, "+(>parameters)") { Builder = nodes => new RPlus<CParameters>(nodes) };
-                /* 485 OptionalOp       */ __Matchers[485] = new Optional(this, 485, "?(>function-specifier)") { Builder = nodes => new ROptional<CFunctionSpecifier>(nodes) };
-                /* 486 SeqOp            */ __Matchers[486] = new Seq(this, 486, "_486:(>function-parameter-type,>member-name,?(>type-parameters),+(>parameters),?(>function-specifier))") { Builder = nodes => new CFunctionParameterDeclaration(nodes) };
-                /* 487 AltOp            */ __Matchers[487] = new Alt(this, 487, "alt(>variadic-type|>kw-void|>kw-function)") { Builder = nodes => nodes[0] };
-                /* 488 SeqOp            */ __Matchers[488] = new Seq(this, 488, "_488:(>value-parameter-type,>member-name,?(>value-specifier))") { Builder = nodes => new CValueParameterDeclaration(nodes) };
-                /* 489 AltOp            */ __Matchers[489] = new Alt(this, 489, "alt(>variadic-type|>kw-value)") { Builder = nodes => nodes[0] };
-                /* 490 StringOp         */ __Matchers[490] = new String(this, 490, "'<'", "<") { Creator = node => new RLiteral(node) };
-                /* 491 StringOp         */ __Matchers[491] = new String(this, 491, "'>'", ">") { Creator = node => new RLiteral(node) };
-                /* 492 SeqOp            */ __Matchers[492] = new Seq(this, 492, "_492:('<',>type-parameter-list,'>')") { Builder = nodes => new CTypeParameters(nodes) };
-                /* 493 SeqOp            */ __Matchers[493] = new Seq(this, 493, "_493:(',',>type-parameter)") { Builder = nodes => new RSequence(nodes) };
-                /* 494 StarOp           */ __Matchers[494] = new Star(this, 494, "*(_493:(',',>type-parameter))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 495 SeqOp            */ __Matchers[495] = new Seq(this, 495, "_495:(>type-parameter,*(_493:(',',>type-parameter)))") { Builder = nodes => new CTypeParameterList(nodes) };
-                /* 496 OptionalOp       */ __Matchers[496] = new Optional(this, 496, "?(>variance)") { Builder = nodes => new ROptional<ICVariance>(nodes) };
-                /* 497 OptionalOp       */ __Matchers[497] = new Optional(this, 497, "?(>type-default)") { Builder = nodes => new ROptional<CTypeDefault>(nodes) };
-                /* 498 SeqOp            */ __Matchers[498] = new Seq(this, 498, "_498:(?(>variance),>type-name,?(>type-default))") { Builder = nodes => new CTypeParameter(nodes) };
-                /* 499 StringOp         */ __Matchers[499] = new Keyword(this, 499, "'in'", "in") { Creator = node => new RLiteral(node) };
-                /* 500 StringOp         */ __Matchers[500] = new Keyword(this, 500, "'out'", "out") { Creator = node => new RLiteral(node) };
-                /* 501 AltOp            */ __Matchers[501] = new Alt(this, 501, "alt('in'|'out')") { Builder = nodes => nodes[0] };
-                /* 502 SeqOp            */ __Matchers[502] = new Seq(this, 502, "_502:('=',>type)") { Builder = nodes => new CTypeDefault(nodes) };
-                /* 503 StringOp         */ __Matchers[503] = new Keyword(this, 503, "'given'", "given") { Creator = node => new RLiteral(node) };
-                /* 504 OptionalOp       */ __Matchers[504] = new Optional(this, 504, "?(>type-name)") { Builder = nodes => new ROptional<ICTypeName>(nodes) };
-                /* 505 OptionalOp       */ __Matchers[505] = new Optional(this, 505, "?(>case-types)") { Builder = nodes => new ROptional<CCaseTypes>(nodes) };
-                /* 506 OptionalOp       */ __Matchers[506] = new Optional(this, 506, "?(>satisfied-types)") { Builder = nodes => new ROptional<CSatisfiedTypes>(nodes) };
-                /* 507 SeqOp            */ __Matchers[507] = new Seq(this, 507, "_507:('given',?(>type-name),?(>type-parameters),?(>case-types),?(>satisfied-types))") { Builder = nodes => new CTypeConstraint(nodes) };
-                /* 508 PlusOp           */ __Matchers[508] = new Plus(this, 508, "+(>type-constraint)") { Builder = nodes => new CTypeConstraints(nodes) };
-                /* 509 StarOp           */ __Matchers[509] = new Star(this, 509, "*(>declaration)") { Builder = nodes => new CDeclarations(nodes) };
-                /* 510 AltOp            */ __Matchers[510] = new Alt(this, 510, "alt(>class-declaration|>interface-declaration|>alias-declaration|>object-declaration|>constructor-declaration|>enumerated-object-declaration|>setter-declaration|>typed-method-declaration|>void-method-declaration|>inferred-method-declaration|>typed-attribute-declaration|>inferred-attribute-declaration)") { Builder = nodes => nodes[0] };
-                /* 511 StringOp         */ __Matchers[511] = new Keyword(this, 511, "'new'", "new") { Creator = node => new RLiteral(node) };
-                /* 512 OptionalOp       */ __Matchers[512] = new Optional(this, 512, "?(>member-name)") { Builder = nodes => new ROptional<ICMemberName>(nodes) };
-                /* 513 OptionalOp       */ __Matchers[513] = new Optional(this, 513, "?(>delegated-constructor)") { Builder = nodes => new ROptional<CDelegatedConstructor>(nodes) };
-                /* 514 SeqOp            */ __Matchers[514] = new Seq(this, 514, "_514:(>annotations,'new',?(>member-name),>parameters,?(>delegated-constructor),>block)") { Builder = nodes => new CConstructorDeclaration(nodes) };
-                /* 515 StringOp         */ __Matchers[515] = new Keyword(this, 515, "'alias'", "alias") { Creator = node => new RLiteral(node) };
-                /* 516 OptionalOp       */ __Matchers[516] = new Optional(this, 516, "?(>type-constraints)") { Builder = nodes => new ROptional<CTypeConstraints>(nodes) };
-                /* 517 SeqOp            */ __Matchers[517] = new Seq(this, 517, "_517:(>annotations,'alias',>type-name,?(>type-parameters),?(>type-constraints),>optional-type-specifier)") { Builder = nodes => new CAliasDeclaration(nodes) };
-                /* 518 SeqOp            */ __Matchers[518] = new Seq(this, 518, "_518:(>annotations,'new',>member-name,?(>delegated-constructor),>block)") { Builder = nodes => new CEnumeratedObjectDeclaration(nodes) };
-                /* 519 StringOp         */ __Matchers[519] = new Keyword(this, 519, "'object'", "object") { Creator = node => new RLiteral(node) };
-                /* 520 OptionalOp       */ __Matchers[520] = new Optional(this, 520, "?(>extended-type)") { Builder = nodes => new ROptional<CExtendedType>(nodes) };
-                /* 521 SeqOp            */ __Matchers[521] = new Seq(this, 521, "_521:(>annotations,'object',>member-name,?(>extended-type),?(>satisfied-types),>block)") { Builder = nodes => new CObjectDeclaration(nodes) };
-                /* 522 StringOp         */ __Matchers[522] = new Keyword(this, 522, "'assign'", "assign") { Creator = node => new RLiteral(node) };
-                /* 523 SeqOp            */ __Matchers[523] = new Seq(this, 523, "_523:(>annotations,'assign',>member-name,>setter-definition)") { Builder = nodes => new CSetterDeclaration(nodes) };
-                /* 524 AltOp            */ __Matchers[524] = new Alt(this, 524, "alt(>block|>required-function-specifier)") { Builder = nodes => nodes[0] };
-                /* 525 SeqOp            */ __Matchers[525] = new Seq(this, 525, "_525:(>annotations,>variadic-type,>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CTypedMethodDeclaration(nodes) };
-                /* 526 StringOp         */ __Matchers[526] = new Keyword(this, 526, "'void'", "void") { Creator = node => new CKwVoid(node) };
-                /* 527 SeqOp            */ __Matchers[527] = new Seq(this, 527, "_527:(>annotations,'void',>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CVoidMethodDeclaration(nodes) };
-                /* 528 StringOp         */ __Matchers[528] = new Keyword(this, 528, "'function'", "function") { Creator = node => new CKwFunction(node) };
-                /* 529 SeqOp            */ __Matchers[529] = new Seq(this, 529, "_529:(>annotations,'function',>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CInferredMethodDeclaration(nodes) };
-                /* 530 SeqOp            */ __Matchers[530] = new Seq(this, 530, "_530:(>annotations,>variadic-type,>member-name,>attribute-definition)") { Builder = nodes => new CTypedAttributeDeclaration(nodes) };
-                /* 531 StringOp         */ __Matchers[531] = new Keyword(this, 531, "'value'", "value") { Creator = node => new CKwValue(node) };
-                /* 532 SeqOp            */ __Matchers[532] = new Seq(this, 532, "_532:(>annotations,'value',>member-name,>attribute-definition)") { Builder = nodes => new CInferredAttributeDeclaration(nodes) };
-                /* 533 AltOp            */ __Matchers[533] = new Alt(this, 533, "alt(>block|>optional-any-specifier)") { Builder = nodes => nodes[0] };
-                /* 534 OptionalOp       */ __Matchers[534] = new Optional(this, 534, "?(>any-specifier)") { Builder = nodes => new ROptional<ICAnySpecifier>(nodes) };
-                /* 535 SeqOp            */ __Matchers[535] = new Seq(this, 535, "_535:(?(>any-specifier),';')") { Builder = nodes => new COptionalAnySpecifier(nodes) };
-                /* 536 StringOp         */ __Matchers[536] = new Keyword(this, 536, "'class'", "class") { Creator = node => new RLiteral(node) };
-                /* 537 OptionalOp       */ __Matchers[537] = new Optional(this, 537, "?(>parameters)") { Builder = nodes => new ROptional<CParameters>(nodes) };
-                /* 538 SeqOp            */ __Matchers[538] = new Seq(this, 538, "_538:(>annotations,'class',>type-name,?(>type-parameters),?(>parameters),?(>case-types),?(>extended-type),?(>satisfied-types),?(>type-constraints),>class-definition)") { Builder = nodes => new CClassDeclaration(nodes) };
-                /* 539 AltOp            */ __Matchers[539] = new Alt(this, 539, "alt(>block|>optional-class-specifier)") { Builder = nodes => nodes[0] };
-                /* 540 OptionalOp       */ __Matchers[540] = new Optional(this, 540, "?(>class-specifier)") { Builder = nodes => new ROptional<CClassSpecifier>(nodes) };
-                /* 541 SeqOp            */ __Matchers[541] = new Seq(this, 541, "_541:(?(>class-specifier),';')") { Builder = nodes => new COptionalClassSpecifier(nodes) };
-                /* 542 StringOp         */ __Matchers[542] = new Keyword(this, 542, "'interface'", "interface") { Creator = node => new RLiteral(node) };
-                /* 543 SeqOp            */ __Matchers[543] = new Seq(this, 543, "_543:(>annotations,'interface',>type-name,?(>type-parameters),?(>case-types),?(>satisfied-types),?(>type-constraints),>interface-definition)") { Builder = nodes => new CInterfaceDeclaration(nodes) };
-                /* 544 AltOp            */ __Matchers[544] = new Alt(this, 544, "alt(>block|>optional-type-specifier)") { Builder = nodes => nodes[0] };
-                /* 545 OptionalOp       */ __Matchers[545] = new Optional(this, 545, "?(>type-specifier)") { Builder = nodes => new ROptional<CTypeSpecifier>(nodes) };
-                /* 546 SeqOp            */ __Matchers[546] = new Seq(this, 546, "_546:(?(>type-specifier),';')") { Builder = nodes => new COptionalTypeSpecifier(nodes) };
-                /* 547 StarOp           */ __Matchers[547] = new Star(this, 547, "*(>statement)") { Builder = nodes => new CStatements(nodes) };
-                /* 548 AltOp            */ __Matchers[548] = new Alt(this, 548, "alt(>declaration-statement|>unclosed-statement|>control-statement)") { Builder = nodes => nodes[0] };
-                /* 549 SeqOp            */ __Matchers[549] = new Seq(this, 549, "_549:(>open-statement,';')") { Builder = nodes => new CUnclosedStatement(nodes) };
-                /* 550 AltOp            */ __Matchers[550] = new Alt(this, 550, "alt(>directive-statement|>expression-statement|>specification-statement|>assertion-statement|>let-statement)") { Builder = nodes => nodes[0] };
-                /* 551 SeqOp            */ __Matchers[551] = new Seq(this, 551, "_551:(>primary,>function-specifier)") { Builder = nodes => new CSpecificationStatement(nodes) };
-                /* 552 AltOp            */ __Matchers[552] = new Alt(this, 552, "alt(>return-statement|>throw-statement|>break-statement|>continue-statement)") { Builder = nodes => nodes[0] };
-                /* 553 StringOp         */ __Matchers[553] = new Keyword(this, 553, "'return'", "return") { Creator = node => new RLiteral(node) };
-                /* 554 OptionalOp       */ __Matchers[554] = new Optional(this, 554, "?(>expression)") { Builder = nodes => new ROptional<ICExpression>(nodes) };
-                /* 555 SeqOp            */ __Matchers[555] = new Seq(this, 555, "_555:('return',?(>expression))") { Builder = nodes => new CReturnStatement(nodes) };
-                /* 556 StringOp         */ __Matchers[556] = new Keyword(this, 556, "'throw'", "throw") { Creator = node => new RLiteral(node) };
-                /* 557 SeqOp            */ __Matchers[557] = new Seq(this, 557, "_557:('throw',?(>expression))") { Builder = nodes => new CThrowStatement(nodes) };
-                /* 558 StringOp         */ __Matchers[558] = new Keyword(this, 558, "'break'", "break") { Creator = node => new CBreakStatement(node) };
-                /* 559 StringOp         */ __Matchers[559] = new Keyword(this, 559, "'continue'", "continue") { Creator = node => new CContinueStatement(node) };
-                /* 560 SeqOp            */ __Matchers[560] = new Seq(this, 560, "_560:('=>',>type)") { Builder = nodes => new CTypeSpecifier(nodes) };
-                /* 561 SeqOp            */ __Matchers[561] = new Seq(this, 561, "_561:('=',>expression)") { Builder = nodes => new CValueSpecifier(nodes) };
-                /* 562 SeqOp            */ __Matchers[562] = new Seq(this, 562, "_562:('=>',>expression)") { Builder = nodes => new CFunctionSpecifier(nodes) };
-                /* 563 AltOp            */ __Matchers[563] = new Alt(this, 563, "alt(>value-specifier|>function-specifier)") { Builder = nodes => nodes[0] };
-                /* 564 AltOp            */ __Matchers[564] = new Alt(this, 564, "alt(>base-reference|>parametrized-member|>self-reference|>self-parametrized-member)") { Builder = nodes => nodes[0] };
-                /* 565 AltOp            */ __Matchers[565] = new Alt(this, 565, "alt(>member-reference|>type-reference)") { Builder = nodes => nodes[0] };
-                /* 566 SeqOp            */ __Matchers[566] = new Seq(this, 566, "_566:(>member-name,?(>type-parameters),+(>parameters))") { Builder = nodes => new CParametrizedMember(nodes) };
-                /* 567 SeqOp            */ __Matchers[567] = new Seq(this, 567, "_567:(>self-reference-selector,>parametrized-member)") { Builder = nodes => new CSelfParametrizedMember(nodes) };
-                /* 568 OptionalOp       */ __Matchers[568] = new Optional(this, 568, "?(>type-arguments)") { Builder = nodes => new ROptional<CTypeArguments>(nodes) };
-                /* 569 SeqOp            */ __Matchers[569] = new Seq(this, 569, "_569:(>member-name,?(>type-arguments))") { Builder = nodes => new CMemberReference(nodes) };
-                /* 570 SeqOp            */ __Matchers[570] = new Seq(this, 570, "_570:(>type-name,?(>type-arguments))") { Builder = nodes => new CTypeReference(nodes) };
-                /* 571 SeqOp            */ __Matchers[571] = new Seq(this, 571, "_571:(>self-reference,>member-selection-operator)") { Builder = nodes => new CSelfReferenceSelector(nodes) };
-                /* 572 StringOp         */ __Matchers[572] = new Keyword(this, 572, "'this'", "this") { Creator = node => new RLiteral(node) };
-                /* 573 StringOp         */ __Matchers[573] = new Keyword(this, 573, "'outer'", "outer") { Creator = node => new RLiteral(node) };
-                /* 574 AltOp            */ __Matchers[574] = new Alt(this, 574, "alt('this'|'super'|'outer'|'package')") { Builder = nodes => nodes[0] };
-                /* 575 OptionalOp       */ __Matchers[575] = new Optional(this, 575, "?(>sequenced-arguments)") { Builder = nodes => new ROptional<CSequencedArguments>(nodes) };
-                /* 576 SeqOp            */ __Matchers[576] = new Seq(this, 576, "_576:('{',>statements,?(>sequenced-arguments),'}')") { Builder = nodes => new CEnumerationExpr(nodes) };
-                /* 577 SeqOp            */ __Matchers[577] = new Seq(this, 577, "_577:('[',?(>sequenced-arguments),']')") { Builder = nodes => new CTupleExpr(nodes) };
-                /* 578 AltOp            */ __Matchers[578] = new Alt(this, 578, "alt(>structural-arguments|>positional-arguments)") { Builder = nodes => nodes[0] };
-                /* 579 StarOp           */ __Matchers[579] = new Star(this, 579, "*(>named-or-anonymous)") { Builder = nodes => new RStar<ICNamedOrAnonymous>(nodes) };
-                /* 580 SeqOp            */ __Matchers[580] = new Seq(this, 580, "_580:('{',*(>named-or-anonymous),?(>sequenced-arguments),'}')") { Builder = nodes => new CStructuralArguments(nodes) };
-                /* 581 AltOp            */ __Matchers[581] = new Alt(this, 581, "alt(>named-argument|>anonymous-argument)") { Builder = nodes => nodes[0] };
-                /* 582 AltOp            */ __Matchers[582] = new Alt(this, 582, "alt(>named-specified-argument|>named-argument-declaration)") { Builder = nodes => nodes[0] };
-                /* 583 SeqOp            */ __Matchers[583] = new Seq(this, 583, "_583:(>expression,';')") { Builder = nodes => new CAnonymousArgument(nodes) };
-                /* 584 SeqOp            */ __Matchers[584] = new Seq(this, 584, "_584:(>member-name,>value-specifier,';')") { Builder = nodes => new CNamedSpecifiedArgument(nodes) };
-                /* 585 SeqOp            */ __Matchers[585] = new Seq(this, 585, "_585:(',',>sequenced-argument)") { Builder = nodes => new RSequence(nodes) };
-                /* 586 StarOp           */ __Matchers[586] = new Star(this, 586, "*(_585:(',',>sequenced-argument))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 587 SeqOp            */ __Matchers[587] = new Seq(this, 587, "_587:(>sequenced-argument,*(_585:(',',>sequenced-argument)))") { Builder = nodes => new CSequencedArguments(nodes) };
-                /* 588 AltOp            */ __Matchers[588] = new Alt(this, 588, "alt(>comprehension-argument|>positional-argument|>spread-argument)") { Builder = nodes => nodes[0] };
-                /* 589 AltOp            */ __Matchers[589] = new Alt(this, 589, "alt(>object-argument|>typed-method-argument|>inferred-method-argument|>untyped-method-argument|>typed-getter-argument|>inferred-getter-argument|>untyped-getter-argument)") { Builder = nodes => nodes[0] };
-                /* 590 SeqOp            */ __Matchers[590] = new Seq(this, 590, "_590:('object',?(>member-name),?(>extended-type),?(>satisfied-types),>block)") { Builder = nodes => new CObjectArgument(nodes) };
-                /* 591 SeqOp            */ __Matchers[591] = new Seq(this, 591, "_591:(>method-argument-type,>parametrized-member,>method-definition)") { Builder = nodes => new CTypedMethodArgument(nodes) };
-                /* 592 AltOp            */ __Matchers[592] = new Alt(this, 592, "alt(>block|>optional-function-specifier)") { Builder = nodes => nodes[0] };
-                /* 593 SeqOp            */ __Matchers[593] = new Seq(this, 593, "_593:(?(>function-specifier),';')") { Builder = nodes => new COptionalFunctionSpecifier(nodes) };
-                /* 594 SeqOp            */ __Matchers[594] = new Seq(this, 594, "_594:(>function-specifier,';')") { Builder = nodes => new CRequiredFunctionSpecifier(nodes) };
-                /* 595 AltOp            */ __Matchers[595] = new Alt(this, 595, "alt(>type|>kw-void)") { Builder = nodes => nodes[0] };
-                /* 596 SeqOp            */ __Matchers[596] = new Seq(this, 596, "_596:(>getter-argument-type,>member-name,>method-definition)") { Builder = nodes => new CTypedGetterArgument(nodes) };
-                /* 597 SeqOp            */ __Matchers[597] = new Seq(this, 597, "_597:('function',?(>member-name),?(>type-parameters),>parameters,>method-definition)") { Builder = nodes => new CInferredMethodArgument(nodes) };
-                /* 598 SeqOp            */ __Matchers[598] = new Seq(this, 598, "_598:('value',>member-name,>method-definition)") { Builder = nodes => new CInferredGetterArgument(nodes) };
-                /* 599 SeqOp            */ __Matchers[599] = new Seq(this, 599, "_599:(>member-name,+(>parameters),>required-function-specifier)") { Builder = nodes => new CUntypedMethodArgument(nodes) };
-                /* 600 SeqOp            */ __Matchers[600] = new Seq(this, 600, "_600:(>member-name,>required-function-specifier)") { Builder = nodes => new CUntypedGetterArgument(nodes) };
-                /* 601 SeqOp            */ __Matchers[601] = new Seq(this, 601, "_601:('(',?(>sequenced-arguments),')')") { Builder = nodes => new CPositionalArguments(nodes) };
-                /* 602 AltOp            */ __Matchers[602] = new Alt(this, 602, "alt(>expression|>declaration-reference)") { Builder = nodes => nodes[0] };
-                /* 603 StringOp         */ __Matchers[603] = new String(this, 603, "'*'", "*") { Creator = node => new RLiteral(node) };
-                /* 604 SeqOp            */ __Matchers[604] = new Seq(this, 604, "_604:('*',>union-expression)") { Builder = nodes => new CSpreadArgument(nodes) };
-                /* 605 OptionalOp       */ __Matchers[605] = new Optional(this, 605, "?(>let-variable-list)") { Builder = nodes => new ROptional<CLetVariableList>(nodes) };
-                /* 606 SeqOp            */ __Matchers[606] = new Seq(this, 606, "_606:('let','(',?(>let-variable-list),')',>conditional-expression)") { Builder = nodes => new CLetExpr(nodes) };
-                /* 607 SeqOp            */ __Matchers[607] = new Seq(this, 607, "_607:(',',>let-variable)") { Builder = nodes => new RSequence(nodes) };
-                /* 608 StarOp           */ __Matchers[608] = new Star(this, 608, "*(_607:(',',>let-variable))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 609 SeqOp            */ __Matchers[609] = new Seq(this, 609, "_609:(>let-variable,*(_607:(',',>let-variable)))") { Builder = nodes => new CLetVariableList(nodes) };
-                /* 610 SeqOp            */ __Matchers[610] = new Seq(this, 610, "_610:(>pattern,>value-specifier)") { Builder = nodes => new CLetVariable(nodes) };
-                /* 611 SeqOp            */ __Matchers[611] = new Seq(this, 611, "_611:(>switch-header,>case-expressions)") { Builder = nodes => new CSwitchExpr(nodes) };
-                /* 612 PlusOp           */ __Matchers[612] = new Plus(this, 612, "+(>case-expression)") { Builder = nodes => new RPlus<CCaseExpression>(nodes) };
-                /* 613 OptionalOp       */ __Matchers[613] = new Optional(this, 613, "?(>else-expression)") { Builder = nodes => new ROptional<CElseExpression>(nodes) };
-                /* 614 SeqOp            */ __Matchers[614] = new Seq(this, 614, "_614:(+(>case-expression),?(>else-expression))") { Builder = nodes => new CCaseExpressions(nodes) };
-                /* 615 StringOp         */ __Matchers[615] = new Keyword(this, 615, "'else'", "else") { Creator = node => new RLiteral(node) };
-                /* 616 OptionalOp       */ __Matchers[616] = new Optional(this, 616, "?('else')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
-                /* 617 StringOp         */ __Matchers[617] = new Keyword(this, 617, "'case'", "case") { Creator = node => new RLiteral(node) };
-                /* 618 SeqOp            */ __Matchers[618] = new Seq(this, 618, "_618:(?('else'),'case','(',>case-item,')',>conditional-expression)") { Builder = nodes => new CCaseExpression(nodes) };
-                /* 619 StringOp         */ __Matchers[619] = new Keyword(this, 619, "'if'", "if") { Creator = node => new RLiteral(node) };
-                /* 620 SeqOp            */ __Matchers[620] = new Seq(this, 620, "_620:('if',>conditions,>then-expression,>else-expression)") { Builder = nodes => new CIfExpr(nodes) };
-                /* 621 SeqOp            */ __Matchers[621] = new Seq(this, 621, "_621:('else',>conditional-expression)") { Builder = nodes => new CElseExpression(nodes) };
-                /* 622 StringOp         */ __Matchers[622] = new Keyword(this, 622, "'then'", "then") { Creator = node => new RLiteral(node) };
-                /* 623 SeqOp            */ __Matchers[623] = new Seq(this, 623, "_623:('then',>conditional-expression)") { Builder = nodes => new CThenExpression(nodes) };
-                /* 624 AltOp            */ __Matchers[624] = new Alt(this, 624, "alt(>if-expr|>let-expr|>disjunction-expression)") { Builder = nodes => nodes[0] };
-                /* 625 OptionalOp       */ __Matchers[625] = new Optional(this, 625, "?(>function-expression-type)") { Builder = nodes => new ROptional<ICFunctionExpressionType>(nodes) };
-                /* 626 OptionalOp       */ __Matchers[626] = new Optional(this, 626, "?(>function-parameters)") { Builder = nodes => new ROptional<CFunctionParameters>(nodes) };
-                /* 627 SeqOp            */ __Matchers[627] = new Seq(this, 627, "_627:(?(>function-expression-type),?(>type-parameters),?(>function-parameters),>function-definition)") { Builder = nodes => new CFunctionExpr(nodes) };
-                /* 628 AltOp            */ __Matchers[628] = new Alt(this, 628, "alt('void'|'function')") { Builder = nodes => nodes[0] };
-                /* 629 SeqOp            */ __Matchers[629] = new Seq(this, 629, "_629:(+(>parameters),?(>type-constraints))") { Builder = nodes => new CFunctionParameters(nodes) };
-                /* 630 AltOp            */ __Matchers[630] = new Alt(this, 630, "alt(>block|>function-specifier)") { Builder = nodes => nodes[0] };
-                /* 631 AltOp            */ __Matchers[631] = new Alt(this, 631, "alt(>for-comprehension-clause|>if-comprehension-clause)") { Builder = nodes => nodes[0] };
-                /* 632 AltOp            */ __Matchers[632] = new Alt(this, 632, "alt(>for-comprehension-clause|>if-comprehension-clause|>expression-comprehension-clause)") { Builder = nodes => nodes[0] };
-                /* 633 StringOp         */ __Matchers[633] = new Keyword(this, 633, "'for'", "for") { Creator = node => new RLiteral(node) };
-                /* 634 OptionalOp       */ __Matchers[634] = new Optional(this, 634, "?(>for-iterator)") { Builder = nodes => new ROptional<CForIterator>(nodes) };
-                /* 635 SeqOp            */ __Matchers[635] = new Seq(this, 635, "_635:('for','(',?(>for-iterator),')',>comprehension-clause)") { Builder = nodes => new CForComprehensionClause(nodes) };
-                /* 636 SeqOp            */ __Matchers[636] = new Seq(this, 636, "_636:('if',>conditions,>comprehension-clause)") { Builder = nodes => new CIfComprehensionClause(nodes) };
-                /* 637 AltOp            */ __Matchers[637] = new Alt(this, 637, "alt(>let-expr|>if-expr|>switch-expr|>function-expr|>operator-expression)") { Builder = nodes => nodes[0] };
-                /* 638 AltOp            */ __Matchers[638] = new Alt(this, 638, "alt(>assignment-expr|>then-else-expression)") { Builder = nodes => nodes[0] };
-                /* 639 SeqOp            */ __Matchers[639] = new Seq(this, 639, "_639:(>then-else-expression,>assignment-operator,>expression)") { Builder = nodes => new CAssignmentExpr(nodes) };
-                /* 640 StringOp         */ __Matchers[640] = new String(this, 640, "'+='", "+=") { Creator = node => new RLiteral(node) };
-                /* 641 StringOp         */ __Matchers[641] = new String(this, 641, "'-='", "-=") { Creator = node => new RLiteral(node) };
-                /* 642 StringOp         */ __Matchers[642] = new String(this, 642, "'*='", "*=") { Creator = node => new RLiteral(node) };
-                /* 643 StringOp         */ __Matchers[643] = new String(this, 643, "'/='", "/=") { Creator = node => new RLiteral(node) };
-                /* 644 StringOp         */ __Matchers[644] = new String(this, 644, "'%='", "%=") { Creator = node => new RLiteral(node) };
-                /* 645 StringOp         */ __Matchers[645] = new String(this, 645, "'&='", "&=") { Creator = node => new RLiteral(node) };
-                /* 646 StringOp         */ __Matchers[646] = new String(this, 646, "'|='", "|=") { Creator = node => new RLiteral(node) };
-                /* 647 StringOp         */ __Matchers[647] = new String(this, 647, "'^='", "^=") { Creator = node => new RLiteral(node) };
-                /* 648 StringOp         */ __Matchers[648] = new String(this, 648, "'~='", "~=") { Creator = node => new RLiteral(node) };
-                /* 649 StringOp         */ __Matchers[649] = new String(this, 649, "'&&='", "&&=") { Creator = node => new RLiteral(node) };
-                /* 650 StringOp         */ __Matchers[650] = new String(this, 650, "'||='", "||=") { Creator = node => new RLiteral(node) };
-                /* 651 AltOp            */ __Matchers[651] = new Alt(this, 651, "alt('='|'+='|'-='|'*='|'/='|'%='|'&='|'|='|'^='|'~='|'&&='|'||=')") { Builder = nodes => nodes[0] };
-                /* 652 AltOp            */ __Matchers[652] = new Alt(this, 652, "alt(>then-else-expr|>disjunction-expression)") { Builder = nodes => nodes[0] };
-                /* 653 SeqOp            */ __Matchers[653] = new Seq(this, 653, "_653:(>then-else-expression,>then-else-operator,>disjunction-expression)") { Builder = nodes => new CThenElseExpr(nodes) };
-                /* 654 AltOp            */ __Matchers[654] = new Alt(this, 654, "alt('else'|'then')") { Builder = nodes => nodes[0] };
-                /* 655 AltOp            */ __Matchers[655] = new Alt(this, 655, "alt(>disjunction-expr|>conjunction-expression)") { Builder = nodes => nodes[0] };
-                /* 656 SeqOp            */ __Matchers[656] = new Seq(this, 656, "_656:(>disjunction-expression,>disjunction-operator,>conjunction-expression)") { Builder = nodes => new CDisjunctionExpr(nodes) };
-                /* 657 StringOp         */ __Matchers[657] = new String(this, 657, "'||'", "||") { Creator = node => new CDisjunctionOperator(node) };
-                /* 658 AltOp            */ __Matchers[658] = new Alt(this, 658, "alt(>conjunction-expr|>logical-negation-expression)") { Builder = nodes => nodes[0] };
-                /* 659 SeqOp            */ __Matchers[659] = new Seq(this, 659, "_659:(>conjunction-expression,>conjunction-operator,>logical-negation-expression)") { Builder = nodes => new CConjunctionExpr(nodes) };
-                /* 660 StringOp         */ __Matchers[660] = new String(this, 660, "'&&'", "&&") { Creator = node => new CConjunctionOperator(node) };
-                /* 661 AltOp            */ __Matchers[661] = new Alt(this, 661, "alt(>logical-negation-expr|>expression-or-meta)") { Builder = nodes => nodes[0] };
-                /* 662 SeqOp            */ __Matchers[662] = new Seq(this, 662, "_662:(>not-operator,>logical-negation-expression)") { Builder = nodes => new CLogicalNegationExpr(nodes) };
-                /* 663 StringOp         */ __Matchers[663] = new String(this, 663, "'!'", "!") { Creator = node => new CNotOperator(node) };
-                /* 664 AltOp            */ __Matchers[664] = new Alt(this, 664, "alt(>equality-expression|>model-reference)") { Builder = nodes => nodes[0] };
-                /* 665 AltOp            */ __Matchers[665] = new Alt(this, 665, "alt(>equality-expr|>comparison-expression)") { Builder = nodes => nodes[0] };
-                /* 666 SeqOp            */ __Matchers[666] = new Seq(this, 666, "_666:(>comparison-expression,>equality-operator,>comparison-expression)") { Builder = nodes => new CEqualityExpr(nodes) };
-                /* 667 StringOp         */ __Matchers[667] = new String(this, 667, "'=='", "==") { Creator = node => new RLiteral(node) };
-                /* 668 StringOp         */ __Matchers[668] = new String(this, 668, "'!='", "!=") { Creator = node => new RLiteral(node) };
-                /* 669 StringOp         */ __Matchers[669] = new String(this, 669, "'==='", "===") { Creator = node => new RLiteral(node) };
-                /* 670 AltOp            */ __Matchers[670] = new Alt(this, 670, "alt('=='|'!='|'===')") { Builder = nodes => nodes[0] };
-                /* 671 AltOp            */ __Matchers[671] = new Alt(this, 671, "alt(>comparison-expr|>larger-expr|>smaller-expr|>larger-bounds-expr|>smaller-bounds-expr|>typecheck-expr|>exists-nonempty-expression)") { Builder = nodes => nodes[0] };
-                /* 672 SeqOp            */ __Matchers[672] = new Seq(this, 672, "_672:(>exists-nonempty-expression,>comparison-operator,>exists-nonempty-expression)") { Builder = nodes => new CComparisonExpr(nodes) };
-                /* 673 SeqOp            */ __Matchers[673] = new Seq(this, 673, "_673:(>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression)") { Builder = nodes => new CLargerExpr(nodes) };
-                /* 674 SeqOp            */ __Matchers[674] = new Seq(this, 674, "_674:(>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression)") { Builder = nodes => new CSmallerExpr(nodes) };
-                /* 675 SeqOp            */ __Matchers[675] = new Seq(this, 675, "_675:(>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression)") { Builder = nodes => new CLargerBoundsExpr(nodes) };
-                /* 676 SeqOp            */ __Matchers[676] = new Seq(this, 676, "_676:(>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression)") { Builder = nodes => new CSmallerBoundsExpr(nodes) };
-                /* 677 SeqOp            */ __Matchers[677] = new Seq(this, 677, "_677:(>exists-nonempty-expression,>type-operator,>type)") { Builder = nodes => new CTypecheckExpr(nodes) };
-                /* 678 StringOp         */ __Matchers[678] = new String(this, 678, "'<=>'", "<=>") { Creator = node => new RLiteral(node) };
-                /* 679 AltOp            */ __Matchers[679] = new Alt(this, 679, "alt('<=>'|'in')") { Builder = nodes => nodes[0] };
-                /* 680 StringOp         */ __Matchers[680] = new String(this, 680, "'<='", "<=") { Creator = node => new RLiteral(node) };
-                /* 681 AltOp            */ __Matchers[681] = new Alt(this, 681, "alt('<='|'<')") { Builder = nodes => nodes[0] };
-                /* 682 StringOp         */ __Matchers[682] = new String(this, 682, "'>='", ">=") { Creator = node => new RLiteral(node) };
-                /* 683 AltOp            */ __Matchers[683] = new Alt(this, 683, "alt('>='|'>')") { Builder = nodes => nodes[0] };
-                /* 684 StringOp         */ __Matchers[684] = new Keyword(this, 684, "'is'", "is") { Creator = node => new RLiteral(node) };
-                /* 685 AltOp            */ __Matchers[685] = new Alt(this, 685, "alt('is'|'extends'|'satisfies'|'of')") { Builder = nodes => nodes[0] };
-                /* 686 AltOp            */ __Matchers[686] = new Alt(this, 686, "alt(>exists-expr|>nonempty-expr|>entry-range-expression)") { Builder = nodes => nodes[0] };
-                /* 687 StringOp         */ __Matchers[687] = new Keyword(this, 687, "'exists'", "exists") { Creator = node => new RLiteral(node) };
-                /* 688 SeqOp            */ __Matchers[688] = new Seq(this, 688, "_688:(>entry-range-expression,'exists')") { Builder = nodes => new CExistsExpr(nodes) };
-                /* 689 StringOp         */ __Matchers[689] = new Keyword(this, 689, "'nonempty'", "nonempty") { Creator = node => new RLiteral(node) };
-                /* 690 SeqOp            */ __Matchers[690] = new Seq(this, 690, "_690:(>entry-range-expression,'nonempty')") { Builder = nodes => new CNonemptyExpr(nodes) };
-                /* 691 AltOp            */ __Matchers[691] = new Alt(this, 691, "alt(>range-expr|>entry-expr|>additive-expression)") { Builder = nodes => nodes[0] };
-                /* 692 SeqOp            */ __Matchers[692] = new Seq(this, 692, "_692:(>additive-expression,>range-operator,>additive-expression)") { Builder = nodes => new CRangeExpr(nodes) };
-                /* 693 SeqOp            */ __Matchers[693] = new Seq(this, 693, "_693:(>additive-expression,>entry-operator,>additive-expression)") { Builder = nodes => new CEntryExpr(nodes) };
-                /* 694 StringOp         */ __Matchers[694] = new String(this, 694, "'..'", "..") { Creator = node => new RLiteral(node) };
-                /* 695 AltOp            */ __Matchers[695] = new Alt(this, 695, "alt('..'|':')") { Builder = nodes => nodes[0] };
-                /* 696 AltOp            */ __Matchers[696] = new Alt(this, 696, "alt(>additive-expr|>scale-expression)") { Builder = nodes => nodes[0] };
-                /* 697 SeqOp            */ __Matchers[697] = new Seq(this, 697, "_697:(>additive-expression,>additive-operator,>scale-expression)") { Builder = nodes => new CAdditiveExpr(nodes) };
-                /* 698 StringOp         */ __Matchers[698] = new String(this, 698, "'+'", "+") { Creator = node => new RLiteral(node) };
-                /* 699 StringOp         */ __Matchers[699] = new String(this, 699, "'-'", "-") { Creator = node => new RLiteral(node) };
-                /* 700 AltOp            */ __Matchers[700] = new Alt(this, 700, "alt('+'|'-')") { Builder = nodes => nodes[0] };
-                /* 701 AltOp            */ __Matchers[701] = new Alt(this, 701, "alt(>scale-expr|>multiplicative-expression)") { Builder = nodes => nodes[0] };
-                /* 702 SeqOp            */ __Matchers[702] = new Seq(this, 702, "_702:(>multiplicative-expression,>scale-operator,>scale-expression)") { Builder = nodes => new CScaleExpr(nodes) };
-                /* 703 StringOp         */ __Matchers[703] = new String(this, 703, "'**'", "**") { Creator = node => new CScaleOperator(node) };
-                /* 704 AltOp            */ __Matchers[704] = new Alt(this, 704, "alt(>multiplicative-expr|>union-expression)") { Builder = nodes => nodes[0] };
-                /* 705 SeqOp            */ __Matchers[705] = new Seq(this, 705, "_705:(>multiplicative-expression,>multiplicative-operator,>union-expression)") { Builder = nodes => new CMultiplicativeExpr(nodes) };
-                /* 706 StringOp         */ __Matchers[706] = new String(this, 706, "'/'", "/") { Creator = node => new RLiteral(node) };
-                /* 707 StringOp         */ __Matchers[707] = new String(this, 707, "'%'", "%") { Creator = node => new RLiteral(node) };
-                /* 708 AltOp            */ __Matchers[708] = new Alt(this, 708, "alt('*'|'/'|'%')") { Builder = nodes => nodes[0] };
-                /* 709 AltOp            */ __Matchers[709] = new Alt(this, 709, "alt(>union-expr|>exclusive-expression)") { Builder = nodes => nodes[0] };
-                /* 710 SeqOp            */ __Matchers[710] = new Seq(this, 710, "_710:(>union-expression,>union-operator,>exclusive-expression)") { Builder = nodes => new CUnionExpr(nodes) };
-                /* 711 StringOp         */ __Matchers[711] = new String(this, 711, "'~'", "~") { Creator = node => new CComplementOperator(node) };
-                /* 712 AltOp            */ __Matchers[712] = new Alt(this, 712, "alt('|'|'~')") { Builder = nodes => nodes[0] };
-                /* 713 AltOp            */ __Matchers[713] = new Alt(this, 713, "alt(>exclusive-expr|>intersection-expression)") { Builder = nodes => nodes[0] };
-                /* 714 SeqOp            */ __Matchers[714] = new Seq(this, 714, "_714:(>exclusive-expression,>exclusive-operator,>intersection-expression)") { Builder = nodes => new CExclusiveExpr(nodes) };
-                /* 715 StringOp         */ __Matchers[715] = new String(this, 715, "'^'", "^") { Creator = node => new CExclusiveOperator(node) };
-                /* 716 AltOp            */ __Matchers[716] = new Alt(this, 716, "alt(>intersection-expr|>negation-or-complement-expression)") { Builder = nodes => nodes[0] };
-                /* 717 SeqOp            */ __Matchers[717] = new Seq(this, 717, "_717:(>intersection-expression,>intersection-operator,>negation-or-complement-expression)") { Builder = nodes => new CIntersectionExpr(nodes) };
-                /* 718 StringOp         */ __Matchers[718] = new String(this, 718, "'&'", "&") { Creator = node => new CIntersectionOperator(node) };
-                /* 719 AltOp            */ __Matchers[719] = new Alt(this, 719, "alt(>negation-or-complement-expr|>prefix-expression)") { Builder = nodes => nodes[0] };
-                /* 720 SeqOp            */ __Matchers[720] = new Seq(this, 720, "_720:(>unary-minus-or-complement-operator,>negation-or-complement-expression)") { Builder = nodes => new CNegationOrComplementExpr(nodes) };
-                /* 721 AltOp            */ __Matchers[721] = new Alt(this, 721, "alt(>negate-operator|>neutral-operator|>complement-operator)") { Builder = nodes => nodes[0] };
-                /* 722 NotOp            */ __Matchers[722] = new Not(this, 722, "!('-')") { Builder = nodes => new RNot<RLiteral>(nodes) };
-                /* 723 SeqOp            */ __Matchers[723] = new Seq(this, 723, "_723:('-',!('-'))") { Builder = nodes => new CNegateOperator(nodes) };
-                /* 724 NotOp            */ __Matchers[724] = new Not(this, 724, "!('+')") { Builder = nodes => new RNot<RLiteral>(nodes) };
-                /* 725 SeqOp            */ __Matchers[725] = new Seq(this, 725, "_725:('+',!('+'))") { Builder = nodes => new CNeutralOperator(nodes) };
-                /* 726 AltOp            */ __Matchers[726] = new Alt(this, 726, "alt(>prefix-expr|>postfix-expression)") { Builder = nodes => nodes[0] };
-                /* 727 SeqOp            */ __Matchers[727] = new Seq(this, 727, "_727:(>increment-operator,>prefix-expression)") { Builder = nodes => new CPrefixExpr(nodes) };
-                /* 728 AltOp            */ __Matchers[728] = new Alt(this, 728, "alt(>postfix-expr|>primary)") { Builder = nodes => nodes[0] };
-                /* 729 SeqOp            */ __Matchers[729] = new Seq(this, 729, "_729:(>postfix-expression,>increment-operator)") { Builder = nodes => new CPostfixExpr(nodes) };
-                /* 730 StringOp         */ __Matchers[730] = new String(this, 730, "'++'", "++") { Creator = node => new RLiteral(node) };
-                /* 731 StringOp         */ __Matchers[731] = new String(this, 731, "'--'", "--") { Creator = node => new RLiteral(node) };
-                /* 732 AltOp            */ __Matchers[732] = new Alt(this, 732, "alt('++'|'--')") { Builder = nodes => nodes[0] };
-                /* 733 AltOp            */ __Matchers[733] = new Alt(this, 733, "alt(>selection-expr|>indexed-expr|>call-expr|>base-expression)") { Builder = nodes => nodes[0] };
-                /* 734 SeqOp            */ __Matchers[734] = new Seq(this, 734, "_734:(>primary,>qualified-reference)") { Builder = nodes => new CSelectionExpr(nodes) };
-                /* 735 SeqOp            */ __Matchers[735] = new Seq(this, 735, "_735:(>member-selection-operator,>base-reference)") { Builder = nodes => new CQualifiedReference(nodes) };
-                /* 736 StringOp         */ __Matchers[736] = new String(this, 736, "'?.'", "?.") { Creator = node => new RLiteral(node) };
-                /* 737 StringOp         */ __Matchers[737] = new String(this, 737, "'*.'", "*.") { Creator = node => new RLiteral(node) };
-                /* 738 AltOp            */ __Matchers[738] = new Alt(this, 738, "alt('.'|'?.'|'*.')") { Builder = nodes => nodes[0] };
-                /* 739 SeqOp            */ __Matchers[739] = new Seq(this, 739, "_739:(>primary,'[',>index,']')") { Builder = nodes => new CIndexedExpr(nodes) };
-                /* 740 AltOp            */ __Matchers[740] = new Alt(this, 740, "alt(>lower-spanned|>upper-spanned|>spanned|>measured|>expression)") { Builder = nodes => nodes[0] };
-                /* 741 SeqOp            */ __Matchers[741] = new Seq(this, 741, "_741:(>index-expression,'...')") { Builder = nodes => new CUpperSpanned(nodes) };
-                /* 742 SeqOp            */ __Matchers[742] = new Seq(this, 742, "_742:('...',>index-expression)") { Builder = nodes => new CLowerSpanned(nodes) };
-                /* 743 SeqOp            */ __Matchers[743] = new Seq(this, 743, "_743:(>index-expression,'..',>index-expression)") { Builder = nodes => new CSpanned(nodes) };
-                /* 744 SeqOp            */ __Matchers[744] = new Seq(this, 744, "_744:(>index-expression,':',>index-expression)") { Builder = nodes => new CMeasured(nodes) };
-                /* 745 SeqOp            */ __Matchers[745] = new Seq(this, 745, "_745:(>primary,>arguments)") { Builder = nodes => new CCallExpr(nodes) };
-                /* 746 AltOp            */ __Matchers[746] = new Alt(this, 746, "alt(>nonstring-literal|>string-expression|>meta-literal|>enumeration-expr|>tuple-expr|>object-expr|>grouped-expr|>base-reference-or-parameterized)") { Builder = nodes => nodes[0] };
-                /* 747 AltOp            */ __Matchers[747] = new Alt(this, 747, "alt(>literal-natural|>literal-float|>literal-char)") { Builder = nodes => nodes[0] };
-                /* 748 AltOp            */ __Matchers[748] = new Alt(this, 748, "alt(>string-literal|>string-interpolation)") { Builder = nodes => nodes[0] };
-                /* 749 StarOp           */ __Matchers[749] = new Star(this, 749, "*(>interpolation-part)") { Builder = nodes => new RStar<CInterpolationPart>(nodes) };
-                /* 750 SeqOp            */ __Matchers[750] = new Seq(this, 750, "_750:(>string-start,>expression,*(>interpolation-part),>string-end)") { Builder = nodes => new CStringInterpolation(nodes) };
-                /* 751 SeqOp            */ __Matchers[751] = new Seq(this, 751, "_751:(>string-mid,>expression)") { Builder = nodes => new CInterpolationPart(nodes) };
-                /* 752 AltOp            */ __Matchers[752] = new Alt(this, 752, "alt(>literal-string|>verbatim-string)") { Builder = nodes => nodes[0] };
-                /* 753 SeqOp            */ __Matchers[753] = new Seq(this, 753, "_753:('object',?(>extended-type),?(>satisfied-types),>block)") { Builder = nodes => new CObjectExpr(nodes) };
-                /* 754 SeqOp            */ __Matchers[754] = new Seq(this, 754, "_754:('(',>expression,')')") { Builder = nodes => new CGroupedExpr(nodes) };
-                /* 755 OptionalOp       */ __Matchers[755] = new Optional(this, 755, "?(>type-argument-list)") { Builder = nodes => new ROptional<CTypeArgumentList>(nodes) };
-                /* 756 SeqOp            */ __Matchers[756] = new Seq(this, 756, "_756:('<',?(>type-argument-list),'>')") { Builder = nodes => new CTypeArguments(nodes) };
-                /* 757 SeqOp            */ __Matchers[757] = new Seq(this, 757, "_757:(',',>varianced-type)") { Builder = nodes => new RSequence(nodes) };
-                /* 758 StarOp           */ __Matchers[758] = new Star(this, 758, "*(_757:(',',>varianced-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 759 SeqOp            */ __Matchers[759] = new Seq(this, 759, "_759:(>varianced-type,*(_757:(',',>varianced-type)))") { Builder = nodes => new CTypeArgumentList(nodes) };
-                /* 760 SeqOp            */ __Matchers[760] = new Seq(this, 760, "_760:(?(>variance),>type)") { Builder = nodes => new CVariancedType(nodes) };
-                /* 761 SeqOp            */ __Matchers[761] = new Seq(this, 761, "_761:(',',>defaulted-type)") { Builder = nodes => new RSequence(nodes) };
-                /* 762 StarOp           */ __Matchers[762] = new Star(this, 762, "*(_761:(',',>defaulted-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 763 SeqOp            */ __Matchers[763] = new Seq(this, 763, "_763:(>defaulted-type,*(_761:(',',>defaulted-type)))") { Builder = nodes => new CDefaultedTypeList(nodes) };
-                /* 764 AltOp            */ __Matchers[764] = new Alt(this, 764, "alt(>defaulted-type-core|>variadic-type)") { Builder = nodes => nodes[0] };
-                /* 765 SeqOp            */ __Matchers[765] = new Seq(this, 765, "_765:(>type,'=')") { Builder = nodes => new CDefaultedTypeCore(nodes) };
-                /* 766 AltOp            */ __Matchers[766] = new Alt(this, 766, "alt(>variadic-union-type|>type)") { Builder = nodes => nodes[0] };
-                /* 767 SeqOp            */ __Matchers[767] = new Seq(this, 767, "_767:(>union-type,>variadic-operator)") { Builder = nodes => new CVariadicUnionType(nodes) };
-                /* 768 AltOp            */ __Matchers[768] = new Alt(this, 768, "alt('*'|'+')") { Builder = nodes => nodes[0] };
-                /* 769 SeqOp            */ __Matchers[769] = new Seq(this, 769, "_769:('*',>union-type)") { Builder = nodes => new CSpreadType(nodes) };
-                /* 770 AltOp            */ __Matchers[770] = new Alt(this, 770, "alt(>entry-type|>union-type)") { Builder = nodes => nodes[0] };
-                /* 771 SeqOp            */ __Matchers[771] = new Seq(this, 771, "_771:(>union-type,'->',>union-type)") { Builder = nodes => new CEntryType(nodes) };
-                /* 772 AltOp            */ __Matchers[772] = new Alt(this, 772, "alt(>union-type-core|>intersection-type)") { Builder = nodes => nodes[0] };
-                /* 773 SeqOp            */ __Matchers[773] = new Seq(this, 773, "_773:(>union-type,'|',>intersection-type)") { Builder = nodes => new CUnionTypeCore(nodes) };
-                /* 774 AltOp            */ __Matchers[774] = new Alt(this, 774, "alt(>intersection-type-core|>primary-type)") { Builder = nodes => nodes[0] };
-                /* 775 SeqOp            */ __Matchers[775] = new Seq(this, 775, "_775:(>intersection-type,'&',>primary-type)") { Builder = nodes => new CIntersectionTypeCore(nodes) };
-                /* 776 AltOp            */ __Matchers[776] = new Alt(this, 776, "alt(>nullable-type|>array-type|>function-type|>tuple-type|>iterable-type|>grouped-type|>package-qualified-type|>type-path)") { Builder = nodes => nodes[0] };
-                /* 777 StringOp         */ __Matchers[777] = new String(this, 777, "'?'", "?") { Creator = node => new RLiteral(node) };
-                /* 778 SeqOp            */ __Matchers[778] = new Seq(this, 778, "_778:(>primary-type,'?')") { Builder = nodes => new CNullableType(nodes) };
-                /* 779 OptionalOp       */ __Matchers[779] = new Optional(this, 779, "?(>literal-natural)") { Builder = nodes => new ROptional<CLiteralNatural>(nodes) };
-                /* 780 SeqOp            */ __Matchers[780] = new Seq(this, 780, "_780:(>primary-type,'[',?(>literal-natural),']')") { Builder = nodes => new CArrayType(nodes) };
-                /* 781 OptionalOp       */ __Matchers[781] = new Optional(this, 781, "?(>type-type-arguments)") { Builder = nodes => new ROptional<ICTypeTypeArguments>(nodes) };
-                /* 782 SeqOp            */ __Matchers[782] = new Seq(this, 782, "_782:(>primary-type,'(',?(>type-type-arguments),')')") { Builder = nodes => new CFunctionType(nodes) };
-                /* 783 AltOp            */ __Matchers[783] = new Alt(this, 783, "alt(>spread-type|>defaulted-type-list)") { Builder = nodes => nodes[0] };
-                /* 784 SeqOp            */ __Matchers[784] = new Seq(this, 784, "_784:('[',?(>type-type-arguments),']')") { Builder = nodes => new CTupleType(nodes) };
-                /* 785 OptionalOp       */ __Matchers[785] = new Optional(this, 785, "?(>variadic-type)") { Builder = nodes => new ROptional<ICVariadicType>(nodes) };
-                /* 786 SeqOp            */ __Matchers[786] = new Seq(this, 786, "_786:('{',?(>variadic-type),'}')") { Builder = nodes => new CIterableType(nodes) };
-                /* 787 SeqOp            */ __Matchers[787] = new Seq(this, 787, "_787:('<',>type,'>')") { Builder = nodes => new CGroupedType(nodes) };
-                /* 788 SeqOp            */ __Matchers[788] = new Seq(this, 788, "_788:('package','.',>type-path)") { Builder = nodes => new CPackageQualifiedType(nodes) };
-                /* 789 OptionalOp       */ __Matchers[789] = new Optional(this, 789, "?(>string-literal)") { Builder = nodes => new ROptional<ICStringLiteral>(nodes) };
-                /* 790 StarOp           */ __Matchers[790] = new Star(this, 790, "*(>annotation)") { Builder = nodes => new RStar<CAnnotation>(nodes) };
-                /* 791 SeqOp            */ __Matchers[791] = new Seq(this, 791, "_791:(?(>string-literal),*(>annotation))") { Builder = nodes => new CAnnotations(nodes) };
-                /* 792 SeqOp            */ __Matchers[792] = new Seq(this, 792, "_792:(>member-name,?(>arguments))") { Builder = nodes => new CAnnotation(nodes) };
-                /* 793 OptionalOp       */ __Matchers[793] = new Optional(this, 793, "?(>condition-list)") { Builder = nodes => new ROptional<CConditionList>(nodes) };
-                /* 794 SeqOp            */ __Matchers[794] = new Seq(this, 794, "_794:('(',?(>condition-list),')')") { Builder = nodes => new CConditions(nodes) };
-                /* 795 SeqOp            */ __Matchers[795] = new Seq(this, 795, "_795:(',',>condition)") { Builder = nodes => new RSequence(nodes) };
-                /* 796 StarOp           */ __Matchers[796] = new Star(this, 796, "*(_795:(',',>condition))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 797 SeqOp            */ __Matchers[797] = new Seq(this, 797, "_797:(>condition,*(_795:(',',>condition)))") { Builder = nodes => new CConditionList(nodes) };
-                /* 798 AltOp            */ __Matchers[798] = new Alt(this, 798, "alt(>exists-condition|>nonempty-condition|>is-condition|>satisfies-condition|>boolean-condition)") { Builder = nodes => nodes[0] };
-                /* 799 OptionalOp       */ __Matchers[799] = new Optional(this, 799, "?('!')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
-                /* 800 SeqOp            */ __Matchers[800] = new Seq(this, 800, "_800:(?('!'),'exists',>let-or-expression)") { Builder = nodes => new CExistsCondition(nodes) };
-                /* 801 SeqOp            */ __Matchers[801] = new Seq(this, 801, "_801:(?('!'),'nonempty',>let-or-expression)") { Builder = nodes => new CNonemptyCondition(nodes) };
-                /* 802 AltOp            */ __Matchers[802] = new Alt(this, 802, "alt(>let-variable|>operator-expression)") { Builder = nodes => nodes[0] };
-                /* 803 SeqOp            */ __Matchers[803] = new Seq(this, 803, "_803:(?('!'),'is',>type,>is-condition-variable)") { Builder = nodes => new CIsCondition(nodes) };
-                /* 804 SeqOp            */ __Matchers[804] = new Seq(this, 804, "_804:(>member-name,?(>value-specifier))") { Builder = nodes => new CIsConditionVariable(nodes) };
-                /* 805 SeqOp            */ __Matchers[805] = new Seq(this, 805, "_805:('satisfies',>type,>type-name)") { Builder = nodes => new CSatisfiesCondition(nodes) };
-                /* 806 AltOp            */ __Matchers[806] = new Alt(this, 806, "alt(>if-else-statement|>for-else-statement|>switch-statement|>while-statement|>try-statement)") { Builder = nodes => nodes[0] };
-                /* 807 OptionalOp       */ __Matchers[807] = new Optional(this, 807, "?(>else-block)") { Builder = nodes => new ROptional<CElseBlock>(nodes) };
-                /* 808 SeqOp            */ __Matchers[808] = new Seq(this, 808, "_808:(>if-block,?(>else-block))") { Builder = nodes => new CIfElseStatement(nodes) };
-                /* 809 SeqOp            */ __Matchers[809] = new Seq(this, 809, "_809:('if',>conditions,>block)") { Builder = nodes => new CIfBlock(nodes) };
-                /* 810 SeqOp            */ __Matchers[810] = new Seq(this, 810, "_810:('else',>else-block-next)") { Builder = nodes => new CElseBlock(nodes) };
-                /* 811 AltOp            */ __Matchers[811] = new Alt(this, 811, "alt(>if-else-statement|>block)") { Builder = nodes => nodes[0] };
-                /* 812 PlusOp           */ __Matchers[812] = new Plus(this, 812, "+(>case-block)") { Builder = nodes => new RPlus<CCaseBlock>(nodes) };
-                /* 813 SeqOp            */ __Matchers[813] = new Seq(this, 813, "_813:(>switch-header,+(>case-block),?(>else-block))") { Builder = nodes => new CSwitchStatement(nodes) };
-                /* 814 StringOp         */ __Matchers[814] = new Keyword(this, 814, "'switch'", "switch") { Creator = node => new RLiteral(node) };
-                /* 815 SeqOp            */ __Matchers[815] = new Seq(this, 815, "_815:('switch','(',>switched,')')") { Builder = nodes => new CSwitchHeader(nodes) };
-                /* 816 SeqOp            */ __Matchers[816] = new Seq(this, 816, "_816:(?('else'),'case','(',>case-item,')',>block)") { Builder = nodes => new CCaseBlock(nodes) };
-                /* 817 AltOp            */ __Matchers[817] = new Alt(this, 817, "alt(>is-case-condition|>satisfies-case-condition|>match-case-condition|>pattern)") { Builder = nodes => nodes[0] };
-                /* 818 OptionalOp       */ __Matchers[818] = new Optional(this, 818, "?('is')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
-                /* 819 SeqOp            */ __Matchers[819] = new Seq(this, 819, "_819:(?('is'),>type)") { Builder = nodes => new CIsCaseCondition(nodes) };
-                /* 820 SeqOp            */ __Matchers[820] = new Seq(this, 820, "_820:('satisfies',>type)") { Builder = nodes => new CSatisfiesCaseCondition(nodes) };
-                /* 821 SeqOp            */ __Matchers[821] = new Seq(this, 821, "_821:(>value-case-separator,>value-case)") { Builder = nodes => new RSequence(nodes) };
-                /* 822 StarOp           */ __Matchers[822] = new Star(this, 822, "*(_821:(>value-case-separator,>value-case))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 823 SeqOp            */ __Matchers[823] = new Seq(this, 823, "_823:(>value-case,*(_821:(>value-case-separator,>value-case)))") { Builder = nodes => new CValueCaseList(nodes) };
-                /* 824 AltOp            */ __Matchers[824] = new Alt(this, 824, "alt(','|'|')") { Builder = nodes => nodes[0] };
-                /* 825 AltOp            */ __Matchers[825] = new Alt(this, 825, "alt(>intersection-type|>intersection-expression)") { Builder = nodes => nodes[0] };
-                /* 826 OptionalOp       */ __Matchers[826] = new Optional(this, 826, "?(>fail-block)") { Builder = nodes => new ROptional<CFailBlock>(nodes) };
-                /* 827 SeqOp            */ __Matchers[827] = new Seq(this, 827, "_827:(>for-block,?(>fail-block))") { Builder = nodes => new CForElseStatement(nodes) };
-                /* 828 SeqOp            */ __Matchers[828] = new Seq(this, 828, "_828:('for','(',?(>for-iterator),')',>block)") { Builder = nodes => new CForBlock(nodes) };
-                /* 829 SeqOp            */ __Matchers[829] = new Seq(this, 829, "_829:('else',>block)") { Builder = nodes => new CFailBlock(nodes) };
-                /* 830 OptionalOp       */ __Matchers[830] = new Optional(this, 830, "?(>containment)") { Builder = nodes => new ROptional<CContainment>(nodes) };
-                /* 831 SeqOp            */ __Matchers[831] = new Seq(this, 831, "_831:(>for-variable,?(>containment))") { Builder = nodes => new CForIterator(nodes) };
-                /* 832 AltOp            */ __Matchers[832] = new Alt(this, 832, "alt(>tuple-or-entry-pattern|>variable)") { Builder = nodes => nodes[0] };
-                /* 833 SeqOp            */ __Matchers[833] = new Seq(this, 833, "_833:(>containment-operator,>operator-expression)") { Builder = nodes => new CContainment(nodes) };
-                /* 834 AltOp            */ __Matchers[834] = new Alt(this, 834, "alt('in'|':')") { Builder = nodes => nodes[0] };
-                /* 835 StringOp         */ __Matchers[835] = new Keyword(this, 835, "'while'", "while") { Creator = node => new RLiteral(node) };
-                /* 836 SeqOp            */ __Matchers[836] = new Seq(this, 836, "_836:('while',>conditions,>block)") { Builder = nodes => new CWhileStatement(nodes) };
-                /* 837 StarOp           */ __Matchers[837] = new Star(this, 837, "*(>catch-block)") { Builder = nodes => new RStar<CCatchBlock>(nodes) };
-                /* 838 OptionalOp       */ __Matchers[838] = new Optional(this, 838, "?(>finally-block)") { Builder = nodes => new ROptional<CFinallyBlock>(nodes) };
-                /* 839 SeqOp            */ __Matchers[839] = new Seq(this, 839, "_839:(>try-block,*(>catch-block),?(>finally-block))") { Builder = nodes => new CTryStatement(nodes) };
-                /* 840 StringOp         */ __Matchers[840] = new Keyword(this, 840, "'try'", "try") { Creator = node => new RLiteral(node) };
-                /* 841 OptionalOp       */ __Matchers[841] = new Optional(this, 841, "?(>resources)") { Builder = nodes => new ROptional<CResources>(nodes) };
-                /* 842 SeqOp            */ __Matchers[842] = new Seq(this, 842, "_842:('try',?(>resources),>block)") { Builder = nodes => new CTryBlock(nodes) };
-                /* 843 StringOp         */ __Matchers[843] = new Keyword(this, 843, "'catch'", "catch") { Creator = node => new RLiteral(node) };
-                /* 844 SeqOp            */ __Matchers[844] = new Seq(this, 844, "_844:('catch',>catch-variable,>block)") { Builder = nodes => new CCatchBlock(nodes) };
-                /* 845 OptionalOp       */ __Matchers[845] = new Optional(this, 845, "?(>variable)") { Builder = nodes => new ROptional<CVariable>(nodes) };
-                /* 846 SeqOp            */ __Matchers[846] = new Seq(this, 846, "_846:('(',?(>variable),')')") { Builder = nodes => new CCatchVariable(nodes) };
-                /* 847 StringOp         */ __Matchers[847] = new Keyword(this, 847, "'finally'", "finally") { Creator = node => new RLiteral(node) };
-                /* 848 SeqOp            */ __Matchers[848] = new Seq(this, 848, "_848:('finally',>block)") { Builder = nodes => new CFinallyBlock(nodes) };
-                /* 849 OptionalOp       */ __Matchers[849] = new Optional(this, 849, "?(>resource-list)") { Builder = nodes => new ROptional<CResourceList>(nodes) };
-                /* 850 SeqOp            */ __Matchers[850] = new Seq(this, 850, "_850:('(',?(>resource-list),')')") { Builder = nodes => new CResources(nodes) };
-                /* 851 SeqOp            */ __Matchers[851] = new Seq(this, 851, "_851:(',',>resource)") { Builder = nodes => new RSequence(nodes) };
-                /* 852 StarOp           */ __Matchers[852] = new Star(this, 852, "*(_851:(',',>resource))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 853 SeqOp            */ __Matchers[853] = new Seq(this, 853, "_853:(>resource,*(_851:(',',>resource)))") { Builder = nodes => new CResourceList(nodes) };
-                /* 854 AltOp            */ __Matchers[854] = new Alt(this, 854, "alt(>specified-variable|>operator-expression)") { Builder = nodes => nodes[0] };
-                /* 855 SeqOp            */ __Matchers[855] = new Seq(this, 855, "_855:(>variable,>value-specifier)") { Builder = nodes => new CSpecifiedVariable(nodes) };
-                /* 856 OptionalOp       */ __Matchers[856] = new Optional(this, 856, "?(>variable-type)") { Builder = nodes => new ROptional<ICVariableType>(nodes) };
-                /* 857 StarOp           */ __Matchers[857] = new Star(this, 857, "*(>parameters)") { Builder = nodes => new RStar<CParameters>(nodes) };
-                /* 858 SeqOp            */ __Matchers[858] = new Seq(this, 858, "_858:(?(>variable-type),>member-name,*(>parameters))") { Builder = nodes => new CVariable(nodes) };
-                /* 859 AltOp            */ __Matchers[859] = new Alt(this, 859, "alt(>type|>kw-void|>kw-function|>kw-value)") { Builder = nodes => nodes[0] };
-                /* 860 SeqOp            */ __Matchers[860] = new Seq(this, 860, "_860:('^',>model-expression)") { Builder = nodes => new CModelReference(nodes) };
-                /* 861 StringOp         */ __Matchers[861] = new String(this, 861, "'`'", "`") { Creator = node => new RLiteral(node) };
-                /* 862 SeqOp            */ __Matchers[862] = new Seq(this, 862, "_862:('`',>meta-expression,'`')") { Builder = nodes => new CMetaLiteral(nodes) };
-                /* 863 AltOp            */ __Matchers[863] = new Alt(this, 863, "alt(>declaration-reference|>model-expression)") { Builder = nodes => nodes[0] };
-                /* 864 AltOp            */ __Matchers[864] = new Alt(this, 864, "alt(>member-model-expression|>type-model-expression)") { Builder = nodes => nodes[0] };
-                /* 865 AltOp            */ __Matchers[865] = new Alt(this, 865, "alt(>member-reference|>package-qualified-member-reference|>type-qualified-member-reference)") { Builder = nodes => nodes[0] };
-                /* 866 SeqOp            */ __Matchers[866] = new Seq(this, 866, "_866:('package','.',>member-reference)") { Builder = nodes => new CPackageQualifiedMemberReference(nodes) };
-                /* 867 SeqOp            */ __Matchers[867] = new Seq(this, 867, "_867:(>primary-type,'.',>member-reference)") { Builder = nodes => new CTypeQualifiedMemberReference(nodes) };
-                /* 868 AltOp            */ __Matchers[868] = new Alt(this, 868, "alt(>module-literal|>package-literal|>class-literal|>new-literal|>interface-literal|>alias-literal|>type-parameter-literal|>value-literal|>function-literal)") { Builder = nodes => nodes[0] };
-                /* 869 OptionalOp       */ __Matchers[869] = new Optional(this, 869, "?(>package-path)") { Builder = nodes => new ROptional<CPackagePath>(nodes) };
-                /* 870 SeqOp            */ __Matchers[870] = new Seq(this, 870, "_870:('module',?(>package-path))") { Builder = nodes => new CModuleLiteral(nodes) };
-                /* 871 SeqOp            */ __Matchers[871] = new Seq(this, 871, "_871:('package',?(>package-path))") { Builder = nodes => new CPackageLiteral(nodes) };
-                /* 872 SeqOp            */ __Matchers[872] = new Seq(this, 872, "_872:('class',>reference-path)") { Builder = nodes => new CClassLiteral(nodes) };
-                /* 873 SeqOp            */ __Matchers[873] = new Seq(this, 873, "_873:('interface',>reference-path)") { Builder = nodes => new CInterfaceLiteral(nodes) };
-                /* 874 SeqOp            */ __Matchers[874] = new Seq(this, 874, "_874:('alias',>reference-path)") { Builder = nodes => new CAliasLiteral(nodes) };
-                /* 875 SeqOp            */ __Matchers[875] = new Seq(this, 875, "_875:('given',>reference-path)") { Builder = nodes => new CTypeParameterLiteral(nodes) };
-                /* 876 SeqOp            */ __Matchers[876] = new Seq(this, 876, "_876:('new',>reference-path)") { Builder = nodes => new CNewLiteral(nodes) };
-                /* 877 SeqOp            */ __Matchers[877] = new Seq(this, 877, "_877:(>value-literal-intro,>reference-path)") { Builder = nodes => new CValueLiteral(nodes) };
-                /* 878 AltOp            */ __Matchers[878] = new Alt(this, 878, "alt('value'|'object')") { Builder = nodes => nodes[0] };
-                /* 879 SeqOp            */ __Matchers[879] = new Seq(this, 879, "_879:('function',>reference-path)") { Builder = nodes => new CFunctionLiteral(nodes) };
+                /* 438 SeqOp            */ __Matchers[438] = new Seq(this, 438, "_438:(',',>let-variable)") { Builder = nodes => new RSequence(nodes) };
+                /* 439 StarOp           */ __Matchers[439] = new Star(this, 439, "*(_438:(',',>let-variable))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 440 SeqOp            */ __Matchers[440] = new Seq(this, 440, "_440:(>let-variable,*(_438:(',',>let-variable)))") { Builder = nodes => new CLetVariableList(nodes) };
+                /* 441 SeqOp            */ __Matchers[441] = new Seq(this, 441, "_441:(>pattern,>value-specifier)") { Builder = nodes => new CLetVariable(nodes) };
+                /* 442 StringOp         */ __Matchers[442] = new Keyword(this, 442, "'extends'", "extends") { Creator = node => new RLiteral(node) };
+                /* 443 SeqOp            */ __Matchers[443] = new Seq(this, 443, "_443:('extends',>class-instatiation)") { Builder = nodes => new CDelegatedConstructor(nodes) };
+                /* 444 OptionalOp       */ __Matchers[444] = new Optional(this, 444, "?(>assertion-message)") { Builder = nodes => new ROptional<ICAssertionMessage>(nodes) };
+                /* 445 StringOp         */ __Matchers[445] = new Keyword(this, 445, "'assert'", "assert") { Creator = node => new RLiteral(node) };
+                /* 446 SeqOp            */ __Matchers[446] = new Seq(this, 446, "_446:(?(>assertion-message),'assert',>conditions)") { Builder = nodes => new CAssertionStatement(nodes) };
+                /* 447 SeqOp            */ __Matchers[447] = new Seq(this, 447, "_447:('{',>imports,>statements,'}')") { Builder = nodes => new CBlock(nodes) };
+                /* 448 SeqOp            */ __Matchers[448] = new Seq(this, 448, "_448:('extends',>class-instatiation)") { Builder = nodes => new CExtendedType(nodes) };
+                /* 449 StringOp         */ __Matchers[449] = new String(this, 449, "'=>'", "=>") { Creator = node => new RLiteral(node) };
+                /* 450 SeqOp            */ __Matchers[450] = new Seq(this, 450, "_450:('=>',>class-instatiation)") { Builder = nodes => new CClassSpecifier(nodes) };
+                /* 451 OptionalOp       */ __Matchers[451] = new Optional(this, 451, "?(>arguments)") { Builder = nodes => new ROptional<ICArguments>(nodes) };
+                /* 452 SeqOp            */ __Matchers[452] = new Seq(this, 452, "_452:(>qualified-class,?(>arguments))") { Builder = nodes => new CClassInstatiation(nodes) };
+                /* 453 AltOp            */ __Matchers[453] = new Alt(this, 453, "alt(>package-qualified-class|>super-qualified-class|>un-qualified-class)") { Builder = nodes => nodes[0] };
+                /* 454 SeqOp            */ __Matchers[454] = new Seq(this, 454, "_454:('package','.',>un-qualified-class)") { Builder = nodes => new CPackageQualifiedClass(nodes) };
+                /* 455 StringOp         */ __Matchers[455] = new Keyword(this, 455, "'super'", "super") { Creator = node => new RLiteral(node) };
+                /* 456 SeqOp            */ __Matchers[456] = new Seq(this, 456, "_456:('super','.',>base-reference)") { Builder = nodes => new CSuperQualifiedClass(nodes) };
+                /* 457 AltOp            */ __Matchers[457] = new Alt(this, 457, "alt(>member-path|>type-path|>member-reference)") { Builder = nodes => nodes[0] };
+                /* 458 SeqOp            */ __Matchers[458] = new Seq(this, 458, "_458:(>type-path,'.',>member-reference)") { Builder = nodes => new CMemberPath(nodes) };
+                /* 459 SeqOp            */ __Matchers[459] = new Seq(this, 459, "_459:('.',>type-reference)") { Builder = nodes => new RSequence(nodes) };
+                /* 460 StarOp           */ __Matchers[460] = new Star(this, 460, "*(_459:('.',>type-reference))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 461 SeqOp            */ __Matchers[461] = new Seq(this, 461, "_461:(>type-reference,*(_459:('.',>type-reference)))") { Builder = nodes => new CTypePath(nodes) };
+                /* 462 StringOp         */ __Matchers[462] = new Keyword(this, 462, "'satisfies'", "satisfies") { Creator = node => new RLiteral(node) };
+                /* 463 SeqOp            */ __Matchers[463] = new Seq(this, 463, "_463:('satisfies',>union-type-list)") { Builder = nodes => new CSatisfiedTypes(nodes) };
+                /* 464 SeqOp            */ __Matchers[464] = new Seq(this, 464, "_464:(',',>union-type)") { Builder = nodes => new RSequence(nodes) };
+                /* 465 StarOp           */ __Matchers[465] = new Star(this, 465, "*(_464:(',',>union-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 466 SeqOp            */ __Matchers[466] = new Seq(this, 466, "_466:(>union-type,*(_464:(',',>union-type)))") { Builder = nodes => new CUnionTypeList(nodes) };
+                /* 467 StringOp         */ __Matchers[467] = new Keyword(this, 467, "'of'", "of") { Creator = node => new RLiteral(node) };
+                /* 468 SeqOp            */ __Matchers[468] = new Seq(this, 468, "_468:('of',>case-type-list)") { Builder = nodes => new CCaseTypes(nodes) };
+                /* 469 StringOp         */ __Matchers[469] = new String(this, 469, "'|'", "|") { Creator = node => new RLiteral(node) };
+                /* 470 SeqOp            */ __Matchers[470] = new Seq(this, 470, "_470:('|',>case-type)") { Builder = nodes => new RSequence(nodes) };
+                /* 471 StarOp           */ __Matchers[471] = new Star(this, 471, "*(_470:('|',>case-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 472 SeqOp            */ __Matchers[472] = new Seq(this, 472, "_472:(>case-type,*(_470:('|',>case-type)))") { Builder = nodes => new CCaseTypeList(nodes) };
+                /* 473 AltOp            */ __Matchers[473] = new Alt(this, 473, "alt(>primary-type|>qualified-case-type)") { Builder = nodes => nodes[0] };
+                /* 474 OptionalOp       */ __Matchers[474] = new Optional(this, 474, "?(>package-qualifier)") { Builder = nodes => new ROptional<CPackageQualifier>(nodes) };
+                /* 475 SeqOp            */ __Matchers[475] = new Seq(this, 475, "_475:(?(>package-qualifier),>member-name)") { Builder = nodes => new CQualifiedCaseType(nodes) };
+                /* 476 OptionalOp       */ __Matchers[476] = new Optional(this, 476, "?(>parameter-list)") { Builder = nodes => new ROptional<CParameterList>(nodes) };
+                /* 477 SeqOp            */ __Matchers[477] = new Seq(this, 477, "_477:('(',?(>parameter-list),')')") { Builder = nodes => new CParameters(nodes) };
+                /* 478 SeqOp            */ __Matchers[478] = new Seq(this, 478, "_478:(',',>parameter-declaration-or-ref-pattern)") { Builder = nodes => new RSequence(nodes) };
+                /* 479 StarOp           */ __Matchers[479] = new Star(this, 479, "*(_478:(',',>parameter-declaration-or-ref-pattern))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 480 SeqOp            */ __Matchers[480] = new Seq(this, 480, "_480:(>parameter-declaration-or-ref-pattern,*(_478:(',',>parameter-declaration-or-ref-pattern)))") { Builder = nodes => new CParameterList(nodes) };
+                /* 481 AltOp            */ __Matchers[481] = new Alt(this, 481, "alt(>entry-pattern|>tuple-pattern|>parameter|>parameter-reference)") { Builder = nodes => nodes[0] };
+                /* 482 SeqOp            */ __Matchers[482] = new Seq(this, 482, "_482:(>annotations,>parameter-declaration)") { Builder = nodes => new CParameter(nodes) };
+                /* 483 OptionalOp       */ __Matchers[483] = new Optional(this, 483, "?(>value-specifier)") { Builder = nodes => new ROptional<CValueSpecifier>(nodes) };
+                /* 484 SeqOp            */ __Matchers[484] = new Seq(this, 484, "_484:(>member-name,?(>value-specifier))") { Builder = nodes => new CParameterReference(nodes) };
+                /* 485 AltOp            */ __Matchers[485] = new Alt(this, 485, "alt(>function-parameter-declaration|>value-parameter-declaration)") { Builder = nodes => nodes[0] };
+                /* 486 OptionalOp       */ __Matchers[486] = new Optional(this, 486, "?(>type-parameters)") { Builder = nodes => new ROptional<CTypeParameters>(nodes) };
+                /* 487 PlusOp           */ __Matchers[487] = new Plus(this, 487, "+(>parameters)") { Builder = nodes => new RPlus<CParameters>(nodes) };
+                /* 488 OptionalOp       */ __Matchers[488] = new Optional(this, 488, "?(>function-specifier)") { Builder = nodes => new ROptional<CFunctionSpecifier>(nodes) };
+                /* 489 SeqOp            */ __Matchers[489] = new Seq(this, 489, "_489:(>function-parameter-type,>member-name,?(>type-parameters),+(>parameters),?(>function-specifier))") { Builder = nodes => new CFunctionParameterDeclaration(nodes) };
+                /* 490 AltOp            */ __Matchers[490] = new Alt(this, 490, "alt(>variadic-type|>kw-void|>kw-function)") { Builder = nodes => nodes[0] };
+                /* 491 SeqOp            */ __Matchers[491] = new Seq(this, 491, "_491:(>value-parameter-type,>member-name,?(>value-specifier))") { Builder = nodes => new CValueParameterDeclaration(nodes) };
+                /* 492 AltOp            */ __Matchers[492] = new Alt(this, 492, "alt(>variadic-type|>kw-value)") { Builder = nodes => nodes[0] };
+                /* 493 StringOp         */ __Matchers[493] = new String(this, 493, "'<'", "<") { Creator = node => new RLiteral(node) };
+                /* 494 StringOp         */ __Matchers[494] = new String(this, 494, "'>'", ">") { Creator = node => new RLiteral(node) };
+                /* 495 SeqOp            */ __Matchers[495] = new Seq(this, 495, "_495:('<',>type-parameter-list,'>')") { Builder = nodes => new CTypeParameters(nodes) };
+                /* 496 SeqOp            */ __Matchers[496] = new Seq(this, 496, "_496:(',',>type-parameter)") { Builder = nodes => new RSequence(nodes) };
+                /* 497 StarOp           */ __Matchers[497] = new Star(this, 497, "*(_496:(',',>type-parameter))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 498 SeqOp            */ __Matchers[498] = new Seq(this, 498, "_498:(>type-parameter,*(_496:(',',>type-parameter)))") { Builder = nodes => new CTypeParameterList(nodes) };
+                /* 499 OptionalOp       */ __Matchers[499] = new Optional(this, 499, "?(>variance)") { Builder = nodes => new ROptional<ICVariance>(nodes) };
+                /* 500 OptionalOp       */ __Matchers[500] = new Optional(this, 500, "?(>type-default)") { Builder = nodes => new ROptional<CTypeDefault>(nodes) };
+                /* 501 SeqOp            */ __Matchers[501] = new Seq(this, 501, "_501:(?(>variance),>type-name,?(>type-default))") { Builder = nodes => new CTypeParameter(nodes) };
+                /* 502 StringOp         */ __Matchers[502] = new Keyword(this, 502, "'in'", "in") { Creator = node => new RLiteral(node) };
+                /* 503 StringOp         */ __Matchers[503] = new Keyword(this, 503, "'out'", "out") { Creator = node => new RLiteral(node) };
+                /* 504 AltOp            */ __Matchers[504] = new Alt(this, 504, "alt('in'|'out')") { Builder = nodes => nodes[0] };
+                /* 505 SeqOp            */ __Matchers[505] = new Seq(this, 505, "_505:('=',>type)") { Builder = nodes => new CTypeDefault(nodes) };
+                /* 506 StringOp         */ __Matchers[506] = new Keyword(this, 506, "'given'", "given") { Creator = node => new RLiteral(node) };
+                /* 507 OptionalOp       */ __Matchers[507] = new Optional(this, 507, "?(>type-name)") { Builder = nodes => new ROptional<ICTypeName>(nodes) };
+                /* 508 OptionalOp       */ __Matchers[508] = new Optional(this, 508, "?(>case-types)") { Builder = nodes => new ROptional<CCaseTypes>(nodes) };
+                /* 509 OptionalOp       */ __Matchers[509] = new Optional(this, 509, "?(>satisfied-types)") { Builder = nodes => new ROptional<CSatisfiedTypes>(nodes) };
+                /* 510 SeqOp            */ __Matchers[510] = new Seq(this, 510, "_510:('given',?(>type-name),?(>type-parameters),?(>case-types),?(>satisfied-types))") { Builder = nodes => new CTypeConstraint(nodes) };
+                /* 511 PlusOp           */ __Matchers[511] = new Plus(this, 511, "+(>type-constraint)") { Builder = nodes => new CTypeConstraints(nodes) };
+                /* 512 StarOp           */ __Matchers[512] = new Star(this, 512, "*(>declaration)") { Builder = nodes => new CDeclarations(nodes) };
+                /* 513 AltOp            */ __Matchers[513] = new Alt(this, 513, "alt(>class-declaration|>interface-declaration|>alias-declaration|>object-declaration|>constructor-declaration|>enumerated-object-declaration|>setter-declaration|>typed-method-declaration|>void-method-declaration|>inferred-method-declaration|>typed-attribute-declaration|>inferred-attribute-declaration)") { Builder = nodes => nodes[0] };
+                /* 514 StringOp         */ __Matchers[514] = new Keyword(this, 514, "'new'", "new") { Creator = node => new RLiteral(node) };
+                /* 515 OptionalOp       */ __Matchers[515] = new Optional(this, 515, "?(>member-name)") { Builder = nodes => new ROptional<ICMemberName>(nodes) };
+                /* 516 OptionalOp       */ __Matchers[516] = new Optional(this, 516, "?(>delegated-constructor)") { Builder = nodes => new ROptional<CDelegatedConstructor>(nodes) };
+                /* 517 SeqOp            */ __Matchers[517] = new Seq(this, 517, "_517:(>annotations,'new',?(>member-name),>parameters,?(>delegated-constructor),>block)") { Builder = nodes => new CConstructorDeclaration(nodes) };
+                /* 518 StringOp         */ __Matchers[518] = new Keyword(this, 518, "'alias'", "alias") { Creator = node => new RLiteral(node) };
+                /* 519 OptionalOp       */ __Matchers[519] = new Optional(this, 519, "?(>type-constraints)") { Builder = nodes => new ROptional<CTypeConstraints>(nodes) };
+                /* 520 SeqOp            */ __Matchers[520] = new Seq(this, 520, "_520:(>annotations,'alias',>type-name,?(>type-parameters),?(>type-constraints),>optional-type-specifier)") { Builder = nodes => new CAliasDeclaration(nodes) };
+                /* 521 SeqOp            */ __Matchers[521] = new Seq(this, 521, "_521:(>annotations,'new',>member-name,?(>delegated-constructor),>block)") { Builder = nodes => new CEnumeratedObjectDeclaration(nodes) };
+                /* 522 StringOp         */ __Matchers[522] = new Keyword(this, 522, "'object'", "object") { Creator = node => new RLiteral(node) };
+                /* 523 OptionalOp       */ __Matchers[523] = new Optional(this, 523, "?(>extended-type)") { Builder = nodes => new ROptional<CExtendedType>(nodes) };
+                /* 524 SeqOp            */ __Matchers[524] = new Seq(this, 524, "_524:(>annotations,'object',>member-name,?(>extended-type),?(>satisfied-types),>block)") { Builder = nodes => new CObjectDeclaration(nodes) };
+                /* 525 StringOp         */ __Matchers[525] = new Keyword(this, 525, "'assign'", "assign") { Creator = node => new RLiteral(node) };
+                /* 526 SeqOp            */ __Matchers[526] = new Seq(this, 526, "_526:(>annotations,'assign',>member-name,>setter-definition)") { Builder = nodes => new CSetterDeclaration(nodes) };
+                /* 527 AltOp            */ __Matchers[527] = new Alt(this, 527, "alt(>block|>required-function-specifier)") { Builder = nodes => nodes[0] };
+                /* 528 SeqOp            */ __Matchers[528] = new Seq(this, 528, "_528:(>annotations,>variadic-type,>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CTypedMethodDeclaration(nodes) };
+                /* 529 StringOp         */ __Matchers[529] = new Keyword(this, 529, "'void'", "void") { Creator = node => new CKwVoid(node) };
+                /* 530 SeqOp            */ __Matchers[530] = new Seq(this, 530, "_530:(>annotations,'void',>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CVoidMethodDeclaration(nodes) };
+                /* 531 StringOp         */ __Matchers[531] = new Keyword(this, 531, "'function'", "function") { Creator = node => new CKwFunction(node) };
+                /* 532 SeqOp            */ __Matchers[532] = new Seq(this, 532, "_532:(>annotations,'function',>member-name,?(>type-parameters),+(>parameters),?(>type-constraints),>method-definition)") { Builder = nodes => new CInferredMethodDeclaration(nodes) };
+                /* 533 SeqOp            */ __Matchers[533] = new Seq(this, 533, "_533:(>annotations,>variadic-type,>member-name,>attribute-definition)") { Builder = nodes => new CTypedAttributeDeclaration(nodes) };
+                /* 534 StringOp         */ __Matchers[534] = new Keyword(this, 534, "'value'", "value") { Creator = node => new CKwValue(node) };
+                /* 535 SeqOp            */ __Matchers[535] = new Seq(this, 535, "_535:(>annotations,'value',>member-name,>attribute-definition)") { Builder = nodes => new CInferredAttributeDeclaration(nodes) };
+                /* 536 AltOp            */ __Matchers[536] = new Alt(this, 536, "alt(>block|>optional-any-specifier)") { Builder = nodes => nodes[0] };
+                /* 537 OptionalOp       */ __Matchers[537] = new Optional(this, 537, "?(>any-specifier)") { Builder = nodes => new ROptional<ICAnySpecifier>(nodes) };
+                /* 538 SeqOp            */ __Matchers[538] = new Seq(this, 538, "_538:(?(>any-specifier),';')") { Builder = nodes => new COptionalAnySpecifier(nodes) };
+                /* 539 StringOp         */ __Matchers[539] = new Keyword(this, 539, "'class'", "class") { Creator = node => new RLiteral(node) };
+                /* 540 OptionalOp       */ __Matchers[540] = new Optional(this, 540, "?(>parameters)") { Builder = nodes => new ROptional<CParameters>(nodes) };
+                /* 541 SeqOp            */ __Matchers[541] = new Seq(this, 541, "_541:(>annotations,'class',>type-name,?(>type-parameters),?(>parameters),?(>case-types),?(>extended-type),?(>satisfied-types),?(>type-constraints),>class-definition)") { Builder = nodes => new CClassDeclaration(nodes) };
+                /* 542 AltOp            */ __Matchers[542] = new Alt(this, 542, "alt(>block|>optional-class-specifier)") { Builder = nodes => nodes[0] };
+                /* 543 OptionalOp       */ __Matchers[543] = new Optional(this, 543, "?(>class-specifier)") { Builder = nodes => new ROptional<CClassSpecifier>(nodes) };
+                /* 544 SeqOp            */ __Matchers[544] = new Seq(this, 544, "_544:(?(>class-specifier),';')") { Builder = nodes => new COptionalClassSpecifier(nodes) };
+                /* 545 StringOp         */ __Matchers[545] = new Keyword(this, 545, "'interface'", "interface") { Creator = node => new RLiteral(node) };
+                /* 546 SeqOp            */ __Matchers[546] = new Seq(this, 546, "_546:(>annotations,'interface',>type-name,?(>type-parameters),?(>case-types),?(>satisfied-types),?(>type-constraints),>interface-definition)") { Builder = nodes => new CInterfaceDeclaration(nodes) };
+                /* 547 AltOp            */ __Matchers[547] = new Alt(this, 547, "alt(>block|>optional-type-specifier)") { Builder = nodes => nodes[0] };
+                /* 548 OptionalOp       */ __Matchers[548] = new Optional(this, 548, "?(>type-specifier)") { Builder = nodes => new ROptional<CTypeSpecifier>(nodes) };
+                /* 549 SeqOp            */ __Matchers[549] = new Seq(this, 549, "_549:(?(>type-specifier),';')") { Builder = nodes => new COptionalTypeSpecifier(nodes) };
+                /* 550 StarOp           */ __Matchers[550] = new Star(this, 550, "*(>statement)") { Builder = nodes => new CStatements(nodes) };
+                /* 551 AltOp            */ __Matchers[551] = new Alt(this, 551, "alt(>declaration-statement|>unclosed-statement|>control-statement)") { Builder = nodes => nodes[0] };
+                /* 552 SeqOp            */ __Matchers[552] = new Seq(this, 552, "_552:(>open-statement,';')") { Builder = nodes => new CUnclosedStatement(nodes) };
+                /* 553 AltOp            */ __Matchers[553] = new Alt(this, 553, "alt(>directive-statement|>expression-statement|>specification-statement|>assertion-statement|>let-statement)") { Builder = nodes => nodes[0] };
+                /* 554 SeqOp            */ __Matchers[554] = new Seq(this, 554, "_554:(>primary,>function-specifier)") { Builder = nodes => new CSpecificationStatement(nodes) };
+                /* 555 AltOp            */ __Matchers[555] = new Alt(this, 555, "alt(>return-statement|>throw-statement|>break-statement|>continue-statement)") { Builder = nodes => nodes[0] };
+                /* 556 StringOp         */ __Matchers[556] = new Keyword(this, 556, "'return'", "return") { Creator = node => new RLiteral(node) };
+                /* 557 OptionalOp       */ __Matchers[557] = new Optional(this, 557, "?(>expression)") { Builder = nodes => new ROptional<ICExpression>(nodes) };
+                /* 558 SeqOp            */ __Matchers[558] = new Seq(this, 558, "_558:('return',?(>expression))") { Builder = nodes => new CReturnStatement(nodes) };
+                /* 559 StringOp         */ __Matchers[559] = new Keyword(this, 559, "'throw'", "throw") { Creator = node => new RLiteral(node) };
+                /* 560 SeqOp            */ __Matchers[560] = new Seq(this, 560, "_560:('throw',?(>expression))") { Builder = nodes => new CThrowStatement(nodes) };
+                /* 561 StringOp         */ __Matchers[561] = new Keyword(this, 561, "'break'", "break") { Creator = node => new CBreakStatement(node) };
+                /* 562 StringOp         */ __Matchers[562] = new Keyword(this, 562, "'continue'", "continue") { Creator = node => new CContinueStatement(node) };
+                /* 563 SeqOp            */ __Matchers[563] = new Seq(this, 563, "_563:('=>',>type)") { Builder = nodes => new CTypeSpecifier(nodes) };
+                /* 564 SeqOp            */ __Matchers[564] = new Seq(this, 564, "_564:('=',>expression)") { Builder = nodes => new CValueSpecifier(nodes) };
+                /* 565 SeqOp            */ __Matchers[565] = new Seq(this, 565, "_565:('=>',>expression)") { Builder = nodes => new CFunctionSpecifier(nodes) };
+                /* 566 AltOp            */ __Matchers[566] = new Alt(this, 566, "alt(>value-specifier|>function-specifier)") { Builder = nodes => nodes[0] };
+                /* 567 AltOp            */ __Matchers[567] = new Alt(this, 567, "alt(>base-reference|>parametrized-member|>self-reference|>self-parametrized-member)") { Builder = nodes => nodes[0] };
+                /* 568 AltOp            */ __Matchers[568] = new Alt(this, 568, "alt(>member-reference|>type-reference)") { Builder = nodes => nodes[0] };
+                /* 569 SeqOp            */ __Matchers[569] = new Seq(this, 569, "_569:(>member-name,?(>type-parameters),+(>parameters))") { Builder = nodes => new CParametrizedMember(nodes) };
+                /* 570 SeqOp            */ __Matchers[570] = new Seq(this, 570, "_570:(>self-reference-selector,>parametrized-member)") { Builder = nodes => new CSelfParametrizedMember(nodes) };
+                /* 571 OptionalOp       */ __Matchers[571] = new Optional(this, 571, "?(>type-arguments)") { Builder = nodes => new ROptional<CTypeArguments>(nodes) };
+                /* 572 SeqOp            */ __Matchers[572] = new Seq(this, 572, "_572:(>member-name,?(>type-arguments))") { Builder = nodes => new CMemberReference(nodes) };
+                /* 573 SeqOp            */ __Matchers[573] = new Seq(this, 573, "_573:(>type-name,?(>type-arguments))") { Builder = nodes => new CTypeReference(nodes) };
+                /* 574 SeqOp            */ __Matchers[574] = new Seq(this, 574, "_574:(>self-reference,>member-selection-operator)") { Builder = nodes => new CSelfReferenceSelector(nodes) };
+                /* 575 StringOp         */ __Matchers[575] = new Keyword(this, 575, "'this'", "this") { Creator = node => new RLiteral(node) };
+                /* 576 StringOp         */ __Matchers[576] = new Keyword(this, 576, "'outer'", "outer") { Creator = node => new RLiteral(node) };
+                /* 577 AltOp            */ __Matchers[577] = new Alt(this, 577, "alt('this'|'super'|'outer'|'package')") { Builder = nodes => nodes[0] };
+                /* 578 OptionalOp       */ __Matchers[578] = new Optional(this, 578, "?(>sequenced-arguments)") { Builder = nodes => new ROptional<CSequencedArguments>(nodes) };
+                /* 579 SeqOp            */ __Matchers[579] = new Seq(this, 579, "_579:('{',>statements,?(>sequenced-arguments),'}')") { Builder = nodes => new CEnumerationExpr(nodes) };
+                /* 580 SeqOp            */ __Matchers[580] = new Seq(this, 580, "_580:('[',?(>sequenced-arguments),']')") { Builder = nodes => new CTupleExpr(nodes) };
+                /* 581 AltOp            */ __Matchers[581] = new Alt(this, 581, "alt(>structural-arguments|>positional-arguments)") { Builder = nodes => nodes[0] };
+                /* 582 StarOp           */ __Matchers[582] = new Star(this, 582, "*(>named-or-anonymous)") { Builder = nodes => new RStar<ICNamedOrAnonymous>(nodes) };
+                /* 583 SeqOp            */ __Matchers[583] = new Seq(this, 583, "_583:('{',*(>named-or-anonymous),?(>sequenced-arguments),'}')") { Builder = nodes => new CStructuralArguments(nodes) };
+                /* 584 SeqOp            */ __Matchers[584] = new Seq(this, 584, "_584:('(',?(>sequenced-arguments),')')") { Builder = nodes => new CPositionalArguments(nodes) };
+                /* 585 AltOp            */ __Matchers[585] = new Alt(this, 585, "alt(>anonymous-argument|>named-argument)") { Builder = nodes => nodes[0] };
+                /* 586 SeqOp            */ __Matchers[586] = new Seq(this, 586, "_586:(>expression,';')") { Builder = nodes => new CAnonymousArgument(nodes) };
+                /* 587 AltOp            */ __Matchers[587] = new Alt(this, 587, "alt(>named-specified-argument|>named-argument-declaration)") { Builder = nodes => nodes[0] };
+                /* 588 SeqOp            */ __Matchers[588] = new Seq(this, 588, "_588:(>member-name,>value-specifier,';')") { Builder = nodes => new CNamedSpecifiedArgument(nodes) };
+                /* 589 SeqOp            */ __Matchers[589] = new Seq(this, 589, "_589:(',',>sequenced-argument)") { Builder = nodes => new RSequence(nodes) };
+                /* 590 StarOp           */ __Matchers[590] = new Star(this, 590, "*(_589:(',',>sequenced-argument))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 591 SeqOp            */ __Matchers[591] = new Seq(this, 591, "_591:(>sequenced-argument,*(_589:(',',>sequenced-argument)))") { Builder = nodes => new CSequencedArguments(nodes) };
+                /* 592 AltOp            */ __Matchers[592] = new Alt(this, 592, "alt(>comprehension-argument|>positional-argument|>spread-argument)") { Builder = nodes => nodes[0] };
+                /* 593 AltOp            */ __Matchers[593] = new Alt(this, 593, "alt(>object-argument|>typed-method-argument|>inferred-method-argument|>untyped-method-argument|>typed-getter-argument|>inferred-getter-argument|>untyped-getter-argument)") { Builder = nodes => nodes[0] };
+                /* 594 SeqOp            */ __Matchers[594] = new Seq(this, 594, "_594:('object',?(>member-name),?(>extended-type),?(>satisfied-types),>block)") { Builder = nodes => new CObjectArgument(nodes) };
+                /* 595 SeqOp            */ __Matchers[595] = new Seq(this, 595, "_595:(>method-argument-type,>parametrized-member,>method-definition)") { Builder = nodes => new CTypedMethodArgument(nodes) };
+                /* 596 AltOp            */ __Matchers[596] = new Alt(this, 596, "alt(>block|>optional-function-specifier)") { Builder = nodes => nodes[0] };
+                /* 597 SeqOp            */ __Matchers[597] = new Seq(this, 597, "_597:(?(>function-specifier),';')") { Builder = nodes => new COptionalFunctionSpecifier(nodes) };
+                /* 598 SeqOp            */ __Matchers[598] = new Seq(this, 598, "_598:(>function-specifier,';')") { Builder = nodes => new CRequiredFunctionSpecifier(nodes) };
+                /* 599 AltOp            */ __Matchers[599] = new Alt(this, 599, "alt(>type|>kw-void)") { Builder = nodes => nodes[0] };
+                /* 600 SeqOp            */ __Matchers[600] = new Seq(this, 600, "_600:(>getter-argument-type,>member-name,>method-definition)") { Builder = nodes => new CTypedGetterArgument(nodes) };
+                /* 601 SeqOp            */ __Matchers[601] = new Seq(this, 601, "_601:('function',?(>member-name),?(>type-parameters),>parameters,>method-definition)") { Builder = nodes => new CInferredMethodArgument(nodes) };
+                /* 602 SeqOp            */ __Matchers[602] = new Seq(this, 602, "_602:('value',>member-name,>method-definition)") { Builder = nodes => new CInferredGetterArgument(nodes) };
+                /* 603 SeqOp            */ __Matchers[603] = new Seq(this, 603, "_603:(>member-name,+(>parameters),>required-function-specifier)") { Builder = nodes => new CUntypedMethodArgument(nodes) };
+                /* 604 SeqOp            */ __Matchers[604] = new Seq(this, 604, "_604:(>member-name,>required-function-specifier)") { Builder = nodes => new CUntypedGetterArgument(nodes) };
+                /* 605 AltOp            */ __Matchers[605] = new Alt(this, 605, "alt(>expression-argument|>declaration-reference)") { Builder = nodes => nodes[0] };
+                /* 606 StringOp         */ __Matchers[606] = new String(this, 606, "'*'", "*") { Creator = node => new RLiteral(node) };
+                /* 607 SeqOp            */ __Matchers[607] = new Seq(this, 607, "_607:('*',>union-expression)") { Builder = nodes => new CSpreadArgument(nodes) };
+                /* 608 OptionalOp       */ __Matchers[608] = new Optional(this, 608, "?(>let-variable-list)") { Builder = nodes => new ROptional<CLetVariableList>(nodes) };
+                /* 609 SeqOp            */ __Matchers[609] = new Seq(this, 609, "_609:('let','(',?(>let-variable-list),')',>conditional-expression)") { Builder = nodes => new CLetExpr(nodes) };
+                /* 610 SeqOp            */ __Matchers[610] = new Seq(this, 610, "_610:(>switch-header,>case-expressions)") { Builder = nodes => new CSwitchExpr(nodes) };
+                /* 611 PlusOp           */ __Matchers[611] = new Plus(this, 611, "+(>case-expression)") { Builder = nodes => new RPlus<CCaseExpression>(nodes) };
+                /* 612 OptionalOp       */ __Matchers[612] = new Optional(this, 612, "?(>else-expression)") { Builder = nodes => new ROptional<CElseExpression>(nodes) };
+                /* 613 SeqOp            */ __Matchers[613] = new Seq(this, 613, "_613:(+(>case-expression),?(>else-expression))") { Builder = nodes => new CCaseExpressions(nodes) };
+                /* 614 StringOp         */ __Matchers[614] = new Keyword(this, 614, "'else'", "else") { Creator = node => new RLiteral(node) };
+                /* 615 OptionalOp       */ __Matchers[615] = new Optional(this, 615, "?('else')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
+                /* 616 StringOp         */ __Matchers[616] = new Keyword(this, 616, "'case'", "case") { Creator = node => new RLiteral(node) };
+                /* 617 SeqOp            */ __Matchers[617] = new Seq(this, 617, "_617:(?('else'),'case','(',>case-item,')',>conditional-expression)") { Builder = nodes => new CCaseExpression(nodes) };
+                /* 618 StringOp         */ __Matchers[618] = new Keyword(this, 618, "'if'", "if") { Creator = node => new RLiteral(node) };
+                /* 619 SeqOp            */ __Matchers[619] = new Seq(this, 619, "_619:('if',>conditions,>then-expression,>else-expression)") { Builder = nodes => new CIfExpr(nodes) };
+                /* 620 SeqOp            */ __Matchers[620] = new Seq(this, 620, "_620:('else',>conditional-expression)") { Builder = nodes => new CElseExpression(nodes) };
+                /* 621 StringOp         */ __Matchers[621] = new Keyword(this, 621, "'then'", "then") { Creator = node => new RLiteral(node) };
+                /* 622 SeqOp            */ __Matchers[622] = new Seq(this, 622, "_622:('then',>conditional-expression)") { Builder = nodes => new CThenExpression(nodes) };
+                /* 623 AltOp            */ __Matchers[623] = new Alt(this, 623, "alt(>if-expr|>let-expr|>disjunction-expression)") { Builder = nodes => nodes[0] };
+                /* 624 OptionalOp       */ __Matchers[624] = new Optional(this, 624, "?(>function-expression-type)") { Builder = nodes => new ROptional<ICFunctionExpressionType>(nodes) };
+                /* 625 OptionalOp       */ __Matchers[625] = new Optional(this, 625, "?(>function-parameters)") { Builder = nodes => new ROptional<CFunctionParameters>(nodes) };
+                /* 626 SeqOp            */ __Matchers[626] = new Seq(this, 626, "_626:(?(>function-expression-type),?(>type-parameters),?(>function-parameters),>function-definition)") { Builder = nodes => new CFunctionExpr(nodes) };
+                /* 627 AltOp            */ __Matchers[627] = new Alt(this, 627, "alt('void'|'function')") { Builder = nodes => nodes[0] };
+                /* 628 SeqOp            */ __Matchers[628] = new Seq(this, 628, "_628:(+(>parameters),?(>type-constraints))") { Builder = nodes => new CFunctionParameters(nodes) };
+                /* 629 AltOp            */ __Matchers[629] = new Alt(this, 629, "alt(>block|>function-specifier)") { Builder = nodes => nodes[0] };
+                /* 630 AltOp            */ __Matchers[630] = new Alt(this, 630, "alt(>for-comprehension-clause|>if-comprehension-clause)") { Builder = nodes => nodes[0] };
+                /* 631 AltOp            */ __Matchers[631] = new Alt(this, 631, "alt(>for-comprehension-clause|>if-comprehension-clause|>expression-comprehension-clause)") { Builder = nodes => nodes[0] };
+                /* 632 StringOp         */ __Matchers[632] = new Keyword(this, 632, "'for'", "for") { Creator = node => new RLiteral(node) };
+                /* 633 OptionalOp       */ __Matchers[633] = new Optional(this, 633, "?(>for-iterator)") { Builder = nodes => new ROptional<CForIterator>(nodes) };
+                /* 634 SeqOp            */ __Matchers[634] = new Seq(this, 634, "_634:('for','(',?(>for-iterator),')',>comprehension-clause)") { Builder = nodes => new CForComprehensionClause(nodes) };
+                /* 635 SeqOp            */ __Matchers[635] = new Seq(this, 635, "_635:('if',>conditions,>comprehension-clause)") { Builder = nodes => new CIfComprehensionClause(nodes) };
+                /* 636 AltOp            */ __Matchers[636] = new Alt(this, 636, "alt(>let-expr|>if-expr|>switch-expr|>function-expr|>operator-expression)") { Builder = nodes => nodes[0] };
+                /* 637 AltOp            */ __Matchers[637] = new Alt(this, 637, "alt(>assignment-expr|>then-else-expression)") { Builder = nodes => nodes[0] };
+                /* 638 SeqOp            */ __Matchers[638] = new Seq(this, 638, "_638:(>then-else-expression,>assignment-operator,>expression)") { Builder = nodes => new CAssignmentExpr(nodes) };
+                /* 639 StringOp         */ __Matchers[639] = new String(this, 639, "'+='", "+=") { Creator = node => new RLiteral(node) };
+                /* 640 StringOp         */ __Matchers[640] = new String(this, 640, "'-='", "-=") { Creator = node => new RLiteral(node) };
+                /* 641 StringOp         */ __Matchers[641] = new String(this, 641, "'*='", "*=") { Creator = node => new RLiteral(node) };
+                /* 642 StringOp         */ __Matchers[642] = new String(this, 642, "'/='", "/=") { Creator = node => new RLiteral(node) };
+                /* 643 StringOp         */ __Matchers[643] = new String(this, 643, "'%='", "%=") { Creator = node => new RLiteral(node) };
+                /* 644 StringOp         */ __Matchers[644] = new String(this, 644, "'&='", "&=") { Creator = node => new RLiteral(node) };
+                /* 645 StringOp         */ __Matchers[645] = new String(this, 645, "'|='", "|=") { Creator = node => new RLiteral(node) };
+                /* 646 StringOp         */ __Matchers[646] = new String(this, 646, "'^='", "^=") { Creator = node => new RLiteral(node) };
+                /* 647 StringOp         */ __Matchers[647] = new String(this, 647, "'~='", "~=") { Creator = node => new RLiteral(node) };
+                /* 648 StringOp         */ __Matchers[648] = new String(this, 648, "'&&='", "&&=") { Creator = node => new RLiteral(node) };
+                /* 649 StringOp         */ __Matchers[649] = new String(this, 649, "'||='", "||=") { Creator = node => new RLiteral(node) };
+                /* 650 AltOp            */ __Matchers[650] = new Alt(this, 650, "alt('='|'+='|'-='|'*='|'/='|'%='|'&='|'|='|'^='|'~='|'&&='|'||=')") { Builder = nodes => nodes[0] };
+                /* 651 AltOp            */ __Matchers[651] = new Alt(this, 651, "alt(>then-else-expr|>disjunction-expression)") { Builder = nodes => nodes[0] };
+                /* 652 SeqOp            */ __Matchers[652] = new Seq(this, 652, "_652:(>then-else-expression,>then-else-operator,>disjunction-expression)") { Builder = nodes => new CThenElseExpr(nodes) };
+                /* 653 AltOp            */ __Matchers[653] = new Alt(this, 653, "alt('else'|'then')") { Builder = nodes => nodes[0] };
+                /* 654 AltOp            */ __Matchers[654] = new Alt(this, 654, "alt(>disjunction-expr|>conjunction-expression)") { Builder = nodes => nodes[0] };
+                /* 655 SeqOp            */ __Matchers[655] = new Seq(this, 655, "_655:(>disjunction-expression,>disjunction-operator,>conjunction-expression)") { Builder = nodes => new CDisjunctionExpr(nodes) };
+                /* 656 StringOp         */ __Matchers[656] = new String(this, 656, "'||'", "||") { Creator = node => new CDisjunctionOperator(node) };
+                /* 657 AltOp            */ __Matchers[657] = new Alt(this, 657, "alt(>conjunction-expr|>logical-negation-expression)") { Builder = nodes => nodes[0] };
+                /* 658 SeqOp            */ __Matchers[658] = new Seq(this, 658, "_658:(>conjunction-expression,>conjunction-operator,>logical-negation-expression)") { Builder = nodes => new CConjunctionExpr(nodes) };
+                /* 659 StringOp         */ __Matchers[659] = new String(this, 659, "'&&'", "&&") { Creator = node => new CConjunctionOperator(node) };
+                /* 660 AltOp            */ __Matchers[660] = new Alt(this, 660, "alt(>logical-negation-expr|>expression-or-meta)") { Builder = nodes => nodes[0] };
+                /* 661 SeqOp            */ __Matchers[661] = new Seq(this, 661, "_661:(>not-operator,>logical-negation-expression)") { Builder = nodes => new CLogicalNegationExpr(nodes) };
+                /* 662 StringOp         */ __Matchers[662] = new String(this, 662, "'!'", "!") { Creator = node => new CNotOperator(node) };
+                /* 663 AltOp            */ __Matchers[663] = new Alt(this, 663, "alt(>equality-expression|>model-reference)") { Builder = nodes => nodes[0] };
+                /* 664 AltOp            */ __Matchers[664] = new Alt(this, 664, "alt(>equality-expr|>comparison-expression)") { Builder = nodes => nodes[0] };
+                /* 665 SeqOp            */ __Matchers[665] = new Seq(this, 665, "_665:(>comparison-expression,>equality-operator,>comparison-expression)") { Builder = nodes => new CEqualityExpr(nodes) };
+                /* 666 StringOp         */ __Matchers[666] = new String(this, 666, "'=='", "==") { Creator = node => new RLiteral(node) };
+                /* 667 StringOp         */ __Matchers[667] = new String(this, 667, "'!='", "!=") { Creator = node => new RLiteral(node) };
+                /* 668 StringOp         */ __Matchers[668] = new String(this, 668, "'==='", "===") { Creator = node => new RLiteral(node) };
+                /* 669 AltOp            */ __Matchers[669] = new Alt(this, 669, "alt('=='|'!='|'===')") { Builder = nodes => nodes[0] };
+                /* 670 AltOp            */ __Matchers[670] = new Alt(this, 670, "alt(>comparison-expr|>larger-expr|>smaller-expr|>larger-bounds-expr|>smaller-bounds-expr|>typecheck-expr|>exists-nonempty-expression)") { Builder = nodes => nodes[0] };
+                /* 671 SeqOp            */ __Matchers[671] = new Seq(this, 671, "_671:(>exists-nonempty-expression,>comparison-operator,>exists-nonempty-expression)") { Builder = nodes => new CComparisonExpr(nodes) };
+                /* 672 SeqOp            */ __Matchers[672] = new Seq(this, 672, "_672:(>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression)") { Builder = nodes => new CLargerExpr(nodes) };
+                /* 673 SeqOp            */ __Matchers[673] = new Seq(this, 673, "_673:(>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression)") { Builder = nodes => new CSmallerExpr(nodes) };
+                /* 674 SeqOp            */ __Matchers[674] = new Seq(this, 674, "_674:(>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression,>larger-operator,>exists-nonempty-expression)") { Builder = nodes => new CLargerBoundsExpr(nodes) };
+                /* 675 SeqOp            */ __Matchers[675] = new Seq(this, 675, "_675:(>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression,>smaller-operator,>exists-nonempty-expression)") { Builder = nodes => new CSmallerBoundsExpr(nodes) };
+                /* 676 SeqOp            */ __Matchers[676] = new Seq(this, 676, "_676:(>exists-nonempty-expression,>type-operator,>type)") { Builder = nodes => new CTypecheckExpr(nodes) };
+                /* 677 StringOp         */ __Matchers[677] = new String(this, 677, "'<=>'", "<=>") { Creator = node => new RLiteral(node) };
+                /* 678 AltOp            */ __Matchers[678] = new Alt(this, 678, "alt('<=>'|'in')") { Builder = nodes => nodes[0] };
+                /* 679 StringOp         */ __Matchers[679] = new String(this, 679, "'<='", "<=") { Creator = node => new RLiteral(node) };
+                /* 680 AltOp            */ __Matchers[680] = new Alt(this, 680, "alt('<='|'<')") { Builder = nodes => nodes[0] };
+                /* 681 StringOp         */ __Matchers[681] = new String(this, 681, "'>='", ">=") { Creator = node => new RLiteral(node) };
+                /* 682 AltOp            */ __Matchers[682] = new Alt(this, 682, "alt('>='|'>')") { Builder = nodes => nodes[0] };
+                /* 683 StringOp         */ __Matchers[683] = new Keyword(this, 683, "'is'", "is") { Creator = node => new RLiteral(node) };
+                /* 684 AltOp            */ __Matchers[684] = new Alt(this, 684, "alt('is'|'extends'|'satisfies'|'of')") { Builder = nodes => nodes[0] };
+                /* 685 AltOp            */ __Matchers[685] = new Alt(this, 685, "alt(>exists-expr|>nonempty-expr|>entry-range-expression)") { Builder = nodes => nodes[0] };
+                /* 686 StringOp         */ __Matchers[686] = new Keyword(this, 686, "'exists'", "exists") { Creator = node => new RLiteral(node) };
+                /* 687 SeqOp            */ __Matchers[687] = new Seq(this, 687, "_687:(>entry-range-expression,'exists')") { Builder = nodes => new CExistsExpr(nodes) };
+                /* 688 StringOp         */ __Matchers[688] = new Keyword(this, 688, "'nonempty'", "nonempty") { Creator = node => new RLiteral(node) };
+                /* 689 SeqOp            */ __Matchers[689] = new Seq(this, 689, "_689:(>entry-range-expression,'nonempty')") { Builder = nodes => new CNonemptyExpr(nodes) };
+                /* 690 AltOp            */ __Matchers[690] = new Alt(this, 690, "alt(>range-expr|>entry-expr|>additive-expression)") { Builder = nodes => nodes[0] };
+                /* 691 SeqOp            */ __Matchers[691] = new Seq(this, 691, "_691:(>additive-expression,>range-operator,>additive-expression)") { Builder = nodes => new CRangeExpr(nodes) };
+                /* 692 SeqOp            */ __Matchers[692] = new Seq(this, 692, "_692:(>additive-expression,>entry-operator,>additive-expression)") { Builder = nodes => new CEntryExpr(nodes) };
+                /* 693 StringOp         */ __Matchers[693] = new String(this, 693, "'..'", "..") { Creator = node => new RLiteral(node) };
+                /* 694 AltOp            */ __Matchers[694] = new Alt(this, 694, "alt('..'|':')") { Builder = nodes => nodes[0] };
+                /* 695 AltOp            */ __Matchers[695] = new Alt(this, 695, "alt(>additive-expr|>scale-expression)") { Builder = nodes => nodes[0] };
+                /* 696 SeqOp            */ __Matchers[696] = new Seq(this, 696, "_696:(>additive-expression,>additive-operator,>scale-expression)") { Builder = nodes => new CAdditiveExpr(nodes) };
+                /* 697 StringOp         */ __Matchers[697] = new String(this, 697, "'+'", "+") { Creator = node => new RLiteral(node) };
+                /* 698 StringOp         */ __Matchers[698] = new String(this, 698, "'-'", "-") { Creator = node => new RLiteral(node) };
+                /* 699 AltOp            */ __Matchers[699] = new Alt(this, 699, "alt('+'|'-')") { Builder = nodes => nodes[0] };
+                /* 700 AltOp            */ __Matchers[700] = new Alt(this, 700, "alt(>scale-expr|>multiplicative-expression)") { Builder = nodes => nodes[0] };
+                /* 701 SeqOp            */ __Matchers[701] = new Seq(this, 701, "_701:(>multiplicative-expression,>scale-operator,>scale-expression)") { Builder = nodes => new CScaleExpr(nodes) };
+                /* 702 StringOp         */ __Matchers[702] = new String(this, 702, "'**'", "**") { Creator = node => new CScaleOperator(node) };
+                /* 703 AltOp            */ __Matchers[703] = new Alt(this, 703, "alt(>multiplicative-expr|>union-expression)") { Builder = nodes => nodes[0] };
+                /* 704 SeqOp            */ __Matchers[704] = new Seq(this, 704, "_704:(>multiplicative-expression,>multiplicative-operator,>union-expression)") { Builder = nodes => new CMultiplicativeExpr(nodes) };
+                /* 705 StringOp         */ __Matchers[705] = new String(this, 705, "'/'", "/") { Creator = node => new RLiteral(node) };
+                /* 706 StringOp         */ __Matchers[706] = new String(this, 706, "'%'", "%") { Creator = node => new RLiteral(node) };
+                /* 707 AltOp            */ __Matchers[707] = new Alt(this, 707, "alt('*'|'/'|'%')") { Builder = nodes => nodes[0] };
+                /* 708 AltOp            */ __Matchers[708] = new Alt(this, 708, "alt(>union-expr|>exclusive-expression)") { Builder = nodes => nodes[0] };
+                /* 709 SeqOp            */ __Matchers[709] = new Seq(this, 709, "_709:(>union-expression,>union-operator,>exclusive-expression)") { Builder = nodes => new CUnionExpr(nodes) };
+                /* 710 StringOp         */ __Matchers[710] = new String(this, 710, "'~'", "~") { Creator = node => new CComplementOperator(node) };
+                /* 711 AltOp            */ __Matchers[711] = new Alt(this, 711, "alt('|'|'~')") { Builder = nodes => nodes[0] };
+                /* 712 AltOp            */ __Matchers[712] = new Alt(this, 712, "alt(>exclusive-expr|>intersection-expression)") { Builder = nodes => nodes[0] };
+                /* 713 SeqOp            */ __Matchers[713] = new Seq(this, 713, "_713:(>exclusive-expression,>exclusive-operator,>intersection-expression)") { Builder = nodes => new CExclusiveExpr(nodes) };
+                /* 714 StringOp         */ __Matchers[714] = new String(this, 714, "'^'", "^") { Creator = node => new CExclusiveOperator(node) };
+                /* 715 AltOp            */ __Matchers[715] = new Alt(this, 715, "alt(>intersection-expr|>negation-or-complement-expression)") { Builder = nodes => nodes[0] };
+                /* 716 SeqOp            */ __Matchers[716] = new Seq(this, 716, "_716:(>intersection-expression,>intersection-operator,>negation-or-complement-expression)") { Builder = nodes => new CIntersectionExpr(nodes) };
+                /* 717 StringOp         */ __Matchers[717] = new String(this, 717, "'&'", "&") { Creator = node => new CIntersectionOperator(node) };
+                /* 718 AltOp            */ __Matchers[718] = new Alt(this, 718, "alt(>negation-or-complement-expr|>prefix-expression)") { Builder = nodes => nodes[0] };
+                /* 719 SeqOp            */ __Matchers[719] = new Seq(this, 719, "_719:(>unary-minus-or-complement-operator,>negation-or-complement-expression)") { Builder = nodes => new CNegationOrComplementExpr(nodes) };
+                /* 720 AltOp            */ __Matchers[720] = new Alt(this, 720, "alt(>negate-operator|>neutral-operator|>complement-operator)") { Builder = nodes => nodes[0] };
+                /* 721 NotOp            */ __Matchers[721] = new Not(this, 721, "!('-')") { Builder = nodes => new RNot<RLiteral>(nodes) };
+                /* 722 SeqOp            */ __Matchers[722] = new Seq(this, 722, "_722:('-',!('-'))") { Builder = nodes => new CNegateOperator(nodes) };
+                /* 723 NotOp            */ __Matchers[723] = new Not(this, 723, "!('+')") { Builder = nodes => new RNot<RLiteral>(nodes) };
+                /* 724 SeqOp            */ __Matchers[724] = new Seq(this, 724, "_724:('+',!('+'))") { Builder = nodes => new CNeutralOperator(nodes) };
+                /* 725 AltOp            */ __Matchers[725] = new Alt(this, 725, "alt(>prefix-expr|>postfix-expression)") { Builder = nodes => nodes[0] };
+                /* 726 SeqOp            */ __Matchers[726] = new Seq(this, 726, "_726:(>increment-operator,>prefix-expression)") { Builder = nodes => new CPrefixExpr(nodes) };
+                /* 727 AltOp            */ __Matchers[727] = new Alt(this, 727, "alt(>postfix-expr|>primary)") { Builder = nodes => nodes[0] };
+                /* 728 SeqOp            */ __Matchers[728] = new Seq(this, 728, "_728:(>postfix-expression,>increment-operator)") { Builder = nodes => new CPostfixExpr(nodes) };
+                /* 729 StringOp         */ __Matchers[729] = new String(this, 729, "'++'", "++") { Creator = node => new RLiteral(node) };
+                /* 730 StringOp         */ __Matchers[730] = new String(this, 730, "'--'", "--") { Creator = node => new RLiteral(node) };
+                /* 731 AltOp            */ __Matchers[731] = new Alt(this, 731, "alt('++'|'--')") { Builder = nodes => nodes[0] };
+                /* 732 AltOp            */ __Matchers[732] = new Alt(this, 732, "alt(>selection-expr|>indexed-expr|>call-expr|>base-expression)") { Builder = nodes => nodes[0] };
+                /* 733 SeqOp            */ __Matchers[733] = new Seq(this, 733, "_733:(>primary,>qualified-reference)") { Builder = nodes => new CSelectionExpr(nodes) };
+                /* 734 SeqOp            */ __Matchers[734] = new Seq(this, 734, "_734:(>member-selection-operator,>base-reference)") { Builder = nodes => new CQualifiedReference(nodes) };
+                /* 735 StringOp         */ __Matchers[735] = new String(this, 735, "'?.'", "?.") { Creator = node => new RLiteral(node) };
+                /* 736 StringOp         */ __Matchers[736] = new String(this, 736, "'*.'", "*.") { Creator = node => new RLiteral(node) };
+                /* 737 AltOp            */ __Matchers[737] = new Alt(this, 737, "alt('.'|'?.'|'*.')") { Builder = nodes => nodes[0] };
+                /* 738 SeqOp            */ __Matchers[738] = new Seq(this, 738, "_738:(>primary,'[',>index,']')") { Builder = nodes => new CIndexedExpr(nodes) };
+                /* 739 AltOp            */ __Matchers[739] = new Alt(this, 739, "alt(>lower-spanned|>upper-spanned|>spanned|>measured|>expression)") { Builder = nodes => nodes[0] };
+                /* 740 SeqOp            */ __Matchers[740] = new Seq(this, 740, "_740:(>index-expression,'...')") { Builder = nodes => new CUpperSpanned(nodes) };
+                /* 741 SeqOp            */ __Matchers[741] = new Seq(this, 741, "_741:('...',>index-expression)") { Builder = nodes => new CLowerSpanned(nodes) };
+                /* 742 SeqOp            */ __Matchers[742] = new Seq(this, 742, "_742:(>index-expression,'..',>index-expression)") { Builder = nodes => new CSpanned(nodes) };
+                /* 743 SeqOp            */ __Matchers[743] = new Seq(this, 743, "_743:(>index-expression,':',>index-expression)") { Builder = nodes => new CMeasured(nodes) };
+                /* 744 SeqOp            */ __Matchers[744] = new Seq(this, 744, "_744:(>primary,>arguments)") { Builder = nodes => new CCallExpr(nodes) };
+                /* 745 AltOp            */ __Matchers[745] = new Alt(this, 745, "alt(>nonstring-literal|>string-expression|>meta-literal|>enumeration-expr|>tuple-expr|>object-expr|>grouped-expr|>base-reference-or-parameterized)") { Builder = nodes => nodes[0] };
+                /* 746 AltOp            */ __Matchers[746] = new Alt(this, 746, "alt(>literal-natural|>literal-float|>literal-char)") { Builder = nodes => nodes[0] };
+                /* 747 AltOp            */ __Matchers[747] = new Alt(this, 747, "alt(>string-literal|>string-interpolation)") { Builder = nodes => nodes[0] };
+                /* 748 StarOp           */ __Matchers[748] = new Star(this, 748, "*(>interpolation-part)") { Builder = nodes => new RStar<CInterpolationPart>(nodes) };
+                /* 749 SeqOp            */ __Matchers[749] = new Seq(this, 749, "_749:(>string-start,>expression,*(>interpolation-part),>string-end)") { Builder = nodes => new CStringInterpolation(nodes) };
+                /* 750 SeqOp            */ __Matchers[750] = new Seq(this, 750, "_750:(>string-mid,>expression)") { Builder = nodes => new CInterpolationPart(nodes) };
+                /* 751 AltOp            */ __Matchers[751] = new Alt(this, 751, "alt(>literal-string|>verbatim-string)") { Builder = nodes => nodes[0] };
+                /* 752 SeqOp            */ __Matchers[752] = new Seq(this, 752, "_752:('object',?(>extended-type),?(>satisfied-types),>block)") { Builder = nodes => new CObjectExpr(nodes) };
+                /* 753 SeqOp            */ __Matchers[753] = new Seq(this, 753, "_753:('(',>expression,')')") { Builder = nodes => new CGroupedExpr(nodes) };
+                /* 754 OptionalOp       */ __Matchers[754] = new Optional(this, 754, "?(>type-argument-list)") { Builder = nodes => new ROptional<CTypeArgumentList>(nodes) };
+                /* 755 SeqOp            */ __Matchers[755] = new Seq(this, 755, "_755:('<',?(>type-argument-list),'>')") { Builder = nodes => new CTypeArguments(nodes) };
+                /* 756 SeqOp            */ __Matchers[756] = new Seq(this, 756, "_756:(',',>varianced-type)") { Builder = nodes => new RSequence(nodes) };
+                /* 757 StarOp           */ __Matchers[757] = new Star(this, 757, "*(_756:(',',>varianced-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 758 SeqOp            */ __Matchers[758] = new Seq(this, 758, "_758:(>varianced-type,*(_756:(',',>varianced-type)))") { Builder = nodes => new CTypeArgumentList(nodes) };
+                /* 759 SeqOp            */ __Matchers[759] = new Seq(this, 759, "_759:(?(>variance),>type)") { Builder = nodes => new CVariancedType(nodes) };
+                /* 760 SeqOp            */ __Matchers[760] = new Seq(this, 760, "_760:(',',>defaulted-type)") { Builder = nodes => new RSequence(nodes) };
+                /* 761 StarOp           */ __Matchers[761] = new Star(this, 761, "*(_760:(',',>defaulted-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 762 SeqOp            */ __Matchers[762] = new Seq(this, 762, "_762:(>defaulted-type,*(_760:(',',>defaulted-type)))") { Builder = nodes => new CDefaultedTypeList(nodes) };
+                /* 763 AltOp            */ __Matchers[763] = new Alt(this, 763, "alt(>defaulted-type-core|>variadic-type)") { Builder = nodes => nodes[0] };
+                /* 764 SeqOp            */ __Matchers[764] = new Seq(this, 764, "_764:(>type,'=')") { Builder = nodes => new CDefaultedTypeCore(nodes) };
+                /* 765 AltOp            */ __Matchers[765] = new Alt(this, 765, "alt(>variadic-union-type|>type)") { Builder = nodes => nodes[0] };
+                /* 766 SeqOp            */ __Matchers[766] = new Seq(this, 766, "_766:(>union-type,>variadic-operator)") { Builder = nodes => new CVariadicUnionType(nodes) };
+                /* 767 AltOp            */ __Matchers[767] = new Alt(this, 767, "alt('*'|'+')") { Builder = nodes => nodes[0] };
+                /* 768 SeqOp            */ __Matchers[768] = new Seq(this, 768, "_768:('*',>union-type)") { Builder = nodes => new CSpreadType(nodes) };
+                /* 769 AltOp            */ __Matchers[769] = new Alt(this, 769, "alt(>entry-type|>union-type)") { Builder = nodes => nodes[0] };
+                /* 770 SeqOp            */ __Matchers[770] = new Seq(this, 770, "_770:(>union-type,'->',>union-type)") { Builder = nodes => new CEntryType(nodes) };
+                /* 771 AltOp            */ __Matchers[771] = new Alt(this, 771, "alt(>union-type-core|>intersection-type)") { Builder = nodes => nodes[0] };
+                /* 772 SeqOp            */ __Matchers[772] = new Seq(this, 772, "_772:(>union-type,'|',>intersection-type)") { Builder = nodes => new CUnionTypeCore(nodes) };
+                /* 773 AltOp            */ __Matchers[773] = new Alt(this, 773, "alt(>intersection-type-core|>primary-type)") { Builder = nodes => nodes[0] };
+                /* 774 SeqOp            */ __Matchers[774] = new Seq(this, 774, "_774:(>intersection-type,'&',>primary-type)") { Builder = nodes => new CIntersectionTypeCore(nodes) };
+                /* 775 AltOp            */ __Matchers[775] = new Alt(this, 775, "alt(>nullable-type|>array-type|>function-type|>tuple-type|>iterable-type|>grouped-type|>package-qualified-type|>type-path)") { Builder = nodes => nodes[0] };
+                /* 776 StringOp         */ __Matchers[776] = new String(this, 776, "'?'", "?") { Creator = node => new RLiteral(node) };
+                /* 777 SeqOp            */ __Matchers[777] = new Seq(this, 777, "_777:(>primary-type,'?')") { Builder = nodes => new CNullableType(nodes) };
+                /* 778 OptionalOp       */ __Matchers[778] = new Optional(this, 778, "?(>literal-natural)") { Builder = nodes => new ROptional<CLiteralNatural>(nodes) };
+                /* 779 SeqOp            */ __Matchers[779] = new Seq(this, 779, "_779:(>primary-type,'[',?(>literal-natural),']')") { Builder = nodes => new CArrayType(nodes) };
+                /* 780 OptionalOp       */ __Matchers[780] = new Optional(this, 780, "?(>type-type-arguments)") { Builder = nodes => new ROptional<ICTypeTypeArguments>(nodes) };
+                /* 781 SeqOp            */ __Matchers[781] = new Seq(this, 781, "_781:(>primary-type,'(',?(>type-type-arguments),')')") { Builder = nodes => new CFunctionType(nodes) };
+                /* 782 AltOp            */ __Matchers[782] = new Alt(this, 782, "alt(>spread-type|>defaulted-type-list)") { Builder = nodes => nodes[0] };
+                /* 783 SeqOp            */ __Matchers[783] = new Seq(this, 783, "_783:('[',?(>type-type-arguments),']')") { Builder = nodes => new CTupleType(nodes) };
+                /* 784 OptionalOp       */ __Matchers[784] = new Optional(this, 784, "?(>variadic-type)") { Builder = nodes => new ROptional<ICVariadicType>(nodes) };
+                /* 785 SeqOp            */ __Matchers[785] = new Seq(this, 785, "_785:('{',?(>variadic-type),'}')") { Builder = nodes => new CIterableType(nodes) };
+                /* 786 SeqOp            */ __Matchers[786] = new Seq(this, 786, "_786:('<',>type,'>')") { Builder = nodes => new CGroupedType(nodes) };
+                /* 787 SeqOp            */ __Matchers[787] = new Seq(this, 787, "_787:('package','.',>type-path)") { Builder = nodes => new CPackageQualifiedType(nodes) };
+                /* 788 OptionalOp       */ __Matchers[788] = new Optional(this, 788, "?(>string-literal)") { Builder = nodes => new ROptional<ICStringLiteral>(nodes) };
+                /* 789 StarOp           */ __Matchers[789] = new Star(this, 789, "*(>annotation)") { Builder = nodes => new RStar<CAnnotation>(nodes) };
+                /* 790 SeqOp            */ __Matchers[790] = new Seq(this, 790, "_790:(?(>string-literal),*(>annotation))") { Builder = nodes => new CAnnotations(nodes) };
+                /* 791 SeqOp            */ __Matchers[791] = new Seq(this, 791, "_791:(>member-name,?(>arguments))") { Builder = nodes => new CAnnotation(nodes) };
+                /* 792 OptionalOp       */ __Matchers[792] = new Optional(this, 792, "?(>condition-list)") { Builder = nodes => new ROptional<CConditionList>(nodes) };
+                /* 793 SeqOp            */ __Matchers[793] = new Seq(this, 793, "_793:('(',?(>condition-list),')')") { Builder = nodes => new CConditions(nodes) };
+                /* 794 SeqOp            */ __Matchers[794] = new Seq(this, 794, "_794:(',',>condition)") { Builder = nodes => new RSequence(nodes) };
+                /* 795 StarOp           */ __Matchers[795] = new Star(this, 795, "*(_794:(',',>condition))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 796 SeqOp            */ __Matchers[796] = new Seq(this, 796, "_796:(>condition,*(_794:(',',>condition)))") { Builder = nodes => new CConditionList(nodes) };
+                /* 797 AltOp            */ __Matchers[797] = new Alt(this, 797, "alt(>exists-condition|>nonempty-condition|>is-condition|>satisfies-condition|>boolean-condition)") { Builder = nodes => nodes[0] };
+                /* 798 OptionalOp       */ __Matchers[798] = new Optional(this, 798, "?('!')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
+                /* 799 SeqOp            */ __Matchers[799] = new Seq(this, 799, "_799:(?('!'),'exists',>let-or-expression)") { Builder = nodes => new CExistsCondition(nodes) };
+                /* 800 SeqOp            */ __Matchers[800] = new Seq(this, 800, "_800:(?('!'),'nonempty',>let-or-expression)") { Builder = nodes => new CNonemptyCondition(nodes) };
+                /* 801 AltOp            */ __Matchers[801] = new Alt(this, 801, "alt(>let-variable|>operator-expression)") { Builder = nodes => nodes[0] };
+                /* 802 SeqOp            */ __Matchers[802] = new Seq(this, 802, "_802:(?('!'),'is',>type,>is-condition-variable)") { Builder = nodes => new CIsCondition(nodes) };
+                /* 803 SeqOp            */ __Matchers[803] = new Seq(this, 803, "_803:(>member-name,?(>value-specifier))") { Builder = nodes => new CIsConditionVariable(nodes) };
+                /* 804 SeqOp            */ __Matchers[804] = new Seq(this, 804, "_804:('satisfies',>type,>type-name)") { Builder = nodes => new CSatisfiesCondition(nodes) };
+                /* 805 AltOp            */ __Matchers[805] = new Alt(this, 805, "alt(>if-else-statement|>for-else-statement|>switch-statement|>while-statement|>try-statement)") { Builder = nodes => nodes[0] };
+                /* 806 OptionalOp       */ __Matchers[806] = new Optional(this, 806, "?(>else-block)") { Builder = nodes => new ROptional<CElseBlock>(nodes) };
+                /* 807 SeqOp            */ __Matchers[807] = new Seq(this, 807, "_807:(>if-block,?(>else-block))") { Builder = nodes => new CIfElseStatement(nodes) };
+                /* 808 SeqOp            */ __Matchers[808] = new Seq(this, 808, "_808:('if',>conditions,>block)") { Builder = nodes => new CIfBlock(nodes) };
+                /* 809 SeqOp            */ __Matchers[809] = new Seq(this, 809, "_809:('else',>else-block-next)") { Builder = nodes => new CElseBlock(nodes) };
+                /* 810 AltOp            */ __Matchers[810] = new Alt(this, 810, "alt(>if-else-statement|>block)") { Builder = nodes => nodes[0] };
+                /* 811 PlusOp           */ __Matchers[811] = new Plus(this, 811, "+(>case-block)") { Builder = nodes => new RPlus<CCaseBlock>(nodes) };
+                /* 812 SeqOp            */ __Matchers[812] = new Seq(this, 812, "_812:(>switch-header,+(>case-block),?(>else-block))") { Builder = nodes => new CSwitchStatement(nodes) };
+                /* 813 StringOp         */ __Matchers[813] = new Keyword(this, 813, "'switch'", "switch") { Creator = node => new RLiteral(node) };
+                /* 814 SeqOp            */ __Matchers[814] = new Seq(this, 814, "_814:('switch','(',>switched,')')") { Builder = nodes => new CSwitchHeader(nodes) };
+                /* 815 SeqOp            */ __Matchers[815] = new Seq(this, 815, "_815:(?('else'),'case','(',>case-item,')',>block)") { Builder = nodes => new CCaseBlock(nodes) };
+                /* 816 AltOp            */ __Matchers[816] = new Alt(this, 816, "alt(>is-case-condition|>satisfies-case-condition|>match-case-condition|>pattern)") { Builder = nodes => nodes[0] };
+                /* 817 OptionalOp       */ __Matchers[817] = new Optional(this, 817, "?('is')") { Builder = nodes => new ROptional<RLiteral>(nodes) };
+                /* 818 SeqOp            */ __Matchers[818] = new Seq(this, 818, "_818:(?('is'),>type)") { Builder = nodes => new CIsCaseCondition(nodes) };
+                /* 819 SeqOp            */ __Matchers[819] = new Seq(this, 819, "_819:('satisfies',>type)") { Builder = nodes => new CSatisfiesCaseCondition(nodes) };
+                /* 820 SeqOp            */ __Matchers[820] = new Seq(this, 820, "_820:(>value-case-separator,>value-case)") { Builder = nodes => new RSequence(nodes) };
+                /* 821 StarOp           */ __Matchers[821] = new Star(this, 821, "*(_820:(>value-case-separator,>value-case))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 822 SeqOp            */ __Matchers[822] = new Seq(this, 822, "_822:(>value-case,*(_820:(>value-case-separator,>value-case)))") { Builder = nodes => new CValueCaseList(nodes) };
+                /* 823 AltOp            */ __Matchers[823] = new Alt(this, 823, "alt(','|'|')") { Builder = nodes => nodes[0] };
+                /* 824 AltOp            */ __Matchers[824] = new Alt(this, 824, "alt(>intersection-type|>intersection-expression)") { Builder = nodes => nodes[0] };
+                /* 825 OptionalOp       */ __Matchers[825] = new Optional(this, 825, "?(>fail-block)") { Builder = nodes => new ROptional<CFailBlock>(nodes) };
+                /* 826 SeqOp            */ __Matchers[826] = new Seq(this, 826, "_826:(>for-block,?(>fail-block))") { Builder = nodes => new CForElseStatement(nodes) };
+                /* 827 SeqOp            */ __Matchers[827] = new Seq(this, 827, "_827:('for','(',?(>for-iterator),')',>block)") { Builder = nodes => new CForBlock(nodes) };
+                /* 828 SeqOp            */ __Matchers[828] = new Seq(this, 828, "_828:('else',>block)") { Builder = nodes => new CFailBlock(nodes) };
+                /* 829 OptionalOp       */ __Matchers[829] = new Optional(this, 829, "?(>containment)") { Builder = nodes => new ROptional<CContainment>(nodes) };
+                /* 830 SeqOp            */ __Matchers[830] = new Seq(this, 830, "_830:(>for-variable,?(>containment))") { Builder = nodes => new CForIterator(nodes) };
+                /* 831 AltOp            */ __Matchers[831] = new Alt(this, 831, "alt(>tuple-or-entry-pattern|>variable)") { Builder = nodes => nodes[0] };
+                /* 832 SeqOp            */ __Matchers[832] = new Seq(this, 832, "_832:(>containment-operator,>operator-expression)") { Builder = nodes => new CContainment(nodes) };
+                /* 833 AltOp            */ __Matchers[833] = new Alt(this, 833, "alt('in'|':')") { Builder = nodes => nodes[0] };
+                /* 834 StringOp         */ __Matchers[834] = new Keyword(this, 834, "'while'", "while") { Creator = node => new RLiteral(node) };
+                /* 835 SeqOp            */ __Matchers[835] = new Seq(this, 835, "_835:('while',>conditions,>block)") { Builder = nodes => new CWhileStatement(nodes) };
+                /* 836 StarOp           */ __Matchers[836] = new Star(this, 836, "*(>catch-block)") { Builder = nodes => new RStar<CCatchBlock>(nodes) };
+                /* 837 OptionalOp       */ __Matchers[837] = new Optional(this, 837, "?(>finally-block)") { Builder = nodes => new ROptional<CFinallyBlock>(nodes) };
+                /* 838 SeqOp            */ __Matchers[838] = new Seq(this, 838, "_838:(>try-block,*(>catch-block),?(>finally-block))") { Builder = nodes => new CTryStatement(nodes) };
+                /* 839 StringOp         */ __Matchers[839] = new Keyword(this, 839, "'try'", "try") { Creator = node => new RLiteral(node) };
+                /* 840 OptionalOp       */ __Matchers[840] = new Optional(this, 840, "?(>resources)") { Builder = nodes => new ROptional<CResources>(nodes) };
+                /* 841 SeqOp            */ __Matchers[841] = new Seq(this, 841, "_841:('try',?(>resources),>block)") { Builder = nodes => new CTryBlock(nodes) };
+                /* 842 StringOp         */ __Matchers[842] = new Keyword(this, 842, "'catch'", "catch") { Creator = node => new RLiteral(node) };
+                /* 843 SeqOp            */ __Matchers[843] = new Seq(this, 843, "_843:('catch',>catch-variable,>block)") { Builder = nodes => new CCatchBlock(nodes) };
+                /* 844 OptionalOp       */ __Matchers[844] = new Optional(this, 844, "?(>variable)") { Builder = nodes => new ROptional<CVariable>(nodes) };
+                /* 845 SeqOp            */ __Matchers[845] = new Seq(this, 845, "_845:('(',?(>variable),')')") { Builder = nodes => new CCatchVariable(nodes) };
+                /* 846 StringOp         */ __Matchers[846] = new Keyword(this, 846, "'finally'", "finally") { Creator = node => new RLiteral(node) };
+                /* 847 SeqOp            */ __Matchers[847] = new Seq(this, 847, "_847:('finally',>block)") { Builder = nodes => new CFinallyBlock(nodes) };
+                /* 848 OptionalOp       */ __Matchers[848] = new Optional(this, 848, "?(>resource-list)") { Builder = nodes => new ROptional<CResourceList>(nodes) };
+                /* 849 SeqOp            */ __Matchers[849] = new Seq(this, 849, "_849:('(',?(>resource-list),')')") { Builder = nodes => new CResources(nodes) };
+                /* 850 SeqOp            */ __Matchers[850] = new Seq(this, 850, "_850:(',',>resource)") { Builder = nodes => new RSequence(nodes) };
+                /* 851 StarOp           */ __Matchers[851] = new Star(this, 851, "*(_850:(',',>resource))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 852 SeqOp            */ __Matchers[852] = new Seq(this, 852, "_852:(>resource,*(_850:(',',>resource)))") { Builder = nodes => new CResourceList(nodes) };
+                /* 853 AltOp            */ __Matchers[853] = new Alt(this, 853, "alt(>specified-variable|>operator-expression)") { Builder = nodes => nodes[0] };
+                /* 854 SeqOp            */ __Matchers[854] = new Seq(this, 854, "_854:(>variable,>value-specifier)") { Builder = nodes => new CSpecifiedVariable(nodes) };
+                /* 855 OptionalOp       */ __Matchers[855] = new Optional(this, 855, "?(>variable-type)") { Builder = nodes => new ROptional<ICVariableType>(nodes) };
+                /* 856 StarOp           */ __Matchers[856] = new Star(this, 856, "*(>parameters)") { Builder = nodes => new RStar<CParameters>(nodes) };
+                /* 857 SeqOp            */ __Matchers[857] = new Seq(this, 857, "_857:(?(>variable-type),>member-name,*(>parameters))") { Builder = nodes => new CVariable(nodes) };
+                /* 858 AltOp            */ __Matchers[858] = new Alt(this, 858, "alt(>type|>kw-void|>kw-function|>kw-value)") { Builder = nodes => nodes[0] };
+                /* 859 SeqOp            */ __Matchers[859] = new Seq(this, 859, "_859:('^',>model-expression)") { Builder = nodes => new CModelReference(nodes) };
+                /* 860 StringOp         */ __Matchers[860] = new String(this, 860, "'`'", "`") { Creator = node => new RLiteral(node) };
+                /* 861 SeqOp            */ __Matchers[861] = new Seq(this, 861, "_861:('`',>meta-expression,'`')") { Builder = nodes => new CMetaLiteral(nodes) };
+                /* 862 AltOp            */ __Matchers[862] = new Alt(this, 862, "alt(>declaration-reference|>model-expression)") { Builder = nodes => nodes[0] };
+                /* 863 AltOp            */ __Matchers[863] = new Alt(this, 863, "alt(>member-model-expression|>type-model-expression)") { Builder = nodes => nodes[0] };
+                /* 864 AltOp            */ __Matchers[864] = new Alt(this, 864, "alt(>member-reference|>package-qualified-member-reference|>type-qualified-member-reference)") { Builder = nodes => nodes[0] };
+                /* 865 SeqOp            */ __Matchers[865] = new Seq(this, 865, "_865:('package','.',>member-reference)") { Builder = nodes => new CPackageQualifiedMemberReference(nodes) };
+                /* 866 SeqOp            */ __Matchers[866] = new Seq(this, 866, "_866:(>primary-type,'.',>member-reference)") { Builder = nodes => new CTypeQualifiedMemberReference(nodes) };
+                /* 867 AltOp            */ __Matchers[867] = new Alt(this, 867, "alt(>module-literal|>package-literal|>class-literal|>new-literal|>interface-literal|>alias-literal|>type-parameter-literal|>value-literal|>function-literal)") { Builder = nodes => nodes[0] };
+                /* 868 OptionalOp       */ __Matchers[868] = new Optional(this, 868, "?(>package-path)") { Builder = nodes => new ROptional<CPackagePath>(nodes) };
+                /* 869 SeqOp            */ __Matchers[869] = new Seq(this, 869, "_869:('module',?(>package-path))") { Builder = nodes => new CModuleLiteral(nodes) };
+                /* 870 SeqOp            */ __Matchers[870] = new Seq(this, 870, "_870:('package',?(>package-path))") { Builder = nodes => new CPackageLiteral(nodes) };
+                /* 871 SeqOp            */ __Matchers[871] = new Seq(this, 871, "_871:('class',>reference-path)") { Builder = nodes => new CClassLiteral(nodes) };
+                /* 872 SeqOp            */ __Matchers[872] = new Seq(this, 872, "_872:('interface',>reference-path)") { Builder = nodes => new CInterfaceLiteral(nodes) };
+                /* 873 SeqOp            */ __Matchers[873] = new Seq(this, 873, "_873:('alias',>reference-path)") { Builder = nodes => new CAliasLiteral(nodes) };
+                /* 874 SeqOp            */ __Matchers[874] = new Seq(this, 874, "_874:('given',>reference-path)") { Builder = nodes => new CTypeParameterLiteral(nodes) };
+                /* 875 SeqOp            */ __Matchers[875] = new Seq(this, 875, "_875:('new',>reference-path)") { Builder = nodes => new CNewLiteral(nodes) };
+                /* 876 SeqOp            */ __Matchers[876] = new Seq(this, 876, "_876:(>value-literal-intro,>reference-path)") { Builder = nodes => new CValueLiteral(nodes) };
+                /* 877 AltOp            */ __Matchers[877] = new Alt(this, 877, "alt('value'|'object')") { Builder = nodes => nodes[0] };
+                /* 878 SeqOp            */ __Matchers[878] = new Seq(this, 878, "_878:('function',>reference-path)") { Builder = nodes => new CFunctionLiteral(nodes) };
+                /* 879 SeqOp            */ __Matchers[879] = new Seq(this, 879, "_879:('package','.')") { Builder = nodes => new CPackageQualifier(nodes) };
                 /* 880 SeqOp            */ __Matchers[880] = new Seq(this, 880, "_880:(?(>package-qualifier),>reference-path-element-list)") { Builder = nodes => new CReferencePath(nodes) };
                 /* 881 SeqOp            */ __Matchers[881] = new Seq(this, 881, "_881:('.',>reference-path-element)") { Builder = nodes => new RSequence(nodes) };
                 /* 882 StarOp           */ __Matchers[882] = new Star(this, 882, "*(_881:('.',>reference-path-element))") { Builder = nodes => new RStar<RSequence>(nodes) };
@@ -950,321 +950,321 @@ namespace Six.Ceylon
                 /*  40 PlainRuleOp      */ _variablePattern.Set(_variable);
                 /*  41 PlainRuleOp      */ _variadicVariable.Set(__Matchers[433]);
                 /*  42 PlainRuleOp      */ _letStatement.Set(__Matchers[437]);
-                /*  43 PlainRuleOp      */ _delegatedConstructor.Set(__Matchers[439]);
-                /*  44 PlainRuleOp      */ _assertionStatement.Set(__Matchers[442]);
-                /*  45 PlainRuleOp      */ _assertionMessage.Set(_stringExpression);
-                /*  46 PlainRuleOp      */ _block.Set(_blockElements);
-                /*  47 PlainRuleOp      */ _blockElements.Set(__Matchers[443]);
-                /*  48 PlainRuleOp      */ _extendedType.Set(__Matchers[444]);
-                /*  49 PlainRuleOp      */ _classSpecifier.Set(__Matchers[446]);
-                /*  50 PlainRuleOp      */ _classInstatiation.Set(__Matchers[448]);
-                /*  51 PlainRuleOp      */ _qualifiedClass.Set(__Matchers[449]);
-                /*  52 PlainRuleOp      */ _superQualifiedClass.Set(__Matchers[451]);
-                /*  53 PlainRuleOp      */ _packageQualifiedClass.Set(__Matchers[452]);
-                /*  54 PlainRuleOp      */ _packageQualifier.Set(__Matchers[453]);
-                /*  55 PlainRuleOp      */ _unQualifiedClass.Set(__Matchers[454]);
-                /*  56 PlainRuleOp      */ _memberPath.Set(__Matchers[455]);
-                /*  57 PlainRuleOp      */ _typePath.Set(__Matchers[458]);
-                /*  58 PlainRuleOp      */ _satisfiedTypes.Set(__Matchers[460]);
-                /*  59 PlainRuleOp      */ _unionTypeList.Set(__Matchers[463]);
-                /*  60 PlainRuleOp      */ _caseTypes.Set(__Matchers[465]);
-                /*  61 PlainRuleOp      */ _caseTypeList.Set(__Matchers[469]);
-                /*  62 PlainRuleOp      */ _caseType.Set(__Matchers[470]);
-                /*  63 PlainRuleOp      */ _qualifiedCaseType.Set(__Matchers[472]);
-                /*  64 PlainRuleOp      */ _parameters.Set(__Matchers[474]);
-                /*  65 PlainRuleOp      */ _parameterList.Set(__Matchers[477]);
-                /*  66 PlainRuleOp      */ _parameterDeclarationOrRefPattern.Set(__Matchers[478]);
-                /*  67 PlainRuleOp      */ _parameter.Set(__Matchers[479]);
-                /*  68 PlainRuleOp      */ _parameterReference.Set(__Matchers[481]);
-                /*  69 PlainRuleOp      */ _parameterDeclaration.Set(__Matchers[482]);
-                /*  70 PlainRuleOp      */ _functionParameterDeclaration.Set(__Matchers[486]);
-                /*  71 PlainRuleOp      */ _functionParameterType.Set(__Matchers[487]);
-                /*  72 PlainRuleOp      */ _valueParameterDeclaration.Set(__Matchers[488]);
-                /*  73 PlainRuleOp      */ _valueParameterType.Set(__Matchers[489]);
-                /*  74 PlainRuleOp      */ _typeParameters.Set(__Matchers[492]);
-                /*  75 PlainRuleOp      */ _typeParameterList.Set(__Matchers[495]);
-                /*  76 PlainRuleOp      */ _typeParameter.Set(__Matchers[498]);
-                /*  77 PlainRuleOp      */ _variance.Set(__Matchers[501]);
-                /*  78 PlainRuleOp      */ _typeDefault.Set(__Matchers[502]);
-                /*  79 PlainRuleOp      */ _typeConstraint.Set(__Matchers[507]);
-                /*  80 PlainRuleOp      */ _typeConstraints.Set(__Matchers[508]);
-                /*  81 PlainRuleOp      */ _declarations.Set(__Matchers[509]);
-                /*  82 PlainRuleOp      */ _declaration.Set(__Matchers[510]);
-                /*  83 PlainRuleOp      */ _constructorDeclaration.Set(__Matchers[514]);
-                /*  84 PlainRuleOp      */ _aliasDeclaration.Set(__Matchers[517]);
-                /*  85 PlainRuleOp      */ _enumeratedObjectDeclaration.Set(__Matchers[518]);
-                /*  86 PlainRuleOp      */ _objectDeclaration.Set(__Matchers[521]);
-                /*  87 PlainRuleOp      */ _setterDeclaration.Set(__Matchers[523]);
-                /*  88 PlainRuleOp      */ _setterDefinition.Set(__Matchers[524]);
-                /*  89 PlainRuleOp      */ _typedMethodDeclaration.Set(__Matchers[525]);
-                /*  90 PlainRuleOp      */ _voidMethodDeclaration.Set(__Matchers[527]);
-                /*  91 PlainRuleOp      */ _inferredMethodDeclaration.Set(__Matchers[529]);
-                /*  92 PlainRuleOp      */ _typedAttributeDeclaration.Set(__Matchers[530]);
-                /*  93 PlainRuleOp      */ _inferredAttributeDeclaration.Set(__Matchers[532]);
-                /*  94 PlainRuleOp      */ _attributeDefinition.Set(__Matchers[533]);
-                /*  95 PlainRuleOp      */ _optionalAnySpecifier.Set(__Matchers[535]);
-                /*  96 PlainRuleOp      */ _classDeclaration.Set(__Matchers[538]);
-                /*  97 PlainRuleOp      */ _classDefinition.Set(__Matchers[539]);
-                /*  98 PlainRuleOp      */ _optionalClassSpecifier.Set(__Matchers[541]);
-                /*  99 PlainRuleOp      */ _interfaceDeclaration.Set(__Matchers[543]);
-                /* 100 PlainRuleOp      */ _interfaceDefinition.Set(__Matchers[544]);
-                /* 101 PlainRuleOp      */ _optionalTypeSpecifier.Set(__Matchers[546]);
-                /* 102 PlainRuleOp      */ _statements.Set(__Matchers[547]);
-                /* 103 PlainRuleOp      */ _statement.Set(__Matchers[548]);
+                /*  43 PlainRuleOp      */ _letVariableList.Set(__Matchers[440]);
+                /*  44 PlainRuleOp      */ _letVariable.Set(__Matchers[441]);
+                /*  45 PlainRuleOp      */ _delegatedConstructor.Set(__Matchers[443]);
+                /*  46 PlainRuleOp      */ _assertionStatement.Set(__Matchers[446]);
+                /*  47 PlainRuleOp      */ _assertionMessage.Set(_stringExpression);
+                /*  48 PlainRuleOp      */ _block.Set(__Matchers[447]);
+                /*  49 PlainRuleOp      */ _extendedType.Set(__Matchers[448]);
+                /*  50 PlainRuleOp      */ _classSpecifier.Set(__Matchers[450]);
+                /*  51 PlainRuleOp      */ _classInstatiation.Set(__Matchers[452]);
+                /*  52 PlainRuleOp      */ _qualifiedClass.Set(__Matchers[453]);
+                /*  53 PlainRuleOp      */ _packageQualifiedClass.Set(__Matchers[454]);
+                /*  54 PlainRuleOp      */ _superQualifiedClass.Set(__Matchers[456]);
+                /*  55 PlainRuleOp      */ _unQualifiedClass.Set(__Matchers[457]);
+                /*  56 PlainRuleOp      */ _memberPath.Set(__Matchers[458]);
+                /*  57 PlainRuleOp      */ _typePath.Set(__Matchers[461]);
+                /*  58 PlainRuleOp      */ _satisfiedTypes.Set(__Matchers[463]);
+                /*  59 PlainRuleOp      */ _unionTypeList.Set(__Matchers[466]);
+                /*  60 PlainRuleOp      */ _caseTypes.Set(__Matchers[468]);
+                /*  61 PlainRuleOp      */ _caseTypeList.Set(__Matchers[472]);
+                /*  62 PlainRuleOp      */ _caseType.Set(__Matchers[473]);
+                /*  63 PlainRuleOp      */ _qualifiedCaseType.Set(__Matchers[475]);
+                /*  64 PlainRuleOp      */ _parameters.Set(__Matchers[477]);
+                /*  65 PlainRuleOp      */ _parameterList.Set(__Matchers[480]);
+                /*  66 PlainRuleOp      */ _parameterDeclarationOrRefPattern.Set(__Matchers[481]);
+                /*  67 PlainRuleOp      */ _parameter.Set(__Matchers[482]);
+                /*  68 PlainRuleOp      */ _parameterReference.Set(__Matchers[484]);
+                /*  69 PlainRuleOp      */ _parameterDeclaration.Set(__Matchers[485]);
+                /*  70 PlainRuleOp      */ _functionParameterDeclaration.Set(__Matchers[489]);
+                /*  71 PlainRuleOp      */ _functionParameterType.Set(__Matchers[490]);
+                /*  72 PlainRuleOp      */ _valueParameterDeclaration.Set(__Matchers[491]);
+                /*  73 PlainRuleOp      */ _valueParameterType.Set(__Matchers[492]);
+                /*  74 PlainRuleOp      */ _typeParameters.Set(__Matchers[495]);
+                /*  75 PlainRuleOp      */ _typeParameterList.Set(__Matchers[498]);
+                /*  76 PlainRuleOp      */ _typeParameter.Set(__Matchers[501]);
+                /*  77 PlainRuleOp      */ _variance.Set(__Matchers[504]);
+                /*  78 PlainRuleOp      */ _typeDefault.Set(__Matchers[505]);
+                /*  79 PlainRuleOp      */ _typeConstraint.Set(__Matchers[510]);
+                /*  80 PlainRuleOp      */ _typeConstraints.Set(__Matchers[511]);
+                /*  81 PlainRuleOp      */ _declarations.Set(__Matchers[512]);
+                /*  82 PlainRuleOp      */ _declaration.Set(__Matchers[513]);
+                /*  83 PlainRuleOp      */ _constructorDeclaration.Set(__Matchers[517]);
+                /*  84 PlainRuleOp      */ _aliasDeclaration.Set(__Matchers[520]);
+                /*  85 PlainRuleOp      */ _enumeratedObjectDeclaration.Set(__Matchers[521]);
+                /*  86 PlainRuleOp      */ _objectDeclaration.Set(__Matchers[524]);
+                /*  87 PlainRuleOp      */ _setterDeclaration.Set(__Matchers[526]);
+                /*  88 PlainRuleOp      */ _setterDefinition.Set(__Matchers[527]);
+                /*  89 PlainRuleOp      */ _typedMethodDeclaration.Set(__Matchers[528]);
+                /*  90 PlainRuleOp      */ _voidMethodDeclaration.Set(__Matchers[530]);
+                /*  91 PlainRuleOp      */ _inferredMethodDeclaration.Set(__Matchers[532]);
+                /*  92 PlainRuleOp      */ _typedAttributeDeclaration.Set(__Matchers[533]);
+                /*  93 PlainRuleOp      */ _inferredAttributeDeclaration.Set(__Matchers[535]);
+                /*  94 PlainRuleOp      */ _attributeDefinition.Set(__Matchers[536]);
+                /*  95 PlainRuleOp      */ _optionalAnySpecifier.Set(__Matchers[538]);
+                /*  96 PlainRuleOp      */ _classDeclaration.Set(__Matchers[541]);
+                /*  97 PlainRuleOp      */ _classDefinition.Set(__Matchers[542]);
+                /*  98 PlainRuleOp      */ _optionalClassSpecifier.Set(__Matchers[544]);
+                /*  99 PlainRuleOp      */ _interfaceDeclaration.Set(__Matchers[546]);
+                /* 100 PlainRuleOp      */ _interfaceDefinition.Set(__Matchers[547]);
+                /* 101 PlainRuleOp      */ _optionalTypeSpecifier.Set(__Matchers[549]);
+                /* 102 PlainRuleOp      */ _statements.Set(__Matchers[550]);
+                /* 103 PlainRuleOp      */ _statement.Set(__Matchers[551]);
                 /* 104 PlainRuleOp      */ _declarationStatement.Set(_declaration);
-                /* 105 PlainRuleOp      */ _unclosedStatement.Set(__Matchers[549]);
-                /* 106 PlainRuleOp      */ _openStatement.Set(__Matchers[550]);
-                /* 107 PlainRuleOp      */ _specificationStatement.Set(__Matchers[551]);
+                /* 105 PlainRuleOp      */ _unclosedStatement.Set(__Matchers[552]);
+                /* 106 PlainRuleOp      */ _openStatement.Set(__Matchers[553]);
+                /* 107 PlainRuleOp      */ _specificationStatement.Set(__Matchers[554]);
                 /* 108 PlainRuleOp      */ _expressionStatement.Set(_operatorExpression);
-                /* 109 PlainRuleOp      */ _directiveStatement.Set(__Matchers[552]);
-                /* 110 PlainRuleOp      */ _returnStatement.Set(__Matchers[555]);
-                /* 111 PlainRuleOp      */ _throwStatement.Set(__Matchers[557]);
-                /* 112 PlainRuleOp      */ _breakStatement.Set(__Matchers[558]);
-                /* 113 PlainRuleOp      */ _continueStatement.Set(__Matchers[559]);
-                /* 114 PlainRuleOp      */ _typeSpecifier.Set(__Matchers[560]);
-                /* 115 PlainRuleOp      */ _valueSpecifier.Set(__Matchers[561]);
-                /* 116 PlainRuleOp      */ _functionSpecifier.Set(__Matchers[562]);
-                /* 117 PlainRuleOp      */ _anySpecifier.Set(__Matchers[563]);
-                /* 118 PlainRuleOp      */ _baseReferenceOrParameterized.Set(__Matchers[564]);
-                /* 119 PlainRuleOp      */ _baseReference.Set(__Matchers[565]);
-                /* 120 PlainRuleOp      */ _parametrizedMember.Set(__Matchers[566]);
-                /* 121 PlainRuleOp      */ _selfParametrizedMember.Set(__Matchers[567]);
-                /* 122 PlainRuleOp      */ _memberReference.Set(__Matchers[569]);
-                /* 123 PlainRuleOp      */ _typeReference.Set(__Matchers[570]);
-                /* 124 PlainRuleOp      */ _selfReferenceSelector.Set(__Matchers[571]);
-                /* 125 PlainRuleOp      */ _selfReference.Set(__Matchers[574]);
-                /* 126 PlainRuleOp      */ _enumerationExpr.Set(__Matchers[576]);
-                /* 127 PlainRuleOp      */ _tupleExpr.Set(__Matchers[577]);
-                /* 128 PlainRuleOp      */ _arguments.Set(__Matchers[578]);
-                /* 129 PlainRuleOp      */ _structuralArguments.Set(__Matchers[580]);
-                /* 130 PlainRuleOp      */ _namedOrAnonymous.Set(__Matchers[581]);
-                /* 131 PlainRuleOp      */ _namedArgument.Set(__Matchers[582]);
-                /* 132 PlainRuleOp      */ _anonymousArgument.Set(__Matchers[583]);
-                /* 133 PlainRuleOp      */ _namedSpecifiedArgument.Set(__Matchers[584]);
-                /* 134 PlainRuleOp      */ _sequencedArguments.Set(__Matchers[587]);
-                /* 135 PlainRuleOp      */ _sequencedArgument.Set(__Matchers[588]);
-                /* 136 PlainRuleOp      */ _namedArgumentDeclaration.Set(__Matchers[589]);
-                /* 137 PlainRuleOp      */ _objectArgument.Set(__Matchers[590]);
-                /* 138 PlainRuleOp      */ _typedMethodArgument.Set(__Matchers[591]);
-                /* 139 PlainRuleOp      */ _methodDefinition.Set(__Matchers[592]);
-                /* 140 PlainRuleOp      */ _optionalFunctionSpecifier.Set(__Matchers[593]);
-                /* 141 PlainRuleOp      */ _requiredFunctionSpecifier.Set(__Matchers[594]);
-                /* 142 PlainRuleOp      */ _methodArgumentType.Set(__Matchers[595]);
-                /* 143 PlainRuleOp      */ _typedGetterArgument.Set(__Matchers[596]);
-                /* 144 PlainRuleOp      */ _getterArgumentType.Set(_type);
-                /* 145 PlainRuleOp      */ _inferredMethodArgument.Set(__Matchers[597]);
-                /* 146 PlainRuleOp      */ _inferredGetterArgument.Set(__Matchers[598]);
-                /* 147 PlainRuleOp      */ _untypedMethodArgument.Set(__Matchers[599]);
-                /* 148 PlainRuleOp      */ _untypedGetterArgument.Set(__Matchers[600]);
-                /* 149 PlainRuleOp      */ _positionalArguments.Set(__Matchers[601]);
-                /* 150 PlainRuleOp      */ _positionalArgument.Set(__Matchers[602]);
-                /* 151 PlainRuleOp      */ _spreadArgument.Set(__Matchers[604]);
-                /* 152 PlainRuleOp      */ _letExpr.Set(__Matchers[606]);
-                /* 153 PlainRuleOp      */ _letVariableList.Set(__Matchers[609]);
-                /* 154 PlainRuleOp      */ _letVariable.Set(__Matchers[610]);
-                /* 155 PlainRuleOp      */ _switchExpr.Set(__Matchers[611]);
-                /* 156 PlainRuleOp      */ _caseExpressions.Set(__Matchers[614]);
-                /* 157 PlainRuleOp      */ _caseExpression.Set(__Matchers[618]);
-                /* 158 PlainRuleOp      */ _ifExpr.Set(__Matchers[620]);
-                /* 159 PlainRuleOp      */ _elseExpression.Set(__Matchers[621]);
-                /* 160 PlainRuleOp      */ _thenExpression.Set(__Matchers[623]);
-                /* 161 PlainRuleOp      */ _conditionalExpression.Set(__Matchers[624]);
-                /* 162 PlainRuleOp      */ _functionExpr.Set(__Matchers[627]);
-                /* 163 PlainRuleOp      */ _functionExpressionType.Set(__Matchers[628]);
-                /* 164 PlainRuleOp      */ _functionParameters.Set(__Matchers[629]);
-                /* 165 PlainRuleOp      */ _functionDefinition.Set(__Matchers[630]);
-                /* 166 PlainRuleOp      */ _comprehensionArgument.Set(__Matchers[631]);
-                /* 167 PlainRuleOp      */ _comprehensionClause.Set(__Matchers[632]);
-                /* 168 PlainRuleOp      */ _expressionComprehensionClause.Set(_expression);
-                /* 169 PlainRuleOp      */ _forComprehensionClause.Set(__Matchers[635]);
-                /* 170 PlainRuleOp      */ _ifComprehensionClause.Set(__Matchers[636]);
-                /* 171 PlainRuleOp      */ _expression.Set(__Matchers[637]);
-                /* 172 PlainRuleOp      */ _operatorExpression.Set(_assignmentExpression);
-                /* 173 PlainRuleOp      */ _assignmentExpression.Set(__Matchers[638]);
-                /* 174 PlainRuleOp      */ _assignmentExpr.Set(__Matchers[639]);
-                /* 175 PlainRuleOp      */ _assignmentOperator.Set(__Matchers[651]);
-                /* 176 PlainRuleOp      */ _thenElseExpression.Set(__Matchers[652]);
-                /* 177 PlainRuleOp      */ _thenElseExpr.Set(__Matchers[653]);
-                /* 178 PlainRuleOp      */ _thenElseOperator.Set(__Matchers[654]);
-                /* 179 PlainRuleOp      */ _disjunctionExpression.Set(__Matchers[655]);
-                /* 180 PlainRuleOp      */ _disjunctionExpr.Set(__Matchers[656]);
-                /* 181 PlainRuleOp      */ _disjunctionOperator.Set(__Matchers[657]);
-                /* 182 PlainRuleOp      */ _conjunctionExpression.Set(__Matchers[658]);
-                /* 183 PlainRuleOp      */ _conjunctionExpr.Set(__Matchers[659]);
-                /* 184 PlainRuleOp      */ _conjunctionOperator.Set(__Matchers[660]);
-                /* 185 PlainRuleOp      */ _logicalNegationExpression.Set(__Matchers[661]);
-                /* 186 PlainRuleOp      */ _logicalNegationExpr.Set(__Matchers[662]);
-                /* 187 PlainRuleOp      */ _notOperator.Set(__Matchers[663]);
-                /* 188 PlainRuleOp      */ _expressionOrMeta.Set(__Matchers[664]);
-                /* 189 PlainRuleOp      */ _equalityExpression.Set(__Matchers[665]);
-                /* 190 PlainRuleOp      */ _equalityExpr.Set(__Matchers[666]);
-                /* 191 PlainRuleOp      */ _equalityOperator.Set(__Matchers[670]);
-                /* 192 PlainRuleOp      */ _comparisonExpression.Set(__Matchers[671]);
-                /* 193 PlainRuleOp      */ _comparisonExpr.Set(__Matchers[672]);
-                /* 194 PlainRuleOp      */ _largerExpr.Set(__Matchers[673]);
-                /* 195 PlainRuleOp      */ _smallerExpr.Set(__Matchers[674]);
-                /* 196 PlainRuleOp      */ _largerBoundsExpr.Set(__Matchers[675]);
-                /* 197 PlainRuleOp      */ _smallerBoundsExpr.Set(__Matchers[676]);
-                /* 198 PlainRuleOp      */ _typecheckExpr.Set(__Matchers[677]);
-                /* 199 PlainRuleOp      */ _comparisonOperator.Set(__Matchers[679]);
-                /* 200 PlainRuleOp      */ _smallerOperator.Set(__Matchers[681]);
-                /* 201 PlainRuleOp      */ _largerOperator.Set(__Matchers[683]);
-                /* 202 PlainRuleOp      */ _typeOperator.Set(__Matchers[685]);
-                /* 203 PlainRuleOp      */ _existsNonemptyExpression.Set(__Matchers[686]);
-                /* 204 PlainRuleOp      */ _existsExpr.Set(__Matchers[688]);
-                /* 205 PlainRuleOp      */ _nonemptyExpr.Set(__Matchers[690]);
-                /* 206 PlainRuleOp      */ _entryRangeExpression.Set(__Matchers[691]);
-                /* 207 PlainRuleOp      */ _rangeExpr.Set(__Matchers[692]);
-                /* 208 PlainRuleOp      */ _entryExpr.Set(__Matchers[693]);
-                /* 209 PlainRuleOp      */ _rangeOperator.Set(__Matchers[695]);
-                /* 210 PlainRuleOp      */ _entryOperator.Set(__Matchers[422]);
-                /* 211 PlainRuleOp      */ _additiveExpression.Set(__Matchers[696]);
-                /* 212 PlainRuleOp      */ _additiveExpr.Set(__Matchers[697]);
-                /* 213 PlainRuleOp      */ _additiveOperator.Set(__Matchers[700]);
-                /* 214 PlainRuleOp      */ _scaleExpression.Set(__Matchers[701]);
-                /* 215 PlainRuleOp      */ _scaleExpr.Set(__Matchers[702]);
-                /* 216 PlainRuleOp      */ _scaleOperator.Set(__Matchers[703]);
-                /* 217 PlainRuleOp      */ _multiplicativeExpression.Set(__Matchers[704]);
-                /* 218 PlainRuleOp      */ _multiplicativeExpr.Set(__Matchers[705]);
-                /* 219 PlainRuleOp      */ _multiplicativeOperator.Set(__Matchers[708]);
-                /* 220 PlainRuleOp      */ _unionExpression.Set(__Matchers[709]);
-                /* 221 PlainRuleOp      */ _unionExpr.Set(__Matchers[710]);
-                /* 222 PlainRuleOp      */ _unionOperator.Set(__Matchers[712]);
-                /* 223 PlainRuleOp      */ _exclusiveExpression.Set(__Matchers[713]);
-                /* 224 PlainRuleOp      */ _exclusiveExpr.Set(__Matchers[714]);
-                /* 225 PlainRuleOp      */ _exclusiveOperator.Set(__Matchers[715]);
-                /* 226 PlainRuleOp      */ _intersectionExpression.Set(__Matchers[716]);
-                /* 227 PlainRuleOp      */ _intersectionExpr.Set(__Matchers[717]);
-                /* 228 PlainRuleOp      */ _intersectionOperator.Set(__Matchers[718]);
-                /* 229 PlainRuleOp      */ _negationOrComplementExpression.Set(__Matchers[719]);
-                /* 230 PlainRuleOp      */ _negationOrComplementExpr.Set(__Matchers[720]);
-                /* 231 PlainRuleOp      */ _unaryMinusOrComplementOperator.Set(__Matchers[721]);
-                /* 232 PlainRuleOp      */ _negateOperator.Set(__Matchers[723]);
-                /* 233 PlainRuleOp      */ _neutralOperator.Set(__Matchers[725]);
-                /* 234 PlainRuleOp      */ _complementOperator.Set(__Matchers[711]);
-                /* 235 PlainRuleOp      */ _prefixExpression.Set(__Matchers[726]);
-                /* 236 PlainRuleOp      */ _prefixExpr.Set(__Matchers[727]);
-                /* 237 PlainRuleOp      */ _postfixExpression.Set(__Matchers[728]);
-                /* 238 PlainRuleOp      */ _postfixExpr.Set(__Matchers[729]);
-                /* 239 PlainRuleOp      */ _incrementOperator.Set(__Matchers[732]);
-                /* 240 PlainRuleOp      */ _primary.Set(__Matchers[733]);
-                /* 241 PlainRuleOp      */ _selectionExpr.Set(__Matchers[734]);
-                /* 242 PlainRuleOp      */ _qualifiedReference.Set(__Matchers[735]);
-                /* 243 PlainRuleOp      */ _memberSelectionOperator.Set(__Matchers[738]);
-                /* 244 PlainRuleOp      */ _indexedExpr.Set(__Matchers[739]);
-                /* 245 PlainRuleOp      */ _index.Set(__Matchers[740]);
-                /* 246 PlainRuleOp      */ _upperSpanned.Set(__Matchers[741]);
-                /* 247 PlainRuleOp      */ _lowerSpanned.Set(__Matchers[742]);
-                /* 248 PlainRuleOp      */ _spanned.Set(__Matchers[743]);
-                /* 249 PlainRuleOp      */ _measured.Set(__Matchers[744]);
-                /* 250 PlainRuleOp      */ _indexExpression.Set(_additiveExpression);
-                /* 251 PlainRuleOp      */ _callExpr.Set(__Matchers[745]);
-                /* 252 PlainRuleOp      */ _baseExpression.Set(__Matchers[746]);
-                /* 253 PlainRuleOp      */ _nonstringLiteral.Set(__Matchers[747]);
-                /* 254 PlainRuleOp      */ _stringExpression.Set(__Matchers[748]);
-                /* 255 PlainRuleOp      */ _stringInterpolation.Set(__Matchers[750]);
-                /* 256 PlainRuleOp      */ _interpolationPart.Set(__Matchers[751]);
-                /* 257 PlainRuleOp      */ _stringLiteral.Set(__Matchers[752]);
-                /* 258 PlainRuleOp      */ _objectExpr.Set(__Matchers[753]);
-                /* 259 PlainRuleOp      */ _groupedExpr.Set(__Matchers[754]);
-                /* 260 PlainRuleOp      */ _typeArguments.Set(__Matchers[756]);
-                /* 261 PlainRuleOp      */ _typeArgumentList.Set(__Matchers[759]);
-                /* 262 PlainRuleOp      */ _variancedType.Set(__Matchers[760]);
-                /* 263 PlainRuleOp      */ _defaultedTypeList.Set(__Matchers[763]);
-                /* 264 PlainRuleOp      */ _defaultedType.Set(__Matchers[764]);
-                /* 265 PlainRuleOp      */ _defaultedTypeCore.Set(__Matchers[765]);
-                /* 266 PlainRuleOp      */ _variadicType.Set(__Matchers[766]);
-                /* 267 PlainRuleOp      */ _variadicUnionType.Set(__Matchers[767]);
-                /* 268 PlainRuleOp      */ _variadicOperator.Set(__Matchers[768]);
-                /* 269 PlainRuleOp      */ _spreadType.Set(__Matchers[769]);
-                /* 270 PlainRuleOp      */ _type.Set(__Matchers[770]);
-                /* 271 PlainRuleOp      */ _entryType.Set(__Matchers[771]);
-                /* 272 PlainRuleOp      */ _unionType.Set(__Matchers[772]);
-                /* 273 PlainRuleOp      */ _unionTypeCore.Set(__Matchers[773]);
-                /* 274 PlainRuleOp      */ _intersectionType.Set(__Matchers[774]);
-                /* 275 PlainRuleOp      */ _intersectionTypeCore.Set(__Matchers[775]);
-                /* 276 PlainRuleOp      */ _primaryType.Set(__Matchers[776]);
-                /* 277 PlainRuleOp      */ _nullableType.Set(__Matchers[778]);
-                /* 278 PlainRuleOp      */ _arrayType.Set(__Matchers[780]);
-                /* 279 PlainRuleOp      */ _functionType.Set(__Matchers[782]);
-                /* 280 PlainRuleOp      */ _typeTypeArguments.Set(__Matchers[783]);
-                /* 281 PlainRuleOp      */ _tupleType.Set(__Matchers[784]);
-                /* 282 PlainRuleOp      */ _iterableType.Set(__Matchers[786]);
-                /* 283 PlainRuleOp      */ _groupedType.Set(__Matchers[787]);
-                /* 284 PlainRuleOp      */ _packageQualifiedType.Set(__Matchers[788]);
-                /* 285 PlainRuleOp      */ _annotations.Set(__Matchers[791]);
-                /* 286 PlainRuleOp      */ _annotation.Set(__Matchers[792]);
-                /* 287 PlainRuleOp      */ _conditions.Set(__Matchers[794]);
-                /* 288 PlainRuleOp      */ _conditionList.Set(__Matchers[797]);
-                /* 289 PlainRuleOp      */ _condition.Set(__Matchers[798]);
-                /* 290 PlainRuleOp      */ _existsCondition.Set(__Matchers[800]);
-                /* 291 PlainRuleOp      */ _nonemptyCondition.Set(__Matchers[801]);
-                /* 292 PlainRuleOp      */ _letOrExpression.Set(__Matchers[802]);
-                /* 293 PlainRuleOp      */ _isCondition.Set(__Matchers[803]);
-                /* 294 PlainRuleOp      */ _isConditionVariable.Set(__Matchers[804]);
-                /* 295 PlainRuleOp      */ _satisfiesCondition.Set(__Matchers[805]);
-                /* 296 PlainRuleOp      */ _booleanCondition.Set(_expression);
-                /* 297 PlainRuleOp      */ _controlStatement.Set(__Matchers[806]);
-                /* 298 PlainRuleOp      */ _ifElseStatement.Set(__Matchers[808]);
-                /* 299 PlainRuleOp      */ _ifBlock.Set(__Matchers[809]);
-                /* 300 PlainRuleOp      */ _elseBlock.Set(__Matchers[810]);
-                /* 301 PlainRuleOp      */ _elseBlockNext.Set(__Matchers[811]);
-                /* 302 PlainRuleOp      */ _switchStatement.Set(__Matchers[813]);
-                /* 303 PlainRuleOp      */ _switchHeader.Set(__Matchers[815]);
-                /* 304 PlainRuleOp      */ _switched.Set(_specifiedOrExpression);
-                /* 305 PlainRuleOp      */ _caseBlock.Set(__Matchers[816]);
-                /* 306 PlainRuleOp      */ _caseItem.Set(__Matchers[817]);
-                /* 307 PlainRuleOp      */ _isCaseCondition.Set(__Matchers[819]);
-                /* 308 PlainRuleOp      */ _satisfiesCaseCondition.Set(__Matchers[820]);
-                /* 309 PlainRuleOp      */ _matchCaseCondition.Set(_valueCaseList);
-                /* 310 PlainRuleOp      */ _valueCaseList.Set(__Matchers[823]);
-                /* 311 PlainRuleOp      */ _valueCaseSeparator.Set(__Matchers[824]);
-                /* 312 PlainRuleOp      */ _valueCase.Set(__Matchers[825]);
-                /* 313 PlainRuleOp      */ _forElseStatement.Set(__Matchers[827]);
-                /* 314 PlainRuleOp      */ _forBlock.Set(__Matchers[828]);
-                /* 315 PlainRuleOp      */ _failBlock.Set(__Matchers[829]);
-                /* 316 PlainRuleOp      */ _forIterator.Set(__Matchers[831]);
-                /* 317 PlainRuleOp      */ _forVariable.Set(__Matchers[832]);
-                /* 318 PlainRuleOp      */ _containment.Set(__Matchers[833]);
-                /* 319 PlainRuleOp      */ _containmentOperator.Set(__Matchers[834]);
-                /* 320 PlainRuleOp      */ _whileStatement.Set(__Matchers[836]);
-                /* 321 PlainRuleOp      */ _tryStatement.Set(__Matchers[839]);
-                /* 322 PlainRuleOp      */ _tryBlock.Set(__Matchers[842]);
-                /* 323 PlainRuleOp      */ _catchBlock.Set(__Matchers[844]);
-                /* 324 PlainRuleOp      */ _catchVariable.Set(__Matchers[846]);
-                /* 325 PlainRuleOp      */ _finallyBlock.Set(__Matchers[848]);
-                /* 326 PlainRuleOp      */ _resources.Set(__Matchers[850]);
-                /* 327 PlainRuleOp      */ _resourceList.Set(__Matchers[853]);
-                /* 328 PlainRuleOp      */ _resource.Set(_specifiedOrExpression);
-                /* 329 PlainRuleOp      */ _specifiedOrExpression.Set(__Matchers[854]);
-                /* 330 PlainRuleOp      */ _specifiedVariable.Set(__Matchers[855]);
-                /* 331 PlainRuleOp      */ _variable.Set(__Matchers[858]);
-                /* 332 PlainRuleOp      */ _variableType.Set(__Matchers[859]);
-                /* 333 PlainRuleOp      */ _modelReference.Set(__Matchers[860]);
-                /* 334 PlainRuleOp      */ _metaLiteral.Set(__Matchers[862]);
-                /* 335 PlainRuleOp      */ _metaExpression.Set(__Matchers[863]);
-                /* 336 PlainRuleOp      */ _modelExpression.Set(__Matchers[864]);
-                /* 337 PlainRuleOp      */ _memberModelExpression.Set(__Matchers[865]);
-                /* 338 PlainRuleOp      */ _packageQualifiedMemberReference.Set(__Matchers[866]);
-                /* 339 PlainRuleOp      */ _typeQualifiedMemberReference.Set(__Matchers[867]);
-                /* 340 PlainRuleOp      */ _typeModelExpression.Set(_type);
-                /* 341 PlainRuleOp      */ _declarationReference.Set(__Matchers[868]);
-                /* 342 PlainRuleOp      */ _moduleLiteral.Set(__Matchers[870]);
-                /* 343 PlainRuleOp      */ _packageLiteral.Set(__Matchers[871]);
-                /* 344 PlainRuleOp      */ _classLiteral.Set(__Matchers[872]);
-                /* 345 PlainRuleOp      */ _interfaceLiteral.Set(__Matchers[873]);
-                /* 346 PlainRuleOp      */ _aliasLiteral.Set(__Matchers[874]);
-                /* 347 PlainRuleOp      */ _typeParameterLiteral.Set(__Matchers[875]);
-                /* 348 PlainRuleOp      */ _newLiteral.Set(__Matchers[876]);
-                /* 349 PlainRuleOp      */ _valueLiteral.Set(__Matchers[877]);
-                /* 350 PlainRuleOp      */ _valueLiteralIntro.Set(__Matchers[878]);
-                /* 351 PlainRuleOp      */ _functionLiteral.Set(__Matchers[879]);
+                /* 109 PlainRuleOp      */ _directiveStatement.Set(__Matchers[555]);
+                /* 110 PlainRuleOp      */ _returnStatement.Set(__Matchers[558]);
+                /* 111 PlainRuleOp      */ _throwStatement.Set(__Matchers[560]);
+                /* 112 PlainRuleOp      */ _breakStatement.Set(__Matchers[561]);
+                /* 113 PlainRuleOp      */ _continueStatement.Set(__Matchers[562]);
+                /* 114 PlainRuleOp      */ _typeSpecifier.Set(__Matchers[563]);
+                /* 115 PlainRuleOp      */ _valueSpecifier.Set(__Matchers[564]);
+                /* 116 PlainRuleOp      */ _functionSpecifier.Set(__Matchers[565]);
+                /* 117 PlainRuleOp      */ _anySpecifier.Set(__Matchers[566]);
+                /* 118 PlainRuleOp      */ _baseReferenceOrParameterized.Set(__Matchers[567]);
+                /* 119 PlainRuleOp      */ _baseReference.Set(__Matchers[568]);
+                /* 120 PlainRuleOp      */ _parametrizedMember.Set(__Matchers[569]);
+                /* 121 PlainRuleOp      */ _selfParametrizedMember.Set(__Matchers[570]);
+                /* 122 PlainRuleOp      */ _memberReference.Set(__Matchers[572]);
+                /* 123 PlainRuleOp      */ _typeReference.Set(__Matchers[573]);
+                /* 124 PlainRuleOp      */ _selfReferenceSelector.Set(__Matchers[574]);
+                /* 125 PlainRuleOp      */ _selfReference.Set(__Matchers[577]);
+                /* 126 PlainRuleOp      */ _enumerationExpr.Set(__Matchers[579]);
+                /* 127 PlainRuleOp      */ _tupleExpr.Set(__Matchers[580]);
+                /* 128 PlainRuleOp      */ _arguments.Set(__Matchers[581]);
+                /* 129 PlainRuleOp      */ _structuralArguments.Set(__Matchers[583]);
+                /* 130 PlainRuleOp      */ _positionalArguments.Set(__Matchers[584]);
+                /* 131 PlainRuleOp      */ _namedOrAnonymous.Set(__Matchers[585]);
+                /* 132 PlainRuleOp      */ _anonymousArgument.Set(__Matchers[586]);
+                /* 133 PlainRuleOp      */ _namedArgument.Set(__Matchers[587]);
+                /* 134 PlainRuleOp      */ _namedSpecifiedArgument.Set(__Matchers[588]);
+                /* 135 PlainRuleOp      */ _sequencedArguments.Set(__Matchers[591]);
+                /* 136 PlainRuleOp      */ _sequencedArgument.Set(__Matchers[592]);
+                /* 137 PlainRuleOp      */ _namedArgumentDeclaration.Set(__Matchers[593]);
+                /* 138 PlainRuleOp      */ _objectArgument.Set(__Matchers[594]);
+                /* 139 PlainRuleOp      */ _typedMethodArgument.Set(__Matchers[595]);
+                /* 140 PlainRuleOp      */ _methodDefinition.Set(__Matchers[596]);
+                /* 141 PlainRuleOp      */ _optionalFunctionSpecifier.Set(__Matchers[597]);
+                /* 142 PlainRuleOp      */ _requiredFunctionSpecifier.Set(__Matchers[598]);
+                /* 143 PlainRuleOp      */ _methodArgumentType.Set(__Matchers[599]);
+                /* 144 PlainRuleOp      */ _typedGetterArgument.Set(__Matchers[600]);
+                /* 145 PlainRuleOp      */ _getterArgumentType.Set(_type);
+                /* 146 PlainRuleOp      */ _inferredMethodArgument.Set(__Matchers[601]);
+                /* 147 PlainRuleOp      */ _inferredGetterArgument.Set(__Matchers[602]);
+                /* 148 PlainRuleOp      */ _untypedMethodArgument.Set(__Matchers[603]);
+                /* 149 PlainRuleOp      */ _untypedGetterArgument.Set(__Matchers[604]);
+                /* 150 PlainRuleOp      */ _positionalArgument.Set(__Matchers[605]);
+                /* 151 PlainRuleOp      */ _expressionArgument.Set(_expression);
+                /* 152 PlainRuleOp      */ _spreadArgument.Set(__Matchers[607]);
+                /* 153 PlainRuleOp      */ _letExpr.Set(__Matchers[609]);
+                /* 154 PlainRuleOp      */ _switchExpr.Set(__Matchers[610]);
+                /* 155 PlainRuleOp      */ _caseExpressions.Set(__Matchers[613]);
+                /* 156 PlainRuleOp      */ _caseExpression.Set(__Matchers[617]);
+                /* 157 PlainRuleOp      */ _ifExpr.Set(__Matchers[619]);
+                /* 158 PlainRuleOp      */ _elseExpression.Set(__Matchers[620]);
+                /* 159 PlainRuleOp      */ _thenExpression.Set(__Matchers[622]);
+                /* 160 PlainRuleOp      */ _conditionalExpression.Set(__Matchers[623]);
+                /* 161 PlainRuleOp      */ _functionExpr.Set(__Matchers[626]);
+                /* 162 PlainRuleOp      */ _functionExpressionType.Set(__Matchers[627]);
+                /* 163 PlainRuleOp      */ _functionParameters.Set(__Matchers[628]);
+                /* 164 PlainRuleOp      */ _functionDefinition.Set(__Matchers[629]);
+                /* 165 PlainRuleOp      */ _comprehensionArgument.Set(__Matchers[630]);
+                /* 166 PlainRuleOp      */ _comprehensionClause.Set(__Matchers[631]);
+                /* 167 PlainRuleOp      */ _expressionComprehensionClause.Set(_expression);
+                /* 168 PlainRuleOp      */ _forComprehensionClause.Set(__Matchers[634]);
+                /* 169 PlainRuleOp      */ _ifComprehensionClause.Set(__Matchers[635]);
+                /* 170 PlainRuleOp      */ _expression.Set(__Matchers[636]);
+                /* 171 PlainRuleOp      */ _operatorExpression.Set(_assignmentExpression);
+                /* 172 PlainRuleOp      */ _assignmentExpression.Set(__Matchers[637]);
+                /* 173 PlainRuleOp      */ _assignmentExpr.Set(__Matchers[638]);
+                /* 174 PlainRuleOp      */ _assignmentOperator.Set(__Matchers[650]);
+                /* 175 PlainRuleOp      */ _thenElseExpression.Set(__Matchers[651]);
+                /* 176 PlainRuleOp      */ _thenElseExpr.Set(__Matchers[652]);
+                /* 177 PlainRuleOp      */ _thenElseOperator.Set(__Matchers[653]);
+                /* 178 PlainRuleOp      */ _disjunctionExpression.Set(__Matchers[654]);
+                /* 179 PlainRuleOp      */ _disjunctionExpr.Set(__Matchers[655]);
+                /* 180 PlainRuleOp      */ _disjunctionOperator.Set(__Matchers[656]);
+                /* 181 PlainRuleOp      */ _conjunctionExpression.Set(__Matchers[657]);
+                /* 182 PlainRuleOp      */ _conjunctionExpr.Set(__Matchers[658]);
+                /* 183 PlainRuleOp      */ _conjunctionOperator.Set(__Matchers[659]);
+                /* 184 PlainRuleOp      */ _logicalNegationExpression.Set(__Matchers[660]);
+                /* 185 PlainRuleOp      */ _logicalNegationExpr.Set(__Matchers[661]);
+                /* 186 PlainRuleOp      */ _notOperator.Set(__Matchers[662]);
+                /* 187 PlainRuleOp      */ _expressionOrMeta.Set(__Matchers[663]);
+                /* 188 PlainRuleOp      */ _equalityExpression.Set(__Matchers[664]);
+                /* 189 PlainRuleOp      */ _equalityExpr.Set(__Matchers[665]);
+                /* 190 PlainRuleOp      */ _equalityOperator.Set(__Matchers[669]);
+                /* 191 PlainRuleOp      */ _comparisonExpression.Set(__Matchers[670]);
+                /* 192 PlainRuleOp      */ _comparisonExpr.Set(__Matchers[671]);
+                /* 193 PlainRuleOp      */ _largerExpr.Set(__Matchers[672]);
+                /* 194 PlainRuleOp      */ _smallerExpr.Set(__Matchers[673]);
+                /* 195 PlainRuleOp      */ _largerBoundsExpr.Set(__Matchers[674]);
+                /* 196 PlainRuleOp      */ _smallerBoundsExpr.Set(__Matchers[675]);
+                /* 197 PlainRuleOp      */ _typecheckExpr.Set(__Matchers[676]);
+                /* 198 PlainRuleOp      */ _comparisonOperator.Set(__Matchers[678]);
+                /* 199 PlainRuleOp      */ _smallerOperator.Set(__Matchers[680]);
+                /* 200 PlainRuleOp      */ _largerOperator.Set(__Matchers[682]);
+                /* 201 PlainRuleOp      */ _typeOperator.Set(__Matchers[684]);
+                /* 202 PlainRuleOp      */ _existsNonemptyExpression.Set(__Matchers[685]);
+                /* 203 PlainRuleOp      */ _existsExpr.Set(__Matchers[687]);
+                /* 204 PlainRuleOp      */ _nonemptyExpr.Set(__Matchers[689]);
+                /* 205 PlainRuleOp      */ _entryRangeExpression.Set(__Matchers[690]);
+                /* 206 PlainRuleOp      */ _rangeExpr.Set(__Matchers[691]);
+                /* 207 PlainRuleOp      */ _entryExpr.Set(__Matchers[692]);
+                /* 208 PlainRuleOp      */ _rangeOperator.Set(__Matchers[694]);
+                /* 209 PlainRuleOp      */ _entryOperator.Set(__Matchers[422]);
+                /* 210 PlainRuleOp      */ _additiveExpression.Set(__Matchers[695]);
+                /* 211 PlainRuleOp      */ _additiveExpr.Set(__Matchers[696]);
+                /* 212 PlainRuleOp      */ _additiveOperator.Set(__Matchers[699]);
+                /* 213 PlainRuleOp      */ _scaleExpression.Set(__Matchers[700]);
+                /* 214 PlainRuleOp      */ _scaleExpr.Set(__Matchers[701]);
+                /* 215 PlainRuleOp      */ _scaleOperator.Set(__Matchers[702]);
+                /* 216 PlainRuleOp      */ _multiplicativeExpression.Set(__Matchers[703]);
+                /* 217 PlainRuleOp      */ _multiplicativeExpr.Set(__Matchers[704]);
+                /* 218 PlainRuleOp      */ _multiplicativeOperator.Set(__Matchers[707]);
+                /* 219 PlainRuleOp      */ _unionExpression.Set(__Matchers[708]);
+                /* 220 PlainRuleOp      */ _unionExpr.Set(__Matchers[709]);
+                /* 221 PlainRuleOp      */ _unionOperator.Set(__Matchers[711]);
+                /* 222 PlainRuleOp      */ _exclusiveExpression.Set(__Matchers[712]);
+                /* 223 PlainRuleOp      */ _exclusiveExpr.Set(__Matchers[713]);
+                /* 224 PlainRuleOp      */ _exclusiveOperator.Set(__Matchers[714]);
+                /* 225 PlainRuleOp      */ _intersectionExpression.Set(__Matchers[715]);
+                /* 226 PlainRuleOp      */ _intersectionExpr.Set(__Matchers[716]);
+                /* 227 PlainRuleOp      */ _intersectionOperator.Set(__Matchers[717]);
+                /* 228 PlainRuleOp      */ _negationOrComplementExpression.Set(__Matchers[718]);
+                /* 229 PlainRuleOp      */ _negationOrComplementExpr.Set(__Matchers[719]);
+                /* 230 PlainRuleOp      */ _unaryMinusOrComplementOperator.Set(__Matchers[720]);
+                /* 231 PlainRuleOp      */ _negateOperator.Set(__Matchers[722]);
+                /* 232 PlainRuleOp      */ _neutralOperator.Set(__Matchers[724]);
+                /* 233 PlainRuleOp      */ _complementOperator.Set(__Matchers[710]);
+                /* 234 PlainRuleOp      */ _prefixExpression.Set(__Matchers[725]);
+                /* 235 PlainRuleOp      */ _prefixExpr.Set(__Matchers[726]);
+                /* 236 PlainRuleOp      */ _postfixExpression.Set(__Matchers[727]);
+                /* 237 PlainRuleOp      */ _postfixExpr.Set(__Matchers[728]);
+                /* 238 PlainRuleOp      */ _incrementOperator.Set(__Matchers[731]);
+                /* 239 PlainRuleOp      */ _primary.Set(__Matchers[732]);
+                /* 240 PlainRuleOp      */ _selectionExpr.Set(__Matchers[733]);
+                /* 241 PlainRuleOp      */ _qualifiedReference.Set(__Matchers[734]);
+                /* 242 PlainRuleOp      */ _memberSelectionOperator.Set(__Matchers[737]);
+                /* 243 PlainRuleOp      */ _indexedExpr.Set(__Matchers[738]);
+                /* 244 PlainRuleOp      */ _index.Set(__Matchers[739]);
+                /* 245 PlainRuleOp      */ _upperSpanned.Set(__Matchers[740]);
+                /* 246 PlainRuleOp      */ _lowerSpanned.Set(__Matchers[741]);
+                /* 247 PlainRuleOp      */ _spanned.Set(__Matchers[742]);
+                /* 248 PlainRuleOp      */ _measured.Set(__Matchers[743]);
+                /* 249 PlainRuleOp      */ _indexExpression.Set(_additiveExpression);
+                /* 250 PlainRuleOp      */ _callExpr.Set(__Matchers[744]);
+                /* 251 PlainRuleOp      */ _baseExpression.Set(__Matchers[745]);
+                /* 252 PlainRuleOp      */ _nonstringLiteral.Set(__Matchers[746]);
+                /* 253 PlainRuleOp      */ _stringExpression.Set(__Matchers[747]);
+                /* 254 PlainRuleOp      */ _stringInterpolation.Set(__Matchers[749]);
+                /* 255 PlainRuleOp      */ _interpolationPart.Set(__Matchers[750]);
+                /* 256 PlainRuleOp      */ _stringLiteral.Set(__Matchers[751]);
+                /* 257 PlainRuleOp      */ _objectExpr.Set(__Matchers[752]);
+                /* 258 PlainRuleOp      */ _groupedExpr.Set(__Matchers[753]);
+                /* 259 PlainRuleOp      */ _typeArguments.Set(__Matchers[755]);
+                /* 260 PlainRuleOp      */ _typeArgumentList.Set(__Matchers[758]);
+                /* 261 PlainRuleOp      */ _variancedType.Set(__Matchers[759]);
+                /* 262 PlainRuleOp      */ _defaultedTypeList.Set(__Matchers[762]);
+                /* 263 PlainRuleOp      */ _defaultedType.Set(__Matchers[763]);
+                /* 264 PlainRuleOp      */ _defaultedTypeCore.Set(__Matchers[764]);
+                /* 265 PlainRuleOp      */ _variadicType.Set(__Matchers[765]);
+                /* 266 PlainRuleOp      */ _variadicUnionType.Set(__Matchers[766]);
+                /* 267 PlainRuleOp      */ _variadicOperator.Set(__Matchers[767]);
+                /* 268 PlainRuleOp      */ _spreadType.Set(__Matchers[768]);
+                /* 269 PlainRuleOp      */ _type.Set(__Matchers[769]);
+                /* 270 PlainRuleOp      */ _entryType.Set(__Matchers[770]);
+                /* 271 PlainRuleOp      */ _unionType.Set(__Matchers[771]);
+                /* 272 PlainRuleOp      */ _unionTypeCore.Set(__Matchers[772]);
+                /* 273 PlainRuleOp      */ _intersectionType.Set(__Matchers[773]);
+                /* 274 PlainRuleOp      */ _intersectionTypeCore.Set(__Matchers[774]);
+                /* 275 PlainRuleOp      */ _primaryType.Set(__Matchers[775]);
+                /* 276 PlainRuleOp      */ _nullableType.Set(__Matchers[777]);
+                /* 277 PlainRuleOp      */ _arrayType.Set(__Matchers[779]);
+                /* 278 PlainRuleOp      */ _functionType.Set(__Matchers[781]);
+                /* 279 PlainRuleOp      */ _typeTypeArguments.Set(__Matchers[782]);
+                /* 280 PlainRuleOp      */ _tupleType.Set(__Matchers[783]);
+                /* 281 PlainRuleOp      */ _iterableType.Set(__Matchers[785]);
+                /* 282 PlainRuleOp      */ _groupedType.Set(__Matchers[786]);
+                /* 283 PlainRuleOp      */ _packageQualifiedType.Set(__Matchers[787]);
+                /* 284 PlainRuleOp      */ _annotations.Set(__Matchers[790]);
+                /* 285 PlainRuleOp      */ _annotation.Set(__Matchers[791]);
+                /* 286 PlainRuleOp      */ _conditions.Set(__Matchers[793]);
+                /* 287 PlainRuleOp      */ _conditionList.Set(__Matchers[796]);
+                /* 288 PlainRuleOp      */ _condition.Set(__Matchers[797]);
+                /* 289 PlainRuleOp      */ _existsCondition.Set(__Matchers[799]);
+                /* 290 PlainRuleOp      */ _nonemptyCondition.Set(__Matchers[800]);
+                /* 291 PlainRuleOp      */ _letOrExpression.Set(__Matchers[801]);
+                /* 292 PlainRuleOp      */ _isCondition.Set(__Matchers[802]);
+                /* 293 PlainRuleOp      */ _isConditionVariable.Set(__Matchers[803]);
+                /* 294 PlainRuleOp      */ _satisfiesCondition.Set(__Matchers[804]);
+                /* 295 PlainRuleOp      */ _booleanCondition.Set(_expression);
+                /* 296 PlainRuleOp      */ _controlStatement.Set(__Matchers[805]);
+                /* 297 PlainRuleOp      */ _ifElseStatement.Set(__Matchers[807]);
+                /* 298 PlainRuleOp      */ _ifBlock.Set(__Matchers[808]);
+                /* 299 PlainRuleOp      */ _elseBlock.Set(__Matchers[809]);
+                /* 300 PlainRuleOp      */ _elseBlockNext.Set(__Matchers[810]);
+                /* 301 PlainRuleOp      */ _switchStatement.Set(__Matchers[812]);
+                /* 302 PlainRuleOp      */ _switchHeader.Set(__Matchers[814]);
+                /* 303 PlainRuleOp      */ _switched.Set(_specifiedOrExpression);
+                /* 304 PlainRuleOp      */ _caseBlock.Set(__Matchers[815]);
+                /* 305 PlainRuleOp      */ _caseItem.Set(__Matchers[816]);
+                /* 306 PlainRuleOp      */ _isCaseCondition.Set(__Matchers[818]);
+                /* 307 PlainRuleOp      */ _satisfiesCaseCondition.Set(__Matchers[819]);
+                /* 308 PlainRuleOp      */ _matchCaseCondition.Set(_valueCaseList);
+                /* 309 PlainRuleOp      */ _valueCaseList.Set(__Matchers[822]);
+                /* 310 PlainRuleOp      */ _valueCaseSeparator.Set(__Matchers[823]);
+                /* 311 PlainRuleOp      */ _valueCase.Set(__Matchers[824]);
+                /* 312 PlainRuleOp      */ _forElseStatement.Set(__Matchers[826]);
+                /* 313 PlainRuleOp      */ _forBlock.Set(__Matchers[827]);
+                /* 314 PlainRuleOp      */ _failBlock.Set(__Matchers[828]);
+                /* 315 PlainRuleOp      */ _forIterator.Set(__Matchers[830]);
+                /* 316 PlainRuleOp      */ _forVariable.Set(__Matchers[831]);
+                /* 317 PlainRuleOp      */ _containment.Set(__Matchers[832]);
+                /* 318 PlainRuleOp      */ _containmentOperator.Set(__Matchers[833]);
+                /* 319 PlainRuleOp      */ _whileStatement.Set(__Matchers[835]);
+                /* 320 PlainRuleOp      */ _tryStatement.Set(__Matchers[838]);
+                /* 321 PlainRuleOp      */ _tryBlock.Set(__Matchers[841]);
+                /* 322 PlainRuleOp      */ _catchBlock.Set(__Matchers[843]);
+                /* 323 PlainRuleOp      */ _catchVariable.Set(__Matchers[845]);
+                /* 324 PlainRuleOp      */ _finallyBlock.Set(__Matchers[847]);
+                /* 325 PlainRuleOp      */ _resources.Set(__Matchers[849]);
+                /* 326 PlainRuleOp      */ _resourceList.Set(__Matchers[852]);
+                /* 327 PlainRuleOp      */ _resource.Set(_specifiedOrExpression);
+                /* 328 PlainRuleOp      */ _specifiedOrExpression.Set(__Matchers[853]);
+                /* 329 PlainRuleOp      */ _specifiedVariable.Set(__Matchers[854]);
+                /* 330 PlainRuleOp      */ _variable.Set(__Matchers[857]);
+                /* 331 PlainRuleOp      */ _variableType.Set(__Matchers[858]);
+                /* 332 PlainRuleOp      */ _modelReference.Set(__Matchers[859]);
+                /* 333 PlainRuleOp      */ _metaLiteral.Set(__Matchers[861]);
+                /* 334 PlainRuleOp      */ _metaExpression.Set(__Matchers[862]);
+                /* 335 PlainRuleOp      */ _modelExpression.Set(__Matchers[863]);
+                /* 336 PlainRuleOp      */ _memberModelExpression.Set(__Matchers[864]);
+                /* 337 PlainRuleOp      */ _packageQualifiedMemberReference.Set(__Matchers[865]);
+                /* 338 PlainRuleOp      */ _typeQualifiedMemberReference.Set(__Matchers[866]);
+                /* 339 PlainRuleOp      */ _typeModelExpression.Set(_type);
+                /* 340 PlainRuleOp      */ _declarationReference.Set(__Matchers[867]);
+                /* 341 PlainRuleOp      */ _moduleLiteral.Set(__Matchers[869]);
+                /* 342 PlainRuleOp      */ _packageLiteral.Set(__Matchers[870]);
+                /* 343 PlainRuleOp      */ _classLiteral.Set(__Matchers[871]);
+                /* 344 PlainRuleOp      */ _interfaceLiteral.Set(__Matchers[872]);
+                /* 345 PlainRuleOp      */ _aliasLiteral.Set(__Matchers[873]);
+                /* 346 PlainRuleOp      */ _typeParameterLiteral.Set(__Matchers[874]);
+                /* 347 PlainRuleOp      */ _newLiteral.Set(__Matchers[875]);
+                /* 348 PlainRuleOp      */ _valueLiteral.Set(__Matchers[876]);
+                /* 349 PlainRuleOp      */ _valueLiteralIntro.Set(__Matchers[877]);
+                /* 350 PlainRuleOp      */ _functionLiteral.Set(__Matchers[878]);
+                /* 351 PlainRuleOp      */ _packageQualifier.Set(__Matchers[879]);
                 /* 352 PlainRuleOp      */ _referencePath.Set(__Matchers[880]);
                 /* 353 PlainRuleOp      */ _referencePathElementList.Set(__Matchers[883]);
                 /* 354 PlainRuleOp      */ _referencePathElement.Set(_identifier);
-                /* 355 PlainRuleOp      */ _kwVoid.Set(__Matchers[526]);
-                /* 356 PlainRuleOp      */ _kwFunction.Set(__Matchers[528]);
-                /* 357 PlainRuleOp      */ _kwValue.Set(__Matchers[531]);
+                /* 355 PlainRuleOp      */ _kwVoid.Set(__Matchers[529]);
+                /* 356 PlainRuleOp      */ _kwFunction.Set(__Matchers[531]);
+                /* 357 PlainRuleOp      */ _kwValue.Set(__Matchers[534]);
                 /* 358 DfaRuleOp        */ _literalFloat.Set(_literalFloat_DFA);
                 /* 359 DfaRuleOp        */ _literalNatural.Set(_literalNatural_DFA);
                 /* 360 DfaRuleOp        */ _literalChar.Set(_literalChar_DFA);
@@ -1326,373 +1326,373 @@ namespace Six.Ceylon
                 /* 432 OptionalOp       */ __Matchers[432].Set(_unionType);
                 /* 433 SeqOp            */ __Matchers[433].Set(__Matchers[432], _variadicOperator, _memberName);
                 /* 437 SeqOp            */ __Matchers[437].Set(__Matchers[434], __Matchers[435], _letVariableList, __Matchers[436]);
-                /* 439 SeqOp            */ __Matchers[439].Set(__Matchers[438], _classInstatiation);
-                /* 440 OptionalOp       */ __Matchers[440].Set(_assertionMessage);
-                /* 442 SeqOp            */ __Matchers[442].Set(__Matchers[440], __Matchers[441], _conditions);
-                /* 443 SeqOp            */ __Matchers[443].Set(__Matchers[393], _imports, _statements, __Matchers[395]);
-                /* 444 SeqOp            */ __Matchers[444].Set(__Matchers[438], _classInstatiation);
-                /* 446 SeqOp            */ __Matchers[446].Set(__Matchers[445], _classInstatiation);
-                /* 447 OptionalOp       */ __Matchers[447].Set(_arguments);
-                /* 448 SeqOp            */ __Matchers[448].Set(_qualifiedClass, __Matchers[447]);
-                /* 449 AltOp            */ __Matchers[449].Set(_packageQualifiedClass, _superQualifiedClass, _unQualifiedClass);
-                /* 451 SeqOp            */ __Matchers[451].Set(__Matchers[450], __Matchers[376], _baseReference);
-                /* 452 SeqOp            */ __Matchers[452].Set(__Matchers[398], __Matchers[376], _unQualifiedClass);
-                /* 453 SeqOp            */ __Matchers[453].Set(__Matchers[398], __Matchers[376]);
-                /* 454 AltOp            */ __Matchers[454].Set(_memberPath, _typePath, _memberReference);
-                /* 455 SeqOp            */ __Matchers[455].Set(_typePath, __Matchers[376], _memberReference);
-                /* 456 SeqOp            */ __Matchers[456].Set(__Matchers[376], _typeReference);
-                /* 457 StarOp           */ __Matchers[457].Set(__Matchers[456]);
-                /* 458 SeqOp            */ __Matchers[458].Set(_typeReference, __Matchers[457]);
-                /* 460 SeqOp            */ __Matchers[460].Set(__Matchers[459], _unionTypeList);
-                /* 461 SeqOp            */ __Matchers[461].Set(__Matchers[405], _unionType);
-                /* 462 StarOp           */ __Matchers[462].Set(__Matchers[461]);
-                /* 463 SeqOp            */ __Matchers[463].Set(_unionType, __Matchers[462]);
-                /* 465 SeqOp            */ __Matchers[465].Set(__Matchers[464], _caseTypeList);
-                /* 467 SeqOp            */ __Matchers[467].Set(__Matchers[466], _caseType);
-                /* 468 StarOp           */ __Matchers[468].Set(__Matchers[467]);
-                /* 469 SeqOp            */ __Matchers[469].Set(_caseType, __Matchers[468]);
-                /* 470 AltOp            */ __Matchers[470].Set(_primaryType, _qualifiedCaseType);
-                /* 471 OptionalOp       */ __Matchers[471].Set(_packageQualifier);
-                /* 472 SeqOp            */ __Matchers[472].Set(__Matchers[471], _memberName);
-                /* 473 OptionalOp       */ __Matchers[473].Set(_parameterList);
-                /* 474 SeqOp            */ __Matchers[474].Set(__Matchers[435], __Matchers[473], __Matchers[436]);
-                /* 475 SeqOp            */ __Matchers[475].Set(__Matchers[405], _parameterDeclarationOrRefPattern);
-                /* 476 StarOp           */ __Matchers[476].Set(__Matchers[475]);
-                /* 477 SeqOp            */ __Matchers[477].Set(_parameterDeclarationOrRefPattern, __Matchers[476]);
-                /* 478 AltOp            */ __Matchers[478].Set(_entryPattern, _tuplePattern, _parameter, _parameterReference);
-                /* 479 SeqOp            */ __Matchers[479].Set(_annotations, _parameterDeclaration);
-                /* 480 OptionalOp       */ __Matchers[480].Set(_valueSpecifier);
-                /* 481 SeqOp            */ __Matchers[481].Set(_memberName, __Matchers[480]);
-                /* 482 AltOp            */ __Matchers[482].Set(_functionParameterDeclaration, _valueParameterDeclaration);
-                /* 483 OptionalOp       */ __Matchers[483].Set(_typeParameters);
-                /* 484 PlusOp           */ __Matchers[484].Set(_parameters);
-                /* 485 OptionalOp       */ __Matchers[485].Set(_functionSpecifier);
-                /* 486 SeqOp            */ __Matchers[486].Set(_functionParameterType, _memberName, __Matchers[483], __Matchers[484], __Matchers[485]);
-                /* 487 AltOp            */ __Matchers[487].Set(_variadicType, _kwVoid, _kwFunction);
-                /* 488 SeqOp            */ __Matchers[488].Set(_valueParameterType, _memberName, __Matchers[480]);
-                /* 489 AltOp            */ __Matchers[489].Set(_variadicType, _kwValue);
-                /* 492 SeqOp            */ __Matchers[492].Set(__Matchers[490], _typeParameterList, __Matchers[491]);
-                /* 493 SeqOp            */ __Matchers[493].Set(__Matchers[405], _typeParameter);
-                /* 494 StarOp           */ __Matchers[494].Set(__Matchers[493]);
-                /* 495 SeqOp            */ __Matchers[495].Set(_typeParameter, __Matchers[494]);
-                /* 496 OptionalOp       */ __Matchers[496].Set(_variance);
-                /* 497 OptionalOp       */ __Matchers[497].Set(_typeDefault);
-                /* 498 SeqOp            */ __Matchers[498].Set(__Matchers[496], _typeName, __Matchers[497]);
-                /* 501 AltOp            */ __Matchers[501].Set(__Matchers[499], __Matchers[500]);
-                /* 502 SeqOp            */ __Matchers[502].Set(__Matchers[413], _type);
-                /* 504 OptionalOp       */ __Matchers[504].Set(_typeName);
-                /* 505 OptionalOp       */ __Matchers[505].Set(_caseTypes);
-                /* 506 OptionalOp       */ __Matchers[506].Set(_satisfiedTypes);
-                /* 507 SeqOp            */ __Matchers[507].Set(__Matchers[503], __Matchers[504], __Matchers[483], __Matchers[505], __Matchers[506]);
-                /* 508 PlusOp           */ __Matchers[508].Set(_typeConstraint);
-                /* 509 StarOp           */ __Matchers[509].Set(_declaration);
-                /* 510 AltOp            */ __Matchers[510].Set(_classDeclaration, _interfaceDeclaration, _aliasDeclaration, _objectDeclaration, _constructorDeclaration, _enumeratedObjectDeclaration, _setterDeclaration, _typedMethodDeclaration, _voidMethodDeclaration, _inferredMethodDeclaration, _typedAttributeDeclaration, _inferredAttributeDeclaration);
-                /* 512 OptionalOp       */ __Matchers[512].Set(_memberName);
-                /* 513 OptionalOp       */ __Matchers[513].Set(_delegatedConstructor);
-                /* 514 SeqOp            */ __Matchers[514].Set(_annotations, __Matchers[511], __Matchers[512], _parameters, __Matchers[513], _block);
-                /* 516 OptionalOp       */ __Matchers[516].Set(_typeConstraints);
-                /* 517 SeqOp            */ __Matchers[517].Set(_annotations, __Matchers[515], _typeName, __Matchers[483], __Matchers[516], _optionalTypeSpecifier);
-                /* 518 SeqOp            */ __Matchers[518].Set(_annotations, __Matchers[511], _memberName, __Matchers[513], _block);
-                /* 520 OptionalOp       */ __Matchers[520].Set(_extendedType);
-                /* 521 SeqOp            */ __Matchers[521].Set(_annotations, __Matchers[519], _memberName, __Matchers[520], __Matchers[506], _block);
-                /* 523 SeqOp            */ __Matchers[523].Set(_annotations, __Matchers[522], _memberName, _setterDefinition);
-                /* 524 AltOp            */ __Matchers[524].Set(_block, _requiredFunctionSpecifier);
-                /* 525 SeqOp            */ __Matchers[525].Set(_annotations, _variadicType, _memberName, __Matchers[483], __Matchers[484], __Matchers[516], _methodDefinition);
-                /* 527 SeqOp            */ __Matchers[527].Set(_annotations, __Matchers[526], _memberName, __Matchers[483], __Matchers[484], __Matchers[516], _methodDefinition);
-                /* 529 SeqOp            */ __Matchers[529].Set(_annotations, __Matchers[528], _memberName, __Matchers[483], __Matchers[484], __Matchers[516], _methodDefinition);
-                /* 530 SeqOp            */ __Matchers[530].Set(_annotations, _variadicType, _memberName, _attributeDefinition);
-                /* 532 SeqOp            */ __Matchers[532].Set(_annotations, __Matchers[531], _memberName, _attributeDefinition);
-                /* 533 AltOp            */ __Matchers[533].Set(_block, _optionalAnySpecifier);
-                /* 534 OptionalOp       */ __Matchers[534].Set(_anySpecifier);
-                /* 535 SeqOp            */ __Matchers[535].Set(__Matchers[534], __Matchers[374]);
-                /* 537 OptionalOp       */ __Matchers[537].Set(_parameters);
-                /* 538 SeqOp            */ __Matchers[538].Set(_annotations, __Matchers[536], _typeName, __Matchers[483], __Matchers[537], __Matchers[505], __Matchers[520], __Matchers[506], __Matchers[516], _classDefinition);
-                /* 539 AltOp            */ __Matchers[539].Set(_block, _optionalClassSpecifier);
-                /* 540 OptionalOp       */ __Matchers[540].Set(_classSpecifier);
-                /* 541 SeqOp            */ __Matchers[541].Set(__Matchers[540], __Matchers[374]);
-                /* 543 SeqOp            */ __Matchers[543].Set(_annotations, __Matchers[542], _typeName, __Matchers[483], __Matchers[505], __Matchers[506], __Matchers[516], _interfaceDefinition);
-                /* 544 AltOp            */ __Matchers[544].Set(_block, _optionalTypeSpecifier);
-                /* 545 OptionalOp       */ __Matchers[545].Set(_typeSpecifier);
-                /* 546 SeqOp            */ __Matchers[546].Set(__Matchers[545], __Matchers[374]);
-                /* 547 StarOp           */ __Matchers[547].Set(_statement);
-                /* 548 AltOp            */ __Matchers[548].Set(_declarationStatement, _unclosedStatement, _controlStatement);
-                /* 549 SeqOp            */ __Matchers[549].Set(_openStatement, __Matchers[374]);
-                /* 550 AltOp            */ __Matchers[550].Set(_directiveStatement, _expressionStatement, _specificationStatement, _assertionStatement, _letStatement);
-                /* 551 SeqOp            */ __Matchers[551].Set(_primary, _functionSpecifier);
-                /* 552 AltOp            */ __Matchers[552].Set(_returnStatement, _throwStatement, _breakStatement, _continueStatement);
-                /* 554 OptionalOp       */ __Matchers[554].Set(_expression);
-                /* 555 SeqOp            */ __Matchers[555].Set(__Matchers[553], __Matchers[554]);
-                /* 557 SeqOp            */ __Matchers[557].Set(__Matchers[556], __Matchers[554]);
-                /* 560 SeqOp            */ __Matchers[560].Set(__Matchers[445], _type);
-                /* 561 SeqOp            */ __Matchers[561].Set(__Matchers[413], _expression);
-                /* 562 SeqOp            */ __Matchers[562].Set(__Matchers[445], _expression);
-                /* 563 AltOp            */ __Matchers[563].Set(_valueSpecifier, _functionSpecifier);
-                /* 564 AltOp            */ __Matchers[564].Set(_baseReference, _parametrizedMember, _selfReference, _selfParametrizedMember);
-                /* 565 AltOp            */ __Matchers[565].Set(_memberReference, _typeReference);
-                /* 566 SeqOp            */ __Matchers[566].Set(_memberName, __Matchers[483], __Matchers[484]);
-                /* 567 SeqOp            */ __Matchers[567].Set(_selfReferenceSelector, _parametrizedMember);
-                /* 568 OptionalOp       */ __Matchers[568].Set(_typeArguments);
-                /* 569 SeqOp            */ __Matchers[569].Set(_memberName, __Matchers[568]);
-                /* 570 SeqOp            */ __Matchers[570].Set(_typeName, __Matchers[568]);
-                /* 571 SeqOp            */ __Matchers[571].Set(_selfReference, _memberSelectionOperator);
-                /* 574 AltOp            */ __Matchers[574].Set(__Matchers[572], __Matchers[450], __Matchers[573], __Matchers[398]);
-                /* 575 OptionalOp       */ __Matchers[575].Set(_sequencedArguments);
-                /* 576 SeqOp            */ __Matchers[576].Set(__Matchers[393], _statements, __Matchers[575], __Matchers[395]);
-                /* 577 SeqOp            */ __Matchers[577].Set(__Matchers[424], __Matchers[575], __Matchers[426]);
-                /* 578 AltOp            */ __Matchers[578].Set(_structuralArguments, _positionalArguments);
-                /* 579 StarOp           */ __Matchers[579].Set(_namedOrAnonymous);
-                /* 580 SeqOp            */ __Matchers[580].Set(__Matchers[393], __Matchers[579], __Matchers[575], __Matchers[395]);
-                /* 581 AltOp            */ __Matchers[581].Set(_namedArgument, _anonymousArgument);
-                /* 582 AltOp            */ __Matchers[582].Set(_namedSpecifiedArgument, _namedArgumentDeclaration);
-                /* 583 SeqOp            */ __Matchers[583].Set(_expression, __Matchers[374]);
-                /* 584 SeqOp            */ __Matchers[584].Set(_memberName, _valueSpecifier, __Matchers[374]);
-                /* 585 SeqOp            */ __Matchers[585].Set(__Matchers[405], _sequencedArgument);
-                /* 586 StarOp           */ __Matchers[586].Set(__Matchers[585]);
-                /* 587 SeqOp            */ __Matchers[587].Set(_sequencedArgument, __Matchers[586]);
-                /* 588 AltOp            */ __Matchers[588].Set(_comprehensionArgument, _positionalArgument, _spreadArgument);
-                /* 589 AltOp            */ __Matchers[589].Set(_objectArgument, _typedMethodArgument, _inferredMethodArgument, _untypedMethodArgument, _typedGetterArgument, _inferredGetterArgument, _untypedGetterArgument);
-                /* 590 SeqOp            */ __Matchers[590].Set(__Matchers[519], __Matchers[512], __Matchers[520], __Matchers[506], _block);
-                /* 591 SeqOp            */ __Matchers[591].Set(_methodArgumentType, _parametrizedMember, _methodDefinition);
-                /* 592 AltOp            */ __Matchers[592].Set(_block, _optionalFunctionSpecifier);
-                /* 593 SeqOp            */ __Matchers[593].Set(__Matchers[485], __Matchers[374]);
-                /* 594 SeqOp            */ __Matchers[594].Set(_functionSpecifier, __Matchers[374]);
-                /* 595 AltOp            */ __Matchers[595].Set(_type, _kwVoid);
-                /* 596 SeqOp            */ __Matchers[596].Set(_getterArgumentType, _memberName, _methodDefinition);
-                /* 597 SeqOp            */ __Matchers[597].Set(__Matchers[528], __Matchers[512], __Matchers[483], _parameters, _methodDefinition);
-                /* 598 SeqOp            */ __Matchers[598].Set(__Matchers[531], _memberName, _methodDefinition);
-                /* 599 SeqOp            */ __Matchers[599].Set(_memberName, __Matchers[484], _requiredFunctionSpecifier);
-                /* 600 SeqOp            */ __Matchers[600].Set(_memberName, _requiredFunctionSpecifier);
-                /* 601 SeqOp            */ __Matchers[601].Set(__Matchers[435], __Matchers[575], __Matchers[436]);
-                /* 602 AltOp            */ __Matchers[602].Set(_expression, _declarationReference);
-                /* 604 SeqOp            */ __Matchers[604].Set(__Matchers[603], _unionExpression);
-                /* 605 OptionalOp       */ __Matchers[605].Set(_letVariableList);
-                /* 606 SeqOp            */ __Matchers[606].Set(__Matchers[434], __Matchers[435], __Matchers[605], __Matchers[436], _conditionalExpression);
-                /* 607 SeqOp            */ __Matchers[607].Set(__Matchers[405], _letVariable);
-                /* 608 StarOp           */ __Matchers[608].Set(__Matchers[607]);
-                /* 609 SeqOp            */ __Matchers[609].Set(_letVariable, __Matchers[608]);
-                /* 610 SeqOp            */ __Matchers[610].Set(_pattern, _valueSpecifier);
-                /* 611 SeqOp            */ __Matchers[611].Set(_switchHeader, _caseExpressions);
-                /* 612 PlusOp           */ __Matchers[612].Set(_caseExpression);
-                /* 613 OptionalOp       */ __Matchers[613].Set(_elseExpression);
-                /* 614 SeqOp            */ __Matchers[614].Set(__Matchers[612], __Matchers[613]);
-                /* 616 OptionalOp       */ __Matchers[616].Set(__Matchers[615]);
-                /* 618 SeqOp            */ __Matchers[618].Set(__Matchers[616], __Matchers[617], __Matchers[435], _caseItem, __Matchers[436], _conditionalExpression);
-                /* 620 SeqOp            */ __Matchers[620].Set(__Matchers[619], _conditions, _thenExpression, _elseExpression);
-                /* 621 SeqOp            */ __Matchers[621].Set(__Matchers[615], _conditionalExpression);
-                /* 623 SeqOp            */ __Matchers[623].Set(__Matchers[622], _conditionalExpression);
-                /* 624 AltOp            */ __Matchers[624].Set(_ifExpr, _letExpr, _disjunctionExpression);
-                /* 625 OptionalOp       */ __Matchers[625].Set(_functionExpressionType);
-                /* 626 OptionalOp       */ __Matchers[626].Set(_functionParameters);
-                /* 627 SeqOp            */ __Matchers[627].Set(__Matchers[625], __Matchers[483], __Matchers[626], _functionDefinition);
-                /* 628 AltOp            */ __Matchers[628].Set(__Matchers[526], __Matchers[528]);
-                /* 629 SeqOp            */ __Matchers[629].Set(__Matchers[484], __Matchers[516]);
-                /* 630 AltOp            */ __Matchers[630].Set(_block, _functionSpecifier);
-                /* 631 AltOp            */ __Matchers[631].Set(_forComprehensionClause, _ifComprehensionClause);
-                /* 632 AltOp            */ __Matchers[632].Set(_forComprehensionClause, _ifComprehensionClause, _expressionComprehensionClause);
-                /* 634 OptionalOp       */ __Matchers[634].Set(_forIterator);
-                /* 635 SeqOp            */ __Matchers[635].Set(__Matchers[633], __Matchers[435], __Matchers[634], __Matchers[436], _comprehensionClause);
-                /* 636 SeqOp            */ __Matchers[636].Set(__Matchers[619], _conditions, _comprehensionClause);
-                /* 637 AltOp            */ __Matchers[637].Set(_letExpr, _ifExpr, _switchExpr, _functionExpr, _operatorExpression);
-                /* 638 AltOp            */ __Matchers[638].Set(_assignmentExpr, _thenElseExpression);
-                /* 639 SeqOp            */ __Matchers[639].Set(_thenElseExpression, _assignmentOperator, _expression);
-                /* 651 AltOp            */ __Matchers[651].Set(__Matchers[413], __Matchers[640], __Matchers[641], __Matchers[642], __Matchers[643], __Matchers[644], __Matchers[645], __Matchers[646], __Matchers[647], __Matchers[648], __Matchers[649], __Matchers[650]);
-                /* 652 AltOp            */ __Matchers[652].Set(_thenElseExpr, _disjunctionExpression);
-                /* 653 SeqOp            */ __Matchers[653].Set(_thenElseExpression, _thenElseOperator, _disjunctionExpression);
-                /* 654 AltOp            */ __Matchers[654].Set(__Matchers[615], __Matchers[622]);
-                /* 655 AltOp            */ __Matchers[655].Set(_disjunctionExpr, _conjunctionExpression);
-                /* 656 SeqOp            */ __Matchers[656].Set(_disjunctionExpression, _disjunctionOperator, _conjunctionExpression);
-                /* 658 AltOp            */ __Matchers[658].Set(_conjunctionExpr, _logicalNegationExpression);
-                /* 659 SeqOp            */ __Matchers[659].Set(_conjunctionExpression, _conjunctionOperator, _logicalNegationExpression);
-                /* 661 AltOp            */ __Matchers[661].Set(_logicalNegationExpr, _expressionOrMeta);
-                /* 662 SeqOp            */ __Matchers[662].Set(_notOperator, _logicalNegationExpression);
-                /* 664 AltOp            */ __Matchers[664].Set(_equalityExpression, _modelReference);
-                /* 665 AltOp            */ __Matchers[665].Set(_equalityExpr, _comparisonExpression);
-                /* 666 SeqOp            */ __Matchers[666].Set(_comparisonExpression, _equalityOperator, _comparisonExpression);
-                /* 670 AltOp            */ __Matchers[670].Set(__Matchers[667], __Matchers[668], __Matchers[669]);
-                /* 671 AltOp            */ __Matchers[671].Set(_comparisonExpr, _largerExpr, _smallerExpr, _largerBoundsExpr, _smallerBoundsExpr, _typecheckExpr, _existsNonemptyExpression);
-                /* 672 SeqOp            */ __Matchers[672].Set(_existsNonemptyExpression, _comparisonOperator, _existsNonemptyExpression);
-                /* 673 SeqOp            */ __Matchers[673].Set(_existsNonemptyExpression, _largerOperator, _existsNonemptyExpression);
-                /* 674 SeqOp            */ __Matchers[674].Set(_existsNonemptyExpression, _smallerOperator, _existsNonemptyExpression);
-                /* 675 SeqOp            */ __Matchers[675].Set(_existsNonemptyExpression, _largerOperator, _existsNonemptyExpression, _largerOperator, _existsNonemptyExpression);
-                /* 676 SeqOp            */ __Matchers[676].Set(_existsNonemptyExpression, _smallerOperator, _existsNonemptyExpression, _smallerOperator, _existsNonemptyExpression);
-                /* 677 SeqOp            */ __Matchers[677].Set(_existsNonemptyExpression, _typeOperator, _type);
-                /* 679 AltOp            */ __Matchers[679].Set(__Matchers[678], __Matchers[499]);
-                /* 681 AltOp            */ __Matchers[681].Set(__Matchers[680], __Matchers[490]);
-                /* 683 AltOp            */ __Matchers[683].Set(__Matchers[682], __Matchers[491]);
-                /* 685 AltOp            */ __Matchers[685].Set(__Matchers[684], __Matchers[438], __Matchers[459], __Matchers[464]);
-                /* 686 AltOp            */ __Matchers[686].Set(_existsExpr, _nonemptyExpr, _entryRangeExpression);
-                /* 688 SeqOp            */ __Matchers[688].Set(_entryRangeExpression, __Matchers[687]);
-                /* 690 SeqOp            */ __Matchers[690].Set(_entryRangeExpression, __Matchers[689]);
-                /* 691 AltOp            */ __Matchers[691].Set(_rangeExpr, _entryExpr, _additiveExpression);
-                /* 692 SeqOp            */ __Matchers[692].Set(_additiveExpression, _rangeOperator, _additiveExpression);
-                /* 693 SeqOp            */ __Matchers[693].Set(_additiveExpression, _entryOperator, _additiveExpression);
-                /* 695 AltOp            */ __Matchers[695].Set(__Matchers[694], __Matchers[385]);
-                /* 696 AltOp            */ __Matchers[696].Set(_additiveExpr, _scaleExpression);
-                /* 697 SeqOp            */ __Matchers[697].Set(_additiveExpression, _additiveOperator, _scaleExpression);
-                /* 700 AltOp            */ __Matchers[700].Set(__Matchers[698], __Matchers[699]);
-                /* 701 AltOp            */ __Matchers[701].Set(_scaleExpr, _multiplicativeExpression);
-                /* 702 SeqOp            */ __Matchers[702].Set(_multiplicativeExpression, _scaleOperator, _scaleExpression);
-                /* 704 AltOp            */ __Matchers[704].Set(_multiplicativeExpr, _unionExpression);
-                /* 705 SeqOp            */ __Matchers[705].Set(_multiplicativeExpression, _multiplicativeOperator, _unionExpression);
-                /* 708 AltOp            */ __Matchers[708].Set(__Matchers[603], __Matchers[706], __Matchers[707]);
-                /* 709 AltOp            */ __Matchers[709].Set(_unionExpr, _exclusiveExpression);
-                /* 710 SeqOp            */ __Matchers[710].Set(_unionExpression, _unionOperator, _exclusiveExpression);
-                /* 712 AltOp            */ __Matchers[712].Set(__Matchers[466], __Matchers[711]);
-                /* 713 AltOp            */ __Matchers[713].Set(_exclusiveExpr, _intersectionExpression);
-                /* 714 SeqOp            */ __Matchers[714].Set(_exclusiveExpression, _exclusiveOperator, _intersectionExpression);
-                /* 716 AltOp            */ __Matchers[716].Set(_intersectionExpr, _negationOrComplementExpression);
-                /* 717 SeqOp            */ __Matchers[717].Set(_intersectionExpression, _intersectionOperator, _negationOrComplementExpression);
-                /* 719 AltOp            */ __Matchers[719].Set(_negationOrComplementExpr, _prefixExpression);
-                /* 720 SeqOp            */ __Matchers[720].Set(_unaryMinusOrComplementOperator, _negationOrComplementExpression);
-                /* 721 AltOp            */ __Matchers[721].Set(_negateOperator, _neutralOperator, _complementOperator);
-                /* 722 NotOp            */ __Matchers[722].Set(__Matchers_722_DFA);
-                /* 723 SeqOp            */ __Matchers[723].Set(__Matchers[699], __Matchers[722]);
-                /* 724 NotOp            */ __Matchers[724].Set(__Matchers_724_DFA);
-                /* 725 SeqOp            */ __Matchers[725].Set(__Matchers[698], __Matchers[724]);
-                /* 726 AltOp            */ __Matchers[726].Set(_prefixExpr, _postfixExpression);
-                /* 727 SeqOp            */ __Matchers[727].Set(_incrementOperator, _prefixExpression);
-                /* 728 AltOp            */ __Matchers[728].Set(_postfixExpr, _primary);
-                /* 729 SeqOp            */ __Matchers[729].Set(_postfixExpression, _incrementOperator);
-                /* 732 AltOp            */ __Matchers[732].Set(__Matchers[730], __Matchers[731]);
-                /* 733 AltOp            */ __Matchers[733].Set(_selectionExpr, _indexedExpr, _callExpr, _baseExpression);
-                /* 734 SeqOp            */ __Matchers[734].Set(_primary, _qualifiedReference);
-                /* 735 SeqOp            */ __Matchers[735].Set(_memberSelectionOperator, _baseReference);
-                /* 738 AltOp            */ __Matchers[738].Set(__Matchers[376], __Matchers[736], __Matchers[737]);
-                /* 739 SeqOp            */ __Matchers[739].Set(_primary, __Matchers[424], _index, __Matchers[426]);
-                /* 740 AltOp            */ __Matchers[740].Set(_lowerSpanned, _upperSpanned, _spanned, _measured, _expression);
-                /* 741 SeqOp            */ __Matchers[741].Set(_indexExpression, __Matchers[415]);
-                /* 742 SeqOp            */ __Matchers[742].Set(__Matchers[415], _indexExpression);
-                /* 743 SeqOp            */ __Matchers[743].Set(_indexExpression, __Matchers[694], _indexExpression);
-                /* 744 SeqOp            */ __Matchers[744].Set(_indexExpression, __Matchers[385], _indexExpression);
-                /* 745 SeqOp            */ __Matchers[745].Set(_primary, _arguments);
-                /* 746 AltOp            */ __Matchers[746].Set(_nonstringLiteral, _stringExpression, _metaLiteral, _enumerationExpr, _tupleExpr, _objectExpr, _groupedExpr, _baseReferenceOrParameterized);
-                /* 747 AltOp            */ __Matchers[747].Set(_literalNatural, _literalFloat, _literalChar);
-                /* 748 AltOp            */ __Matchers[748].Set(_stringLiteral, _stringInterpolation);
-                /* 749 StarOp           */ __Matchers[749].Set(_interpolationPart);
-                /* 750 SeqOp            */ __Matchers[750].Set(_stringStart, _expression, __Matchers[749], _stringEnd);
-                /* 751 SeqOp            */ __Matchers[751].Set(_stringMid, _expression);
-                /* 752 AltOp            */ __Matchers[752].Set(_literalString, _verbatimString);
-                /* 753 SeqOp            */ __Matchers[753].Set(__Matchers[519], __Matchers[520], __Matchers[506], _block);
-                /* 754 SeqOp            */ __Matchers[754].Set(__Matchers[435], _expression, __Matchers[436]);
-                /* 755 OptionalOp       */ __Matchers[755].Set(_typeArgumentList);
-                /* 756 SeqOp            */ __Matchers[756].Set(__Matchers[490], __Matchers[755], __Matchers[491]);
-                /* 757 SeqOp            */ __Matchers[757].Set(__Matchers[405], _variancedType);
-                /* 758 StarOp           */ __Matchers[758].Set(__Matchers[757]);
-                /* 759 SeqOp            */ __Matchers[759].Set(_variancedType, __Matchers[758]);
-                /* 760 SeqOp            */ __Matchers[760].Set(__Matchers[496], _type);
-                /* 761 SeqOp            */ __Matchers[761].Set(__Matchers[405], _defaultedType);
-                /* 762 StarOp           */ __Matchers[762].Set(__Matchers[761]);
-                /* 763 SeqOp            */ __Matchers[763].Set(_defaultedType, __Matchers[762]);
-                /* 764 AltOp            */ __Matchers[764].Set(_defaultedTypeCore, _variadicType);
-                /* 765 SeqOp            */ __Matchers[765].Set(_type, __Matchers[413]);
-                /* 766 AltOp            */ __Matchers[766].Set(_variadicUnionType, _type);
-                /* 767 SeqOp            */ __Matchers[767].Set(_unionType, _variadicOperator);
-                /* 768 AltOp            */ __Matchers[768].Set(__Matchers[603], __Matchers[698]);
-                /* 769 SeqOp            */ __Matchers[769].Set(__Matchers[603], _unionType);
-                /* 770 AltOp            */ __Matchers[770].Set(_entryType, _unionType);
-                /* 771 SeqOp            */ __Matchers[771].Set(_unionType, __Matchers[422], _unionType);
-                /* 772 AltOp            */ __Matchers[772].Set(_unionTypeCore, _intersectionType);
-                /* 773 SeqOp            */ __Matchers[773].Set(_unionType, __Matchers[466], _intersectionType);
-                /* 774 AltOp            */ __Matchers[774].Set(_intersectionTypeCore, _primaryType);
-                /* 775 SeqOp            */ __Matchers[775].Set(_intersectionType, __Matchers[718], _primaryType);
-                /* 776 AltOp            */ __Matchers[776].Set(_nullableType, _arrayType, _functionType, _tupleType, _iterableType, _groupedType, _packageQualifiedType, _typePath);
-                /* 778 SeqOp            */ __Matchers[778].Set(_primaryType, __Matchers[777]);
-                /* 779 OptionalOp       */ __Matchers[779].Set(_literalNatural);
-                /* 780 SeqOp            */ __Matchers[780].Set(_primaryType, __Matchers[424], __Matchers[779], __Matchers[426]);
-                /* 781 OptionalOp       */ __Matchers[781].Set(_typeTypeArguments);
-                /* 782 SeqOp            */ __Matchers[782].Set(_primaryType, __Matchers[435], __Matchers[781], __Matchers[436]);
-                /* 783 AltOp            */ __Matchers[783].Set(_spreadType, _defaultedTypeList);
-                /* 784 SeqOp            */ __Matchers[784].Set(__Matchers[424], __Matchers[781], __Matchers[426]);
-                /* 785 OptionalOp       */ __Matchers[785].Set(_variadicType);
-                /* 786 SeqOp            */ __Matchers[786].Set(__Matchers[393], __Matchers[785], __Matchers[395]);
-                /* 787 SeqOp            */ __Matchers[787].Set(__Matchers[490], _type, __Matchers[491]);
-                /* 788 SeqOp            */ __Matchers[788].Set(__Matchers[398], __Matchers[376], _typePath);
-                /* 789 OptionalOp       */ __Matchers[789].Set(_stringLiteral);
-                /* 790 StarOp           */ __Matchers[790].Set(_annotation);
-                /* 791 SeqOp            */ __Matchers[791].Set(__Matchers[789], __Matchers[790]);
-                /* 792 SeqOp            */ __Matchers[792].Set(_memberName, __Matchers[447]);
-                /* 793 OptionalOp       */ __Matchers[793].Set(_conditionList);
-                /* 794 SeqOp            */ __Matchers[794].Set(__Matchers[435], __Matchers[793], __Matchers[436]);
-                /* 795 SeqOp            */ __Matchers[795].Set(__Matchers[405], _condition);
-                /* 796 StarOp           */ __Matchers[796].Set(__Matchers[795]);
-                /* 797 SeqOp            */ __Matchers[797].Set(_condition, __Matchers[796]);
-                /* 798 AltOp            */ __Matchers[798].Set(_existsCondition, _nonemptyCondition, _isCondition, _satisfiesCondition, _booleanCondition);
-                /* 799 OptionalOp       */ __Matchers[799].Set(__Matchers[663]);
-                /* 800 SeqOp            */ __Matchers[800].Set(__Matchers[799], __Matchers[687], _letOrExpression);
-                /* 801 SeqOp            */ __Matchers[801].Set(__Matchers[799], __Matchers[689], _letOrExpression);
-                /* 802 AltOp            */ __Matchers[802].Set(_letVariable, _operatorExpression);
-                /* 803 SeqOp            */ __Matchers[803].Set(__Matchers[799], __Matchers[684], _type, _isConditionVariable);
-                /* 804 SeqOp            */ __Matchers[804].Set(_memberName, __Matchers[480]);
-                /* 805 SeqOp            */ __Matchers[805].Set(__Matchers[459], _type, _typeName);
-                /* 806 AltOp            */ __Matchers[806].Set(_ifElseStatement, _forElseStatement, _switchStatement, _whileStatement, _tryStatement);
-                /* 807 OptionalOp       */ __Matchers[807].Set(_elseBlock);
-                /* 808 SeqOp            */ __Matchers[808].Set(_ifBlock, __Matchers[807]);
-                /* 809 SeqOp            */ __Matchers[809].Set(__Matchers[619], _conditions, _block);
-                /* 810 SeqOp            */ __Matchers[810].Set(__Matchers[615], _elseBlockNext);
-                /* 811 AltOp            */ __Matchers[811].Set(_ifElseStatement, _block);
-                /* 812 PlusOp           */ __Matchers[812].Set(_caseBlock);
-                /* 813 SeqOp            */ __Matchers[813].Set(_switchHeader, __Matchers[812], __Matchers[807]);
-                /* 815 SeqOp            */ __Matchers[815].Set(__Matchers[814], __Matchers[435], _switched, __Matchers[436]);
-                /* 816 SeqOp            */ __Matchers[816].Set(__Matchers[616], __Matchers[617], __Matchers[435], _caseItem, __Matchers[436], _block);
-                /* 817 AltOp            */ __Matchers[817].Set(_isCaseCondition, _satisfiesCaseCondition, _matchCaseCondition, _pattern);
-                /* 818 OptionalOp       */ __Matchers[818].Set(__Matchers[684]);
-                /* 819 SeqOp            */ __Matchers[819].Set(__Matchers[818], _type);
-                /* 820 SeqOp            */ __Matchers[820].Set(__Matchers[459], _type);
-                /* 821 SeqOp            */ __Matchers[821].Set(_valueCaseSeparator, _valueCase);
-                /* 822 StarOp           */ __Matchers[822].Set(__Matchers[821]);
-                /* 823 SeqOp            */ __Matchers[823].Set(_valueCase, __Matchers[822]);
-                /* 824 AltOp            */ __Matchers[824].Set(__Matchers[405], __Matchers[466]);
-                /* 825 AltOp            */ __Matchers[825].Set(_intersectionType, _intersectionExpression);
-                /* 826 OptionalOp       */ __Matchers[826].Set(_failBlock);
-                /* 827 SeqOp            */ __Matchers[827].Set(_forBlock, __Matchers[826]);
-                /* 828 SeqOp            */ __Matchers[828].Set(__Matchers[633], __Matchers[435], __Matchers[634], __Matchers[436], _block);
-                /* 829 SeqOp            */ __Matchers[829].Set(__Matchers[615], _block);
-                /* 830 OptionalOp       */ __Matchers[830].Set(_containment);
-                /* 831 SeqOp            */ __Matchers[831].Set(_forVariable, __Matchers[830]);
-                /* 832 AltOp            */ __Matchers[832].Set(_tupleOrEntryPattern, _variable);
-                /* 833 SeqOp            */ __Matchers[833].Set(_containmentOperator, _operatorExpression);
-                /* 834 AltOp            */ __Matchers[834].Set(__Matchers[499], __Matchers[385]);
-                /* 836 SeqOp            */ __Matchers[836].Set(__Matchers[835], _conditions, _block);
-                /* 837 StarOp           */ __Matchers[837].Set(_catchBlock);
-                /* 838 OptionalOp       */ __Matchers[838].Set(_finallyBlock);
-                /* 839 SeqOp            */ __Matchers[839].Set(_tryBlock, __Matchers[837], __Matchers[838]);
-                /* 841 OptionalOp       */ __Matchers[841].Set(_resources);
-                /* 842 SeqOp            */ __Matchers[842].Set(__Matchers[840], __Matchers[841], _block);
-                /* 844 SeqOp            */ __Matchers[844].Set(__Matchers[843], _catchVariable, _block);
-                /* 845 OptionalOp       */ __Matchers[845].Set(_variable);
-                /* 846 SeqOp            */ __Matchers[846].Set(__Matchers[435], __Matchers[845], __Matchers[436]);
-                /* 848 SeqOp            */ __Matchers[848].Set(__Matchers[847], _block);
-                /* 849 OptionalOp       */ __Matchers[849].Set(_resourceList);
-                /* 850 SeqOp            */ __Matchers[850].Set(__Matchers[435], __Matchers[849], __Matchers[436]);
-                /* 851 SeqOp            */ __Matchers[851].Set(__Matchers[405], _resource);
-                /* 852 StarOp           */ __Matchers[852].Set(__Matchers[851]);
-                /* 853 SeqOp            */ __Matchers[853].Set(_resource, __Matchers[852]);
-                /* 854 AltOp            */ __Matchers[854].Set(_specifiedVariable, _operatorExpression);
-                /* 855 SeqOp            */ __Matchers[855].Set(_variable, _valueSpecifier);
-                /* 856 OptionalOp       */ __Matchers[856].Set(_variableType);
-                /* 857 StarOp           */ __Matchers[857].Set(_parameters);
-                /* 858 SeqOp            */ __Matchers[858].Set(__Matchers[856], _memberName, __Matchers[857]);
-                /* 859 AltOp            */ __Matchers[859].Set(_type, _kwVoid, _kwFunction, _kwValue);
-                /* 860 SeqOp            */ __Matchers[860].Set(__Matchers[715], _modelExpression);
-                /* 862 SeqOp            */ __Matchers[862].Set(__Matchers[861], _metaExpression, __Matchers[861]);
-                /* 863 AltOp            */ __Matchers[863].Set(_declarationReference, _modelExpression);
-                /* 864 AltOp            */ __Matchers[864].Set(_memberModelExpression, _typeModelExpression);
-                /* 865 AltOp            */ __Matchers[865].Set(_memberReference, _packageQualifiedMemberReference, _typeQualifiedMemberReference);
-                /* 866 SeqOp            */ __Matchers[866].Set(__Matchers[398], __Matchers[376], _memberReference);
-                /* 867 SeqOp            */ __Matchers[867].Set(_primaryType, __Matchers[376], _memberReference);
-                /* 868 AltOp            */ __Matchers[868].Set(_moduleLiteral, _packageLiteral, _classLiteral, _newLiteral, _interfaceLiteral, _aliasLiteral, _typeParameterLiteral, _valueLiteral, _functionLiteral);
-                /* 869 OptionalOp       */ __Matchers[869].Set(_packagePath);
-                /* 870 SeqOp            */ __Matchers[870].Set(__Matchers[381], __Matchers[869]);
-                /* 871 SeqOp            */ __Matchers[871].Set(__Matchers[398], __Matchers[869]);
-                /* 872 SeqOp            */ __Matchers[872].Set(__Matchers[536], _referencePath);
-                /* 873 SeqOp            */ __Matchers[873].Set(__Matchers[542], _referencePath);
-                /* 874 SeqOp            */ __Matchers[874].Set(__Matchers[515], _referencePath);
-                /* 875 SeqOp            */ __Matchers[875].Set(__Matchers[503], _referencePath);
-                /* 876 SeqOp            */ __Matchers[876].Set(__Matchers[511], _referencePath);
-                /* 877 SeqOp            */ __Matchers[877].Set(_valueLiteralIntro, _referencePath);
-                /* 878 AltOp            */ __Matchers[878].Set(__Matchers[531], __Matchers[519]);
-                /* 879 SeqOp            */ __Matchers[879].Set(__Matchers[528], _referencePath);
-                /* 880 SeqOp            */ __Matchers[880].Set(__Matchers[471], _referencePathElementList);
+                /* 438 SeqOp            */ __Matchers[438].Set(__Matchers[405], _letVariable);
+                /* 439 StarOp           */ __Matchers[439].Set(__Matchers[438]);
+                /* 440 SeqOp            */ __Matchers[440].Set(_letVariable, __Matchers[439]);
+                /* 441 SeqOp            */ __Matchers[441].Set(_pattern, _valueSpecifier);
+                /* 443 SeqOp            */ __Matchers[443].Set(__Matchers[442], _classInstatiation);
+                /* 444 OptionalOp       */ __Matchers[444].Set(_assertionMessage);
+                /* 446 SeqOp            */ __Matchers[446].Set(__Matchers[444], __Matchers[445], _conditions);
+                /* 447 SeqOp            */ __Matchers[447].Set(__Matchers[393], _imports, _statements, __Matchers[395]);
+                /* 448 SeqOp            */ __Matchers[448].Set(__Matchers[442], _classInstatiation);
+                /* 450 SeqOp            */ __Matchers[450].Set(__Matchers[449], _classInstatiation);
+                /* 451 OptionalOp       */ __Matchers[451].Set(_arguments);
+                /* 452 SeqOp            */ __Matchers[452].Set(_qualifiedClass, __Matchers[451]);
+                /* 453 AltOp            */ __Matchers[453].Set(_packageQualifiedClass, _superQualifiedClass, _unQualifiedClass);
+                /* 454 SeqOp            */ __Matchers[454].Set(__Matchers[398], __Matchers[376], _unQualifiedClass);
+                /* 456 SeqOp            */ __Matchers[456].Set(__Matchers[455], __Matchers[376], _baseReference);
+                /* 457 AltOp            */ __Matchers[457].Set(_memberPath, _typePath, _memberReference);
+                /* 458 SeqOp            */ __Matchers[458].Set(_typePath, __Matchers[376], _memberReference);
+                /* 459 SeqOp            */ __Matchers[459].Set(__Matchers[376], _typeReference);
+                /* 460 StarOp           */ __Matchers[460].Set(__Matchers[459]);
+                /* 461 SeqOp            */ __Matchers[461].Set(_typeReference, __Matchers[460]);
+                /* 463 SeqOp            */ __Matchers[463].Set(__Matchers[462], _unionTypeList);
+                /* 464 SeqOp            */ __Matchers[464].Set(__Matchers[405], _unionType);
+                /* 465 StarOp           */ __Matchers[465].Set(__Matchers[464]);
+                /* 466 SeqOp            */ __Matchers[466].Set(_unionType, __Matchers[465]);
+                /* 468 SeqOp            */ __Matchers[468].Set(__Matchers[467], _caseTypeList);
+                /* 470 SeqOp            */ __Matchers[470].Set(__Matchers[469], _caseType);
+                /* 471 StarOp           */ __Matchers[471].Set(__Matchers[470]);
+                /* 472 SeqOp            */ __Matchers[472].Set(_caseType, __Matchers[471]);
+                /* 473 AltOp            */ __Matchers[473].Set(_primaryType, _qualifiedCaseType);
+                /* 474 OptionalOp       */ __Matchers[474].Set(_packageQualifier);
+                /* 475 SeqOp            */ __Matchers[475].Set(__Matchers[474], _memberName);
+                /* 476 OptionalOp       */ __Matchers[476].Set(_parameterList);
+                /* 477 SeqOp            */ __Matchers[477].Set(__Matchers[435], __Matchers[476], __Matchers[436]);
+                /* 478 SeqOp            */ __Matchers[478].Set(__Matchers[405], _parameterDeclarationOrRefPattern);
+                /* 479 StarOp           */ __Matchers[479].Set(__Matchers[478]);
+                /* 480 SeqOp            */ __Matchers[480].Set(_parameterDeclarationOrRefPattern, __Matchers[479]);
+                /* 481 AltOp            */ __Matchers[481].Set(_entryPattern, _tuplePattern, _parameter, _parameterReference);
+                /* 482 SeqOp            */ __Matchers[482].Set(_annotations, _parameterDeclaration);
+                /* 483 OptionalOp       */ __Matchers[483].Set(_valueSpecifier);
+                /* 484 SeqOp            */ __Matchers[484].Set(_memberName, __Matchers[483]);
+                /* 485 AltOp            */ __Matchers[485].Set(_functionParameterDeclaration, _valueParameterDeclaration);
+                /* 486 OptionalOp       */ __Matchers[486].Set(_typeParameters);
+                /* 487 PlusOp           */ __Matchers[487].Set(_parameters);
+                /* 488 OptionalOp       */ __Matchers[488].Set(_functionSpecifier);
+                /* 489 SeqOp            */ __Matchers[489].Set(_functionParameterType, _memberName, __Matchers[486], __Matchers[487], __Matchers[488]);
+                /* 490 AltOp            */ __Matchers[490].Set(_variadicType, _kwVoid, _kwFunction);
+                /* 491 SeqOp            */ __Matchers[491].Set(_valueParameterType, _memberName, __Matchers[483]);
+                /* 492 AltOp            */ __Matchers[492].Set(_variadicType, _kwValue);
+                /* 495 SeqOp            */ __Matchers[495].Set(__Matchers[493], _typeParameterList, __Matchers[494]);
+                /* 496 SeqOp            */ __Matchers[496].Set(__Matchers[405], _typeParameter);
+                /* 497 StarOp           */ __Matchers[497].Set(__Matchers[496]);
+                /* 498 SeqOp            */ __Matchers[498].Set(_typeParameter, __Matchers[497]);
+                /* 499 OptionalOp       */ __Matchers[499].Set(_variance);
+                /* 500 OptionalOp       */ __Matchers[500].Set(_typeDefault);
+                /* 501 SeqOp            */ __Matchers[501].Set(__Matchers[499], _typeName, __Matchers[500]);
+                /* 504 AltOp            */ __Matchers[504].Set(__Matchers[502], __Matchers[503]);
+                /* 505 SeqOp            */ __Matchers[505].Set(__Matchers[413], _type);
+                /* 507 OptionalOp       */ __Matchers[507].Set(_typeName);
+                /* 508 OptionalOp       */ __Matchers[508].Set(_caseTypes);
+                /* 509 OptionalOp       */ __Matchers[509].Set(_satisfiedTypes);
+                /* 510 SeqOp            */ __Matchers[510].Set(__Matchers[506], __Matchers[507], __Matchers[486], __Matchers[508], __Matchers[509]);
+                /* 511 PlusOp           */ __Matchers[511].Set(_typeConstraint);
+                /* 512 StarOp           */ __Matchers[512].Set(_declaration);
+                /* 513 AltOp            */ __Matchers[513].Set(_classDeclaration, _interfaceDeclaration, _aliasDeclaration, _objectDeclaration, _constructorDeclaration, _enumeratedObjectDeclaration, _setterDeclaration, _typedMethodDeclaration, _voidMethodDeclaration, _inferredMethodDeclaration, _typedAttributeDeclaration, _inferredAttributeDeclaration);
+                /* 515 OptionalOp       */ __Matchers[515].Set(_memberName);
+                /* 516 OptionalOp       */ __Matchers[516].Set(_delegatedConstructor);
+                /* 517 SeqOp            */ __Matchers[517].Set(_annotations, __Matchers[514], __Matchers[515], _parameters, __Matchers[516], _block);
+                /* 519 OptionalOp       */ __Matchers[519].Set(_typeConstraints);
+                /* 520 SeqOp            */ __Matchers[520].Set(_annotations, __Matchers[518], _typeName, __Matchers[486], __Matchers[519], _optionalTypeSpecifier);
+                /* 521 SeqOp            */ __Matchers[521].Set(_annotations, __Matchers[514], _memberName, __Matchers[516], _block);
+                /* 523 OptionalOp       */ __Matchers[523].Set(_extendedType);
+                /* 524 SeqOp            */ __Matchers[524].Set(_annotations, __Matchers[522], _memberName, __Matchers[523], __Matchers[509], _block);
+                /* 526 SeqOp            */ __Matchers[526].Set(_annotations, __Matchers[525], _memberName, _setterDefinition);
+                /* 527 AltOp            */ __Matchers[527].Set(_block, _requiredFunctionSpecifier);
+                /* 528 SeqOp            */ __Matchers[528].Set(_annotations, _variadicType, _memberName, __Matchers[486], __Matchers[487], __Matchers[519], _methodDefinition);
+                /* 530 SeqOp            */ __Matchers[530].Set(_annotations, __Matchers[529], _memberName, __Matchers[486], __Matchers[487], __Matchers[519], _methodDefinition);
+                /* 532 SeqOp            */ __Matchers[532].Set(_annotations, __Matchers[531], _memberName, __Matchers[486], __Matchers[487], __Matchers[519], _methodDefinition);
+                /* 533 SeqOp            */ __Matchers[533].Set(_annotations, _variadicType, _memberName, _attributeDefinition);
+                /* 535 SeqOp            */ __Matchers[535].Set(_annotations, __Matchers[534], _memberName, _attributeDefinition);
+                /* 536 AltOp            */ __Matchers[536].Set(_block, _optionalAnySpecifier);
+                /* 537 OptionalOp       */ __Matchers[537].Set(_anySpecifier);
+                /* 538 SeqOp            */ __Matchers[538].Set(__Matchers[537], __Matchers[374]);
+                /* 540 OptionalOp       */ __Matchers[540].Set(_parameters);
+                /* 541 SeqOp            */ __Matchers[541].Set(_annotations, __Matchers[539], _typeName, __Matchers[486], __Matchers[540], __Matchers[508], __Matchers[523], __Matchers[509], __Matchers[519], _classDefinition);
+                /* 542 AltOp            */ __Matchers[542].Set(_block, _optionalClassSpecifier);
+                /* 543 OptionalOp       */ __Matchers[543].Set(_classSpecifier);
+                /* 544 SeqOp            */ __Matchers[544].Set(__Matchers[543], __Matchers[374]);
+                /* 546 SeqOp            */ __Matchers[546].Set(_annotations, __Matchers[545], _typeName, __Matchers[486], __Matchers[508], __Matchers[509], __Matchers[519], _interfaceDefinition);
+                /* 547 AltOp            */ __Matchers[547].Set(_block, _optionalTypeSpecifier);
+                /* 548 OptionalOp       */ __Matchers[548].Set(_typeSpecifier);
+                /* 549 SeqOp            */ __Matchers[549].Set(__Matchers[548], __Matchers[374]);
+                /* 550 StarOp           */ __Matchers[550].Set(_statement);
+                /* 551 AltOp            */ __Matchers[551].Set(_declarationStatement, _unclosedStatement, _controlStatement);
+                /* 552 SeqOp            */ __Matchers[552].Set(_openStatement, __Matchers[374]);
+                /* 553 AltOp            */ __Matchers[553].Set(_directiveStatement, _expressionStatement, _specificationStatement, _assertionStatement, _letStatement);
+                /* 554 SeqOp            */ __Matchers[554].Set(_primary, _functionSpecifier);
+                /* 555 AltOp            */ __Matchers[555].Set(_returnStatement, _throwStatement, _breakStatement, _continueStatement);
+                /* 557 OptionalOp       */ __Matchers[557].Set(_expression);
+                /* 558 SeqOp            */ __Matchers[558].Set(__Matchers[556], __Matchers[557]);
+                /* 560 SeqOp            */ __Matchers[560].Set(__Matchers[559], __Matchers[557]);
+                /* 563 SeqOp            */ __Matchers[563].Set(__Matchers[449], _type);
+                /* 564 SeqOp            */ __Matchers[564].Set(__Matchers[413], _expression);
+                /* 565 SeqOp            */ __Matchers[565].Set(__Matchers[449], _expression);
+                /* 566 AltOp            */ __Matchers[566].Set(_valueSpecifier, _functionSpecifier);
+                /* 567 AltOp            */ __Matchers[567].Set(_baseReference, _parametrizedMember, _selfReference, _selfParametrizedMember);
+                /* 568 AltOp            */ __Matchers[568].Set(_memberReference, _typeReference);
+                /* 569 SeqOp            */ __Matchers[569].Set(_memberName, __Matchers[486], __Matchers[487]);
+                /* 570 SeqOp            */ __Matchers[570].Set(_selfReferenceSelector, _parametrizedMember);
+                /* 571 OptionalOp       */ __Matchers[571].Set(_typeArguments);
+                /* 572 SeqOp            */ __Matchers[572].Set(_memberName, __Matchers[571]);
+                /* 573 SeqOp            */ __Matchers[573].Set(_typeName, __Matchers[571]);
+                /* 574 SeqOp            */ __Matchers[574].Set(_selfReference, _memberSelectionOperator);
+                /* 577 AltOp            */ __Matchers[577].Set(__Matchers[575], __Matchers[455], __Matchers[576], __Matchers[398]);
+                /* 578 OptionalOp       */ __Matchers[578].Set(_sequencedArguments);
+                /* 579 SeqOp            */ __Matchers[579].Set(__Matchers[393], _statements, __Matchers[578], __Matchers[395]);
+                /* 580 SeqOp            */ __Matchers[580].Set(__Matchers[424], __Matchers[578], __Matchers[426]);
+                /* 581 AltOp            */ __Matchers[581].Set(_structuralArguments, _positionalArguments);
+                /* 582 StarOp           */ __Matchers[582].Set(_namedOrAnonymous);
+                /* 583 SeqOp            */ __Matchers[583].Set(__Matchers[393], __Matchers[582], __Matchers[578], __Matchers[395]);
+                /* 584 SeqOp            */ __Matchers[584].Set(__Matchers[435], __Matchers[578], __Matchers[436]);
+                /* 585 AltOp            */ __Matchers[585].Set(_anonymousArgument, _namedArgument);
+                /* 586 SeqOp            */ __Matchers[586].Set(_expression, __Matchers[374]);
+                /* 587 AltOp            */ __Matchers[587].Set(_namedSpecifiedArgument, _namedArgumentDeclaration);
+                /* 588 SeqOp            */ __Matchers[588].Set(_memberName, _valueSpecifier, __Matchers[374]);
+                /* 589 SeqOp            */ __Matchers[589].Set(__Matchers[405], _sequencedArgument);
+                /* 590 StarOp           */ __Matchers[590].Set(__Matchers[589]);
+                /* 591 SeqOp            */ __Matchers[591].Set(_sequencedArgument, __Matchers[590]);
+                /* 592 AltOp            */ __Matchers[592].Set(_comprehensionArgument, _positionalArgument, _spreadArgument);
+                /* 593 AltOp            */ __Matchers[593].Set(_objectArgument, _typedMethodArgument, _inferredMethodArgument, _untypedMethodArgument, _typedGetterArgument, _inferredGetterArgument, _untypedGetterArgument);
+                /* 594 SeqOp            */ __Matchers[594].Set(__Matchers[522], __Matchers[515], __Matchers[523], __Matchers[509], _block);
+                /* 595 SeqOp            */ __Matchers[595].Set(_methodArgumentType, _parametrizedMember, _methodDefinition);
+                /* 596 AltOp            */ __Matchers[596].Set(_block, _optionalFunctionSpecifier);
+                /* 597 SeqOp            */ __Matchers[597].Set(__Matchers[488], __Matchers[374]);
+                /* 598 SeqOp            */ __Matchers[598].Set(_functionSpecifier, __Matchers[374]);
+                /* 599 AltOp            */ __Matchers[599].Set(_type, _kwVoid);
+                /* 600 SeqOp            */ __Matchers[600].Set(_getterArgumentType, _memberName, _methodDefinition);
+                /* 601 SeqOp            */ __Matchers[601].Set(__Matchers[531], __Matchers[515], __Matchers[486], _parameters, _methodDefinition);
+                /* 602 SeqOp            */ __Matchers[602].Set(__Matchers[534], _memberName, _methodDefinition);
+                /* 603 SeqOp            */ __Matchers[603].Set(_memberName, __Matchers[487], _requiredFunctionSpecifier);
+                /* 604 SeqOp            */ __Matchers[604].Set(_memberName, _requiredFunctionSpecifier);
+                /* 605 AltOp            */ __Matchers[605].Set(_expressionArgument, _declarationReference);
+                /* 607 SeqOp            */ __Matchers[607].Set(__Matchers[606], _unionExpression);
+                /* 608 OptionalOp       */ __Matchers[608].Set(_letVariableList);
+                /* 609 SeqOp            */ __Matchers[609].Set(__Matchers[434], __Matchers[435], __Matchers[608], __Matchers[436], _conditionalExpression);
+                /* 610 SeqOp            */ __Matchers[610].Set(_switchHeader, _caseExpressions);
+                /* 611 PlusOp           */ __Matchers[611].Set(_caseExpression);
+                /* 612 OptionalOp       */ __Matchers[612].Set(_elseExpression);
+                /* 613 SeqOp            */ __Matchers[613].Set(__Matchers[611], __Matchers[612]);
+                /* 615 OptionalOp       */ __Matchers[615].Set(__Matchers[614]);
+                /* 617 SeqOp            */ __Matchers[617].Set(__Matchers[615], __Matchers[616], __Matchers[435], _caseItem, __Matchers[436], _conditionalExpression);
+                /* 619 SeqOp            */ __Matchers[619].Set(__Matchers[618], _conditions, _thenExpression, _elseExpression);
+                /* 620 SeqOp            */ __Matchers[620].Set(__Matchers[614], _conditionalExpression);
+                /* 622 SeqOp            */ __Matchers[622].Set(__Matchers[621], _conditionalExpression);
+                /* 623 AltOp            */ __Matchers[623].Set(_ifExpr, _letExpr, _disjunctionExpression);
+                /* 624 OptionalOp       */ __Matchers[624].Set(_functionExpressionType);
+                /* 625 OptionalOp       */ __Matchers[625].Set(_functionParameters);
+                /* 626 SeqOp            */ __Matchers[626].Set(__Matchers[624], __Matchers[486], __Matchers[625], _functionDefinition);
+                /* 627 AltOp            */ __Matchers[627].Set(__Matchers[529], __Matchers[531]);
+                /* 628 SeqOp            */ __Matchers[628].Set(__Matchers[487], __Matchers[519]);
+                /* 629 AltOp            */ __Matchers[629].Set(_block, _functionSpecifier);
+                /* 630 AltOp            */ __Matchers[630].Set(_forComprehensionClause, _ifComprehensionClause);
+                /* 631 AltOp            */ __Matchers[631].Set(_forComprehensionClause, _ifComprehensionClause, _expressionComprehensionClause);
+                /* 633 OptionalOp       */ __Matchers[633].Set(_forIterator);
+                /* 634 SeqOp            */ __Matchers[634].Set(__Matchers[632], __Matchers[435], __Matchers[633], __Matchers[436], _comprehensionClause);
+                /* 635 SeqOp            */ __Matchers[635].Set(__Matchers[618], _conditions, _comprehensionClause);
+                /* 636 AltOp            */ __Matchers[636].Set(_letExpr, _ifExpr, _switchExpr, _functionExpr, _operatorExpression);
+                /* 637 AltOp            */ __Matchers[637].Set(_assignmentExpr, _thenElseExpression);
+                /* 638 SeqOp            */ __Matchers[638].Set(_thenElseExpression, _assignmentOperator, _expression);
+                /* 650 AltOp            */ __Matchers[650].Set(__Matchers[413], __Matchers[639], __Matchers[640], __Matchers[641], __Matchers[642], __Matchers[643], __Matchers[644], __Matchers[645], __Matchers[646], __Matchers[647], __Matchers[648], __Matchers[649]);
+                /* 651 AltOp            */ __Matchers[651].Set(_thenElseExpr, _disjunctionExpression);
+                /* 652 SeqOp            */ __Matchers[652].Set(_thenElseExpression, _thenElseOperator, _disjunctionExpression);
+                /* 653 AltOp            */ __Matchers[653].Set(__Matchers[614], __Matchers[621]);
+                /* 654 AltOp            */ __Matchers[654].Set(_disjunctionExpr, _conjunctionExpression);
+                /* 655 SeqOp            */ __Matchers[655].Set(_disjunctionExpression, _disjunctionOperator, _conjunctionExpression);
+                /* 657 AltOp            */ __Matchers[657].Set(_conjunctionExpr, _logicalNegationExpression);
+                /* 658 SeqOp            */ __Matchers[658].Set(_conjunctionExpression, _conjunctionOperator, _logicalNegationExpression);
+                /* 660 AltOp            */ __Matchers[660].Set(_logicalNegationExpr, _expressionOrMeta);
+                /* 661 SeqOp            */ __Matchers[661].Set(_notOperator, _logicalNegationExpression);
+                /* 663 AltOp            */ __Matchers[663].Set(_equalityExpression, _modelReference);
+                /* 664 AltOp            */ __Matchers[664].Set(_equalityExpr, _comparisonExpression);
+                /* 665 SeqOp            */ __Matchers[665].Set(_comparisonExpression, _equalityOperator, _comparisonExpression);
+                /* 669 AltOp            */ __Matchers[669].Set(__Matchers[666], __Matchers[667], __Matchers[668]);
+                /* 670 AltOp            */ __Matchers[670].Set(_comparisonExpr, _largerExpr, _smallerExpr, _largerBoundsExpr, _smallerBoundsExpr, _typecheckExpr, _existsNonemptyExpression);
+                /* 671 SeqOp            */ __Matchers[671].Set(_existsNonemptyExpression, _comparisonOperator, _existsNonemptyExpression);
+                /* 672 SeqOp            */ __Matchers[672].Set(_existsNonemptyExpression, _largerOperator, _existsNonemptyExpression);
+                /* 673 SeqOp            */ __Matchers[673].Set(_existsNonemptyExpression, _smallerOperator, _existsNonemptyExpression);
+                /* 674 SeqOp            */ __Matchers[674].Set(_existsNonemptyExpression, _largerOperator, _existsNonemptyExpression, _largerOperator, _existsNonemptyExpression);
+                /* 675 SeqOp            */ __Matchers[675].Set(_existsNonemptyExpression, _smallerOperator, _existsNonemptyExpression, _smallerOperator, _existsNonemptyExpression);
+                /* 676 SeqOp            */ __Matchers[676].Set(_existsNonemptyExpression, _typeOperator, _type);
+                /* 678 AltOp            */ __Matchers[678].Set(__Matchers[677], __Matchers[502]);
+                /* 680 AltOp            */ __Matchers[680].Set(__Matchers[679], __Matchers[493]);
+                /* 682 AltOp            */ __Matchers[682].Set(__Matchers[681], __Matchers[494]);
+                /* 684 AltOp            */ __Matchers[684].Set(__Matchers[683], __Matchers[442], __Matchers[462], __Matchers[467]);
+                /* 685 AltOp            */ __Matchers[685].Set(_existsExpr, _nonemptyExpr, _entryRangeExpression);
+                /* 687 SeqOp            */ __Matchers[687].Set(_entryRangeExpression, __Matchers[686]);
+                /* 689 SeqOp            */ __Matchers[689].Set(_entryRangeExpression, __Matchers[688]);
+                /* 690 AltOp            */ __Matchers[690].Set(_rangeExpr, _entryExpr, _additiveExpression);
+                /* 691 SeqOp            */ __Matchers[691].Set(_additiveExpression, _rangeOperator, _additiveExpression);
+                /* 692 SeqOp            */ __Matchers[692].Set(_additiveExpression, _entryOperator, _additiveExpression);
+                /* 694 AltOp            */ __Matchers[694].Set(__Matchers[693], __Matchers[385]);
+                /* 695 AltOp            */ __Matchers[695].Set(_additiveExpr, _scaleExpression);
+                /* 696 SeqOp            */ __Matchers[696].Set(_additiveExpression, _additiveOperator, _scaleExpression);
+                /* 699 AltOp            */ __Matchers[699].Set(__Matchers[697], __Matchers[698]);
+                /* 700 AltOp            */ __Matchers[700].Set(_scaleExpr, _multiplicativeExpression);
+                /* 701 SeqOp            */ __Matchers[701].Set(_multiplicativeExpression, _scaleOperator, _scaleExpression);
+                /* 703 AltOp            */ __Matchers[703].Set(_multiplicativeExpr, _unionExpression);
+                /* 704 SeqOp            */ __Matchers[704].Set(_multiplicativeExpression, _multiplicativeOperator, _unionExpression);
+                /* 707 AltOp            */ __Matchers[707].Set(__Matchers[606], __Matchers[705], __Matchers[706]);
+                /* 708 AltOp            */ __Matchers[708].Set(_unionExpr, _exclusiveExpression);
+                /* 709 SeqOp            */ __Matchers[709].Set(_unionExpression, _unionOperator, _exclusiveExpression);
+                /* 711 AltOp            */ __Matchers[711].Set(__Matchers[469], __Matchers[710]);
+                /* 712 AltOp            */ __Matchers[712].Set(_exclusiveExpr, _intersectionExpression);
+                /* 713 SeqOp            */ __Matchers[713].Set(_exclusiveExpression, _exclusiveOperator, _intersectionExpression);
+                /* 715 AltOp            */ __Matchers[715].Set(_intersectionExpr, _negationOrComplementExpression);
+                /* 716 SeqOp            */ __Matchers[716].Set(_intersectionExpression, _intersectionOperator, _negationOrComplementExpression);
+                /* 718 AltOp            */ __Matchers[718].Set(_negationOrComplementExpr, _prefixExpression);
+                /* 719 SeqOp            */ __Matchers[719].Set(_unaryMinusOrComplementOperator, _negationOrComplementExpression);
+                /* 720 AltOp            */ __Matchers[720].Set(_negateOperator, _neutralOperator, _complementOperator);
+                /* 721 NotOp            */ __Matchers[721].Set(__Matchers_721_DFA);
+                /* 722 SeqOp            */ __Matchers[722].Set(__Matchers[698], __Matchers[721]);
+                /* 723 NotOp            */ __Matchers[723].Set(__Matchers_723_DFA);
+                /* 724 SeqOp            */ __Matchers[724].Set(__Matchers[697], __Matchers[723]);
+                /* 725 AltOp            */ __Matchers[725].Set(_prefixExpr, _postfixExpression);
+                /* 726 SeqOp            */ __Matchers[726].Set(_incrementOperator, _prefixExpression);
+                /* 727 AltOp            */ __Matchers[727].Set(_postfixExpr, _primary);
+                /* 728 SeqOp            */ __Matchers[728].Set(_postfixExpression, _incrementOperator);
+                /* 731 AltOp            */ __Matchers[731].Set(__Matchers[729], __Matchers[730]);
+                /* 732 AltOp            */ __Matchers[732].Set(_selectionExpr, _indexedExpr, _callExpr, _baseExpression);
+                /* 733 SeqOp            */ __Matchers[733].Set(_primary, _qualifiedReference);
+                /* 734 SeqOp            */ __Matchers[734].Set(_memberSelectionOperator, _baseReference);
+                /* 737 AltOp            */ __Matchers[737].Set(__Matchers[376], __Matchers[735], __Matchers[736]);
+                /* 738 SeqOp            */ __Matchers[738].Set(_primary, __Matchers[424], _index, __Matchers[426]);
+                /* 739 AltOp            */ __Matchers[739].Set(_lowerSpanned, _upperSpanned, _spanned, _measured, _expression);
+                /* 740 SeqOp            */ __Matchers[740].Set(_indexExpression, __Matchers[415]);
+                /* 741 SeqOp            */ __Matchers[741].Set(__Matchers[415], _indexExpression);
+                /* 742 SeqOp            */ __Matchers[742].Set(_indexExpression, __Matchers[693], _indexExpression);
+                /* 743 SeqOp            */ __Matchers[743].Set(_indexExpression, __Matchers[385], _indexExpression);
+                /* 744 SeqOp            */ __Matchers[744].Set(_primary, _arguments);
+                /* 745 AltOp            */ __Matchers[745].Set(_nonstringLiteral, _stringExpression, _metaLiteral, _enumerationExpr, _tupleExpr, _objectExpr, _groupedExpr, _baseReferenceOrParameterized);
+                /* 746 AltOp            */ __Matchers[746].Set(_literalNatural, _literalFloat, _literalChar);
+                /* 747 AltOp            */ __Matchers[747].Set(_stringLiteral, _stringInterpolation);
+                /* 748 StarOp           */ __Matchers[748].Set(_interpolationPart);
+                /* 749 SeqOp            */ __Matchers[749].Set(_stringStart, _expression, __Matchers[748], _stringEnd);
+                /* 750 SeqOp            */ __Matchers[750].Set(_stringMid, _expression);
+                /* 751 AltOp            */ __Matchers[751].Set(_literalString, _verbatimString);
+                /* 752 SeqOp            */ __Matchers[752].Set(__Matchers[522], __Matchers[523], __Matchers[509], _block);
+                /* 753 SeqOp            */ __Matchers[753].Set(__Matchers[435], _expression, __Matchers[436]);
+                /* 754 OptionalOp       */ __Matchers[754].Set(_typeArgumentList);
+                /* 755 SeqOp            */ __Matchers[755].Set(__Matchers[493], __Matchers[754], __Matchers[494]);
+                /* 756 SeqOp            */ __Matchers[756].Set(__Matchers[405], _variancedType);
+                /* 757 StarOp           */ __Matchers[757].Set(__Matchers[756]);
+                /* 758 SeqOp            */ __Matchers[758].Set(_variancedType, __Matchers[757]);
+                /* 759 SeqOp            */ __Matchers[759].Set(__Matchers[499], _type);
+                /* 760 SeqOp            */ __Matchers[760].Set(__Matchers[405], _defaultedType);
+                /* 761 StarOp           */ __Matchers[761].Set(__Matchers[760]);
+                /* 762 SeqOp            */ __Matchers[762].Set(_defaultedType, __Matchers[761]);
+                /* 763 AltOp            */ __Matchers[763].Set(_defaultedTypeCore, _variadicType);
+                /* 764 SeqOp            */ __Matchers[764].Set(_type, __Matchers[413]);
+                /* 765 AltOp            */ __Matchers[765].Set(_variadicUnionType, _type);
+                /* 766 SeqOp            */ __Matchers[766].Set(_unionType, _variadicOperator);
+                /* 767 AltOp            */ __Matchers[767].Set(__Matchers[606], __Matchers[697]);
+                /* 768 SeqOp            */ __Matchers[768].Set(__Matchers[606], _unionType);
+                /* 769 AltOp            */ __Matchers[769].Set(_entryType, _unionType);
+                /* 770 SeqOp            */ __Matchers[770].Set(_unionType, __Matchers[422], _unionType);
+                /* 771 AltOp            */ __Matchers[771].Set(_unionTypeCore, _intersectionType);
+                /* 772 SeqOp            */ __Matchers[772].Set(_unionType, __Matchers[469], _intersectionType);
+                /* 773 AltOp            */ __Matchers[773].Set(_intersectionTypeCore, _primaryType);
+                /* 774 SeqOp            */ __Matchers[774].Set(_intersectionType, __Matchers[717], _primaryType);
+                /* 775 AltOp            */ __Matchers[775].Set(_nullableType, _arrayType, _functionType, _tupleType, _iterableType, _groupedType, _packageQualifiedType, _typePath);
+                /* 777 SeqOp            */ __Matchers[777].Set(_primaryType, __Matchers[776]);
+                /* 778 OptionalOp       */ __Matchers[778].Set(_literalNatural);
+                /* 779 SeqOp            */ __Matchers[779].Set(_primaryType, __Matchers[424], __Matchers[778], __Matchers[426]);
+                /* 780 OptionalOp       */ __Matchers[780].Set(_typeTypeArguments);
+                /* 781 SeqOp            */ __Matchers[781].Set(_primaryType, __Matchers[435], __Matchers[780], __Matchers[436]);
+                /* 782 AltOp            */ __Matchers[782].Set(_spreadType, _defaultedTypeList);
+                /* 783 SeqOp            */ __Matchers[783].Set(__Matchers[424], __Matchers[780], __Matchers[426]);
+                /* 784 OptionalOp       */ __Matchers[784].Set(_variadicType);
+                /* 785 SeqOp            */ __Matchers[785].Set(__Matchers[393], __Matchers[784], __Matchers[395]);
+                /* 786 SeqOp            */ __Matchers[786].Set(__Matchers[493], _type, __Matchers[494]);
+                /* 787 SeqOp            */ __Matchers[787].Set(__Matchers[398], __Matchers[376], _typePath);
+                /* 788 OptionalOp       */ __Matchers[788].Set(_stringLiteral);
+                /* 789 StarOp           */ __Matchers[789].Set(_annotation);
+                /* 790 SeqOp            */ __Matchers[790].Set(__Matchers[788], __Matchers[789]);
+                /* 791 SeqOp            */ __Matchers[791].Set(_memberName, __Matchers[451]);
+                /* 792 OptionalOp       */ __Matchers[792].Set(_conditionList);
+                /* 793 SeqOp            */ __Matchers[793].Set(__Matchers[435], __Matchers[792], __Matchers[436]);
+                /* 794 SeqOp            */ __Matchers[794].Set(__Matchers[405], _condition);
+                /* 795 StarOp           */ __Matchers[795].Set(__Matchers[794]);
+                /* 796 SeqOp            */ __Matchers[796].Set(_condition, __Matchers[795]);
+                /* 797 AltOp            */ __Matchers[797].Set(_existsCondition, _nonemptyCondition, _isCondition, _satisfiesCondition, _booleanCondition);
+                /* 798 OptionalOp       */ __Matchers[798].Set(__Matchers[662]);
+                /* 799 SeqOp            */ __Matchers[799].Set(__Matchers[798], __Matchers[686], _letOrExpression);
+                /* 800 SeqOp            */ __Matchers[800].Set(__Matchers[798], __Matchers[688], _letOrExpression);
+                /* 801 AltOp            */ __Matchers[801].Set(_letVariable, _operatorExpression);
+                /* 802 SeqOp            */ __Matchers[802].Set(__Matchers[798], __Matchers[683], _type, _isConditionVariable);
+                /* 803 SeqOp            */ __Matchers[803].Set(_memberName, __Matchers[483]);
+                /* 804 SeqOp            */ __Matchers[804].Set(__Matchers[462], _type, _typeName);
+                /* 805 AltOp            */ __Matchers[805].Set(_ifElseStatement, _forElseStatement, _switchStatement, _whileStatement, _tryStatement);
+                /* 806 OptionalOp       */ __Matchers[806].Set(_elseBlock);
+                /* 807 SeqOp            */ __Matchers[807].Set(_ifBlock, __Matchers[806]);
+                /* 808 SeqOp            */ __Matchers[808].Set(__Matchers[618], _conditions, _block);
+                /* 809 SeqOp            */ __Matchers[809].Set(__Matchers[614], _elseBlockNext);
+                /* 810 AltOp            */ __Matchers[810].Set(_ifElseStatement, _block);
+                /* 811 PlusOp           */ __Matchers[811].Set(_caseBlock);
+                /* 812 SeqOp            */ __Matchers[812].Set(_switchHeader, __Matchers[811], __Matchers[806]);
+                /* 814 SeqOp            */ __Matchers[814].Set(__Matchers[813], __Matchers[435], _switched, __Matchers[436]);
+                /* 815 SeqOp            */ __Matchers[815].Set(__Matchers[615], __Matchers[616], __Matchers[435], _caseItem, __Matchers[436], _block);
+                /* 816 AltOp            */ __Matchers[816].Set(_isCaseCondition, _satisfiesCaseCondition, _matchCaseCondition, _pattern);
+                /* 817 OptionalOp       */ __Matchers[817].Set(__Matchers[683]);
+                /* 818 SeqOp            */ __Matchers[818].Set(__Matchers[817], _type);
+                /* 819 SeqOp            */ __Matchers[819].Set(__Matchers[462], _type);
+                /* 820 SeqOp            */ __Matchers[820].Set(_valueCaseSeparator, _valueCase);
+                /* 821 StarOp           */ __Matchers[821].Set(__Matchers[820]);
+                /* 822 SeqOp            */ __Matchers[822].Set(_valueCase, __Matchers[821]);
+                /* 823 AltOp            */ __Matchers[823].Set(__Matchers[405], __Matchers[469]);
+                /* 824 AltOp            */ __Matchers[824].Set(_intersectionType, _intersectionExpression);
+                /* 825 OptionalOp       */ __Matchers[825].Set(_failBlock);
+                /* 826 SeqOp            */ __Matchers[826].Set(_forBlock, __Matchers[825]);
+                /* 827 SeqOp            */ __Matchers[827].Set(__Matchers[632], __Matchers[435], __Matchers[633], __Matchers[436], _block);
+                /* 828 SeqOp            */ __Matchers[828].Set(__Matchers[614], _block);
+                /* 829 OptionalOp       */ __Matchers[829].Set(_containment);
+                /* 830 SeqOp            */ __Matchers[830].Set(_forVariable, __Matchers[829]);
+                /* 831 AltOp            */ __Matchers[831].Set(_tupleOrEntryPattern, _variable);
+                /* 832 SeqOp            */ __Matchers[832].Set(_containmentOperator, _operatorExpression);
+                /* 833 AltOp            */ __Matchers[833].Set(__Matchers[502], __Matchers[385]);
+                /* 835 SeqOp            */ __Matchers[835].Set(__Matchers[834], _conditions, _block);
+                /* 836 StarOp           */ __Matchers[836].Set(_catchBlock);
+                /* 837 OptionalOp       */ __Matchers[837].Set(_finallyBlock);
+                /* 838 SeqOp            */ __Matchers[838].Set(_tryBlock, __Matchers[836], __Matchers[837]);
+                /* 840 OptionalOp       */ __Matchers[840].Set(_resources);
+                /* 841 SeqOp            */ __Matchers[841].Set(__Matchers[839], __Matchers[840], _block);
+                /* 843 SeqOp            */ __Matchers[843].Set(__Matchers[842], _catchVariable, _block);
+                /* 844 OptionalOp       */ __Matchers[844].Set(_variable);
+                /* 845 SeqOp            */ __Matchers[845].Set(__Matchers[435], __Matchers[844], __Matchers[436]);
+                /* 847 SeqOp            */ __Matchers[847].Set(__Matchers[846], _block);
+                /* 848 OptionalOp       */ __Matchers[848].Set(_resourceList);
+                /* 849 SeqOp            */ __Matchers[849].Set(__Matchers[435], __Matchers[848], __Matchers[436]);
+                /* 850 SeqOp            */ __Matchers[850].Set(__Matchers[405], _resource);
+                /* 851 StarOp           */ __Matchers[851].Set(__Matchers[850]);
+                /* 852 SeqOp            */ __Matchers[852].Set(_resource, __Matchers[851]);
+                /* 853 AltOp            */ __Matchers[853].Set(_specifiedVariable, _operatorExpression);
+                /* 854 SeqOp            */ __Matchers[854].Set(_variable, _valueSpecifier);
+                /* 855 OptionalOp       */ __Matchers[855].Set(_variableType);
+                /* 856 StarOp           */ __Matchers[856].Set(_parameters);
+                /* 857 SeqOp            */ __Matchers[857].Set(__Matchers[855], _memberName, __Matchers[856]);
+                /* 858 AltOp            */ __Matchers[858].Set(_type, _kwVoid, _kwFunction, _kwValue);
+                /* 859 SeqOp            */ __Matchers[859].Set(__Matchers[714], _modelExpression);
+                /* 861 SeqOp            */ __Matchers[861].Set(__Matchers[860], _metaExpression, __Matchers[860]);
+                /* 862 AltOp            */ __Matchers[862].Set(_declarationReference, _modelExpression);
+                /* 863 AltOp            */ __Matchers[863].Set(_memberModelExpression, _typeModelExpression);
+                /* 864 AltOp            */ __Matchers[864].Set(_memberReference, _packageQualifiedMemberReference, _typeQualifiedMemberReference);
+                /* 865 SeqOp            */ __Matchers[865].Set(__Matchers[398], __Matchers[376], _memberReference);
+                /* 866 SeqOp            */ __Matchers[866].Set(_primaryType, __Matchers[376], _memberReference);
+                /* 867 AltOp            */ __Matchers[867].Set(_moduleLiteral, _packageLiteral, _classLiteral, _newLiteral, _interfaceLiteral, _aliasLiteral, _typeParameterLiteral, _valueLiteral, _functionLiteral);
+                /* 868 OptionalOp       */ __Matchers[868].Set(_packagePath);
+                /* 869 SeqOp            */ __Matchers[869].Set(__Matchers[381], __Matchers[868]);
+                /* 870 SeqOp            */ __Matchers[870].Set(__Matchers[398], __Matchers[868]);
+                /* 871 SeqOp            */ __Matchers[871].Set(__Matchers[539], _referencePath);
+                /* 872 SeqOp            */ __Matchers[872].Set(__Matchers[545], _referencePath);
+                /* 873 SeqOp            */ __Matchers[873].Set(__Matchers[518], _referencePath);
+                /* 874 SeqOp            */ __Matchers[874].Set(__Matchers[506], _referencePath);
+                /* 875 SeqOp            */ __Matchers[875].Set(__Matchers[514], _referencePath);
+                /* 876 SeqOp            */ __Matchers[876].Set(_valueLiteralIntro, _referencePath);
+                /* 877 AltOp            */ __Matchers[877].Set(__Matchers[534], __Matchers[522]);
+                /* 878 SeqOp            */ __Matchers[878].Set(__Matchers[531], _referencePath);
+                /* 879 SeqOp            */ __Matchers[879].Set(__Matchers[398], __Matchers[376]);
+                /* 880 SeqOp            */ __Matchers[880].Set(__Matchers[474], _referencePathElementList);
                 /* 881 SeqOp            */ __Matchers[881].Set(__Matchers[376], _referencePathElement);
                 /* 882 StarOp           */ __Matchers[882].Set(__Matchers[881]);
                 /* 883 SeqOp            */ __Matchers[883].Set(_referencePathElement, __Matchers[882]);
@@ -2735,23 +2735,23 @@ namespace Six.Ceylon
                 _identifier_DFA.States[1].Set(
                     new DfaTrans(_identifier_DFA.States[1], new DfaInterval(48, 57), new DfaInterval(65, 90), new DfaInterval(95, 95), new DfaInterval(97, 122), new DfaInterval(128, 65535))
                 );
-                __Matchers_722_DFA.Set(
+                __Matchers_721_DFA.Set(
                     new DfaState(0, false),
                     new DfaState(1, true)
                 );
-                __Matchers_722_DFA.States[0].Set(
-                    new DfaTrans(__Matchers_722_DFA.States[1], new DfaInterval(45, 45))
+                __Matchers_721_DFA.States[0].Set(
+                    new DfaTrans(__Matchers_721_DFA.States[1], new DfaInterval(45, 45))
                 );
-                __Matchers_722_DFA.States[1].Set(
+                __Matchers_721_DFA.States[1].Set(
                 );
-                __Matchers_724_DFA.Set(
+                __Matchers_723_DFA.Set(
                     new DfaState(0, false),
                     new DfaState(1, true)
                 );
-                __Matchers_724_DFA.States[0].Set(
-                    new DfaTrans(__Matchers_724_DFA.States[1], new DfaInterval(43, 43))
+                __Matchers_723_DFA.States[0].Set(
+                    new DfaTrans(__Matchers_723_DFA.States[1], new DfaInterval(43, 43))
                 );
-                __Matchers_724_DFA.States[1].Set(
+                __Matchers_723_DFA.States[1].Set(
                 );
             }
 
@@ -2795,18 +2795,18 @@ namespace Six.Ceylon
             private PlainRule _variablePattern;
             private PlainRule _variadicVariable;
             private PlainRule _letStatement;
+            private PlainRule _letVariableList;
+            private PlainRule _letVariable;
             private PlainRule _delegatedConstructor;
             private PlainRule _assertionStatement;
             private PlainRule _assertionMessage;
             private PlainRule _block;
-            private PlainRule _blockElements;
             private PlainRule _extendedType;
             private PlainRule _classSpecifier;
             private PlainRule _classInstatiation;
             private PlainRule _qualifiedClass;
-            private PlainRule _superQualifiedClass;
             private PlainRule _packageQualifiedClass;
-            private PlainRule _packageQualifier;
+            private PlainRule _superQualifiedClass;
             private PlainRule _unQualifiedClass;
             private PlainRule _memberPath;
             private PlainRule _typePath;
@@ -2882,9 +2882,10 @@ namespace Six.Ceylon
             private PlainRule _tupleExpr;
             private PlainRule _arguments;
             private PlainRule _structuralArguments;
+            private PlainRule _positionalArguments;
             private PlainRule _namedOrAnonymous;
-            private PlainRule _namedArgument;
             private PlainRule _anonymousArgument;
+            private PlainRule _namedArgument;
             private PlainRule _namedSpecifiedArgument;
             private PlainRule _sequencedArguments;
             private PlainRule _sequencedArgument;
@@ -2901,12 +2902,10 @@ namespace Six.Ceylon
             private PlainRule _inferredGetterArgument;
             private PlainRule _untypedMethodArgument;
             private PlainRule _untypedGetterArgument;
-            private PlainRule _positionalArguments;
             private PlainRule _positionalArgument;
+            private PlainRule _expressionArgument;
             private PlainRule _spreadArgument;
             private PlainRule _letExpr;
-            private PlainRule _letVariableList;
-            private PlainRule _letVariable;
             private PlainRule _switchExpr;
             private PlainRule _caseExpressions;
             private PlainRule _caseExpression;
@@ -3104,6 +3103,7 @@ namespace Six.Ceylon
             private PlainRule _valueLiteral;
             private PlainRule _valueLiteralIntro;
             private PlainRule _functionLiteral;
+            private PlainRule _packageQualifier;
             private PlainRule _referencePath;
             private PlainRule _referencePathElementList;
             private PlainRule _referencePathElement;
@@ -3135,8 +3135,8 @@ namespace Six.Ceylon
             private Dfa _lowerIdentifier_DFA = new Dfa("lower-identifier");
             private Dfa _upperIdentifier_DFA = new Dfa("upper-identifier");
             private Dfa _identifier_DFA = new Dfa("identifier");
-            private Dfa __Matchers_722_DFA = new Dfa("__Matchers_722_DFA");
-            private Dfa __Matchers_724_DFA = new Dfa("__Matchers_724_DFA");
+            private Dfa __Matchers_721_DFA = new Dfa("__Matchers_721_DFA");
+            private Dfa __Matchers_723_DFA = new Dfa("__Matchers_723_DFA");
         }
     }
 
@@ -3185,18 +3185,18 @@ namespace Six.Ceylon
         public interface ICVariablePattern : ICPattern, ICVariableOrTuplePattern {}
         public interface ICVariadicVariable : ICVariadicPattern {}
         public interface ICLetStatement : ICOpenStatement {}
+        public interface ICLetVariableList : IRNode {}
+        public interface ICLetVariable : ICLetOrExpression {}
         public interface ICDelegatedConstructor : IRNode {}
         public interface ICAssertionStatement : ICOpenStatement {}
         public interface ICAssertionMessage : IRNode {}
         public interface ICBlock : ICAttributeDefinition, ICClassDefinition, ICElseBlockNext, ICFunctionDefinition, ICInterfaceDefinition, ICMethodDefinition, ICSetterDefinition {}
-        public interface ICBlockElements : ICBlock {}
         public interface ICExtendedType : IRNode {}
         public interface ICClassSpecifier : IRNode {}
         public interface ICClassInstatiation : IRNode {}
         public interface ICQualifiedClass : IRNode {}
-        public interface ICSuperQualifiedClass : ICQualifiedClass {}
         public interface ICPackageQualifiedClass : ICQualifiedClass {}
-        public interface ICPackageQualifier : IRNode {}
+        public interface ICSuperQualifiedClass : ICQualifiedClass {}
         public interface ICUnQualifiedClass : ICQualifiedClass {}
         public interface ICMemberPath : ICUnQualifiedClass {}
         public interface ICTypePath : ICPrimaryType, ICUnQualifiedClass {}
@@ -3272,9 +3272,10 @@ namespace Six.Ceylon
         public interface ICTupleExpr : ICBaseExpression {}
         public interface ICArguments : IRNode {}
         public interface ICStructuralArguments : ICArguments {}
+        public interface ICPositionalArguments : ICArguments {}
         public interface ICNamedOrAnonymous : IRNode {}
-        public interface ICNamedArgument : ICNamedOrAnonymous {}
         public interface ICAnonymousArgument : ICNamedOrAnonymous {}
+        public interface ICNamedArgument : ICNamedOrAnonymous {}
         public interface ICNamedSpecifiedArgument : ICNamedArgument {}
         public interface ICSequencedArguments : IRNode {}
         public interface ICSequencedArgument : IRNode {}
@@ -3291,12 +3292,10 @@ namespace Six.Ceylon
         public interface ICInferredGetterArgument : ICNamedArgumentDeclaration {}
         public interface ICUntypedMethodArgument : ICNamedArgumentDeclaration {}
         public interface ICUntypedGetterArgument : ICNamedArgumentDeclaration {}
-        public interface ICPositionalArguments : ICArguments {}
         public interface ICPositionalArgument : ICSequencedArgument {}
+        public interface ICExpressionArgument : ICPositionalArgument {}
         public interface ICSpreadArgument : ICSequencedArgument {}
         public interface ICLetExpr : ICConditionalExpression, ICExpression {}
-        public interface ICLetVariableList : IRNode {}
-        public interface ICLetVariable : ICLetOrExpression {}
         public interface ICSwitchExpr : ICExpression {}
         public interface ICCaseExpressions : IRNode {}
         public interface ICCaseExpression : IRNode {}
@@ -3313,7 +3312,7 @@ namespace Six.Ceylon
         public interface ICExpressionComprehensionClause : ICComprehensionClause {}
         public interface ICForComprehensionClause : ICComprehensionArgument, ICComprehensionClause {}
         public interface ICIfComprehensionClause : ICComprehensionArgument, ICComprehensionClause {}
-        public interface ICExpression : ICBooleanCondition, ICExpressionComprehensionClause, ICIndex, ICPositionalArgument {}
+        public interface ICExpression : ICBooleanCondition, ICExpressionArgument, ICExpressionComprehensionClause, ICIndex {}
         public interface ICOperatorExpression : ICExpression, ICExpressionStatement, ICLetOrExpression, ICSpecifiedOrExpression {}
         public interface ICAssignmentExpression : ICOperatorExpression {}
         public interface ICAssignmentExpr : ICAssignmentExpression {}
@@ -3494,6 +3493,7 @@ namespace Six.Ceylon
         public interface ICValueLiteral : ICDeclarationReference {}
         public interface ICValueLiteralIntro : IRNode {}
         public interface ICFunctionLiteral : ICDeclarationReference {}
+        public interface ICPackageQualifier : IRNode {}
         public interface ICReferencePath : IRNode {}
         public interface ICReferencePathElementList : IRNode {}
         public interface ICReferencePathElement : IRNode {}
@@ -3754,6 +3754,21 @@ namespace Six.Ceylon
             public RLiteral Literal3 => Get<RLiteral>(3); // ')'
         }
 
+        public partial class CLetVariableList : RLoop<CLetVariable>, ICLetVariableList
+        {
+            // sequence
+            public CLetVariableList(params RNode[] children) : base(children) {}
+        }
+
+        public partial class CLetVariable : RSequence, ICLetVariable
+        {
+            // sequence
+            public CLetVariable(params RNode[] children) : base(children) {}
+
+            public ICPattern Pattern => Get<ICPattern>(0);
+            public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
+        }
+
         public partial class CDelegatedConstructor : RSequence, ICDelegatedConstructor
         {
             // sequence
@@ -3773,10 +3788,10 @@ namespace Six.Ceylon
             public CConditions Conditions => Get<CConditions>(2);
         }
 
-        public partial class CBlockElements : RSequence, ICBlockElements
+        public partial class CBlock : RSequence, ICBlock
         {
             // sequence
-            public CBlockElements(params RNode[] children) : base(children) {}
+            public CBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0); // '{'
             public CImports Imports => Get<CImports>(1);
@@ -3811,16 +3826,6 @@ namespace Six.Ceylon
             public ROptional<ICArguments> ArgumentsOptional => Get<ROptional<ICArguments>>(1);
         }
 
-        public partial class CSuperQualifiedClass : RSequence, ICSuperQualifiedClass
-        {
-            // sequence
-            public CSuperQualifiedClass(params RNode[] children) : base(children) {}
-
-            public RLiteral Literal => Get<RLiteral>(0); // 'super'
-            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
-            public ICBaseReference BaseReference => Get<ICBaseReference>(2);
-        }
-
         public partial class CPackageQualifiedClass : RSequence, ICPackageQualifiedClass
         {
             // sequence
@@ -3831,13 +3836,14 @@ namespace Six.Ceylon
             public ICUnQualifiedClass UnQualifiedClass => Get<ICUnQualifiedClass>(2);
         }
 
-        public partial class CPackageQualifier : RSequence, ICPackageQualifier
+        public partial class CSuperQualifiedClass : RSequence, ICSuperQualifiedClass
         {
             // sequence
-            public CPackageQualifier(params RNode[] children) : base(children) {}
+            public CSuperQualifiedClass(params RNode[] children) : base(children) {}
 
-            public RLiteral Literal => Get<RLiteral>(0); // 'package'
+            public RLiteral Literal => Get<RLiteral>(0); // 'super'
             public RLiteral Literal2 => Get<RLiteral>(1); // '.'
+            public ICBaseReference BaseReference => Get<ICBaseReference>(2);
         }
 
         public partial class CMemberPath : RSequence, ICMemberPath
@@ -4026,7 +4032,7 @@ namespace Six.Ceylon
             public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(2);
             public CParameters Parameters => Get<CParameters>(3);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(4);
-            public ICBlock Block => Get<ICBlock>(5);
+            public CBlock Block => Get<CBlock>(5);
         }
 
         public partial class CAliasDeclaration : RSequence, ICAliasDeclaration
@@ -4051,7 +4057,7 @@ namespace Six.Ceylon
             public RLiteral Literal => Get<RLiteral>(1); // 'new'
             public ICMemberName MemberName => Get<ICMemberName>(2);
             public ROptional<CDelegatedConstructor> DelegatedConstructorOptional => Get<ROptional<CDelegatedConstructor>>(3);
-            public ICBlock Block => Get<ICBlock>(4);
+            public CBlock Block => Get<CBlock>(4);
         }
 
         public partial class CObjectDeclaration : RSequence, ICObjectDeclaration
@@ -4064,7 +4070,7 @@ namespace Six.Ceylon
             public ICMemberName MemberName => Get<ICMemberName>(2);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(3);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(4);
-            public ICBlock Block => Get<ICBlock>(5);
+            public CBlock Block => Get<CBlock>(5);
         }
 
         public partial class CSetterDeclaration : RSequence, ICSetterDeclaration
@@ -4366,6 +4372,16 @@ namespace Six.Ceylon
             public RLiteral Literal2 => Get<RLiteral>(3); // '}'
         }
 
+        public partial class CPositionalArguments : RSequence, ICPositionalArguments
+        {
+            // sequence
+            public CPositionalArguments(params RNode[] children) : base(children) {}
+
+            public RLiteral Literal => Get<RLiteral>(0); // '('
+            public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
+            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
+        }
+
         public partial class CAnonymousArgument : RSequence, ICAnonymousArgument
         {
             // sequence
@@ -4400,7 +4416,7 @@ namespace Six.Ceylon
             public ROptional<ICMemberName> MemberNameOptional => Get<ROptional<ICMemberName>>(1);
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(2);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(3);
-            public ICBlock Block => Get<ICBlock>(4);
+            public CBlock Block => Get<CBlock>(4);
         }
 
         public partial class CTypedMethodArgument : RSequence, ICTypedMethodArgument
@@ -4482,16 +4498,6 @@ namespace Six.Ceylon
             public CRequiredFunctionSpecifier RequiredFunctionSpecifier => Get<CRequiredFunctionSpecifier>(1);
         }
 
-        public partial class CPositionalArguments : RSequence, ICPositionalArguments
-        {
-            // sequence
-            public CPositionalArguments(params RNode[] children) : base(children) {}
-
-            public RLiteral Literal => Get<RLiteral>(0); // '('
-            public ROptional<CSequencedArguments> SequencedArgumentsOptional => Get<ROptional<CSequencedArguments>>(1);
-            public RLiteral Literal2 => Get<RLiteral>(2); // ')'
-        }
-
         public partial class CSpreadArgument : RSequence, ICSpreadArgument
         {
             // sequence
@@ -4511,21 +4517,6 @@ namespace Six.Ceylon
             public ROptional<CLetVariableList> LetVariableListOptional => Get<ROptional<CLetVariableList>>(2);
             public RLiteral Literal3 => Get<RLiteral>(3); // ')'
             public ICConditionalExpression ConditionalExpression => Get<ICConditionalExpression>(4);
-        }
-
-        public partial class CLetVariableList : RLoop<CLetVariable>, ICLetVariableList
-        {
-            // sequence
-            public CLetVariableList(params RNode[] children) : base(children) {}
-        }
-
-        public partial class CLetVariable : RSequence, ICLetVariable
-        {
-            // sequence
-            public CLetVariable(params RNode[] children) : base(children) {}
-
-            public ICPattern Pattern => Get<ICPattern>(0);
-            public CValueSpecifier ValueSpecifier => Get<CValueSpecifier>(1);
         }
 
         public partial class CSwitchExpr : RSequence, ICSwitchExpr
@@ -5132,7 +5123,7 @@ namespace Six.Ceylon
             public RLiteral Literal => Get<RLiteral>(0); // 'object'
             public ROptional<CExtendedType> ExtendedTypeOptional => Get<ROptional<CExtendedType>>(1);
             public ROptional<CSatisfiedTypes> SatisfiedTypesOptional => Get<ROptional<CSatisfiedTypes>>(2);
-            public ICBlock Block => Get<ICBlock>(3);
+            public CBlock Block => Get<CBlock>(3);
         }
 
         public partial class CGroupedExpr : RSequence, ICGroupedExpr
@@ -5410,7 +5401,7 @@ namespace Six.Ceylon
 
             public RLiteral Literal => Get<RLiteral>(0); // 'if'
             public CConditions Conditions => Get<CConditions>(1);
-            public ICBlock Block => Get<ICBlock>(2);
+            public CBlock Block => Get<CBlock>(2);
         }
 
         public partial class CElseBlock : RSequence, ICElseBlock
@@ -5453,7 +5444,7 @@ namespace Six.Ceylon
             public RLiteral Literal3 => Get<RLiteral>(2); // '('
             public ICCaseItem CaseItem => Get<ICCaseItem>(3);
             public RLiteral Literal4 => Get<RLiteral>(4); // ')'
-            public ICBlock Block => Get<ICBlock>(5);
+            public CBlock Block => Get<CBlock>(5);
         }
 
         public partial class CIsCaseCondition : RSequence, ICIsCaseCondition
@@ -5504,7 +5495,7 @@ namespace Six.Ceylon
             public RLiteral Literal2 => Get<RLiteral>(1); // '('
             public ROptional<CForIterator> ForIteratorOptional => Get<ROptional<CForIterator>>(2);
             public RLiteral Literal3 => Get<RLiteral>(3); // ')'
-            public ICBlock Block => Get<ICBlock>(4);
+            public CBlock Block => Get<CBlock>(4);
         }
 
         public partial class CFailBlock : RSequence, ICFailBlock
@@ -5513,7 +5504,7 @@ namespace Six.Ceylon
             public CFailBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0); // 'else'
-            public ICBlock Block => Get<ICBlock>(1);
+            public CBlock Block => Get<CBlock>(1);
         }
 
         public partial class CForIterator : RSequence, ICForIterator
@@ -5547,7 +5538,7 @@ namespace Six.Ceylon
 
             public RLiteral Literal => Get<RLiteral>(0); // 'while'
             public CConditions Conditions => Get<CConditions>(1);
-            public ICBlock Block => Get<ICBlock>(2);
+            public CBlock Block => Get<CBlock>(2);
         }
 
         public partial class CTryStatement : RSequence, ICTryStatement
@@ -5567,7 +5558,7 @@ namespace Six.Ceylon
 
             public RLiteral Literal => Get<RLiteral>(0); // 'try'
             public ROptional<CResources> ResourcesOptional => Get<ROptional<CResources>>(1);
-            public ICBlock Block => Get<ICBlock>(2);
+            public CBlock Block => Get<CBlock>(2);
         }
 
         public partial class CCatchBlock : RSequence, ICCatchBlock
@@ -5577,7 +5568,7 @@ namespace Six.Ceylon
 
             public RLiteral Literal => Get<RLiteral>(0); // 'catch'
             public CCatchVariable CatchVariable => Get<CCatchVariable>(1);
-            public ICBlock Block => Get<ICBlock>(2);
+            public CBlock Block => Get<CBlock>(2);
         }
 
         public partial class CCatchVariable : RSequence, ICCatchVariable
@@ -5596,7 +5587,7 @@ namespace Six.Ceylon
             public CFinallyBlock(params RNode[] children) : base(children) {}
 
             public RLiteral Literal => Get<RLiteral>(0); // 'finally'
-            public ICBlock Block => Get<ICBlock>(1);
+            public CBlock Block => Get<CBlock>(1);
         }
 
         public partial class CResources : RSequence, ICResources
@@ -5758,6 +5749,15 @@ namespace Six.Ceylon
 
             public RLiteral Literal => Get<RLiteral>(0); // 'function'
             public CReferencePath ReferencePath => Get<CReferencePath>(1);
+        }
+
+        public partial class CPackageQualifier : RSequence, ICPackageQualifier
+        {
+            // sequence
+            public CPackageQualifier(params RNode[] children) : base(children) {}
+
+            public RLiteral Literal => Get<RLiteral>(0); // 'package'
+            public RLiteral Literal2 => Get<RLiteral>(1); // '.'
         }
 
         public partial class CReferencePath : RSequence, ICReferencePath
@@ -6001,6 +6001,16 @@ namespace Six.Ceylon
                 DefaultImplementation(element);
             }
 
+            protected virtual void Visit(CLetVariableList element)
+            {
+                DefaultImplementation(element);
+            }
+
+            protected virtual void Visit(CLetVariable element)
+            {
+                DefaultImplementation(element);
+            }
+
             protected virtual void Visit(CDelegatedConstructor element)
             {
                 DefaultImplementation(element);
@@ -6011,7 +6021,7 @@ namespace Six.Ceylon
                 DefaultImplementation(element);
             }
 
-            protected virtual void Visit(CBlockElements element)
+            protected virtual void Visit(CBlock element)
             {
                 DefaultImplementation(element);
             }
@@ -6031,17 +6041,12 @@ namespace Six.Ceylon
                 DefaultImplementation(element);
             }
 
-            protected virtual void Visit(CSuperQualifiedClass element)
-            {
-                DefaultImplementation(element);
-            }
-
             protected virtual void Visit(CPackageQualifiedClass element)
             {
                 DefaultImplementation(element);
             }
 
-            protected virtual void Visit(CPackageQualifier element)
+            protected virtual void Visit(CSuperQualifiedClass element)
             {
                 DefaultImplementation(element);
             }
@@ -6321,6 +6326,11 @@ namespace Six.Ceylon
                 DefaultImplementation(element);
             }
 
+            protected virtual void Visit(CPositionalArguments element)
+            {
+                DefaultImplementation(element);
+            }
+
             protected virtual void Visit(CAnonymousArgument element)
             {
                 DefaultImplementation(element);
@@ -6381,27 +6391,12 @@ namespace Six.Ceylon
                 DefaultImplementation(element);
             }
 
-            protected virtual void Visit(CPositionalArguments element)
-            {
-                DefaultImplementation(element);
-            }
-
             protected virtual void Visit(CSpreadArgument element)
             {
                 DefaultImplementation(element);
             }
 
             protected virtual void Visit(CLetExpr element)
-            {
-                DefaultImplementation(element);
-            }
-
-            protected virtual void Visit(CLetVariableList element)
-            {
-                DefaultImplementation(element);
-            }
-
-            protected virtual void Visit(CLetVariable element)
             {
                 DefaultImplementation(element);
             }
@@ -7092,6 +7087,11 @@ namespace Six.Ceylon
             }
 
             protected virtual void Visit(CFunctionLiteral element)
+            {
+                DefaultImplementation(element);
+            }
+
+            protected virtual void Visit(CPackageQualifier element)
             {
                 DefaultImplementation(element);
             }
