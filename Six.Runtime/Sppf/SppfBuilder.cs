@@ -77,9 +77,8 @@ namespace Six.Runtime.Sppf
                     return BuildRange(match, start, end);
                 case Eof match:
                     return BuildEof(match, start, end);
-                case Not:
-                    // drop from film set
-                    return null;
+                case Not match:
+                    return BuildNot(match, start, end);
                 default:
                     throw new NotImplementedException($"can't build node for '{matcher.GetType().Name}'");
             }
@@ -363,6 +362,16 @@ namespace Six.Runtime.Sppf
             if (matcher.TryContext(start, end, out var context))
             {
                 return NewTerminal(matcher, start, context.Core, end);
+            }
+
+            return null;
+        }
+
+        private Symbol? BuildNot(Not matcher, Cursor start, Cursor end)
+        {
+            if (matcher.TryContext(start, end, out var context))
+            {
+                return NewNonterminal(Role.Not, matcher, start, end);
             }
 
             return null;

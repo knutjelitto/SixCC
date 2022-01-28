@@ -1,7 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class TypeList : ReadOnlyList<Type>
-    {
-        public TypeList(IEnumerable<Type> types) : base(types) { }
-    }
+    public record TypeList(IEnumerable<Typo> Items) : ReadOnlyList<Typo>(Items);
 }

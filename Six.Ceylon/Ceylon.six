@@ -71,15 +71,15 @@ module-body
 
 module-body-element
     | inferred-attribute-declaration
-    | import-module
+    | module-import
+    ;
+
+module-import
+    | annotations 'import' module version? ';'
     ;
 
 package-descriptor
     | annotations 'package' package-path ';'
-    ;
-
-import-module
-    | annotations 'import' module version? ';'
     ;
 
 import-namespace
@@ -560,27 +560,27 @@ self-reference
     ;
 
 enumeration-expr
-    | '{' statements sequenced-arguments? '}'
+    | '{' statements sequenced-argument-list? '}'
     ;
 
 tuple-expr
-    : '[' sequenced-arguments? ']'
+    : '[' sequenced-argument-list? ']'
     ;
 
 arguments
-    | structural-arguments
+    | patterned-arguments
     | positional-arguments
     ;
 
-structural-arguments
-    | '{' named-or-anonymous* sequenced-arguments? '}'
+patterned-arguments
+    | '{' structured-argument* sequenced-argument-list? '}'
     ;
 
 positional-arguments
-    : '(' sequenced-arguments? ')'
+    : '(' sequenced-argument-list? ')'
     ;
 
-named-or-anonymous
+structured-argument
     | anonymous-argument
     | named-argument
     ;
@@ -598,7 +598,7 @@ named-specified-argument
     | member-name value-specifier ';'
     ;
 
-sequenced-arguments
+sequenced-argument-list
     | sequenced-argument (',' sequenced-argument)* 
     ;
 
@@ -1045,7 +1045,7 @@ unary-minus-or-complement-operator
     ;
 
 negate-operator
-    | '-' !'-'
+    : '-' !'-'
     ;
 
 neutral-operator
@@ -1087,11 +1087,7 @@ primary
     ;
 
 selection-expr
-    | primary qualified-reference
-    ;
-
-qualified-reference
-    | member-selection-operator base-reference
+    | primary member-selection-operator base-reference
     ;
 
 member-selection-operator
@@ -1121,7 +1117,7 @@ lower-spanned
     ;
 
 spanned
-    | index-expression '..' index-expression
+    | index-expression  '..' index-expression
     ;
 
 measured
@@ -1416,15 +1412,11 @@ value-case
     ;
 
 for-else-statement
-    | for-block fail-block?
+    | for-block else-block?
     ;
 
 for-block
     | 'for' '(' for-iterator? ')' block
-    ;
-
-fail-block
-    | 'else' block
     ;
 
 for-iterator

@@ -8,7 +8,7 @@ namespace Six.Ceylon
         protected override void Visit(CConditions element)
         {
             // '('
-            var items = Walk<List<IExpression>>(element.ConditionListOptional) ?? new List<IExpression>();
+            var items = Walk<List<IExpression>>(element.ConditionList) ?? new List<IExpression>();
             // ')'
 
             element.Value = new ConditionList(items);
@@ -34,7 +34,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CExistsCondition element)
         {
-            var not = Exists(element.LiteralOptional);
+            var not = Exists(element.Literal);
             // 'exists'
             var expression = Walk<Ast.IExpression>(element.LetOrExpression);
 
@@ -43,7 +43,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CNonemptyCondition element)
         {
-            var not = Exists(element.LiteralOptional);
+            var not = Exists(element.Literal);
             // 'nonempty'
             var expression = Walk<Ast.IExpression>(element.LetOrExpression);
 
@@ -52,9 +52,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CIsCondition element)
         {
-            var not = Exists(element.LiteralOptional);
+            var not = Exists(element.Literal);
             // 'is'
-            var type = Walk<Ast.Type>(element.Type);
+            var type = Walk<Ast.Typo>(element.Type);
             var variable = Walk<Variable>(element.IsConditionVariable);
 
             element.Value = new IsCondition(not, type, variable);
@@ -63,7 +63,7 @@ namespace Six.Ceylon
         protected override void Visit(CIsConditionVariable element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var value = Walk<IExpression>(element.ValueSpecifierOptional);
+            var value = Walk<IExpression>(element.ValueSpecifier);
 
             element.Value = new Variable(name, value);
         }

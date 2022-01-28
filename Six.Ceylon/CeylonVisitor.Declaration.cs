@@ -13,8 +13,8 @@ namespace Six.Ceylon
 
             using (Use(element, new Alias(name)))
             {
-                Walk(element.TypeParametersOptional);
-                Walk(element.TypeConstraintsOptional);
+                Walk(element.TypeParameters);
+                Walk(element.TypeConstraints);
                 Walk(element.OptionalTypeSpecifier);
             }
         }
@@ -31,7 +31,7 @@ namespace Six.Ceylon
                 //Walk(element.ParametersOptional);
                 //Walk(element.CaseTypesOptional);
                 //Walk(element.ExtendedTypeOptional);
-                var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
+                var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
                 //Walk(element.TypeConstraintsOptional);
                 Walk(element.ClassDefinition);
             }
@@ -47,7 +47,7 @@ namespace Six.Ceylon
                 //TODO: uncomment
                 //Walk(element.TypeParametersOptional);
                 //Walk(element.CaseTypesOptional);
-                var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
+                var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
                 //Walk(element.TypeConstraintsOptional);
                 Walk(element.InterfaceDefinition);
             }
@@ -62,7 +62,7 @@ namespace Six.Ceylon
             {
                 //TODO: uncomment
                 //Walk(element.ExtendedTypeOptional);
-                var satisfied = Walk<Satisfied>(element.SatisfiedTypesOptional);
+                var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
                 Walk(element.Block);
             }
         }
@@ -71,13 +71,13 @@ namespace Six.Ceylon
         {
             Walk(element.Annotations);
             // 'new'
-            var name = Walk<Identifier>(element.MemberNameOptional);
+            var name = Walk<Identifier>(element.MemberName);
 
             using (Use(element, new Constructor(name)))
             {
                 //TODO: uncomment
                 Walk(element.Parameters);
-                Walk(element.DelegatedConstructorOptional);
+                Walk(element.DelegatedConstructor);
                 Walk(element.Block);
             }
         }
@@ -90,7 +90,7 @@ namespace Six.Ceylon
 
             using (Use(element, new Enumerated(name)))
             {
-                Walk(element.DelegatedConstructorOptional);
+                Walk(element.DelegatedConstructor);
                 Walk(element.Block);
             }
         }
@@ -169,7 +169,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CSetterDeclaration element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
     }
 }

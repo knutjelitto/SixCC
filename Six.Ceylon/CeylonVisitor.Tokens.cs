@@ -29,6 +29,7 @@ namespace Six.Ceylon
         protected override void Visit(CLiteralFloat element)
         {
             //TODO
+            element.Value = new FloatNumber();
         }
 
         protected override void Visit(CLiteralString element)

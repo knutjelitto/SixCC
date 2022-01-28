@@ -7,13 +7,121 @@ namespace Six.Ceylon
     {
         protected override void Visit(CAssignmentExpr element)
         {
-            WalkChildren(element);
+            var left = Walk<IExpression>(element.ThenElseExpression);
+            var op = element.AssignmentOperator.GetText();
+            var right = Walk<IExpression>(element.Expression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Infix(op, left, right);
         }
 
-        protected override void Visit(CCallExpr element)
+        protected override void Visit(CLargerExpr element)
+        {
+            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var op = element.LargerOperator.GetText();
+            var right = Walk<IExpression>(element.ExistsNonemptyExpression2);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CSmallerExpr element)
+        {
+            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var op = element.SmallerOperator.GetText();
+            var right = Walk<IExpression>(element.ExistsNonemptyExpression2);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CAdditiveExpr element)
+        {
+            var left = Walk<IExpression>(element.AdditiveExpression);
+            var op = element.AdditiveOperator.GetText();
+            var right = Walk<IExpression>(element.ScaleExpression);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CSelectionExpr element)
+        {
+            var left = Walk<IExpression>(element.Primary);
+            var op = element.MemberSelectionOperator.GetText();
+            var right = Walk<IExpression>(element.BaseReference);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CMultiplicativeExpr element)
+        {
+            var left = Walk<IExpression>(element.MultiplicativeExpression);
+            var op = element.MultiplicativeOperator.GetText();
+            var right = Walk<IExpression>(element.UnionExpression);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CThenElseExpr element)
+        {
+            var left = Walk<IExpression>(element.ThenElseExpression);
+            var op = element.ThenElseOperator.GetText();
+            var right = Walk<IExpression>(element.DisjunctionExpression);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CEqualityExpr element)
+        {
+            var left = Walk<IExpression>(element.ComparisonExpression);
+            var op = element.EqualityOperator.GetText();
+            var right = Walk<IExpression>(element.ComparisonExpression2);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CConjunctionExpr element)
+        {
+            var left = Walk<IExpression>(element.ConjunctionExpression);
+            var op = element.ConjunctionOperator.GetText();
+            var right = Walk<IExpression>(element.LogicalNegationExpression);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CComparisonExpr element)
+        {
+            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var op = element.ComparisonOperator.GetText();
+            var right = Walk<IExpression>(element.ExistsNonemptyExpression2);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CDisjunctionExpr element)
+        {
+            var left = Walk<IExpression>(element.DisjunctionExpression);
+            var op = element.DisjunctionOperator.GetText();
+            var right = Walk<IExpression>(element.ConjunctionExpression);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CRangeExpr element)
+        {
+            var left = Walk<IExpression>(element.AdditiveExpression);
+            var op = element.RangeOperator.GetText();
+            var right = Walk<IExpression>(element.AdditiveExpression2);
+
+            element.Value = new Expression.Infix(op, left, right);
+        }
+
+        protected override void Visit(CPostfixExpr element)
+        {
+            var expr = Walk<IExpression>(element.PostfixExpression);
+            var op = element.IncrementOperator.GetText();
+
+            element.Value = new Expression.Postfix(expr, op);
+        }
+
+        protected override void Visit(CPrefixExpr element)
         {
             WalkChildrenTodo(element);
 
@@ -21,41 +129,33 @@ namespace Six.Ceylon
             element.Value = new Expression();
         }
 
-        protected override void Visit(CLargerExpr element)
+        protected override void Visit(CNegationOrComplementExpr element)
         {
-            WalkChildren(element);
+            var op = Walk<string>(element.UnaryMinusOrComplementOperator);
+            var right = Walk<IExpression>(element.NegationOrComplementExpression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Prefix(op, right);
         }
 
-        protected override void Visit(CSmallerExpr element)
+        protected override void Visit(CLogicalNegationExpr element)
         {
-            WalkChildren(element);
+            var op = element.NotOperator.GetText();
+            var right = Walk<IExpression>(element.LogicalNegationExpression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Prefix(op, right);
         }
 
-        protected override void Visit(CAdditiveExpr element)
+        protected override void Visit(CCallExpr element)
         {
-            WalkChildren(element);
+            var primary = Walk<IExpression>(element.Primary);
+            var arguments = Walk<Arguments>(element.Arguments);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Call(primary, arguments);
         }
 
         protected override void Visit(CIfExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CSelectionExpr element)
-        {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -63,7 +163,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CTupleExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -71,7 +171,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CFunctionExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -79,39 +179,15 @@ namespace Six.Ceylon
 
         protected override void Visit(CIndexedExpr element)
         {
-            WalkChildren(element);
+            var expr = Walk<IExpression>(element.Primary);
+            var index = Walk<IExpression>(element.Index);
 
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CPostfixExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CPrefixExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Indexed(expr, index);
         }
 
         protected override void Visit(CEntryExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CMultiplicativeExpr element)
-        {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -119,7 +195,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CObjectExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -127,23 +203,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CGroupedExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CRangeExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
+            element.Value = Walk<IExpression>(element.Expression);
         }
 
         protected override void Visit(CEnumerationExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -151,15 +216,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CTypecheckExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CThenElseExpr element)
-        {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -167,7 +224,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CExistsExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -175,15 +232,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CNonemptyExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CLogicalNegationExpr element)
-        {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -191,7 +240,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CSwitchExpr element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -199,39 +248,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CLetExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CEqualityExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CConjunctionExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CNegationOrComplementExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CComparisonExpr element)
-        {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -239,22 +256,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CExclusiveExpr element)
         {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CDisjunctionExpr element)
-        {
-            WalkChildren(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-        protected override void Visit(CSmallerBoundsExpr element)
-        {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Expression();
@@ -262,11 +264,107 @@ namespace Six.Ceylon
 
         protected override void Visit(CStringInterpolation element)
         {
-            WalkChildren(element);
+            var start = Walk<StartInterpolationString>(element.StringStart);
+            var end = Walk<EndInterpolationString>(element.StringEnd);
+            var mids = element.InterpolationPart.Select(part => Walk<MidInterpolationString>(part.StringMid));
+            var strings = Enumerable.Repeat<Ast.InterpolationString>(start, 1)
+                .Concat(mids.Cast<Ast.InterpolationString>())
+                .Concat(Enumerable.Repeat<Ast.InterpolationString>(end, 1));
+            var first = Walk<IExpression>(element.Expression);
+            var rest = element.InterpolationPart.Select(part => Walk<IExpression>(part.Expression));
+            var expressions = Enumerable.Repeat(first, 1).Concat(rest);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Interpolation(strings.ToList(), expressions.ToList());
         }
 
+        protected override void Visit(CInterpolationPart element)
+        {
+            WalkChildrenTodo(element);
+        }
+
+        protected override void Visit(CSmallerBoundsExpr element)
+        {
+            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var op1 = element.SmallerOperator.GetText();
+            var mid = Walk<IExpression>(element.ExistsNonemptyExpression2);
+            var op2 = element.SmallerOperator2.GetText();
+            var right = Walk<IExpression>(element.ExistsNonemptyExpression3);
+
+            element.Value = new Expression.Infix2(left, op1, mid, op2, right);
+        }
+
+        /*---------------------------------------------------------------------
+         *  Expression - Inners
+         *--------------------------------------------------------------------*/
+        protected override void Visit(CThenExpression element)
+        {
+            var op = element.Literal.GetText();
+            var right = Walk<IExpression>(element.ConditionalExpression);
+
+            element.Value = new Expression.Prefix(op, right);
+        }
+
+        protected override void Visit(CElseExpression element)
+        {
+            var op = element.Literal.GetText();
+            var right = Walk<IExpression>(element.ConditionalExpression);
+
+            element.Value = new Expression.Prefix(op, right);
+        }
+
+        protected override void Visit(CSwitchHeader element)
+        {
+            WalkChildrenTodo(element);
+        }
+
+        protected override void Visit(CCaseExpressions element)
+        {
+            WalkChildrenTodo(element);
+        }
+
+        protected override void Visit(CCaseExpression element)
+        {
+            WalkChildrenTodo(element);
+        }
+
+        protected override void Visit(CIsCaseCondition element)
+        {
+            WalkChildrenTodo(element);
+        }
+
+        protected override void Visit(CLetVariableList element)
+        {
+            WalkChildrenTodo(element);
+        }
+
+        protected override void Visit(CSpanned element)
+        {
+            var from = Walk<IExpression>(element.IndexExpression);
+            var to = Walk<IExpression>(element.IndexExpression2);
+
+            element.Value = new Expression.SpanIndex(from, to);
+        }
+
+        protected override void Visit(CMeasured element)
+        {
+            var from = Walk<IExpression>(element.IndexExpression);
+            var count = Walk<IExpression>(element.IndexExpression2);
+
+            element.Value = new Expression.MeasureIndex(from, count);
+        }
+
+        protected override void Visit(CLowerSpanned element)
+        {
+            var to = Walk<IExpression>(element.IndexExpression);
+
+            element.Value = new Expression.ToIndex(to);
+        }
+
+        protected override void Visit(CUpperSpanned element)
+        {
+            var from = Walk<IExpression>(element.IndexExpression);
+
+            element.Value = new Expression.FromIndex(from);
+        }
     }
 }

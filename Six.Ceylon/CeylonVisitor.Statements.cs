@@ -31,7 +31,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CAssertionStatement element)
         {
-            var message = Walk<Ast.String>(element.AssertionMessageOptional);
+            var message = Walk<Ast.String>(element.AssertionMessage);
             // 'assert'
             var conditions = Walk<ConditionList>(element.Conditions);
 
@@ -45,8 +45,8 @@ namespace Six.Ceylon
             var block = Walk<Block>(element.Block);
 
             var ifBlock = new Statement.ConditionalBlock(conditions, block);
-            var elseIfs = element.ElseIfStar.Children.Select(child => Walk<Statement.ConditionalBlock>(child));
-            var elseBlock = Walk<Block>(element.ElseBlockOptional);
+            var elseIfs = element.ElseIf.Children.Select(child => Walk<Statement.ConditionalBlock>(child));
+            var elseBlock = Walk<Block>(element.ElseBlock);
 
             var conditionals = Enumerable.Repeat(ifBlock, 1).Concat(elseIfs);
             //TODO
@@ -65,7 +65,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CForElseStatement element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Statement();
@@ -73,13 +73,13 @@ namespace Six.Ceylon
 
         protected override void Visit(CReturnStatement element)
         {
-            var expr = Walk<IExpression>(element.ExpressionOptional);
+            var expr = Walk<IExpression>(element.Expression);
             element.Value = new Statement.Return(expr);
         }
 
         protected override void Visit(CThrowStatement element)
         {
-            var expr = Walk<IExpression>(element.ExpressionOptional);
+            var expr = Walk<IExpression>(element.Expression);
             element.Value = new Statement.Throw(expr);
         }
 
@@ -95,7 +95,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CSwitchStatement element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Statement();
@@ -111,12 +111,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CLetStatement element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTryStatement element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
             //TODO
             element.Value = new Statement();
@@ -131,70 +131,54 @@ namespace Six.Ceylon
             element.Value = Walk<Block>(element.Block);
         }
 
-        protected override void Visit(CFailBlock element)
-        {
-            // 'else'
-            element.Value = Walk<Block>(element.Block);
-        }
-
         protected override void Visit(CForBlock element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTryBlock element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CCatchBlock element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CCatchVariable element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CResources element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CResourceList element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CCaseBlock element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CFinallyBlock element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CForIterator element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CContainment element)
         {
-            //TODO
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
     }
 }

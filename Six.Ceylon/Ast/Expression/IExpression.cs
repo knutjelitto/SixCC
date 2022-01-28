@@ -9,8 +9,4 @@ namespace Six.Ceylon.Ast
     public interface IExpression
     {
     }
-
-    public class Expression : IExpression
-    {
-    }
 }

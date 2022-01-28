@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public sealed record TypeArguments(IEnumerable<Typo> Items) : TypeList(Items);
+    public sealed record ImportList(IEnumerable<Import> Items) : ReadOnlyList<Import>(Items);
 }

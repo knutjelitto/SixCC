@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class ReadOnlyList<T> : IReadOnlyList<T>
+    public record ReadOnlyList<T> : IReadOnlyList<T>
     {
         private readonly List<T> items;
 

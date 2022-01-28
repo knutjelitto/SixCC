@@ -21,144 +21,164 @@ namespace Six.Ceylon
 
         protected override void Visit(CTypeConstraints element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTypeConstraint element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CCaseTypes element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CCaseTypeList element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CQualifiedCaseType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTypeDefault element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTypePath element)
         {
             //TODO: Type
-            element.Value = new Ast.Type();
+            element.Value = new Ast.Typo();
         }
 
         protected override void Visit(CUnionTypeList element)
         {
-            var types = element.Elements.Select(child => Walk<Ast.Type>(child));
+            var types = element.Elements.Select(child => Walk<Ast.Typo>(child));
 
             element.Value = new TypeList(types);
         }
 
         protected override void Visit(CPackageQualifiedType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CEntryType element)
         {
-            WalkChildren(element);
+            var left = Walk<Ast.Typo>(element.UnionType);
+            var op = element.Literal.GetText();
+            var right = Walk<Ast.Typo>(element.UnionType2);
+
+            element.Value = new Ast.Typo.Infix(left, op, right);
         }
 
         protected override void Visit(CIntersectionTypeCore element)
         {
-            WalkChildren(element);
+            var left = Walk<Ast.Typo>(element.IntersectionType);
+            var op = element.Literal.GetText();
+            var right = Walk<Ast.Typo>(element.PrimaryType);
 
-            //TODO: Visitor
-            element.Value = new Ast.Type();
+            element.Value = new Ast.Typo.Infix(left, op, right);
         }
 
         protected override void Visit(CUnionTypeCore element)
         {
-            var left = Walk<Ast.Type>(element.UnionType);
-            var right = Walk<Ast.Type>(element.IntersectionType);
+            var left = Walk<Ast.Typo>(element.UnionType);
+            var op = element.Literal.GetText();
+            var right = Walk<Ast.Typo>(element.IntersectionType);
 
-            element.Value = new Ast.Type.Union(left, right);
+            element.Value = new Ast.Typo.Infix(left, op, right);
         }
 
         protected override void Visit(CIterableType element)
         {
-            WalkChildren(element);
+            // '{'
+            var type = Walk<Ast.Typo>(element.VariadicType);
+            element.Value = new Typo.Iterable(type);
+            // '}'
         }
 
         protected override void Visit(CGroupedType element)
         {
-            WalkChildren(element);
+            // '<'
+            element.Value = Walk<Ast.Typo>(element.Type);
+            // '>'
         }
 
         protected override void Visit(CTupleType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
 
-            //TODO: Visitor
-            element.Value = new Ast.Type();
+            //TODO
+            element.Value = new Ast.Typo();
         }
 
         protected override void Visit(CArrayType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
+
+            //TODO
+            element.Value = new Ast.Typo();
         }
 
         protected override void Visit(CNullableType element)
         {
-            WalkChildren(element);
+            var type = Walk<Typo>(element.PrimaryType);
+            var op = element.Literal.GetText();
+
+            element.Value = new Typo.Postfix(type, op);
         }
 
         protected override void Visit(CFunctionType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CVariancedType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CVariadicUnionType element)
         {
-            WalkChildren(element);
+            var left = Walk<Ast.Typo>(element.UnionType);
+            var op = element.VariadicOperator.GetText();
+
+            element.Value = new Ast.Typo.Postfix(left, op);
         }
 
         protected override void Visit(CSpreadType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CFunctionExpressionType element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CDefaultedTypeList element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTypeParameters element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTypeParameterList element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CTypeParameter element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
     }
 }

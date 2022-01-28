@@ -15,32 +15,32 @@ namespace Six.Ceylon
 
         protected override void Visit(CImportDeclaration element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CImportElements element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CImportElementList element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CImportNamed element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CImportNameSpecifier element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
 
         protected override void Visit(CImportWildcard element)
         {
-            WalkChildren(element);
+            WalkChildrenTodo(element);
         }
     }
 }

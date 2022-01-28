@@ -2,13 +2,13 @@
 {
     public class Annotation
     {
-        public Annotation(Identifier name, Arguments? arguments)
+        public Annotation(Identifier name, ArgumentList? arguments)
         {
             Name = name;
             Arguments = arguments;
         }
 
         public Identifier Name { get; }
-        public Arguments? Arguments { get; }
+        public ArgumentList? Arguments { get; }
     }
 }

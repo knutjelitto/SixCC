@@ -2,7 +2,7 @@
 
 namespace Six.Ceylon.Ast
 {
-    public class CharString : String
+    public class CharString : String, IExpression
     {
         public CharString(RToken token)
             : base(GetText(token))

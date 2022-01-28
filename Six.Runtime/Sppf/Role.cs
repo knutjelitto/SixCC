@@ -8,5 +8,6 @@
         Star,
         Plus,
         Optional,
+        Not,
     }
 }

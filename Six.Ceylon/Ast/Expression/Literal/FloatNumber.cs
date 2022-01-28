@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public sealed class ImportList : ReadOnlyList<Import>
+    public class FloatNumber : IExpression
     {
-        public ImportList(IEnumerable<Import> items) : base(items)
-        {
-        }
+        //TODO
     }
 }

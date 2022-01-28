@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Six.Ceylon.Ast
+﻿namespace Six.Ceylon.Ast
 {
-    public sealed class ArgumentList : ReadOnlyList<Argument>
-    {
-        public ArgumentList(IEnumerable<Argument> items) : base(items)
-        {
-        }
-    }
+    public sealed record ArgumentList(IEnumerable<Argument> Items) : ReadOnlyList<Argument>(Items);
 }

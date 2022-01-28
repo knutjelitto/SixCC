@@ -1,10 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class IdentifierList : ReadOnlyList<Identifier>
-    {
-        public IdentifierList(IEnumerable<Identifier> ids)
-            : base(ids)
-        {
-        }
-    }
+    public sealed record IdentifierList(IEnumerable<Identifier> Items) : ReadOnlyList<Identifier>(Items);
 }

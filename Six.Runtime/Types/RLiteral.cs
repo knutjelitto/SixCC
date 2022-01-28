@@ -27,6 +27,13 @@ namespace Six.Runtime.Types
         {
             var start = Math.Max(Core, Start);
 
+            return Source.GetText(start, End - start);
+        }
+
+        public string GetEscapedText()
+        {
+            var start = Math.Max(Core, Start);
+
             var text = Source.GetText(start, End - start);
             if (text.StartsWith("'") && text.EndsWith("'"))
             {
@@ -38,7 +45,7 @@ namespace Six.Runtime.Types
 
         public override string ToString()
         {
-            return $"{CommonName()}{{{GetText()}}}";
+            return $"{CommonName()}{{{GetEscapedText()}}}";
         }
     }
 }
