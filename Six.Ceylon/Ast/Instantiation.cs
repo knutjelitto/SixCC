@@ -1,6 +1,9 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Instantiation
+    public interface QualifiedClass { }
+
+    public record Instantiation(QualifiedClass Class, ArgumentList? Arguments)
     {
+        public record Qualified;
     }
 }

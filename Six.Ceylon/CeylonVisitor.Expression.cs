@@ -123,10 +123,10 @@ namespace Six.Ceylon
 
         protected override void Visit(CPrefixExpr element)
         {
-            WalkChildrenTodo(element);
+            var op = element.IncrementOperator.GetText();
+            var expr = Walk<IExpression>(element.PrefixExpression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expression.Prefix(op, expr);
         }
 
         protected override void Visit(CNegationOrComplementExpr element)
@@ -153,23 +153,48 @@ namespace Six.Ceylon
             element.Value = new Expression.Call(primary, arguments);
         }
 
-        protected override void Visit(CIfExpr element)
+        protected override void Visit(CParametrizedMember element)
         {
             WalkChildrenTodo(element);
 
-            //TODO
             element.Value = new Expression();
+        }
+
+        protected override void Visit(CInferredFunctionExpr element)
+        {
+
+            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
+            var parameters = new ParameterListList(items); ;
+            var constraints = Walk<ConstraintList>(element.TypeConstraints);
+            var definition = Walk<IExpression>(element.FunctionDefinition);
+
+            element.Value = new Expression.InferredFunction(typeParameters, parameters, constraints, definition);
+        }
+
+        protected override void Visit(CVoidFunctionExpr element)
+        {
+            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
+            var parameters = new ParameterListList(items); ;
+            var constraints = Walk<ConstraintList>(element.TypeConstraints);
+            var definition = Walk<IExpression>(element.FunctionDefinition);
+
+            element.Value = new Expression.VoidFunction(typeParameters, parameters, constraints, definition);
+        }
+
+
+        protected override void Visit(CIfExpr element)
+        {
+            // 'if'
+            var conditions = Walk<ConditionList>(element.Conditions);
+            var thenExpr = Walk<IExpression>(element.ThenExpression);
+            var elseExpr = Walk<IExpression>(element.ElseExpression);
+
+            element.Value = new Expression.If(conditions, thenExpr, elseExpr);
         }
 
         protected override void Visit(CTupleExpr element)
-        {
-            WalkChildrenTodo(element);
-
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CFunctionExpr element)
         {
             WalkChildrenTodo(element);
 

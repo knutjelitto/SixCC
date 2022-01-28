@@ -7,6 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+namespace six.core;
+
 """A collection in which every element has a unique 
    non-negative integer index. The elements of a nonempty 
    list are indexed starting with `0` at the [[first]] 

@@ -5,6 +5,7 @@
         public RPlus(params RNode[] children)
             : base(children)
         {
+            Assert(Children.Length > 0);
         }
     }
 

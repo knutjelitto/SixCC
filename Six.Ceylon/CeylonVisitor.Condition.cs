@@ -55,7 +55,7 @@ namespace Six.Ceylon
             var not = Exists(element.Literal);
             // 'is'
             var type = Walk<Ast.Typo>(element.Type);
-            var variable = Walk<Variable>(element.IsConditionVariable);
+            var variable = Walk<ConditionVariable>(element.IsConditionVariable);
 
             element.Value = new IsCondition(not, type, variable);
         }
@@ -65,7 +65,7 @@ namespace Six.Ceylon
             var name = Walk<Identifier>(element.MemberName);
             var value = Walk<IExpression>(element.ValueSpecifier);
 
-            element.Value = new Variable(name, value);
+            element.Value = new ConditionVariable(name, value);
         }
 
     }

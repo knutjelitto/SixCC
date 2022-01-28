@@ -1,8 +1,8 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class MemberReference : IExpression
+    public class TypeReference : IExpression
     {
-        public MemberReference(Identifier name, TypeArgumentList arguments)
+        public TypeReference(Identifier name, TypeArgumentList arguments)
         {
             Name = name;
             Arguments = arguments;

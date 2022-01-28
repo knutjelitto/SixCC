@@ -7,6 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+namespace six.core;
+
 """
 A nonempty, immutable sequence of values. The type `Sequence<Element>` may be abbreviated
 `[Element+]`.
@@ -68,24 +70,25 @@ shared sealed interface Sequence<out Element=Anything> satisfies Element[] & {El
     
     "The rest of the sequence, without the first element."
     shared actual default Element[] rest 
-        => size > 1 
-        then Subsequence(1, lastIndex) 
-        else [];
+        =>  size > 1 
+            then Subsequence(1, lastIndex) 
+            else [];
     
     "This sequence, without the last element."
     shared actual default Element[] exceptLast 
-        => size > 1 
-        then Subsequence(0, lastIndex-1) 
-        else [];
+        =>  size > 1 
+            then     Subsequence(0, lastIndex-1) 
+            else [];
     
     shared actual default 
     Element[] sublist(Integer from, Integer to) 
-        => from<=to && from<=lastIndex && to>=0
-        then Subsequence {
-            from = Integer.largest(0, from);
-            to = Integer.smallest(lastIndex, to); 
-        }
-        else [];
+        => from <= to && from <= lastIndex && to >= 0
+            then Subsequence
+            {
+                from = Integer.largest(0, from);
+                to = Integer.smallest(lastIndex, to); 
+            }
+            else [];
     
     shared actual default 
     Element[] sublistTo(Integer to) => sublist(0, to);
@@ -101,7 +104,7 @@ shared sealed interface Sequence<out Element=Anything> satisfies Element[] & {El
     "Produces a sequence formed by repeating the elements of this sequence the given
      [[number of times|times]], or the [[empty sequence|empty]] if `times<=0`."
     shared default actual Element[] repeat(Integer times) 
-            => switch (times<=>1) 
+        =>  switch (times <=> 1) 
             case (smaller) []
             case (equal) this
             case (larger) Repeat(times);
@@ -109,30 +112,19 @@ shared sealed interface Sequence<out Element=Anything> satisfies Element[] & {El
     "This nonempty sequence."
     shared actual default [Element+] clone() => this;
     
-    /*shared actual default Element[] repeat(Integer times) {
-        value resultSize = size*times;
-        value array = arrayOfSize(resultSize, first);
-        variable value i = 1;
-        while (i < resultSize) {
-            array[i] = getElement(i%size);
-        }
-        return ArraySequence(array); 
-    }*/
-    
-    "A nonempty sequence containing the elements of this
-     container, sorted according to a function imposing a 
-     partial order upon the elements."
+    "A nonempty sequence containing the elements of this container, sorted according to a function imposing a partial order
+     upon the elements."
     shared default actual 
     [Element+] sort(
         "The function comparing pairs of elements."
-        Comparison comparing(Element x, Element y)) {
+        Comparison comparing(Element x, Element y))
+    {
         value array = Array(this);
         array.sortInPlace(comparing);
         return ArraySequence(array);
     }
 
-    "A nonempty sequence containing the results of applying 
-     the given mapping to the elements of this sequence."
+    "A nonempty sequence containing the results of applying the given mapping to the elements of this sequence."
     shared default actual 
     [Result+] collect<Result>(
         "The transformation applied to the elements."
@@ -454,7 +446,6 @@ class JoinedSequence<Element>
         }
     }
     
-    iterator() => ChainedIterator(firstSeq,secondSeq);
-    
+    iterator() => ChainedIterator(firstSeq,secondSeq);    
 }
 

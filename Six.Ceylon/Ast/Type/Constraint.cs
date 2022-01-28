@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Constraint : IExpression
+    public record Constraint : Typo
     {
     }
 }

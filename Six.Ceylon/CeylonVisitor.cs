@@ -131,13 +131,6 @@ namespace Six.Ceylon
             WalkChildrenTodo(element);
         }
 
-        protected override void Visit(CClassInstatiation element)
-        {
-            //TODO
-            Walk(element.QualifiedClass);
-            var arguments = Walk<ArgumentList>(element.Arguments);
-        }
-
         protected override void Visit(CBlock element)
         {
             // '{'
@@ -185,15 +178,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CDelegatedConstructor element)
         {
-            WalkChildrenTodo(element);
-        }
-
-        /*---------------------------------------------------------------------
-         *  Declaration - Parameters
-         *--------------------------------------------------------------------*/
-        protected override void Visit(CFunctionParameters element)
-        {
-            WalkChildrenTodo(element);
+            element.Value = Walk<Instantiation>(element.ClassInstantiation);
         }
 
         /**********************************************************************
@@ -201,7 +186,12 @@ namespace Six.Ceylon
          **********************************************************************/
         protected override void Visit(CVariable element)
         {
-            WalkChildrenTodo(element);
+            var type = Walk<Typo>(element.VariableType);
+            var name = Walk<Identifier>(element.MemberName);
+            var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
+            var parameters = new ParameterListList(items);
+
+            element.Value = new Variable(type, name, parameters);
         }
 
         protected override void Visit(CVariadicVariable element)
@@ -224,20 +214,16 @@ namespace Six.Ceylon
 
         protected override void Visit(CTuplePattern element)
         {
-            WalkChildrenTodo(element);
+            var patterns = Walk<PatternList>(element.VariadicPatternList) ?? new PatternList(Enumerable.Empty<Pattern>());
+
+            element.Value = new Pattern.Tuple(patterns);
         }
 
         protected override void Visit(CVariadicPatternList element)
         {
-            WalkChildrenTodo(element);
-        }
+            var items = element.Elements.Select(child => Walk<Pattern>(child)).ToList();
 
-        /**********************************************************************
-         *  Expression
-         **********************************************************************/
-        protected override void Visit(CParametrizedMember element)
-        {
-            WalkChildrenTodo(element);
+            element.Value = new PatternList(items);
         }
 
 
@@ -264,7 +250,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CSequencedArgumentList element)
         {
-            WalkChildrenTodo(element);
+            var items = element.Elements.Select(child => Walk<Argument>(child));
+
+            element.Value = new ArgumentList(items);
         }
 
         protected override void Visit(CSpreadArgument element)
@@ -338,7 +326,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CClassLiteral element)
         {
-            WalkChildrenTodo(element);
+            var path = Walk<ReferencePath>(element.ReferencePath);
+
+            element.Value = new Meta.Class(path);
         }
 
         protected override void Visit(CInterfaceLiteral element)
@@ -348,12 +338,16 @@ namespace Six.Ceylon
 
         protected override void Visit(CFunctionLiteral element)
         {
-            WalkChildrenTodo(element);
+            var path = Walk<ReferencePath>(element.ReferencePath);
+
+            element.Value = new Meta.Function(path);
         }
 
         protected override void Visit(CValueLiteral element)
         {
-            WalkChildrenTodo(element);
+            var path = Walk<ReferencePath>(element.ReferencePath);
+
+            element.Value = new Meta.Value(path);
         }
 
         protected override void Visit(CAliasLiteral element)
@@ -390,7 +384,11 @@ namespace Six.Ceylon
 
         protected override void Visit(CReferencePath element)
         {
-            WalkChildrenTodo(element);
+            var package = element.PackageQualifier.Children.Length > 0;
+            var items = element.ReferencePathElementList.Elements.Select(child => Walk<Identifier>(child));
+            var names = new IdentifierList(items);
+
+            element.Value = new ReferencePath(package, names);
         }
 
         protected override void Visit(CReferencePathElementList element)
@@ -400,32 +398,30 @@ namespace Six.Ceylon
 
         protected override void Visit(CMemberReference element)
         {
-            //TODO
             var name = Walk<Identifier>(element.MemberName);
-            if (element.TypeArguments.Children.Length > 0)
-            {
-                Assert(true);
-            }
-            var arguments = Walk<TypeArguments>(element.TypeArguments);
+            var arguments = Walk<TypeArgumentList>(element.TypeArguments) ?? new TypeArgumentList(Enumerable.Empty<Typo>());
 
             element.Value = new MemberReference(name, arguments);
         }
 
         protected override void Visit(CTypeReference element)
         {
-            WalkChildrenTodo(element);
+            var name = Walk<Identifier>(element.TypeName);
+            var arguments = Walk<TypeArgumentList>(element.TypeArguments) ?? new TypeArgumentList(Enumerable.Empty<Typo>());
 
-            element.Value = new Expression();
+            element.Value = new TypeReference(name, arguments);
         }
 
         protected override void Visit(CTypeArguments element)
         {
-            WalkChildrenTodo(element);
+            element.Value = Walk<TypeArgumentList>(element.TypeArgumentList);
         }
 
         protected override void Visit(CTypeArgumentList element)
         {
-            WalkChildrenTodo(element);
+            var items = element.Elements.Select(child => Walk<Typo.Varianced>(child));
+
+            element.Value = new TypeArgumentList(items);
         }
 
         protected override void Visit(CVariance element)
@@ -489,12 +485,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CConjunctionOperator element)
         {
-            WalkChildrenTodo(element);
+            element.Value = element.GetText();
         }
 
         protected override void Visit(CAdditiveOperator element)
         {
-            WalkChildrenTodo(element);
+            element.Value = element.GetText();
         }
 
         protected override void Visit(CMultiplicativeOperator element)

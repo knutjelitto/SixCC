@@ -8,7 +8,7 @@ namespace Six.Ceylon.Ast
 {
     public class IsCondition : Condition
     {
-        public IsCondition(bool not, Typo type, Variable variable)
+        public IsCondition(bool not, Typo type, ConditionVariable variable)
         {
             Not = not;
             Type = type;
@@ -17,6 +17,6 @@ namespace Six.Ceylon.Ast
 
         public bool Not { get; }
         public Typo Type { get; }
-        public Variable Variable { get; }
+        public ConditionVariable Variable { get; }
     }
 }

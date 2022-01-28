@@ -7,6 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+namespace six.core;
+
 "A [[List]] which can be efficiently searched for 
  occurrences of a given element, or for inclusions of a 
  given sublist of elements. This interface provides 

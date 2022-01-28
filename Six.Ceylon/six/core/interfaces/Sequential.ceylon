@@ -7,6 +7,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+namespace six.core;
+
 """
 A possibly-empty, immutable sequence of values. The type `Sequential<Element>` may be abbreviated `[Element*]` or `Element[]`. 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract record Argument
+    public interface Argument
     {
         public record Expression(IExpression Expr) : Argument, IExpression;
     }

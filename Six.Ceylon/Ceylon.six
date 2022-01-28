@@ -176,6 +176,11 @@ variadic-variable
     | union-type? variadic-operator member-name
     ;
 
+variadic-operator
+    | '*'
+    | '+'
+    ;
+
 let-statement
     | 'let' '(' let-variable-list ')'
     ;
@@ -189,7 +194,7 @@ let-variable
     ;
 
 delegated-constructor
-    | 'extends' class-instatiation
+    | 'extends' class-instantiation
     ;
 
 assertion-statement
@@ -205,14 +210,14 @@ block
     ;
 
 extended-type
-    | 'extends' class-instatiation
+    | 'extends' class-instantiation
     ;
 
 class-specifier
-    | '=>' class-instatiation
+    | '=>' class-instantiation
     ;
 
-class-instatiation
+class-instantiation
     | qualified-class arguments?
     ;
 
@@ -224,11 +229,11 @@ qualified-class
 
 
 package-qualified-class
-    | 'package' '.' un-qualified-class
+    : 'package' '.' un-qualified-class
     ;
 
 super-qualified-class
-    | 'super' '.' base-reference
+    : 'super' '.' base-reference
     ;
 
 un-qualified-class
@@ -299,22 +304,34 @@ parameter-declaration
     ;
 
 function-parameter-declaration
-    | function-parameter-type member-name type-parameters? parameters+ function-specifier?
+    | void-function-parameter
+    | inferred-function-parameter
+    | typed-function-parameter
     ;
 
-function-parameter-type
-    | variadic-type
-    | kw-void
-    | kw-function
+void-function-parameter
+    : 'void' member-name type-parameters? parameters+ function-specifier?
+    ;
+
+inferred-function-parameter
+    : 'function' member-name type-parameters? parameters+ function-specifier?
+    ;
+
+typed-function-parameter
+    : variadic-type member-name type-parameters? parameters+ function-specifier?
     ;
 
 value-parameter-declaration
-    | value-parameter-type member-name value-specifier?
+    | inferred-value-parameter
+    | typed-value-parameter
     ;
 
-value-parameter-type
-    | variadic-type
-    | kw-value
+inferred-value-parameter
+    : 'value' member-name value-specifier?
+    ;
+
+typed-value-parameter
+    | variadic-type member-name value-specifier?
     ;
 
 type-parameters
@@ -391,16 +408,16 @@ setter-definition
     | required-function-specifier
     ;
 
-typed-method-declaration
-    | annotations variadic-type member-name type-parameters? parameters+ type-constraints? method-definition
-    ;
-
 void-method-declaration
     | annotations 'void' member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
 inferred-method-declaration
     | annotations 'function' member-name type-parameters? parameters+ type-constraints? method-definition
+    ;
+
+typed-method-declaration
+    | annotations variadic-type member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
 typed-attribute-declaration
@@ -522,8 +539,8 @@ any-specifier
 
 base-reference-or-parameterized
     | base-reference
-    | parametrized-member
     | self-reference
+    | parametrized-member
     | self-parametrized-member
     ;
 
@@ -715,13 +732,17 @@ conditional-expression
     | disjunction-expression
     ;
 
-function-expr
-    | function-expression-type? type-parameters? function-parameters? function-definition
+function-expression
+    | void-function-expr
+    | inferred-function-expr
     ;
 
-function-expression-type
-    | 'void'
-    | 'function'
+void-function-expr
+    | 'void' type-parameters? parameters+ type-constraints? function-definition
+    ;
+
+inferred-function-expr
+    | 'function'? type-parameters? parameters+ type-constraints? function-definition
     ;
 
 function-parameters
@@ -760,7 +781,7 @@ expression
     | let-expr
     | if-expr
     | switch-expr
-    | function-expr
+    | function-expression
     | operator-expression
     ;
 
@@ -1209,11 +1230,6 @@ variadic-union-type
     | union-type variadic-operator
     ;
 
-variadic-operator
-    | '*'
-    | '+'
-    ;
-
 spread-type
     | '*' union-type
     ;
@@ -1412,11 +1428,7 @@ value-case
     ;
 
 for-else-statement
-    | for-block else-block?
-    ;
-
-for-block
-    | 'for' '(' for-iterator? ')' block
+    | 'for' '(' for-iterator? ')' block else-block?
     ;
 
 for-iterator

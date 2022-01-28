@@ -52,6 +52,45 @@
             public Block? ElseBlock { get; }
         }
 
+
+        public sealed class For : Statement
+        {
+            public For(ForIterator? iterator, Block block, Block? elseBlock)
+            {
+                Iterator = iterator;
+                Block = block;
+                ElseBlock = elseBlock;
+            }
+
+            public ForIterator? Iterator { get; }
+            public Block Block { get; }
+            public Block? ElseBlock { get; }
+        }
+
+        public sealed class ForIterator
+        {
+            public ForIterator(Pattern variable, Containment? containment)
+            {
+                Variable = variable;
+                Containment = containment;
+            }
+
+            public Pattern Variable { get; }
+            public Containment? Containment { get; }
+        }
+
+        public sealed class Containment
+        {
+            public Containment(string op, IExpression expr)
+            {
+                Op = op;
+                Expr = expr;
+            }
+
+            public string Op { get; }
+            public IExpression Expr { get; }
+        }
+
         public sealed class While : ConditionalBlock
         {
             public While(ConditionList conditions, Block block)

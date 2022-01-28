@@ -65,21 +65,24 @@ namespace Six.Ceylon
 
         protected override void Visit(CForElseStatement element)
         {
-            WalkChildrenTodo(element);
+            var iterator = Walk<Statement.ForIterator>(element.ForIterator);
+            var block = Walk<Block>(element.Block);
+            var elseBlock = Walk<Block>(element.ElseBlock);
 
-            //TODO
-            element.Value = new Statement();
+            element.Value = new Statement.For(iterator, block, elseBlock);
         }
 
         protected override void Visit(CReturnStatement element)
         {
             var expr = Walk<IExpression>(element.Expression);
+
             element.Value = new Statement.Return(expr);
         }
 
         protected override void Visit(CThrowStatement element)
         {
             var expr = Walk<IExpression>(element.Expression);
+
             element.Value = new Statement.Throw(expr);
         }
 
@@ -131,11 +134,6 @@ namespace Six.Ceylon
             element.Value = Walk<Block>(element.Block);
         }
 
-        protected override void Visit(CForBlock element)
-        {
-            WalkChildrenTodo(element);
-        }
-
         protected override void Visit(CTryBlock element)
         {
             WalkChildrenTodo(element);
@@ -173,12 +171,18 @@ namespace Six.Ceylon
 
         protected override void Visit(CForIterator element)
         {
-            WalkChildrenTodo(element);
+            var pattern = Walk<Pattern>(element.ForVariable);
+            var containment = Walk<Statement.Containment>(element.Containment);
+
+            element.Value = new Statement.ForIterator(pattern, containment);
         }
 
         protected override void Visit(CContainment element)
         {
-            WalkChildrenTodo(element);
+            var op = element.ContainmentOperator.GetText();
+            var expr = Walk<IExpression>(element.OperatorExpression);
+
+            element.Value = new Statement.Containment(op, expr);
         }
     }
 }

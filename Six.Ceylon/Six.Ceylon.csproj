@@ -727,7 +727,7 @@
       <None Update="language\largest.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\List.ceylon">
+      <None Update="six\core\interfaces\List.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\loop.ceylon">
@@ -1069,16 +1069,16 @@
       <None Update="language\Scalable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\SearchableList.ceylon">
+      <None Update="six\core\interfaces\SearchableList.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Sequence.ceylon">
+      <None Update="six\core\interfaces\Sequence.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\SequencedAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Sequential.ceylon">
+      <None Update="six\core\interfaces\Sequential.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\serialization\deserialization.ceylon">
