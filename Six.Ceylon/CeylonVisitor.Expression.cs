@@ -162,7 +162,6 @@ namespace Six.Ceylon
 
         protected override void Visit(CInferredFunctionExpr element)
         {
-
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
             var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
             var parameters = new ParameterListList(items); ;

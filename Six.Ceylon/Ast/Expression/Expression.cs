@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public record Expression : IExpression
+    public record Expression : IExpression, Argument
     {
         public record Infix(string Op, IExpression Left, IExpression Right) : Expression;
 
@@ -34,7 +34,8 @@
 
         public sealed record If(ConditionList Conditions, IExpression Then, IExpression Else) : Expression;
 
-        public abstract record Function(TypeParameterList? TypeParameters, ParameterListList Parameters, ConstraintList? Constraints, IExpression Definition);
+        public abstract record Function(TypeParameterList? TypeParameters, ParameterListList Parameters, ConstraintList? Constraints, IExpression Definition)
+            : Expression;
 
         public record InferredFunction(TypeParameterList? TypeParameters, ParameterListList Parameters, ConstraintList? Constraints, IExpression Definition)
             : Function(TypeParameters, Parameters, Constraints, Definition);

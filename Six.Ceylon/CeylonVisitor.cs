@@ -196,7 +196,11 @@ namespace Six.Ceylon
 
         protected override void Visit(CVariadicVariable element)
         {
-            WalkChildrenTodo(element);
+            var type = Walk<Typo>(element.UnionType);
+            var op = element.VariadicOperator.GetText();
+            var name = Walk<Identifier>(element.MemberName);
+
+            element.Value = new Variadic(type, op, name);
         }
 
         protected override void Visit(CLetVariable element)
