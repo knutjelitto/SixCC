@@ -9,6 +9,12 @@
 	  </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="six\core\AAA\**" />
+      <EmbeddedResource Remove="six\core\AAA\**" />
+      <None Remove="six\core\AAA\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Remove="Ceylon.six" />
 		<AdditionalFiles Include="Ceylon.six" />
 		<EmbeddedResource Include=".\Ceylon.six" Link="Grammar.six" />
@@ -475,19 +481,94 @@
       <None Update="ceylon\json\Visitor.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\and.ceylon">
+      <None Update="six\core\annotations\Annotated.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Annotated.ceylon">
+      <None Update="six\core\annotations\Annotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Annotation.ceylon">
+      <None Update="six\core\annotations\annotations.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\annotations.ceylon">
+      <None Update="six\core\annotations\ConstrainedAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\any.ceylon">
+      <None Update="six\core\annotations\OptionalAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\annotations\SequencedAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\and.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Annotated.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Annotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\annotations.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\any.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Scalable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\SequencedAnnotation.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Set.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\shuffle.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Singleton.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\smallest.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\sort.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Span.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\StringBuilder.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\StringTokens.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\sum.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\Summable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\system.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\times.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\transpose.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\unflatten.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\unzip.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\vmArguments.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\BBB\zip.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="six\core\classes\Basic.ceylon">
@@ -508,6 +589,72 @@
       <None Update="six\core\classes\Tuple.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="six\core\className.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\and.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\apply.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\byDecreasing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\byIncreasing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\byItem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\byKey.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\compose.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\curry.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\flatten.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\forItem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\forKey.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\not.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\or.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\shuffle.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functional\unflatten.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functions\functions.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functions\identical.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functions\identityHash.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functions\largest.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\functions\smallest.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\interfaces\Callable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <None Update="six\core\interfaces\Destroyable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
@@ -523,40 +670,40 @@
       <None Update="six\core\classes\Anything.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\apply.ceylon">
+      <None Update="six\core\BBB\apply.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Array.ceylon">
+      <None Update="six\core\BBB\Array.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\arrayOfSize.ceylon">
+      <None Update="six\core\BBB\arrayOfSize.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\ArraySequence.ceylon">
+      <None Update="six\core\BBB\ArraySequence.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\AssertionError.ceylon">
+      <None Update="six\core\BBB\AssertionError.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Basic.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Binary.ceylon">
+      <None Update="six\core\BBB\Binary.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="six\core\classes\Boolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\byDecreasing.ceylon">
+      <None Update="six\core\BBB\byDecreasing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\byIncreasing.ceylon">
+      <None Update="six\core\BBB\byIncreasing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\byItem.ceylon">
+      <None Update="six\core\BBB\byItem.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\byKey.ceylon">
+      <None Update="six\core\BBB\byKey.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Byte.ceylon">
@@ -565,115 +712,115 @@
       <None Update="language\Callable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Category.ceylon">
+      <None Update="six\core\BBB\Category.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\ChainedIterator.ceylon">
+      <None Update="six\core\BBB\ChainedIterator.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Character.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\className.ceylon">
+      <None Update="six\core\BBB\className.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Collection.ceylon">
+      <None Update="six\core\BBB\Collection.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Comparable.ceylon">
+      <None Update="six\core\BBB\Comparable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\comparing.ceylon">
+      <None Update="six\core\BBB\comparing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Comparison.ceylon">
+      <None Update="six\core\BBB\Comparison.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\compose.ceylon">
+      <None Update="six\core\BBB\compose.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\concatenate.ceylon">
+      <None Update="six\core\BBB\concatenate.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\ConstrainedAnnotation.ceylon">
+      <None Update="six\core\BBB\ConstrainedAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Contextual.ceylon">
+      <None Update="six\core\BBB\Contextual.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Correspondence.ceylon">
+      <None Update="six\core\BBB\Correspondence.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\corresponding.ceylon">
+      <None Update="six\core\BBB\corresponding.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\count.ceylon">
+      <None Update="six\core\BBB\count.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\curry.ceylon">
+      <None Update="six\core\BBB\curry.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\CycledIterator.ceylon">
+      <None Update="six\core\BBB\CycledIterator.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Destroyable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Empty.ceylon">
+      <None Update="six\core\BBB\Empty.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\emptyOrSingleton.ceylon">
+      <None Update="six\core\BBB\emptyOrSingleton.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Entry.ceylon">
+      <None Update="six\core\BBB\Entry.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Enumerable.ceylon">
+      <None Update="six\core\BBB\Enumerable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\every.ceylon">
+      <None Update="six\core\BBB\every.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Exception.ceylon">
+      <None Update="six\core\BBB\Exception.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\expand.ceylon">
+      <None Update="six\core\BBB\expand.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Exponentiable.ceylon">
+      <None Update="six\core\BBB\Exponentiable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Finished.ceylon">
+      <None Update="six\core\BBB\Finished.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\flatten.ceylon">
+      <None Update="six\core\BBB\flatten.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Float.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\forItem.ceylon">
+      <None Update="six\core\BBB\forItem.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\forKey.ceylon">
+      <None Update="six\core\BBB\forKey.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\formatFloat.ceylon">
+      <None Update="six\core\BBB\formatFloat.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\formatInteger.ceylon">
+      <None Update="six\core\BBB\formatInteger.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\functions.ceylon">
+      <None Update="six\core\BBB\functions.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\identical.ceylon">
+      <None Update="six\core\BBB\identical.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Identifiable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\identityHash.ceylon">
+      <None Update="six\core\BBB\identityHash.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\impl\bases.ceylon">
@@ -697,49 +844,49 @@
       <None Update="language\impl\rethrow.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\infinity.ceylon">
+      <None Update="six\core\BBB\infinity.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\InitializationError.ceylon">
+      <None Update="six\core\BBB\InitializationError.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Integer.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Integral.ceylon">
+      <None Update="six\core\BBB\Integral.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\interleave.ceylon">
+      <None Update="six\core\BBB\interleave.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Invertible.ceylon">
+      <None Update="six\core\BBB\Invertible.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Iterable.ceylon">
+      <None Update="six\core\BBB\Iterable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Iterator.ceylon">
+      <None Update="six\core\BBB\Iterator.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\language.ceylon">
+      <None Update="six\core\BBB\language.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\largest.ceylon">
+      <None Update="six\core\BBB\largest.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="six\core\interfaces\List.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\loop.ceylon">
+      <None Update="six\core\BBB\loop.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Map.ceylon">
+      <None Update="six\core\BBB\Map.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\max.ceylon">
+      <None Update="six\core\BBB\max.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Measure.ceylon">
+      <None Update="six\core\BBB\Measure.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\meta\annotations.ceylon">
@@ -973,19 +1120,226 @@
       <None Update="language\meta\typeLiteral.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\min.ceylon">
+      <None Update="six\core\BBB\min.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\module.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Multiplicable.ceylon">
+      <None Update="six\core\BBB\Multiplicable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\not.ceylon">
+      <None Update="six\core\BBB\not.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="six\core\support\nothing.ceylon">
+      <None Update="six\core\numbers\Binary.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Boolean.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Byte.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Enumerable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Exponentiable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Float.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\formatFloat.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\formatInteger.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\infinity.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Integer.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Integral.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Invertible.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Multiplicable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Number.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Numeric.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Ordinal.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\plus.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\product.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Scalable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\sum.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\Summable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\numbers\times.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\any.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Array.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\arrayOfSize.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\ArraySequence.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Category.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\ChainedIterator.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Collection.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Comparable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\comparing.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Comparison.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\concatenate.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Correspondence.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\corresponding.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\count.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Empty.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\emptyOrSingleton.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Entry.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\every.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\expand.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Finished.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\interleave.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Iterable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Iterator.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\List.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\loop.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Map.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\max.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Measure.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\min.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\pairs.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Range.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Ranged.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\SearchableList.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Sequence.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Sequential.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\collections\Set.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Singleton.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\sort.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Span.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\transpose.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\Tuple.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\unzip.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\streams\zip.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\strings\Character.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\strings\String.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\strings\StringBuilder.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\strings\StringTokens.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\nothing.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="six\core\classes\Byte.ceylon">
@@ -994,10 +1348,10 @@
       <None Update="six\core\classes\Null.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Number.ceylon">
+      <None Update="six\core\BBB\Number.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Numeric.ceylon">
+      <None Update="six\core\BBB\Numeric.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="six\core\classes\Object.ceylon">
@@ -1006,64 +1360,64 @@
       <None Update="language\Obtainable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\operatingSystem.ceylon">
+      <None Update="six\core\BBB\operatingSystem.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\OptionalAnnotation.ceylon">
+      <None Update="six\core\BBB\OptionalAnnotation.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\or.ceylon">
+      <None Update="six\core\BBB\or.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Ordinal.ceylon">
+      <None Update="six\core\BBB\Ordinal.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\OverflowException.ceylon">
+      <None Update="six\core\BBB\OverflowException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\package.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\pairs.ceylon">
+      <None Update="six\core\BBB\pairs.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="six\core\support\parseBoolean.ceylon">
+      <None Update="six\core\numbers\parseBoolean.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\ParseException.ceylon">
+      <None Update="six\core\BBB\ParseException.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="six\core\support\parseFloat.ceylon">
+      <None Update="six\core\numbers\parseFloat.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="six\core\support\parseInteger.ceylon">
+      <None Update="six\core\numbers\parseInteger.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\plus.ceylon">
+      <None Update="six\core\BBB\plus.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\print.ceylon">
+      <None Update="six\core\BBB\print.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\printStackTrace.ceylon">
+      <None Update="six\core\BBB\printStackTrace.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\process.ceylon">
+      <None Update="six\core\BBB\process.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\product.ceylon">
+      <None Update="six\core\BBB\product.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Range.ceylon">
+      <None Update="six\core\BBB\Range.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Ranged.ceylon">
+      <None Update="six\core\BBB\Ranged.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\Resource.ceylon">
+      <None Update="six\core\BBB\Resource.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="language\runtime.ceylon">
+      <None Update="six\core\BBB\runtime.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="language\Scalable.ceylon">
@@ -1796,6 +2150,54 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="six\core\classes\Throwable.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\Contextual.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\language.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\operatingSystem.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\print.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\printStackTrace.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\process.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\Resource.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\runtime.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\system.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\system\vmArguments.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\throws\AssertionError.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\throws\Exception.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\throws\InitializationError.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\throws\OverflowException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\throws\ParseException.ceylon">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="six\core\throws\Throwable.ceylon">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="tests\basics\functions.ceylon">

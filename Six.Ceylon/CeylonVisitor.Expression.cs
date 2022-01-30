@@ -7,157 +7,168 @@ namespace Six.Ceylon
     {
         protected override void Visit(CAssignmentExpr element)
         {
-            var left = Walk<IExpression>(element.ThenElseExpression);
+            var left = Walk<Expr>(element.ThenElseExpression);
             var op = element.AssignmentOperator.GetText();
-            var right = Walk<IExpression>(element.Expression);
+            var right = Walk<Expr>(element.Expression);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CLargerExpr element)
         {
-            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var left = Walk<Expr>(element.ExistsNonemptyExpression);
             var op = element.LargerOperator.GetText();
-            var right = Walk<IExpression>(element.ExistsNonemptyExpression2);
+            var right = Walk<Expr>(element.ExistsNonemptyExpression2);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CSmallerExpr element)
         {
-            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var left = Walk<Expr>(element.ExistsNonemptyExpression);
             var op = element.SmallerOperator.GetText();
-            var right = Walk<IExpression>(element.ExistsNonemptyExpression2);
+            var right = Walk<Expr>(element.ExistsNonemptyExpression2);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CAdditiveExpr element)
         {
-            var left = Walk<IExpression>(element.AdditiveExpression);
+            var left = Walk<Expr>(element.AdditiveExpression);
             var op = element.AdditiveOperator.GetText();
-            var right = Walk<IExpression>(element.ScaleExpression);
+            var right = Walk<Expr>(element.ScaleExpression);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CSelectionExpr element)
         {
-            var left = Walk<IExpression>(element.Primary);
+            var left = Walk<Expr>(element.Primary);
             var op = element.MemberSelectionOperator.GetText();
-            var right = Walk<IExpression>(element.BaseReference);
+            var right = Walk<Expr>(element.BaseReference);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CMultiplicativeExpr element)
         {
-            var left = Walk<IExpression>(element.MultiplicativeExpression);
+            var left = Walk<Expr>(element.MultiplicativeExpression);
             var op = element.MultiplicativeOperator.GetText();
-            var right = Walk<IExpression>(element.UnionExpression);
+            var right = Walk<Expr>(element.UnionExpression);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CThenElseExpr element)
         {
-            var left = Walk<IExpression>(element.ThenElseExpression);
+            var left = Walk<Expr>(element.ThenElseExpression);
             var op = element.ThenElseOperator.GetText();
-            var right = Walk<IExpression>(element.DisjunctionExpression);
+            var right = Walk<Expr>(element.DisjunctionExpression);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CEqualityExpr element)
         {
-            var left = Walk<IExpression>(element.ComparisonExpression);
+            var left = Walk<Expr>(element.ComparisonExpression);
             var op = element.EqualityOperator.GetText();
-            var right = Walk<IExpression>(element.ComparisonExpression2);
+            var right = Walk<Expr>(element.ComparisonExpression2);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CConjunctionExpr element)
         {
-            var left = Walk<IExpression>(element.ConjunctionExpression);
+            var left = Walk<Expr>(element.ConjunctionExpression);
             var op = element.ConjunctionOperator.GetText();
-            var right = Walk<IExpression>(element.LogicalNegationExpression);
+            var right = Walk<Expr>(element.LogicalNegationExpression);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CComparisonExpr element)
         {
-            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var left = Walk<Expr>(element.ExistsNonemptyExpression);
             var op = element.ComparisonOperator.GetText();
-            var right = Walk<IExpression>(element.ExistsNonemptyExpression2);
+            var right = Walk<Expr>(element.ExistsNonemptyExpression2);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CDisjunctionExpr element)
         {
-            var left = Walk<IExpression>(element.DisjunctionExpression);
+            var left = Walk<Expr>(element.DisjunctionExpression);
             var op = element.DisjunctionOperator.GetText();
-            var right = Walk<IExpression>(element.ConjunctionExpression);
+            var right = Walk<Expr>(element.ConjunctionExpression);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CRangeExpr element)
         {
-            var left = Walk<IExpression>(element.AdditiveExpression);
+            var left = Walk<Expr>(element.AdditiveExpression);
             var op = element.RangeOperator.GetText();
-            var right = Walk<IExpression>(element.AdditiveExpression2);
+            var right = Walk<Expr>(element.AdditiveExpression2);
 
-            element.Value = new Expression.Infix(op, left, right);
+            element.Value = new Expr.Infix(op, left, right);
+        }
+
+        protected override void Visit(CExclusiveExpr element)
+        {
+            var left = Walk<Expr>(element.ExclusiveExpression);
+            var op = element.ExclusiveOperator.GetText();
+            var right = Walk<Expr>(element.IntersectionExpression);
+
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CPostfixExpr element)
         {
-            var expr = Walk<IExpression>(element.PostfixExpression);
+            var expr = Walk<Expr>(element.PostfixExpression);
             var op = element.IncrementOperator.GetText();
 
-            element.Value = new Expression.Postfix(expr, op);
+            element.Value = new Expr.Postfix(expr, op);
         }
 
         protected override void Visit(CPrefixExpr element)
         {
             var op = element.IncrementOperator.GetText();
-            var expr = Walk<IExpression>(element.PrefixExpression);
+            var expr = Walk<Expr>(element.PrefixExpression);
 
-            element.Value = new Expression.Prefix(op, expr);
+            element.Value = new Expr.Prefix(op, expr);
         }
 
         protected override void Visit(CNegationOrComplementExpr element)
         {
             var op = Walk<string>(element.UnaryMinusOrComplementOperator);
-            var right = Walk<IExpression>(element.NegationOrComplementExpression);
+            var right = Walk<Expr>(element.NegationOrComplementExpression);
 
-            element.Value = new Expression.Prefix(op, right);
+            element.Value = new Expr.Prefix(op, right);
         }
 
         protected override void Visit(CLogicalNegationExpr element)
         {
             var op = element.NotOperator.GetText();
-            var right = Walk<IExpression>(element.LogicalNegationExpression);
+            var right = Walk<Expr>(element.LogicalNegationExpression);
 
-            element.Value = new Expression.Prefix(op, right);
+            element.Value = new Expr.Prefix(op, right);
         }
 
         protected override void Visit(CCallExpr element)
         {
-            var primary = Walk<IExpression>(element.Primary);
+            var primary = Walk<Expr>(element.Primary);
             var arguments = Walk<Arguments>(element.Arguments);
 
-            element.Value = new Expression.Call(primary, arguments);
+            element.Value = new Expr.Call(primary, arguments);
         }
 
         protected override void Visit(CParametrizedMember element)
         {
-            WalkChildrenTodo(element);
+            var name = Walk<Identifier>(element.MemberName);
+            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var parameters = new ParameterListList(element.Parameters.Children.Select(child => Walk<ParameterList>(child)));
 
-            element.Value = new Expression();
+            element.Value = new Expr.Member(name, typeParameters, parameters);
         }
 
         protected override void Visit(CInferredFunctionExpr element)
@@ -165,10 +176,10 @@ namespace Six.Ceylon
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
             var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
             var parameters = new ParameterListList(items); ;
-            var constraints = Walk<ConstraintList>(element.TypeConstraints);
-            var definition = Walk<IExpression>(element.FunctionDefinition);
+            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var definition = Walk<Expr>(element.FunctionDefinition);
 
-            element.Value = new Expression.InferredFunction(typeParameters, parameters, constraints, definition);
+            element.Value = new Expr.InferredFunction(typeParameters, parameters, constraints, definition);
         }
 
         protected override void Visit(CVoidFunctionExpr element)
@@ -176,10 +187,10 @@ namespace Six.Ceylon
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
             var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
             var parameters = new ParameterListList(items); ;
-            var constraints = Walk<ConstraintList>(element.TypeConstraints);
-            var definition = Walk<IExpression>(element.FunctionDefinition);
+            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var definition = Walk<Expr>(element.FunctionDefinition);
 
-            element.Value = new Expression.VoidFunction(typeParameters, parameters, constraints, definition);
+            element.Value = new Expr.VoidFunction(typeParameters, parameters, constraints, definition);
         }
 
 
@@ -187,103 +198,96 @@ namespace Six.Ceylon
         {
             // 'if'
             var conditions = Walk<ConditionList>(element.Conditions);
-            var thenExpr = Walk<IExpression>(element.ThenExpression);
-            var elseExpr = Walk<IExpression>(element.ElseExpression);
+            var thenExpr = Walk<Expr>(element.ThenExpression);
+            var elseExpr = Walk<Expr>(element.ElseExpression);
 
-            element.Value = new Expression.If(conditions, thenExpr, elseExpr);
+            element.Value = new Expr.If(conditions, thenExpr, elseExpr);
         }
 
         protected override void Visit(CTupleExpr element)
         {
-            WalkChildrenTodo(element);
+            var arguments = Walk<ArgumentList>(element.SequencedArgumentList) ?? new ArgumentList(Enumerable.Empty<Argument>());
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Tuple(arguments);
         }
 
         protected override void Visit(CIndexedExpr element)
         {
-            var expr = Walk<IExpression>(element.Primary);
-            var index = Walk<IExpression>(element.Index);
+            var expr = Walk<Expr>(element.Primary);
+            var index = Walk<Expr>(element.Index);
 
-            element.Value = new Expression.Indexed(expr, index);
+            element.Value = new Expr.Indexed(expr, index);
         }
 
         protected override void Visit(CEntryExpr element)
         {
-            WalkChildrenTodo(element);
+            var left = Walk<Expr>(element.AdditiveExpression);
+            var op = element.EntryOperator.GetText();
+            var right = Walk<Expr>(element.AdditiveExpression2);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Infix(op, left, right);
         }
 
         protected override void Visit(CObjectExpr element)
         {
-            WalkChildrenTodo(element);
+            var extended = Walk<Extended>(element.ExtendedType);
+            var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
+            var block = Walk<Block>(element.Block);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Object(extended, satisfied, block);
         }
 
         protected override void Visit(CGroupedExpr element)
         {
-            element.Value = Walk<IExpression>(element.Expression);
+            element.Value = Walk<Expr>(element.Expression);
         }
 
         protected override void Visit(CEnumerationExpr element)
         {
-            WalkChildrenTodo(element);
+            var statements = Walk<StatementList>(element.Statements);
+            var sequenced = Walk<ArgumentList>(element.SequencedArgumentList);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Enumeration(statements, sequenced);
         }
 
         protected override void Visit(CTypecheckExpr element)
         {
-            WalkChildrenTodo(element);
+            var expr = Walk<Expr>(element.ExistsNonemptyExpression);
+            var op = element.TypeOperator.GetText();
+            var type = Walk<Typo>(element.Type);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Typecheck(expr, op, type);
         }
 
         protected override void Visit(CExistsExpr element)
         {
-            WalkChildrenTodo(element);
+            var expr = Walk<Expr>(element.EntryRangeExpression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Exists(expr);
         }
 
         protected override void Visit(CNonemptyExpr element)
         {
-            WalkChildrenTodo(element);
+            var expr = Walk<Expr>(element.EntryRangeExpression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Nonempty(expr);
         }
 
         protected override void Visit(CSwitchExpr element)
         {
-            WalkChildrenTodo(element);
+            var head = Walk<Expr>(element.SwitchHeader);
+            var cases = new Expr.CaseList(element.CaseExpression.Children.Select(child => Walk<Expr.Case>(child)));
+            var @else = Walk<Expr>(element.ElseExpression);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Switch(head, cases, @else);
         }
 
         protected override void Visit(CLetExpr element)
         {
-            WalkChildrenTodo(element);
+            var lets = Walk<LetList>(element.LetVariableList);
+            var expr = Walk<Expr>(element.ConditionalExpression);
 
-            //TODO
-            element.Value = new Expression();
-        }
-
-        protected override void Visit(CExclusiveExpr element)
-        {
-            WalkChildrenTodo(element);
-
-            //TODO
-            element.Value = new Expression();
+            element.Value = new Expr.Let(lets, expr);
         }
 
         protected override void Visit(CStringInterpolation element)
@@ -294,27 +298,27 @@ namespace Six.Ceylon
             var strings = Enumerable.Repeat<Ast.InterpolationString>(start, 1)
                 .Concat(mids.Cast<Ast.InterpolationString>())
                 .Concat(Enumerable.Repeat<Ast.InterpolationString>(end, 1));
-            var first = Walk<IExpression>(element.Expression);
-            var rest = element.InterpolationPart.Select(part => Walk<IExpression>(part.Expression));
+            var first = Walk<Expr>(element.Expression);
+            var rest = element.InterpolationPart.Select(part => Walk<Expr>(part.Expression));
             var expressions = Enumerable.Repeat(first, 1).Concat(rest);
 
-            element.Value = new Expression.Interpolation(strings.ToList(), expressions.ToList());
+            element.Value = new Expr.Interpolation(strings.ToList(), expressions.ToList());
         }
 
         protected override void Visit(CInterpolationPart element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNever(element);
         }
 
         protected override void Visit(CSmallerBoundsExpr element)
         {
-            var left = Walk<IExpression>(element.ExistsNonemptyExpression);
+            var left = Walk<Expr>(element.ExistsNonemptyExpression);
             var op1 = element.SmallerOperator.GetText();
-            var mid = Walk<IExpression>(element.ExistsNonemptyExpression2);
+            var mid = Walk<Expr>(element.ExistsNonemptyExpression2);
             var op2 = element.SmallerOperator2.GetText();
-            var right = Walk<IExpression>(element.ExistsNonemptyExpression3);
+            var right = Walk<Expr>(element.ExistsNonemptyExpression3);
 
-            element.Value = new Expression.Infix2(left, op1, mid, op2, right);
+            element.Value = new Expr.Infix2(left, op1, mid, op2, right);
         }
 
         /*---------------------------------------------------------------------
@@ -323,72 +327,76 @@ namespace Six.Ceylon
         protected override void Visit(CThenExpression element)
         {
             var op = element.Literal.GetText();
-            var right = Walk<IExpression>(element.ConditionalExpression);
+            var right = Walk<Expr>(element.ConditionalExpression);
 
-            element.Value = new Expression.Prefix(op, right);
+            element.Value = new Expr.Prefix(op, right);
         }
 
         protected override void Visit(CElseExpression element)
         {
             var op = element.Literal.GetText();
-            var right = Walk<IExpression>(element.ConditionalExpression);
+            var right = Walk<Expr>(element.ConditionalExpression);
 
-            element.Value = new Expression.Prefix(op, right);
+            element.Value = new Expr.Prefix(op, right);
         }
 
         protected override void Visit(CSwitchHeader element)
         {
-            WalkChildrenTodo(element);
-        }
+            var switched = Walk<Expr>(element.Switched);
 
-        protected override void Visit(CCaseExpressions element)
-        {
-            WalkChildrenTodo(element);
+            element.Value = switched;
         }
 
         protected override void Visit(CCaseExpression element)
         {
-            WalkChildrenTodo(element);
+            var item = Walk<CaseItem>(element.CaseItem);
+            var expr = Walk<Expr>(element.ConditionalExpression);
+
+            element.Value = new Expr.Case(item, expr);
         }
 
         protected override void Visit(CIsCaseCondition element)
         {
-            WalkChildrenTodo(element);
+            var type = Walk<Typo>(element.Type);
+
+            element.Value = new CaseItem.IsCase(type);
         }
 
         protected override void Visit(CLetVariableList element)
         {
-            WalkChildrenTodo(element);
+            var items = WalkMany<LetVariable>(element);
+
+            element.Value = new LetList(items);
         }
 
         protected override void Visit(CSpanned element)
         {
-            var from = Walk<IExpression>(element.IndexExpression);
-            var to = Walk<IExpression>(element.IndexExpression2);
+            var from = Walk<Expr>(element.IndexExpression);
+            var to = Walk<Expr>(element.IndexExpression2);
 
-            element.Value = new Expression.SpanIndex(from, to);
+            element.Value = new Expr.SpanIndex(from, to);
         }
 
         protected override void Visit(CMeasured element)
         {
-            var from = Walk<IExpression>(element.IndexExpression);
-            var count = Walk<IExpression>(element.IndexExpression2);
+            var from = Walk<Expr>(element.IndexExpression);
+            var count = Walk<Expr>(element.IndexExpression2);
 
-            element.Value = new Expression.MeasureIndex(from, count);
+            element.Value = new Expr.MeasureIndex(from, count);
         }
 
         protected override void Visit(CLowerSpanned element)
         {
-            var to = Walk<IExpression>(element.IndexExpression);
+            var to = Walk<Expr>(element.IndexExpression);
 
-            element.Value = new Expression.ToIndex(to);
+            element.Value = new Expr.ToIndex(to);
         }
 
         protected override void Visit(CUpperSpanned element)
         {
-            var from = Walk<IExpression>(element.IndexExpression);
+            var from = Walk<Expr>(element.IndexExpression);
 
-            element.Value = new Expression.FromIndex(from);
+            element.Value = new Expr.FromIndex(from);
         }
     }
 }

@@ -1,4 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public sealed record StatementList(IEnumerable<Statement> Items) : ReadOnlyList<Statement>(Items);
+    public sealed record StatementList(IEnumerable<Stmt> Items) : ReadOnlyList<Stmt>(Items.ToList());
 }

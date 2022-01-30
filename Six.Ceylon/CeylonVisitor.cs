@@ -29,9 +29,18 @@ namespace Six.Ceylon
             }
         }
 
-        protected override void WalkChildren(RNode element)
+
+        private void WalkChildrenNotYet(RNode element)
         {
-            WalkChildrenTodo(element);
+            foreach (var child in element.Children)
+            {
+                Walk(child);
+            }
+        }
+
+        private void WalkChildrenNever(RNode element)
+        {
+            throw new InvalidOperationException();
         }
 
         protected override void DefaultImplementation(RNode element)
@@ -43,39 +52,38 @@ namespace Six.Ceylon
 
         protected override void Visit(CXStart element)
         {
-            WalkChildrenTodo(element);
-        }
+            if (element.CompilationUnit is CModuleDescriptor)
+            {
+                WalkChildrenNotYet(element);
+            }
+            else if (element.CompilationUnit is CPackageDescriptor)
+            {
+                WalkChildrenNotYet(element);
+            }
+            else
+            {
+                var unit = Walk<Unit>(element.CompilationUnit);
 
-        protected override void Visit(CModuleDescriptor element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CPackageDescriptor element)
-        {
-            WalkChildrenTodo(element);
+                element.Value = unit;
+            }
         }
 
         protected override void Visit(CCodeUnit element)
         {
-#if true
             var imports = Walk<ImportList>(element.Imports);
-            Walk(element.Namespace);
+            var ns = Walk<Ast.Namespace>(element.Namespace);
+            var imports2 = Walk<ImportList>(element.Imports2);
+            var declarations = Walk<DeclarationList>(element.Declarations);
 
-            var path = element.Namespace.NamespacePath.GetValue<IdentifierList>()!;
-
-            using (World.CreateNamespace(path))
-            {
-                Walk(element.Declarations);
-            }
-#endif
+            element.Value = new Unit(imports, ns, imports2, declarations);
         }
 
         protected override void Visit(CNamespace element)
         {
-            //TODO: Visitor - Annotations
-            //Walk(element.Annotations);
-            Walk(element.NamespacePath);
+            var annotations = Walk<Annotations>(element.Annotations);
+            var path = Walk<IdentifierList>(element.NamespacePath);
+
+            element.Value = new Ast.Namespace(annotations, path);
         }
 
         protected override void Visit(CNamespacePath element)
@@ -85,40 +93,42 @@ namespace Six.Ceylon
 
         protected override void Visit(CDeclarations element)
         {
-            element.Value = new DeclarationList(element.Children.Select(child => Walk<Declaration>(child)));
+            element.Value = new DeclarationList(element.Children.Select(child => Walk<Decl>(child)));
         }
 
         protected override void Visit(COptionalAnySpecifier element)
         {
-            element.Value = Walk<Expression.Specifier>(element.AnySpecifier);
+            element.Value = Walk<Expr.Specifier>(element.AnySpecifier) ?? new Expr.Specifier.Null();
         }
 
         protected override void Visit(CFunctionSpecifier element)
         {
             // '=>'
-            element.Value = new Expression.FunctionSpecifier(
-                element.Literal.GetText(),
-                Walk<IExpression>(element.Expression));
+            var op = element.Literal.GetText();
+            var expr = Walk<Expr>(element.Expression);
+
+            element.Value = new Expr.Specifier.Function(op, expr);
         }
 
         protected override void Visit(COptionalFunctionSpecifier element)
         {
-            element.Value = Walk<Expression.FunctionSpecifier>(element.FunctionSpecifier);
+            element.Value = Walk<Expr.Specifier>(element.FunctionSpecifier) ?? new Expr.Specifier.Null();
             // ';'
         }
 
         protected override void Visit(CRequiredFunctionSpecifier element)
         {
-            element.Value = Walk<Expression.FunctionSpecifier>(element.FunctionSpecifier);
+            element.Value = Walk<Expr.Specifier.Function>(element.FunctionSpecifier);
             // ';'
         }
 
         protected override void Visit(CValueSpecifier element)
         {
             // '='
-            element.Value = new Expression.ValueSpecifier(
-                element.Literal.GetText(),
-                Walk<IExpression>(element.Expression));
+            var op = element.Literal.GetText();
+            var expr = Walk<Expr>(element.Expression);
+
+            element.Value = new Expr.Specifier.Value(op, expr);
         }
 
         protected override void Visit(COptionalClassSpecifier element)
@@ -157,20 +167,6 @@ namespace Six.Ceylon
         /*---------------------------------------------------------------------
          *  Declaration - Interns
          *--------------------------------------------------------------------*/
-        protected override void Visit(CModuleSpecifier element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CModuleBody element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CModuleImport element)
-        {
-            WalkChildrenTodo(element);
-        }
         protected override void Visit(CSuperQualifiedClass element)
         {
             WalkChildrenTodo(element);
@@ -205,15 +201,18 @@ namespace Six.Ceylon
 
         protected override void Visit(CLetVariable element)
         {
-            WalkChildrenTodo(element);
+            var pattern = Walk<Pattern>(element.Pattern);
+            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
 
-            //TODO
-            element.Value = new Expression();
+            element.Value = new LetVariable(pattern, specifier);
         }
 
         protected override void Visit(CEntryPattern element)
         {
-            WalkChildrenTodo(element);
+            var left = Walk<Pattern>(element.VariableOrTuplePattern);
+            var right = Walk<Pattern>(element.VariableOrTuplePattern2);
+
+            element.Value = new Pattern.Entry(left, right);
         }
 
         protected override void Visit(CTuplePattern element)
@@ -261,7 +260,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CSpreadArgument element)
         {
-            WalkChildrenTodo(element);
+            var expr = Walk<Expr>(element.UnionExpression);
+
+            element.Value = new Argument.Spread(expr);
         }
 
         protected override void Visit(CNamedSpecifiedArgument element)
@@ -271,7 +272,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CAnonymousArgument element)
         {
-            var expr = Walk<IExpression>(element.Expression);
+            var expr = Walk<Expr>(element.Expression);
 
             element.Value = new Argument.Expression(expr);
         }
@@ -293,12 +294,18 @@ namespace Six.Ceylon
 
         protected override void Visit(CForComprehensionClause element)
         {
-            WalkChildrenTodo(element);
+            var iterator = Walk<Misc.ForIterator>(element.ForIterator);
+            var comprehension = Walk<Comprehension>(element.ComprehensionClause);
+
+            element.Value = new Comprehension.For(iterator, comprehension);
         }
 
         protected override void Visit(CIfComprehensionClause element)
         {
-            WalkChildrenTodo(element);
+            var conditions = Walk<ConditionList>(element.Conditions);
+            var comprehension = Walk<Comprehension>(element.ComprehensionClause);
+
+            element.Value = new Comprehension.If(conditions, comprehension);
         }
 
 
@@ -307,78 +314,23 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CSpecifiedVariable element)
         {
-            WalkChildrenTodo(element);
+            var variable = Walk<Variable>(element.Variable);
+            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
+
+            element.Value = new Expr.SpecifiedVariable(variable, specifier);
         }
+     
         protected override void Visit(CValueCaseList element)
         {
-            WalkChildrenTodo(element);
-        }
+            var items = element.Elements.Select(child => Walk<CaseItem>(child));
+            var list = new CaseItemList(items);
 
+            element.Value = list;
+        }
 
         /*---------------------------------------------------------------------
          *  Names / References / Literals
          *--------------------------------------------------------------------*/
-        protected override void Visit(CMetaLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CModuleLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CClassLiteral element)
-        {
-            var path = Walk<ReferencePath>(element.ReferencePath);
-
-            element.Value = new Meta.Class(path);
-        }
-
-        protected override void Visit(CInterfaceLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CFunctionLiteral element)
-        {
-            var path = Walk<ReferencePath>(element.ReferencePath);
-
-            element.Value = new Meta.Function(path);
-        }
-
-        protected override void Visit(CValueLiteral element)
-        {
-            var path = Walk<ReferencePath>(element.ReferencePath);
-
-            element.Value = new Meta.Value(path);
-        }
-
-        protected override void Visit(CAliasLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CNewLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CPackageLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CTypeParameterLiteral element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CValueLiteralIntro element)
-        {
-            WalkChildrenTodo(element);
-        }
-
         protected override void Visit(CPackagePath element)
         {
             var names = element.Elements.Select(child => Walk<Identifier>(child));
@@ -389,15 +341,16 @@ namespace Six.Ceylon
         protected override void Visit(CReferencePath element)
         {
             var package = element.PackageQualifier.Children.Length > 0;
-            var items = element.ReferencePathElementList.Elements.Select(child => Walk<Identifier>(child));
-            var names = new IdentifierList(items);
+            var names = Walk<IdentifierList>(element.ReferencePathElementList);
 
             element.Value = new ReferencePath(package, names);
         }
 
         protected override void Visit(CReferencePathElementList element)
         {
-            WalkChildrenTodo(element);
+            var items = WalkMany<Identifier>(element);
+
+            element.Value = new IdentifierList(items);
         }
 
         protected override void Visit(CMemberReference element)
@@ -430,27 +383,27 @@ namespace Six.Ceylon
 
         protected override void Visit(CVariance element)
         {
-            WalkChildrenTodo(element);
+            element.Value = element.GetText();
         }
 
         protected override void Visit(CPackageQualifier element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNever(element);
         }
 
         protected override void Visit(CKwVoid element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNever(element);
         }
 
         protected override void Visit(CKwValue element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNever(element);
         }
 
         protected override void Visit(CKwFunction element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNever(element);
         }
 
         /**********************************************************************
@@ -564,7 +517,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CSelfReference element)
         {
-            element.Value = new Expression.SelfReference(element.GetText());
+            element.Value = new Expr.SelfReference(element.GetText());
         }
     }
 }

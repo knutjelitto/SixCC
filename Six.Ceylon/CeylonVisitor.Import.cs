@@ -7,7 +7,7 @@ namespace Six.Ceylon
     {
         protected override void Visit(CImports element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
 
             //TODO
             element.Value = new ImportList(Enumerable.Empty<Import>());
@@ -15,32 +15,32 @@ namespace Six.Ceylon
 
         protected override void Visit(CImportDeclaration element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
         }
 
         protected override void Visit(CImportElements element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
         }
 
         protected override void Visit(CImportElementList element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
         }
 
         protected override void Visit(CImportNamed element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
         }
 
         protected override void Visit(CImportNameSpecifier element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
         }
 
         protected override void Visit(CImportWildcard element)
         {
-            WalkChildrenTodo(element);
+            WalkChildrenNotYet(element);
         }
     }
 }

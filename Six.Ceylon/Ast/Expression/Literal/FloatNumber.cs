@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class FloatNumber : IExpression
+    public class FloatNumber : Expr
     {
         //TODO
     }

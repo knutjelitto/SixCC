@@ -8,7 +8,9 @@ namespace Six.Ceylon.Ast
 {
     public interface Argument
     {
-        public record Expression(IExpression Expr) : Argument, IExpression;
+        public record Expression(Ast.Expr Expr) : Argument, Ast.Expr;
+
+        public record Spread(Ast.Expr Expr) : Argument;
     }
 
     public abstract record class Arguments

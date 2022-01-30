@@ -4,29 +4,29 @@
     {
         public record Declared(Annotations Annotations, ParameterDeclaration Declaration) : Parameter;
 
-        public record Reference(Identifier Name, Expression.ValueSpecifier? Specifier) : Parameter;
+        public record Reference(Identifier Name, Expr.Specifier.Value? Specifier) : Parameter;
 
         public abstract record ParameterDeclaration;
 
-        public abstract record Function(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expression.FunctionSpecifier? Specifier)
+        public abstract record Function(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expr.Specifier.Function? Specifier)
             : ParameterDeclaration;
 
-        public record VoidFunction(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expression.FunctionSpecifier? Specifier)
+        public record VoidFunction(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expr.Specifier.Function? Specifier)
             : Function(Name, TypeParameters, Parameters, Specifier);
 
-        public record InferredFunction(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expression.FunctionSpecifier? Specifier)
+        public record InferredFunction(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expr.Specifier.Function? Specifier)
             : Function(Name, TypeParameters, Parameters, Specifier);
 
-        public record TypedFunction(Typo Type, Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expression.FunctionSpecifier? Specifier)
+        public record TypedFunction(Typo Type, Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters, Expr.Specifier.Function? Specifier)
             : Function(Name, TypeParameters, Parameters, Specifier);
 
-        public abstract record Value(Identifier Name, Expression.ValueSpecifier? Specifier)
+        public abstract record Value(Identifier Name, Expr.Specifier.Value? Specifier)
             : ParameterDeclaration;
 
-        public record InferredValue(Identifier Name, Expression.ValueSpecifier? Specifier)
+        public record InferredValue(Identifier Name, Expr.Specifier.Value? Specifier)
             : Value(Name, Specifier);
 
-        public record TypedValue(Typo Type, Identifier Name, Expression.ValueSpecifier? Specifier)
+        public record TypedValue(Typo Type, Identifier Name, Expr.Specifier.Value? Specifier)
             : Value(Name, Specifier);
     }
 }

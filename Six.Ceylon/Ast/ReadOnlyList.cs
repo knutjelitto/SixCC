@@ -4,9 +4,9 @@
     {
         private readonly List<T> items;
 
-        protected ReadOnlyList(IEnumerable<T> items)
+        protected ReadOnlyList(List<T> items)
         {
-            this.items = items.ToList();
+            this.items = items;
         }
 
         public T this[int index] => items[index];

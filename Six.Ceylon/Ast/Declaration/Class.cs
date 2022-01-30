@@ -1,12 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Class : Declaration
-    {
-        public Class(Identifier name)
-            : base(name)
-        {
-        }
-
-        public override string ItemKind => "d-class";
-    }
+    public record Class(Annotations Annotations, Identifier Name) : Decl.Core(Annotations, Name);
 }

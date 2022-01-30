@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class TypeReference : IExpression
+    public class TypeReference : Expr
     {
         public TypeReference(Identifier name, TypeArgumentList arguments)
         {

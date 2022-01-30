@@ -7,7 +7,7 @@ namespace Six.Ceylon
     {
         protected override void Visit(CStatements element)
         {
-            var statements = element.Children.Select(child => Walk<Statement>(child));
+            var statements = element.Children.Select(child => Walk<Stmt>(child));
 
             element.Value = new StatementList(statements);
         }
@@ -16,17 +16,17 @@ namespace Six.Ceylon
         {
             Walk(element.OpenStatement);
 
-            element.Value = element.OpenStatement.Value is IExpression expression
-                ? new Statement.Expression(expression)
+            element.Value = element.OpenStatement.Value is Expr expression
+                ? new Stmt.Expression(expression)
                 : element.OpenStatement.Value!;
         }
 
         protected override void Visit(CSpecificationStatement element)
         {
-            var primary = Walk<IExpression>(element.Primary);
-            var specifier = Walk<IExpression>(element.FunctionSpecifier);
+            var primary = Walk<Expr>(element.Primary);
+            var specifier = Walk<Expr>(element.FunctionSpecifier);
 
-            element.Value = new Statement.Specification(primary, specifier);
+            element.Value = new Stmt.Specification(primary, specifier);
         }
 
         protected override void Visit(CAssertionStatement element)
@@ -35,7 +35,7 @@ namespace Six.Ceylon
             // 'assert'
             var conditions = Walk<ConditionList>(element.Conditions);
 
-            element.Value = new Statement.Assertion(message, conditions);
+            element.Value = new Stmt.Assertion(message, conditions);
         }
 
         protected override void Visit(CIfElseStatement element)
@@ -44,13 +44,13 @@ namespace Six.Ceylon
             var conditions = Walk<ConditionList>(element.Conditions);
             var block = Walk<Block>(element.Block);
 
-            var ifBlock = new Statement.ConditionalBlock(conditions, block);
-            var elseIfs = element.ElseIf.Children.Select(child => Walk<Statement.ConditionalBlock>(child));
+            var ifBlock = new Stmt.ConditionalBlock(conditions, block);
+            var elseIfs = element.ElseIf.Children.Select(child => Walk<Stmt.ConditionalBlock>(child));
             var elseBlock = Walk<Block>(element.ElseBlock);
 
             var conditionals = Enumerable.Repeat(ifBlock, 1).Concat(elseIfs);
             //TODO
-            element.Value = new Statement.If(conditionals, elseBlock);
+            element.Value = new Stmt.If(conditionals, elseBlock);
         }
 
         protected override void Visit(CElseIf element)
@@ -60,69 +60,75 @@ namespace Six.Ceylon
             var conditions = Walk<ConditionList>(element.Conditions);
             var block = Walk<Block>(element.Block);
 
-            element.Value = new Statement.ConditionalBlock(conditions, block);
+            element.Value = new Stmt.ConditionalBlock(conditions, block);
         }
 
         protected override void Visit(CForElseStatement element)
         {
-            var iterator = Walk<Statement.ForIterator>(element.ForIterator);
+            var iterator = Walk<Misc.ForIterator>(element.ForIterator);
             var block = Walk<Block>(element.Block);
             var elseBlock = Walk<Block>(element.ElseBlock);
 
-            element.Value = new Statement.For(iterator, block, elseBlock);
+            element.Value = new Stmt.For(iterator, block, elseBlock);
         }
 
         protected override void Visit(CReturnStatement element)
         {
-            var expr = Walk<IExpression>(element.Expression);
+            var expr = Walk<Expr>(element.Expression);
 
-            element.Value = new Statement.Return(expr);
+            element.Value = new Stmt.Return(expr);
         }
 
         protected override void Visit(CThrowStatement element)
         {
-            var expr = Walk<IExpression>(element.Expression);
+            var expr = Walk<Expr>(element.Expression);
 
-            element.Value = new Statement.Throw(expr);
+            element.Value = new Stmt.Throw(expr);
         }
 
         protected override void Visit(CBreakStatement element)
         {
-            element.Value = new Statement.Break();
+            element.Value = new Stmt.Break();
         }
 
         protected override void Visit(CContinueStatement element)
         {
-            element.Value = new Statement.Continue();
+            element.Value = new Stmt.Continue();
         }
 
         protected override void Visit(CSwitchStatement element)
         {
-            WalkChildrenTodo(element);
+            var head = Walk<Expr>(element.SwitchHeader);
+            var cases = new Stmt.CaseList(WalkMany<Stmt.Case>(element.CaseBlock));
+            var @else = Walk<Block>(element.ElseBlock);
 
-            //TODO
-            element.Value = new Statement();
+            element.Value = new Stmt.Switch(head, cases, @else);
         }
 
         protected override void Visit(CWhileStatement element)
-        {
+        {   
             var conditions = Walk<ConditionList>(element.Conditions);
             var block = Walk<Block>(element.Block);
 
-            element.Value = new Statement.While(conditions, block);
+            element.Value = new Stmt.While(conditions, block);
         }
 
         protected override void Visit(CLetStatement element)
         {
-            WalkChildrenTodo(element);
+            var lets = Walk<LetList>(element.LetVariableList);
+
+            element.Value = new Stmt.Let(lets);
         }
 
         protected override void Visit(CTryStatement element)
         {
-            WalkChildrenTodo(element);
+            var resources = Walk<ResourceList>(element.Resources);
+            var block = Walk<Block>(element.Block);
+            var catches = new CatchBlockList(element.CatchBlock.Children.Select(child => Walk<CatchBlock>(child)));
+            var final = Walk<Block>(element.FinallyBlock);
 
             //TODO
-            element.Value = new Statement();
+            element.Value = new Stmt.Try(resources, block, catches, final);
         }
 
         /*---------------------------------------------------------------------
@@ -134,55 +140,54 @@ namespace Six.Ceylon
             element.Value = Walk<Block>(element.Block);
         }
 
-        protected override void Visit(CTryBlock element)
-        {
-            WalkChildrenTodo(element);
-        }
-
         protected override void Visit(CCatchBlock element)
         {
-            WalkChildrenTodo(element);
-        }
+            var variable = Walk<Variable>(element.Variable);
+            var block = Walk<Block>(element.Block);
 
-        protected override void Visit(CCatchVariable element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CResources element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CResourceList element)
-        {
-            WalkChildrenTodo(element);
-        }
-
-        protected override void Visit(CCaseBlock element)
-        {
-            WalkChildrenTodo(element);
+            element.Value = new CatchBlock(variable, block);
         }
 
         protected override void Visit(CFinallyBlock element)
         {
-            WalkChildrenTodo(element);
+            element.Value = Walk<Block>(element.Block);
+        }
+
+        protected override void Visit(CResources element)
+        {
+            element.Value = Walk<ResourceList>(element.ResourceList);
+        }
+
+        protected override void Visit(CResourceList element)
+        {
+            var items = element.Elements.Select(child => Walk<Resource>(child));
+            var list = new ResourceList(items);
+
+            element.Value = list;
+        }
+
+        protected override void Visit(CCaseBlock element)
+        {
+            var item = Walk<CaseItem>(element.CaseItem);
+            var block = Walk<Block>(element.Block);
+
+            element.Value = new Stmt.Case(item, block);
         }
 
         protected override void Visit(CForIterator element)
         {
             var pattern = Walk<Pattern>(element.ForVariable);
-            var containment = Walk<Statement.Containment>(element.Containment);
+            var containment = Walk<Misc.Containment>(element.Containment);
 
-            element.Value = new Statement.ForIterator(pattern, containment);
+            element.Value = new Misc.ForIterator(pattern, containment);
         }
 
         protected override void Visit(CContainment element)
         {
             var op = element.ContainmentOperator.GetText();
-            var expr = Walk<IExpression>(element.OperatorExpression);
+            var expr = Walk<Expr>(element.OperatorExpression);
 
-            element.Value = new Statement.Containment(op, expr);
+            element.Value = new Misc.Containment(op, expr);
         }
     }
 }

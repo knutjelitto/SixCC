@@ -1,12 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Alias : Declaration
-    {
-        public Alias(Identifier name)
-            : base(name)
-        {
-        }
-
-        public override string ItemKind => "d-alias";
-    }
+    public record Alias(Annotations Annotations, Identifier Name) : Decl.Core(Annotations, Name);
 }

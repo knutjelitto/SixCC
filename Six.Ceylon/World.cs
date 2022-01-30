@@ -28,7 +28,7 @@ namespace Six.Ceylon
             return Use(current);
         }
 
-        public void AddDeclaration(Statement declaration)
+        public void AddDeclaration(Stmt declaration)
         {
             Assert(ownerStack.Count > 0);
             Owner.Body.Add(declaration);

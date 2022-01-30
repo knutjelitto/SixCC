@@ -19,6 +19,12 @@ namespace Six.Ceylon
             return value;
         }
 
+        private IEnumerable<T> WalkMany<T>(IRNode node)
+            where T : class
+        {
+            return node.Children.Select(child => Walk<T>(child));
+        }
+
         private T? Walk<T>(ROptional node)
             where T : class
         {
@@ -32,7 +38,7 @@ namespace Six.Ceylon
         }
 
         private T Add<T>(RNode node, T declaration)
-            where T : Statement
+            where T : Stmt
         {
             node.Value = declaration;
             World.AddDeclaration(declaration);
@@ -41,7 +47,7 @@ namespace Six.Ceylon
         }
 
         private IDisposable Use<T>(RNode node, T declaration)
-            where T : Statement, IBodyOwner
+            where T : Stmt, IBodyOwner
         {
             return World.Use(Add<T>(node, declaration));
         }

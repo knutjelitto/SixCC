@@ -1,12 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Method : Declaration
-    {
-        public Method(Identifier name)
-            : base(name)
-        {
-        }
-
-        public override string ItemKind => "d-method";
-    }
+    public record Method(Annotations Annotations, Identifier Name) : Decl.Core(Annotations, Name);
 }

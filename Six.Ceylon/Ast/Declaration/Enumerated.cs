@@ -1,12 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Enumerated : Declaration
-    {
-        public Enumerated(Identifier name)
-            : base(name)
-        {
-        }
-
-        public override string ItemKind => "d-enumerated";
-    }
+    public record Enumerated(Annotations Annotations, Identifier Name) : Decl.Core(Annotations, Name);
 }

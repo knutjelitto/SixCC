@@ -2,13 +2,13 @@
 {
     public class ConditionVariable
     {
-        public ConditionVariable(Identifier name, IExpression? value)
+        public ConditionVariable(Identifier name, Expr? value)
         {
             Name = name;
             Value = value;
         }
 
         public Identifier Name { get; }
-        public IExpression? Value { get; }
+        public Expr? Value { get; }
     }
 }

@@ -4,8 +4,8 @@ namespace Six.Ceylon
 {
     public class Body : IBody
     {
-        private readonly Dictionary<Identifier, Declaration> declarations = new();
-        private readonly List<Statement> statements = new();
+        private readonly Dictionary<Identifier, Decl> declarations = new();
+        private readonly List<Stmt> statements = new();
 
         public Body(IBodyOwner owner)
         {
@@ -18,10 +18,10 @@ namespace Six.Ceylon
         public int StatementCount => statements.Count - declarations.Count;
         public int DeclarationCount => declarations.Count;
 
-        public void Add(Statement statement)
+        public void Add(Stmt statement)
         {
             statements.Add(statement);
-            if (statement is Declaration declaration)
+            if (statement is Decl declaration)
             {
                 Add(declaration);
             }
@@ -31,17 +31,29 @@ namespace Six.Ceylon
             }
         }
 
-        private void Add(Declaration declaration)
+        private void Add(Decl declaration)
         {
+#if false
             Assert(declaration.Name is LowerIdentifier || declaration.Name is UpperIdentifier);
-            declarations.Add(declaration.Name, declaration);
+            try
+            {
+                declarations.Add(declaration.Name, declaration);
+            }
+            catch (Exception ex)
+            {
+                throw new AggregateException($"{declaration.Location()}: ERROR", ex);
+            }
+#endif
         }
 
         public void Dump(Writer writer)
         {
-            foreach (var declaration in statements.OfType<Declaration>())
+#if true
+            writer.WriteLine("TODO");
+#else
+            foreach (var declaration in statements.OfType<Decl>())
             {
-                writer.WriteLine($"{declaration.ItemKind,-13}: {declaration.Name,-30} [{declaration.Location()}]");
+                writer.WriteLine($"{declaration.GetType().Name.ToLowerInvariant(),-13}: {declaration.Name,-30} [{declaration.Location()}]");
                 if (declaration is IBodyOwner owner && owner.Body.DeclarationCount > 0)
                 {
                     using (writer.Indent())
@@ -50,6 +62,7 @@ namespace Six.Ceylon
                     }
                 }
             }
+#endif
         }
     }
 }

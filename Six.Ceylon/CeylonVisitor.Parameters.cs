@@ -8,9 +8,10 @@ namespace Six.Ceylon
         protected override void Visit(CParameters element)
         {
             // '('
-            var parameters = Walk<ParameterList>(element.ParameterList);
+            var parameters = Walk<ParameterList>(element.ParameterList) ?? new ParameterList(Enumerable.Empty<Parameter>());
             // ')'
 
+            Assert(parameters != null);
             element.Value = parameters;
         }
 
@@ -32,7 +33,7 @@ namespace Six.Ceylon
         protected override void Visit(CParameterReference element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var specifier = Walk<Expression.ValueSpecifier>(element.ValueSpecifier);
+            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
 
             element.Value = new Parameter.Reference(name, specifier);
         }
@@ -41,9 +42,32 @@ namespace Six.Ceylon
         {
             var type = Walk<Typo>(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
-            var specifier = Walk<Expression.ValueSpecifier>(element.ValueSpecifier);
+            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
 
             element.Value = new Parameter.TypedValue(type, name, specifier);
+        }
+
+        protected override void Visit(CTypedFunctionParameter element)
+        {
+            var type = Walk<Typo>(element.VariadicType);
+            var name = Walk<Identifier>(element.MemberName);
+            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var items = WalkMany<ParameterList>(element.Parameters);
+            var parameters = new ParameterListList(items);
+            var specifier = Walk<Expr.Specifier.Function>(element.FunctionSpecifier);
+
+            element.Value = new Parameter.TypedFunction(type, name, typeParameters, parameters, specifier);
+        }
+
+        protected override void Visit(CVoidFunctionParameter element)
+        {
+            var name = Walk<Identifier>(element.MemberName);
+            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var items = WalkMany<ParameterList>(element.Parameters);
+            var parameters = new ParameterListList(items);
+            var specifier = Walk<Expr.Specifier.Function>(element.FunctionSpecifier);
+
+            element.Value = new Parameter.VoidFunction(name, typeParameters, parameters, specifier);
         }
     }
 }

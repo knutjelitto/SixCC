@@ -8,13 +8,13 @@ namespace Six.Ceylon.Ast
 {
     public class ExistsCondition : Condition
     {
-        public ExistsCondition(bool not, IExpression expression)
+        public ExistsCondition(bool not, Expr expression)
         {
             Not = not;
             Expression = expression;
         }
 
         public bool Not { get; }
-        public IExpression Expression { get; }
+        public Expr Expression { get; }
     }
 }

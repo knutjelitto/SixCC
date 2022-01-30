@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class Constructor : Statement, IBodyOwner
+    public class Constructor : Stmt, IBodyOwner
     {
         public Constructor(Identifier? name)
         {
             Body = new Body(this);
         }
-
-        public override string ItemKind => "d-ctor";
 
         public IBody Body { get; }
     }

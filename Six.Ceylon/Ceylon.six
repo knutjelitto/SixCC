@@ -13,7 +13,7 @@ compilation-unit
     ;
 
 code-unit
-    : imports namespace declarations
+    : imports namespace imports declarations
     ;
 
 namespace
@@ -259,7 +259,7 @@ union-type-list
     ;
 
 case-types
-    | 'of' case-type-list
+    : 'of' case-type-list
     ;
 
 case-type-list
@@ -362,7 +362,6 @@ type-constraint
 type-constraints
     : type-constraint+
     ;
-    
 
 declarations
     : declaration*
@@ -417,11 +416,11 @@ inferred-method-declaration
     ;
 
 typed-method-declaration
-    | annotations variadic-type member-name type-parameters? parameters+ type-constraints? method-definition
+    : annotations variadic-type member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
 typed-attribute-declaration
-    | annotations variadic-type member-name attribute-definition
+    : annotations variadic-type member-name attribute-definition
     ;
 
 inferred-attribute-declaration
@@ -703,15 +702,19 @@ let-expr
     ;
 
 switch-expr
-    | switch-header case-expressions
-    ;
-
-case-expressions
-    | case-expression+ else-expression?
+    | switch-header case-expression+ else-expression?
     ;
     
+switch-header
+    | 'switch' '(' switched ')'
+    ;
+
+switched
+    : specified-or-expression
+    ;
+
 case-expression
-    | 'else'? 'case' '(' case-item ')' conditional-expression
+    : 'else'? 'case' '(' case-item ')' conditional-expression
     ;
 
 if-expr
@@ -766,7 +769,7 @@ comprehension-clause
     ;
 
 expression-comprehension-clause
-    | expression
+    : expression
     ;
 
 for-comprehension-clause
@@ -1222,11 +1225,11 @@ defaulted-type-core
     ;
 
 variadic-type
-    | variadic-union-type
+    | variadic-type-core
     | type
     ;
 
-variadic-union-type
+variadic-type-core
     | union-type variadic-operator
     ;
 
@@ -1361,7 +1364,7 @@ boolean-condition
 control-statement
     | if-else-statement
     | for-else-statement
-    | switch-statement 
+    | switch-statement
     | while-statement
     | try-statement
     ;
@@ -1382,14 +1385,6 @@ switch-statement
     | switch-header case-block+ else-block?
     ;
 
-switch-header
-    | 'switch' '(' switched ')'
-    ;
-
-switched
-    | specified-or-expression
-    ;
-
 case-block
     | 'else'? 'case' '(' case-item ')' block
     ;
@@ -1397,24 +1392,20 @@ case-block
 case-item
     | is-case-condition
     | satisfies-case-condition
-    | match-case-condition
+    | value-case-list
     | pattern
     ;
 
 is-case-condition
-    | 'is'? type
+    : 'is' type
     ;
 
 satisfies-case-condition
-    | 'satisfies' type
-    ;
-
-match-case-condition
-    | value-case-list
+    : 'satisfies' type
     ;
 
 value-case-list
-    | value-case (value-case-separator value-case)*
+    : value-case (value-case-separator value-case)*
     ;
 
 value-case-separator
@@ -1454,19 +1445,11 @@ while-statement
     ;
 
 try-statement
-    | try-block catch-block* finally-block?
-    ;
-
-try-block
-    | 'try' resources? block
+    | 'try' resources? block catch-block* finally-block?
     ;
 
 catch-block
-    | 'catch' catch-variable block
-    ;
-
-catch-variable
-    | '(' variable? ')' 
+    | 'catch' '(' variable? ')' block
     ;
 
 finally-block
@@ -1550,6 +1533,7 @@ declaration-reference
     | alias-literal
     | type-parameter-literal
     | value-literal
+    | object-literal
     | function-literal
     ;
 
@@ -1583,7 +1567,11 @@ new-literal
     ;
 
 value-literal
-    | value-literal-intro reference-path
+    | 'value' reference-path
+    ;
+
+object-literal
+    | 'object' reference-path
     ;
 
 value-literal-intro

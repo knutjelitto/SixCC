@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class NaturalNumber : IExpression
+    public class NaturalNumber : Expr
     {
         //TODO
     }
