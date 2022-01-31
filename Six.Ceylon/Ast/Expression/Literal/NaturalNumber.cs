@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Six.Runtime.Types;
 
 namespace Six.Ceylon.Ast
 {
     public class NaturalNumber : Expr
     {
         //TODO
+
+        public NaturalNumber(RToken token)
+        {
+            Token = token;
+        }
+
+        public RToken Token { get; }
     }
 }

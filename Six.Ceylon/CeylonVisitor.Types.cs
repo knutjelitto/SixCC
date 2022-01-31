@@ -52,7 +52,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CCaseTypeList element)
         {
-            element.Value = new TypeList(WalkMany<Typo>(element));
+            element.Value = new TypeList(WalkMany<Type>(element));
         }
 
         protected override void Visit(CQualifiedCaseType element)
@@ -60,25 +60,24 @@ namespace Six.Ceylon
             var withPackage = element.PackageQualifier.Children.Length > 0;
             var name = Walk<Identifier>(element.MemberName);
 
-            element.Value = new Typo.CaseType(withPackage, name);
+            element.Value = new Type.CaseType(withPackage, name);
         }
 
         protected override void Visit(CTypeDefault element)
         {
-            element.Value = Walk<Typo>(element.Type);
+            element.Value = Walk<Type>(element.Type);
         }
 
         protected override void Visit(CTypePath element)
         {
-            var items = element.Elements.Select(child => Walk<TypeReference>(child));
-            var path = new TypePath(items);
+            var items = WalkMany<Expr.TypeReference>(element);
 
-            element.Value = path;
+            element.Value = new TypePath(items);
         }
 
         protected override void Visit(CUnionTypeList element)
         {
-            var types = element.Elements.Select(child => Walk<Typo>(child));
+            var types = WalkMany<Type>(element);
 
             element.Value = new TypeList(types);
         }
@@ -87,108 +86,107 @@ namespace Six.Ceylon
         {
             var path = Walk<TypePath>(element.TypePath);
 
-            element.Value = new Typo.PackageType(path);
+            element.Value = new Type.PackageType(path);
         }
 
         protected override void Visit(CEntryType element)
         {
-            var left = Walk<Typo>(element.UnionType);
+            var left = Walk<Type>(element.UnionType);
             var op = element.Literal.GetText();
-            var right = Walk<Typo>(element.UnionType2);
+            var right = Walk<Type>(element.UnionType2);
 
-            element.Value = new Typo.Entry(left, right);
+            element.Value = new Type.Entry(left, right);
         }
 
         protected override void Visit(CIntersectionTypeCore element)
         {
-            var left = Walk<Typo>(element.IntersectionType);
+            var left = Walk<Type>(element.IntersectionType);
             var op = element.Literal.GetText();
-            var right = Walk<Typo>(element.PrimaryType);
+            var right = Walk<Type>(element.PrimaryType);
 
-            element.Value = new Typo.Intersection(left, right);
+            element.Value = new Type.Intersection(left, right);
         }
 
         protected override void Visit(CUnionTypeCore element)
         {
-            var left = Walk<Typo>(element.UnionType);
+            var left = Walk<Type>(element.UnionType);
             var op = element.Literal.GetText();
-            var right = Walk<Typo>(element.IntersectionType);
+            var right = Walk<Type>(element.IntersectionType);
 
-            element.Value = new Typo.Union(left, right);
+            element.Value = new Type.Union(left, right);
         }
 
         protected override void Visit(CIterableType element)
         {
             // '{'
-            var type = Walk<Typo>(element.VariadicType);
-            element.Value = new Typo.Iterable(type);
+            var type = Walk<Type>(element.VariadicType);
+            element.Value = new Type.Iterable(type);
             // '}'
         }
 
         protected override void Visit(CGroupedType element)
         {
             // '<'
-            element.Value = Walk<Typo>(element.Type);
+            element.Value = Walk<Type>(element.Type);
             // '>'
         }
 
         protected override void Visit(CTupleType element)
         {
-            var args = Walk<Typo>(element.TypeTypeArguments) ?? new TypeList(Enumerable.Empty<Typo>());
+            var args = Walk<Type>(element.TypeTypeArguments) ?? new TypeList(Enumerable.Empty<Type>());
 
-            element.Value = new Typo.Tuple(args);
+            element.Value = new Type.Tuple(args);
         }
 
         protected override void Visit(CArrayType element)
         {
-            var primary = Walk<Typo>(element.PrimaryType);
+            var primary = Walk<Type>(element.PrimaryType);
             var number = Walk<NaturalNumber>(element.LiteralNatural);
 
-            element.Value = new Typo.Array(primary, number);
+            element.Value = new Type.Array(primary, number);
         }
 
         protected override void Visit(CNullableType element)
         {
-            var type = Walk<Typo>(element.PrimaryType);
-            var op = element.Literal.GetText();
+            var type = Walk<Type>(element.PrimaryType);
 
-            element.Value = new Typo.Postfix(type, op);
+            element.Value = new Type.Nullable(type);
         }
 
         protected override void Visit(CFunctionType element)
         {
-            var type = Walk<Typo>(element.PrimaryType);
-            var args = Walk<Typo>(element.TypeTypeArguments) ?? new TypeList(Enumerable.Empty<Typo>());
+            var type = Walk<Type>(element.PrimaryType);
+            var args = Walk<Type>(element.TypeTypeArguments) ?? new TypeList(Enumerable.Empty<Type>());
 
-            element.Value = new Typo.Function(type, args);
+            element.Value = new Type.Function(type, args);
         }
 
         protected override void Visit(CVariancedType element)
         {
             var variance = Walk<string>(element.Variance);
-            var type = Walk<Typo>(element.Type);
+            var type = Walk<Type>(element.Type);
 
-            element.Value = new Typo.Varianced(variance, type);
+            element.Value = new Type.Varianced(variance, type);
         }
 
         protected override void Visit(CVariadicTypeCore element)
         {
-            var left = Walk<Typo>(element.UnionType);
+            var left = Walk<Type>(element.UnionType);
             var op = element.VariadicOperator.GetText();
 
-            element.Value = new Typo.Variadic(left, op);
+            element.Value = new Type.Variadic(left, op);
         }
 
         protected override void Visit(CSpreadType element)
         {
-            var type = Walk<Typo>(element.UnionType);
+            var type = Walk<Type>(element.UnionType);
 
-            element.Value = new Typo.Spread(type);
+            element.Value = new Type.Spread(type);
         }
 
         protected override void Visit(CDefaultedTypeList element)
         {
-            var items = element.Elements.Select(child => Walk<Typo>(child));
+            var items = element.Elements.Select(child => Walk<Type>(child));
             var types = new TypeList(items);
 
             element.Value = types;
@@ -197,9 +195,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CDefaultedTypeCore element)
         {
-            var type = Walk<Typo>(element.Type);
+            var type = Walk<Type>(element.Type);
 
-            element.Value = new Typo.Defaulted(type);
+            element.Value = new Type.Defaulted(type);
         }
 
         protected override void Visit(CTypeParameters element)
@@ -216,7 +214,7 @@ namespace Six.Ceylon
         {
             var variance = Walk<string>(element.Variance);
             var name = Walk<Identifier>(element.TypeName);
-            var @default = Walk<Typo>(element.TypeDefault);
+            var @default = Walk<Type>(element.TypeDefault);
 
             element.Value = new TypeParameter(variance, name, @default);
         }

@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract class Condition : Expr
-    {
-    }
+    public record Namespace(Annotations Annotations, IdentifierList Names) : AstNode;
 }

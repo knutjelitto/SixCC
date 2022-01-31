@@ -1,4 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public sealed record IdentifierList(IEnumerable<Identifier> Items) : ReadOnlyList<Identifier>(Items.ToList());
+    public sealed record IdentifierList(IEnumerable<Identifier> Items) : ReadOnlyList<Identifier>(Items);
 }

@@ -22,7 +22,7 @@ namespace Six.Ceylon.Ast
                 return text;
             }
 
-            throw new InvalidOperationException("character literal doesn't represent a single codepoint");
+            throw new System.InvalidOperationException("character literal doesn't represent a single codepoint");
         }
     }
 }

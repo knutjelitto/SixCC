@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public interface Resource
+    public interface Resource : AstNode
     {
     }
 }

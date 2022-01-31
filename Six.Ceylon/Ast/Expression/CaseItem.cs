@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Six.Ceylon.Ast
+﻿namespace Six.Ceylon.Ast
 {
-    public interface CaseItem
+    public interface CaseItem : AstNode
     {
-        public sealed record IsCase(Typo Type) : CaseItem;
+        public sealed record IsCase(Type Type) : CaseItem;
     }
 }

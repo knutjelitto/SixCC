@@ -1350,7 +1350,11 @@ is-condition
     ;
 
 is-condition-variable
-    | member-name value-specifier?
+    : member-name value-specifier?
+    ;
+
+member-specifier
+    : member-name value-specifier?
     ;
 
 satisfies-condition

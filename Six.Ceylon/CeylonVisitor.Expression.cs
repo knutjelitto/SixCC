@@ -166,7 +166,7 @@ namespace Six.Ceylon
         {
             var name = Walk<Identifier>(element.MemberName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var parameters = new ParameterListList(element.Parameters.Children.Select(child => Walk<ParameterList>(child)));
+            var parameters = new ParametersList(element.Parameters.Children.Select(child => Walk<Parameters>(child)));
 
             element.Value = new Expr.Member(name, typeParameters, parameters);
         }
@@ -174,8 +174,8 @@ namespace Six.Ceylon
         protected override void Visit(CInferredFunctionExpr element)
         {
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
-            var parameters = new ParameterListList(items); ;
+            var items = element.Parameters.Children.Select(child => Walk<Parameters>(child));
+            var parameters = new ParametersList(items); ;
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr>(element.FunctionDefinition);
 
@@ -185,8 +185,8 @@ namespace Six.Ceylon
         protected override void Visit(CVoidFunctionExpr element)
         {
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
-            var parameters = new ParameterListList(items); ;
+            var items = element.Parameters.Children.Select(child => Walk<Parameters>(child));
+            var parameters = new ParametersList(items); ;
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr>(element.FunctionDefinition);
 
@@ -197,7 +197,7 @@ namespace Six.Ceylon
         protected override void Visit(CIfExpr element)
         {
             // 'if'
-            var conditions = Walk<ConditionList>(element.Conditions);
+            var conditions = Walk<Conditions>(element.Conditions);
             var thenExpr = Walk<Expr>(element.ThenExpression);
             var elseExpr = Walk<Expr>(element.ElseExpression);
 
@@ -254,7 +254,7 @@ namespace Six.Ceylon
         {
             var expr = Walk<Expr>(element.ExistsNonemptyExpression);
             var op = element.TypeOperator.GetText();
-            var type = Walk<Typo>(element.Type);
+            var type = Walk<Type>(element.Type);
 
             element.Value = new Expr.Typecheck(expr, op, type);
         }
@@ -284,7 +284,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CLetExpr element)
         {
-            var lets = Walk<LetList>(element.LetVariableList);
+            var lets = Walk<LetVariableList>(element.LetVariableList);
             var expr = Walk<Expr>(element.ConditionalExpression);
 
             element.Value = new Expr.Let(lets, expr);
@@ -357,16 +357,16 @@ namespace Six.Ceylon
 
         protected override void Visit(CIsCaseCondition element)
         {
-            var type = Walk<Typo>(element.Type);
+            var type = Walk<Type>(element.Type);
 
             element.Value = new CaseItem.IsCase(type);
         }
 
         protected override void Visit(CLetVariableList element)
         {
-            var items = WalkMany<LetVariable>(element);
+            var items = WalkMany<Pattern.LetVariable>(element);
 
-            element.Value = new LetList(items);
+            element.Value = new LetVariableList(items);
         }
 
         protected override void Visit(CSpanned element)

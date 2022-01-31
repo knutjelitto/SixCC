@@ -6,7 +6,7 @@
 
         public new record Core(Annotations Annotations, Identifier? Name) : Decl
         {
-            public IBody Body => throw new NotImplementedException();
+            public IBody Body => throw new System.NotImplementedException();
 
             public string Location()
             {
@@ -14,19 +14,21 @@
             }
         }
 
+        public abstract record List(IEnumerable<Decl> Items) : ReadOnlyList<Decl>(Items);
+
         public sealed record Alias(
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
             TypeConstraintList? TypeConstraints,
-            Typo? Definition)
+            Type? Definition)
         : Core(Annotations, Name);
 
         public abstract record InterClass(
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
-            ParameterList? Parameters,
+            Parameters? Parameters,
             CaseTypes? CaseTypes,
             Extended? Extended,
             Satisfied? Satisfied,
@@ -47,7 +49,7 @@
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
-            ParameterList? Parameters,
+            Parameters? Parameters,
             CaseTypes? CaseTypes,
             Extended? Extended,
             Satisfied? Satisfied,
@@ -58,7 +60,7 @@
         public sealed record Constructor(
             Annotations Annotations,
             Identifier? Name,
-            ParameterList Parameters,
+            Parameters Parameters,
             Instantiation? Instantiation,
             Block Definition)
         : Core(Annotations, Name);
@@ -82,16 +84,16 @@
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
-            ParameterListList Parameters,
+            ParametersList Parameters,
             TypeConstraintList? TypeConstraints,
             Expr.Specifier Definition) : Core(Annotations, Name);
 
         public sealed record TypedMethod(
-            Typo Type,
+            Type Type,
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
-            ParameterListList Parameters,
+            ParametersList Parameters,
             TypeConstraintList? TypeConstraints,
             Expr.Specifier Definition)
         : Method(Annotations, Name, TypeParameters, Parameters, TypeConstraints, Definition);
@@ -100,7 +102,7 @@
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
-            ParameterListList Parameters,
+            ParametersList Parameters,
             TypeConstraintList? TypeConstraints,
             Expr.Specifier Definition)
         : Method(Annotations, Name, TypeParameters, Parameters, TypeConstraints, Definition);
@@ -109,7 +111,7 @@
             Annotations Annotations,
             Identifier Name,
             TypeParameterList? TypeParameters,
-            ParameterListList Parameters,
+            ParametersList Parameters,
             TypeConstraintList? TypeConstraints,
             Expr.Specifier Definition)
         : Method(Annotations, Name, TypeParameters, Parameters, TypeConstraints, Definition);
@@ -120,7 +122,7 @@
             Expr.Specifier Definition) : Core(Annotations, Name);
 
         public sealed record TypedAttribute(
-            Typo Type,
+            Type Type,
             Annotations Annotations,
             Identifier Name,
             Expr.Specifier Definition) : Attribute(Annotations, Name, Definition);
@@ -135,4 +137,6 @@
             Identifier Name,
             Expr.Specifier Definition) : Attribute(Annotations, Name, Definition);
     }
+
+    public sealed record Declarations(IEnumerable<Decl> Items) : Decl.List(Items);
 }

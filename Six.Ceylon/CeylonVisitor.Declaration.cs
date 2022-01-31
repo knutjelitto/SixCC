@@ -5,13 +5,18 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
+        protected override void Visit(CDeclarations element)
+        {
+            element.Value = new Declarations(WalkMany<Decl>(element));
+        }
+
         protected override void Visit(CAliasDeclaration element)
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
-            var definition = Walk<Typo>(element.OptionalTypeSpecifier);
+            var definition = Walk<Type>(element.OptionalTypeSpecifier);
 
             element.Value = new Decl.Alias(annotations, name, typeParameters, constraints, definition);
         }
@@ -21,7 +26,7 @@ namespace Six.Ceylon
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var parameters = Walk<ParameterList>(element.Parameters);
+            var parameters = Walk<Parameters>(element.Parameters);
             var caseType = Walk<CaseTypes>(element.CaseTypes);
             var extended = Walk<Extended>(element.ExtendedType);
             var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
@@ -59,7 +64,7 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
-            var parameters = Walk<ParameterList>(element.Parameters);
+            var parameters = Walk<Parameters>(element.Parameters);
             var instantiation = Walk<Instantiation>(element.DelegatedConstructor);
             var definition = Walk<Block>(element.Block);
 
@@ -79,10 +84,10 @@ namespace Six.Ceylon
         protected override void Visit(CTypedMethodDeclaration element)
         {
             var annotations = Walk<Annotations>(element.Annotations);
-            var type = Walk<Typo>(element.VariadicType);
+            var type = Walk<Type>(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var parameters = new ParameterListList(WalkMany<ParameterList>(element.Parameters));
+            var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.MethodDefinition);
 
@@ -94,7 +99,7 @@ namespace Six.Ceylon
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var parameters = new ParameterListList(WalkMany<ParameterList>(element.Parameters));
+            var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.MethodDefinition);
 
@@ -106,7 +111,7 @@ namespace Six.Ceylon
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var parameters = new ParameterListList(WalkMany<ParameterList>(element.Parameters));
+            var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.MethodDefinition);
 
@@ -116,7 +121,7 @@ namespace Six.Ceylon
         protected override void Visit(CTypedAttributeDeclaration element)
         {
             var annotations = Walk<Annotations>(element.Annotations);
-            var type = Walk<Typo>(element.VariadicType);
+            var type = Walk<Type>(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
             var definition = Walk<Expr.Specifier>(element.AttributeDefinition);
 

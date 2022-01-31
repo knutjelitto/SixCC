@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public class Import
+    public interface AstList : AstNode
     {
+        IEnumerable<AstNode> Items { get; }
     }
 }

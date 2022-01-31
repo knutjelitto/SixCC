@@ -10,5 +10,5 @@ namespace Six.Ceylon.Ast
         ImportList Imports1,
         Namespace Namespace,
         ImportList Imports2,
-        DeclarationList Declarations);
+        Declarations Declarations) : AstNode;
 }

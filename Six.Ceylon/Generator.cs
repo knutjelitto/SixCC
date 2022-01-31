@@ -50,7 +50,7 @@ namespace Six.Ceylon
             }
             catch (DiagnosticException ex)
             {
-                Console.WriteLine("=== errors ===");
+                System.Console.WriteLine("=== errors ===");
                 ex.Report();
             }
         }

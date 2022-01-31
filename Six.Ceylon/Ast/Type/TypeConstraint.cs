@@ -4,5 +4,5 @@
         Identifier? Name, 
         TypeParameterList? TypeParameters, 
         CaseTypes? CaseTypes, 
-        Satisfied? Satisfied) : Typo;
+        Satisfied? Satisfied) : Type;
 }

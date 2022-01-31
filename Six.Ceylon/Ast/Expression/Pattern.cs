@@ -1,10 +1,15 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public interface Pattern : Parameter
+    public interface Pattern : Parameter, Expr
     {
-        public record Instance : Pattern;
+        public abstract record List(IEnumerable<Pattern> Items) : ReadOnlyList<Pattern>(Items);
 
-        public sealed record Tuple(PatternList patterns) : Pattern;
+        new public sealed record Tuple(Patterns patterns) : Pattern;
         public sealed record Entry(Pattern Key, Pattern Value) : Pattern;
+        public sealed record Variadic(Type? Type, string Op, Identifier Name) : Pattern;
+        public sealed record Variable(Type? Type, Identifier Name, ParametersList Parameters) : Pattern;
+        public sealed record LetVariable(Pattern Pattern, Expr.Specifier.Value Specifier) : Pattern;
     }
+
+    public sealed record Patterns(IEnumerable<Pattern> Items) : Pattern.List(Items);
 }

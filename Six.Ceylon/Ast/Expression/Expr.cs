@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public interface Expr : Argument, CaseItem, Comprehension
+    public interface Expr : AstNode, Argument, CaseItem, Comprehension
     {
         public class Instance : Expr { }
 
@@ -16,7 +16,7 @@
 
         public sealed record Nonempty(Expr Expr) : Expr;
 
-        public sealed record Member(Identifier Name, TypeParameterList? TypeParameters, ParameterListList Parameters) : Expr;
+        public sealed record Member(Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters) : Expr;
 
         public sealed record Enumeration(StatementList Stmts, ArgumentList? Arguments) : Expr;
 
@@ -32,41 +32,45 @@
 
         public record ToIndex(Expr To) : Expr;
 
-        public record SpecifiedVariable(Variable Variable, Specifier.Value Specifier) : Expr;
+        public record SpecifiedVariable(Pattern.Variable Variable, Specifier.Value Specifier) : Expr;
 
-        public record Interpolation(IReadOnlyList<InterpolationString> Strings, IReadOnlyList<Expr> Expressions) : Expr;
+        public record Interpolation(
+            IReadOnlyList<InterpolationString> Strings,
+            IReadOnlyList<Expr> Expressions)
+            : Expr;
 
         public sealed record Call(Expr Expr, Arguments Arguments) : Expr;
 
         public sealed record Object(Extended? Extended, Satisfied? Satisfied, Block Block) : Expr;
 
-        public new sealed record If(ConditionList Conditions, Expr Then, Expr Else) : Expr;
+        public new sealed record If(Conditions Conditions, Expr Then, Expr Else) : Expr;
 
         public sealed record Tuple(ArgumentList Arguments) : Expr;
 
-        public sealed record Let(LetList? Lets, Expr Expr) : Expr;
+        public sealed record Let(LetVariableList? Lets, Expr Expr) : Expr;
 
-        public sealed record Typecheck(Expr Expr, string op, Typo Type) : Expr;
+        public sealed record Typecheck(Expr Expr, string op, Type Type) : Expr;
 
         public sealed record Switch(Expr Head, CaseList Cases, Expr? Else) : Expr;
-        public sealed record Case(CaseItem Item, Expr Expr);
-        public sealed record CaseList(IEnumerable<Case> cases) : ReadOnlyList<Case>(cases.ToList());
+        public sealed record Case(CaseItem Item, Expr Expr) : AstNode;
+        public sealed record CaseList(IEnumerable<Case> cases) : ReadOnlyList<Case>(cases);
 
-        public abstract record Function(TypeParameterList? TypeParameters, ParameterListList Parameters, TypeConstraintList? Constraints, Expr Definition)
+        public abstract record Function(TypeParameterList? TypeParameters, ParametersList Parameters, TypeConstraintList? Constraints, Expr Definition)
             : Expr;
 
-        public sealed record InferredFunction(TypeParameterList? TypeParameters, ParameterListList Parameters, TypeConstraintList? Constraints, Expr Definition)
+        public sealed record InferredFunction(TypeParameterList? TypeParameters, ParametersList Parameters, TypeConstraintList? Constraints, Expr Definition)
             : Function(TypeParameters, Parameters, Constraints, Definition);
 
-        public sealed record VoidFunction(TypeParameterList? TypeParameters, ParameterListList Parameters, TypeConstraintList? Constraints, Expr Definition)
+        public sealed record VoidFunction(TypeParameterList? TypeParameters, ParametersList Parameters, TypeConstraintList? Constraints, Expr Definition)
             : Function(TypeParameters, Parameters, Constraints, Definition);
+
+        public sealed record MemberReference(Identifier Name, TypeArgumentList? Arguments) : Expr;
+        public sealed record TypeReference(Identifier Name, TypeArgumentList? Arguments) : Expr;
 
         public interface Specifier : Expr
         {
             public sealed record Value(string Op, Expr Right) : Prefix(Op, Right), Specifier;
-
             new public sealed record Function(string Op, Expr Right) : Prefix(Op, Right), Specifier;
-
             public sealed record Null() : Specifier;
         }
 

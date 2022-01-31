@@ -6,5 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public sealed record ImportList(IEnumerable<Import> Items) : ReadOnlyList<Import>(Items.ToList());
+    public interface AstNode
+    {
+    }
 }

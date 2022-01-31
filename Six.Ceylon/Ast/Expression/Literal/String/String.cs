@@ -100,7 +100,7 @@
                                 }
                                 break;
                             default:
-                                throw new InvalidOperationException();
+                                throw new System.InvalidOperationException();
                         }
                         break;
                     default:
@@ -129,7 +129,7 @@
                 return chr - 'a' + 10;
             if ('A' <= chr && chr <= 'F')
                 return chr - 'A' + 10;
-            throw new InvalidOperationException();
+            throw new System.InvalidOperationException();
         }
 
         private static bool IsCharacterName(char chr)

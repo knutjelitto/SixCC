@@ -18,7 +18,7 @@ namespace Six.Ceylon
         public Package CurrentPackage => packageStack.Peek();
         public IBodyOwner Owner => ownerStack.Peek();
 
-        public IDisposable CreateNamespace(IdentifierList identifiers)
+        public System.IDisposable CreateNamespace(IdentifierList identifiers)
         {
             var current = Global;
             foreach (var identifier in identifiers)
@@ -34,19 +34,19 @@ namespace Six.Ceylon
             Owner.Body.Add(declaration);
         }
 
-        public IDisposable Use(Module module)
+        public System.IDisposable Use(Module module)
         {
             moduleStack.Push(module);
             return new Disposable(() => moduleStack.Pop());
         }
 
-        public IDisposable Use(Package package)
+        public System.IDisposable Use(Package package)
         {
             packageStack.Push(package);
             return new Disposable(() => packageStack.Pop());
         }
 
-        public IDisposable Use(IBodyOwner owner)
+        public System.IDisposable Use(IBodyOwner owner)
         {
             ownerStack.Push(owner);
             return new Disposable(() => ownerStack.Pop());

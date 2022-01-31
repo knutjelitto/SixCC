@@ -9,6 +9,6 @@ namespace Six.Ceylon.Ast
     public interface Comprehension : Argument
     {
         public sealed record For(Misc.ForIterator? Iterator, Comprehension Comprehension) : Comprehension;
-        public sealed record If(ConditionList Conditions, Comprehension Comprehension) : Comprehension;
+        public sealed record If(Conditions Conditions, Comprehension Comprehension) : Comprehension;
     }
 }

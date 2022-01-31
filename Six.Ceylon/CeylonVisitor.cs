@@ -40,14 +40,14 @@ namespace Six.Ceylon
 
         private void WalkChildrenNever(RNode element)
         {
-            throw new InvalidOperationException();
+            throw new System.InvalidOperationException();
         }
 
         protected override void DefaultImplementation(RNode element)
         {
-            Console.WriteLine($"Type ``{element.GetType().Name}´´ not implemented");
+            System.Console.WriteLine($"Type ``{element.GetType().Name}´´ not implemented");
 
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         protected override void Visit(CXStart element)
@@ -73,7 +73,7 @@ namespace Six.Ceylon
             var imports = Walk<ImportList>(element.Imports);
             var ns = Walk<Ast.Namespace>(element.Namespace);
             var imports2 = Walk<ImportList>(element.Imports2);
-            var declarations = Walk<DeclarationList>(element.Declarations);
+            var declarations = Walk<Declarations>(element.Declarations);
 
             element.Value = new Unit(imports, ns, imports2, declarations);
         }
@@ -89,11 +89,6 @@ namespace Six.Ceylon
         protected override void Visit(CNamespacePath element)
         {
             element.Value = new IdentifierList(element.Children.Select(child => Walk<Identifier>(child)));
-        }
-
-        protected override void Visit(CDeclarations element)
-        {
-            element.Value = new DeclarationList(element.Children.Select(child => Walk<Decl>(child)));
         }
 
         protected override void Visit(COptionalAnySpecifier element)
@@ -153,15 +148,15 @@ namespace Six.Ceylon
 
         protected override void Visit(COptionalTypeSpecifier element)
         {
-            element.Value = Walk<Typo.Specifier>(element.TypeSpecifier);
+            element.Value = Walk<Type.Specifier>(element.TypeSpecifier);
         }
 
         protected override void Visit(CTypeSpecifier element)
         {
             // '=>' type
-            var type = Walk<Typo>(element.Type);
+            var type = Walk<Type>(element.Type);
 
-            element.Value = new Typo.Specifier(type);
+            element.Value = new Type.Specifier(type);
         }
 
         /*---------------------------------------------------------------------
@@ -182,21 +177,21 @@ namespace Six.Ceylon
          **********************************************************************/
         protected override void Visit(CVariable element)
         {
-            var type = Walk<Typo>(element.VariableType);
+            var type = Walk<Type>(element.VariableType);
             var name = Walk<Identifier>(element.MemberName);
-            var items = element.Parameters.Children.Select(child => Walk<ParameterList>(child));
-            var parameters = new ParameterListList(items);
+            var items = element.Parameters.Children.Select(child => Walk<Parameters>(child));
+            var parameters = new ParametersList(items);
 
-            element.Value = new Variable(type, name, parameters);
+            element.Value = new Pattern.Variable(type, name, parameters);
         }
 
         protected override void Visit(CVariadicVariable element)
         {
-            var type = Walk<Typo>(element.UnionType);
+            var type = Walk<Type>(element.UnionType);
             var op = element.VariadicOperator.GetText();
             var name = Walk<Identifier>(element.MemberName);
 
-            element.Value = new Variadic(type, op, name);
+            element.Value = new Pattern.Variadic(type, op, name);
         }
 
         protected override void Visit(CLetVariable element)
@@ -204,7 +199,7 @@ namespace Six.Ceylon
             var pattern = Walk<Pattern>(element.Pattern);
             var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
 
-            element.Value = new LetVariable(pattern, specifier);
+            element.Value = new Pattern.LetVariable(pattern, specifier);
         }
 
         protected override void Visit(CEntryPattern element)
@@ -217,7 +212,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CTuplePattern element)
         {
-            var patterns = Walk<PatternList>(element.VariadicPatternList) ?? new PatternList(Enumerable.Empty<Pattern>());
+            var patterns = Walk<Patterns>(element.VariadicPatternList) ?? new Patterns(Enumerable.Empty<Pattern>());
 
             element.Value = new Pattern.Tuple(patterns);
         }
@@ -226,7 +221,7 @@ namespace Six.Ceylon
         {
             var items = element.Elements.Select(child => Walk<Pattern>(child)).ToList();
 
-            element.Value = new PatternList(items);
+            element.Value = new Patterns(items);
         }
 
 
@@ -302,7 +297,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CIfComprehensionClause element)
         {
-            var conditions = Walk<ConditionList>(element.Conditions);
+            var conditions = Walk<Conditions>(element.Conditions);
             var comprehension = Walk<Comprehension>(element.ComprehensionClause);
 
             element.Value = new Comprehension.If(conditions, comprehension);
@@ -314,7 +309,7 @@ namespace Six.Ceylon
          *--------------------------------------------------------------------*/
         protected override void Visit(CSpecifiedVariable element)
         {
-            var variable = Walk<Variable>(element.Variable);
+            var variable = Walk<Pattern.Variable>(element.Variable);
             var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
 
             element.Value = new Expr.SpecifiedVariable(variable, specifier);
@@ -356,17 +351,17 @@ namespace Six.Ceylon
         protected override void Visit(CMemberReference element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var arguments = Walk<TypeArgumentList>(element.TypeArguments) ?? new TypeArgumentList(Enumerable.Empty<Typo>());
+            var arguments = Walk<TypeArgumentList>(element.TypeArguments);
 
-            element.Value = new MemberReference(name, arguments);
+            element.Value = new Expr.MemberReference(name, arguments);
         }
 
         protected override void Visit(CTypeReference element)
         {
             var name = Walk<Identifier>(element.TypeName);
-            var arguments = Walk<TypeArgumentList>(element.TypeArguments) ?? new TypeArgumentList(Enumerable.Empty<Typo>());
+            var arguments = Walk<TypeArgumentList>(element.TypeArguments);
 
-            element.Value = new TypeReference(name, arguments);
+            element.Value = new Expr.TypeReference(name, arguments);
         }
 
         protected override void Visit(CTypeArguments element)
@@ -376,9 +371,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CTypeArgumentList element)
         {
-            var items = element.Elements.Select(child => Walk<Typo.Varianced>(child));
+            var arguments = WalkMany<Type.Varianced>(element);
 
-            element.Value = new TypeArgumentList(items);
+            element.Value = new TypeArgumentList(arguments);
         }
 
         protected override void Visit(CVariance element)

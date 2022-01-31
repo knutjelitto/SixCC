@@ -1,4 +1,6 @@
-﻿using Six.Ceylon.Ast;
+﻿using System;
+using Six.Ceylon.Ast;
+using Six.Ceylon.Walking;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
@@ -130,6 +132,14 @@ namespace Six.Ceylon
                     using (var writer = $"{file.ShortPath}.tree".Writer())
                     {
                         TypedDumper.Dump(file.Tree, writer);
+                    }
+                }
+
+                if (file.Tree?.Value != null)
+                {
+                    using (var writer = $"{file.ShortPath}.ast".Writer())
+                    {
+                        new Reflector(writer).Reflect(file.Tree.Value);
                     }
                 }
             }

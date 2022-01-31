@@ -33,7 +33,7 @@ namespace Six.Ceylon
         {
             var message = Walk<Ast.String>(element.AssertionMessage);
             // 'assert'
-            var conditions = Walk<ConditionList>(element.Conditions);
+            var conditions = Walk<Conditions>(element.Conditions);
 
             element.Value = new Stmt.Assertion(message, conditions);
         }
@@ -41,7 +41,7 @@ namespace Six.Ceylon
         protected override void Visit(CIfElseStatement element)
         {
             // 'if'
-            var conditions = Walk<ConditionList>(element.Conditions);
+            var conditions = Walk<Conditions>(element.Conditions);
             var block = Walk<Block>(element.Block);
 
             var ifBlock = new Stmt.ConditionalBlock(conditions, block);
@@ -57,7 +57,7 @@ namespace Six.Ceylon
         {
             // 'else'
             // 'if'
-            var conditions = Walk<ConditionList>(element.Conditions);
+            var conditions = Walk<Conditions>(element.Conditions);
             var block = Walk<Block>(element.Block);
 
             element.Value = new Stmt.ConditionalBlock(conditions, block);
@@ -107,7 +107,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CWhileStatement element)
         {   
-            var conditions = Walk<ConditionList>(element.Conditions);
+            var conditions = Walk<Conditions>(element.Conditions);
             var block = Walk<Block>(element.Block);
 
             element.Value = new Stmt.While(conditions, block);
@@ -115,7 +115,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CLetStatement element)
         {
-            var lets = Walk<LetList>(element.LetVariableList);
+            var lets = Walk<LetVariableList>(element.LetVariableList);
 
             element.Value = new Stmt.Let(lets);
         }
@@ -142,7 +142,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CCatchBlock element)
         {
-            var variable = Walk<Variable>(element.Variable);
+            var variable = Walk<Pattern.Variable>(element.Variable);
             var block = Walk<Block>(element.Block);
 
             element.Value = new CatchBlock(variable, block);

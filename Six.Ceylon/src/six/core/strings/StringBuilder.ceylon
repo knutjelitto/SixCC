@@ -9,39 +9,35 @@
  ********************************************************************************/
 namespace six.core;
 
-"""Builder utility for constructing [[strings|String]] by 
-   incrementally appending strings or characters.
-   
-       value builder = StringBuilder();
-       builder.append("hello");
-       builder.appendCharacter(' ');
-       builder.append("world");
-       String hello = builder.string; //hello world"""
+"""
+Builder utility for constructing [[strings|String]] by incrementally appending strings or characters.
+
+    value builder = StringBuilder();
+    builder.append("hello");
+    builder.appendCharacter(' ');
+    builder.append("world");
+    String hello = builder.string; //hello world
+"""
 tagged("Strings")
 shared native final class StringBuilder() 
-        satisfies SearchableList<Character> &
-                  Ranged<Integer,Character,String> &
-                  IndexedCorrespondenceMutator<Character> { 
-    
-    "The number of characters in the current content, that 
-     is, the [[size|String.size]] of the produced [[string]]."
+    satisfies SearchableList<Character> &
+              Ranged<Integer,Character,String> &
+              IndexedCorrespondenceMutator<Character>
+{
+    "The number of characters in the current content, that is, the [[size|String.size]] of the produced [[string]]."
     shared actual native Integer size;
     
-    "Determines if the current content holds at least one
-     character."
+    "Determines if the current content holds at least one character."
     shared actual native Boolean empty;
     
     shared actual native Integer? lastIndex;
     
-    "The resulting string. If no characters have been
-     appended, the empty string."
+    "The resulting string. If no characters have been appended, the empty string."
     shared actual native variable String string;
     
-    "A copy of this `StringBuilder`, whose content is 
-     initially the same as the current content of this
-     instance."
-    since("1.3.0")
-    shared actual StringBuilder clone() {
+    "A copy of this `StringBuilder`, whose content is initially the same as the current content of this instance."
+    shared actual StringBuilder clone()
+    {
         value clone = StringBuilder();
         clone.string = string;
         return clone;
@@ -49,13 +45,10 @@ shared native final class StringBuilder()
     
     shared actual native Iterator<Character> iterator();
     
-    "Returns a string of the given [[length]] containing
-     the characters beginning at the given [[index]]."
+    "Returns a string of the given [[length]] containing the characters beginning at the given [[index]]."
     deprecated ("use [[measure]]")
-    since("1.1.0")
     shared 
-    String substring(Integer index, Integer length)
-            => measure(index, length);
+    String substring(Integer index, Integer length) => measure(index, length);
     
     shared actual native
     Character? getFromFirst(Integer index);
@@ -66,23 +59,25 @@ shared native final class StringBuilder()
     
     "Append the characters in the given [[strings]]."
     shared native 
-    StringBuilder appendAll({String*} strings) {
-        for (s in strings) {
+    StringBuilder appendAll({String*} strings)
+    {
+        for (s in strings)
+        {
             append(s);
         }
         return this;
     }
     
     "Prepend the characters in the given [[string]]."
-    since("1.1.0")
     shared native 
     StringBuilder prepend(String string);
     
     "Prepend the characters in the given [[strings]]."
-    since("1.1.0")
     shared native 
-    StringBuilder prependAll({String*} strings) {
-        for (s in strings) {
+    StringBuilder prependAll({String*} strings)
+    {
+        for (s in strings)
+        {
             prepend(s);
         }
         return this;
@@ -93,7 +88,6 @@ shared native final class StringBuilder()
     StringBuilder appendCharacter(Character character);
     
     "Prepend the given [[character]]."
-    since("1.1.0")
     shared native 
     StringBuilder prependCharacter(Character character);
     
@@ -106,15 +100,12 @@ shared native final class StringBuilder()
     StringBuilder appendSpace() => appendCharacter(' ');
     
     "Remove all content and return to initial state."
-    since("1.1.0")
     shared native 
     StringBuilder clear();
     
-    "Set the character at the given index to the given
-     [[character]]."
-    since("1.3.0")
+    "Set the character at the given index to the given [[character]]."
     shared actual void set(Integer index, Character character)
-            => replace(index, 1, character.string);
+        => replace(index, 1, character.string);
     
     "Insert a [[string]] at the specified [[index]]."
     shared native 
@@ -122,114 +113,90 @@ shared native final class StringBuilder()
     
     "Insert a [[character]] at the specified [[index]]."
     shared native 
-    StringBuilder insertCharacter
-            (Integer index, Character character);
+    StringBuilder insertCharacter(Integer index, Character character);
     
-    "Replaces the specified [[number of characters|length]] 
-     from the current content, starting at the specified 
-     [[index]], with the given [[string]]. If [[length]] is 
-     nonpositive, nothing is replaced, and the `string` is
-     simply inserted at the specified `index`."
-    since("1.1.0")
+    "Replaces the specified [[number of characters|length]] from the current content, starting at the specified [[index]],
+     with the given [[string]]. If [[length]] is nonpositive, nothing is replaced, and the `string` is simply inserted at
+     the specified `index`."
     shared native 
-    StringBuilder replace
-            (Integer index, Integer length, String string);
+    StringBuilder replace(Integer index, Integer length, String string);
     
-    "Deletes the specified [[number of characters|length]] 
-     from the current content, starting at the specified 
-     [[index]]. If [[length]] is nonpositive, nothing is 
-     deleted."
+    "Deletes the specified [[number of characters|length]] from the current content, starting at the specified [[index]].
+     If [[length]] is nonpositive, nothing is deleted."
     shared native 
     StringBuilder delete(Integer index, Integer length/*=1*/);
     
-    "Deletes the specified [[number of characters|length]] 
-     from the start of the string. If `length` is 
-     nonpositive, nothing is deleted."
-    since("1.1.0")
+    "Deletes the specified [[number of characters|length]] from the start of the string. If `length` is nonpositive,
+     nothing is deleted."
     shared native 
     StringBuilder deleteInitial(Integer length);
     
-    "Deletes the specified [[number of characters|length]] 
-     from the end of the string. If `length` is nonpositive, 
-     nothing is deleted."
-    since("1.1.0")
+    "Deletes the specified [[number of characters|length]] from the end of the string. If `length` is nonpositive, nothing
+     is deleted."
     shared native 
     StringBuilder deleteTerminal(Integer length);
     
     "Reverses the order of the current characters."
-    since("1.1.0")
     shared native 
     StringBuilder reverseInPlace();
     
-    "The first index at which the given 
-     [[list of characters|sublist]] occurs as a sublist, 
-     that is greater than or equal to the optional 
-     [[starting index|from]]."
+    "The first index at which the given [[list of characters|sublist]] occurs as a sublist, that is greater than or equal
+     to the optional [[starting index|from]]."
     shared actual native
     Integer? firstInclusion(List<Character> sublist,
         Integer from);
     
-    "The last index at which the given 
-     [[list of characters|sublist]] occurs as a sublist, 
-     that falls within the range `0:size-from+1-sublist.size` 
-     defined by the optional [[starting index|from]], 
-     interpreted as a reverse index counting from the _end_
-     of the list."
+    "The last index at which the given [[list of characters|sublist]] occurs as a sublist, that falls within the range
+     `0:size - from + 1 - sublist.size` defined by the optional [[starting index|from]], interpreted as a reverse index
+     counting from the _end_ of the list."
     shared actual native
-    Integer? lastInclusion(List<Character> sublist,
-        Integer from);
+    Integer? lastInclusion(List<Character> sublist, Integer from);
     
-    "The first index at which the given [[character]] occurs, 
-     that is greater than or equal to the optional 
+    "The first index at which the given [[character]] occurs, that is greater than or equal to the optional
      [[starting index|from]]."
     shared actual native
-    Integer? firstOccurrence(Character character,
-        Integer from, Integer length);
+    Integer? firstOccurrence(Character character, Integer from, Integer length);
     
-    "The last index at which the given [[character]] occurs, 
-     that falls within the range `0:size-from` defined by 
-     the optional [[starting index|from]], interpreted as a 
-     reverse index counting from the _end_ of the list."
+    "The last index at which the given [[character]] occurs, that falls within the range `0:size-from` defined by the
+     optional [[starting index|from]], interpreted as a reverse index counting from the _end_ of the list."
     shared actual native
-    Integer? lastOccurrence(Character character,
-        Integer from, Integer length);
+    Integer? lastOccurrence(Character character, Integer from, Integer length);
     
     shared actual native
-    {Integer*} inclusions(List<Character> sublist, 
-        Integer from);
+    {Integer*} inclusions(List<Character> sublist, Integer from);
     
     shared actual native
-    {Integer*} occurrences(Character character, 
-        Integer from, Integer length);
+    {Integer*} occurrences(Character character, Integer from, Integer length);
     
     shared actual 
     Boolean occursAt(Integer index, Character character) 
-            => if (exists ch = getFromFirst(index))
-                then ch == character else false;
+        =>  if (exists ch = getFromFirst(index))
+            then ch == character
+            else false;
     
     shared actual 
     Boolean includesAt(Integer index, List<Character> sublist)
-            => this[index:sublist.size] == sublist;
+        => this[index:sublist.size] == sublist;
     
     shared actual native 
     String measure(Integer from, Integer length);
     
     shared actual 
     String initial(Integer length) 
-            => measure(0, length);
+        => measure(0, length);
     
     shared actual 
     String terminal(Integer length) 
-            => measure(size-length, length);
+        => measure(size-length, length);
     
     shared actual native String span(Integer from, Integer to);
     shared actual native String spanTo(Integer to);
     shared actual native String spanFrom(Integer from);
     
     shared actual Boolean equals(Object that) 
-            => (super of List<Character>).equals(that);
+        => (super of List<Character>).equals(that);
     shared actual Integer hash
-            => (super of List<Character>).hash;
+        => (super of List<Character>).hash;
 }
 
 shared native("jvm") final class StringBuilder() 

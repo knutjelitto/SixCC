@@ -1,8 +1,9 @@
 ﻿using Six.Runtime.Types;
+using System;
 
 namespace Six.Ceylon.Ast
 {
-    public abstract class Identifier : IComparable<Identifier>
+    public abstract class Identifier : AstNode, IComparable<Identifier>
     {
         public Identifier(RToken token, string text)
         {

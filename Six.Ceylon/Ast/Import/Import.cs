@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public record CaseItemList(IEnumerable<CaseItem> items)
-        : ReadOnlyList<CaseItem>(items), CaseItem;
+    public class Import : AstNode
+    {
+    }
 }

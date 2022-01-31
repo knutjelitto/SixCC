@@ -22,14 +22,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CLiteralNatural element)
         {
-            //TODO
-            element.Value = new NaturalNumber();
+            element.Value = new NaturalNumber(element);
         }
 
         protected override void Visit(CLiteralFloat element)
         {
-            //TODO
-            element.Value = new FloatNumber();
+            element.Value = new FloatNumber(element);
         }
 
         protected override void Visit(CLiteralString element)

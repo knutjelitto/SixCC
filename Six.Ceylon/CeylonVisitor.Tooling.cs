@@ -46,7 +46,7 @@ namespace Six.Ceylon
             return declaration;
         }
 
-        private IDisposable Use<T>(RNode node, T declaration)
+        private System.IDisposable Use<T>(RNode node, T declaration)
             where T : Stmt, IBodyOwner
         {
             return World.Use(Add<T>(node, declaration));

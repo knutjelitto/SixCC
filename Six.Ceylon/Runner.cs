@@ -2,9 +2,9 @@
 {
     public static class Runner
     {
-        public const string CeylonRoot = "ceylon";
-        public const string SixRoot = "six";
-        public const string TestsRoot = "tests";
+        public const string CeylonRoot = "src/ceylon";
+        public const string SixRoot = "src/six";
+        public const string TestsRoot = "src/tests";
 
         public static void Run()
         {
@@ -32,11 +32,11 @@
 
                 compiler.Report();
             }
-            catch (Exception exception)
+            catch (System.Exception exception)
             {
-                Console.WriteLine();
-                Console.WriteLine(exception.Message);
-                Console.WriteLine(exception.ToString());
+                System.Console.WriteLine();
+                System.Console.WriteLine(exception.Message);
+                System.Console.WriteLine(exception.ToString());
             }
         }
     }

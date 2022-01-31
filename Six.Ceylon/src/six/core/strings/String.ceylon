@@ -11,8 +11,8 @@
 namespace six.core;
 
 """
-A string of characters. Each character in the string is a [[32-bit Unicode character|Character]].
-The UTF-16 encoding of the underlying native string is hidden from clients.
+A string of characters. Each character in the string is a [[32-bit Unicode character|Character]]. The UTF-16 encoding
+of the underlying native string is hidden from clients.
 
 Literal strings may be written between double quotes:
 
@@ -46,18 +46,17 @@ They are [[ranged|Ranged]]:
 
     String who = "hello world"[6...];
 
-Note that since `string[index]` evaluates to the optional type `Character?`, it is often more 
-convenient to write `string[index..index]`, which evaluates to a `String` containing a single
-character, or to the empty string `""` if `index` refers to a position outside the string.
+Note that since `string[index]` evaluates to the optional type `Character?`, it is often more convenient to write
+`string[index..index]`, which evaluates to a `String` containing a single character, or to the empty string `""` if
+`index` refers to a position outside the string.
 
 It is easy to use comprehensions to transform strings:
 
     String { for (s in "hello world") if (s.letter) s.uppercased }
 
-Since a `String` has an underlying UTF-16-encoded native string, certain operations are expensive,
-requiring iteration of the characters of the string. In particular, [[size]] requires iteration of
-the whole string, and `get()`, `span()`, and `measure()` require iteration from the beginning of
-the string to the given index.
+Since a `String` has an underlying UTF-16-encoded native string, certain operations are expensive, requiring iteration
+of the characters of the string. In particular, [[size]] requires iteration of the whole string, and `get()`, `span()`,
+and `measure()` require iteration from the beginning of the string to the given index.
 """
 by ("Gavin")
 tagged("Basic types", "Strings")

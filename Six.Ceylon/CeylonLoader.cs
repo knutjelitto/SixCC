@@ -26,11 +26,11 @@ namespace Six.Ceylon
             return module;
         }
 
-        private static IEnumerable<SourceFile> LoadFiles(string fromRoot, Func<string, bool>? filter = null)
+        private static IEnumerable<SourceFile> LoadFiles(string fromRoot, System.Func<string, bool>? filter = null)
         {
             filter ??= n => true;
 
-            var current = Environment.CurrentDirectory;
+            var current = System.Environment.CurrentDirectory;
             var filesRoot = Path.Combine(current, fromRoot);
             foreach (var fullPath in Directory.EnumerateFiles(filesRoot, "*", SearchOption.AllDirectories).Where(n => filter(n)))
             {

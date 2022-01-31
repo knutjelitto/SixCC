@@ -1,4 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public sealed record TypeArgumentList(IEnumerable<Typo> Items) : TypeList(Items);
+    public sealed record TypeArgumentList(IEnumerable<Type> Items) : TypeList(Items);
 }
