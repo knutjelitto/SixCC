@@ -6,7 +6,7 @@
 
         public record Reference(Identifier Name, Expr.Specifier.Value? Specifier) : Parameter;
 
-        public abstract record ParameterDeclaration;
+        public abstract record ParameterDeclaration : AstNode;
 
         public abstract record Function(Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
             : ParameterDeclaration;

@@ -76,6 +76,7 @@ namespace Six.Runtime
             var ok = parser.Parse(source);
             timer.Stop();
             job.ParseTime = timer.Elapsed;
+            job.ParseLines = source.LineCount;
             return ok;
         }
 

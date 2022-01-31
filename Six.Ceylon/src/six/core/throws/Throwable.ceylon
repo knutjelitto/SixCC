@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-import ceylon.language { printTrace=printStackTrace }
-
 namespace six.core;
+
+import ceylon.language { printTrace=printStackTrace }
 
 """
 The abstract supertype of values indicating exceptional conditions. An exception may be raised

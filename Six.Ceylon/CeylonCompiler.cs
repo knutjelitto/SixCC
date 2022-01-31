@@ -13,6 +13,7 @@ namespace Six.Ceylon
         private readonly CompilerConfiguration configuration;
         private readonly World world;
         private readonly CeylonVisitor visitor;
+        private readonly List<SourceFile> files = new();
 
         public CeylonCompiler(CompilerConfiguration configuration)
         {
@@ -40,6 +41,32 @@ namespace Six.Ceylon
             using (var writer = $"{parser.__Name}-Namespaces.txt".Writer())
             {
                 world.Global.Dump(writer);
+            }
+
+            using (var writer = $"{parser.__Name}-Timing.txt".Writer())
+            {
+                var sorted = files.OrderBy(file => file.ParseLines / file.ParseTime.TotalSeconds);
+
+                var lines = 0;
+                var seconds = 0.0;
+                var milliSeconds = 0.0;
+                foreach (var file in sorted)
+                {
+                    var ms = Math.Round(file.ParseTime.TotalMilliseconds);
+                    var lps = Math.Round(file.ParseLines / file.ParseTime.TotalSeconds);
+
+                    writer.WriteLine($"{file.ParseLines,6} lines - {ms,6} ms - {lps,6} lps - {file.ShortPath}");
+
+                    lines += file.ParseLines;
+                    seconds += file.ParseTime.TotalSeconds;
+                    milliSeconds += file.ParseTime.TotalMilliseconds;
+                }
+                var mss = Math.Round(milliSeconds);
+                var lpss = Math.Round(lines / seconds);
+
+                writer.WriteLine();
+                writer.WriteLine("Total:");
+                writer.WriteLine($"{lines,6} lines - {mss,6} ms - {lpss,6} lps");
             }
         }
 
@@ -111,6 +138,8 @@ namespace Six.Ceylon
 
         private bool HandleFile(SourceFile file)
         {
+            files.Add(file);
+
             var ok = BuildFile(file);
 
             if (ok)

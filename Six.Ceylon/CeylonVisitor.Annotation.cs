@@ -15,7 +15,7 @@ namespace Six.Ceylon
         protected override void Visit(CAnnotation element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var arguments = Walk<ArgumentList>(element.Arguments);
+            var arguments = Walk<Arguments>(element.Arguments);
 
             element.Value = new Annotation(name, arguments);
         }

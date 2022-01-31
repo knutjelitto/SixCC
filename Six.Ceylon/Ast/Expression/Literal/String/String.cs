@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public abstract class String
+    public abstract class String : AstNode
     {
         public String(string text)
         {

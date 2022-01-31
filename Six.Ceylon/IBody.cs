@@ -2,7 +2,7 @@
 
 namespace Six.Ceylon
 {
-    public interface IBody
+    public interface IBody : AstNode
     {
         IBodyOwner Owner { get; }
         void Add(Stmt statement);

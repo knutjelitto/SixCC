@@ -88,14 +88,11 @@ namespace six.core;
  span `ranged[x..y]` has length `n`:
  
  - `ranged[x..y]==ranged[x:n]`."
-see (interface List, 
-     interface Sequence, 
-     class String, 
-     class StringBuilder)
+see (interface List, interface Sequence, class String, class StringBuilder)
 shared interface Ranged<in Index, out Element, out Subrange>
-        satisfies {Element*}
-        given Subrange satisfies Ranged<Index,Element,Subrange> {
-    
+    satisfies {Element*}
+    given Subrange satisfies Ranged<Index,Element,Subrange>
+{    
     "Obtain a span containing the elements between the two 
      given indices.
      
@@ -174,7 +171,5 @@ shared interface Ranged<in Index, out Element, out Subrange>
      
      When the given index does not belong to this ranged 
      object, the behavior is implementation dependent."
-    since("1.1.0")
-    shared formal Subrange measure(Index from, Integer length);
-    
+    shared formal Subrange measure(Index from, Integer length);    
 }

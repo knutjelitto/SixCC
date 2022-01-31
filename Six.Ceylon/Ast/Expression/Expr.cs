@@ -6,11 +6,13 @@
 
         public record Infix(string Op, Expr Left, Expr Right) : Expr;
 
-        public record Infix2(Expr Left, string Op1, Expr Mid, string Op2, Expr Right) : Expr;
+        public record SmallerBounds(Expr Left, string Op1, Expr Mid, string Op2, Expr Right) : Expr;
 
         public record Prefix(string Op, Expr Right) : Expr;
 
-        public record Postfix(Expr Left, string Op) : Expr;
+        public record PostfixIncDec(Expr Left, string Op) : Expr;
+
+        public record PrefixIncDec(string op, Expr Left) : Expr;
 
         public sealed record Exists(Expr Expr) : Expr;
 
@@ -34,10 +36,7 @@
 
         public record SpecifiedVariable(Pattern.Variable Variable, Specifier.Value Specifier) : Expr;
 
-        public record Interpolation(
-            IReadOnlyList<InterpolationString> Strings,
-            IReadOnlyList<Expr> Expressions)
-            : Expr;
+        public record Interpolation(Strings Strings, Expressions Expressions) : Expr;
 
         public sealed record Call(Expr Expr, Arguments Arguments) : Expr;
 
@@ -69,8 +68,8 @@
 
         public interface Specifier : Expr
         {
-            public sealed record Value(string Op, Expr Right) : Prefix(Op, Right), Specifier;
-            new public sealed record Function(string Op, Expr Right) : Prefix(Op, Right), Specifier;
+            public sealed record Value(string Op, Expr Expr) : Prefix(Op, Expr), Specifier;
+            new public sealed record Function(string Op, Expr Expr) : Prefix(Op, Expr), Specifier;
             public sealed record Null() : Specifier;
         }
 
@@ -87,5 +86,8 @@
             public sealed record Package(IdentifierList? Path) : Meta;
             public sealed record Module(IdentifierList? Path) : Meta;
         }
+
+        public sealed record Expressions(IEnumerable<Expr> items) : ReadOnlyList<Expr>(items);
+        public sealed record Strings(IEnumerable<String> items) : ReadOnlyList<String>(items);
     }
 }

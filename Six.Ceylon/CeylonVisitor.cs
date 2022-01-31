@@ -72,10 +72,9 @@ namespace Six.Ceylon
         {
             var imports = Walk<ImportList>(element.Imports);
             var ns = Walk<Ast.Namespace>(element.Namespace);
-            var imports2 = Walk<ImportList>(element.Imports2);
-            var declarations = Walk<Declarations>(element.Declarations);
+            var declarations = Walk<Declarations>(element.TopDeclarations);
 
-            element.Value = new Unit(imports, ns, imports2, declarations);
+            element.Value = new Unit(imports, ns, declarations);
         }
 
         protected override void Visit(CNamespace element)

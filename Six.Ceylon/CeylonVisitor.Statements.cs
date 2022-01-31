@@ -48,7 +48,7 @@ namespace Six.Ceylon
             var elseIfs = element.ElseIf.Children.Select(child => Walk<Stmt.ConditionalBlock>(child));
             var elseBlock = Walk<Block>(element.ElseBlock);
 
-            var conditionals = Enumerable.Repeat(ifBlock, 1).Concat(elseIfs);
+            var conditionals = new Stmt.Conditionals(Enumerable.Repeat(ifBlock, 1).Concat(elseIfs));
             //TODO
             element.Value = new Stmt.If(conditionals, elseBlock);
         }

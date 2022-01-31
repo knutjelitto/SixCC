@@ -1,16 +1,12 @@
 ﻿using Six.Ceylon.Ast;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Six.Runtime.Types;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Ceylon.Walking
 {
     internal class Reflector : WithWriter
     {
-        private readonly Dictionary<System.Type, Node> nodes = new Dictionary<System.Type, Node>();
+        private readonly Dictionary<System.Type, Node> nodes = new();
 
         public Reflector(Writer writer)
             : base(writer)
@@ -19,19 +15,54 @@ namespace Six.Ceylon.Walking
 
         public void Reflect(object? ast)
         {
-            if (ast is AstNode astNode)
+            if (ast is AstList astList)
+            {
+                wl($" : {astList.GetType().Name}[*]");
+                indent(() =>
+                {
+                    var index = 0;
+                    foreach (var item in astList.Items)
+                    {
+                        w($"[{index++}]");
+                        Reflect(item);
+                    }
+                });
+            }
+            else if (ast is AstNode astNode)
             {
                 var node = Get(astNode.GetType());
 
-                foreach (var getter in node)
+                w($" : {node.Type.Name}");
+                if (astNode is Identifier token)
                 {
-                    wl($"{getter.Name,-20}");
-
+                    wl($" = {token.Text.Esc()}");
+                }
+                else if (astNode is String str)
+                {
+                    wl($" = {str.Text.Substring(0, System.Math.Min(str.Text.Length, 200)).Esc()}");
+                }
+                else
+                {
+                    wl();
                     indent(() =>
                     {
-                        Reflect(getter.Get(astNode));
+                        foreach (var getter in node)
+                        {
+                            var value = getter.Get(astNode);
+                            w($"{getter.Name}");
+                            Reflect(value);
+                        }
                     });
                 }
+            }
+            else if (ast != null)
+            {
+                wl($"{ast}");
+                Assert(false);
+            }
+            else
+            {
+                wl();
             }
         }
 
@@ -55,18 +86,7 @@ namespace Six.Ceylon.Walking
                 Type = type;
                 Name = Type.Name;
 
-                var props = type.GetProperties();
-                foreach (var prop in props)
-                {
-                    if (typeof(AstNode).IsAssignableFrom(prop.PropertyType))
-                    {
-                        getters.Add(new Getter(prop));
-                    }
-                    else
-                    {
-                        Assert(false);
-                    }
-                }
+                AddProperties(Type);
             }
 
             public System.Type Type { get; }
@@ -74,6 +94,37 @@ namespace Six.Ceylon.Walking
 
             public IEnumerator<Getter> GetEnumerator() => getters.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            private void AddProperties(System.Type type)
+            {
+                var props = type.GetProperties();
+                foreach (var prop in props)
+                {
+                    if (typeof(string).IsAssignableFrom(prop.PropertyType))
+                    {
+                        continue;
+                    }
+                    if (typeof(bool).IsAssignableFrom(prop.PropertyType))
+                    {
+                        continue;
+                    }
+                    if (typeof(int).IsAssignableFrom(prop.PropertyType))
+                    {
+                        continue;
+                    }
+                    if (typeof(RToken).IsAssignableFrom(prop.PropertyType))
+                    {
+                        continue;
+                    }
+                    if (typeof(AstNode).IsAssignableFrom(prop.PropertyType))
+                    {
+                        getters.Add(new Getter(prop));
+                        continue;
+                    }
+
+                    Assert(false);
+                }
+            }
 
             public class Getter
             {
@@ -86,9 +137,9 @@ namespace Six.Ceylon.Walking
                 public PropertyInfo Prop { get; }
                 public string Name { get; }
 
-                public AstNode? Get(AstNode node)
+                public object? Get(AstNode node)
                 {
-                    return Prop.GetValue(node) as AstNode;
+                    return Prop.GetValue(node);
                 }
             }
         }

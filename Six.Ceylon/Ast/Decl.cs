@@ -6,8 +6,6 @@
 
         public new record Core(Annotations Annotations, Identifier? Name) : Decl
         {
-            public IBody Body => throw new System.NotImplementedException();
-
             public string Location()
             {
                 return Name?.Token.Source.NameLineColumn(Name.Token.Core) ?? "<LOCATION>";

@@ -14,7 +14,7 @@
 
         public sealed record Throw(Ast.Expr? Expr) : Stmt;
 
-        public sealed record If(IEnumerable<ConditionalBlock> Conditionals, Block? ElseBlock) : Stmt;
+        public sealed record If(Conditionals Conditionals, Block? ElseBlock) : Stmt;
 
         public sealed record For(Misc.ForIterator? Iterator, Block Block, Block? ElseBlock) : Stmt;
 
@@ -33,5 +33,7 @@
         public sealed record Switch(Expr Head, CaseList Cases, Block? Else) : Stmt;
         public sealed record Case(CaseItem Item, Block Block) : AstNode;
         public sealed record CaseList(IEnumerable<Case> cases) : ReadOnlyList<Case>(cases);
+
+        public sealed record Conditionals(IEnumerable<ConditionalBlock> cases) : ReadOnlyList<ConditionalBlock>(cases);
     }
 }

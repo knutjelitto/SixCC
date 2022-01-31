@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Extended
+    public class Extended : AstNode
     {
         public Extended(Instantiation instantiation)
         {

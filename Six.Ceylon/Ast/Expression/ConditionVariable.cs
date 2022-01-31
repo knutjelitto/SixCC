@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class ConditionVariable
+    public class ConditionVariable : AstNode
     {
         public ConditionVariable(Identifier name, Expr.Specifier.Value? value)
         {

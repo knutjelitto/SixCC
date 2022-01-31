@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Package
+    public class Package : AstNode
     {
         public Package(Module module, string name, SourceFile? packageFile = null)
         {

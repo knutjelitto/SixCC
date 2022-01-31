@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class CaseTypes
+    public class CaseTypes : AstNode
     {
         public CaseTypes(TypeList types)
         {

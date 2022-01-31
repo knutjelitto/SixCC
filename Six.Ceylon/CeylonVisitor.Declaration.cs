@@ -5,7 +5,7 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor
     {
-        protected override void Visit(CDeclarations element)
+        protected override void Visit(CTopDeclarations element)
         {
             element.Value = new Declarations(WalkMany<Decl>(element));
         }

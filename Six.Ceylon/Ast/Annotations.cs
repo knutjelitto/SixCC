@@ -2,19 +2,19 @@
 {
     public class Annotation : AstNode
     {
-        public Annotation(Identifier name, ArgumentList? arguments)
+        public Annotation(Identifier name, Arguments? arguments)
         {
             Name = name;
             Arguments = arguments;
         }
 
         public Identifier Name { get; }
-        public ArgumentList? Arguments { get; }
+        public Arguments? Arguments { get; }
     }
 
     public sealed record AnnotationList(IEnumerable<Annotation> Items) : ReadOnlyList<Annotation>(Items);
 
-    public class Annotations
+    public class Annotations : AstNode
     {
         public Annotations(String? doc, AnnotationList annotations)
         {

@@ -13,7 +13,7 @@ compilation-unit
     ;
 
 code-unit
-    : imports namespace imports declarations
+    : namespace imports top-declarations
     ;
 
 namespace
@@ -361,6 +361,23 @@ type-constraint
 
 type-constraints
     : type-constraint+
+    ;
+
+top-declarations
+    : top-declaration*
+    ;
+
+top-declaration
+    | class-declaration
+    | interface-declaration
+    | alias-declaration
+    | object-declaration
+    | setter-declaration
+    | typed-method-declaration
+    | void-method-declaration
+    | inferred-method-declaration
+    | typed-attribute-declaration
+    | inferred-attribute-declaration
     ;
 
 declarations

@@ -127,15 +127,15 @@ namespace Six.Ceylon
             var expr = Walk<Expr>(element.PostfixExpression);
             var op = element.IncrementOperator.GetText();
 
-            element.Value = new Expr.Postfix(expr, op);
+            element.Value = new Expr.PostfixIncDec(expr, op);
         }
 
         protected override void Visit(CPrefixExpr element)
         {
-            var op = element.IncrementOperator.GetText();
+            var op = Walk<string>(element.IncrementOperator);
             var expr = Walk<Expr>(element.PrefixExpression);
 
-            element.Value = new Expr.Prefix(op, expr);
+            element.Value = new Expr.PrefixIncDec(op, expr);
         }
 
         protected override void Visit(CNegationOrComplementExpr element)
@@ -166,7 +166,7 @@ namespace Six.Ceylon
         {
             var name = Walk<Identifier>(element.MemberName);
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var parameters = new ParametersList(element.Parameters.Children.Select(child => Walk<Parameters>(child)));
+            var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
 
             element.Value = new Expr.Member(name, typeParameters, parameters);
         }
@@ -174,8 +174,7 @@ namespace Six.Ceylon
         protected override void Visit(CInferredFunctionExpr element)
         {
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var items = element.Parameters.Children.Select(child => Walk<Parameters>(child));
-            var parameters = new ParametersList(items); ;
+            var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters)); ;
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr>(element.FunctionDefinition);
 
@@ -185,8 +184,7 @@ namespace Six.Ceylon
         protected override void Visit(CVoidFunctionExpr element)
         {
             var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var items = element.Parameters.Children.Select(child => Walk<Parameters>(child));
-            var parameters = new ParametersList(items); ;
+            var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters)); ;
             var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
             var definition = Walk<Expr>(element.FunctionDefinition);
 
@@ -276,10 +274,10 @@ namespace Six.Ceylon
         protected override void Visit(CSwitchExpr element)
         {
             var head = Walk<Expr>(element.SwitchHeader);
-            var cases = new Expr.CaseList(element.CaseExpression.Children.Select(child => Walk<Expr.Case>(child)));
-            var @else = Walk<Expr>(element.ElseExpression);
+            var cases = new Expr.CaseList(WalkMany<Expr.Case>(element.CaseExpression));
+            var elseExpr = Walk<Expr>(element.ElseExpression);
 
-            element.Value = new Expr.Switch(head, cases, @else);
+            element.Value = new Expr.Switch(head, cases, elseExpr);
         }
 
         protected override void Visit(CLetExpr element)
@@ -295,14 +293,15 @@ namespace Six.Ceylon
             var start = Walk<StartInterpolationString>(element.StringStart);
             var end = Walk<EndInterpolationString>(element.StringEnd);
             var mids = element.InterpolationPart.Select(part => Walk<MidInterpolationString>(part.StringMid));
-            var strings = Enumerable.Repeat<Ast.InterpolationString>(start, 1)
+            var istrings = Enumerable.Repeat<Ast.InterpolationString>(start, 1)
                 .Concat(mids.Cast<Ast.InterpolationString>())
                 .Concat(Enumerable.Repeat<Ast.InterpolationString>(end, 1));
+            var strings = new Expr.Strings(istrings);
             var first = Walk<Expr>(element.Expression);
             var rest = element.InterpolationPart.Select(part => Walk<Expr>(part.Expression));
-            var expressions = Enumerable.Repeat(first, 1).Concat(rest);
+            var expressions = new Expr.Expressions(Enumerable.Repeat(first, 1).Concat(rest));
 
-            element.Value = new Expr.Interpolation(strings.ToList(), expressions.ToList());
+            element.Value = new Expr.Interpolation(strings, expressions);
         }
 
         protected override void Visit(CInterpolationPart element)
@@ -318,7 +317,7 @@ namespace Six.Ceylon
             var op2 = element.SmallerOperator2.GetText();
             var right = Walk<Expr>(element.ExistsNonemptyExpression3);
 
-            element.Value = new Expr.Infix2(left, op1, mid, op2, right);
+            element.Value = new Expr.SmallerBounds(left, op1, mid, op2, right);
         }
 
         /*---------------------------------------------------------------------
