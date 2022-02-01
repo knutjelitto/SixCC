@@ -1,8 +1,8 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public class Satisfied : AstNode
+    public class Satisfies : AstNode
     {
-        public Satisfied(TypeList types)
+        public Satisfies(TypeList types)
         {
             Types = types;
         }

@@ -17,43 +17,43 @@
         public sealed record Alias(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
-            TypeConstraintList? TypeConstraints,
+            TypeParameters? TypeParameters,
+            TypeConstraints? Constraints,
             Type? Definition)
         : Core(Annotations, Name);
 
         public abstract record InterClass(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             Parameters? Parameters,
             CaseTypes? CaseTypes,
-            Extended? Extended,
-            Satisfied? Satisfied,
-            TypeConstraintList? TypeConstraints,
+            Extends? Extended,
+            Satisfies? Satisfied,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition) : Core(Annotations, Name);
 
         public sealed record Interface(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             CaseTypes? CaseTypes,
-            Satisfied? Satisfied,
-            TypeConstraintList? TypeConstraints,
+            Satisfies? Satisfied,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : InterClass(Annotations, Name, TypeParameters, null, CaseTypes, null, Satisfied, TypeConstraints, Definition);
+        : InterClass(Annotations, Name, TypeParameters, null, CaseTypes, null, Satisfied, Constraints, Definition);
 
         public sealed record Class(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             Parameters? Parameters,
             CaseTypes? CaseTypes,
-            Extended? Extended,
-            Satisfied? Satisfied,
-            TypeConstraintList? TypeConstraints,
+            Extends? Extended,
+            Satisfies? Satisfied,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : InterClass(Annotations, Name, TypeParameters, Parameters, CaseTypes, Extended, Satisfied, TypeConstraints, Definition);
+        : InterClass(Annotations, Name, TypeParameters, Parameters, CaseTypes, Extended, Satisfied, Constraints, Definition);
 
         public sealed record Constructor(
             Annotations Annotations,
@@ -73,46 +73,46 @@
         public sealed record Object(
             Annotations Annotations,
             Identifier Name,
-            Extended? Extended,
-            Satisfied? Satisfied,
+            Extends? Extended,
+            Satisfies? Satisfied,
             Expr.Specifier Definition)
         : InterClass(Annotations, Name, null, null, null, Extended, Satisfied, null, Definition);
 
         public abstract record Method(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             ParametersList Parameters,
-            TypeConstraintList? TypeConstraints,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition) : Core(Annotations, Name);
 
         public sealed record TypedMethod(
             Type Type,
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             ParametersList Parameters,
-            TypeConstraintList? TypeConstraints,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : Method(Annotations, Name, TypeParameters, Parameters, TypeConstraints, Definition);
+        : Method(Annotations, Name, TypeParameters, Parameters, Constraints, Definition);
 
         public sealed record VoidMethod(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             ParametersList Parameters,
-            TypeConstraintList? TypeConstraints,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : Method(Annotations, Name, TypeParameters, Parameters, TypeConstraints, Definition);
+        : Method(Annotations, Name, TypeParameters, Parameters, Constraints, Definition);
 
         public sealed record InferredMethod(
             Annotations Annotations,
             Identifier Name,
-            TypeParameterList? TypeParameters,
+            TypeParameters? TypeParameters,
             ParametersList Parameters,
-            TypeConstraintList? TypeConstraints,
+            TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : Method(Annotations, Name, TypeParameters, Parameters, TypeConstraints, Definition);
+        : Method(Annotations, Name, TypeParameters, Parameters, Constraints, Definition);
 
         public abstract record Attribute(
             Annotations Annotations,

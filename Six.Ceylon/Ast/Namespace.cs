@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Six.Ceylon.Ast
 {
-    public record Namespace(Annotations Annotations, IdentifierList Names) : AstNode;
+    public record Namespace(Annotations Annotations, Identifiers Names) : AstNode;
 }

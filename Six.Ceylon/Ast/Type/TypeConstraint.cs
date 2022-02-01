@@ -1,8 +1,11 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public record TypeConstraint(
+    public sealed record TypeConstraint(
         Identifier? Name, 
-        TypeParameterList? TypeParameters, 
+        TypeParameters? TypeParameters, 
         CaseTypes? CaseTypes, 
-        Satisfied? Satisfied) : Type;
+        Satisfies? Satisfied) : Type;
+
+    public sealed record TypeConstraints(IEnumerable<TypeConstraint> Items)
+        : ReadOnlyList<TypeConstraint>(Items);
 }

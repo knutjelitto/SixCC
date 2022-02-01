@@ -9,45 +9,48 @@
  ********************************************************************************/
 namespace six.core;
 
-"Produces the [[stream|Iterable]] that results from repeated
- application of the given [[function|next]] to the given
- [[first]] element of the stream, until the function first
- returns [[finished]]. If the given function never returns 
- `finished`, the resulting stream is infinite.
+"""
+Produces the [[stream|Iterable]] that results from repeated application of the given [[function|next]] to the given
+[[first]] element of the stream, until the function first returns [[finished]]. If the given function never returns 
+`finished`, the resulting stream is infinite.
 
- For example:
+For example:
 
-     loop(0, 2.plus).takeWhile(10.largerThan)
+    loop(0, 2.plus).takeWhile(10.largerThan)
 
- produces the stream `{ 0, 2, 4, 6, 8 }`."
+produces the stream `{ 0, 2, 4, 6, 8 }`.
+"""
 tagged("Streams")
 aliased("iterate")
-since("1.1.0")
-shared {Element+} loop<Element>
-        ("The first element of the resulting stream."
-         Element first,
-         "The function that produces the next element of the
-          stream, given the current element. The function may
-          return [[finished]] to indicate the end of the 
-          stream."
-         Element|Finished next(Element element))
-    => let (initial = first, nxt = next)
-    object satisfies {Element+} {
-        first => initial;
-        empty => false;
-        iterator() => object satisfies Iterator<Element> {
-            variable Boolean started = false;
-            variable Element|Finished current = initial;
-            shared actual Element|Finished next() {
-                if (!started) {
-                    started = true;
-                    return initial;
-                }
+shared {Element+} loop<Element>(
+    "The first element of the resulting stream."
+    Element first,
+    "The function that produces the next element of the stream, given the current element. The function may return
+     [[finished]] to indicate the end of the stream."
+    Element|Finished next(Element element)
+)
+    =>  let (initial = first, nxt = next)
+        object satisfies {Element+}
+        {
+            first => initial;
+            empty => false;
+            iterator() => object satisfies Iterator<Element>
+            {
+                variable Boolean started = false;
+                variable Element|Finished current = initial;
+                shared actual Element|Finished next()
+                {
+                    if (!started)
+                    {
+                        started = true;
+                        return initial;
+                    }
 
-                if (!is Finished curr = current) {
-                    current = nxt(curr);
+                    if (!is Finished curr = current)
+                    {
+                        current = nxt(curr);
+                    }
+                    return current;
                 }
-                return current;
-            }
+            };
         };
-    };

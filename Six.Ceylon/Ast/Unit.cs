@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Six.Ceylon.Ast
 {
     public record Unit(
-        ImportList Imports,
+        Imports Imports,
         Namespace Namespace,
         Declarations Declarations) : AstNode;
 }

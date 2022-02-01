@@ -1,4 +1,4 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public sealed record Block(ImportList imports, StatementList statements) : Expr.Specifier;
+    public sealed record Block(Imports imports, StatementList statements) : Expr.Specifier;
 }

@@ -51,7 +51,7 @@ namespace Six.Ceylon
         {
             var type = Walk<Type>(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var items = WalkMany<Parameters>(element.Parameters);
             var parameters = new ParametersList(items);
             var specifier = Walk<Expr.Specifier.Function>(element.FunctionSpecifier);
@@ -62,7 +62,7 @@ namespace Six.Ceylon
         protected override void Visit(CVoidFunctionParameter element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var items = WalkMany<Parameters>(element.Parameters);
             var parameters = new ParametersList(items);
             var specifier = Walk<Expr.Specifier.Function>(element.FunctionSpecifier);

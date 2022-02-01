@@ -18,7 +18,7 @@
 
         public sealed record Nonempty(Expr Expr) : Expr;
 
-        public sealed record Member(Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters) : Expr;
+        public sealed record Member(Identifier Name, TypeParameters? TypeParameters, ParametersList Parameters) : Expr;
 
         public sealed record Enumeration(StatementList Stmts, ArgumentList? Arguments) : Expr;
 
@@ -40,7 +40,7 @@
 
         public sealed record Call(Expr Expr, Arguments Arguments) : Expr;
 
-        public sealed record Object(Extended? Extended, Satisfied? Satisfied, Block Block) : Expr;
+        public sealed record Object(Extends? Extended, Satisfies? Satisfied, Block Block) : Expr;
 
         public new sealed record If(Conditions Conditions, Expr Then, Expr Else) : Expr;
 
@@ -54,13 +54,13 @@
         public sealed record Case(CaseItem Item, Expr Expr) : AstNode;
         public sealed record CaseList(IEnumerable<Case> cases) : ReadOnlyList<Case>(cases);
 
-        public abstract record Function(TypeParameterList? TypeParameters, ParametersList Parameters, TypeConstraintList? Constraints, Expr Definition)
+        public abstract record Function(TypeParameters? TypeParameters, ParametersList Parameters, TypeConstraints? Constraints, Expr Definition)
             : Expr;
 
-        public sealed record InferredFunction(TypeParameterList? TypeParameters, ParametersList Parameters, TypeConstraintList? Constraints, Expr Definition)
+        public sealed record InferredFunction(TypeParameters? TypeParameters, ParametersList Parameters, TypeConstraints? Constraints, Expr Definition)
             : Function(TypeParameters, Parameters, Constraints, Definition);
 
-        public sealed record VoidFunction(TypeParameterList? TypeParameters, ParametersList Parameters, TypeConstraintList? Constraints, Expr Definition)
+        public sealed record VoidFunction(TypeParameters? TypeParameters, ParametersList Parameters, TypeConstraints? Constraints, Expr Definition)
             : Function(TypeParameters, Parameters, Constraints, Definition);
 
         public sealed record MemberReference(Identifier Name, TypeArgumentList? Arguments) : Expr;
@@ -83,8 +83,8 @@
             public sealed record Alias(ReferencePath Path) : Meta;
             public sealed record New(ReferencePath Path) : Meta;
             public sealed record Given(ReferencePath Path) : Meta;
-            public sealed record Package(IdentifierList? Path) : Meta;
-            public sealed record Module(IdentifierList? Path) : Meta;
+            public sealed record Package(Identifiers? Path) : Meta;
+            public sealed record Module(Identifiers? Path) : Meta;
         }
 
         public sealed record Expressions(IEnumerable<Expr> items) : ReadOnlyList<Expr>(items);

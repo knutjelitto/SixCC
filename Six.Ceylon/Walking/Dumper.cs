@@ -1,8 +1,4 @@
 ﻿using Six.Ceylon.Ast;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Ceylon.Walking
 {
@@ -18,15 +14,10 @@ namespace Six.Ceylon.Walking
 
         public void Dump(object? ast)
         {
-            Dispatch("Top", ast);
+            Walk("Top", ast);
         }
 
-        public void DumpX(string name, object? ast)
-        {
-            Dispatch(name, ast);
-        }
-
-        private void Dispatch(string name, object? ast)
+        private void Walk(string name, object? ast)
         {
             if (ast != null)
             {
@@ -36,16 +27,19 @@ namespace Six.Ceylon.Walking
 
         private void Dump(string name, object obj)
         {
-            w(name);
-
-            wl($" = {obj}");
+            wl($"{name} = {obj}");
 
             Assert(false);
         }
 
-        private void Dump(string name, string str)
+        private void Dump(string name, string @string)
         {
-            wl($"{name} = {str}");
+            wl($"{name} = {@string}");
+        }
+
+        private void Dump(string name, bool @bool)
+        {
+            wl($"{name} = {@bool}");
         }
 
         private void Dump(string name, Identifier token)
@@ -68,7 +62,7 @@ namespace Six.Ceylon.Walking
                 foreach (var getter in node)
                 {
                     var value = getter.Get(astNode);
-                    Dispatch($"{getter.Name}", value);
+                    Walk($"{getter.Name}", value);
                 }
             });
         }
@@ -83,7 +77,7 @@ namespace Six.Ceylon.Walking
                     var index = 0;
                     foreach (var item in list.Items)
                     {
-                        Dispatch($"[{index++}]", item);
+                        Walk($"[{index++}]", item);
                     }
                 });
             }

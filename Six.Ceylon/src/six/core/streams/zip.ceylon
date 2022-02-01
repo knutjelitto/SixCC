@@ -17,17 +17,20 @@ resulting stream is the length of the shorter of the two given streams.
 
 Thus:
 
-    zipEntries(keys, items)[i] == keys[i] -> items[i]
+    zipEntries(keys, items)[i] == keys[i]->items[i]
 
-for every `0<=i<smallest(keys.size,items.size)`.
+for every `0 <= i < smallest(keys.size, items.size)`.
 """
 tagged("Streams")
-shared Iterable<<Key->Item>,KeyAbsent|ItemAbsent> 
-zipEntries<Key,Item,KeyAbsent,ItemAbsent>(Iterable<Key,KeyAbsent> keys, Iterable<Item,ItemAbsent> items)
+shared
+Iterable<<Key->Item>,KeyAbsent|ItemAbsent> 
+zipEntries<Key,Item,KeyAbsent,ItemAbsent>(
+    Iterable<Key,KeyAbsent> keys, Iterable<Item,ItemAbsent> items
+)
     given Key satisfies Object
     given KeyAbsent satisfies Null
     given ItemAbsent satisfies Null
-    =>   mapPairs(keys, items, Entry<Key,Item>);
+    => mapPairs(keys, items, Entry<Key,Item>);
 
 """
 Given two streams, form a new stream consisting of all pairs where, for any given index in the resulting stream, the
@@ -39,14 +42,18 @@ Thus:
 
     zipPairs(xs, ys)[i] == [xs[i], ys[i]]
 
-for every `0<=i<smallest(xs.size,ys.size)`.
+for every `0 <= i< smallest(xs.size, ys.size)`.
 """
 tagged("Streams")
-shared Iterable<[First,Second],FirstAbsent|SecondAbsent> 
-zipPairs<First,Second,FirstAbsent,SecondAbsent>(Iterable<First,FirstAbsent> firstElements, Iterable<Second,SecondAbsent> secondElements)
+shared 
+Iterable<[First,Second],FirstAbsent|SecondAbsent> 
+zipPairs<First,Second,FirstAbsent,SecondAbsent>(
+    Iterable<First,FirstAbsent> firstElements,
+    Iterable<Second,SecondAbsent> secondElements
+)
     given FirstAbsent satisfies Null
     given SecondAbsent satisfies Null
-    =>  mapPairs(firstElements, secondElements, (First first, Second second) => [first,second]);
+    => mapPairs(firstElements, secondElements, (First first, Second second) => [first,second]);
 
 """
 Given a stream of values, and a stream of [[tuples|Tuple]], produce a new stream of tuples formed by prepending the
@@ -57,7 +64,7 @@ Thus:
 
     zip(heads, tails)[i] == [heads[i], *tails[i]]
 
-for every `0<=i<smallest(heads.size,tails.size)`.
+for every `0 <= i < smallest(heads.size, tails.size)`.
 """
 tagged("Streams")
 shared Iterable<Tuple<Element|Head,Head,Tail>,HeadAbsent|TailAbsent> 

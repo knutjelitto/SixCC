@@ -1,6 +1,6 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public sealed record ReferencePath(bool Package, IdentifierList Names) : AstNode
+    public sealed record ReferencePath(bool Package, Identifiers Names) : AstNode
     {
     }
 }

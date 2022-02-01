@@ -15,14 +15,14 @@ namespace Six.Ceylon
 
         protected override void Visit(CModuleLiteral element)
         {
-            var path = Walk<IdentifierList>(element.PackagePath);
+            var path = Walk<Identifiers>(element.PackagePath);
 
             element.Value = new Expr.Meta.Module(path);
         }
 
         protected override void Visit(CPackageLiteral element)
         {
-            var path = Walk<IdentifierList>(element.PackagePath);
+            var path = Walk<Identifiers>(element.PackagePath);
 
             element.Value = new Expr.Meta.Package(path);
         }

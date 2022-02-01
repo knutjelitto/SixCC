@@ -12,7 +12,7 @@ namespace six.core;
 """
 Determines if any one of the given boolean values (usually a comprehension) is `true`.
 
-    Boolean anyNegative = any { for (x in xs) x<0.0 };
+    Boolean anyNegative = any { for (x in xs) x < 0.0 };
 
 If there are no boolean values, return `false`.
 """

@@ -14,8 +14,8 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Type>(element.OptionalTypeSpecifier);
 
             element.Value = new Decl.Alias(annotations, name, typeParameters, constraints, definition);
@@ -25,12 +25,12 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = Walk<Parameters>(element.Parameters);
             var caseType = Walk<CaseTypes>(element.CaseTypes);
-            var extended = Walk<Extended>(element.ExtendedType);
-            var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var extended = Walk<Extends>(element.ExtendedType);
+            var satisfied = Walk<Satisfies>(element.SatisfiedTypes);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.ClassDefinition);
 
             element.Value = new Decl.Class(annotations, name, typeParameters, parameters, caseType, extended, satisfied, constraints, definition);
@@ -40,10 +40,10 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.TypeName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var caseType = Walk<CaseTypes>(element.CaseTypes);
-            var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var satisfied = Walk<Satisfies>(element.SatisfiedTypes);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.InterfaceDefinition);
 
             element.Value = new Decl.Interface(annotations, name, typeParameters, caseType, satisfied, constraints, definition);
@@ -53,8 +53,8 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
-            var extended = Walk<Extended>(element.ExtendedType);
-            var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
+            var extended = Walk<Extends>(element.ExtendedType);
+            var satisfied = Walk<Satisfies>(element.SatisfiedTypes);
             var definition = Walk<Block>(element.Block);
 
             element.Value = new Decl.Object(annotations, name, extended, satisfied, definition);
@@ -86,9 +86,9 @@ namespace Six.Ceylon
             var annotations = Walk<Annotations>(element.Annotations);
             var type = Walk<Type>(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.MethodDefinition);
 
             element.Value = new Decl.TypedMethod(type, annotations, name, typeParameters, parameters, constraints, definition);
@@ -98,9 +98,9 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.MethodDefinition);
 
             element.Value = new Decl.VoidMethod(annotations, name, typeParameters, parameters, constraints, definition);
@@ -110,9 +110,9 @@ namespace Six.Ceylon
         {
             var annotations = Walk<Annotations>(element.Annotations);
             var name = Walk<Identifier>(element.MemberName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr.Specifier>(element.MethodDefinition);
 
             element.Value = new Decl.InferredMethod(annotations, name, typeParameters, parameters, constraints, definition);

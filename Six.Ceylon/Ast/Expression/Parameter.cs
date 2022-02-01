@@ -8,16 +8,16 @@
 
         public abstract record ParameterDeclaration : AstNode;
 
-        public abstract record Function(Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
+        public abstract record Function(Identifier Name, TypeParameters? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
             : ParameterDeclaration;
 
-        public record VoidFunction(Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
+        public record VoidFunction(Identifier Name, TypeParameters? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
             : Function(Name, TypeParameters, Parameters, Specifier);
 
-        public record InferredFunction(Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
+        public record InferredFunction(Identifier Name, TypeParameters? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
             : Function(Name, TypeParameters, Parameters, Specifier);
 
-        public record TypedFunction(Type Type, Identifier Name, TypeParameterList? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
+        public record TypedFunction(Type Type, Identifier Name, TypeParameters? TypeParameters, ParametersList Parameters, Expr.Specifier.Function? Specifier)
             : Function(Name, TypeParameters, Parameters, Specifier);
 
         public abstract record Value(Identifier Name, Expr.Specifier? Specifier)

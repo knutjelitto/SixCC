@@ -166,7 +166,7 @@ namespace Six.Ceylon
         protected override void Visit(CParametrizedMember element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters));
 
             element.Value = new Expr.Member(name, typeParameters, parameters);
@@ -174,9 +174,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CInferredFunctionExpr element)
         {
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters)); ;
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr>(element.FunctionDefinition);
 
             element.Value = new Expr.InferredFunction(typeParameters, parameters, constraints, definition);
@@ -184,9 +184,9 @@ namespace Six.Ceylon
 
         protected override void Visit(CVoidFunctionExpr element)
         {
-            var typeParameters = Walk<TypeParameterList>(element.TypeParameters);
+            var typeParameters = Walk<TypeParameters>(element.TypeParameters);
             var parameters = new ParametersList(WalkMany<Parameters>(element.Parameters)); ;
-            var constraints = Walk<TypeConstraintList>(element.TypeConstraints);
+            var constraints = Walk<TypeConstraints>(element.TypeConstraints);
             var definition = Walk<Expr>(element.FunctionDefinition);
 
             element.Value = new Expr.VoidFunction(typeParameters, parameters, constraints, definition);
@@ -229,8 +229,8 @@ namespace Six.Ceylon
 
         protected override void Visit(CObjectExpr element)
         {
-            var extended = Walk<Extended>(element.ExtendedType);
-            var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
+            var extended = Walk<Extends>(element.ExtendedType);
+            var satisfied = Walk<Satisfies>(element.SatisfiedTypes);
             var block = Walk<Block>(element.Block);
 
             element.Value = new Expr.Object(extended, satisfied, block);

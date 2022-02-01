@@ -67,7 +67,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CCodeUnit element)
         {
-            var imports = Walk<ImportList>(element.Imports);
+            var imports = Walk<Imports>(element.Imports);
             var ns = Walk<Ast.Namespace>(element.Namespace);
             var declarations = Walk<Declarations>(element.TopDeclarations);
 
@@ -77,14 +77,14 @@ namespace Six.Ceylon
         protected override void Visit(CNamespace element)
         {
             var annotations = Walk<Annotations>(element.Annotations);
-            var path = Walk<IdentifierList>(element.NamespacePath);
+            var path = Walk<Identifiers>(element.NamespacePath);
 
             element.Value = new Ast.Namespace(annotations, path);
         }
 
         protected override void Visit(CNamespacePath element)
         {
-            element.Value = new IdentifierList(WalkMany<Identifier>(element));
+            element.Value = new Identifiers(WalkMany<Identifier>(element));
         }
 
         protected override void Visit(COptionalAnySpecifier element)
@@ -131,7 +131,7 @@ namespace Six.Ceylon
         protected override void Visit(CBlock element)
         {
             // '{'
-            var imports = Walk<ImportList>(element.Imports);
+            var imports = Walk<Imports>(element.Imports);
             var statements = Walk<StatementList>(element.Statements);
             // '}'
 
@@ -320,13 +320,13 @@ namespace Six.Ceylon
         {
             var names = element.Elements.Select(child => Walk<Identifier>(child));
 
-            element.Value = new IdentifierList(names);
+            element.Value = new Identifiers(names);
         }
 
         protected override void Visit(CReferencePath element)
         {
             var withPackage = Exists(element.PackageQualifier);
-            var names = Walk<IdentifierList>(element.ReferencePathElementList);
+            var names = Walk<Identifiers>(element.ReferencePathElementList);
 
             element.Value = new ReferencePath(withPackage, names);
         }
@@ -335,7 +335,7 @@ namespace Six.Ceylon
         {
             var items = WalkMany<Identifier>(element);
 
-            element.Value = new IdentifierList(items);
+            element.Value = new Identifiers(items);
         }
 
         protected override void Visit(CMemberReference element)

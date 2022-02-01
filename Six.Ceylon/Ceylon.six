@@ -436,6 +436,11 @@ typed-method-declaration
     : annotations variadic-type member-name type-parameters? parameters+ type-constraints? method-definition
     ;
 
+method-definition
+    | block
+    | optional-function-specifier
+    ;
+
 typed-attribute-declaration
     : annotations variadic-type member-name attribute-definition
     ;
@@ -490,28 +495,24 @@ unclosed-statement
     ;
 
 open-statement
-    | directive-statement
+    | return-statement
+    | throw-statement
+    | break-statement
+    | continue-statement
     | expression-statement
     | specification-statement
     | assertion-statement
     | let-statement
     ;
 
-specification-statement
-    | primary function-specifier
-    ;
-    
 expression-statement
     : operator-expression
     ;
 
-directive-statement
-    | return-statement
-    | throw-statement
-    | break-statement
-    | continue-statement
+specification-statement
+    | primary function-specifier
     ;
-
+    
 return-statement
     | 'return' expression?
     ;
@@ -673,11 +674,6 @@ inferred-method-argument
 
 untyped-method-argument
     : member-name parameters+ required-function-specifier
-    ;
-
-method-definition
-    | block
-    | optional-function-specifier
     ;
 
 typed-getter-argument

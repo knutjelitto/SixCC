@@ -62,6 +62,7 @@ namespace Six.Ceylon.Walking
                     }
                     if (typeof(bool).IsAssignableFrom(prop.PropertyType))
                     {
+                        getters.Add(new Getter(prop));
                         continue;
                     }
                     if (typeof(int).IsAssignableFrom(prop.PropertyType))

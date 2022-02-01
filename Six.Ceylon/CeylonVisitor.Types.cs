@@ -9,7 +9,7 @@ namespace Six.Ceylon
         {
             // 'satisfies'
             var types = Walk<TypeList>(element.UnionTypeList);
-            element.Value = new Satisfied(types);
+            element.Value = new Satisfies(types);
         }
 
         protected override void Visit(CExtendedType element)
@@ -17,30 +17,28 @@ namespace Six.Ceylon
             // 'extends'
             var instantiation = Walk<Instantiation>(element.ClassInstantiation);
 
-            element.Value = new Extended(instantiation);
+            element.Value = new Extends(instantiation);
         }
 
         protected override void Visit(CClassInstantiation element)
         {
-            //TODO
             var @class = Walk<QualifiedClass>(element.QualifiedClass);
             var arguments = Walk<ArgumentList>(element.Arguments);
 
             element.Value = new Instantiation(@class, arguments);
         }
 
-
         protected override void Visit(CTypeConstraints element)
         {
-            element.Value = new TypeConstraintList(WalkMany<TypeConstraint>(element));
+            element.Value = new TypeConstraints(WalkMany<TypeConstraint>(element));
         }
 
         protected override void Visit(CTypeConstraint element)
         {
             var name = Walk<Identifier>(element.TypeName);
-            var parameters = Walk<TypeParameterList>(element.TypeParameters);
+            var parameters = Walk<TypeParameters>(element.TypeParameters);
             var caseTypes = Walk<CaseTypes>(element.CaseTypes);
-            var satisfied = Walk<Satisfied>(element.SatisfiedTypes);
+            var satisfied = Walk<Satisfies>(element.SatisfiedTypes);
 
             element.Value = new TypeConstraint(name, parameters, caseTypes, satisfied);
         }
@@ -70,16 +68,12 @@ namespace Six.Ceylon
 
         protected override void Visit(CTypePath element)
         {
-            var items = WalkMany<Expr.TypeReference>(element);
-
-            element.Value = new TypePath(items);
+            element.Value = new TypePath(WalkMany<Expr.TypeReference>(element));
         }
 
         protected override void Visit(CUnionTypeList element)
         {
-            var types = WalkMany<Type>(element);
-
-            element.Value = new TypeList(types);
+            element.Value = new TypeList(WalkMany<Type>(element));
         }
 
         protected override void Visit(CPackageQualifiedType element)
@@ -186,28 +180,23 @@ namespace Six.Ceylon
 
         protected override void Visit(CDefaultedTypeList element)
         {
-            var items = element.Elements.Select(child => Walk<Type>(child));
-            var types = new TypeList(items);
-
-            element.Value = types;
+            element.Value = new TypeList(WalkMany<Type>(element));
         }
 
 
         protected override void Visit(CDefaultedTypeCore element)
         {
-            var type = Walk<Type>(element.Type);
-
-            element.Value = new Type.Defaulted(type);
+            element.Value = new Type.Defaulted(Walk<Type>(element.Type));
         }
 
         protected override void Visit(CTypeParameters element)
         {
-            element.Value = Walk<TypeParameterList>(element.TypeParameterList);
+            element.Value = Walk<TypeParameters>(element.TypeParameterList);
         }
 
         protected override void Visit(CTypeParameterList element)
         {
-            element.Value = new TypeParameterList(WalkMany<TypeParameter>(element));
+            element.Value = new TypeParameters(WalkMany<TypeParameter>(element));
         }
 
         protected override void Visit(CTypeParameter element)
