@@ -19,6 +19,6 @@ shared Boolean identical(
     "An object with well-defined identity."
     Identifiable x, 
     "A second object with well-defined identity."
-    Identifiable y) 
-
+    Identifiable y
+) 
     => x === y;

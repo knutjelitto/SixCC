@@ -6,12 +6,9 @@ namespace Six.Ceylon
 {
     public partial class CeylonVisitor : DynamicCeylonVisitor
     {
-        public CeylonVisitor(World world)
+        public CeylonVisitor()
         {
-            World = world;
         }
-
-        public World World { get; }
 
         public void Walk(SourceFile source)
         {
@@ -87,7 +84,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CNamespacePath element)
         {
-            element.Value = new IdentifierList(element.Children.Select(child => Walk<Identifier>(child)));
+            element.Value = new IdentifierList(WalkMany<Identifier>(element));
         }
 
         protected override void Visit(COptionalAnySpecifier element)
@@ -97,8 +94,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CFunctionSpecifier element)
         {
-            // '=>'
-            var op = element.Literal.GetText();
+            var op = Walk<string>(element.Literal);
             var expr = Walk<Expr>(element.Expression);
 
             element.Value = new Expr.Specifier.Function(op, expr);
@@ -107,18 +103,15 @@ namespace Six.Ceylon
         protected override void Visit(COptionalFunctionSpecifier element)
         {
             element.Value = Walk<Expr.Specifier>(element.FunctionSpecifier) ?? new Expr.Specifier.Null();
-            // ';'
         }
 
         protected override void Visit(CRequiredFunctionSpecifier element)
         {
-            element.Value = Walk<Expr.Specifier.Function>(element.FunctionSpecifier);
-            // ';'
+            element.Value = Walk<Expr.Specifier>(element.FunctionSpecifier);
         }
 
         protected override void Visit(CValueSpecifier element)
         {
-            // '='
             var op = element.Literal.GetText();
             var expr = Walk<Expr>(element.Expression);
 
@@ -196,7 +189,7 @@ namespace Six.Ceylon
         protected override void Visit(CLetVariable element)
         {
             var pattern = Walk<Pattern>(element.Pattern);
-            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
+            var specifier = Walk<Expr.Specifier>(element.ValueSpecifier);
 
             element.Value = new Pattern.LetVariable(pattern, specifier);
         }
@@ -247,9 +240,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CSequencedArgumentList element)
         {
-            var items = element.Elements.Select(child => Walk<Argument>(child));
-
-            element.Value = new ArgumentList(items);
+            element.Value = new ArgumentList(WalkMany<Argument>(element));
         }
 
         protected override void Visit(CSpreadArgument element)
@@ -309,7 +300,7 @@ namespace Six.Ceylon
         protected override void Visit(CSpecifiedVariable element)
         {
             var variable = Walk<Pattern.Variable>(element.Variable);
-            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
+            var specifier = Walk<Expr.Specifier>(element.ValueSpecifier);
 
             element.Value = new Expr.SpecifiedVariable(variable, specifier);
         }
@@ -334,10 +325,10 @@ namespace Six.Ceylon
 
         protected override void Visit(CReferencePath element)
         {
-            var package = element.PackageQualifier.Children.Length > 0;
+            var withPackage = Exists(element.PackageQualifier);
             var names = Walk<IdentifierList>(element.ReferencePathElementList);
 
-            element.Value = new ReferencePath(package, names);
+            element.Value = new ReferencePath(withPackage, names);
         }
 
         protected override void Visit(CReferencePathElementList element)
@@ -499,14 +490,14 @@ namespace Six.Ceylon
             element.Value = element.GetText();
         }
 
-        protected override void Visit(CNegateOperator element)
-        {
-            element.Value = element.Literal.GetText();
-        }
-
         protected override void Visit(CExclusiveOperator element)
         {
             element.Value = element.GetText();
+        }
+
+        protected override void Visit(CNegateOperator element)
+        {
+            element.Value = element.Literal.GetText();
         }
 
         protected override void Visit(CSelfReference element)

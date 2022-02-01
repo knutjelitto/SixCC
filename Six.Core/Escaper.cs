@@ -49,7 +49,21 @@
 
         public static string Esc(this string text)
         {
-            return $"'{string.Join(string.Empty, text.Codepoints().Select(cp => cp.Esc()))}'";
+            return $"'{text.InnerEsc()}'";
+        }
+
+        public static string InnerEsc(this string text)
+        {
+            return $"{string.Join(string.Empty, text.Codepoints().Select(cp => cp.Esc()))}";
+        }
+
+        public static string ShortEsc(this string text, int length)
+        {
+            if (text.Length > length)
+            {
+                return text.Substring(0, length).Esc() + "…";
+            }
+            return (text.Esc());
         }
     }
 }

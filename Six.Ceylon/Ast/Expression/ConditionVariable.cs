@@ -2,13 +2,13 @@
 {
     public class ConditionVariable : AstNode
     {
-        public ConditionVariable(Identifier name, Expr.Specifier.Value? value)
+        public ConditionVariable(Identifier name, Expr.Specifier? value)
         {
             Name = name;
             Value = value;
         }
 
         public Identifier Name { get; }
-        public Expr.Specifier.Value? Value { get; }
+        public Expr.Specifier? Value { get; }
     }
 }

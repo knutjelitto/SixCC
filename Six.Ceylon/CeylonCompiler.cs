@@ -11,7 +11,6 @@ namespace Six.Ceylon
     public class CeylonCompiler : Compiler<CeylonParser>
     {
         private readonly CompilerConfiguration configuration;
-        private readonly World world;
         private readonly CeylonVisitor visitor;
         private readonly List<SourceFile> files = new();
 
@@ -24,8 +23,7 @@ namespace Six.Ceylon
 
             this.configuration = configuration;
 
-            world = new World();
-            visitor = new CeylonVisitor(world);
+            visitor = new CeylonVisitor();
         }
 
         public void Report()
@@ -36,11 +34,6 @@ namespace Six.Ceylon
                 {
                     ruleIndex.Dump(writer);
                 }
-            }
-
-            using (var writer = $"{parser.__Name}-Namespaces.txt".Writer())
-            {
-                world.Global.Dump(writer);
             }
 
             using (var writer = $"{parser.__Name}-Timing.txt".Writer())
@@ -74,66 +67,60 @@ namespace Six.Ceylon
         {
             Console.Write($"{module.Name,-28}");
 
-            using (world.Use(module))
+            var ok = HandleFile(module.ModuleFile);
+
+            Console.WriteLine();
+
+            if (ok)
             {
-                var ok = HandleFile(module.ModuleFile);
+                _ = GetModuleDescriptor(module.ModuleFile);
 
-                Console.WriteLine();
-
-                if (ok)
+                foreach (var package in module.Packages)
                 {
-                    _ = GetModuleDescriptor(module.ModuleFile);
+                    ok = ok && BuildPackage(package);
 
-                    foreach (var package in module.Packages)
+                    if (!ok)
                     {
-                        ok = ok && BuildPackage(package);
-
-                        if (!ok)
-                        {
-                            break;
-                        }
+                        break;
                     }
                 }
-
-                return ok;
             }
+
+            return ok;
         }
 
         public bool BuildPackage(Package package)
         {
             Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
 
-            using (world.Use(package))
+            var ok = true;
+
+            if (package.PackageFile != null)
             {
-                var ok = true;
-
-                if (package.PackageFile != null)
-                {
-                    ok = HandleFile(package.PackageFile);
-
-                    if (ok)
-                    {
-                        var packageDescriptor = GetPackageDescriptor(package.PackageFile);
-                    }
-                }
+                ok = HandleFile(package.PackageFile);
 
                 if (ok)
                 {
-                    foreach (var file in package.Files)
-                    {
-                        ok = ok && HandleFile(file);
+                    var packageDescriptor = GetPackageDescriptor(package.PackageFile);
+                }
+            }
 
-                        if (!ok)
-                        {
-                            break;
-                        }
+            if (ok)
+            {
+                foreach (var file in package.Files)
+                {
+                    ok = ok && HandleFile(file);
+
+                    if (!ok)
+                    {
+                        break;
                     }
                 }
-
-                Console.WriteLine();
-
-                return ok;
             }
+
+            Console.WriteLine();
+
+            return ok;
         }
 
         private bool HandleFile(SourceFile file)
@@ -168,7 +155,9 @@ namespace Six.Ceylon
                 {
                     using (var writer = $"{file.ShortPath}.ast".Writer())
                     {
-                        new Reflector(writer).Reflect(file.Tree.Value);
+                        var reflector = new Reflector(writer);
+
+                        new Dumper(writer, reflector).Dump(file.Tree.Value);
                     }
                 }
             }

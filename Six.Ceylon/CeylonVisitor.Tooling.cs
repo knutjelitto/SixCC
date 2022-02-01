@@ -37,21 +37,6 @@ namespace Six.Ceylon
             return value;
         }
 
-        private T Add<T>(RNode node, T declaration)
-            where T : Stmt
-        {
-            node.Value = declaration;
-            World.AddDeclaration(declaration);
-
-            return declaration;
-        }
-
-        private System.IDisposable Use<T>(RNode node, T declaration)
-            where T : Stmt, IBodyOwner
-        {
-            return World.Use(Add<T>(node, declaration));
-        }
-
         private bool Exists(ROptional optional)
         {
             return optional.Children.Length == 1;

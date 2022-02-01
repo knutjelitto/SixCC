@@ -26,15 +26,15 @@
 
         public record Indexed(Expr Expr, Expr Index) : Expr;
 
-        public record SpanIndex(Expr From, Expr To) : Expr;
+        public record SpannedIndex(Expr From, Expr To) : Expr;
 
-        public record MeasureIndex(Expr From, Expr Count) : Expr;
+        public record MeasuredIndex(Expr From, Expr Count) : Expr;
 
         public record FromIndex(Expr From) : Expr;
 
         public record ToIndex(Expr To) : Expr;
 
-        public record SpecifiedVariable(Pattern.Variable Variable, Specifier.Value Specifier) : Expr;
+        public record SpecifiedVariable(Pattern.Variable Variable, Specifier Specifier) : Expr;
 
         public record Interpolation(Strings Strings, Expressions Expressions) : Expr;
 
@@ -68,8 +68,8 @@
 
         public interface Specifier : Expr
         {
-            public sealed record Value(string Op, Expr Expr) : Prefix(Op, Expr), Specifier;
-            new public sealed record Function(string Op, Expr Expr) : Prefix(Op, Expr), Specifier;
+            public sealed record Value(string Op, Expr Expr) : Specifier;
+            new public sealed record Function(string Op, Expr Expr) : Specifier;
             public sealed record Null() : Specifier;
         }
 

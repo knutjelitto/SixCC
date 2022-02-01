@@ -20,13 +20,13 @@ produces the stream
 
     `{ { 'h', 'w', 1 }, { 'e', 'o', 2 }, { 'l', 'r', 3 }, { 'l', 'l', null }, { 'o', 'd', null } }`.
 """
-shared {[Element+]*} transpose<Element,Absent>
-    ("A value used to pad shorter streams."
-        Element padding,
-        "The streams to be transposed."
-        Iterable<{Element*},Absent> streams)
-    given Absent satisfies Null
-    => object satisfies {[Element+]*}
+shared {[Element+]*} transpose<Element,Absent>(
+    "A value used to pad shorter streams."
+    Element padding,
+    "The streams to be transposed."
+    Iterable<{Element*},Absent> streams
+)   given Absent satisfies Null
+=>  object satisfies {[Element+]*}
     {
         iterator() => object satisfies Iterator<[Element+]>
         {

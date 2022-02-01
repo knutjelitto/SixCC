@@ -8,7 +8,7 @@
         public sealed record Entry(Pattern Key, Pattern Value) : Pattern;
         public sealed record Variadic(Type? Type, string Op, Identifier Name) : Pattern;
         public sealed record Variable(Type? Type, Identifier Name, ParametersList Parameters) : Pattern;
-        public sealed record LetVariable(Pattern Pattern, Expr.Specifier.Value Specifier) : Pattern;
+        public sealed record LetVariable(Pattern Pattern, Expr.Specifier Specifier) : Pattern;
     }
 
     public sealed record Patterns(IEnumerable<Pattern> Items) : Pattern.List(Items);

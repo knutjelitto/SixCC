@@ -40,6 +40,7 @@ namespace Six.Runtime
 
         protected virtual void Visit(RLiteral element)
         {
+            element.Value = element.GetText();
         }
 
         protected virtual void Visit(REof element)

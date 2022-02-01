@@ -63,7 +63,7 @@ namespace Six.Ceylon
         protected override void Visit(CIsConditionVariable element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var value = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
+            var value = Walk<Expr.Specifier>(element.ValueSpecifier);
 
             element.Value = new ConditionVariable(name, value);
         }

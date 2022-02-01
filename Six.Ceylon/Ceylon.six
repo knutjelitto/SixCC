@@ -29,15 +29,15 @@ imports
     ;
 
 module-descriptor
-    | annotations 'module' module-name module-specifier? version? module-body
+    : annotations 'module' module-name module-specifier? version? module-body
     ;
 
 module-specifier
-    | repository ':' module artifact-and-classifier?
+    : repository ':' module artifact-and-classifier?
     ;
 
 repository
-    | identifier
+    : identifier
     ;
 
 module
@@ -46,27 +46,27 @@ module
     ;
 
 artifact-and-classifier
-    | artifact classifier?
+    : artifact classifier?
     ;
 
 artifact
-    | ':' literal-string
+    : ':' literal-string
     ;
 
 classifier
-    | ':' literal-string
+    : ':' literal-string
     ;
 
 version
-    | literal-string
+    : literal-string
     ;
    
 module-name
-    | package-path
+    : package-path
     ;
 
 module-body
-    | '{' ( module-body-element )* '}'
+    : '{' ( module-body-element )* '}'
     ;
 
 module-body-element
@@ -75,27 +75,27 @@ module-body-element
     ;
 
 module-import
-    | annotations 'import' module version? ';'
+    : annotations 'import' module version? ';'
     ;
 
 package-descriptor
-    | annotations 'package' package-path ';'
+    : annotations 'package' package-path ';'
     ;
 
 import-namespace
-     | identifier ':'
+     : identifier ':'
      ;
 
 import-declaration
-    | 'import' package-path import-elements
+    : 'import' package-path import-elements
     ;
 
 import-elements
-    | '{' import-element-list? '}'
+    : '{' import-element-list? '}'
     ;
 
 import-element-list
-    | import-element (',' import-element)*
+    : import-element (',' import-element)*
     ;
 
 import-element
@@ -104,7 +104,7 @@ import-element
     ;
 
 import-named
-    | import-name import-name-specifier? import-elements?
+    : import-name import-name-specifier? import-elements?
     ;
 
 import-name
@@ -124,24 +124,19 @@ package-name
     ;
 
 package-path
-    | package-name ( '.' package-name )*
+    : package-name ( '.' package-name )*
     ;
 
 member-name
-    | lower-identifier
+    : lower-identifier
     ;
     
 type-name
-    | upper-identifier
+    : upper-identifier
     ;
 
 pattern
     | entry-pattern
-    | tuple-pattern
-    | variable-pattern
-    ;
-
-variable-or-tuple-pattern
     | tuple-pattern
     | variable-pattern
     ;
@@ -152,15 +147,20 @@ tuple-or-entry-pattern
     ;
 
 entry-pattern
-    | variable-or-tuple-pattern '->' variable-or-tuple-pattern
+    : variable-or-tuple-pattern '->' variable-or-tuple-pattern
+    ;
+
+variable-or-tuple-pattern
+    | tuple-pattern
+    | variable-pattern
     ;
 
 tuple-pattern
-    | '[' variadic-pattern-list? ']'
+    : '[' variadic-pattern-list? ']'
     ;
 
 variadic-pattern-list
-    | variadic-pattern (',' variadic-pattern)*
+    : variadic-pattern (',' variadic-pattern)*
     ;
 
 variadic-pattern
@@ -449,10 +449,6 @@ attribute-definition
     | optional-any-specifier
     ;
 
-optional-any-specifier
-    | any-specifier? ';'
-    ;
-
 class-declaration
     | annotations 'class' type-name type-parameters? parameters? case-types? extended-type? satisfied-types? type-constraints? class-definition
     ;
@@ -473,10 +469,6 @@ interface-declaration
 interface-definition
     | block
     | optional-type-specifier
-    ;
-
-optional-type-specifier
-    | type-specifier? ';'
     ;
 
 statements
@@ -536,10 +528,6 @@ continue-statement
     | 'continue'
     ;
 
-type-specifier
-    | '=>' type
-    ;
-
 value-specifier
     | '=' expression
     ;
@@ -548,9 +536,29 @@ function-specifier
     | '=>' expression
     ;
 
+optional-function-specifier
+    | function-specifier? ';'
+    ;
+
+required-function-specifier
+    | function-specifier ';'
+    ;
+
+type-specifier
+    | '=>' type
+    ;
+
+optional-type-specifier
+    | type-specifier? ';'
+    ;
+
 any-specifier
     | value-specifier
     | function-specifier
+    ;
+
+optional-any-specifier
+    | any-specifier? ';'
     ;
 
 base-reference-or-parameterized
@@ -628,11 +636,11 @@ named-argument
     ;
 
 named-specified-argument
-    | member-name value-specifier ';'
+    : member-name value-specifier ';'
     ;
 
 sequenced-argument-list
-    | sequenced-argument (',' sequenced-argument)* 
+    : sequenced-argument (',' sequenced-argument)* 
     ;
 
 sequenced-argument
@@ -652,11 +660,19 @@ named-argument-declaration
     ;
 
 object-argument
-    | 'object' member-name? extended-type? satisfied-types? block
+    : 'object' member-name? extended-type? satisfied-types? block
     ;
 
 typed-method-argument
-    | method-argument-type parametrized-member method-definition
+    : type parametrized-member method-definition
+    ;
+
+inferred-method-argument
+    | 'function' member-name? type-parameters? parameters method-definition
+    ;
+
+untyped-method-argument
+    : member-name parameters+ required-function-specifier
     ;
 
 method-definition
@@ -664,37 +680,12 @@ method-definition
     | optional-function-specifier
     ;
 
-optional-function-specifier
-    | function-specifier? ';'
-    ;
-
-required-function-specifier
-    | function-specifier ';'
-    ;
-
-method-argument-type
-    | type
-    | kw-void
-    ;
-
 typed-getter-argument
-    | getter-argument-type member-name method-definition
-    ;
-
-getter-argument-type
-    | type
-    ;
-
-inferred-method-argument
-    | 'function' member-name? type-parameters? parameters method-definition
+    : type member-name method-definition
     ;
 
 inferred-getter-argument
     | 'value' member-name method-definition
-    ;
-
-untyped-method-argument
-    : member-name parameters+ required-function-specifier
     ;
 
 untyped-getter-argument
@@ -1444,12 +1435,11 @@ for-else-statement
     ;
 
 for-iterator
-    | for-variable containment?
+    | for-variable containment
     ;
 
 for-variable
-    | tuple-or-entry-pattern
-    | variable
+    | pattern
     ;
     
 containment

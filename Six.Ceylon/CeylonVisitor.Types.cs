@@ -57,7 +57,7 @@ namespace Six.Ceylon
 
         protected override void Visit(CQualifiedCaseType element)
         {
-            var withPackage = element.PackageQualifier.Children.Length > 0;
+            var withPackage = Exists(element.PackageQualifier);
             var name = Walk<Identifier>(element.MemberName);
 
             element.Value = new Type.CaseType(withPackage, name);
@@ -95,7 +95,7 @@ namespace Six.Ceylon
             var op = element.Literal.GetText();
             var right = Walk<Type>(element.UnionType2);
 
-            element.Value = new Type.Entry(left, right);
+            element.Value = new Type.Entry(op, left, right);
         }
 
         protected override void Visit(CIntersectionTypeCore element)
@@ -104,7 +104,7 @@ namespace Six.Ceylon
             var op = element.Literal.GetText();
             var right = Walk<Type>(element.PrimaryType);
 
-            element.Value = new Type.Intersection(left, right);
+            element.Value = new Type.Intersection(op, left, right);
         }
 
         protected override void Visit(CUnionTypeCore element)
@@ -113,7 +113,7 @@ namespace Six.Ceylon
             var op = element.Literal.GetText();
             var right = Walk<Type>(element.IntersectionType);
 
-            element.Value = new Type.Union(left, right);
+            element.Value = new Type.Union(op, left, right);
         }
 
         protected override void Visit(CIterableType element)

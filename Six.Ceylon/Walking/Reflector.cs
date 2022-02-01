@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Six.Ceylon.Walking
 {
-    internal class Reflector : WithWriter
+    public class Reflector : WithWriter
     {
         private readonly Dictionary<System.Type, Node> nodes = new();
 
@@ -13,60 +13,7 @@ namespace Six.Ceylon.Walking
         {
         }
 
-        public void Reflect(object? ast)
-        {
-            if (ast is AstList astList)
-            {
-                wl($" : {astList.GetType().Name}[*]");
-                indent(() =>
-                {
-                    var index = 0;
-                    foreach (var item in astList.Items)
-                    {
-                        w($"[{index++}]");
-                        Reflect(item);
-                    }
-                });
-            }
-            else if (ast is AstNode astNode)
-            {
-                var node = Get(astNode.GetType());
-
-                w($" : {node.Type.Name}");
-                if (astNode is Identifier token)
-                {
-                    wl($" = {token.Text.Esc()}");
-                }
-                else if (astNode is String str)
-                {
-                    wl($" = {str.Text.Substring(0, System.Math.Min(str.Text.Length, 200)).Esc()}");
-                }
-                else
-                {
-                    wl();
-                    indent(() =>
-                    {
-                        foreach (var getter in node)
-                        {
-                            var value = getter.Get(astNode);
-                            w($"{getter.Name}");
-                            Reflect(value);
-                        }
-                    });
-                }
-            }
-            else if (ast != null)
-            {
-                wl($"{ast}");
-                Assert(false);
-            }
-            else
-            {
-                wl();
-            }
-        }
-
-        private Node Get(System.Type type)
+        public Node Get(System.Type type)
         {
             if (!nodes.TryGetValue(type, out var node))
             {
@@ -97,11 +44,20 @@ namespace Six.Ceylon.Walking
 
             private void AddProperties(System.Type type)
             {
-                var props = type.GetProperties();
+                var super = type.BaseType;
+
+                if (super != null && typeof(AstNode).IsAssignableFrom(super))
+                {
+                    AddProperties(super);
+                }
+
+                var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
                 foreach (var prop in props)
                 {
                     if (typeof(string).IsAssignableFrom(prop.PropertyType))
                     {
+                        getters.Add(new Getter(prop));
                         continue;
                     }
                     if (typeof(bool).IsAssignableFrom(prop.PropertyType))

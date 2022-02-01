@@ -19,9 +19,11 @@ This function is often used in conjunction with `curry()`.
 """
 see (function curry)
 tagged("Functions")
-shared Result(*FirstArgs)(*SecondArgs)shuffle<Result,FirstArgs,SecondArgs>(Result(*SecondArgs)(*FirstArgs) f)
+shared Result(*FirstArgs)(*SecondArgs) shuffle<Result,FirstArgs,SecondArgs>(
+    Result(*SecondArgs)(*FirstArgs) f
+)
     given FirstArgs satisfies Anything[]
     given SecondArgs satisfies Anything[]
-        => flatten((SecondArgs secondArgs) 
-            => flatten((FirstArgs firstArgs)
-                => unflatten(unflatten(f)(firstArgs))(secondArgs)));
+    => flatten((SecondArgs secondArgs) 
+        => flatten((FirstArgs firstArgs)
+            => unflatten(unflatten(f)(firstArgs))(secondArgs)));

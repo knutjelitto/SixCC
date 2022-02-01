@@ -1,4 +1,5 @@
 ﻿using Six.Ceylon.Ast;
+using Six.Runtime.Types;
 using static Six.Ceylon.CeylonTree;
 
 namespace Six.Ceylon
@@ -373,7 +374,7 @@ namespace Six.Ceylon
             var from = Walk<Expr>(element.IndexExpression);
             var to = Walk<Expr>(element.IndexExpression2);
 
-            element.Value = new Expr.SpanIndex(from, to);
+            element.Value = new Expr.SpannedIndex(from, to);
         }
 
         protected override void Visit(CMeasured element)
@@ -381,7 +382,7 @@ namespace Six.Ceylon
             var from = Walk<Expr>(element.IndexExpression);
             var count = Walk<Expr>(element.IndexExpression2);
 
-            element.Value = new Expr.MeasureIndex(from, count);
+            element.Value = new Expr.MeasuredIndex(from, count);
         }
 
         protected override void Visit(CLowerSpanned element)

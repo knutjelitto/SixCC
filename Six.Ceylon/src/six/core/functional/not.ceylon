@@ -13,5 +13,8 @@ namespace six.core;
 tagged("Functions")
 shared Boolean not<in Value>(
     "The predicate function to negate"
-    Boolean(Value) p)(Value val) 
+    Boolean(Value) p
+)(
+    Value val
+) 
     => !p(val);

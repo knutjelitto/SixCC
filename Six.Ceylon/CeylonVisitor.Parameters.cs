@@ -33,7 +33,7 @@ namespace Six.Ceylon
         protected override void Visit(CParameterReference element)
         {
             var name = Walk<Identifier>(element.MemberName);
-            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
+            var specifier = Walk<Expr.Specifier>(element.ValueSpecifier);
 
             element.Value = new Parameter.Reference(name, specifier);
         }
@@ -42,7 +42,7 @@ namespace Six.Ceylon
         {
             var type = Walk<Type>(element.VariadicType);
             var name = Walk<Identifier>(element.MemberName);
-            var specifier = Walk<Expr.Specifier.Value>(element.ValueSpecifier);
+            var specifier = Walk<Expr.Specifier>(element.ValueSpecifier);
 
             element.Value = new Parameter.TypedValue(type, name, specifier);
         }
