@@ -11,22 +11,19 @@
 namespace six.core;
 
 """
-An exact representation of a positive whole number, negative whole number, or zero. The largest
-and smallest representable values are platform-dependent:
+An exact representation of a positive whole number, negative whole number, or zero. The largest and smallest
+representable values are platform-dependent:
 
-- For the JVM runtime, integer values between -2<sup>63</sup> and 2<sup>63</sup>-1 may be
-represented without overflow.
-- For the JavaScript runtime, integer values with a magnitude no greater than 2<sup>53</sup> may
-be represented without loss of precision.
+- For the JVM runtime, integer values between -2<sup>63</sup> and 2<sup>63</sup>-1 may be represented without overflow.
+- For the JavaScript runtime, integer values with a magnitude no greater than 2<sup>53</sup> may be represented without loss of precision.
 
 Overflow or loss of precision occurs silently (with no exception raised).
 
-An integer is considered equal to its [[float]] representation, if that exists. That is, for every
-integer `int`, either `int.float` throws an [[OverflowException]], or the expression `int.float==int`
-evaluates to `true`.
+An integer is considered equal to its [[float]] representation, if that exists. That is, for every integer `int`,
+either `int.float` throws an [[OverflowException]], or the expression `int.float==int`evaluates to `true`.
 
-An integer is representable as a sequence of bits. Not all of the bits in the representation may
-be addressed by the methods inherited from [[Binary]]:
+An integer is representable as a sequence of bits. Not all of the bits in the representation may be addressed by the
+methods inherited from [[Binary]]:
 
 - For the JVM runtime, the bits at all indices (0 to 63) are addressable.
 - For the JavaScript runtime, the bits at indices 0 to 31 are addressable.
@@ -43,14 +40,11 @@ Underscores may be used to group digits:
     #21_D4
     $10_0001_1101_0100
 """
-see (value runtime.integerSize)
-tagged("Basic types", "Numbers")
-shared native final class Integer
-    extends Object
+see (value runtime.integerSize) tagged("Basic types", "Numbers")
+shared native final class Integer extends Object
     satisfies Integral<Integer> & Binary<Integer> & Exponentiable<Integer,Integer>
 {
     "The sum of all the integers in the given stream, or `0` if the stream is empty."
-    since("1.3.2")
     shared static Integer sum({Integer*} integers)
     {
         variable value sum = 0;
@@ -62,7 +56,6 @@ shared native final class Integer
     }
     
     "The product of all the integers in the given stream, or `1` if the stream is empty."
-    since("1.3.2")
     shared static Integer product({Integer*} integers)
     {
         variable value product = 1;
@@ -75,39 +68,42 @@ shared native final class Integer
     
     "The largest integer in the given stream, or `null` if 
      the stream is empty."
-    since("1.3.2")
-    shared static Integer|Absent max<Absent>
-            (Iterable<Integer,Absent> integers)
-            given Absent satisfies Null {
+    shared static Integer|Absent max<Absent>(Iterable<Integer,Absent> integers)
+        given Absent satisfies Null
+    {
         variable value first = true;
         variable value max = 0;
-        for (x in integers) {
-            if (first) {
+        for (x in integers)
+        {
+            if (first)
+            {
                 first = false;
                 max = x;
             }
-            else if (x > max) {
+            else if (x > max)
+            {
                 max = x;
             }
         }
-        if (first) {
+        if (first)
+        {
             assert (is Absent null);
             return null;
         }
-        else {
+        else
+        {
             return max;
         }
     }
     
-    "The smallest integer in the given stream, or `null` if 
-     the stream is empty."
-    since("1.3.2")
-    shared static Integer|Absent min<Absent>
-            (Iterable<Integer,Absent> integers)
-            given Absent satisfies Null {
+    "The smallest integer in the given stream, or `null` if the stream is empty."
+    shared static Integer|Absent min<Absent>(Iterable<Integer,Absent> integers)
+        given Absent satisfies Null
+    {
         variable value first = true;
         variable value min = 0;
-        for (x in integers) {
+        for (x in integers)
+        {
             if (first) {
                 first = false;
                 min = x;

@@ -9,20 +9,19 @@
  ********************************************************************************/
 namespace six.core;
 
-"Represents the current process (instance of the virtual
- machine)."
+"Represents the current process (instance of the virtual machine)."
 by ("Gavin", "Tako")
-see (value language, value runtime, value system,
-     value operatingSystem)
+see (value language, value runtime, value system, value operatingSystem)
 tagged("Environment")
-shared native object process {
-    
+shared native object process
+{
     "The command line arguments to the virtual machine."
     shared native String[] arguments;
     
-    "Determine if an argument of form `-name` or `--name` 
-     was specified among the command line arguments to 
-     the virtual machine."
+    """
+    Determine if an argument of form `-name` or `--name` was specified among the command line arguments to the virtual
+    machine.
+    """
     shared native Boolean namedArgumentPresent(String name);
 
     "The value of the first argument of form `-name=value`, 

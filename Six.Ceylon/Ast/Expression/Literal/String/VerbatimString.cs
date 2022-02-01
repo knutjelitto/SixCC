@@ -2,7 +2,7 @@
 
 namespace Six.Ceylon.Ast
 {
-    public class VerbatimString : String
+    public sealed class VerbatimString : String
     {
         public VerbatimString(RToken token)
             : base(GetText(token))

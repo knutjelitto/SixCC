@@ -75,9 +75,9 @@ namespace Six.Ceylon
             {
                 _ = GetModuleDescriptor(module.ModuleFile);
 
-                foreach (var package in module.Packages)
+                foreach (var folder in module.Folders)
                 {
-                    ok = ok && BuildPackage(package);
+                    ok = ok && BuildFolder(folder);
 
                     if (!ok)
                     {
@@ -89,32 +89,19 @@ namespace Six.Ceylon
             return ok;
         }
 
-        public bool BuildPackage(Package package)
+        public bool BuildFolder(Folder folder)
         {
-            Console.Write($"  {package.Name[(package.Name.IndexOf('.') + 1)..],-26}");
+            Console.Write($"  {folder.Name[(folder.Name.IndexOf('.') + 1)..],-26}");
 
             var ok = true;
 
-            if (package.PackageFile != null)
+            foreach (var file in folder.Files)
             {
-                ok = HandleFile(package.PackageFile);
+                ok = ok && HandleFile(file);
 
-                if (ok)
+                if (!ok)
                 {
-                    var packageDescriptor = GetPackageDescriptor(package.PackageFile);
-                }
-            }
-
-            if (ok)
-            {
-                foreach (var file in package.Files)
-                {
-                    ok = ok && HandleFile(file);
-
-                    if (!ok)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
 
@@ -173,11 +160,6 @@ namespace Six.Ceylon
         private static CModuleDescriptor? GetModuleDescriptor(SourceFile file)
         {
             return GetStart(file)?.CompilationUnit as CModuleDescriptor;
-        }
-
-        private static CPackageDescriptor? GetPackageDescriptor(SourceFile file)
-        {
-            return GetStart(file)?.CompilationUnit as CPackageDescriptor;
         }
     }
 }

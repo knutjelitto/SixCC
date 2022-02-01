@@ -10,11 +10,10 @@
 namespace six.core;
 
 "Contains information about the Ceylon language version."
-see (value process, value runtime, value system,
-     value operatingSystem)
+see (value process, value runtime, value system, value operatingSystem)
 tagged("Environment")
-shared native object language {
-    
+shared native object language
+{
     "The Ceylon language version."
     shared String version => "1.3.4-SNAPSHOT"/*@CEYLON_VERSION@*/;
     
@@ -28,36 +27,23 @@ shared native object language {
     shared Integer releaseVersion => 4/*@CEYLON_VERSION_RELEASE@*/;
     
     "The Ceylon language version qualifier."
-    since("1.3.0")
     shared String versionQualifier => "SNAPSHOT"/*@CEYLON_VERSION_QUALIFIER@*/;
     
     "The Ceylon language release name."
     shared String versionName => "You'll Thank Me Later"/*@CEYLON_VERSION_NAME@*/;
     
-    "The major version of the code generated for the 
-     underlying runtime."
+    "The major version of the code generated for the underlying runtime."
     shared native Integer majorVersionBinary;
     
-    "The minor version of the code generated for the 
-     underlying runtime."
+    "The minor version of the code generated for the underlying runtime."
     shared native Integer minorVersionBinary;
     
     shared actual String string => "language";
     
 }
 
-shared native("jvm") object language {
-    
+shared native("jvm") object language
+{
     shared native("jvm") Integer majorVersionBinary => 8;
-    
     shared native("jvm") Integer minorVersionBinary => 1;
-    
-}
-
-shared native("js") object language {
-    
-    shared native("js") Integer majorVersionBinary => 10;
-    
-    shared native("js") Integer minorVersionBinary => 0;
-    
 }

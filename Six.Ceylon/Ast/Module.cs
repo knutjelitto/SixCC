@@ -8,7 +8,7 @@
         }
 
         public SourceFile ModuleFile { get; }
-        public List<Package> Packages { get; } = new List<Package>();
+        public List<Folder> Folders { get; } = new List<Folder>();
 
         public string Name => Path.GetDirectoryName(ModuleFile.ShortPath)!.Replace("\\", ".");
     }

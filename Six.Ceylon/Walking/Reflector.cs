@@ -55,31 +55,26 @@ namespace Six.Ceylon.Walking
 
                 foreach (var prop in props)
                 {
-                    if (typeof(string).IsAssignableFrom(prop.PropertyType))
-                    {
-                        getters.Add(new Getter(prop));
-                        continue;
-                    }
-                    if (typeof(bool).IsAssignableFrom(prop.PropertyType))
-                    {
-                        getters.Add(new Getter(prop));
-                        continue;
-                    }
-                    if (typeof(int).IsAssignableFrom(prop.PropertyType))
-                    {
-                        continue;
-                    }
                     if (typeof(RToken).IsAssignableFrom(prop.PropertyType))
                     {
                         continue;
                     }
-                    if (typeof(AstNode).IsAssignableFrom(prop.PropertyType))
+                    if (typeof(string).IsAssignableFrom(prop.PropertyType))
                     {
                         getters.Add(new Getter(prop));
-                        continue;
                     }
-
-                    Assert(false);
+                    else if (typeof(bool).IsAssignableFrom(prop.PropertyType))
+                    {
+                        getters.Add(new Getter(prop));
+                    }
+                    else if (typeof(AstNode).IsAssignableFrom(prop.PropertyType))
+                    {
+                        getters.Add(new Getter(prop));
+                    }
+                    else
+                    {
+                        Assert(false);
+                    }
                 }
             }
 

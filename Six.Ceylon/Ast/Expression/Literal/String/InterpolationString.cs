@@ -22,17 +22,17 @@ namespace Six.Ceylon.Ast
         }
     }
 
-    public class StartInterpolationString : InterpolationString
+    public sealed class StartInterpolationString : InterpolationString
     {
         public StartInterpolationString(RToken token) : base(token, "\"", "``") { }
     }
 
-    public class MidInterpolationString : InterpolationString
+    public sealed class MidInterpolationString : InterpolationString
     {
         public MidInterpolationString(RToken token) : base(token, "``", "``") { }
     }
 
-    public class EndInterpolationString : InterpolationString
+    public sealed class EndInterpolationString : InterpolationString
     {
         public EndInterpolationString(RToken token) : base(token, "``", "\"") { }
     }

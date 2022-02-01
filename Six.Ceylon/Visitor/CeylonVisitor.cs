@@ -37,6 +37,7 @@ namespace Six.Ceylon
 
         private void WalkChildrenNever(RNode element)
         {
+            Assert(false);
             throw new System.InvalidOperationException();
         }
 
@@ -44,16 +45,12 @@ namespace Six.Ceylon
         {
             System.Console.WriteLine($"Type ``{element.GetType().Name}´´ not implemented");
 
-            throw new System.NotImplementedException();
+            throw new System.NotImplementedException($"Type ``{element.GetType().Name}´´ not implemented");
         }
 
         protected override void Visit(CXStart element)
         {
             if (element.CompilationUnit is CModuleDescriptor)
-            {
-                WalkChildrenNotYet(element);
-            }
-            else if (element.CompilationUnit is CPackageDescriptor)
             {
                 WalkChildrenNotYet(element);
             }

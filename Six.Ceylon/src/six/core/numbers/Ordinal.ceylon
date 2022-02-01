@@ -40,8 +40,7 @@ satisfy:
 see (class Character, class Integer, interface Integral, interface Comparable, interface Enumerable)
 by ("Gavin")
 tagged("Numbers")
-shared interface Ordinal<out Other> of Other
-    given Other satisfies Ordinal<Other>
+shared interface Ordinal<out Other> of Other given Other satisfies Ordinal<Other>
 {
     "The successor of this value."
     shared formal Other successor;

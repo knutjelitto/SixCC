@@ -14,7 +14,7 @@ namespace Six.Ceylon.Ast
 
         new public sealed record Nonempty(bool not, Expr expression) : Condition;
 
-        public abstract record List(IEnumerable<Expr> Items) : ReadOnlyList<Expr>(Items);
+        new public abstract record List(IEnumerable<Expr> Items) : ReadOnlyList<Expr>(Items);
     }
 
     public sealed record Conditions(IEnumerable<Expr> Items) : Condition.List(Items);

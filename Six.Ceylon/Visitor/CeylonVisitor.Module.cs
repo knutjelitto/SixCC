@@ -11,11 +11,6 @@ namespace Six.Ceylon
             WalkChildrenNotYet(element);
         }
 
-        protected override void Visit(CModuleSpecifier element)
-        {
-            WalkChildrenNotYet(element);
-        }
-
         protected override void Visit(CModuleBody element)
         {
             WalkChildrenNotYet(element);

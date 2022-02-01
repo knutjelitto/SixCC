@@ -8,7 +8,6 @@
 
 compilation-unit
     | module-descriptor
-    | package-descriptor
     | code-unit
     ;
 
@@ -29,32 +28,7 @@ imports
     ;
 
 module-descriptor
-    : annotations 'module' module-name module-specifier? version? module-body
-    ;
-
-module-specifier
-    : repository ':' module artifact-and-classifier?
-    ;
-
-repository
-    : identifier
-    ;
-
-module
-    | literal-string
-    | module-name
-    ;
-
-artifact-and-classifier
-    : artifact classifier?
-    ;
-
-artifact
-    : ':' literal-string
-    ;
-
-classifier
-    : ':' literal-string
+    : annotations 'module' module-name version? module-body
     ;
 
 version
@@ -75,7 +49,7 @@ module-body-element
     ;
 
 module-import
-    : annotations 'import' module version? ';'
+    : annotations 'import' module-name version? ';'
     ;
 
 package-descriptor

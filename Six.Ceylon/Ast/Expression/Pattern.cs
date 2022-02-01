@@ -2,7 +2,7 @@
 {
     public interface Pattern : Parameter, Expr
     {
-        public abstract record List(IEnumerable<Pattern> Items) : ReadOnlyList<Pattern>(Items);
+        new public abstract record List(IEnumerable<Pattern> Items) : ReadOnlyList<Pattern>(Items);
 
         new public sealed record Tuple(Patterns patterns) : Pattern;
         public sealed record Entry(Pattern Key, Pattern Value) : Pattern;

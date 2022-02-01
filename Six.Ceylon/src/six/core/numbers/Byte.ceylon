@@ -158,14 +158,11 @@ shared native final class Byte(congruent)
     shared actual native Byte predecessor => (unsigned-1).byte;
     shared actual native Byte successor => (unsigned+1).byte;
     
-    shared actual native Byte neighbour(Integer offset) 
-        => (unsigned + offset).byte;
+    shared actual native Byte neighbour(Integer offset)  => (unsigned + offset).byte;
     
-    shared actual native Integer offset(Byte other)
-        => minus(other).unsigned;
+    shared actual native Integer offset(Byte other) => minus(other).unsigned;
     
-    shared actual native Integer offsetSign(Byte other)
-        => this==other then 0 else 1;
+    shared actual native Integer offsetSign(Byte other) => this==other then 0 else 1;
 
     shared actual native Boolean equals(Object that) 
         =>  if (is Byte that) 

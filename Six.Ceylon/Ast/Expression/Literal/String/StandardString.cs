@@ -2,7 +2,7 @@
 
 namespace Six.Ceylon.Ast
 {
-    public class StandardString : String, Expr
+    public sealed class StandardString : String, Expr
     {
         public StandardString(RToken token)
             : base(GetText(token))

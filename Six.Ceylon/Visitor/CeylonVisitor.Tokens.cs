@@ -7,17 +7,17 @@ namespace Six.Ceylon
     {
         protected override void Visit(CIdentifier element)
         {
-            element.Value = new AnyIdentifier(element);
+            element.Value = new Identifier.Any(element);
         }
 
         protected override void Visit(CLowerIdentifier element)
         {
-            element.Value = new LowerIdentifier(element);
+            element.Value = new Identifier.Lower(element);
         }
 
         protected override void Visit(CUpperIdentifier element)
         {
-            element.Value = new UpperIdentifier(element);
+            element.Value = new Identifier.Upper(element);
         }
 
         protected override void Visit(CLiteralNatural element)

@@ -9,7 +9,8 @@
  ********************************************************************************/
 namespace six.core;
  
-native("jvm") Array<String> vmArguments {
+native("jvm") Array<String> vmArguments
+{
     "never called"
     assert (false);
 }
