@@ -12,5 +12,6 @@ namespace Six.Ceylon
         public bool DumpSppf { get; init; }
         public bool DumpTree { get; init; }
         public bool BuildAst { get; init; }
+        public bool BuildTypes { get; init; }
     }
 }

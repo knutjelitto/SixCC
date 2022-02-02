@@ -2,14 +2,12 @@
 {
     public interface Decl : Stmt, INamed
     {
-        string Location();
+        string Location { get; }
+        Annotations Annotations { get; }
 
         new public record Core(Annotations Annotations, Identifier Name) : Decl
         {
-            public string Location()
-            {
-                return Name.Location;
-            }
+            public string Location => Name.Location;
         }
 
         public abstract record List(IEnumerable<Decl> Items) : ReadOnlyList<Decl>(Items);

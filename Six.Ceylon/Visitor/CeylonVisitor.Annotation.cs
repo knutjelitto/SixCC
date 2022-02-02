@@ -7,7 +7,7 @@ namespace Six.Ceylon.Visitor
     {
         protected override void Visit(CAnnotations element)
         {
-            var doc = Walk<Ast.String>(element.StringLiteral);
+            var doc = Walk<String>(element.StringLiteral);
             var annotations = new AnnotationList(WalkMany<Annotation>(element.Annotation));
             element.Value = new Annotations(doc, annotations);
         }

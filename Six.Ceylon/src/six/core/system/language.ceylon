@@ -38,12 +38,5 @@ shared native object language
     "The minor version of the code generated for the underlying runtime."
     shared native Integer minorVersionBinary;
     
-    shared actual String string => "language";
-    
-}
-
-shared native("jvm") object language
-{
-    shared native("jvm") Integer majorVersionBinary => 8;
-    shared native("jvm") Integer minorVersionBinary => 1;
+    shared actual String string => "language";    
 }

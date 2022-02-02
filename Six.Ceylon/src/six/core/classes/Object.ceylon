@@ -31,9 +31,7 @@ In extreme cases it is acceptable for two values to be equal even when they are 
 same class. For example, the [[Integer]] value `1` and the [[Float]] value `1.0` are considered equal.
 Except in these extreme cases, instances of different classes are considered unequal.
 """
-see (class Basic, class Null)
-by ("Gavin")
-tagged("Basic types")
+see (class Basic, class Null) by ("Gavin") tagged("Basic types")
 shared abstract class Object() extends Anything()
 {
     "Determine if two values are equal.

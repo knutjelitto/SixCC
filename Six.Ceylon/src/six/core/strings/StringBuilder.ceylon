@@ -19,22 +19,31 @@ Builder utility for constructing [[strings|String]] by incrementally appending s
     String hello = builder.string; //hello world
 """
 tagged("Strings")
-shared native final class StringBuilder() 
+shared native("jvm") final class StringBuilder() 
     satisfies SearchableList<Character> &
               Ranged<Integer,Character,String> &
               IndexedCorrespondenceMutator<Character>
 {
+    import java.lang { JStringBuilder=StringBuilder, JCharacter=Character { toChars, charCount }, IndexOutOfBoundsException }
+    
+    value builder = JStringBuilder();
+
     "The number of characters in the current content, that is, the [[size|String.size]] of the produced [[string]]."
-    shared actual native Integer size;
+    shared actual native("jvm") Integer size  =>  builder.codePointCount(0, builder.length());
     
     "Determines if the current content holds at least one character."
-    shared actual native Boolean empty;
+    shared actual native("jvm") Boolean empty
+        =>  builder.length() == 0;
     
-    shared actual native Integer? lastIndex;
+    
+    shared actual native("jvm") Integer? lastIndex 
+        =>  if (builder.length() == 0)
+            then null
+            else size - 1;
     
     "The resulting string. If no characters have been appended, the empty string."
-    shared actual native variable String string;
-    
+    shared actual native("jvm") String string => builder.string;
+     
     "A copy of this `StringBuilder`, whose content is initially the same as the current content of this instance."
     shared actual StringBuilder clone()
     {
@@ -43,197 +52,9 @@ shared native final class StringBuilder()
         return clone;
     }
     
-    shared actual native Iterator<Character> iterator();
-    
-    "Returns a string of the given [[length]] containing the characters beginning at the given [[index]]."
-    deprecated ("use [[measure]]")
-    shared 
-    String substring(Integer index, Integer length) => measure(index, length);
-    
-    shared actual native
-    Character? getFromFirst(Integer index);
-    
-    "Append the characters in the given [[string]]."
-    shared native 
-    StringBuilder append(String string);
-    
-    "Append the characters in the given [[strings]]."
-    shared native 
-    StringBuilder appendAll({String*} strings)
-    {
-        for (s in strings)
-        {
-            append(s);
-        }
-        return this;
-    }
-    
-    "Prepend the characters in the given [[string]]."
-    shared native 
-    StringBuilder prepend(String string);
-    
-    "Prepend the characters in the given [[strings]]."
-    shared native 
-    StringBuilder prependAll({String*} strings)
-    {
-        for (s in strings)
-        {
-            prepend(s);
-        }
-        return this;
-    }
-    
-    "Append the given [[character]]."
-    shared native 
-    StringBuilder appendCharacter(Character character);
-    
-    "Prepend the given [[character]]."
-    shared native 
-    StringBuilder prependCharacter(Character character);
-    
-    "Append a newline character."
-    shared native 
-    StringBuilder appendNewline() => appendCharacter('\n');
-    
-    "Append a space character."
-    shared native 
-    StringBuilder appendSpace() => appendCharacter(' ');
-    
-    "Remove all content and return to initial state."
-    shared native 
-    StringBuilder clear();
-    
-    "Set the character at the given index to the given [[character]]."
-    shared actual void set(Integer index, Character character)
-        => replace(index, 1, character.string);
-    
-    "Insert a [[string]] at the specified [[index]]."
-    shared native 
-    StringBuilder insert(Integer index, String string);
-    
-    "Insert a [[character]] at the specified [[index]]."
-    shared native 
-    StringBuilder insertCharacter(Integer index, Character character);
-    
-    "Replaces the specified [[number of characters|length]] from the current content, starting at the specified [[index]],
-     with the given [[string]]. If [[length]] is nonpositive, nothing is replaced, and the `string` is simply inserted at
-     the specified `index`."
-    shared native 
-    StringBuilder replace(Integer index, Integer length, String string);
-    
-    "Deletes the specified [[number of characters|length]] from the current content, starting at the specified [[index]].
-     If [[length]] is nonpositive, nothing is deleted."
-    shared native 
-    StringBuilder delete(Integer index, Integer length/*=1*/);
-    
-    "Deletes the specified [[number of characters|length]] from the start of the string. If `length` is nonpositive,
-     nothing is deleted."
-    shared native 
-    StringBuilder deleteInitial(Integer length);
-    
-    "Deletes the specified [[number of characters|length]] from the end of the string. If `length` is nonpositive, nothing
-     is deleted."
-    shared native 
-    StringBuilder deleteTerminal(Integer length);
-    
-    "Reverses the order of the current characters."
-    shared native 
-    StringBuilder reverseInPlace();
-    
-    "The first index at which the given [[list of characters|sublist]] occurs as a sublist, that is greater than or equal
-     to the optional [[starting index|from]]."
-    shared actual native
-    Integer? firstInclusion(List<Character> sublist,
-        Integer from);
-    
-    "The last index at which the given [[list of characters|sublist]] occurs as a sublist, that falls within the range
-     `0:size - from + 1 - sublist.size` defined by the optional [[starting index|from]], interpreted as a reverse index
-     counting from the _end_ of the list."
-    shared actual native
-    Integer? lastInclusion(List<Character> sublist, Integer from);
-    
-    "The first index at which the given [[character]] occurs, that is greater than or equal to the optional
-     [[starting index|from]]."
-    shared actual native
-    Integer? firstOccurrence(Character character, Integer from, Integer length);
-    
-    "The last index at which the given [[character]] occurs, that falls within the range `0:size-from` defined by the
-     optional [[starting index|from]], interpreted as a reverse index counting from the _end_ of the list."
-    shared actual native
-    Integer? lastOccurrence(Character character, Integer from, Integer length);
-    
-    shared actual native
-    {Integer*} inclusions(List<Character> sublist, Integer from);
-    
-    shared actual native
-    {Integer*} occurrences(Character character, Integer from, Integer length);
-    
-    shared actual 
-    Boolean occursAt(Integer index, Character character) 
-        =>  if (exists ch = getFromFirst(index))
-            then ch == character
-            else false;
-    
-    shared actual 
-    Boolean includesAt(Integer index, List<Character> sublist)
-        => this[index:sublist.size] == sublist;
-    
-    shared actual native 
-    String measure(Integer from, Integer length);
-    
-    shared actual 
-    String initial(Integer length) 
-        => measure(0, length);
-    
-    shared actual 
-    String terminal(Integer length) 
-        => measure(size-length, length);
-    
-    shared actual native String span(Integer from, Integer to);
-    shared actual native String spanTo(Integer to);
-    shared actual native String spanFrom(Integer from);
-    
-    shared actual Boolean equals(Object that) 
-        => (super of List<Character>).equals(that);
-    shared actual Integer hash
-        => (super of List<Character>).hash;
-}
-
-shared native("jvm") final class StringBuilder() 
-        satisfies SearchableList<Character> &
-                  Ranged<Integer,Character,String> &
-                  IndexedCorrespondenceMutator<Character> {
-    
-    import java.lang {
-        JStringBuilder=StringBuilder,
-        JCharacter=Character {
-            toChars,
-            charCount
-        },
-        IndexOutOfBoundsException
-    }
-    
-    value builder = JStringBuilder();
-    
-    shared actual native("jvm") Integer size 
-            => builder.codePointCount(0, builder.length());
-    
-    shared actual native("jvm") Boolean empty
-            => builder.length() == 0;
-    
-    shared actual native("jvm") Integer? lastIndex 
-            => if (builder.length() == 0)
-            then null
-            else size - 1;
-    
-    shared actual native("jvm") String string 
-            => builder.string;
-    
-    native("jvm") assign string 
-            => builder.replace(0, builder.length(), string);
-    
     shared actual native("jvm") 
-    Iterator<Character> iterator() {
+    Iterator<Character> iterator()
+    {
         object stringBuilderIterator
                 satisfies Iterator<Character> {
             variable Integer offset = 0;
@@ -252,8 +73,14 @@ shared native("jvm") final class StringBuilder()
         return stringBuilderIterator;
     }
     
+    "Returns a string of the given [[length]] containing the characters beginning at the given [[index]]."
+    deprecated ("use [[measure]]")
+    shared 
+    String substring(Integer index, Integer length) => measure(index, length);
+    
     shared actual native("jvm")
-    Character? getFromFirst(Integer index) {
+    Character? getFromFirst(Integer index)
+    {
         try {
             return builder.codePointAt(startIndex(index))
                           .character;
@@ -263,38 +90,82 @@ shared native("jvm") final class StringBuilder()
         }
     }
     
+    "Append the characters in the given [[string]]."
     shared native("jvm") 
     StringBuilder append(String string) {
         builder.append(string);
         return this;
     }
     
+    "Append the characters in the given [[strings]]."
+    shared native 
+    StringBuilder appendAll({String*} strings)
+    {
+        for (s in strings)
+        {
+            append(s);
+        }
+        return this;
+    }
+    
+    "Prepend the characters in the given [[string]]."
     shared native("jvm") 
-    StringBuilder prepend(String string) {
+    StringBuilder prepend(String string)
+    {
         builder.insert(0, string);
         return this;
     }
     
+    "Prepend the characters in the given [[strings]]."
+    shared native 
+    StringBuilder prependAll({String*} strings)
+    {
+        for (s in strings)
+        {
+            prepend(s);
+        }
+        return this;
+    }
+    
+    "Append the given [[character]]."
     shared native("jvm") 
-    StringBuilder appendCharacter(Character character) {
+    StringBuilder appendCharacter(Character character)
+    {
         builder.appendCodePoint(character.integer);
         return this;
     }
     
+    "Prepend the given [[character]]."
     shared native("jvm") 
-    StringBuilder prependCharacter(Character character) {
+    StringBuilder prependCharacter(Character character)
+    {
         builder.insert(0, toChars(character.integer));
         return this;
     }
     
+    "Append a newline character."
+    shared native 
+    StringBuilder appendNewline() => appendCharacter('\n');
+    
+    "Append a space character."
+    shared native 
+    StringBuilder appendSpace() => appendCharacter(' ');
+    
+    "Remove all content and return to initial state."
     shared native("jvm") 
     StringBuilder clear() {
         builder.setLength(0);
         return this;
     }
     
+    "Set the character at the given index to the given [[character]]."
+    shared actual void set(Integer index, Character character)
+        => replace(index, 1, character.string);
+    
+    "Insert a [[string]] at the specified [[index]]."
     shared native("jvm") 
-    StringBuilder insert(Integer index, String string) {
+    StringBuilder insert(Integer index, String string)
+    {
         "index must not be negative"
         assert (index>=0);
         "index must not be greater than size"
@@ -303,9 +174,10 @@ shared native("jvm") final class StringBuilder()
         return this;
     }
     
+    "Insert a [[character]] at the specified [[index]]."
     shared native("jvm") 
-    StringBuilder insertCharacter
-            (Integer index, Character character) {
+    StringBuilder insertCharacter(Integer index, Character character)
+    {
         "index must not be negative"
         assert (index>=0);
         "index must not be greater than size"
@@ -315,9 +187,12 @@ shared native("jvm") final class StringBuilder()
         return this;
     }
     
+    "Replaces the specified [[number of characters|length]] from the current content, starting at the specified [[index]],
+     with the given [[string]]. If [[length]] is nonpositive, nothing is replaced, and the `string` is simply inserted at
+     the specified `index`."
     shared native("jvm") 
-    StringBuilder replace
-            (Integer index, Integer length, String string) {
+    StringBuilder replace(Integer index, Integer length, String string)
+    {
         "index must not be negative"
         assert (index>=0);
         "index must not be greater than size"
@@ -331,6 +206,8 @@ shared native("jvm") final class StringBuilder()
         return this;
     }
     
+    "Deletes the specified [[number of characters|length]] from the current content, starting at the specified [[index]].
+     If [[length]] is nonpositive, nothing is deleted."
     shared native("jvm") 
     StringBuilder delete(Integer index, Integer length) {
         "index must not be negative"
@@ -347,8 +224,11 @@ shared native("jvm") final class StringBuilder()
         return this;
     }
     
+    "Deletes the specified [[number of characters|length]] from the start of the string. If `length` is nonpositive,
+     nothing is deleted."
     shared native("jvm") 
-    StringBuilder deleteInitial(Integer length) {
+    StringBuilder deleteInitial(Integer length)
+    {
         "length must not be greater than size"
         assert (length<=size);
         if (length>0) {
@@ -357,8 +237,11 @@ shared native("jvm") final class StringBuilder()
         return this;
     }
     
+    "Deletes the specified [[number of characters|length]] from the end of the string. If `length` is nonpositive, nothing
+     is deleted."
     shared native("jvm") 
-    StringBuilder deleteTerminal(Integer length) {
+    StringBuilder deleteTerminal(Integer length)
+    {
         "length must not be greater than size"
         assert (length<=size);
         if (length>0) {
@@ -368,16 +251,21 @@ shared native("jvm") final class StringBuilder()
         return this;
     }
     
+    "Reverses the order of the current characters."
     shared native("jvm") 
-    StringBuilder reverseInPlace() {
+    StringBuilder reverseInPlace()
+    {
         builder.reverse();
         return this;
     }
     
+    "The first index at which the given [[list of characters|sublist]] occurs as a sublist, that is greater than or equal
+     to the optional [[starting index|from]]."
     shared actual native("jvm")
-    Integer? firstInclusion(List<Character> sublist,
-        Integer from) {
-        try {
+    Integer? firstInclusion(List<Character> sublist, Integer from)
+    {
+        try
+        {
             value start 
                     = builder.offsetByCodePoints(0, 
                             from>0 then from else 0);
@@ -393,6 +281,9 @@ shared native("jvm") final class StringBuilder()
         }
     }
     
+    "The last index at which the given [[list of characters|sublist]] occurs as a sublist, that falls within the range
+     `0:size - from + 1 - sublist.size` defined by the optional [[starting index|from]], interpreted as a reverse index
+     counting from the _end_ of the list."
     shared actual native("jvm")
     Integer? lastInclusion(List<Character> sublist,
         Integer from) {
@@ -413,9 +304,11 @@ shared native("jvm") final class StringBuilder()
         }
     }
     
+    "The first index at which the given [[character]] occurs, that is greater than or equal to the optional
+     [[starting index|from]]."
     shared actual native("jvm")
-    Integer? firstOccurrence(Character character,
-        Integer from, Integer length) {
+    Integer? firstOccurrence(Character character, Integer from, Integer length)
+    {
         if (length<=0) { return null; }
         try {
             value start 
@@ -440,9 +333,11 @@ shared native("jvm") final class StringBuilder()
         }
     }
     
+    "The last index at which the given [[character]] occurs, that falls within the range `0:size-from` defined by the
+     optional [[starting index|from]], interpreted as a reverse index counting from the _end_ of the list."
     shared actual native("jvm")
-    Integer? lastOccurrence(Character character,
-        Integer from, Integer length) {
+    Integer? lastOccurrence(Character character, Integer from, Integer length)
+    {
         if (length<=0) { return null; }
         try {
             value start 
@@ -469,36 +364,55 @@ shared native("jvm") final class StringBuilder()
     }
     
     shared actual native("jvm")
-    {Integer*} inclusions(List<Character> sublist, 
-        Integer from)
-            //TODO: optimize this!
-            => string.inclusions(sublist, from);
+    {Integer*} inclusions(List<Character> sublist, Integer from)
+        //TODO: optimize this!
+        => string.inclusions(sublist, from);
     
     shared actual native("jvm")
-    {Integer*} occurrences(Character character, 
-        Integer from, Integer length)
-            //TODO: optimize this!
-            => string.occurrences(character, from, length);
+    {Integer*} occurrences(Character character, Integer from, Integer length)
+        //TODO: optimize this!
+        => string.occurrences(character, from, length);
+    
+    shared actual 
+    Boolean occursAt(Integer index, Character character) 
+        =>  if (exists ch = getFromFirst(index))
+            then ch == character
+            else false;
+    
+    shared actual 
+    Boolean includesAt(Integer index, List<Character> sublist)
+        => this[index:sublist.size] == sublist;
     
     shared actual native("jvm")
-    String measure(Integer from, Integer length) {
+    String measure(Integer from, Integer length)
+    {
         value len = size;
-        if (from >= len || length <= 0) {
+        if (from >= len || length <= 0)
+        {
             return "";
         }
-        value resultLength 
-                = if (from + length > len) 
-                then len - from 
-                else length;
+        value resultLength =
+            if (from + length > len) 
+            then len - from 
+            else length;
         value start = startIndex(from);
         value end = endIndex(start, resultLength);
         return builder.substring(start, end);
     }
     
+    shared actual 
+    String initial(Integer length) 
+        => measure(0, length);
+    
+    shared actual 
+    String terminal(Integer length) => measure(size-length, length);
+    
     shared actual native("jvm") 
-    String span(Integer from, Integer to) {
+    String span(Integer from, Integer to)
+    {
         value len = size;
-        if (len == 0) {
+        if (len == 0) 
+        {
             return "";
         }
         value reverse = to < from;
@@ -527,35 +441,45 @@ shared native("jvm") final class StringBuilder()
         }
         return reverse then result.reversed else result;
     }
-    
+
     shared actual native("jvm") 
-    String spanFrom(Integer from) {
-        if (from <= 0) {
-            return string;
-        }
+    String spanTo(Integer to)
+    {
         value len = size;
-        if (len == 0 || from >= len) {
+        if (len == 0 || to < 0)
+        {
             return "";
         }
-        return builder.substring(startIndex(from));
-    }
-    
-    shared actual native("jvm") 
-    String spanTo(Integer to) {
-        value len = size;
-        if (len == 0 || to < 0) {
-            return "";
-        }
-        if (to >= len) {
+        if (to >= len)
+        {
             return string;
         }
         return builder.substring(0, startIndex(to+1));
     }
     
+    shared actual native("jvm") 
+    String spanFrom(Integer from)
+    {
+        if (from <= 0)
+        {
+            return string;
+        }
+        value len = size;
+        if (len == 0 || from >= len)
+        {
+            return "";
+        }
+        return builder.substring(startIndex(from));
+    }
+        
+    shared actual Boolean equals(Object that)  => (super of List<Character>).equals(that);
+    shared actual Integer hash => (super of List<Character>).hash;
+
+    native("jvm") assign string  => builder.replace(0, builder.length(), string);
+            
     Integer startIndex(Integer index) 
             => builder.offsetByCodePoints(0, index);
     
     Integer endIndex(Integer start, Integer length) 
             => builder.offsetByCodePoints(start, length);
-    
 }

@@ -17,8 +17,10 @@ represented by the runtime.
 """
 see (value process, value language, value system, value operatingSystem)
 tagged("Environment")
-shared native object runtime
+shared native("jvm") object runtime
 {
+    import java.lang { System, Long, Double, Int=Integer, Math }
+
     """
     A string that identifies the kind of virtual machine this process is executing:
 
@@ -26,7 +28,7 @@ shared native object runtime
     - `js` when executing any kind of JavaScript virtual machine, or
     - `dartvm` when executing the Dart VM.
     """
-    shared native String type;
+    shared native("jvm") String type => "jvm";
     
     """
     The name of the virtual machine this process is executing:
@@ -37,17 +39,17 @@ shared native object runtime
     - `DartVM` when running on the Dart VM.
     """
     deprecated ("Use [[type]]")
-    shared native String name;
+    shared native("jvm") String name => "jvm";
     
     "The version of the virtual machine this process is executing."
-    shared native String version;
+    shared native("jvm") String version => System.getProperty("java.specification.version");
     
     "The number of bits used to represent the value of an [[Integer]]."
     see (class Integer)
-    shared native Integer integerSize;
-    
+    shared native("jvm") Integer integerSize => 64;
+
     "The number of bits of [[Integer]] instances which may be manipulated via the methods inherited from [[Binary]]."
-    shared native Integer integerAddressableSize;
+    shared native("jvm") Integer integerAddressableSize => 64;
     
     """
     The smallest [[Integer]] value that can be represented by the runtime.
@@ -57,7 +59,7 @@ shared native object runtime
     `Integer(n-1) = Integer(n) - 1` with `Integer(0) = 0`
     """
     see (class Integer)
-    shared native Integer minIntegerValue;
+    shared native("jvm") Integer minIntegerValue => Long.minValue;
 
     """
     The largest [[Integer]] value that can be represented by the runtime.
@@ -67,59 +69,32 @@ shared native object runtime
     `Integer(n+1) = Integer(n) + 1` with `Integer(0) = 0`
     """
     see (class Integer)
-    shared native Integer maxIntegerValue;
+    shared native("jvm") Integer maxIntegerValue => Long.maxValue;
     
     """
     The maximum size of an [[Array]] that is possible for this runtime. Note that this is a theoretical limit only. In
     practice it is usually impossible to allocate an array of this size, due to memory constraints.
     """
     see (class Array)
-    shared native Integer maxArraySize;
+    shared native("jvm") Integer maxArraySize = Int.maxValue - 8;
     
     "The largest finite [[Float]] value that can be represented by the runtime."
-    shared native Float maxFloatValue;
+    shared native("jvm") Float maxFloatValue => Double.maxValue;
 
     "The smallest positive nonzero [[Float]] value that can be represented by the runtime."
-    shared native Float minFloatValue;
+    shared native("jvm") Float minFloatValue => Double.minValue;    
     
     "The _machine epsilon_ for [[floating point|Float]] values. That is, the smallest value `e` such that:
      
          1.0 + e > 1.0"
-    shared native Float epsilon; 
+    shared native("jvm") Float epsilon = Math.ulp(1.0);
     
     """
     The largest [[Integer]] that can be exactly represented as a [[Float]] without loss of precision. The negative of
     this value is the smallest `Integer` that can be exactly represented as a `Float`.
     """
     see (value Integer.float)
-    shared native Integer maxExactIntegralFloat;
-    
-    shared actual String string  => "runtime [``type`` / ``version``]";
-}
-
-shared native("jvm") object runtime
-{
-    import java.lang
-    {
-        System, 
-        Long, 
-        Double, 
-        Int=Integer, 
-        Math
-    }
-
-    shared native("jvm") String type => "jvm";
-    shared native("jvm") String name => "jvm";
-    shared native("jvm") String version => System.getProperty("java.specification.version");
-    
-    shared native("jvm") Integer integerSize => 64;
-    shared native("jvm") Integer integerAddressableSize => 64;
-    shared native("jvm") Integer minIntegerValue => Long.minValue;
-    shared native("jvm") Integer maxIntegerValue => Long.maxValue;
-    shared native("jvm") Integer maxArraySize = Int.maxValue - 8;
-    shared native("jvm") Float maxFloatValue => Double.maxValue;
-    shared native("jvm") Float minFloatValue => Double.minValue;    
-    shared native("jvm") Float epsilon = Math.ulp(1.0);
     shared native("jvm") Integer maxExactIntegralFloat = 2^53-1;
     
+    shared actual String string  => "runtime [``type`` / ``version``]";
 }

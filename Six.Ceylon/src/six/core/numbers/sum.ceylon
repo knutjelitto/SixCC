@@ -25,8 +25,6 @@ For the case of a stream of `Integer`s, `Float`s, or `String`s, prefer [[Integer
 """
 see (function product, function Integer.sum, function Float.sum, function String.sum)
 tagged("Streams", "Numbers")
-shared native Value sum<Value>({Value+} values) given Value satisfies Summable<Value>;
-
 shared native("jvm") Value sum<Value>({Value+} values) given Value satisfies Summable<Value>
 {
     value it = values.iterator();

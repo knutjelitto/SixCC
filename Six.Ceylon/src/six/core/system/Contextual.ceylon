@@ -44,30 +44,15 @@ An example:
 NB: This example only shows how to *use* `Contextual` and does not show anything thread-related.
 """
 by("Tako Schotanus")
-native
-shared class Contextual<Element>()
-{
-    
-    """
-    Retrieves the value previously set. Will throw an assertion exception if called when not within a try-resource block.
-    """
-    native shared Element get();
-    
-    "Used to set a value for this `Contextual`"
-    native shared class Using(Element|Element() newValue) satisfies Obtainable
-    {
-        native shared actual void obtain() {}
-        native shared actual void release(Throwable? error) {}
-    }
-}
-
-native("jvm")
-shared class Contextual<Element>()
+shared native("jvm") class Contextual<Element>()
 {
     import java.lang { ThreadLocal }
 
     value threadLocal = ThreadLocal<Element>();
     
+    """
+    Retrieves the value previously set. Will throw an assertion exception if called when not within a try-resource block.
+    """
     native("jvm") shared Element get()
     {
         if (exists result = threadLocal.get())
@@ -82,6 +67,9 @@ shared class Contextual<Element>()
         }
     }
     
+    """
+    Used to set a value for this `Contextual`
+    """
     native("jvm") shared class Using(Element|Element() newValue) satisfies Obtainable
     {
         variable Element? previous = null; 

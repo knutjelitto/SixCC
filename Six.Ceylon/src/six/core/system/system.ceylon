@@ -16,36 +16,26 @@ Holds information about system time and locale.
 """
 see (value process, value runtime, value language, value operatingSystem)
 tagged("Environment")
-shared native object system
-{
-    "The elapsed time in milliseconds since midnight, 1 January 1970."
-    shared native Integer milliseconds;
-    
-    "The elapsed time in nanoseconds since an arbitrary starting point."
-    shared native Integer nanoseconds;
-    
-    "Returns the offset, in milliseconds, to add to UTC to get the local time for default timezone for this system."
-    shared native Integer timezoneOffset;
-    
-    "Returns the IETF language tag representing the default locale for this system."
-    shared native String locale;
-    
-    "Returns the IANA character set name representing the default character encoding for this system."
-    shared native String characterEncoding;
-    
-    shared actual String string => "system";
-}
-
 shared native("jvm") object system
 {
-    
     import java.lang { System }
     import java.util { TimeZone, Locale }
     import java.nio.charset { Charset { defaultCharset } }
     
+    "The elapsed time in milliseconds since midnight, 1 January 1970."
     shared native("jvm") Integer milliseconds => System.currentTimeMillis();    
+    
+    "The elapsed time in nanoseconds since an arbitrary starting point."
     shared native("jvm") Integer nanoseconds => System.nanoTime();
+    
+    "Returns the offset, in milliseconds, to add to UTC to get the local time for default timezone for this system."
     shared native("jvm") Integer timezoneOffset => TimeZone.default.getOffset(milliseconds);
+    
+    "Returns the IETF language tag representing the default locale for this system."
     shared native("jvm") String locale => Locale.default.toLanguageTag();
+    
+    "Returns the IANA character set name representing the default character encoding for this system."
     shared native("jvm") String characterEncoding => defaultCharset().name();
+    
+    shared actual String string => "system";
 }

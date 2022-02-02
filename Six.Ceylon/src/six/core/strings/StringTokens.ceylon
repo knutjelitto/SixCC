@@ -9,28 +9,9 @@
  ********************************************************************************/
 namespace six.core;
 
-native class StringTokens(str, separator, discardSeparators, groupSeparators, limit)
-    satisfies {String+}
+native("jvm") class StringTokens (str, separator, discardSeparators, groupSeparators, limit) satisfies {String+}
 {
-    String str;
-    Boolean separator(Character ch);
-    Boolean discardSeparators;
-    Boolean groupSeparators;
-    Integer? limit;
-    
-    shared actual native Iterator<String> iterator();
-    shared actual native Boolean empty;
-
-}
-
-native("jvm") class StringTokens
-    (str, separator, discardSeparators, groupSeparators, limit)
-        satisfies {String+} {
-    
-    import java.lang { 
-        JString=String, 
-        JCharacter=Character
-    }
+    import java.lang { JString=String, JCharacter=Character }
     
     String str;
     Boolean separator(Character ch);

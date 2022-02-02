@@ -19,10 +19,3 @@ too large to be represented as a `Float` is "rounded down" to `-infinity`.
 """
 tagged("Numbers")
 native shared Float infinity;
-
-native("jvm") shared Float infinity
-{ 
-    import java.lang { Double }
-
-    return Double.positiveInfinity;
-}

@@ -12,8 +12,10 @@ namespace six.core;
 "Represents the operating system on which the current process is running."
 see (value process, value runtime, value language, value system)
 tagged("Environment")
-shared native object operatingSystem
+shared native("jvm") object operatingSystem
 {
+    import java.lang { System }
+    
     "Returns the name of the operating system this process is running on: `linux`, `mac`, `unix`, `windows`, or `other`."
     shared native String name
     {
@@ -43,10 +45,10 @@ shared native object operatingSystem
     Returns the version of the operating system this process is running on or `Unknown` if it was not possible to retrieve
     that information. The result is completely dependent on the underlying system.
     """
-    shared native String version => "Unknown";
+    shared native("jvm") String version => process.propertyValue("os.version") else "Unknown";
     
     "The line ending character sequence on this platform."
-    shared native String newline;
+    shared native("jvm") String newline => System.lineSeparator();
     
     "The character used on this platform to separate the folder/file elements of a path."
     shared native String fileSeparator
@@ -63,14 +65,4 @@ shared native object operatingSystem
     }
     
     shared actual String string => "operating system [``name`` / ``version``]";
-}
-
-shared native("jvm") object operatingSystem
-{
-    
-    import java.lang { System }
-    
-    shared native("jvm") String version => process.propertyValue("os.version") else "Unknown";
-    
-    shared native("jvm") String newline => System.lineSeparator();
 }

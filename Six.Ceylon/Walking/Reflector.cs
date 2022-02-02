@@ -4,12 +4,11 @@ using System.Reflection;
 
 namespace Six.Ceylon.Walking
 {
-    public class Reflector : WithWriter
+    public class Reflector
     {
         private readonly Dictionary<System.Type, Node> nodes = new();
 
-        public Reflector(Writer writer)
-            : base(writer)
+        public Reflector()
         {
         }
 

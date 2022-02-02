@@ -8,7 +8,7 @@ namespace Six.Ceylon.Ast
         string Text { get; }
         string Location { get; }
 
-        public abstract class Core : Identifier //, IComparable<Core>
+        public abstract class Core : Identifier, IComparable<Core>
         {
             private readonly RToken Token;
 
@@ -21,9 +21,9 @@ namespace Six.Ceylon.Ast
             public string Text { get; }
             public string Location => Token.Source.NameLineColumn(Token.Core);
 
-            //public int CompareTo(Core? other) => Text.CompareTo(other!.Text ?? string.Empty);
-            //public override bool Equals(object? obj) => obj is Core that && Text == that.Text;
-            //public override int GetHashCode() => Text.GetHashCode();
+            public int CompareTo(Core? other) => Text.CompareTo(other!.Text ?? string.Empty);
+            public override bool Equals(object? obj) => obj is Core that && Text == that.Text;
+            public override int GetHashCode() => Text.GetHashCode();
             public override string ToString() => Text;
         }
 

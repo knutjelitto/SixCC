@@ -34,8 +34,8 @@ An ordinal enumerated type `X` with a total order has well-defined `maximum` and
 `minimum < x < maximum` for any other instance `x` of `X`. Then the `successor` and `predecessor` operations should
 satisfy:
 
-- `minimum.predecessor==minimum`, and
-- `maximum.successor==maximum`.
+- `minimum.predecessor == minimum`, and
+- `maximum.successor == maximum`.
 """
 see (class Character, class Integer, interface Integral, interface Comparable, interface Enumerable)
 by ("Gavin")

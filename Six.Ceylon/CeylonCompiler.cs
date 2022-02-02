@@ -1,5 +1,6 @@
 ﻿using System;
 using Six.Ceylon.Ast;
+using Six.Ceylon.Sema;
 using Six.Ceylon.Visitor;
 using Six.Ceylon.Walking;
 using Six.Runtime.Matchers;
@@ -13,6 +14,7 @@ namespace Six.Ceylon
     {
         private readonly CompilerConfiguration configuration;
         private readonly CeylonVisitor visitor;
+        private readonly Typer typer;
         private readonly List<SourceFile> files = new();
 
         public CeylonCompiler(CompilerConfiguration configuration)
@@ -25,6 +27,7 @@ namespace Six.Ceylon
             this.configuration = configuration;
 
             visitor = new CeylonVisitor();
+            typer = new Typer(new NamespaceScope(null, ""), new Reflector());
         }
 
         public void Report()
@@ -85,6 +88,14 @@ namespace Six.Ceylon
                         break;
                     }
                 }
+
+                if (configuration.BuildTypes)
+                {
+                    using (var writer = $"{parser.__Name}-Typer.txt".Writer())
+                    {
+                        typer.Root.Dump(writer);
+                    }
+                }
             }
 
             return ok;
@@ -131,6 +142,8 @@ namespace Six.Ceylon
                         SppfDumper.Dump(file.Sppf, writer);
                     }
                 }
+                file.Sppf = null;
+
                 if (configuration.DumpTree && file.Tree != null)
                 {
                     using (var writer = $"{file.ShortPath}.tree".Writer())
@@ -143,9 +156,15 @@ namespace Six.Ceylon
                 {
                     using (var writer = $"{file.ShortPath}.ast".Writer())
                     {
-                        var reflector = new Reflector(writer);
+                        new Dumper(writer, typer.Ref).Dump(file.Tree.Value);
+                    }
 
-                        new Dumper(writer, reflector).Dump(file.Tree.Value);
+                    if (configuration.BuildTypes)
+                    {
+                        if (file.Tree?.Value is AstNode root)
+                        {
+                            typer.Walk(root);
+                        }
                     }
                 }
             }

@@ -11,7 +11,7 @@
             Generator.Run();
             //AllModules(fromRoot: TestsRoot, new CompilerConfiguration { WithRuleIndex = false });
             //AllModules(fromRoot: CeylonRoot, new CompilerConfiguration { WithRuleIndex = true, DumpTree = true, BuildAst = false, });
-            AllModules(fromRoot: SixRoot, new CompilerConfiguration { WithRuleIndex = true, DumpTree = true, BuildAst = true, });
+            AllModules(fromRoot: SixRoot, new CompilerConfiguration { WithRuleIndex = true, DumpTree = true, BuildAst = true, BuildTypes = true });
         }
 
         private static void AllModules(string fromRoot, CompilerConfiguration configuration)

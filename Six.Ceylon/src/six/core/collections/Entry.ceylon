@@ -7,6 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
+
 namespace six.core;
 
 """
@@ -16,11 +17,9 @@ the `->` operator:
 
     String->Person entry = person.name->person;
 """
-by ("Gavin")
-tagged("Collections")
+by ("Gavin") tagged("Collections")
 shared final serializable
-class Entry<out Key, out Item>(key, item) extends Object()
-    given Key satisfies Object
+class Entry<out Key, out Item>(key, item) extends Object() given Key satisfies Object
 {    
     "The key used to access the entry."
     shared Key key;
@@ -28,15 +27,15 @@ class Entry<out Key, out Item>(key, item) extends Object()
     "The item associated with the key."
     shared Item item;
     
-    "A pair (2 element tuple) with the key and item of this entry. For any `entry`:
+    """
+    A pair (2 element tuple) with the key and item of this entry. For any `entry`:
      
-         entry.pair == [entry.key,entry.item]"
+        entry.pair == [entry.key,entry.item]
+    """
     shared [Key, Item] pair => [key, item];
     
     "An `Entry` with the key and item of this entry if this entry's item is non-null, or `null` otherwise."
-    since("1.2.0")
-    shared <Key->Item&Object>? coalesced
-            => if (exists item) then key->item else null;
+    shared <Key->Item&Object>? coalesced => if (exists item) then key->item else null;
     
     """
     Determines if this entry is equal to the given entry. Two entries are equal if they have the same key and the same item.

@@ -248,14 +248,4 @@ Float halfEven(Float num) {
     return result * num.sign.float;
 }
 
-native
-Float log10(Float num);
-
-native("jvm")
-Float log10(Float num) {
-    import java.lang {
-        Math
-    }
-    
-    return Math.log10(num);
-}
+native Float log10(Float num);
