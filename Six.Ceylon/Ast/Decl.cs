@@ -1,14 +1,14 @@
 ﻿namespace Six.Ceylon.Ast
 {
-    public interface Decl : Stmt
+    public interface Decl : Stmt, INamed
     {
         string Location();
 
-        public new record Core(Annotations Annotations, Identifier? Name) : Decl
+        new public record Core(Annotations Annotations, Identifier Name) : Decl
         {
             public string Location()
             {
-                return Name?.Token.Source.NameLineColumn(Name.Token.Core) ?? "<LOCATION>";
+                return Name.Location;
             }
         }
 
@@ -57,7 +57,7 @@
 
         public sealed record Constructor(
             Annotations Annotations,
-            Identifier? Name,
+            Identifier Name,
             Parameters Parameters,
             Instantiation? Instantiation,
             Block Definition)

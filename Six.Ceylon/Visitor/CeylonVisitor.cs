@@ -2,7 +2,7 @@
 using Six.Runtime.Types;
 using static Six.Ceylon.CeylonTree;
 
-namespace Six.Ceylon
+namespace Six.Ceylon.Visitor
 {
     public partial class CeylonVisitor : DynamicCeylonVisitor
     {

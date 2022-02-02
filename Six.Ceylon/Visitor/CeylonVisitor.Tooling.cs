@@ -1,7 +1,7 @@
 ﻿using Six.Ceylon.Ast;
 using Six.Runtime.Types;
 
-namespace Six.Ceylon
+namespace Six.Ceylon.Visitor
 {
     public partial class CeylonVisitor
     {

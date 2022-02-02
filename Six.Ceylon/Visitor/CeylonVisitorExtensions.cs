@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Six.Ceylon
+namespace Six.Ceylon.Visitor
 {
     internal static class CeylonVisitorExtensions
     {

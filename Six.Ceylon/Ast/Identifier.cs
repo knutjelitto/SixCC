@@ -6,23 +6,31 @@ namespace Six.Ceylon.Ast
     public interface Identifier : AstNode
     {
         string Text { get; }
-        RToken Token { get; }
+        string Location { get; }
 
-        public abstract class Core : Identifier, IComparable<Core>
+        public abstract class Core : Identifier //, IComparable<Core>
         {
+            private readonly RToken Token;
+
             public Core(RToken token, string text)
             {
                 Token = token;
                 Text = text;
             }
 
-            public RToken Token { get; }
             public string Text { get; }
+            public string Location => Token.Source.NameLineColumn(Token.Core);
 
-            public int CompareTo(Core? other) => Text.CompareTo(other!.Text ?? string.Empty);
-            public override bool Equals(object? obj) => obj is Core that && Text == that.Text;
-            public override int GetHashCode() => Text.GetHashCode();
+            //public int CompareTo(Core? other) => Text.CompareTo(other!.Text ?? string.Empty);
+            //public override bool Equals(object? obj) => obj is Core that && Text == that.Text;
+            //public override int GetHashCode() => Text.GetHashCode();
             public override string ToString() => Text;
+        }
+
+        public sealed class Fake : Identifier
+        {
+            public string Text => "<nothing>";
+            public string Location => "<nowhere>";
         }
 
         public sealed class Any : Core

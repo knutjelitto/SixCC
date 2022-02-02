@@ -1,7 +1,7 @@
 ﻿using Six.Ceylon.Ast;
 using static Six.Ceylon.CeylonTree;
 
-namespace Six.Ceylon
+namespace Six.Ceylon.Visitor
 {
     public partial class CeylonVisitor
     {
@@ -63,7 +63,7 @@ namespace Six.Ceylon
         protected override void Visit(CConstructorDeclaration element)
         {
             var annotations = Walk<Annotations>(element.Annotations);
-            var name = Walk<Identifier>(element.MemberName);
+            var name = Walk<Identifier>(element.MemberName) ?? new Identifier.Fake();
             var parameters = Walk<Parameters>(element.Parameters);
             var instantiation = Walk<Instantiation>(element.DelegatedConstructor);
             var definition = Walk<Block>(element.Block);

@@ -1,5 +1,6 @@
 ﻿using System;
 using Six.Ceylon.Ast;
+using Six.Ceylon.Visitor;
 using Six.Ceylon.Walking;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
