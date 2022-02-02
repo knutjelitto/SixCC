@@ -2,6 +2,6 @@
 {
     public interface IScope
     {
-        bool Add(Dc declaration);
+        bool Declare(Dc declaration);
     }
 }

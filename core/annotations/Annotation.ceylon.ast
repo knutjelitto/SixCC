@@ -1,0 +1,63 @@
+Top : Unit
+    Imports : Imports[#1]
+        [0] : Import
+            Path : Identifiers[#3]
+                [0] : Any = 'ceylon'
+                [1] : Any = 'language'
+                [2] : Any = 'meta'
+            Elements : ElementList[#3]
+                [0] : Named
+                    Name : Any = 'annotations'
+                [1] : Named
+                    Name : Any = 'optionalAnnotation'
+                [2] : Named
+                    Name : Any = 'sequencedAnnotations'
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nThe supertype of all *annotation classes*. \r\n\r\n### Annotation classes\r\n\r\nAn *annotation class* mus'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#5]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'OptionalAnnotation'
+                                [1] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'SequencedAnnotation'
+                                [2] : Function
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'annotations'
+                                [3] : Function
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'optionalAnnotation'
+                                [4] : Function
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'sequencedAnnotations'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'Annotation'
+            Location = Annotation.ceylon(71,18)
+            CaseTypes : CaseTypes
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'ConstrainedAnnotation'
+            Definition : Block

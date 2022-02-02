@@ -9,7 +9,7 @@
  ********************************************************************************/
 namespace six.core;
 
-import ceylon.language.meta.declaration
+import six.core.meta.declaration
 {
     Module,
     Package,

@@ -1,0 +1,80 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#2]
+        [0] : Class
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nThe type of the [[null]] value. Any union type of form `Null|T` is considered an _optional_ type, '…
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Value
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'null'
+                    [1] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [2] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Basic types'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+                    [4] : Annotation
+                        Name : Lower = 'abstract'
+            Name : Upper = 'Null'
+            Location = Null.ceylon(50,23)
+            CaseTypes : CaseTypes
+                Types : TypeList[#1]
+                    [0] : CaseType
+                        Package = False
+                        Name : Lower = 'null'
+            Extends : Extends
+                Instantiation : Instantiation
+                    Class : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Anything'
+            Definition : Block
+        [1] : Object
+            Annotations : Annotations
+                Doc : StandardString = 'The null value.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Class
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Null'
+                    [1] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [2] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Basic types'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+            Name : Lower = 'null'
+            Location = Null.ceylon(56,15)
+            Extends : Extends
+                Instantiation : Instantiation
+                    Class : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Null'
+            Definition : Block

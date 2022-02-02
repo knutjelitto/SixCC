@@ -1,0 +1,38 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Class
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nThe default superclass when no superclass is explicitly specified using `extends`. For the sake of'…
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [1] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Basic types'
+                    [2] : Annotation
+                        Name : Lower = 'shared'
+                    [3] : Annotation
+                        Name : Lower = 'abstract'
+            Name : Upper = 'Basic'
+            Location = Basic.ceylon(19,23)
+            Extends : Extends
+                Instantiation : Instantiation
+                    Class : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Object'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Identifiable'
+            Definition : Block

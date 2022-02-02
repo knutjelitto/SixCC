@@ -10,7 +10,7 @@
             public string Location => Name.Location;
         }
 
-        public abstract record List(IEnumerable<Decl> Items) : ReadOnlyList<Decl>(Items);
+        new public abstract record List(IEnumerable<Decl> Items) : ReadOnlyList<Decl>(Items);
 
         public sealed record Alias(
             Annotations Annotations,
@@ -26,8 +26,8 @@
             TypeParameters? TypeParameters,
             Parameters? Parameters,
             CaseTypes? CaseTypes,
-            Extends? Extended,
-            Satisfies? Satisfied,
+            Extends? Extends,
+            Satisfies? Satisfies,
             TypeConstraints? Constraints,
             Expr.Specifier Definition) : Core(Annotations, Name);
 
@@ -36,10 +36,10 @@
             Identifier Name,
             TypeParameters? TypeParameters,
             CaseTypes? CaseTypes,
-            Satisfies? Satisfied,
+            Satisfies? Satisfies,
             TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : InterClass(Annotations, Name, TypeParameters, null, CaseTypes, null, Satisfied, Constraints, Definition);
+        : InterClass(Annotations, Name, TypeParameters, null, CaseTypes, null, Satisfies, Constraints, Definition);
 
         public sealed record Class(
             Annotations Annotations,
@@ -47,11 +47,11 @@
             TypeParameters? TypeParameters,
             Parameters? Parameters,
             CaseTypes? CaseTypes,
-            Extends? Extended,
-            Satisfies? Satisfied,
+            Extends? Extends,
+            Satisfies? Satisfies,
             TypeConstraints? Constraints,
             Expr.Specifier Definition)
-        : InterClass(Annotations, Name, TypeParameters, Parameters, CaseTypes, Extended, Satisfied, Constraints, Definition);
+        : InterClass(Annotations, Name, TypeParameters, Parameters, CaseTypes, Extends, Satisfies, Constraints, Definition);
 
         public sealed record Constructor(
             Annotations Annotations,
@@ -71,10 +71,10 @@
         public sealed record Object(
             Annotations Annotations,
             Identifier Name,
-            Extends? Extended,
-            Satisfies? Satisfied,
+            Extends? Extends,
+            Satisfies? Satisfies,
             Expr.Specifier Definition)
-        : InterClass(Annotations, Name, null, null, null, Extended, Satisfied, null, Definition);
+        : InterClass(Annotations, Name, null, null, null, Extends, Satisfies, null, Definition);
 
         public abstract record Method(
             Annotations Annotations,

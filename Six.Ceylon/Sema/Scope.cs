@@ -5,20 +5,11 @@
         private readonly Dictionary<Ast.Identifier, Dc> declarations = new();
         private readonly Dictionary<Ast.Identifier, List<Dc>> dups = new();
 
-        public bool Add(Dc declaration)
+        public bool Declare(Dc declaration)
         {
             var added = declarations.TryAdd(declaration.Name, declaration);
 
-            if (!added)
-            {
-                if (!dups.TryGetValue(declaration.Name, out var list))
-                {
-                    list = new List<Dc>();
-                    dups.Add(declaration.Name, list);
-                    list.Add(declarations[declaration.Name]);
-                }
-                list.Add(declaration);
-            }
+            Dup(!added, declaration);
 
             return added;
         }
@@ -34,6 +25,20 @@
             var upper = declarations.Values.Where(dc => dc.Name is Ast.Identifier.Upper).OrderBy(dc => dc.Name.Text);
 
             return lower.Concat(upper);
+        }
+
+        private void Dup(bool isDup, Dc declaration)
+        {
+            if (isDup)
+            {
+                if (!dups.TryGetValue(declaration.Name, out var list))
+                {
+                    list = new List<Dc>();
+                    dups.Add(declaration.Name, list);
+                    list.Add(declarations[declaration.Name]);
+                }
+                list.Add(declaration);
+            }
         }
     }
 }

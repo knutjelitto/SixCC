@@ -20,7 +20,7 @@
 
         public sealed record Member(Identifier Name, TypeParameters? TypeParameters, ParametersList Parameters) : Expr;
 
-        public sealed record Enumeration(StatementList Stmts, ArgumentList? Arguments) : Expr;
+        public sealed record Enumeration(Statements Stmts, ArgumentList? Arguments) : Expr;
 
         public record SelfReference(string Reference) : Expr;
 

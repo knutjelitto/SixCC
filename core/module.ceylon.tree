@@ -1,0 +1,15 @@
+CXStart
+    CModuleDescriptor
+        CAnnotations
+            ROptional<ICStringLiteral>
+            RStar<CAnnotation>
+        RLiteral{'module'}
+        CPackagePath
+            CIdentifier{'six'}
+            CIdentifier{'core'}
+        ROptional<ICVersion>
+        CModuleBody
+            RLiteral{'{'}
+            RStar<ICModuleBodyElement>
+            RLiteral{'}'}
+    REof{'\r\n'}

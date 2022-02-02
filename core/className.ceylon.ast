@@ -1,0 +1,53 @@
+Top : Unit
+    Imports : Imports[#1]
+        [0] : Import
+            Path : Identifiers[#3]
+                [0] : Any = 'ceylon'
+                [1] : Any = 'language'
+                [2] : Any = 'meta'
+            Elements : ElementList[#1]
+                [0] : Named
+                    Name : Any = 'type'
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : TypedMethod
+            Annotations : Annotations
+                Doc : VerbatimString = 'Return the name of the concrete class of the given object, \r\n   in a format native to the virtual ma'…
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Metamodel'
+                    [1] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Function
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'type'
+                    [2] : Annotation
+                        Name : Lower = 'shared'
+                    [3] : Annotation
+                        Name : Lower = 'native'
+            Name : Lower = 'className'
+            Location = className.ceylon(34,22)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                        Declaration : TypedValue
+                            Name : Lower = 'obj'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Anything'
+            Definition : Null
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'String'

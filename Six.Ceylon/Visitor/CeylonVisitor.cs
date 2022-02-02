@@ -129,7 +129,7 @@ namespace Six.Ceylon.Visitor
         {
             // '{'
             var imports = Walk<Imports>(element.Imports);
-            var statements = Walk<StatementList>(element.Statements);
+            var statements = Walk<Statements>(element.Statements);
             // '}'
 
             element.Value = new Block(imports, statements);

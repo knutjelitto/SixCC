@@ -243,7 +243,7 @@ namespace Six.Ceylon.Visitor
 
         protected override void Visit(CEnumerationExpr element)
         {
-            var statements = Walk<StatementList>(element.Statements);
+            var statements = Walk<Statements>(element.Statements);
             var sequenced = Walk<ArgumentList>(element.SequencedArgumentList);
 
             element.Value = new Expr.Enumeration(statements, sequenced);

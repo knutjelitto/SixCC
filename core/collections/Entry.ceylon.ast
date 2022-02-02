@@ -1,0 +1,349 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Class
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nA pair containing a _key_ and an associated value called the _item_. Used primarily to represent t'…
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [1] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Collections'
+                    [2] : Annotation
+                        Name : Lower = 'shared'
+                    [3] : Annotation
+                        Name : Lower = 'final'
+                    [4] : Annotation
+                        Name : Lower = 'serializable'
+            Name : Upper = 'Entry'
+            Location = Entry.ceylon(22,7)
+            TypeParameters : TypeParameters[#2]
+                [0] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Key'
+                [1] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Item'
+            Parameters : Parameters[#2]
+                [0] : Reference
+                    Name : Lower = 'key'
+                [1] : Reference
+                    Name : Lower = 'item'
+            Extends : Extends
+                Instantiation : Instantiation
+                    Class : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Object'
+            Constraints : TypeConstraints[#1]
+                [0] : TypeConstraint
+                    Name : Upper = 'Key'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Object'
+            Definition : Block
+                statements : StatementList[#7]
+                    [0] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'The key used to access the entry.'
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'key'
+                        Location = Entry.ceylon(25,16)
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Key'
+                    [1] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'The item associated with the key.'
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'item'
+                        Location = Entry.ceylon(28,17)
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Item'
+                    [2] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : VerbatimString = '\r\n    A pair (2 element tuple) with the key and item of this entry. For any `entry`:\r\n     \r\n       '…
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'pair'
+                        Location = Entry.ceylon(35,24)
+                        Definition : Function
+                            Op = =>
+                            Expr : Tuple
+                                Arguments : ArgumentList[#2]
+                                    [0] : MemberReference
+                                        Name : Lower = 'key'
+                                    [1] : MemberReference
+                                        Name : Lower = 'item'
+                        Type : Tuple
+                            Type : TypeList[#2]
+                                [0] : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Key'
+                                [1] : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Item'
+                    [3] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'An `Entry` with the key and item of this entry if this entry\'s item is non-null, or `null` otherwise'…
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'coalesced'
+                        Location = Entry.ceylon(38,32)
+                        Definition : Function
+                            Op = =>
+                            Expr : If
+                                Conditions : Conditions[#1]
+                                    [0] : Exists
+                                        not = False
+                                        expression : MemberReference
+                                            Name : Lower = 'item'
+                                Then : Prefix
+                                    Op = then
+                                    Right : Infix
+                                        Op = ->
+                                        Left : MemberReference
+                                            Name : Lower = 'key'
+                                        Right : MemberReference
+                                            Name : Lower = 'item'
+                                Else : Prefix
+                                    Op = else
+                                    Right : MemberReference
+                                        Name : Lower = 'null'
+                        Type : Nullable
+                            Left : Entry
+                                Op = ->
+                                Left : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Key'
+                                Right : Intersection
+                                    Op = &
+                                    Left : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Item'
+                                    Right : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Object'
+                    [4] : TypedMethod
+                        Annotations : Annotations
+                            Doc : VerbatimString = '\r\n    Determines if this entry is equal to the given entry. Two entries are equal if they have the s'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'equals'
+                        Location = Entry.ceylon(46,27)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'that'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Object'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Is
+                                                    not = False
+                                                    type : TypePath[#1]
+                                                        [0] : TypeReference
+                                                            Name : Upper = 'Entry'
+                                                            Arguments : TypeArgumentList[#2]
+                                                                [0] : Varianced
+                                                                    Type : TypePath[#1]
+                                                                        [0] : TypeReference
+                                                                            Name : Upper = 'Object'
+                                                                [1] : Varianced
+                                                                    Type : TypePath[#1]
+                                                                        [0] : TypeReference
+                                                                            Name : Upper = 'Anything'
+                                                    variable : ConditionVariable
+                                                        Name : Lower = 'that'
+                                            Block : Block
+                                                statements : StatementList[#2]
+                                                    [0] : If
+                                                        Conditionals : Conditionals[#1]
+                                                            [0] : ConditionalBlock
+                                                                Conditions : Conditions[#1]
+                                                                    [0] : Infix
+                                                                        Op = !=
+                                                                        Left : Infix
+                                                                            Op = .
+                                                                            Left : SelfReference
+                                                                                Reference = this
+                                                                            Right : MemberReference
+                                                                                Name : Lower = 'key'
+                                                                        Right : Infix
+                                                                            Op = .
+                                                                            Left : MemberReference
+                                                                                Name : Lower = 'that'
+                                                                            Right : MemberReference
+                                                                                Name : Lower = 'key'
+                                                                Block : Block
+                                                                    statements : StatementList[#1]
+                                                                        [0] : Return
+                                                                            Expr : MemberReference
+                                                                                Name : Lower = 'false'
+                                                    [1] : If
+                                                        Conditionals : Conditionals[#1]
+                                                            [0] : ConditionalBlock
+                                                                Conditions : Conditions[#2]
+                                                                    [0] : Exists
+                                                                        not = False
+                                                                        expression : LetVariable
+                                                                            Pattern : Variable
+                                                                                Name : Lower = 'thisItem'
+                                                                            Specifier : Value
+                                                                                Op = =
+                                                                                Expr : Infix
+                                                                                    Op = .
+                                                                                    Left : SelfReference
+                                                                                        Reference = this
+                                                                                    Right : MemberReference
+                                                                                        Name : Lower = 'item'
+                                                                    [1] : Exists
+                                                                        not = False
+                                                                        expression : LetVariable
+                                                                            Pattern : Variable
+                                                                                Name : Lower = 'thatItem'
+                                                                            Specifier : Value
+                                                                                Op = =
+                                                                                Expr : Infix
+                                                                                    Op = .
+                                                                                    Left : MemberReference
+                                                                                        Name : Lower = 'that'
+                                                                                    Right : MemberReference
+                                                                                        Name : Lower = 'item'
+                                                                Block : Block
+                                                                    statements : StatementList[#1]
+                                                                        [0] : Return
+                                                                            Expr : Infix
+                                                                                Op = ==
+                                                                                Left : MemberReference
+                                                                                    Name : Lower = 'thisItem'
+                                                                                Right : MemberReference
+                                                                                    Name : Lower = 'thatItem'
+                                                        ElseBlock : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : Infix
+                                                                        Op = &&
+                                                                        Left : Prefix
+                                                                            Op = !
+                                                                            Right : Exists
+                                                                                Expr : Infix
+                                                                                    Op = .
+                                                                                    Left : SelfReference
+                                                                                        Reference = this
+                                                                                    Right : MemberReference
+                                                                                        Name : Lower = 'item'
+                                                                        Right : Prefix
+                                                                            Op = !
+                                                                            Right : Exists
+                                                                                Expr : Infix
+                                                                                    Op = .
+                                                                                    Left : MemberReference
+                                                                                        Name : Lower = 'that'
+                                                                                    Right : MemberReference
+                                                                                        Name : Lower = 'item'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'false'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [5] : TypedAttribute
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'hash'
+                        Location = Entry.ceylon(69,27)
+                        Definition : Function
+                            Op = =>
+                            Expr : Infix
+                                Op = +
+                                Left : Infix
+                                    Op = *
+                                    Left : Infix
+                                        Op = +
+                                        Left : NaturalNumber
+                                        Right : Infix
+                                            Op = .
+                                            Left : MemberReference
+                                                Name : Lower = 'key'
+                                            Right : MemberReference
+                                                Name : Lower = 'hash'
+                                    Right : NaturalNumber
+                                Right : Infix
+                                    Op = else
+                                    Left : Infix
+                                        Op = ?.
+                                        Left : MemberReference
+                                            Name : Lower = 'item'
+                                        Right : MemberReference
+                                            Name : Lower = 'hash'
+                                    Right : NaturalNumber
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Integer'
+                    [6] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'A description of the entry in the form `key->item`. If [[item]] is `null`, its string representation'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'string'
+                        Location = Entry.ceylon(73,26)
+                        Definition : Function
+                            Op = =>
+                            Expr : Interpolation
+                                Strings : Strings[#3]
+                                    [0] : StartInterpolationString = ''
+                                    [1] : MidInterpolationString = '->'
+                                    [2] : EndInterpolationString = ''
+                                Expressions : Expressions[#2]
+                                    [0] : MemberReference
+                                        Name : Lower = 'key'
+                                    [1] : Call
+                                        Expr : MemberReference
+                                            Name : Lower = 'stringify'
+                                        Arguments : Positional
+                                            Sequenced : ArgumentList[#1]
+                                                [0] : MemberReference
+                                                    Name : Lower = 'item'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'

@@ -41,15 +41,16 @@
 
             if (prefix.Length > 0)
             {
-                writer.WriteLine(prefix);
+                writer.WriteLine($"namspace {prefix}:");
 
                 using (writer.Indent())
                 {
                     foreach (var dc in GetDeclarations())
                     {
-                        var attrs = dc.IsShared ? "[S]" : "[ ]";
+                        var attrs = new StringBuilder();
+                        attrs.Append(dc.IsShared ? "S" : " ");
 
-                        writer.WriteLine($"{dc.Kind,-15} {attrs}{dc.Name.Text} - {dc.Location}");
+                        writer.WriteLine($"{dc.Kind,-15} [{attrs}] {dc.Name.Text} - {dc.Location}");
                     }
                     var dups = GetDups().ToList();
                     if (dups.Count > 0)

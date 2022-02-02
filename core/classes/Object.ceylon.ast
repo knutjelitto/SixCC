@@ -1,0 +1,133 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Class
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nThe abstract supertype of all types representing definite values. Any two values which are\r\nassign'…
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#2]
+                                [0] : Class
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Basic'
+                                [1] : Class
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Null'
+                    [1] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [2] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Basic types'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+                    [4] : Annotation
+                        Name : Lower = 'abstract'
+            Name : Upper = 'Object'
+            Location = Object.ceylon(35,23)
+            Extends : Extends
+                Instantiation : Instantiation
+                    Class : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Anything'
+            Definition : Block
+                statements : StatementList[#3]
+                    [0] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determine if two values are equal.\r\n     \r\n     For any two non-null objects `x` and `y`, `x.equals('…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'equals'
+                        Location = Object.ceylon(69,27)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'that'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Object'
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [1] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'The hash value of the value, which allows the value to \r\n     be an element of a hash-based set or k'…
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'identityHash'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'hash'
+                        Location = Object.ceylon(91,27)
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Integer'
+                    [2] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'A developer-friendly string representing the instance. \r\n     Concatenates the name of the concrete '…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'string'
+                        Location = Object.ceylon(98,27)
+                        Definition : Function
+                            Op = =>
+                            Expr : Infix
+                                Op = +
+                                Left : Infix
+                                    Op = +
+                                    Left : Call
+                                        Expr : MemberReference
+                                            Name : Lower = 'className'
+                                        Arguments : Positional
+                                            Sequenced : ArgumentList[#1]
+                                                [0] : SelfReference
+                                                    Reference = this
+                                    Right : StandardString = '@'
+                                Right : Call
+                                    Expr : Infix
+                                        Op = .
+                                        Left : TypeReference
+                                            Name : Upper = 'Integer'
+                                        Right : MemberReference
+                                            Name : Lower = 'format'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#2]
+                                            [0] : MemberReference
+                                                Name : Lower = 'hash'
+                                            [1] : NaturalNumber
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'

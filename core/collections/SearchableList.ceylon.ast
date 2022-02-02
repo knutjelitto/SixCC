@@ -1,0 +1,1543 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : StandardString = 'A [[List]] which can be efficiently searched for \r\n occurrences of a given element, or for inclusion'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#2]
+                                [0] : Class
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'String'
+                                [1] : Class
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Array'
+                    [1] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [2] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'SearchableList'
+            Location = SearchableList.ceylon(46,18)
+            TypeParameters : TypeParameters[#1]
+                [0] : TypeParameter
+                    Name : Upper = 'Element'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'List'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Element'
+            Definition : Block
+                statements : StatementList[#10]
+                    [0] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determines if the given [[value|element]] occurs at the \r\n     given index in this list.'
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'occursAt'
+                        Location = SearchableList.ceylon(52,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The index at which the value might occur.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'index'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The value. If null, it is considered to occur\r\n         at any index in this list with a null elemen'…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                        Definition : Function
+                            Op = =>
+                            Expr : Let
+                                Lets : LetVariableList[#1]
+                                    [0] : LetVariable
+                                        Pattern : Variable
+                                            Name : Lower = 'elem'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : Call
+                                                Expr : MemberReference
+                                                    Name : Lower = 'getFromFirst'
+                                                Arguments : Positional
+                                                    Sequenced : ArgumentList[#1]
+                                                        [0] : MemberReference
+                                                            Name : Lower = 'index'
+                                Expr : If
+                                    Conditions : Conditions[#2]
+                                        [0] : Exists
+                                            not = False
+                                            expression : MemberReference
+                                                Name : Lower = 'element'
+                                        [1] : Exists
+                                            not = False
+                                            expression : MemberReference
+                                                Name : Lower = 'elem'
+                                    Then : Prefix
+                                        Op = then
+                                        Right : Infix
+                                            Op = ==
+                                            Left : MemberReference
+                                                Name : Lower = 'elem'
+                                            Right : MemberReference
+                                                Name : Lower = 'element'
+                                    Else : Prefix
+                                        Op = else
+                                        Right : Infix
+                                            Op = &&
+                                            Left : Infix
+                                                Op = &&
+                                                Left : SmallerBounds
+                                                    Left : NaturalNumber
+                                                    Op1 = <=
+                                                    Mid : MemberReference
+                                                        Name : Lower = 'index'
+                                                    Op2 = <
+                                                    Right : MemberReference
+                                                        Name : Lower = 'size'
+                                                Right : Prefix
+                                                    Op = !
+                                                    Right : Exists
+                                                        Expr : MemberReference
+                                                            Name : Lower = 'element'
+                                            Right : Prefix
+                                                Op = !
+                                                Right : Exists
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'elem'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [1] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'The indexes in this list at which the given \r\n     [[value|element]] occurs.'
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'occurrences'
+                        Location = SearchableList.ceylon(67,16)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#3]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The value. If null, it is considered to occur\r\n         at any index in this list with a null elemen'…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [2] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The number of indexes to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'length'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : Infix
+                                                Op = -
+                                                Left : MemberReference
+                                                    Name : Lower = 'size'
+                                                Right : MemberReference
+                                                    Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Function
+                            Op = =>
+                            Expr : Object
+                                Satisfied : Satisfies
+                                    Types : TypeList[#1]
+                                        [0] : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Iterable'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Integer'
+                                Block : Block
+                                    statements : StatementList[#7]
+                                        [0] : InferredAttribute
+                                            Annotations : Annotations
+                                            Name : Lower = 'len'
+                                            Location = SearchableList.ceylon(80,15)
+                                            Definition : Value
+                                                Op = =
+                                                Expr : Infix
+                                                    Op = .
+                                                    Left : SelfReference
+                                                        Reference = outer
+                                                    Right : MemberReference
+                                                        Name : Lower = 'size'
+                                        [1] : InferredAttribute
+                                            Annotations : Annotations
+                                            Name : Lower = 'max'
+                                            Location = SearchableList.ceylon(81,15)
+                                            Definition : Value
+                                                Op = =
+                                                Expr : Infix
+                                                    Op = else
+                                                    Left : Infix
+                                                        Op = then
+                                                        Left : Infix
+                                                            Op = >
+                                                            Left : Infix
+                                                                Op = +
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'from'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'length'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'len'
+                                                        Right : MemberReference
+                                                            Name : Lower = 'len'
+                                                    Right : Infix
+                                                        Op = +
+                                                        Left : MemberReference
+                                                            Name : Lower = 'from'
+                                                        Right : MemberReference
+                                                            Name : Lower = 'length'
+                                        [2] : Specification
+                                            Primary : Call
+                                                Expr : MemberReference
+                                                    Name : Lower = 'iterator'
+                                                Arguments : Positional
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Object
+                                                    Satisfied : Satisfies
+                                                        Types : TypeList[#1]
+                                                            [0] : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Iterator'
+                                                                    Arguments : TypeArgumentList[#1]
+                                                                        [0] : Varianced
+                                                                            Type : TypePath[#1]
+                                                                                [0] : TypeReference
+                                                                                    Name : Upper = 'Integer'
+                                                    Block : Block
+                                                        statements : StatementList[#2]
+                                                            [0] : InferredAttribute
+                                                                Annotations : Annotations
+                                                                    Items : AnnotationList[#1]
+                                                                        [0] : Annotation
+                                                                            Name : Lower = 'variable'
+                                                                Name : Lower = 'index'
+                                                                Location = SearchableList.ceylon(86,28)
+                                                                Definition : Value
+                                                                    Op = =
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'from'
+                                                            [1] : TypedMethod
+                                                                Annotations : Annotations
+                                                                    Items : AnnotationList[#2]
+                                                                        [0] : Annotation
+                                                                            Name : Lower = 'shared'
+                                                                        [1] : Annotation
+                                                                            Name : Lower = 'actual'
+                                                                Name : Lower = 'next'
+                                                                Location = SearchableList.ceylon(87,44)
+                                                                Parameters : ParametersList[#1]
+                                                                Definition : Block
+                                                                    statements : StatementList[#2]
+                                                                        [0] : While
+                                                                            Conditions : Conditions[#1]
+                                                                                [0] : Infix
+                                                                                    Op = <
+                                                                                    Left : MemberReference
+                                                                                        Name : Lower = 'index'
+                                                                                    Right : MemberReference
+                                                                                        Name : Lower = 'max'
+                                                                            Block : Block
+                                                                                statements : StatementList[#1]
+                                                                                    [0] : If
+                                                                                        Conditionals : Conditionals[#1]
+                                                                                            [0] : ConditionalBlock
+                                                                                                Conditions : Conditions[#1]
+                                                                                                    [0] : Call
+                                                                                                        Expr : MemberReference
+                                                                                                            Name : Lower = 'occursAt'
+                                                                                                        Arguments : Positional
+                                                                                                            Sequenced : ArgumentList[#2]
+                                                                                                                [0] : MemberReference
+                                                                                                                    Name : Lower = 'index'
+                                                                                                                [1] : MemberReference
+                                                                                                                    Name : Lower = 'element'
+                                                                                                Block : Block
+                                                                                                    statements : StatementList[#1]
+                                                                                                        [0] : Return
+                                                                                                            Expr : PostfixIncDec
+                                                                                                                Left : MemberReference
+                                                                                                                    Name : Lower = 'index'
+                                                                                                                Op = ++
+                                                                                        ElseBlock : Block
+                                                                                            statements : StatementList[#1]
+                                                                                                [0] : Expression
+                                                                                                    Expr : PostfixIncDec
+                                                                                                        Left : MemberReference
+                                                                                                            Name : Lower = 'index'
+                                                                                                        Op = ++
+                                                                        [1] : Return
+                                                                            Expr : MemberReference
+                                                                                Name : Lower = 'finished'
+                                                                Type : Union
+                                                                    Op = |
+                                                                    Left : TypePath[#1]
+                                                                        [0] : TypeReference
+                                                                            Name : Upper = 'Integer'
+                                                                    Right : TypePath[#1]
+                                                                        [0] : TypeReference
+                                                                            Name : Upper = 'Finished'
+                                        [3] : TypedAttribute
+                                            Annotations : Annotations
+                                                Items : AnnotationList[#2]
+                                                    [0] : Annotation
+                                                        Name : Lower = 'shared'
+                                                    [1] : Annotation
+                                                        Name : Lower = 'actual'
+                                            Name : Lower = 'size'
+                                            Location = SearchableList.ceylon(99,31)
+                                            Definition : Block
+                                                statements : StatementList[#3]
+                                                    [0] : InferredAttribute
+                                                        Annotations : Annotations
+                                                            Items : AnnotationList[#1]
+                                                                [0] : Annotation
+                                                                    Name : Lower = 'variable'
+                                                        Name : Lower = 'size'
+                                                        Location = SearchableList.ceylon(100,28)
+                                                        Definition : Value
+                                                            Op = =
+                                                            Expr : NaturalNumber
+                                                    [1] : For
+                                                        Iterator : ForIterator
+                                                            Variable : Variable
+                                                                Name : Lower = 'index'
+                                                            Containment : Containment
+                                                                Op = in
+                                                                Expr : Infix
+                                                                    Op = :
+                                                                    Left : MemberReference
+                                                                        Name : Lower = 'from'
+                                                                    Right : Infix
+                                                                        Op = -
+                                                                        Left : MemberReference
+                                                                            Name : Lower = 'max'
+                                                                        Right : MemberReference
+                                                                            Name : Lower = 'from'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : If
+                                                                    Conditionals : Conditionals[#1]
+                                                                        [0] : ConditionalBlock
+                                                                            Conditions : Conditions[#1]
+                                                                                [0] : Call
+                                                                                    Expr : MemberReference
+                                                                                        Name : Lower = 'occursAt'
+                                                                                    Arguments : Positional
+                                                                                        Sequenced : ArgumentList[#2]
+                                                                                            [0] : MemberReference
+                                                                                                Name : Lower = 'index'
+                                                                                            [1] : MemberReference
+                                                                                                Name : Lower = 'element'
+                                                                            Block : Block
+                                                                                statements : StatementList[#1]
+                                                                                    [0] : Expression
+                                                                                        Expr : PostfixIncDec
+                                                                                            Left : MemberReference
+                                                                                                Name : Lower = 'size'
+                                                                                            Op = ++
+                                                    [2] : Return
+                                                        Expr : MemberReference
+                                                            Name : Lower = 'size'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Integer'
+                                        [4] : Specification
+                                            Primary : MemberReference
+                                                Name : Lower = 'empty'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'occurs'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#3]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'element'
+                                                            [1] : MemberReference
+                                                                Name : Lower = 'from'
+                                                            [2] : MemberReference
+                                                                Name : Lower = 'length'
+                                        [5] : Specification
+                                            Primary : MemberReference
+                                                Name : Lower = 'first'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'firstOccurrence'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#3]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'element'
+                                                            [1] : MemberReference
+                                                                Name : Lower = 'from'
+                                                            [2] : MemberReference
+                                                                Name : Lower = 'length'
+                                        [6] : Specification
+                                            Primary : MemberReference
+                                                Name : Lower = 'last'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'lastOccurrence'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#3]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'element'
+                                                            [1] : MemberReference
+                                                                Name : Lower = 'from'
+                                                            [2] : MemberReference
+                                                                Name : Lower = 'length'
+                        Type : Iterable
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Integer'
+                                Op = *
+                    [2] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determines if the given [[value|element]] occurs as an \r\n     element of this list, at any index tha'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'occurs'
+                        Location = SearchableList.ceylon(118,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#3]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The value. If null, it is considered to occur\r\n         at any index in this list with a null elemen'…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [2] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The number of indexes to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'length'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : Infix
+                                                Op = -
+                                                Left : MemberReference
+                                                    Name : Lower = 'size'
+                                                Right : MemberReference
+                                                    Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Function
+                            Op = =>
+                            Expr : Exists
+                                Expr : Call
+                                    Expr : MemberReference
+                                        Name : Lower = 'firstOccurrence'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#3]
+                                            [0] : MemberReference
+                                                Name : Lower = 'element'
+                                            [1] : MemberReference
+                                                Name : Lower = 'from'
+                                            [2] : MemberReference
+                                                Name : Lower = 'length'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [3] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'The first index in this list at which the given \r\n     [[value|element]] occurs, that falls within t'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'firstOccurrence'
+                        Location = SearchableList.ceylon(133,14)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#3]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The value. If null, it is considered to occur\r\n         at any index in this list with a null elemen'…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [2] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The number of indexes to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'length'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : Infix
+                                                Op = -
+                                                Left : MemberReference
+                                                    Name : Lower = 'size'
+                                                Right : MemberReference
+                                                    Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#5]
+                                [0] : InferredAttribute
+                                    Annotations : Annotations
+                                        Items : AnnotationList[#1]
+                                            [0] : Annotation
+                                                Name : Lower = 'variable'
+                                    Name : Lower = 'start'
+                                    Location = SearchableList.ceylon(141,24)
+                                    Definition : Value
+                                        Op = =
+                                        Expr : MemberReference
+                                            Name : Lower = 'from'
+                                [1] : InferredAttribute
+                                    Annotations : Annotations
+                                        Items : AnnotationList[#1]
+                                            [0] : Annotation
+                                                Name : Lower = 'variable'
+                                    Name : Lower = 'len'
+                                    Location = SearchableList.ceylon(142,24)
+                                    Definition : Value
+                                        Op = =
+                                        Expr : MemberReference
+                                            Name : Lower = 'length'
+                                [2] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = <
+                                                    Left : MemberReference
+                                                        Name : Lower = 'start'
+                                                    Right : NaturalNumber
+                                            Block : Block
+                                                statements : StatementList[#2]
+                                                    [0] : Expression
+                                                        Expr : Infix
+                                                            Op = +=
+                                                            Left : MemberReference
+                                                                Name : Lower = 'len'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'start'
+                                                    [1] : Expression
+                                                        Expr : Infix
+                                                            Op = =
+                                                            Left : MemberReference
+                                                                Name : Lower = 'start'
+                                                            Right : NaturalNumber
+                                [3] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = >
+                                                    Left : MemberReference
+                                                        Name : Lower = 'len'
+                                                    Right : Infix
+                                                        Op = -
+                                                        Left : MemberReference
+                                                            Name : Lower = 'size'
+                                                        Right : MemberReference
+                                                            Name : Lower = 'start'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Expression
+                                                        Expr : Infix
+                                                            Op = =
+                                                            Left : MemberReference
+                                                                Name : Lower = 'len'
+                                                            Right : Infix
+                                                                Op = -
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'size'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'start'
+                                [4] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'index'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : Infix
+                                                Op = :
+                                                Left : MemberReference
+                                                    Name : Lower = 'start'
+                                                Right : MemberReference
+                                                    Name : Lower = 'len'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Call
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'occursAt'
+                                                                Arguments : Positional
+                                                                    Sequenced : ArgumentList[#2]
+                                                                        [0] : MemberReference
+                                                                            Name : Lower = 'index'
+                                                                        [1] : MemberReference
+                                                                            Name : Lower = 'element'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'index'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'null'
+                        Type : Nullable
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Integer'
+                    [4] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'The last index in this list at which the given \r\n     [[value|element]] occurs, that falls within th'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'lastOccurrence'
+                        Location = SearchableList.ceylon(166,14)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#3]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The value. If null, it is considered to occur\r\n         at any index in this list with a null elemen'…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider, interpreted as\r\n         a reverse index counting from the _end_ of '…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [2] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The number of indexes to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'length'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : Infix
+                                                Op = -
+                                                Left : MemberReference
+                                                    Name : Lower = 'size'
+                                                Right : MemberReference
+                                                    Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#5]
+                                [0] : InferredAttribute
+                                    Annotations : Annotations
+                                        Items : AnnotationList[#1]
+                                            [0] : Annotation
+                                                Name : Lower = 'variable'
+                                    Name : Lower = 'start'
+                                    Location = SearchableList.ceylon(179,24)
+                                    Definition : Value
+                                        Op = =
+                                        Expr : MemberReference
+                                            Name : Lower = 'from'
+                                [1] : InferredAttribute
+                                    Annotations : Annotations
+                                        Items : AnnotationList[#1]
+                                            [0] : Annotation
+                                                Name : Lower = 'variable'
+                                    Name : Lower = 'len'
+                                    Location = SearchableList.ceylon(180,24)
+                                    Definition : Value
+                                        Op = =
+                                        Expr : MemberReference
+                                            Name : Lower = 'length'
+                                [2] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = <
+                                                    Left : MemberReference
+                                                        Name : Lower = 'start'
+                                                    Right : NaturalNumber
+                                            Block : Block
+                                                statements : StatementList[#2]
+                                                    [0] : Expression
+                                                        Expr : Infix
+                                                            Op = +=
+                                                            Left : MemberReference
+                                                                Name : Lower = 'len'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'start'
+                                                    [1] : Expression
+                                                        Expr : Infix
+                                                            Op = =
+                                                            Left : MemberReference
+                                                                Name : Lower = 'start'
+                                                            Right : NaturalNumber
+                                [3] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = >
+                                                    Left : MemberReference
+                                                        Name : Lower = 'len'
+                                                    Right : Infix
+                                                        Op = -
+                                                        Left : MemberReference
+                                                            Name : Lower = 'size'
+                                                        Right : MemberReference
+                                                            Name : Lower = 'start'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Expression
+                                                        Expr : Infix
+                                                            Op = =
+                                                            Left : MemberReference
+                                                                Name : Lower = 'len'
+                                                            Right : Infix
+                                                                Op = -
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'size'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'start'
+                                [4] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'index'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : Infix
+                                                Op = .
+                                                Left : Infix
+                                                    Op = :
+                                                    Left : Infix
+                                                        Op = -
+                                                        Left : Infix
+                                                            Op = -
+                                                            Left : MemberReference
+                                                                Name : Lower = 'size'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'len'
+                                                        Right : MemberReference
+                                                            Name : Lower = 'start'
+                                                    Right : MemberReference
+                                                        Name : Lower = 'len'
+                                                Right : MemberReference
+                                                    Name : Lower = 'reversed'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Call
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'occursAt'
+                                                                Arguments : Positional
+                                                                    Sequenced : ArgumentList[#2]
+                                                                        [0] : MemberReference
+                                                                            Name : Lower = 'index'
+                                                                        [1] : MemberReference
+                                                                            Name : Lower = 'element'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'index'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'null'
+                        Type : Nullable
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Integer'
+                    [5] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determine if the given [[list|sublist]] occurs as a \r\n     sublist at the given index of this list.'
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'includesAt'
+                        Location = SearchableList.ceylon(201,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The index at which the [[sublist]] might occur.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'index'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'sublist'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'List'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : SmallerBounds
+                                                    Left : NaturalNumber
+                                                    Op1 = <=
+                                                    Mid : MemberReference
+                                                        Name : Lower = 'index'
+                                                    Op2 = <=
+                                                    Right : Infix
+                                                        Op = -
+                                                        Left : MemberReference
+                                                            Name : Lower = 'size'
+                                                        Right : Infix
+                                                            Op = .
+                                                            Left : MemberReference
+                                                                Name : Lower = 'sublist'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'size'
+                                            Block : Block
+                                                statements : StatementList[#2]
+                                                    [0] : InferredAttribute
+                                                        Annotations : Annotations
+                                                            Items : AnnotationList[#1]
+                                                                [0] : Annotation
+                                                                    Name : Lower = 'variable'
+                                                        Name : Lower = 'i'
+                                                        Location = SearchableList.ceylon(206,28)
+                                                        Definition : Value
+                                                            Op = =
+                                                            Expr : MemberReference
+                                                                Name : Lower = 'index'
+                                                    [1] : For
+                                                        Iterator : ForIterator
+                                                            Variable : Variable
+                                                                Name : Lower = 'element'
+                                                            Containment : Containment
+                                                                Op = in
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'sublist'
+                                                        Block : Block
+                                                            statements : StatementList[#2]
+                                                                [0] : If
+                                                                    Conditionals : Conditionals[#1]
+                                                                        [0] : ConditionalBlock
+                                                                            Conditions : Conditions[#1]
+                                                                                [0] : Exists
+                                                                                    not = False
+                                                                                    expression : MemberReference
+                                                                                        Name : Lower = 'element'
+                                                                            Block : Block
+                                                                                statements : StatementList[#1]
+                                                                                    [0] : If
+                                                                                        Conditionals : Conditionals[#1]
+                                                                                            [0] : ConditionalBlock
+                                                                                                Conditions : Conditions[#1]
+                                                                                                    [0] : Prefix
+                                                                                                        Op = !
+                                                                                                        Right : Call
+                                                                                                            Expr : MemberReference
+                                                                                                                Name : Lower = 'occursAt'
+                                                                                                            Arguments : Positional
+                                                                                                                Sequenced : ArgumentList[#2]
+                                                                                                                    [0] : MemberReference
+                                                                                                                        Name : Lower = 'i'
+                                                                                                                    [1] : MemberReference
+                                                                                                                        Name : Lower = 'element'
+                                                                                                Block : Block
+                                                                                                    statements : StatementList[#1]
+                                                                                                        [0] : Return
+                                                                                                            Expr : MemberReference
+                                                                                                                Name : Lower = 'false'
+                                                                    ElseBlock : Block
+                                                                        statements : StatementList[#2]
+                                                                            [0] : Assertion
+                                                                                Conditions : Conditions[#1]
+                                                                                    [0] : Is
+                                                                                        not = False
+                                                                                        type : TypePath[#1]
+                                                                                            [0] : TypeReference
+                                                                                                Name : Upper = 'Element'
+                                                                                        variable : ConditionVariable
+                                                                                            Name : Lower = 'null'
+                                                                            [1] : If
+                                                                                Conditionals : Conditionals[#1]
+                                                                                    [0] : ConditionalBlock
+                                                                                        Conditions : Conditions[#1]
+                                                                                            [0] : Prefix
+                                                                                                Op = !
+                                                                                                Right : Call
+                                                                                                    Expr : MemberReference
+                                                                                                        Name : Lower = 'occursAt'
+                                                                                                    Arguments : Positional
+                                                                                                        Sequenced : ArgumentList[#2]
+                                                                                                            [0] : MemberReference
+                                                                                                                Name : Lower = 'i'
+                                                                                                            [1] : MemberReference
+                                                                                                                Name : Lower = 'null'
+                                                                                        Block : Block
+                                                                                            statements : StatementList[#1]
+                                                                                                [0] : Return
+                                                                                                    Expr : MemberReference
+                                                                                                        Name : Lower = 'false'
+                                                                [1] : Expression
+                                                                    Expr : PostfixIncDec
+                                                                        Left : MemberReference
+                                                                            Name : Lower = 'i'
+                                                                        Op = ++
+                                                        ElseBlock : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'true'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'false'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [6] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'The indexes in this list at which the given \r\n     [[list|sublist]] occurs as a sublist, that are gr'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'inclusions'
+                        Location = SearchableList.ceylon(234,16)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'sublist'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'List'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Function
+                            Op = =>
+                            Expr : Object
+                                Satisfied : Satisfies
+                                    Types : TypeList[#1]
+                                        [0] : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Iterable'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Integer'
+                                Block : Block
+                                    statements : StatementList[#6]
+                                        [0] : InferredAttribute
+                                            Annotations : Annotations
+                                            Name : Lower = 'len'
+                                            Location = SearchableList.ceylon(242,15)
+                                            Definition : Value
+                                                Op = =
+                                                Expr : Infix
+                                                    Op = .
+                                                    Left : SelfReference
+                                                        Reference = outer
+                                                    Right : MemberReference
+                                                        Name : Lower = 'size'
+                                        [1] : Specification
+                                            Primary : Call
+                                                Expr : MemberReference
+                                                    Name : Lower = 'iterator'
+                                                Arguments : Positional
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Object
+                                                    Satisfied : Satisfies
+                                                        Types : TypeList[#1]
+                                                            [0] : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Iterator'
+                                                                    Arguments : TypeArgumentList[#1]
+                                                                        [0] : Varianced
+                                                                            Type : TypePath[#1]
+                                                                                [0] : TypeReference
+                                                                                    Name : Upper = 'Integer'
+                                                    Block : Block
+                                                        statements : StatementList[#3]
+                                                            [0] : InferredAttribute
+                                                                Annotations : Annotations
+                                                                Name : Lower = 'max'
+                                                                Location = SearchableList.ceylon(245,19)
+                                                                Definition : Value
+                                                                    Op = =
+                                                                    Expr : Infix
+                                                                        Op = -
+                                                                        Left : Infix
+                                                                            Op = +
+                                                                            Left : MemberReference
+                                                                                Name : Lower = 'len'
+                                                                            Right : NaturalNumber
+                                                                        Right : Infix
+                                                                            Op = .
+                                                                            Left : MemberReference
+                                                                                Name : Lower = 'sublist'
+                                                                            Right : MemberReference
+                                                                                Name : Lower = 'size'
+                                                            [1] : InferredAttribute
+                                                                Annotations : Annotations
+                                                                    Items : AnnotationList[#1]
+                                                                        [0] : Annotation
+                                                                            Name : Lower = 'variable'
+                                                                Name : Lower = 'index'
+                                                                Location = SearchableList.ceylon(246,28)
+                                                                Definition : Value
+                                                                    Op = =
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'from'
+                                                            [2] : TypedMethod
+                                                                Annotations : Annotations
+                                                                    Items : AnnotationList[#2]
+                                                                        [0] : Annotation
+                                                                            Name : Lower = 'shared'
+                                                                        [1] : Annotation
+                                                                            Name : Lower = 'actual'
+                                                                Name : Lower = 'next'
+                                                                Location = SearchableList.ceylon(247,44)
+                                                                Parameters : ParametersList[#1]
+                                                                Definition : Block
+                                                                    statements : StatementList[#2]
+                                                                        [0] : While
+                                                                            Conditions : Conditions[#1]
+                                                                                [0] : Infix
+                                                                                    Op = <
+                                                                                    Left : MemberReference
+                                                                                        Name : Lower = 'index'
+                                                                                    Right : MemberReference
+                                                                                        Name : Lower = 'max'
+                                                                            Block : Block
+                                                                                statements : StatementList[#1]
+                                                                                    [0] : If
+                                                                                        Conditionals : Conditionals[#1]
+                                                                                            [0] : ConditionalBlock
+                                                                                                Conditions : Conditions[#1]
+                                                                                                    [0] : Call
+                                                                                                        Expr : MemberReference
+                                                                                                            Name : Lower = 'includesAt'
+                                                                                                        Arguments : Positional
+                                                                                                            Sequenced : ArgumentList[#2]
+                                                                                                                [0] : MemberReference
+                                                                                                                    Name : Lower = 'index'
+                                                                                                                [1] : MemberReference
+                                                                                                                    Name : Lower = 'sublist'
+                                                                                                Block : Block
+                                                                                                    statements : StatementList[#1]
+                                                                                                        [0] : Return
+                                                                                                            Expr : PostfixIncDec
+                                                                                                                Left : MemberReference
+                                                                                                                    Name : Lower = 'index'
+                                                                                                                Op = ++
+                                                                                        ElseBlock : Block
+                                                                                            statements : StatementList[#1]
+                                                                                                [0] : Expression
+                                                                                                    Expr : PostfixIncDec
+                                                                                                        Left : MemberReference
+                                                                                                            Name : Lower = 'index'
+                                                                                                        Op = ++
+                                                                        [1] : Return
+                                                                            Expr : MemberReference
+                                                                                Name : Lower = 'finished'
+                                                                Type : Union
+                                                                    Op = |
+                                                                    Left : TypePath[#1]
+                                                                        [0] : TypeReference
+                                                                            Name : Upper = 'Integer'
+                                                                    Right : TypePath[#1]
+                                                                        [0] : TypeReference
+                                                                            Name : Upper = 'Finished'
+                                        [2] : TypedAttribute
+                                            Annotations : Annotations
+                                                Items : AnnotationList[#2]
+                                                    [0] : Annotation
+                                                        Name : Lower = 'shared'
+                                                    [1] : Annotation
+                                                        Name : Lower = 'actual'
+                                            Name : Lower = 'size'
+                                            Location = SearchableList.ceylon(259,31)
+                                            Definition : Block
+                                                statements : StatementList[#3]
+                                                    [0] : InferredAttribute
+                                                        Annotations : Annotations
+                                                            Items : AnnotationList[#1]
+                                                                [0] : Annotation
+                                                                    Name : Lower = 'variable'
+                                                        Name : Lower = 'size'
+                                                        Location = SearchableList.ceylon(260,28)
+                                                        Definition : Value
+                                                            Op = =
+                                                            Expr : NaturalNumber
+                                                    [1] : For
+                                                        Iterator : ForIterator
+                                                            Variable : Variable
+                                                                Name : Lower = 'index'
+                                                            Containment : Containment
+                                                                Op = in
+                                                                Expr : Infix
+                                                                    Op = :
+                                                                    Left : MemberReference
+                                                                        Name : Lower = 'from'
+                                                                    Right : Infix
+                                                                        Op = -
+                                                                        Left : Infix
+                                                                            Op = +
+                                                                            Left : Infix
+                                                                                Op = -
+                                                                                Left : MemberReference
+                                                                                    Name : Lower = 'len'
+                                                                                Right : MemberReference
+                                                                                    Name : Lower = 'from'
+                                                                            Right : NaturalNumber
+                                                                        Right : Infix
+                                                                            Op = .
+                                                                            Left : MemberReference
+                                                                                Name : Lower = 'sublist'
+                                                                            Right : MemberReference
+                                                                                Name : Lower = 'size'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : If
+                                                                    Conditionals : Conditionals[#1]
+                                                                        [0] : ConditionalBlock
+                                                                            Conditions : Conditions[#1]
+                                                                                [0] : Call
+                                                                                    Expr : MemberReference
+                                                                                        Name : Lower = 'includesAt'
+                                                                                    Arguments : Positional
+                                                                                        Sequenced : ArgumentList[#2]
+                                                                                            [0] : MemberReference
+                                                                                                Name : Lower = 'index'
+                                                                                            [1] : MemberReference
+                                                                                                Name : Lower = 'sublist'
+                                                                            Block : Block
+                                                                                statements : StatementList[#1]
+                                                                                    [0] : Expression
+                                                                                        Expr : PostfixIncDec
+                                                                                            Left : MemberReference
+                                                                                                Name : Lower = 'size'
+                                                                                            Op = ++
+                                                    [2] : Return
+                                                        Expr : MemberReference
+                                                            Name : Lower = 'size'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Integer'
+                                        [3] : Specification
+                                            Primary : MemberReference
+                                                Name : Lower = 'empty'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'includes'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#2]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'sublist'
+                                                            [1] : MemberReference
+                                                                Name : Lower = 'from'
+                                        [4] : Specification
+                                            Primary : MemberReference
+                                                Name : Lower = 'first'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'firstInclusion'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#2]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'sublist'
+                                                            [1] : MemberReference
+                                                                Name : Lower = 'from'
+                                        [5] : Specification
+                                            Primary : MemberReference
+                                                Name : Lower = 'last'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'lastInclusion'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#2]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'sublist'
+                                                            [1] : MemberReference
+                                                                Name : Lower = 'from'
+                        Type : Iterable
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Integer'
+                                Op = *
+                    [7] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determine if the given [[list|sublist]] occurs as a \r\n     sublist at some index in this list, at an'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'includes'
+                        Location = SearchableList.ceylon(278,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'sublist'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'List'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Function
+                            Op = =>
+                            Expr : Exists
+                                Expr : Call
+                                    Expr : MemberReference
+                                        Name : Lower = 'firstInclusion'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#2]
+                                            [0] : MemberReference
+                                                Name : Lower = 'sublist'
+                                            [1] : MemberReference
+                                                Name : Lower = 'from'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [8] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'The first index in this list at which the given \r\n     [[list|sublist]] occurs as a sublist, that is'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'firstInclusion'
+                        Location = SearchableList.ceylon(287,14)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'sublist'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'List'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider.'
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'index'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : Infix
+                                                Op = :
+                                                Left : MemberReference
+                                                    Name : Lower = 'from'
+                                                Right : Infix
+                                                    Op = -
+                                                    Left : Infix
+                                                        Op = +
+                                                        Left : Infix
+                                                            Op = -
+                                                            Left : MemberReference
+                                                                Name : Lower = 'size'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'from'
+                                                        Right : NaturalNumber
+                                                    Right : Infix
+                                                        Op = .
+                                                        Left : MemberReference
+                                                            Name : Lower = 'sublist'
+                                                        Right : MemberReference
+                                                            Name : Lower = 'size'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Call
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'includesAt'
+                                                                Arguments : Positional
+                                                                    Sequenced : ArgumentList[#2]
+                                                                        [0] : MemberReference
+                                                                            Name : Lower = 'index'
+                                                                        [1] : MemberReference
+                                                                            Name : Lower = 'sublist'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'index'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'null'
+                        Type : Nullable
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Integer'
+                    [9] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'The last index in this list at which the given \r\n     [[list|sublist]] occurs as a sublist, that fal'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'lastInclusion'
+                        Location = SearchableList.ceylon(306,14)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'sublist'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'List'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                        Doc : StandardString = 'The smallest index to consider, interpreted as\r\n         a reverse index counting from the _end_ of '…
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Specifier : Value
+                                            Op = =
+                                            Expr : NaturalNumber
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'index'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : Infix
+                                                Op = .
+                                                Left : Infix
+                                                    Op = :
+                                                    Left : NaturalNumber
+                                                    Right : Infix
+                                                        Op = -
+                                                        Left : Infix
+                                                            Op = +
+                                                            Left : Infix
+                                                                Op = -
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'size'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'from'
+                                                            Right : NaturalNumber
+                                                        Right : Infix
+                                                            Op = .
+                                                            Left : MemberReference
+                                                                Name : Lower = 'sublist'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'size'
+                                                Right : MemberReference
+                                                    Name : Lower = 'reversed'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Call
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'includesAt'
+                                                                Arguments : Positional
+                                                                    Sequenced : ArgumentList[#2]
+                                                                        [0] : MemberReference
+                                                                            Name : Lower = 'index'
+                                                                        [1] : MemberReference
+                                                                            Name : Lower = 'sublist'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'index'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'null'
+                        Type : Nullable
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Integer'

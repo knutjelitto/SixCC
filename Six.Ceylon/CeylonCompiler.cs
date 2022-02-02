@@ -12,22 +12,24 @@ namespace Six.Ceylon
 {
     public class CeylonCompiler : Compiler<CeylonParser>
     {
-        private readonly CompilerConfiguration configuration;
+        private readonly CompilerConfiguration Configuration;
         private readonly CeylonVisitor visitor;
         private readonly Typer typer;
+        private readonly Sema.Context context;
         private readonly List<SourceFile> files = new();
 
         public CeylonCompiler(CompilerConfiguration configuration)
         {
-            if (configuration.WithRuleIndex)
+            Configuration = configuration;
+
+            if (Configuration.WithRuleIndex)
             {
                 ruleIndex = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
             }
 
-            this.configuration = configuration;
-
+            context = new Sema.Context();
             visitor = new CeylonVisitor();
-            typer = new Typer(new NamespaceScope(null, ""), new Reflector());
+            typer = new Typer(context);
         }
 
         public void Report()
@@ -89,11 +91,11 @@ namespace Six.Ceylon
                     }
                 }
 
-                if (configuration.BuildTypes)
+                if (Configuration.BuildTypes)
                 {
                     using (var writer = $"{parser.__Name}-Typer.txt".Writer())
                     {
-                        typer.Root.Dump(writer);
+                        typer.Dump(writer);
                     }
                 }
             }
@@ -130,12 +132,12 @@ namespace Six.Ceylon
 
             if (ok)
             {
-                if (configuration.BuildAst)
+                if (Configuration.BuildAst)
                 {
                     visitor.Walk(file);
                 }
 
-                if (configuration.DumpSppf && file.Sppf != null)
+                if (Configuration.DumpSppf && file.Sppf != null)
                 {
                     using (var writer = $"{file.ShortPath}.sppf".Writer())
                     {
@@ -144,7 +146,7 @@ namespace Six.Ceylon
                 }
                 file.Sppf = null;
 
-                if (configuration.DumpTree && file.Tree != null)
+                if (Configuration.DumpTree && file.Tree != null)
                 {
                     using (var writer = $"{file.ShortPath}.tree".Writer())
                     {
@@ -159,7 +161,7 @@ namespace Six.Ceylon
                         new Dumper(writer, typer.Ref).Dump(file.Tree.Value);
                     }
 
-                    if (configuration.BuildTypes)
+                    if (Configuration.BuildTypes)
                     {
                         if (file.Tree?.Value is AstNode root)
                         {

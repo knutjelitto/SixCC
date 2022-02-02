@@ -1,4 +1,6 @@
-﻿namespace Six.Ceylon.Sema
+﻿using System;
+
+namespace Six.Ceylon.Sema
 {
     public interface Dc
     {
@@ -8,12 +10,18 @@
         string Location { get; }
         bool IsShared { get; }
 
-        public static Dc Create(Ast.Decl declaration)
+        public static IDisposable Create(Context context, Ast.Decl declaration)
         {
-            return new Named(declaration);
+            var scope = new DeclarationScope(context.Current);
+
+            var dc = new Named(context, scope, declaration);
+
+            context.Current.Declare(dc);
+
+            return context.Push(scope);
         }
 
-        private record Named(Ast.Decl Declaration) : Dc
+        private record Named(Context Context, IScope Scope, Ast.Decl Declaration) : Dc
         {
             private bool? isShared = null;
 

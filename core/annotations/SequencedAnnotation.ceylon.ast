@@ -1,0 +1,97 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nAn annotation that may occur multiple times at a given program element, and only on certain progra'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Annotation'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'SequencedAnnotation'
+            Location = SequencedAnnotation.ceylon(27,18)
+            TypeParameters : TypeParameters[#3]
+                [0] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Value'
+                [1] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'ProgramElement'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Annotated'
+                [2] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Type'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Anything'
+            CaseTypes : CaseTypes
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Value'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'ConstrainedAnnotation'
+                            Arguments : TypeArgumentList[#4]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Value'
+                                [1] : Varianced
+                                    Type : Array
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Value'
+                                [2] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ProgramElement'
+                                [3] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Type'
+            Constraints : TypeConstraints[#2]
+                [0] : TypeConstraint
+                    Name : Upper = 'Value'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'SequencedAnnotation'
+                                    Arguments : TypeArgumentList[#3]
+                                        [0] : Varianced
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Value'
+                                        [1] : Varianced
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'ProgramElement'
+                                        [2] : Varianced
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Type'
+                [1] : TypeConstraint
+                    Name : Upper = 'ProgramElement'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Annotated'
+            Definition : Block

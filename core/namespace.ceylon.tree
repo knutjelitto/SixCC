@@ -1,0 +1,31 @@
+CXStart
+    CCodeUnit
+        CNamespace
+            CAnnotations
+                ROptional<ICStringLiteral>
+                    CVerbatimString{'\"\"\"\r\nThe root package of the Ceylon language module, functioning as the core of the [Ceylon platform][sdk], and covering the\r\nfollowing areas of functionality:\r\n\r\n- the foundational types [[Anything]], [[Object]], and [[Null]], and a [[logical boolean|Boolean]] type,\r\n- abstractions of [[numeric|Numeric]] types, along with basic types representing [[integral|Integer]] and \r\n  [[floating point|Float]] values,\r\n- [[characters|Character]] and [[character strings|String]],\r\n- [[unsigned bytes|Byte]],\r\n- support for functional programming with [[streams|Iterable]],\r\n- abstract interfaces for unmodifiable [[lists|List]], [[sets|Set]], and [[maps|Map]],\r\n- a low-level abstraction of native [[arrays|Array]],\r\n- immutable [[sequences|Sequential]], [[ranges|Range]], and [[tuples|Tuple]], which provide the foundation for\r\n  representing [[function types|Callable]] and lists offunction arguments,\r\n- generic higher-order functions, including for function [[composition|compose]] and [[partial application|curry]],\r\n- [[exceptions|Throwable]] and support for management of heavyweight [[destroyable|Destroyable]] and\r\n  [[obtainable|Obtainable]] objects,\r\n- support for loading [[resources|Resource]] packaged with a module,\r\n- access to information about the current [[virtual machine|runtime]], [[system|system]], [[process]], and\r\n  [[operating system|system]], and\r\n- support for definition of [[annotations|Annotation]].\r\n\r\nFinally, this module defines the [[most useful and interesting void function of all time ever|print]].\r\n\r\nDeclarations belonging to this package need not be explicitly imported by other source files.\r\n\r\n[sdk]: https://modules.ceylon-lang.org/categories/SDK\r\n\"\"\"'}
+                RStar<CAnnotation>
+                    CAnnotation
+                        CLowerIdentifier{'by'}
+                        ROptional<ICArguments>
+                            CPositionalArguments
+                                RLiteral{'('}
+                                ROptional<CSequencedArgumentList>
+                                    CSequencedArgumentList
+                                        CLiteralString{'\"Gavin King\"'}
+                                        CLiteralString{'\"Tom Bentley\"'}
+                                        CLiteralString{'\"Tako Schotanus\"'}
+                                        CLiteralString{'\"Stephane Epardaud\"'}
+                                        CLiteralString{'\"Enrique Zamudio\"'}
+                                RLiteral{')'}
+                    CAnnotation
+                        CLowerIdentifier{'shared'}
+                        ROptional<ICArguments>
+            RLiteral{'namespace'}
+            CNamespacePath
+                CIdentifier{'six'}
+                CIdentifier{'core'}
+            RLiteral{';'}
+        CImports
+        CTopDeclarations
+    REof{'\r\n'}

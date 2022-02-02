@@ -9,7 +9,7 @@ namespace Six.Ceylon.Visitor
         {
             var statements = element.Children.Select(child => Walk<Stmt>(child));
 
-            element.Value = new StatementList(statements);
+            element.Value = new Statements(statements);
         }
 
         protected override void Visit(CUnclosedStatement element)

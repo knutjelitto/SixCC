@@ -1,0 +1,2020 @@
+Top : Unit
+    Imports : Imports[#1]
+        [0] : Import
+            Path : Identifiers[#4]
+                [0] : Any = 'six'
+                [1] : Any = 'core'
+                [2] : Any = 'meta'
+                [3] : Any = 'declaration'
+            Elements : ElementList[#11]
+                [0] : Named
+                    Name : Any = 'Module'
+                [1] : Named
+                    Name : Any = 'Package'
+                [2] : Named
+                    Name : Any = 'Import'
+                [3] : Named
+                    Name : Any = 'ClassDeclaration'
+                [4] : Named
+                    Name : Any = 'ClassOrInterfaceDeclaration'
+                [5] : Named
+                    Name : Any = 'ConstructorDeclaration'
+                [6] : Named
+                    Name : Any = 'FunctionDeclaration'
+                [7] : Named
+                    Name : Any = 'Declaration'
+                [8] : Named
+                    Name : Any = 'ValueDeclaration'
+                [9] : Named
+                    Name : Any = 'FunctionOrValueDeclaration'
+                [10] : Named
+                    Name : Any = 'AliasDeclaration'
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#56]
+        [0] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[annotation]] meta-annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'AnnotationAnnotation'
+            Location = annotations.ceylon(28,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'AnnotationAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ClassDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'FunctionDeclaration'
+            Definition : Block
+        [1] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a class as an *annotation class*, or a top-level function as an *annotation const'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Annotation'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'annotation'
+            Location = annotations.ceylon(35,40)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'AnnotationAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'AnnotationAnnotation'
+        [2] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[shared]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SharedAnnotation'
+            Location = annotations.ceylon(38,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SharedAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : Union
+                                            Op = |
+                                            Left : Union
+                                                Op = |
+                                                Left : Union
+                                                    Op = |
+                                                    Left : TypePath[#1]
+                                                        [0] : TypeReference
+                                                            Name : Upper = 'FunctionOrValueDeclaration'
+                                                    Right : TypePath[#1]
+                                                        [0] : TypeReference
+                                                            Name : Upper = 'ClassOrInterfaceDeclaration'
+                                                Right : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'ConstructorDeclaration'
+                                            Right : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Package'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Import'
+            Definition : Block
+        [3] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a declaration as shared. A `shared`  declaration is visible outside the block of\r'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'shared'
+            Location = annotations.ceylon(47,36)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SharedAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SharedAnnotation'
+        [4] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[restricted]] annotation.'
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.3'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'sealed'
+                    [4] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'RestrictedAnnotation'
+            Location = annotations.ceylon(51,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The modules to which this declaration is visible.'
+                    Declaration : TypedValue
+                        Name : Lower = 'modules'
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Module'
+                            Op = *
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'RestrictedAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : Union
+                                            Op = |
+                                            Left : Union
+                                                Op = |
+                                                Left : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'FunctionOrValueDeclaration'
+                                                Right : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'ClassOrInterfaceDeclaration'
+                                            Right : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'ConstructorDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Package'
+            Definition : Block
+        [5] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to restrict the visibility of a declaration or package to a given list\r\n of [[modules]]. '…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.3'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'restricted'
+            Location = annotations.ceylon(64,40)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The modules to which this declaration is visible.'
+                        Declaration : TypedValue
+                            Name : Lower = 'modules'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Module'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'RestrictedAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'modules'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'RestrictedAnnotation'
+        [6] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[variable]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'VariableAnnotation'
+            Location = annotations.ceylon(70,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'VariableAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ValueDeclaration'
+            Definition : Block
+        [7] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a value as variable. A `variable` value may be assigned\r\n multiple times.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'variable'
+            Location = annotations.ceylon(76,38)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'VariableAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'VariableAnnotation'
+        [8] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[abstract]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'AbstractAnnotation'
+            Location = annotations.ceylon(79,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'AbstractAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ClassDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ConstructorDeclaration'
+            Definition : Block
+        [9] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a class as abstract. An `abstract` class may have `formal`\r\n members, but may not'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'abstract'
+            Location = annotations.ceylon(87,38)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'AbstractAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'AbstractAnnotation'
+        [10] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[final]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'FinalAnnotation'
+            Location = annotations.ceylon(90,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'FinalAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ClassDeclaration'
+            Definition : Block
+        [11] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a class as final. A `final` class may not be extended. Marking\r\n a class as `fina'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'final'
+            Location = annotations.ceylon(96,35)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'FinalAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'FinalAnnotation'
+        [12] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[sealed]] annotation.'
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.1.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'sealed'
+                    [4] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SealedAnnotation'
+            Location = annotations.ceylon(100,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SealedAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ClassOrInterfaceDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ConstructorDeclaration'
+            Definition : Block
+        [13] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark an interface, class, or constructor as sealed. A `sealed`\r\n interface may not be '…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.1.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'sealed'
+            Location = annotations.ceylon(111,36)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SealedAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SealedAnnotation'
+        [14] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[actual]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'ActualAnnotation'
+            Location = annotations.ceylon(114,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ActualAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'FunctionOrValueDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ClassDeclaration'
+            Definition : Block
+        [15] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a member of a type as refining a member of a supertype.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'actual'
+            Location = annotations.ceylon(120,36)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'ActualAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'ActualAnnotation'
+        [16] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[formal]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'FormalAnnotation'
+            Location = annotations.ceylon(123,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'FormalAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'FunctionOrValueDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ClassDeclaration'
+            Definition : Block
+        [17] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a member whose implementation must be provided by subtypes.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'formal'
+            Location = annotations.ceylon(129,36)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'FormalAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'FormalAnnotation'
+        [18] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[default]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'DefaultAnnotation'
+            Location = annotations.ceylon(132,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'DefaultAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'FunctionOrValueDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ClassDeclaration'
+            Definition : Block
+        [19] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a member whose implementation may be refined by subtypes.\r\n Non-`default` declara'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'default'
+            Location = annotations.ceylon(139,37)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'DefaultAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'DefaultAnnotation'
+        [20] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[static]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'StaticAnnotation'
+            Location = annotations.ceylon(142,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'StaticAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : Union
+                                            Op = |
+                                            Left : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'FunctionOrValueDeclaration'
+                                            Right : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'ClassOrInterfaceDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'AliasDeclaration'
+            Definition : Block
+        [21] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a member of a toplevel class as static. A `static` member does\r\n not have access '…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'static'
+            Location = annotations.ceylon(177,36)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'StaticAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'StaticAnnotation'
+        [22] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[late]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'LateAnnotation'
+            Location = annotations.ceylon(180,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'LateAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ValueDeclaration'
+            Definition : Block
+        [23] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to disable definite initialization analysis for an attribute of a\r\n class, or for a tople'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'late'
+            Location = annotations.ceylon(223,34)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'LateAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'LateAnnotation'
+        [24] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[native]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'NativeAnnotation'
+            Location = annotations.ceylon(226,38)
+            Parameters : Parameters[#1]
+                [0] : Reference
+                    Name : Lower = 'backends'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'NativeAnnotation'
+            Definition : Block
+                statements : StatementList[#1]
+                    [0] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'The compiler backend(s) that this native annotation applies to, or the empty\r\n     sequence to decla'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'since'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : StandardString = '1.2.0'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'backends'
+                        Location = annotations.ceylon(232,20)
+                        Definition : Null
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+                            Op = *
+        [25] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark a module, import, or declaration as platform-native.\r\n \r\n For example, this code '…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'native'
+            Location = annotations.ceylon(254,36)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'since'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : StandardString = '1.2.0'
+                        Declaration : TypedValue
+                            Name : Lower = 'backends'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'String'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'NativeAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'backends'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'NativeAnnotation'
+        [26] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[doc]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'DocAnnotation'
+            Location = annotations.ceylon(268,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'Documentation, in Markdown syntax, describing the \r\n     annotated program element'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'description'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'DocAnnotation'
+            Definition : Block
+        [27] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify API documentation of a program \r\n element. The `doc` annotation need not be ex'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'doc'
+            Location = annotations.ceylon(287,33)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'Documentation, in Markdown syntax, describing the \r\n     annotated program element'
+                        Declaration : TypedValue
+                            Name : Lower = 'description'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'DocAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : MemberReference
+                                Name : Lower = 'description'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'DocAnnotation'
+        [28] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[see]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SeeAnnotation'
+            Location = annotations.ceylon(294,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The program elements being referred to.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'programElements'
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Declaration'
+                            Op = *
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'SequencedAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SeeAnnotation'
+            Definition : Block
+        [29] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify references to other program elements\r\n related to the annotated API.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'see'
+            Location = annotations.ceylon(301,33)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The program elements being referred to.'
+                        Declaration : TypedValue
+                            Name : Lower = 'programElements'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Declaration'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SeeAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'programElements'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SeeAnnotation'
+        [30] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[by]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'AuthorsAnnotation'
+            Location = annotations.ceylon(307,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The authors, in Markdown syntax, of the annotated \r\n     program element'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'authors'
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+                            Op = *
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'AuthorsAnnotation'
+            Definition : Block
+        [31] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to document the authors of an API.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'by'
+            Location = annotations.ceylon(314,37)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The authors, in Markdown syntax, of the annotated \r\n     program element'
+                        Declaration : TypedValue
+                            Name : Lower = 'authors'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'String'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'AuthorsAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'authors'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'AuthorsAnnotation'
+        [32] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[throws]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'ThrownExceptionAnnotation'
+            Location = annotations.ceylon(321,38)
+            Parameters : Parameters[#2]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The [[Exception]] type that is thrown.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'type'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Declaration'
+                [1] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'A description, in Markdown syntax, of the circumstances \r\n     that cause this exception to be throw'…
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'when'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'SequencedAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ThrownExceptionAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : Union
+                                            Op = |
+                                            Left : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'FunctionOrValueDeclaration'
+                                            Right : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'ClassDeclaration'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'ConstructorDeclaration'
+            Definition : Block
+        [33] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to document the exception types thrown by a \r\n function, value, class, or constructor.\r\n '…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'throws'
+            Location = annotations.ceylon(337,45)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#2]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The [[Exception]] type that is thrown.'
+                        Declaration : TypedValue
+                            Name : Lower = 'type'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Declaration'
+                    [1] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'A description, in Markdown syntax, of the circumstances \r\n     that cause this exception to be throw'…
+                        Declaration : TypedValue
+                            Name : Lower = 'when'
+                            Specifier : Value
+                                Op = =
+                                Expr : StandardString = ''
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'ThrownExceptionAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#2]
+                            [0] : MemberReference
+                                Name : Lower = 'type'
+                            [1] : MemberReference
+                                Name : Lower = 'when'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'ThrownExceptionAnnotation'
+        [34] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[deprecated]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'DeprecationAnnotation'
+            Location = annotations.ceylon(346,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'A description, in Markdown syntax, of why the program \r\n     element is deprecated, and of what alte'…
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'description'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'DeprecationAnnotation'
+            Definition : Block
+                statements : StatementList[#1]
+                    [0] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'A description, in Markdown syntax, of why the program \r\n     element is deprecated, and what alterna'…
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'reason'
+                        Location = annotations.ceylon(355,20)
+                        Definition : Function
+                            Op = =>
+                            Expr : Infix
+                                Op = then
+                                Left : Prefix
+                                    Op = !
+                                    Right : Infix
+                                        Op = .
+                                        Left : MemberReference
+                                            Name : Lower = 'description'
+                                        Right : MemberReference
+                                            Name : Lower = 'empty'
+                                Right : MemberReference
+                                    Name : Lower = 'description'
+                        Type : Nullable
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+        [35] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to mark program elements which should not be \r\n used anymore.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'deprecated'
+            Location = annotations.ceylon(361,41)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'A description, in Markdown syntax, of why the program \r\n     element is deprecated, and what alterna'…
+                        Declaration : TypedValue
+                            Name : Lower = 'reason'
+                            Specifier : Value
+                                Op = =
+                                Expr : StandardString = ''
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'DeprecationAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : MemberReference
+                                Name : Lower = 'reason'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'DeprecationAnnotation'
+        [36] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[tagged]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'TagsAnnotation'
+            Location = annotations.ceylon(369,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The tags, in plain text.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'tags'
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+                            Op = *
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'TagsAnnotation'
+            Definition : Block
+        [37] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to categorize an API by tag.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'tagged'
+            Location = annotations.ceylon(375,34)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The tags, in plain text.'
+                        Declaration : TypedValue
+                            Name : Lower = 'tags'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'String'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'TagsAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'tags'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'TagsAnnotation'
+        [38] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[aliased]] annotation.'
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'sealed'
+                    [4] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'AliasesAnnotation'
+            Location = annotations.ceylon(382,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The aliases, in plain text.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'aliases'
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+                            Op = *
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'AliasesAnnotation'
+            Definition : Block
+        [39] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify a list of aliases that tools such as \r\n auto-completion and quick-fixes should'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'aliased'
+            Location = annotations.ceylon(391,37)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The aliases, in plain text.'
+                        Declaration : TypedValue
+                            Name : Lower = 'aliases'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'String'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'AliasesAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'aliases'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'AliasesAnnotation'
+        [40] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[license]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'LicenseAnnotation'
+            Location = annotations.ceylon(397,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The name, text, or URL of the license.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'description'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'LicenseAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Module'
+            Definition : Block
+        [41] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify the URL of the license of a module or \r\n package.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'license'
+            Location = annotations.ceylon(405,37)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The name, text, or URL of the license.'
+                        Declaration : TypedValue
+                            Name : Lower = 'description'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'LicenseAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : MemberReference
+                                Name : Lower = 'description'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'LicenseAnnotation'
+        [42] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[label]] annotation.'
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.4.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'sealed'
+                    [4] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'LabelAnnotation'
+            Location = annotations.ceylon(412,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The readable name of the module.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'name'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'LabelAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Module'
+            Definition : Block
+        [43] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify the readable name of a module.'
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.4.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'label'
+            Location = annotations.ceylon(420,35)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The readable name of the module.'
+                        Declaration : TypedValue
+                            Name : Lower = 'name'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'LabelAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : MemberReference
+                                Name : Lower = 'name'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'LabelAnnotation'
+        [44] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[since]] annotation.'
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'sealed'
+                    [4] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SinceAnnotation'
+            Location = annotations.ceylon(427,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The version of the module when this declaration was added.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'version'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'String'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SinceAnnotation'
+            Definition : Block
+        [45] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to indicate at which moment the annotated declaration\r\n was added to the module.'
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'since'
+            Location = annotations.ceylon(435,35)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The version of the module when this declaration was added.'
+                        Declaration : TypedValue
+                            Name : Lower = 'version'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SinceAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : MemberReference
+                                Name : Lower = 'version'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SinceAnnotation'
+        [46] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[optional]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'final'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'OptionalImportAnnotation'
+            Location = annotations.ceylon(441,38)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'OptionalImportAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Import'
+            Definition : Block
+        [47] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify that a module can be executed even if \r\n the annotated dependency is not avail'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'shared'
+                    [1] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'optional'
+            Location = annotations.ceylon(449,44)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'OptionalImportAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'OptionalImportAnnotation'
+        [48] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[suppressWarnings]] \r\n annotation.'
+                Items : AnnotationList[#5]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'sealed'
+                    [4] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SuppressWarningsAnnotation'
+            Location = annotations.ceylon(455,38)
+            Parameters : Parameters[#1]
+                [0] : Declared
+                    Annotations : Annotations
+                        Doc : StandardString = 'The warning types to suppress.'
+                        Items : AnnotationList[#1]
+                            [0] : Annotation
+                                Name : Lower = 'shared'
+                    Declaration : TypedValue
+                        Name : Lower = 'warnings'
+                        Type : Variadic
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'String'
+                            Op = *
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SuppressWarningsAnnotation'
+                                [1] : Varianced
+                                    Type : Union
+                                        Op = |
+                                        Left : Union
+                                            Op = |
+                                            Left : Union
+                                                Op = |
+                                                Left : Union
+                                                    Op = |
+                                                    Left : Union
+                                                        Op = |
+                                                        Left : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'FunctionOrValueDeclaration'
+                                                        Right : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'ClassOrInterfaceDeclaration'
+                                                    Right : TypePath[#1]
+                                                        [0] : TypeReference
+                                                            Name : Upper = 'ConstructorDeclaration'
+                                                Right : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'Module'
+                                            Right : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Package'
+                                        Right : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Import'
+            Definition : Block
+        [49] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to suppress compilation warnings of the \r\n [[specified types|warnings]] when typechecking'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'suppressWarnings'
+            Location = annotations.ceylon(468,46)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The warning types to suppress.\r\n     \r\n     Allowed warning types are:\r\n     `filenameNonAscii`,\r\n  '…
+                        Declaration : TypedValue
+                            Name : Lower = 'warnings'
+                            Type : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'String'
+                                Op = *
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SuppressWarningsAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : Spread
+                                Expr : MemberReference
+                                    Name : Lower = 'warnings'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SuppressWarningsAnnotation'
+        [50] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[serializable]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SerializableAnnotation'
+            Location = annotations.ceylon(513,31)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SerializableAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ClassDeclaration'
+            Definition : Block
+        [51] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to specify that a class is serializable.\r\n  \r\n A serializable class may have instances th'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.2.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'serializable'
+            Location = annotations.ceylon(524,42)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SerializableAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SerializableAnnotation'
+        [52] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[small]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'SmallAnnotation'
+            Location = annotations.ceylon(530,31)
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'OptionalAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'SmallAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'FunctionOrValueDeclaration'
+            Definition : Block
+        [53] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation to hint to the compiler that, if possible:\r\n \r\n  - an [[Integer]] type should be represen'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'small'
+            Location = annotations.ceylon(548,35)
+            Parameters : ParametersList[#1]
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'SmallAnnotation'
+                    Arguments : Positional
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'SmallAnnotation'
+        [54] : Class
+            Annotations : Annotations
+                Doc : StandardString = 'The annotation class for the [[service]] annotation.'
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'final'
+                    [3] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Upper = 'ServiceAnnotation'
+            Location = annotations.ceylon(554,31)
+            Parameters : Parameters[#1]
+                [0] : Reference
+                    Name : Lower = 'contract'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'SequencedAnnotation'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ServiceAnnotation'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'ClassDeclaration'
+            Definition : Block
+                statements : StatementList[#1]
+                    [0] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'The service interface or class that the annotated class \r\n     provides.'
+                            Items : AnnotationList[#1]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                        Name : Lower = 'contract'
+                        Location = annotations.ceylon(559,40)
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'ClassOrInterfaceDeclaration'
+        [55] : TypedMethod
+            Annotations : Annotations
+                Doc : StandardString = 'Annotation marking a class as implementing a service. The\r\n class must be a non-abstract, shared, to'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'annotation'
+            Name : Lower = 'service'
+            Location = annotations.ceylon(577,37)
+            Parameters : ParametersList[#1]
+                [0] : Parameters[#1]
+                    [0] : Declared
+                        Annotations : Annotations
+                            Doc : StandardString = 'The service interface or class that the annotated class \r\n     provides.'
+                        Declaration : TypedValue
+                            Name : Lower = 'contract'
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'ClassOrInterfaceDeclaration'
+            Definition : Function
+                Op = =>
+                Expr : Call
+                    Expr : TypeReference
+                        Name : Upper = 'ServiceAnnotation'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#1]
+                            [0] : MemberReference
+                                Name : Lower = 'contract'
+            Type : TypePath[#1]
+                [0] : TypeReference
+                    Name : Upper = 'ServiceAnnotation'

@@ -9,7 +9,7 @@
  ********************************************************************************/
 namespace six.core;
 
-import ceylon.language
+import six.core
 {
     makeSpan = span,
     makeMeasure = measure

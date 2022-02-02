@@ -1,0 +1,656 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#4]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : StandardString = 'Abstract supertype of objects which associate values with \r\n keys. A `Correspondence<Key,Item>` may '…
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#3]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Map'
+                                [1] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'List'
+                                [2] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Category'
+                    [1] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [2] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Collections'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'Correspondence'
+            Location = Correspondence.ceylon(37,18)
+            TypeParameters : TypeParameters[#2]
+                [0] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'Key'
+                [1] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Item'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Anything'
+            Constraints : TypeConstraints[#1]
+                [0] : TypeConstraint
+                    Name : Upper = 'Key'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Object'
+            Definition : Block
+                statements : StatementList[#6]
+                    [0] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Returns the value defined for the given key, or `null` \r\n     if there is no value defined for the g'…
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'getAll'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'get'
+                        Location = Correspondence.ceylon(48,25)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'key'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Key'
+                        Definition : Null
+                        Type : Nullable
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Item'
+                    [1] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determines if there is a value defined for the given \r\n     key.'
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#3]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'definesAny'
+                                            [1] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'definesEvery'
+                                            [2] : Value
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'keys'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'defines'
+                        Location = Correspondence.ceylon(55,27)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'key'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Key'
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [2] : TypedAttribute
+                        Annotations : Annotations
+                            Doc : StandardString = 'The `Category` of all keys for which a value is defined\r\n     by this `Correspondence`.'
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'defines'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'keys'
+                        Location = Correspondence.ceylon(82,34)
+                        Definition : Function
+                            Op = =>
+                            Expr : Object
+                                Satisfied : Satisfies
+                                    Types : TypeList[#1]
+                                        [0] : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Category'
+                                                Arguments : TypeArgumentList[#1]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Key'
+                                Block : Block
+                                    statements : StatementList[#1]
+                                        [0] : Specification
+                                            Primary : Member
+                                                Name : Lower = 'contains'
+                                                Parameters : ParametersList[#1]
+                                                    [0] : Parameters[#1]
+                                                        [0] : Declared
+                                                            Annotations : Annotations
+                                                            Declaration : TypedValue
+                                                                Name : Lower = 'key'
+                                                                Type : TypePath[#1]
+                                                                    [0] : TypeReference
+                                                                        Name : Upper = 'Key'
+                                            Value : Function
+                                                Op = =>
+                                                Expr : Call
+                                                    Expr : MemberReference
+                                                        Name : Lower = 'defines'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#1]
+                                                            [0] : MemberReference
+                                                                Name : Lower = 'key'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Category'
+                                Arguments : TypeArgumentList[#1]
+                                    [0] : Varianced
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Key'
+                    [3] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determines if this `Correspondence` defines a value for\r\n     every one of the given keys.'
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'defines'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'definesEvery'
+                        Location = Correspondence.ceylon(92,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'keys'
+                                        Type : Iterable
+                                            Type : Variadic
+                                                Type : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'Key'
+                                                Op = *
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'key'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : MemberReference
+                                                Name : Lower = 'keys'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Prefix
+                                                                Op = !
+                                                                Right : Call
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'defines'
+                                                                    Arguments : Positional
+                                                                        Sequenced : ArgumentList[#1]
+                                                                            [0] : MemberReference
+                                                                                Name : Lower = 'key'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'false'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'true'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [4] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Determines if this `Correspondence` defines a value for\r\n     any one of the given keys.'
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'defines'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'definesAny'
+                        Location = Correspondence.ceylon(107,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'keys'
+                                        Type : Iterable
+                                            Type : Variadic
+                                                Type : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'Key'
+                                                Op = *
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'key'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : MemberReference
+                                                Name : Lower = 'keys'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Call
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'defines'
+                                                                Arguments : Positional
+                                                                    Sequenced : ArgumentList[#1]
+                                                                        [0] : MemberReference
+                                                                            Name : Lower = 'key'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'true'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'false'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [5] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Returns the items defined for the given keys, in the \r\n     same order as the corresponding keys. Fo'…
+                            Items : AnnotationList[#4]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#2]
+                                                        [0] : Any = 'Correspondence'
+                                                        [1] : Any = 'get'
+                                [1] : Annotation
+                                    Name : Lower = 'since'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#1]
+                                            [0] : StandardString = '1.1.0'
+                                [2] : Annotation
+                                    Name : Lower = 'shared'
+                                [3] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'getAll'
+                        Location = Correspondence.ceylon(125,28)
+                        TypeParameters : TypeParameters[#1]
+                            [0] : TypeParameter
+                                Name : Upper = 'Absent'
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'keys'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Iterable'
+                                                Arguments : TypeArgumentList[#2]
+                                                    [0] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Key'
+                                                    [1] : Varianced
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Absent'
+                        Constraints : TypeConstraints[#1]
+                            [0] : TypeConstraint
+                                Name : Upper = 'Absent'
+                                Satisfied : Satisfies
+                                    Types : TypeList[#1]
+                                        [0] : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Null'
+                        Definition : Function
+                            Op = =>
+                            Expr : Enumeration
+                                Arguments : ArgumentList[#1]
+                                    [0] : For
+                                        Iterator : ForIterator
+                                            Variable : Variable
+                                                Name : Lower = 'key'
+                                            Containment : Containment
+                                                Op = in
+                                                Expr : MemberReference
+                                                    Name : Lower = 'keys'
+                                        Comprehension : Call
+                                            Expr : MemberReference
+                                                Name : Lower = 'get'
+                                            Arguments : Positional
+                                                Sequenced : ArgumentList[#1]
+                                                    [0] : MemberReference
+                                                        Name : Lower = 'key'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Iterable'
+                                Arguments : TypeArgumentList[#2]
+                                    [0] : Varianced
+                                        Type : Nullable
+                                            Left : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Item'
+                                    [1] : Varianced
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Absent'
+        [1] : Interface
+            Annotations : Annotations
+                Doc : StandardString = 'A [[Correspondence]] that supports mutation of its \r\n constituent key/item associations. Items may b'…
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Collections'
+                    [2] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#3]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Correspondence'
+                                [1] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'KeyedCorrespondenceMutator'
+                                [2] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'IndexedCorrespondenceMutator'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'CorrespondenceMutator'
+            Location = Correspondence.ceylon(153,18)
+            TypeParameters : TypeParameters[#1]
+                [0] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'Item'
+            CaseTypes : CaseTypes
+                Types : TypeList[#2]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'IndexedCorrespondenceMutator'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Item'
+                    [1] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'KeyedCorrespondenceMutator'
+                            Arguments : TypeArgumentList[#2]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Nothing'
+                                [1] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Item'
+            Definition : Block
+        [2] : Interface
+            Annotations : Annotations
+                Doc : StandardString = 'A [[CorrespondenceMutator]] which allows mutation of the\r\n item associated with a given integer inde'…
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Collections'
+                    [2] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'KeyedCorrespondenceMutator'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'IndexedCorrespondenceMutator'
+            Location = Correspondence.ceylon(165,18)
+            TypeParameters : TypeParameters[#1]
+                [0] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'Element'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'CorrespondenceMutator'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Element'
+            Definition : Block
+                statements : StatementList[#1]
+                    [0] : VoidMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Set the item associated with the given [[index]] to the\r\n     given [[item]], replacing the item pre'…
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'throws'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#2]
+                                            [0] : Class
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'AssertionError'
+                                            [1] : StandardString = 'if the given [[index]] is outside the range of\r\n             indexes belonging to this objects'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'set'
+                        Location = Correspondence.ceylon(180,24)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'index'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'item'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                        Definition : Null
+        [3] : Interface
+            Annotations : Annotations
+                Doc : StandardString = 'A [[CorrespondenceMutator]] which allows mutation of the\r\n item associated with an existing key, and'…
+                Items : AnnotationList[#4]
+                    [0] : Annotation
+                        Name : Lower = 'since'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = '1.3.0'
+                    [1] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Collections'
+                    [2] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'IndexedCorrespondenceMutator'
+                    [3] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'KeyedCorrespondenceMutator'
+            Location = Correspondence.ceylon(191,18)
+            TypeParameters : TypeParameters[#2]
+                [0] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'Key'
+                [1] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'Item'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'CorrespondenceMutator'
+                            Arguments : TypeArgumentList[#1]
+                                [0] : Varianced
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Item'
+            Constraints : TypeConstraints[#1]
+                [0] : TypeConstraint
+                    Name : Upper = 'Key'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Object'
+            Definition : Block
+                statements : StatementList[#1]
+                    [0] : VoidMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'Set the item associated with the given [[key]] to the\r\n     given [[item]]. If there is already an i'…
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'put'
+                        Location = Correspondence.ceylon(205,24)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'key'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Key'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'item'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Item'
+                        Definition : Null

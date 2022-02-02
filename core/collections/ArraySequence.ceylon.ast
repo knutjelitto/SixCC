@@ -1,0 +1,1042 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Class
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nA [[Sequence]] backed by an [[Array]]. \r\n\r\nSince [[Array]]s are mutable, this class is private to '…
+                Items : AnnotationList[#6]
+                    [0] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Tom'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+                    [2] : Annotation
+                        Name : Lower = 'sealed'
+                    [3] : Annotation
+                        Name : Lower = 'final'
+                    [4] : Annotation
+                        Name : Lower = 'serializable'
+                    [5] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#2]
+                                [0] : StandardString = 'Collections'
+                                [1] : StandardString = 'Sequences'
+            Name : Upper = 'ArraySequence'
+            Location = ArraySequence.ceylon(22,7)
+            TypeParameters : TypeParameters[#1]
+                [0] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Element'
+            Parameters : Parameters[#1]
+                [0] : Reference
+                    Name : Lower = 'array'
+            Extends : Extends
+                Instantiation : Instantiation
+                    Class : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Object'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : Tuple
+                        Type : TypeList[#1]
+                            [0] : Variadic
+                                Type : TypePath[#1]
+                                    [0] : TypeReference
+                                        Name : Upper = 'Element'
+                                Op = +
+            Definition : Block
+                statements : StatementList[#22]
+                    [0] : TypedAttribute
+                        Annotations : Annotations
+                        Name : Lower = 'array'
+                        Location = ArraySequence.ceylon(24,20)
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Array'
+                                Arguments : TypeArgumentList[#1]
+                                    [0] : Varianced
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                    [1] : Assertion
+                        Conditions : Conditions[#1]
+                            [0] : Prefix
+                                Op = !
+                                Right : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'empty'
+                    [2] : Specification
+                        Primary : Member
+                            Name : Lower = 'getFromFirst'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedValue
+                                            Name : Lower = 'index'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Integer'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'getFromFirst'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'index'
+                    [3] : Specification
+                        Primary : Member
+                            Name : Lower = 'contains'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedValue
+                                            Name : Lower = 'element'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Object'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'contains'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'element'
+                    [4] : Specification
+                        Primary : MemberReference
+                            Name : Lower = 'size'
+                        Value : Function
+                            Op = =>
+                            Expr : Infix
+                                Op = .
+                                Left : MemberReference
+                                    Name : Lower = 'array'
+                                Right : MemberReference
+                                    Name : Lower = 'size'
+                    [5] : Specification
+                        Primary : Call
+                            Expr : MemberReference
+                                Name : Lower = 'iterator'
+                            Arguments : Positional
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'iterator'
+                                Arguments : Positional
+                    [6] : TypedAttribute
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'first'
+                        Location = ArraySequence.ceylon(36,27)
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Exists
+                                                    not = False
+                                                    expression : LetVariable
+                                                        Pattern : Variable
+                                                            Name : Lower = 'first'
+                                                        Specifier : Value
+                                                            Op = =
+                                                            Expr : Infix
+                                                                Op = .
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'array'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'first'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : MemberReference
+                                                            Name : Lower = 'first'
+                                    ElseBlock : Block
+                                        statements : StatementList[#2]
+                                            [0] : Assertion
+                                                Conditions : Conditions[#1]
+                                                    [0] : Is
+                                                        not = False
+                                                        type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                                        variable : ConditionVariable
+                                                            Name : Lower = 'null'
+                                            [1] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'null'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Element'
+                    [7] : TypedAttribute
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'last'
+                        Location = ArraySequence.ceylon(46,27)
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Exists
+                                                    not = False
+                                                    expression : LetVariable
+                                                        Pattern : Variable
+                                                            Name : Lower = 'last'
+                                                        Specifier : Value
+                                                            Op = =
+                                                            Expr : Infix
+                                                                Op = .
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'array'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'last'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : MemberReference
+                                                            Name : Lower = 'last'
+                                    ElseBlock : Block
+                                        statements : StatementList[#2]
+                                            [0] : Assertion
+                                                Conditions : Conditions[#1]
+                                                    [0] : Is
+                                                        not = False
+                                                        type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                                        variable : ConditionVariable
+                                                            Name : Lower = 'null'
+                                            [1] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'null'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Element'
+                    [8] : Specification
+                        Primary : Call
+                            Expr : MemberReference
+                                Name : Lower = 'tuple'
+                            Arguments : Positional
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : MemberReference
+                                    Name : Lower = 'arrayToTuple'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'array'
+                    [9] : Specification
+                        Primary : Member
+                            Name : Lower = 'each'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : VoidFunction
+                                            Name : Lower = 'step'
+                                            Parameters : ParametersList[#1]
+                                                [0] : Parameters[#1]
+                                                    [0] : Declared
+                                                        Annotations : Annotations
+                                                        Declaration : TypedValue
+                                                            Name : Lower = 'element'
+                                                            Type : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Element'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'each'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'step'
+                    [10] : Specification
+                        Primary : Member
+                            Name : Lower = 'count'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedFunction
+                                            Name : Lower = 'selecting'
+                                            Parameters : ParametersList[#1]
+                                                [0] : Parameters[#1]
+                                                    [0] : Declared
+                                                        Annotations : Annotations
+                                                        Declaration : TypedValue
+                                                            Name : Lower = 'element'
+                                                            Type : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Element'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Boolean'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'count'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'selecting'
+                    [11] : Specification
+                        Primary : Member
+                            Name : Lower = 'every'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedFunction
+                                            Name : Lower = 'selecting'
+                                            Parameters : ParametersList[#1]
+                                                [0] : Parameters[#1]
+                                                    [0] : Declared
+                                                        Annotations : Annotations
+                                                        Declaration : TypedValue
+                                                            Name : Lower = 'element'
+                                                            Type : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Element'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Boolean'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'every'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'selecting'
+                    [12] : Specification
+                        Primary : Member
+                            Name : Lower = 'any'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedFunction
+                                            Name : Lower = 'selecting'
+                                            Parameters : ParametersList[#1]
+                                                [0] : Parameters[#1]
+                                                    [0] : Declared
+                                                        Annotations : Annotations
+                                                        Declaration : TypedValue
+                                                            Name : Lower = 'element'
+                                                            Type : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Element'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Boolean'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'any'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'selecting'
+                    [13] : Specification
+                        Primary : Member
+                            Name : Lower = 'find'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedFunction
+                                            Name : Lower = 'selecting'
+                                            Parameters : ParametersList[#1]
+                                                [0] : Parameters[#1]
+                                                    [0] : Declared
+                                                        Annotations : Annotations
+                                                        Declaration : TypedValue
+                                                            Name : Lower = 'element'
+                                                            Type : Intersection
+                                                                Op = &
+                                                                Left : TypePath[#1]
+                                                                    [0] : TypeReference
+                                                                        Name : Upper = 'Element'
+                                                                Right : TypePath[#1]
+                                                                    [0] : TypeReference
+                                                                        Name : Upper = 'Object'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Boolean'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'find'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'selecting'
+                    [14] : Specification
+                        Primary : Member
+                            Name : Lower = 'findLast'
+                            Parameters : ParametersList[#1]
+                                [0] : Parameters[#1]
+                                    [0] : Declared
+                                        Annotations : Annotations
+                                        Declaration : TypedFunction
+                                            Name : Lower = 'selecting'
+                                            Parameters : ParametersList[#1]
+                                                [0] : Parameters[#1]
+                                                    [0] : Declared
+                                                        Annotations : Annotations
+                                                        Declaration : TypedValue
+                                                            Name : Lower = 'element'
+                                                            Type : Intersection
+                                                                Op = &
+                                                                Left : TypePath[#1]
+                                                                    [0] : TypeReference
+                                                                        Name : Upper = 'Element'
+                                                                Right : TypePath[#1]
+                                                                    [0] : TypeReference
+                                                                        Name : Upper = 'Object'
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Boolean'
+                        Value : Function
+                            Op = =>
+                            Expr : Call
+                                Expr : Infix
+                                    Op = .
+                                    Left : MemberReference
+                                        Name : Lower = 'array'
+                                    Right : MemberReference
+                                        Name : Lower = 'findLast'
+                                Arguments : Positional
+                                    Sequenced : ArgumentList[#1]
+                                        [0] : MemberReference
+                                            Name : Lower = 'selecting'
+                    [15] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'reduce'
+                        Location = ArraySequence.ceylon(71,20)
+                        TypeParameters : TypeParameters[#1]
+                            [0] : TypeParameter
+                                Name : Upper = 'Result'
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedFunction
+                                        Name : Lower = 'accumulating'
+                                        Parameters : ParametersList[#1]
+                                            [0] : Parameters[#2]
+                                                [0] : Declared
+                                                    Annotations : Annotations
+                                                    Declaration : TypedValue
+                                                        Name : Lower = 'partial'
+                                                        Type : Union
+                                                            Op = |
+                                                            Left : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Result'
+                                                            Right : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Element'
+                                                [1] : Declared
+                                                    Annotations : Annotations
+                                                    Declaration : TypedValue
+                                                        Name : Lower = 'element'
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Result'
+                        Definition : Block
+                            statements : StatementList[#2]
+                                [0] : InferredAttribute
+                                    Annotations : Annotations
+                                    Name : Lower = 'result'
+                                    Location = ArraySequence.ceylon(75,15)
+                                    Definition : Value
+                                        Op = =
+                                        Expr : Call
+                                            Expr : Infix
+                                                Op = .
+                                                Left : MemberReference
+                                                    Name : Lower = 'array'
+                                                Right : MemberReference
+                                                    Name : Lower = 'reduce'
+                                            Arguments : Positional
+                                                Sequenced : ArgumentList[#1]
+                                                    [0] : MemberReference
+                                                        Name : Lower = 'accumulating'
+                                [1] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Exists
+                                                    not = False
+                                                    expression : MemberReference
+                                                        Name : Lower = 'result'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : MemberReference
+                                                            Name : Lower = 'result'
+                                    ElseBlock : Block
+                                        statements : StatementList[#2]
+                                            [0] : Assertion
+                                                Conditions : Conditions[#1]
+                                                    [0] : Is
+                                                        not = False
+                                                        type : Union
+                                                            Op = |
+                                                            Left : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Result'
+                                                            Right : TypePath[#1]
+                                                                [0] : TypeReference
+                                                                    Name : Upper = 'Element'
+                                                        variable : ConditionVariable
+                                                            Name : Lower = 'result'
+                                            [1] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'result'
+                        Type : Union
+                            Op = |
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Result'
+                            Right : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Element'
+                    [16] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'collect'
+                        Location = ArraySequence.ceylon(86,15)
+                        TypeParameters : TypeParameters[#1]
+                            [0] : TypeParameter
+                                Name : Upper = 'Result'
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedFunction
+                                        Name : Lower = 'collecting'
+                                        Parameters : ParametersList[#1]
+                                            [0] : Parameters[#1]
+                                                [0] : Declared
+                                                    Annotations : Annotations
+                                                    Declaration : TypedValue
+                                                        Name : Lower = 'element'
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Result'
+                        Definition : Block
+                            statements : StatementList[#2]
+                                [0] : Assertion
+                                    Conditions : Conditions[#1]
+                                        [0] : Nonempty
+                                            not = False
+                                            expression : LetVariable
+                                                Pattern : Variable
+                                                    Name : Lower = 'sequence'
+                                                Specifier : Value
+                                                    Op = =
+                                                    Expr : Call
+                                                        Expr : Infix
+                                                            Op = .
+                                                            Left : MemberReference
+                                                                Name : Lower = 'array'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'collect'
+                                                        Arguments : Positional
+                                                            Sequenced : ArgumentList[#1]
+                                                                [0] : MemberReference
+                                                                    Name : Lower = 'collecting'
+                                [1] : Return
+                                    Expr : MemberReference
+                                        Name : Lower = 'sequence'
+                        Type : Tuple
+                            Type : TypeList[#1]
+                                [0] : Variadic
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Result'
+                                    Op = +
+                    [17] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'sort'
+                        Location = ArraySequence.ceylon(94,16)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedFunction
+                                        Name : Lower = 'comparing'
+                                        Parameters : ParametersList[#1]
+                                            [0] : Parameters[#2]
+                                                [0] : Declared
+                                                    Annotations : Annotations
+                                                    Declaration : TypedValue
+                                                        Name : Lower = 'x'
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                                [1] : Declared
+                                                    Annotations : Annotations
+                                                    Declaration : TypedValue
+                                                        Name : Lower = 'y'
+                                                        Type : TypePath[#1]
+                                                            [0] : TypeReference
+                                                                Name : Upper = 'Element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Comparison'
+                        Definition : Block
+                            statements : StatementList[#2]
+                                [0] : Assertion
+                                    Conditions : Conditions[#1]
+                                        [0] : Nonempty
+                                            not = False
+                                            expression : LetVariable
+                                                Pattern : Variable
+                                                    Name : Lower = 'sequence'
+                                                Specifier : Value
+                                                    Op = =
+                                                    Expr : Call
+                                                        Expr : Infix
+                                                            Op = .
+                                                            Left : MemberReference
+                                                                Name : Lower = 'array'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'sort'
+                                                        Arguments : Positional
+                                                            Sequenced : ArgumentList[#1]
+                                                                [0] : MemberReference
+                                                                    Name : Lower = 'comparing'
+                                [1] : Return
+                                    Expr : MemberReference
+                                        Name : Lower = 'sequence'
+                        Type : Tuple
+                            Type : TypeList[#1]
+                                [0] : Variadic
+                                    Type : TypePath[#1]
+                                        [0] : TypeReference
+                                            Name : Upper = 'Element'
+                                    Op = +
+                    [18] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'measure'
+                        Location = ArraySequence.ceylon(102,15)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'length'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = ||
+                                                    Left : Infix
+                                                        Op = ||
+                                                        Left : Infix
+                                                            Op = >
+                                                            Left : MemberReference
+                                                                Name : Lower = 'from'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'lastIndex'
+                                                        Right : Infix
+                                                            Op = <=
+                                                            Left : MemberReference
+                                                                Name : Lower = 'length'
+                                                            Right : NaturalNumber
+                                                    Right : Infix
+                                                        Op = <=
+                                                        Left : Infix
+                                                            Op = +
+                                                            Left : MemberReference
+                                                                Name : Lower = 'from'
+                                                            Right : MemberReference
+                                                                Name : Lower = 'length'
+                                                        Right : NaturalNumber
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : Tuple
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : Call
+                                                    Expr : TypeReference
+                                                        Name : Upper = 'ArraySequence'
+                                                    Arguments : Positional
+                                                        Sequenced : ArgumentList[#1]
+                                                            [0] : Indexed
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'array'
+                                                                Index : MeasuredIndex
+                                                                    From : MemberReference
+                                                                        Name : Lower = 'from'
+                                                                    Count : MemberReference
+                                                                        Name : Lower = 'length'
+                        Type : Array
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Element'
+                    [19] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'span'
+                        Location = ArraySequence.ceylon(114,15)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#2]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                                [1] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'to'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#1]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = <=
+                                                    Left : MemberReference
+                                                        Name : Lower = 'from'
+                                                    Right : MemberReference
+                                                        Name : Lower = 'to'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : If
+                                                            Conditions : Conditions[#1]
+                                                                [0] : Infix
+                                                                    Op = ||
+                                                                    Left : Infix
+                                                                        Op = <
+                                                                        Left : MemberReference
+                                                                            Name : Lower = 'to'
+                                                                        Right : NaturalNumber
+                                                                    Right : Infix
+                                                                        Op = >
+                                                                        Left : MemberReference
+                                                                            Name : Lower = 'from'
+                                                                        Right : MemberReference
+                                                                            Name : Lower = 'lastIndex'
+                                                            Then : Prefix
+                                                                Op = then
+                                                                Right : Tuple
+                                                            Else : Prefix
+                                                                Op = else
+                                                                Right : Call
+                                                                    Expr : TypeReference
+                                                                        Name : Upper = 'ArraySequence'
+                                                                    Arguments : Positional
+                                                                        Sequenced : ArgumentList[#1]
+                                                                            [0] : Indexed
+                                                                                Expr : MemberReference
+                                                                                    Name : Lower = 'array'
+                                                                                Index : SpannedIndex
+                                                                                    From : MemberReference
+                                                                                        Name : Lower = 'from'
+                                                                                    To : MemberReference
+                                                                                        Name : Lower = 'to'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : If
+                                                    Conditions : Conditions[#1]
+                                                        [0] : Infix
+                                                            Op = ||
+                                                            Left : Infix
+                                                                Op = <
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'from'
+                                                                Right : NaturalNumber
+                                                            Right : Infix
+                                                                Op = >
+                                                                Left : MemberReference
+                                                                    Name : Lower = 'to'
+                                                                Right : MemberReference
+                                                                    Name : Lower = 'lastIndex'
+                                                    Then : Prefix
+                                                        Op = then
+                                                        Right : Tuple
+                                                    Else : Prefix
+                                                        Op = else
+                                                        Right : Call
+                                                            Expr : TypeReference
+                                                                Name : Upper = 'ArraySequence'
+                                                            Arguments : Positional
+                                                                Sequenced : ArgumentList[#1]
+                                                                    [0] : Indexed
+                                                                        Expr : MemberReference
+                                                                            Name : Lower = 'array'
+                                                                        Index : SpannedIndex
+                                                                            From : MemberReference
+                                                                                Name : Lower = 'from'
+                                                                            To : MemberReference
+                                                                                Name : Lower = 'to'
+                        Type : Array
+                            Type : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Element'
+                    [20] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'spanFrom'
+                        Location = ArraySequence.ceylon(129,45)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'from'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#2]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = <=
+                                                    Left : MemberReference
+                                                        Name : Lower = 'from'
+                                                    Right : NaturalNumber
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : SelfReference
+                                                            Reference = this
+                                        [1] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = <
+                                                    Left : MemberReference
+                                                        Name : Lower = 'from'
+                                                    Right : MemberReference
+                                                        Name : Lower = 'size'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : Call
+                                                            Expr : TypeReference
+                                                                Name : Upper = 'ArraySequence'
+                                                            Arguments : Positional
+                                                                Sequenced : ArgumentList[#1]
+                                                                    [0] : Indexed
+                                                                        Expr : MemberReference
+                                                                            Name : Lower = 'array'
+                                                                        Index : FromIndex
+                                                                            From : MemberReference
+                                                                                Name : Lower = 'from'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : Tuple
+                        Type : Union
+                            Op = |
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'ArraySequence'
+                                    Arguments : TypeArgumentList[#1]
+                                        [0] : Varianced
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Element'
+                            Right : Tuple
+                    [21] : TypedMethod
+                        Annotations : Annotations
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'actual'
+                        Name : Lower = 'spanTo'
+                        Location = ArraySequence.ceylon(141,45)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'to'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Integer'
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : If
+                                    Conditionals : Conditionals[#2]
+                                        [0] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = >=
+                                                    Left : MemberReference
+                                                        Name : Lower = 'to'
+                                                    Right : MemberReference
+                                                        Name : Lower = 'lastIndex'
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : SelfReference
+                                                            Reference = this
+                                        [1] : ConditionalBlock
+                                            Conditions : Conditions[#1]
+                                                [0] : Infix
+                                                    Op = >=
+                                                    Left : MemberReference
+                                                        Name : Lower = 'to'
+                                                    Right : NaturalNumber
+                                            Block : Block
+                                                statements : StatementList[#1]
+                                                    [0] : Return
+                                                        Expr : Call
+                                                            Expr : TypeReference
+                                                                Name : Upper = 'ArraySequence'
+                                                            Arguments : Positional
+                                                                Sequenced : ArgumentList[#1]
+                                                                    [0] : Indexed
+                                                                        Expr : MemberReference
+                                                                            Name : Lower = 'array'
+                                                                        Index : ToIndex
+                                                                            To : MemberReference
+                                                                                Name : Lower = 'to'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : Tuple
+                        Type : Union
+                            Op = |
+                            Left : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'ArraySequence'
+                                    Arguments : TypeArgumentList[#1]
+                                        [0] : Varianced
+                                            Type : TypePath[#1]
+                                                [0] : TypeReference
+                                                    Name : Upper = 'Element'
+                            Right : Tuple

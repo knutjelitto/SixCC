@@ -1,0 +1,225 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nAbstract supertype of objects that contain other values, called *elements*, where it is possible t'…
+                Items : AnnotationList[#3]
+                    [0] : Annotation
+                        Name : Lower = 'by'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Gavin'
+                    [1] : Annotation
+                        Name : Lower = 'tagged'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : StandardString = 'Collections'
+                    [2] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'Category'
+            Location = Category.ceylon(47,18)
+            TypeParameters : TypeParameters[#1]
+                [0] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'Element'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Object'
+            Constraints : TypeConstraints[#1]
+                [0] : TypeConstraint
+                    Name : Upper = 'Element'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Object'
+            Definition : Block
+                statements : StatementList[#3]
+                    [0] : TypedMethod
+                        Annotations : Annotations
+                            Doc : VerbatimString = '\r\n    Returns `true` if the given value belongs to this `Category`, that is, if it is an element of '…
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#2]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'containsEvery'
+                                            [1] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'containsAny'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'contains'
+                        Location = Category.ceylon(66,27)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'element'
+                                        Type : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'Element'
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [1] : TypedMethod
+                        Annotations : Annotations
+                            Doc : VerbatimString = '\r\n    Returns `true` if every one of the given values belongs to this `Category`, or `false` otherwi'…
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#2]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'contains'
+                                            [1] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'containsAny'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'containsEvery'
+                        Location = Category.ceylon(73,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'elements'
+                                        Type : Iterable
+                                            Type : Variadic
+                                                Type : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'Element'
+                                                Op = *
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'element'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : MemberReference
+                                                Name : Lower = 'elements'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Prefix
+                                                                Op = !
+                                                                Right : Call
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'contains'
+                                                                    Arguments : Positional
+                                                                        Sequenced : ArgumentList[#1]
+                                                                            [0] : MemberReference
+                                                                                Name : Lower = 'element'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'false'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'true'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'
+                    [2] : TypedMethod
+                        Annotations : Annotations
+                            Doc : VerbatimString = '\r\n    Returns `true` if any one of the given values belongs to this `Category`, or `false` otherwise'…
+                            Items : AnnotationList[#3]
+                                [0] : Annotation
+                                    Name : Lower = 'see'
+                                    Arguments : Positional
+                                        Sequenced : ArgumentList[#2]
+                                            [0] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'contains'
+                                            [1] : Function
+                                                Path : ReferencePath
+                                                    Package = False
+                                                    Names : Identifiers[#1]
+                                                        [0] : Any = 'containsEvery'
+                                [1] : Annotation
+                                    Name : Lower = 'shared'
+                                [2] : Annotation
+                                    Name : Lower = 'default'
+                        Name : Lower = 'containsAny'
+                        Location = Category.ceylon(93,13)
+                        Parameters : ParametersList[#1]
+                            [0] : Parameters[#1]
+                                [0] : Declared
+                                    Annotations : Annotations
+                                    Declaration : TypedValue
+                                        Name : Lower = 'elements'
+                                        Type : Iterable
+                                            Type : Variadic
+                                                Type : TypePath[#1]
+                                                    [0] : TypeReference
+                                                        Name : Upper = 'Element'
+                                                Op = *
+                        Definition : Block
+                            statements : StatementList[#1]
+                                [0] : For
+                                    Iterator : ForIterator
+                                        Variable : Variable
+                                            Name : Lower = 'element'
+                                        Containment : Containment
+                                            Op = in
+                                            Expr : MemberReference
+                                                Name : Lower = 'elements'
+                                    Block : Block
+                                        statements : StatementList[#1]
+                                            [0] : If
+                                                Conditionals : Conditionals[#1]
+                                                    [0] : ConditionalBlock
+                                                        Conditions : Conditions[#1]
+                                                            [0] : Call
+                                                                Expr : MemberReference
+                                                                    Name : Lower = 'contains'
+                                                                Arguments : Positional
+                                                                    Sequenced : ArgumentList[#1]
+                                                                        [0] : MemberReference
+                                                                            Name : Lower = 'element'
+                                                        Block : Block
+                                                            statements : StatementList[#1]
+                                                                [0] : Return
+                                                                    Expr : MemberReference
+                                                                        Name : Lower = 'true'
+                                    ElseBlock : Block
+                                        statements : StatementList[#1]
+                                            [0] : Return
+                                                Expr : MemberReference
+                                                    Name : Lower = 'false'
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'

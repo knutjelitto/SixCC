@@ -1,0 +1,80 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : VerbatimString = '\r\nAn annotation constrained to appear only on certain program elements, and only with certain values'…
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#3]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Annotation'
+                                [1] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'OptionalAnnotation'
+                                [2] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'SequencedAnnotation'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'ConstrainedAnnotation'
+            Location = ConstrainedAnnotation.ceylon(29,18)
+            TypeParameters : TypeParameters[#4]
+                [0] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Value'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Annotation'
+                [1] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Values'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Anything'
+                [2] : TypeParameter
+                    Variance = in
+                    Name : Upper = 'ProgramElement'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Nothing'
+                [3] : TypeParameter
+                    Variance = out
+                    Name : Upper = 'Type'
+                    Default : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Anything'
+            Satisfies : Satisfies
+                Types : TypeList[#1]
+                    [0] : TypePath[#1]
+                        [0] : TypeReference
+                            Name : Upper = 'Annotation'
+            Constraints : TypeConstraints[#2]
+                [0] : TypeConstraint
+                    Name : Upper = 'Value'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Annotation'
+                [1] : TypeConstraint
+                    Name : Upper = 'ProgramElement'
+                    Satisfied : Satisfies
+                        Types : TypeList[#1]
+                            [0] : TypePath[#1]
+                                [0] : TypeReference
+                                    Name : Upper = 'Annotated'
+            Definition : Block

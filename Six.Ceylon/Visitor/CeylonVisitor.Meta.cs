@@ -8,9 +8,7 @@ namespace Six.Ceylon.Visitor
     {
         protected override void Visit(CMetaLiteral element)
         {
-            var expr = Walk<Expr.Meta>(element.MetaExpression);
-
-            element.Value = expr;
+            element.Value = Walk<Expr.Meta>(element.MetaExpression);
         }
 
         protected override void Visit(CModuleLiteral element)

@@ -35,5 +35,10 @@
         public sealed record CaseList(IEnumerable<Case> Cases) : ReadOnlyList<Case>(Cases);
 
         public sealed record Conditionals(IEnumerable<ConditionalBlock> Cases) : ReadOnlyList<ConditionalBlock>(Cases);
+
+
+        public abstract record List(IEnumerable<Stmt> Items) : ReadOnlyList<Stmt>(Items);
     }
+
+    public sealed record Statements(IEnumerable<Stmt> Items) : Stmt.List(Items);
 }

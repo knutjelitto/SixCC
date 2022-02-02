@@ -1,4 +1,6 @@
-﻿namespace Six.Ceylon.Ast
+﻿using Six.Runtime;
+
+namespace Six.Ceylon.Ast
 {
     public class Module
     {
@@ -10,6 +12,6 @@
         public SourceFile ModuleFile { get; }
         public List<Folder> Folders { get; } = new List<Folder>();
 
-        public string Name => Path.GetDirectoryName(ModuleFile.ShortPath)!.Replace("\\", ".");
+        public string Name => Path.GetDirectoryName(ModuleFile.ShortPath)!.Replace("\\", "/");
     }
 }

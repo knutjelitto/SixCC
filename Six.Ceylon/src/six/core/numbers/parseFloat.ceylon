@@ -64,7 +64,7 @@ final class ParseFloatState
 
 Float|ParseException parseFloatInternal(String string)
 {
-    import ceylon.language
+    import six.core
     {
         ParseFloatState
         {

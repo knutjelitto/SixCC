@@ -1,0 +1,61 @@
+Top : Unit
+    Imports : Imports[#1]
+        [0] : Import
+            Path : Identifiers[#2]
+                [0] : Any = 'ceylon'
+                [1] : Any = 'language'
+            Elements : ElementList[#1]
+                [0] : Named
+                    Name : Any = 'Annotation'
+                    Alias : Any = 'AnnotationType'
+    Namespace : Namespace
+        Annotations : Annotations
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'
+    Declarations : Declarations[#1]
+        [0] : Interface
+            Annotations : Annotations
+                Doc : StandardString = 'A program element that can be annotated.'
+                Items : AnnotationList[#2]
+                    [0] : Annotation
+                        Name : Lower = 'see'
+                        Arguments : Positional
+                            Sequenced : ArgumentList[#1]
+                                [0] : Interface
+                                    Path : ReferencePath
+                                        Package = False
+                                        Names : Identifiers[#1]
+                                            [0] : Any = 'Annotation'
+                    [1] : Annotation
+                        Name : Lower = 'shared'
+            Name : Upper = 'Annotated'
+            Location = Annotated.ceylon(16,18)
+            Definition : Block
+                statements : StatementList[#1]
+                    [0] : TypedMethod
+                        Annotations : Annotations
+                            Doc : StandardString = 'true if this element has at least one annotation of the given annotation type.'
+                            Items : AnnotationList[#2]
+                                [0] : Annotation
+                                    Name : Lower = 'shared'
+                                [1] : Annotation
+                                    Name : Lower = 'formal'
+                        Name : Lower = 'annotated'
+                        Location = Annotated.ceylon(19,27)
+                        TypeParameters : TypeParameters[#1]
+                            [0] : TypeParameter
+                                Name : Upper = 'Annotation'
+                        Parameters : ParametersList[#1]
+                        Constraints : TypeConstraints[#1]
+                            [0] : TypeConstraint
+                                Name : Upper = 'Annotation'
+                                Satisfied : Satisfies
+                                    Types : TypeList[#1]
+                                        [0] : TypePath[#1]
+                                            [0] : TypeReference
+                                                Name : Upper = 'AnnotationType'
+                        Definition : Null
+                        Type : TypePath[#1]
+                            [0] : TypeReference
+                                Name : Upper = 'Boolean'

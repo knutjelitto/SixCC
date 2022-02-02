@@ -2,11 +2,11 @@
 {
     public class DeclarationScope : Scope
     {
-        public DeclarationScope(string name)
+        public DeclarationScope(IScope up)
         {
-            Name = name;
+            Up = up;
         }
 
-        public string Name { get; }
+        public IScope Up { get; }
     }
 }

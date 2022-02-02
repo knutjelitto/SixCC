@@ -1,0 +1,19 @@
+Top : Unit
+    Namespace : Namespace
+        Annotations : Annotations
+            Doc : VerbatimString = '\r\nThe root package of the Ceylon language module, functioning as the core of the [Ceylon platform][s'…
+            Items : AnnotationList[#2]
+                [0] : Annotation
+                    Name : Lower = 'by'
+                    Arguments : Positional
+                        Sequenced : ArgumentList[#5]
+                            [0] : StandardString = 'Gavin King'
+                            [1] : StandardString = 'Tom Bentley'
+                            [2] : StandardString = 'Tako Schotanus'
+                            [3] : StandardString = 'Stephane Epardaud'
+                            [4] : StandardString = 'Enrique Zamudio'
+                [1] : Annotation
+                    Name : Lower = 'shared'
+        Names : Identifiers[#2]
+            [0] : Any = 'six'
+            [1] : Any = 'core'

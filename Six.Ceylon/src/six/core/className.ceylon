@@ -9,7 +9,7 @@
  ********************************************************************************/
 namespace six.core;
 
-import ceylon.language.meta {
+import six.core.meta {
     type
 }
 

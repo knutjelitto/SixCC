@@ -1,4 +1,5 @@
 ﻿using Six.Ceylon.Ast;
+using Six.Runtime;
 
 namespace Six.Ceylon
 {
@@ -7,7 +8,14 @@ namespace Six.Ceylon
         private const string moduleFile = "module.ceylon";
         private const string fileGlob = "*.ceylon";
 
-        public static IEnumerable<Module> GetModules(string fromRoot)
+        public string Prefix { get; }
+
+        public CeylonLoader(string prefix)
+        {
+            Prefix = prefix;
+        }
+
+        public IEnumerable<Module> GetModules(string fromRoot)
         {
             var moduleFiles = LoadFiles(fromRoot, s => Path.GetFileName(s) == moduleFile).ToList();
 
@@ -17,7 +25,7 @@ namespace Six.Ceylon
             }
         }
 
-        private static Module GetModule(SourceFile moduleFile)
+        private Module GetModule(SourceFile moduleFile)
         {
             var module = new Module(moduleFile);
 
@@ -26,31 +34,26 @@ namespace Six.Ceylon
             return module;
         }
 
-        private static IEnumerable<SourceFile> LoadFiles(string fromRoot, System.Func<string, bool>? filter = null)
+        private IEnumerable<SourceFile> LoadFiles(string relative, System.Func<string, bool>? filter = null)
         {
             filter ??= n => true;
 
             var current = System.Environment.CurrentDirectory;
-            var filesRoot = Path.Combine(current, fromRoot);
-            foreach (var fullPath in Directory.EnumerateFiles(filesRoot, "*", SearchOption.AllDirectories).Where(n => filter(n)))
+            var absolute = Path.Combine(current, Prefix, relative);
+            foreach (var fullPath in Directory.EnumerateFiles(absolute, "*", SearchOption.AllDirectories).Where(n => filter(n)))
             {
-                var shortPath = fullPath[(current.Length + 1)..].Replace("\\", "/");
+                var shortPath = fullPath[(current.Length + Prefix.Length + 2)..].Replace("\\", "/");
 
                 yield return MakeFile(fullPath.Replace("\\", "/"), shortPath);
             }
         }
 
-        private static SourceFile MakeFile(string fullPath, string shortPath)
+        private SourceFile MakeFile(string fullPath, string shortPath)
         {
-            if (shortPath == moduleFile)
-            {
-                Assert(true);
-            }
             return new SourceFile(fullPath, shortPath, () => File.ReadAllText(fullPath));
         }
 
-
-        private static void FindFolders(Module module)
+        private void FindFolders(Module module)
         {
             var root = Path.GetDirectoryName(module.ModuleFile.LongPath)!;
             var prefixLength = module.ModuleFile.LongPath.Length - module.ModuleFile.ShortPath.Length;
@@ -64,7 +67,7 @@ namespace Six.Ceylon
                 if (!hasFiles)
                     continue;
 
-                var folderName = dir[prefixLength..].Replace("\\", "/").Replace("/", ".");
+                var folderName = dir[prefixLength..].Replace("\\", "/");//.Replace("/", ".");
 
                 var folder = new Folder(module, folderName);
 
@@ -84,7 +87,7 @@ namespace Six.Ceylon
             }
         }
 
-        private static bool IsModule(string file)
+        private bool IsModule(string file)
         {
             return Path.GetFileName(file) == moduleFile;
         }

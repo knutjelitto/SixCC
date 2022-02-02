@@ -9,7 +9,7 @@
  ********************************************************************************/
 namespace six.core;
 
-import ceylon.language { printTrace=printStackTrace }
+import six.core { printTrace=printStackTrace }
 
 """
 The abstract supertype of values indicating exceptional conditions. An exception may be raised using the `throw`

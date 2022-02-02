@@ -2,9 +2,10 @@
 {
     public static class Runner
     {
-        public const string CeylonRoot = "src/ceylon";
-        public const string SixRoot = "src/six";
-        public const string TestsRoot = "src/tests";
+        public const string Prefix = "src";
+        public const string SixRoot = "six";
+        public const string CeylonRoot = "ceylon";
+        public const string TestsRoot = "tests";
 
         public static void Run()
         {
@@ -16,7 +17,7 @@
 
         private static void AllModules(string fromRoot, CompilerConfiguration configuration)
         {
-            var modules = CeylonLoader.GetModules(fromRoot).OrderBy(m => m.Name).ToList();
+            var modules = new CeylonLoader(Prefix).GetModules(fromRoot).OrderBy(m => m.Name).ToList();
 
             var compiler = new CeylonCompiler(configuration);
 
