@@ -39,11 +39,11 @@ namespace Six.Gen
         {
             foreach (var rule in Grammar.Rules.Where(r => r.DFA != null))
             {
-                wl($"private {DfaClass} {rule.DfaId()} = new {DfaClass}({rule.Name.CsString()});");
+                wl($"private readonly {DfaClass} {rule.DfaId()} = new({rule.Name.CsString()});");
             }
             foreach (var op in Grammar.Others.Where(r => r.DFA != null))
             {
-                wl($"private {DfaClass} {op.DfaId()} = new {DfaClass}({op.DfaId().CsString()});");
+                wl($"private readonly {DfaClass} {op.DfaId()} = new({op.DfaId().CsString()});");
             }
         }
 

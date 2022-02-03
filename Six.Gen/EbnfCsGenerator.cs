@@ -43,13 +43,12 @@ namespace Six.Gen
             wl($"// <generated from={OriginalPath.CsString()} at={DateTime.Now.ToString().CsString()} />");
             wl();
 
-            wl("using Six.Runtime.Dfa;");
-            wl("using Six.Runtime.Matchers;");
-            wl("using Six.Runtime.Sppf;");
-            wl("using Six.Runtime.Types;");
-            wl("using Range = Six.Runtime.Matchers.Range;");
-            wl("using String = Six.Runtime.Matchers.String;");
+            wl($"using Six.Runtime;");
+            wl($"using Six.Runtime.Dfa;");
+            wl($"using Six.Runtime.Sppf;");
+            wl($"using Six.Runtime.Types;");
             wl($"using static {Grammar.Namespace}.{astClass};");
+            wl($"using Mx = Six.Runtime.Matchers;");
             wl();
 
             block($"namespace {Grammar.Namespace}", () =>
@@ -75,7 +74,7 @@ namespace Six.Gen
                     { 
                         var arguments = extra == null ? "" : $", {extra}";
                         className ??= ClassName(op);
-                        w($"new {className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
+                        w($"new Mx.{className}(this, {op.Id}, {namer.NameOf(op).CsString()}{arguments}");
                         var attributes = new StringBuilder();
                         if (op.Class != null)
                         {
@@ -127,7 +126,7 @@ namespace Six.Gen
                     block($"private class {implementationClass} : {ImplementationCoreClass}", () =>
                     {
                         wl($"public {implementationClass}()");
-                        indent(() => wl($": base(new {MatcherClass}[{matchersCount}])"));
+                        indent(() => wl($": base(new Mx.{MatcherClass}[{matchersCount}])"));
                         block(() =>
                         {
                             foreach (var inner in Grammar.Operators.Where(o => o is not RefOp))
@@ -211,7 +210,7 @@ namespace Six.Gen
                         {
                             if (!op.IsSpecial)
                             {
-                                wl($"private {ClassName(op)} {op.RuleId()};");
+                                wl($"private readonly Mx.{ClassName(op)} {op.RuleId()};");
                             }
                         }
                         wl();
