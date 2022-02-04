@@ -1,0 +1,5 @@
+﻿namespace sax.core;
+ 
+shared abstract class Anything() of Object | Null
+{
+}

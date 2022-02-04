@@ -1,2 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Six.Sax;
+
+Runner.Run();
+
+Wait();
+
+void Wait()
+{
+    Console.Write("any key ... ");
+    Console.ReadKey(true);
+    Console.WriteLine();
+}

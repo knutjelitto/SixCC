@@ -43,12 +43,12 @@ namespace Six.Gen
             wl($"// <generated from={OriginalPath.CsString()} at={DateTime.Now.ToString().CsString()} />");
             wl();
 
-            wl($"using Six.Runtime;");
-            wl($"using Six.Runtime.Dfa;");
-            wl($"using Six.Runtime.Sppf;");
-            wl($"using Six.Runtime.Types;");
+            wl("using Six.Runtime;");
+            wl("using Six.Runtime.Dfa;");
+            wl("using Six.Runtime.Sppf;");
+            wl("using Six.Runtime.Types;");
+            wl("using Mx = Six.Runtime.Matchers;");
             wl($"using static {Grammar.Namespace}.{astClass};");
-            wl($"using Mx = Six.Runtime.Matchers;");
             wl();
 
             block($"namespace {Grammar.Namespace}", () =>
@@ -210,7 +210,7 @@ namespace Six.Gen
                         {
                             if (!op.IsSpecial)
                             {
-                                wl($"private readonly Mx.{ClassName(op)} {op.RuleId()};");
+                                wl($"private readonly Mx.{ClassName(op)} {op.RuleId()};"); 
                             }
                         }
                         wl();

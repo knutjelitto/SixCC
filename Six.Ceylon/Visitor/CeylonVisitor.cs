@@ -6,10 +6,6 @@ namespace Six.Ceylon.Visitor
 {
     public partial class CeylonVisitor : DynamicCeylonVisitor
     {
-        public CeylonVisitor()
-        {
-        }
-
         public void Walk(SourceFile source)
         {
             if (source.Tree != null)

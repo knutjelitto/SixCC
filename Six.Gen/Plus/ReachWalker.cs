@@ -1,4 +1,6 @@
-﻿namespace Six.Gen.Ebnf
+﻿using Six.Core.Errors;
+
+namespace Six.Gen.Ebnf
 {
     internal class ReachWalker : EbnfPredicator
     {
