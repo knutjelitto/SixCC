@@ -1,0 +1,397 @@
+﻿grammar Sax;
+
+%start      = compilation-unit;
+%whitespace = skip;
+%keywords   = identifier;
+
+%namespace  = 'Six.Sax';
+
+compilation-unit
+    | module-descriptor
+    | code-unit
+    ;
+
+code-unit
+    : usings namespace
+    ;
+
+namespace
+    | file-namespace
+    | block-namespace
+    ;
+
+file-namespace
+    : namespace-intro ';' usings declarations
+    ;
+
+block-namespace
+    : namespace-intro '{' usings declarations '}'
+    ;
+
+namespace-intro
+    : 'namespace' namespace-path
+    ;
+
+namespace-path
+    : identifier ('.' identifier)*
+    ;
+
+module-descriptor
+    : 'module' module-name module-body
+    ;
+
+module-name
+    : any-path
+    ;
+
+module-body
+    : '{' module-body-element* '}'
+    ;
+
+module-body-element
+    | module-import
+    ;
+
+module-import
+    : 'import' module-name ';'
+    ;
+
+usings
+    : using-declaration*
+    ;
+
+using-declaration
+    : 'using' any-path using-elements
+    ;
+
+using-elements
+    : '{' using-element-list? '}'
+    ;
+
+using-element-list
+    : using-element (',' using-element)*
+    ;
+
+using-element
+    | using-named
+    | using-wildcard
+    ;
+
+using-named
+    : using-name using-name-specifier? using-elements?
+    ;
+
+using-name
+    : identifier
+    ;
+
+using-name-specifier
+    : '=' identifier
+    ;
+
+using-wildcard
+    : '...'
+    ;
+
+any-path
+    : identifier ( '.' identifier )*
+    ;
+    
+name
+    : identifier
+    ;
+
+//*****************************************************************************
+//
+// DECLARATION
+//
+
+declarations
+    : declaration*
+    ;
+
+declaration
+    : function-declaration
+    | class-declaration
+    | object-declaration
+    ;
+
+function-declaration
+    : prelude type 'function' name parameters function-body
+    ;
+
+function-body
+    : '{' usings declarations statements '}'
+    ;
+
+class-declaration
+    : prelude 'class' name parameters? extends? case-types? class-body
+    ;
+
+extends
+    : ':' type
+    ;
+
+case-types
+    : 'of' case-type-list
+    ;
+
+case-type-list
+    : type ('|' type)*
+    ;
+
+class-body
+    : '{' usings declarations '}'
+    ;
+
+object-declaration
+    : prelude 'object' name extends? class-body
+    ;
+
+//*****************************************************************************
+//
+// PRELUDE
+//
+
+prelude
+    : attribute*
+    ;
+
+attribute
+    : name attribute-arguments?
+    ;
+
+attribute-arguments
+    : '(' ')'
+    ;
+
+//*****************************************************************************
+//
+// TYPE
+//
+type
+    : unionlevel-type
+    ;
+
+unionlevel-type
+    : union-type
+    | intersectionlevel-type
+    ;
+
+union-type
+    : unionlevel-type '|' intersectionlevel-type
+    ;
+
+intersectionlevel-type
+    : intersection-type
+    | primary-type
+    ;
+
+intersection-type
+    : intersectionlevel-type '&' primary-type
+    ;
+
+primary-type
+    : name
+    ;
+
+parameters
+    : '(' parameter-list? ')'
+    ;
+
+parameter-list
+    : parameter (',' parameter)*
+    ;
+
+parameter
+    : type name
+    ;
+
+//*****************************************************************************
+//
+// STATEMENT
+//
+
+statements
+    : statement*
+    ;
+
+statement
+    | return-statement
+    ;
+
+return-statement
+    : 'return' expression ';'
+    ;
+
+//*****************************************************************************
+//
+// EXPRESSION
+//
+
+expression
+    : addlevel-expression
+    ;
+
+addlevel-expression
+    | add-expression
+    | sub-expression
+    | primary-expression
+    ;
+
+add-expression
+    : addlevel-expression '+' primary-expression
+    ;
+
+sub-expression
+    : addlevel-expression '-' primary-expression
+    ;
+
+primary-expression
+    : name
+    ;
+
+//*****************************************************************************
+//
+// LEXER
+//
+
+decimal-digits
+    | decimal-digit ('_' | decimal-digit)*
+    ;
+
+hex-digits
+    | hex-digit ('_' | hex-digit)*
+    ;
+
+binary-digits
+    | binary-digit ('_' | binary-digit)*
+    ;
+
+exponent
+    | ( 'e' | 'E' ) ( '+' | '-' )? decimal-digit*
+    ;
+
+magnitude
+    | 'k' | 'M' | 'G' | 'T' | 'P'
+    ;
+
+fractional-magnitude
+    | 'm' | 'u' | 'n' | 'p' | 'f'
+    ;
+    
+literal-float
+    | < decimal-digits ( '.' decimal-digits (exponent | magnitude | fractional-magnitude)? | fractional-magnitude) >
+    ;
+
+literal-natural
+    | < decimal-digits magnitude? | '#' hex-digits | '$' binary-digits >
+    ;
+
+literal-char
+    | < '\'' char-part '\'' >
+    ;
+
+string-start
+    | < '"' string-part '``' >
+    ;
+
+string-mid
+    | < '``' string-part '``' >
+    ;
+
+string-end
+    | < '``' string-part '`'* '"' >
+    ;
+
+literal-string
+    | < '"' string-part '`'* '"' >
+    ;
+
+verbatim-string
+    | < '"""' (~'"' | '"' ~'"' | '""' ~'"')* '"""' >
+    ;
+
+char-part
+    | ( ~('\\' | '\'') | escape-sequence )*
+    ;
+
+string-part
+    | ( ~('\\'| '"'|'`') | ('`' ~('`'|'"'|'\\')) | '`\\' escape-core | escape-sequence )*
+    ;
+
+escape-sequence
+    | '\\' (~'{' | '{' (~'}')* '}' )
+    ;
+
+escape-core
+    | ~'{'
+    | '{' (~'}')* '}'?
+    ;
+
+skip
+    | white
+    | comment
+    ;
+
+white
+    | ( ' ' | '\r' | '\t' | '\f' | '\n' )+
+    ;
+
+line-end
+    | '\r' '\n'
+    | '\n'
+    | '\r'
+    ;
+
+line-ender
+    | '\r'
+    | '\n'
+    ;
+
+comment
+    | line-comment
+    | block-comment
+    ;
+
+line-comment
+    | '//' (~line-ender)* line-end?
+    ;   
+
+block-comment
+    | '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
+    ;
+
+identifier
+    | < identifier-start identifier-part* >
+    ;
+
+identifier-start
+    | '_'
+    | 'a' .. 'z'
+    | 'A' .. 'Z'
+    ;
+    
+identifier-part
+    |   '_'
+    |   decimal-digit
+    |   letter
+    ;
+
+letter
+    | 'a' .. 'z' 
+    | 'A' .. 'Z' 
+    | '\u{0080}' .. '\u{ffff}'
+    ;
+
+decimal-digit
+    | '0' .. '9'
+    ;
+
+hex-digit
+    | '0' .. '9' | 'A' .. 'F' | 'a' .. 'f'
+    ;
+
+binary-digit
+    | '0' | '1'
+    ;

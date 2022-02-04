@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Sax.six" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Sax.six" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Sax.six" />
+	  <AdditionalFiles Include="Sax.six" />
+	  <EmbeddedResource Include=".\Sax.six" Link="Grammar.six" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
+    <ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Six.Rex\Six.Rex.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="src\sax\**\*.sax">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

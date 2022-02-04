@@ -1,0 +1,9 @@
+﻿namespace sax.core;
+ 
+shared abstract class Null : Anything of null
+{
+}
+
+shared object null : Null
+{
+}

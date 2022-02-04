@@ -38,5 +38,6 @@
         public RuleOp StartRule => Rules.Where(op => op.Name.ToLowerInvariant() == Ast.AstGrammar.TheStart).First();
         public RuleOp WhitespaceRule => Rules.Where(op => op.Name.ToLowerInvariant() == Ast.AstGrammar.TheWhitespace).First();
         public RuleOp KeywordsRule => Rules.Where(op => op.Name.ToLowerInvariant() == Ast.AstGrammar.TheKeywords).First();
+        public RuleOp NamespaceRule => Rules.Where(op => op.Name.ToLowerInvariant() == Ast.AstGrammar.TheNamespace).First();
     }
 }

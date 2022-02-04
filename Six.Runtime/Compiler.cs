@@ -38,7 +38,7 @@ namespace Six.Runtime
                     .Distinct()
                     .ToList();
 
-                var start = furthest.First().Start;
+                var start = furthest.First().Core;
                 var lco = start.Source.NameLineColumn(start.Offset);
 
                 var expected = "'" + string.Join("' | '", terminals) + "'";
