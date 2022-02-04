@@ -12,36 +12,20 @@ compilation-unit
     ;
 
 code-unit
-    : usings namespace
+    : namespace
     ;
 
 namespace
-    | file-namespace
-    | block-namespace
+    : prelude 'namespace' names ';' declarations
     ;
 
-file-namespace
-    : namespace-intro ';' usings declarations
-    ;
-
-block-namespace
-    : namespace-intro '{' usings declarations '}'
-    ;
-
-namespace-intro
-    : 'namespace' namespace-path
-    ;
-
-namespace-path
-    : identifier ('.' identifier)*
-    ;
+//*****************************************************************************
+//
+// MODULE
+//
 
 module-descriptor
-    : 'module' module-name module-body
-    ;
-
-module-name
-    : any-path
+    : 'module' names module-body
     ;
 
 module-body
@@ -49,19 +33,20 @@ module-body
     ;
 
 module-body-element
-    | module-import
+    : module-import
     ;
 
 module-import
-    : 'import' module-name ';'
+    : 'import' names ';'
     ;
 
-usings
-    : using-declaration*
-    ;
+//*****************************************************************************
+//
+// USING
+//
 
 using-declaration
-    : 'using' any-path using-elements
+    : 'using' names using-elements
     ;
 
 using-elements
@@ -92,14 +77,52 @@ using-name-specifier
 using-wildcard
     : '...'
     ;
-
-any-path
-    : identifier ( '.' identifier )*
-    ;
     
+//*****************************************************************************
+//
+// MISC
+//
+
 name
-    : identifier
+    | identifier
     ;
+
+names
+    : name ('.' name)*
+    ;
+
+path
+    : reference ('.' reference)*
+    ;
+
+reference
+    : name generic-arguments?
+    ;
+
+generic-arguments
+    : '<' generic-argument-list? '>'
+    ;
+
+generic-argument-list
+    : generic-argument (',' generic-argument)*
+    ;
+
+generic-argument
+    : type
+    ;
+
+generic-parameters
+    : '<' generic-parameter-list? '>'
+    ;
+
+generic-parameter-list
+    : generic-parameter (',' generic-parameter)*
+    ;
+
+generic-parameter
+    : name
+    ;
+
 
 //*****************************************************************************
 //
@@ -111,21 +134,51 @@ declarations
     ;
 
 declaration
-    : function-declaration
+    | using-declaration
+    | function-declaration
+    | attribute-declaration
     | class-declaration
+    | interface-declaration
     | object-declaration
+    | alias-declaration
     ;
 
 function-declaration
-    : prelude type 'function' name parameters function-body
+    : prelude 'fun' type name parameters function-body
+    ;
+
+attribute-declaration
+    : prelude 'val' type? name attribute-body
     ;
 
 function-body
-    : '{' usings declarations statements '}'
+    : expression-body
+    | block-body
+    ;
+
+attribute-body
+    : expression-body
+    | block-body
+    ;
+
+expression-body
+    : function-specifier? ';'
+    ;
+
+function-specifier
+    : '=>' expression
+    ;
+
+block-body
+    : '{' declarations statements '}'
     ;
 
 class-declaration
-    : prelude 'class' name parameters? extends? case-types? class-body
+    : prelude 'class' name parameters? extends? case-types? block-body
+    ;
+
+interface-declaration
+    : prelude 'interface' name parameters? extends? case-types? block-body
     ;
 
 extends
@@ -140,12 +193,12 @@ case-type-list
     : type ('|' type)*
     ;
 
-class-body
-    : '{' usings declarations '}'
+object-declaration
+    : prelude 'object' name extends? block-body
     ;
 
-object-declaration
-    : prelude 'object' name extends? class-body
+alias-declaration
+    : prelude 'alias' name '=>' type ';'
     ;
 
 //*****************************************************************************
@@ -154,7 +207,7 @@ object-declaration
 //
 
 prelude
-    : attribute*
+    : string-literal? attribute*
     ;
 
 attribute
@@ -162,7 +215,35 @@ attribute
     ;
 
 attribute-arguments
-    : '(' ')'
+    : '(' attribute-argument-list? ')'
+    ;
+
+attribute-argument-list
+    : attribute-argument (',' attribute-argument)*
+    ;
+
+attribute-argument
+    : string-literal
+    | meta-reference
+    ;
+
+meta-reference
+    : class-reference
+    | interface-reference
+    | function-reference
+    ;
+
+class-reference
+    : 'class' names
+    ;
+
+interface-reference
+    : 'interface' names
+    ;
+
+
+function-reference
+    : 'function' names
     ;
 
 //*****************************************************************************
@@ -192,7 +273,12 @@ intersection-type
     ;
 
 primary-type
-    : name
+    : path
+    | constructor
+    ;
+
+constructor
+    : path arguments
     ;
 
 parameters
@@ -204,7 +290,19 @@ parameter-list
     ;
 
 parameter
-    : type name
+    : prelude type name
+    ;
+
+arguments
+    : '(' argument-list? ')'
+    ;
+
+argument-list
+    : argument (',' argument)*
+    ;
+
+argument
+    : expression
     ;
 
 //*****************************************************************************
@@ -221,7 +319,7 @@ statement
     ;
 
 return-statement
-    : 'return' expression ';'
+    : 'return' expression? ';'
     ;
 
 //*****************************************************************************
@@ -236,20 +334,50 @@ expression
 addlevel-expression
     | add-expression
     | sub-expression
-    | primary-expression
+    | mullevel-expression
     ;
 
 add-expression
-    : addlevel-expression '+' primary-expression
+    : addlevel-expression '+' mullevel-expression
     ;
 
 sub-expression
-    : addlevel-expression '-' primary-expression
+    : addlevel-expression '-' mullevel-expression
+    ;
+
+mullevel-expression
+    | mul-expression
+    | div-expression
+    | rem-expression
+    | primary-expression
+    ;
+
+mul-expression
+    : mullevel-expression '*' primary-expression
+    ;
+
+div-expression
+    : mullevel-expression '/' primary-expression
+    ;
+
+rem-expression
+    : mullevel-expression '%' primary-expression
     ;
 
 primary-expression
     : name
+    | literal
     ;
+
+literal
+    | string-literal
+    ;
+
+string-literal
+    | plain-string-literal
+    | verbatim-string-literal
+    ;
+    
 
 //*****************************************************************************
 //
@@ -272,20 +400,12 @@ exponent
     | ( 'e' | 'E' ) ( '+' | '-' )? decimal-digit*
     ;
 
-magnitude
-    | 'k' | 'M' | 'G' | 'T' | 'P'
-    ;
-
-fractional-magnitude
-    | 'm' | 'u' | 'n' | 'p' | 'f'
-    ;
-    
 literal-float
-    | < decimal-digits ( '.' decimal-digits (exponent | magnitude | fractional-magnitude)? | fractional-magnitude) >
+    | < decimal-digits '.' decimal-digits exponent? >
     ;
 
 literal-natural
-    | < decimal-digits magnitude? | '#' hex-digits | '$' binary-digits >
+    | < decimal-digits | '#' hex-digits | '$' binary-digits >
     ;
 
 literal-char
@@ -304,11 +424,11 @@ string-end
     | < '``' string-part '`'* '"' >
     ;
 
-literal-string
+plain-string-literal
     | < '"' string-part '`'* '"' >
     ;
 
-verbatim-string
+verbatim-string-literal
     | < '"""' (~'"' | '"' ~'"' | '""' ~'"')* '"""' >
     ;
 
@@ -373,9 +493,9 @@ identifier-start
     ;
     
 identifier-part
-    |   '_'
-    |   decimal-digit
-    |   letter
+    | '_'
+    | decimal-digit
+    | letter
     ;
 
 letter
@@ -389,7 +509,9 @@ decimal-digit
     ;
 
 hex-digit
-    | '0' .. '9' | 'A' .. 'F' | 'a' .. 'f'
+    | '0' .. '9'
+    | 'A' .. 'F'
+    | 'a' .. 'f'
     ;
 
 binary-digit

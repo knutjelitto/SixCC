@@ -1,4 +1,5 @@
 ﻿using Six.Runtime;
+using System.IO;
 
 namespace Six.Sax.Compiler
 {
