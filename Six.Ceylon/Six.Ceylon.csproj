@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
-		<ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+	  <ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 	  <ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 	  <ProjectReference Include="..\Six.Input\Six.Input.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 	  <ProjectReference Include="..\Six.Gen\Six.Gen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
