@@ -1,9 +1,4 @@
 ﻿using Six.Sax.Ast;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Sax.Sema
 {
@@ -43,35 +38,46 @@ namespace Six.Sax.Sema
             }
         }
 
-        private void Visit(IScope into, Node node)
+        private void WalkMany(IScope into, IEnumerable<Node>? nodes)
         {
+            if (nodes != null)
+            {
+                foreach (var node in nodes)
+                {
+                    Walk(into, node);
+                }
+            }
         }
 
-        private void Visit(IScope into, Declaration.Entity node)
+        private void Visit(IScope into, Node node)
         {
-            //TODO: remove
-            Dc.Declare(into, node);
+            Assert(false);
+        }
+
+        private void Visit(IScope into, Declaration.Entity.Impl node)
+        {
+            into.Declare(node);
+
+            var ds = new DeclarationScope(into);
+
+            WalkMany(ds, node.Generics);
+            WalkMany(ds, node.Parameters);
         }
 
         private void Visit(IScope into, Declaration.Entity.Class node)
         {
-            Dc.Declare(into, node);
-
-            var ds = new DeclarationScope(into);
-
-            Walk(ds, node.Parameters);
-        }
-
-        private void Visit(IScope into, Parameters node)
-        {
-            foreach (var parameter in node)
-            {
-                Walk(into, parameter);
-            }
+            into.Declare(node);
         }
 
         private void Visit(IScope into, Parameter node)
         {
+            into.Declare(node);
+            into.ToResolve(node.Type);
+        }
+
+        private void Visit(IScope into, Generic.Parameter node)
+        {
+            into.Declare(node);
         }
     }
 }

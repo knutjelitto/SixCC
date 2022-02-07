@@ -8,6 +8,5 @@ namespace Six.Sax.Sema
 {
     public interface It
     {
-        Ast.Name Name { get; }
     }
 }

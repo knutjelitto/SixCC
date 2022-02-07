@@ -2,8 +2,12 @@
 {
     public class BlockScope : Scope
     {
-        public BlockScope()
+        public BlockScope(IScope up)
+            : base(up.Global)
         {
+            Up = up;
         }
+
+        public IScope Up { get; }
     }
 }

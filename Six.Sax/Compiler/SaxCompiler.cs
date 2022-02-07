@@ -8,7 +8,7 @@ using Six.Sax.Sema;
 
 namespace Six.Sax.Compiler
 {
-    public class CeylonCompiler : Compiler<SaxParser>
+    public class SaxCompiler : Compiler<SaxParser>
     {
         private readonly Global Global;
         private readonly CompilerConfiguration Configuration;
@@ -16,7 +16,7 @@ namespace Six.Sax.Compiler
 
         private readonly List<SourceFile> files = new();
 
-        public CeylonCompiler(Global global, CompilerConfiguration configuration)
+        public SaxCompiler(Global global, CompilerConfiguration configuration)
         {
             Global = global;
             Configuration = configuration;

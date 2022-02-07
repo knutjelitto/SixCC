@@ -1,7 +1,11 @@
-﻿namespace Six.Sax.Sema
+﻿using Six.Sax.Ast;
+
+namespace Six.Sax.Sema
 {
     public interface IScope
     {
-        bool Declare(It item);
+        Global Global { get; }
+        void Declare(INamed named);
+        void ToResolve(Node node);
     }
 }

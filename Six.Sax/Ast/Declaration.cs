@@ -2,29 +2,42 @@
 
 namespace Six.Sax.Ast
 {
-    public interface Declaration : Node
+    public interface Declaration : Node, INamed
     {
-        public interface Entity : Declaration
+        public interface Entity : Declaration, IPreluded
         {
-            Name Name { get; }
-            Prelude Prelude { get; }
+            public abstract record Impl(
+                IRNode Tree,
+                Prelude Prelude,
+                Name Name,
+                Generic.Parameters? Generics,
+                Parameters? Parameters,
+                Type? Extends,
+                Types? Satisfies,
+                Types? Cases,
+                Generic.Constraints? Constraints,
+                Body Body,
+                Type? Result
+                ) : Entity;
 
             public sealed record Function(
                 IRNode Tree, 
                 Prelude Prelude,
                 Name Name,
                 Generic.Parameters? Generics,
-                Type Type, 
+                Type Result,
                 Parameters Parameters,
                 Generic.Constraints? Constraints,
                 Body Body)
-                : Entity;
+                : Impl(Tree, Prelude, Name, Generics, Parameters, null, null, null, Constraints, Body, Result);
 
             public sealed record Attribute(
                 IRNode Tree, 
-                Prelude Prelude, Name Name,
-                Type? Type, Body Body)
-                : Entity;
+                Prelude Prelude,
+                Name Name,
+                Type? Type,
+                Body Body)
+                : Impl(Tree, Prelude, Name, null, null, null, null, null, null, Body, null);
 
             public sealed record Class(
                 IRNode Tree, 
@@ -37,7 +50,7 @@ namespace Six.Sax.Ast
                 Types? Cases,
                 Generic.Constraints? Constraints,
                 Body Body)
-                : Entity;
+                : Impl(Tree, Prelude, Name, Generics, Parameters, Extends, Satisfies, Cases, Constraints, Body, null);
 
             public sealed record Interface(
                 IRNode Tree, 
@@ -49,7 +62,7 @@ namespace Six.Sax.Ast
                 Types? Cases,
                 Generic.Constraints? Constraints,
                 Body Body)
-                : Entity;
+                : Impl(Tree, Prelude, Name, Generics, Parameters, null, Satisfies, Cases, Constraints, Body, null);
 
             public sealed record Object(
                 IRNode Tree, 
@@ -58,7 +71,7 @@ namespace Six.Sax.Ast
                 Type? Extends,
                 Types? Satisfies,
                 Body Body)
-                : Entity;
+                : Impl(Tree, Prelude, Name, null, null, Extends, Satisfies, null, null, Body, null);
         }
     }
 

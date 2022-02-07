@@ -6,7 +6,8 @@ namespace Six.Sax.Sema
     {
         private readonly Dictionary<string, NamespaceScope> children = new();
 
-        public NamespaceScope(NamespaceScope? parent, string name)
+        public NamespaceScope(Global global, NamespaceScope? parent, string name)
+            : base(global)
         {
             Parent = parent;
             Name = name;
@@ -19,7 +20,7 @@ namespace Six.Sax.Sema
         {
             if (!children.TryGetValue(name, out var scope))
             {
-                scope = new NamespaceScope(this, name);
+                scope = new NamespaceScope(Global, this, name);
                 children.Add(name, scope);
             }
             return scope;
@@ -50,18 +51,9 @@ namespace Six.Sax.Sema
                     foreach (var dc in GetDeclarations())
                     {
                         var attrs = new StringBuilder();
-                        attrs.Append(dc.IsShared ? "S" : " ");
+                        attrs.Append(dc.IsShared() ? "S" : " ");
 
-                        writer.WriteLine($"{dc.Kind,-15} [{attrs}] {dc.Name.Text} - {dc.Location}");
-                    }
-                    var dups = GetDups().ToList();
-                    if (dups.Count > 0)
-                    {
-                        writer.WriteLine("---");
-                        foreach (var dc in dups)
-                        {
-                            writer.WriteLine($"{dc.Kind,-15} {dc.Name.Text} - {dc.Location}");
-                        }
+                        writer.WriteLine($"{dc.GetKind(),-15} [{attrs}] {dc.Name.Text} - {dc.GetLocation()}");
                     }
                 }
             }

@@ -43,6 +43,11 @@ namespace Six.Sax.Ast
             {
                 return Text.GetHashCode();
             }
+
+            public override string ToString()
+            {
+                return Text;
+            }
         }
     }
 

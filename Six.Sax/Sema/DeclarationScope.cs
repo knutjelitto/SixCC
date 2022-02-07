@@ -3,6 +3,7 @@
     public class DeclarationScope : Scope
     {
         public DeclarationScope(IScope up)
+            : base(up.Global)
         {
             Up = up;
         }

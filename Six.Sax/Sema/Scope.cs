@@ -1,41 +1,54 @@
-﻿namespace Six.Sax.Sema
+﻿using Six.Core.Errors;
+using Six.Sax.Ast;
+
+namespace Six.Sax.Sema
 {
     public abstract class Scope : IScope
     {
-        private readonly Dictionary<Ast.Name, It> items = new();
-        private readonly Dictionary<Ast.Name, List<It>> dups = new();
+        private readonly Dictionary<Name, INamed> items = new();
 
-        public bool Declare(It declaration)
+        public Scope(Global global)
         {
-            var added = items.TryAdd(declaration.Name, declaration);
-
-            Dup(!added, declaration);
-
-            return added;
+            Global = global;
         }
 
-        public IEnumerable<Dc> GetDups()
-        {
-            return dups.Values.SelectMany(l => l).OfType<Dc>();
-        }
+        public Global Global { get; }
 
-        public IEnumerable<Dc> GetDeclarations()
+        public void Declare(INamed named)
         {
-            return items.Values.OfType<Dc>().OrderBy(dc => dc.Name);
-        }
+            var added = items.TryAdd(named.Name, named);
 
-        private void Dup(bool isDup, It item)
-        {
-            if (isDup)
+            if (added)
             {
-                if (!dups.TryGetValue(item.Name, out var list))
-                {
-                    list = new List<It>();
-                    dups.Add(item.Name, list);
-                    list.Add(items[item.Name]);
-                }
-                list.Add(item);
+                Global.InScope(this, named);
             }
+            else
+            {
+                DupError(named);
+            }
+        }
+
+        public void ToResolve(Node node)
+        {
+            if (node is IResolveable resolveable)
+            {
+                Global.Add(this, resolveable);
+            }
+        }
+
+        public IEnumerable<INamed> GetDeclarations()
+        {
+            return items.Values.OfType<INamed>().OrderBy(dc => dc.Name);
+        }
+
+        private void DupError(INamed item)
+        {
+            var already = items[item.Name]!;
+            var diagnostic1 = new SemanticError(item.GetLocation(), $"identifier '{item.Name}' already introduced elsewhere");
+            var diagnostic2 = new SemanticError(already.GetLocation(), $"identifier '{already.Name}' introduced here");
+
+            Global.Add(diagnostic1);
+            Global.Add(diagnostic2);
         }
     }
 }

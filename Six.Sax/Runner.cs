@@ -30,7 +30,7 @@ namespace Six.Sax
             if (module != null)
             {
                 var global = new Global();
-                var compiler = new CeylonCompiler(global, configuration);
+                var compiler = new SaxCompiler(global, configuration);
 
                 try
                 {

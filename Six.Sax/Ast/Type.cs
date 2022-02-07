@@ -1,13 +1,8 @@
 ﻿using Six.Runtime.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Sax.Ast
 {
-    public interface Type : Node, Generic.Argument
+    public interface Type : IResolveable, Node, Generic.Argument
     {
         public sealed record Union(IRNode Tree, Type Left, Type Right) : Type;
         public sealed record Constructor(IRNode Tree, Type Type, Arguments Arguments) : Type;
