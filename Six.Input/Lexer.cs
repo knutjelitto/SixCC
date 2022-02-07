@@ -54,8 +54,6 @@ namespace Six.Input
                         return Token(TKind.RightAngle);
                     case '=':
                         return Token(TKind.Assign);
-                    case ':':
-                        return Token(TKind.Colon);
                     case ';':
                         return Token(TKind.Semi);
                     case '|':
@@ -80,6 +78,10 @@ namespace Six.Input
                         return Literal();
                     case '%':
                         return Special();
+                    case ':':
+                        if (Next == ':')
+                            return Token(TKind.DefColon, 2);
+                        return Token(TKind.Colon);
                     default:
                         if (Letter(Current))
                         {

@@ -31,7 +31,12 @@
 
         public Expression Sequence(ILocation location, List<Expression> expressions)
         {
-            return new Sequence(location, expressions);
+            return new Sequence(location, false, expressions);
+        }
+
+        public Expression DefSequence(ILocation location, List<Expression> expressions)
+        {
+            return new Sequence(location, true, expressions);
         }
 
         public Expression Alternation(ILocation location, List<Expression> expressions)
@@ -91,6 +96,6 @@
 
         public Expression Any(ILocation location) => new Any(location);
 
-        public Expression Epsilon(ILocation location) => new Sequence(location);
+        public Expression Epsilon(ILocation location) => new Sequence(location, false);
     }
 }

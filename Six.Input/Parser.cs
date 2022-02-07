@@ -52,6 +52,11 @@ namespace Six.Input
                 Match(TKind.Colon);
                 expression = TopExpression();
             }
+            else if (Check(TKind.DefColon))
+            {
+                Match(TKind.DefColon);
+                expression = DefSequence();
+            }
             else
             {
                 Match(TKind.Assign);
@@ -95,6 +100,20 @@ namespace Six.Input
             }
 
             return builder.Sequence(location, expressions);
+        }
+
+        private Expression DefSequence()
+        {
+            var location = Current.Location;
+
+            var expressions = new List<Expression>();
+            do
+            {
+                expressions.Add(Element());
+            }
+            while (!Check(TKind.Alter, TKind.Semi, TKind.RightParent, TKind.RightCurly, TKind.RightAngle, TKind.EOF));
+
+            return builder.DefSequence(location, expressions);
         }
 
         private Expression Element()

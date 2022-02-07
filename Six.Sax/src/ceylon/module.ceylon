@@ -1,0 +1,3 @@
+module six.core
+{
+}

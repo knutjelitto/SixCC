@@ -12,11 +12,7 @@ compilation-unit
     ;
 
 code-unit
-    : namespace
-    ;
-
-namespace
-    : prelude 'namespace' names ';' declarations
+    : prelude 'namespace' names ';' usings declarations
     ;
 
 //*****************************************************************************
@@ -44,6 +40,10 @@ module-import
 //
 // USING
 //
+
+usings
+    : using-declaration*
+    ;
 
 using-declaration
     : 'using' names using-elements
@@ -120,7 +120,12 @@ generic-parameter-list
     ;
 
 generic-parameter
-    : name
+    : variance? name
+    ;
+
+variance
+    : 'in'
+    | 'out'
     ;
 
 
@@ -134,55 +139,89 @@ declarations
     ;
 
 declaration
-    | using-declaration
     | function-declaration
     | attribute-declaration
     | class-declaration
     | interface-declaration
     | object-declaration
     | alias-declaration
+    | constructor-declaration
     ;
 
 function-declaration
-    : prelude 'fun' type name parameters function-body
+    : prelude 'function' type name generic-parameters? parameters constraints? function-body
     ;
 
 attribute-declaration
-    : prelude 'val' type? name attribute-body
+    : prelude 'value' type? name attribute-body
+    ;
+
+class-declaration
+    : prelude 'class' name generic-parameters? parameters? extends? satisfies? case-types? constraints? block-body
+    ;
+
+interface-declaration
+    : prelude 'interface' name generic-parameters? parameters? satisfies? case-types? constraints? block-body
+    ;
+
+object-declaration
+    : prelude 'object' name extends? satisfies? block-body
+    ;
+
+alias-declaration
+    : prelude 'alias' name generic-parameters? constraints? '=>' type ';'
+    ;
+
+constructor-declaration
+    : prelude 'new' name? extends? function-body
     ;
 
 function-body
-    : expression-body
+    | expression-body
     | block-body
+    | null-body
     ;
 
 attribute-body
-    : expression-body
+    | expression-body
     | block-body
+    | null-body
+    ;
+
+block-body
+    | '{' usings declarations statements '}'
     ;
 
 expression-body
-    : function-specifier? ';'
+    | function-specifier ';'
+    ;
+
+null-body
+    :: ';'
     ;
 
 function-specifier
     : '=>' expression
     ;
 
-block-body
-    : '{' declarations statements '}'
-    ;
-
-class-declaration
-    : prelude 'class' name parameters? extends? case-types? block-body
-    ;
-
-interface-declaration
-    : prelude 'interface' name parameters? extends? case-types? block-body
-    ;
-
 extends
     : ':' type
+    ;
+
+satisfies
+    : 'is' union-type-list
+    ;
+
+constraints
+    : constraint+
+    ;
+
+constraint
+    : 'where' name generic-parameters? case-types? satisfies?
+    ;
+
+union-type-list
+    : type (',' type)*
     ;
 
 case-types
@@ -191,14 +230,6 @@ case-types
 
 case-type-list
     : type ('|' type)*
-    ;
-
-object-declaration
-    : prelude 'object' name extends? block-body
-    ;
-
-alias-declaration
-    : prelude 'alias' name '=>' type ';'
     ;
 
 //*****************************************************************************
@@ -228,7 +259,9 @@ attribute-argument
     ;
 
 meta-reference
-    : class-reference
+    | class-reference
+    | object-reference
+    | value-reference
     | interface-reference
     | function-reference
     ;
@@ -237,10 +270,17 @@ class-reference
     : 'class' names
     ;
 
+object-reference
+    : 'object' names
+    ;
+
+value-reference
+    : 'value' names
+    ;
+
 interface-reference
     : 'interface' names
     ;
-
 
 function-reference
     : 'function' names
@@ -273,12 +313,22 @@ intersection-type
     ;
 
 primary-type
-    : path
+    : reference
+    | type-selector
     | constructor
+    | array-type
+    ;
+
+array-type
+    : primary-type '[' ']'
+    ;
+
+type-selector
+    : primary-type '.' reference
     ;
 
 constructor
-    : path arguments
+    : primary-type arguments
     ;
 
 parameters
@@ -316,10 +366,15 @@ statements
 
 statement
     | return-statement
+    | assert-statement
     ;
 
 return-statement
     : 'return' expression? ';'
+    ;
+
+assert-statement
+    : string-literal? 'assert' arguments ';'
     ;
 
 //*****************************************************************************
@@ -328,7 +383,40 @@ return-statement
 //
 
 expression
-    : addlevel-expression
+    : notlevel-expression
+    ;
+
+notlevel-expression
+    | not-expression
+    | equallevel-expression
+    ;
+
+not-expression
+    : '!' notlevel-expression
+    ;
+
+equallevel-expression
+    | equal-expression
+    | not-equal-expression
+    | identical-expression
+    | not-identical-expression
+    | addlevel-expression
+    ;
+
+equal-expression
+    : addlevel-expression '==' addlevel-expression
+    ;
+
+not-equal-expression
+    : addlevel-expression '!=' addlevel-expression
+    ;
+
+identical-expression
+    : addlevel-expression '===' addlevel-expression
+    ;
+
+not-identical-expression
+    : addlevel-expression '!==' addlevel-expression
     ;
 
 addlevel-expression
@@ -365,12 +453,23 @@ rem-expression
     ;
 
 primary-expression
-    : name
+    : reference
     | literal
+    | call-expression
+    | select-expression
+    ;
+
+call-expression
+    : primary-expression arguments
+    ;
+
+select-expression
+    : primary-expression '.' reference
     ;
 
 literal
     | string-literal
+    | natural-literal
     ;
 
 string-literal
@@ -404,7 +503,7 @@ literal-float
     | < decimal-digits '.' decimal-digits exponent? >
     ;
 
-literal-natural
+natural-literal
     | < decimal-digits | '#' hex-digits | '$' binary-digits >
     ;
 

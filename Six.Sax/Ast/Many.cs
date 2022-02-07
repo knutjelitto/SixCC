@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Six.Sax.Ast
 {
-    public record Many<T> : Node, IReadOnlyList<T>
+    public record Many<T> : NodeList, IReadOnlyList<T>
         where T : Node
     {
         private readonly List<T> items;
@@ -15,6 +15,7 @@ namespace Six.Sax.Ast
         }
 
         public IRNode Tree { get; }
+        IEnumerable<Node> NodeList.Items => (IEnumerable<Node>)items;
 
         public T this[int index] => items[index];
         public int Count => items.Count;

@@ -16,14 +16,15 @@ namespace Six.Sax.Compiler
             Prefix = prefix;
         }
 
-        public IEnumerable<Module> GetModules(string fromRoot)
+        public Module? GetModule(string fromRoot)
         {
-            var moduleFiles = LoadFiles(fromRoot, s => Path.GetFileName(s) == moduleFile).ToList();
+            var file = LoadModule(fromRoot);
 
-            foreach (var moduleFile in moduleFiles)
+            if (file != null)
             {
-                yield return GetModule(moduleFile);
+                return GetModule(file);
             }
+            return null;
         }
 
         private Module GetModule(SourceFile moduleFile)
@@ -35,18 +36,17 @@ namespace Six.Sax.Compiler
             return module;
         }
 
-        private IEnumerable<SourceFile> LoadFiles(string relative, System.Func<string, bool>? filter = null)
+        private SourceFile? LoadModule(string relative)
         {
-            filter ??= n => true;
-
             var current = System.Environment.CurrentDirectory;
             var absolute = Path.Combine(current, Prefix, relative);
-            foreach (var fullPath in Directory.EnumerateFiles(absolute, "*", SearchOption.AllDirectories).Where(n => filter(n)))
+            foreach (var fullPath in Directory.EnumerateFiles(absolute, moduleFile, SearchOption.AllDirectories))
             {
                 var shortPath = fullPath[(current.Length + Prefix.Length + 2)..].Replace("\\", "/");
 
-                yield return MakeFile(fullPath.Replace("\\", "/"), shortPath);
+                return MakeFile(fullPath.Replace("\\", "/"), shortPath);
             }
+            return null;
         }
 
         private SourceFile MakeFile(string fullPath, string shortPath)

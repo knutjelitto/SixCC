@@ -14,9 +14,9 @@ namespace Six.Runtime
         {
         }
 
-        public bool BuildFile(SourceFile job)
+        public bool BuildFile(SourceFile file)
         {
-            var ok = Ok(() => Parse(job));
+            var ok = Ok(() => Parse(file));
 
             if (!ok)
             {
@@ -50,19 +50,19 @@ namespace Six.Runtime
                 return false;
             }
 
-            var sppf = SppfBuilder.Build(job.Source, parser, ruleIndex);
+            var sppf = SppfBuilder.Build(file.Source, parser, ruleIndex);
 
             if (sppf == null)
             {
                 Console.WriteLine();
-                Console.WriteLine($"sppf: {job.ShortPath}");
+                Console.WriteLine($"sppf: {file.ShortPath}");
 
                 return false;
             }
 
-            job.Sppf = sppf;
+            file.Sppf = sppf;
 
-            job.Tree = TypedBuilder.Build(sppf);
+            file.Tree = TypedBuilder.Build(sppf);
 
             return true;
         }

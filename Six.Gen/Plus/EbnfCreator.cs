@@ -99,6 +99,12 @@ namespace Six.Gen.Ebnf
                 }
 
                 var name = symbol.Name;
+
+                if (name == "null-body")
+                {
+                    Assert(true);
+                }
+
                 var transformed = Create(symbol.Expression);
 
                 if (transformed is TokenOp)
@@ -284,17 +290,28 @@ namespace Six.Gen.Ebnf
 
         private CoreOp Visit(Ast.Sequence seq)
         {
-            Assert(seq.Expressions.Count >= 0);
-
-            var transformed = seq.Expressions.Select(e => Create(e)).ToList();
-
-            if (seq.Expressions.Count == 1)
+            if (seq.Definite)
             {
-                return transformed[0];
+                Assert(seq.Expressions.Count >= 1);
+
+                var transformed = seq.Expressions.Select(e => Create(e)).ToList();
+
+                return new SeqOp(seq.Location, transformed);
             }
             else
             {
-                return new SeqOp(seq.Location, transformed);
+                Assert(seq.Expressions.Count >= 0);
+
+                var transformed = seq.Expressions.Select(e => Create(e)).ToList();
+
+                if (seq.Expressions.Count == 1)
+                {
+                    return transformed[0];
+                }
+                else
+                {
+                    return new SeqOp(seq.Location, transformed);
+                }
             }
         }
 

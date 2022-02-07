@@ -11,4 +11,10 @@ namespace Six.Sax.Ast
     {
         IRNode Tree { get; }
     }
+
+    public interface NodeList : Node
+    {
+        IEnumerable<Node> Items { get; }
+        int Count { get; }
+    }
 }

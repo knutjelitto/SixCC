@@ -1,6 +1,6 @@
 ﻿namespace sax.core;
 
-shared fun int add(int x, int y)
+shared function int add(int x, int y)
 {
     return x + y;
 }

@@ -21,6 +21,7 @@ namespace Six.Input
         [Description(">")] RightAngle,
 
         [Description(":")] Colon,
+        [Description("::")] DefColon,
         [Description("=")] Assign,
         [Description(";")] Semi,
         [Description("|")] Alter,

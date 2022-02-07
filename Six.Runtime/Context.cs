@@ -32,7 +32,7 @@ namespace Six.Runtime
             else
             {
                 context.Continues.Add(onMatched);
-                foreach (var next in context.Nexts)
+                foreach (var next in context.Nexts.ToList())
                 {
                     onMatched(next);
                 }

@@ -4,17 +4,21 @@ using Six.Runtime;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
+using Six.Sax.Sema;
 
 namespace Six.Sax.Compiler
 {
     public class CeylonCompiler : Compiler<SaxParser>
     {
+        private readonly Global Global;
         private readonly CompilerConfiguration Configuration;
         private readonly SaxVisitor visitor;
+
         private readonly List<SourceFile> files = new();
 
-        public CeylonCompiler(CompilerConfiguration configuration)
+        public CeylonCompiler(Global global, CompilerConfiguration configuration)
         {
+            Global = global;
             Configuration = configuration;
 
             if (Configuration.WithRuleIndex)
@@ -34,6 +38,16 @@ namespace Six.Sax.Compiler
                     ruleIndex.Dump(writer);
                 }
             }
+
+
+            if (Configuration.BuildTypes)
+            {
+                using (var writer = $"{parser.__Name}-Global.txt".Writer())
+                {
+                    Global.Dump(writer);
+                }
+            }
+
 
             using (var writer = $"{parser.__Name}-Timing.txt".Writer())
             {
@@ -127,13 +141,28 @@ namespace Six.Sax.Compiler
                         SppfDumper.Dump(file.Sppf, writer);
                     }
                 }
-                file.Sppf = null;
 
                 if (Configuration.DumpTree && file.Tree != null)
                 {
                     using (var writer = $"{file.ShortPath}.tree".Writer())
                     {
                         TypedDumper.Dump(file.Tree, writer);
+                    }
+                }
+
+                if (Configuration.DumpAst && file.Tree?.Value != null)
+                {
+                    using (var writer = $"{file.ShortPath}.ast".Writer())
+                    {
+                        new AstDumper(writer, new Reflector()).Dump(file.Tree.Value);
+                    }
+                }
+
+                if (Configuration.BuildTypes && file.Tree?.Value != null)
+                {
+                    if (file.Tree?.Value is Ast.Unit.Code root)
+                    {
+                        CodeUnitWalker.Walk(Global, root);
                     }
                 }
             }
