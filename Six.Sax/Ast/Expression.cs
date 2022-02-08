@@ -43,6 +43,7 @@ namespace Six.Sax.Ast
         public sealed record Not(IRNode Tree, Expression Expr) : Unary;
 
         public sealed record Add(IRNode Tree, Expression Left, Expression Right) : Binary;
+        public sealed record Sub(IRNode Tree, Expression Left, Expression Right) : Binary;
         public sealed record Mul(IRNode Tree, Expression Left, Expression Right) : Binary;
         public sealed record Equal(IRNode Tree, Expression Left, Expression Right) : Binary;
         public sealed record NotEqual(IRNode Tree, Expression Left, Expression Right) : Binary;

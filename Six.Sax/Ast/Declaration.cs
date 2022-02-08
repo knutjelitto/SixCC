@@ -2,7 +2,7 @@
 
 namespace Six.Sax.Ast
 {
-    public interface Declaration : Node, INamed
+    public interface Declaration : Node, INamed, Statelaration
     {
         public interface Entity : Declaration, IPreluded
         {
@@ -16,7 +16,7 @@ namespace Six.Sax.Ast
                 Types? Satisfies,
                 Types? Cases,
                 Generic.Constraints? Constraints,
-                Body Body,
+                Body? Body,
                 Type? Result
                 ) : Entity;
 
@@ -65,13 +65,22 @@ namespace Six.Sax.Ast
                 : Impl(Tree, Prelude, Name, Generics, Parameters, null, Satisfies, Cases, Constraints, Body, null);
 
             public sealed record Object(
-                IRNode Tree, 
+                IRNode Tree,
                 Prelude Prelude,
                 Name Name,
                 Type? Extends,
                 Types? Satisfies,
                 Body Body)
                 : Impl(Tree, Prelude, Name, null, null, Extends, Satisfies, null, null, Body, null);
+
+            public sealed record Alias(
+                IRNode Tree,
+                Prelude Prelude,
+                Name Name,
+                Generic.Parameters? Generics,
+                Generic.Constraints? Constraints,
+                Type? Result)
+                : Impl(Tree, Prelude, Name, Generics, null, null, null, null, Constraints, null, Result);
         }
     }
 

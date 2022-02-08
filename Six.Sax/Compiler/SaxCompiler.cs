@@ -39,7 +39,6 @@ namespace Six.Sax.Compiler
                 }
             }
 
-
             if (Configuration.BuildTypes)
             {
                 using (var writer = $"{parser.__Name}-Global.txt".Writer())

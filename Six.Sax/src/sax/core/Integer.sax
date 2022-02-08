@@ -1,0 +1,11 @@
+﻿namespace sax.core;
+
+shared native class Int32
+{
+}
+
+shared native class Int64
+{
+}
+
+shared native alias int => Int32;

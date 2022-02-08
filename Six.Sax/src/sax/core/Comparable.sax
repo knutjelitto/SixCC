@@ -1,3 +1,5 @@
+@skip
+
 namespace sax.core;
 
 """The general contract for values whose magnitude can be 

@@ -20,7 +20,7 @@ namespace Six.Sax.Sema
 
             if (added)
             {
-                Global.InScope(this, named);
+                Global.DeclareIn(this, named);
             }
             else
             {
@@ -32,8 +32,13 @@ namespace Six.Sax.Sema
         {
             if (node is IResolveable resolveable)
             {
-                Global.Add(this, resolveable);
+                Global.ToResolve(this, resolveable);
             }
+        }
+
+        public virtual bool TryFind(Name name, [MaybeNullWhen(false)] out INamed? node)
+        {
+            return items.TryGetValue(name, out node);
         }
 
         public IEnumerable<INamed> GetDeclarations()

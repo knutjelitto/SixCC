@@ -1,4 +1,6 @@
-﻿namespace sax.core;
+﻿@skip
+
+namespace sax.core;
  
 """
 The abstract supertype of all types. A value of type `Anything` may be a

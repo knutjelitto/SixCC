@@ -8,6 +8,6 @@ namespace Six.Sax.Ast
 
         public sealed record Function(IRNode Tree, Expression Expression) : Body;
 
-        public sealed record Block(IRNode Tree, Declarations Declarations, Statements Statements) : Body;
+        public sealed record Block(IRNode Tree, Statelarations Statelarations) : Body;
     }
 }

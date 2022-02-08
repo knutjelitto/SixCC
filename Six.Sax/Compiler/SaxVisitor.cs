@@ -65,12 +65,14 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CCodeUnit element)
         {
+            var skip = Exists(element.Literal);
+
             var prelude = Walk<Prelude>(element.Prelude);
             var names = Walk<Names>(element.Names);
             var declarations = Walk<Declarations>(element.Declarations);
             var usings = Walk<Using.Usings>(element.Usings);
 
-            element.Value = new Unit.Code(element, prelude, names, usings, declarations);
+            element.Value = new Unit.Code(element, skip, prelude, names, usings, declarations);
         }
 
         protected override void Visit(CModuleDescriptor element)
@@ -128,6 +130,11 @@ namespace Six.Sax.Compiler
         protected override void Visit(CDeclarations element)
         {
             element.Value = new Declarations(element, WalkMany<Declaration>(element));
+        }
+
+        protected override void Visit(CStatelarations element)
+        {
+            element.Value = new Statelarations(element, WalkMany<Statelaration>(element));
         }
 
         protected override void Visit(CFunctionDeclaration element)
@@ -193,6 +200,17 @@ namespace Six.Sax.Compiler
             element.Value = new Declaration.Entity.Object(element, prelude, name, extends, satifies, body);
         }
 
+        protected override void Visit(CAliasDeclaration element)
+        {
+            var prelude = Walk<Prelude>(element.Prelude);
+            var name = Walk<Name>(element.Name);
+            var generics = Walk<Generic.Parameters>(element.GenericParameters);
+            var constraints = Walk<Generic.Constraints>(element.Constraints);
+            var type = Walk<Type>(element.Type);
+
+            element.Value = new Declaration.Entity.Alias(element, prelude, name, generics, constraints, type);
+        }
+
         protected override void Visit(CReference element)
         {
             var name = Walk<Name>(element.Name);
@@ -228,21 +246,15 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CBlockBody element)
         {
-            var declarations = Walk<Declarations>(element.Declarations);
-            var statements = Walk<Statements>(element.Statements);
+            var statelarations = Walk<Statelarations>(element.Statelarations);
 
-            element.Value = new Body.Block(element, declarations, statements);
+            element.Value = new Body.Block(element, statelarations);
         }
 
         protected override void Visit(CExpressionBody element)
         {
             var expression = Walk<Expression>(element.FunctionSpecifier)!;
             element.Value = new Body.Function(element, expression);
-        }
-
-        protected override void Visit(CStatements element)
-        {
-            element.Value = new Statements(element, WalkMany<Statement>(element));
         }
 
         protected override void Visit(CReturnStatement element)
@@ -465,6 +477,14 @@ namespace Six.Sax.Compiler
             var right = Walk<Expression>(element.MullevelExpression);
 
             element.Value = new Expression.Add(element, left, right);
+        }
+
+        protected override void Visit(CSubExpression element)
+        {
+            var left = Walk<Expression>(element.AddlevelExpression);
+            var right = Walk<Expression>(element.MullevelExpression);
+
+            element.Value = new Expression.Sub(element, left, right);
         }
 
         protected override void Visit(CMulExpression element)

@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Six.Sax.Ast
 {
-    public sealed record Reference(IRNode Tree, Name Name, Generic.Arguments? Arguments)
-        : Expression, Type
+    public interface Statelaration : Node
     {
     }
+
+    public sealed record Statelarations(IRNode Tree, IEnumerable<Statelaration> Items)
+        : Many<Statelaration>(Tree, Items);
 }

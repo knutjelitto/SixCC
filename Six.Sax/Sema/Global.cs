@@ -6,9 +6,12 @@ namespace Six.Sax.Sema
 {
     public class Global
     {
-        private readonly IdentityDictionary<Node, IScope> Where = new();
+        public readonly IdentityDictionary<Node, IScope> DeclaredIn = new();
+        public readonly IdentityDictionary<Node, IScope> ResolveIn = new();
+        public readonly IdentityDictionary<Node, Node> ResolvedTo = new();
+
         private readonly List<Diagnostic> Diagnostics = new();
-        private readonly Queue<(IScope, IResolveable)> Resolveables = new();
+        private readonly Queue<IResolveable> Resolveables = new();
 
         public Global()
         {
@@ -32,14 +35,26 @@ namespace Six.Sax.Sema
             Diagnostics.Add(diagnostic);
         }
 
-        public void Add(IScope scope, IResolveable resolveable)
+        public void ToResolve(IScope scope, IResolveable resolveable)
         {
-            Resolveables.Enqueue((scope, resolveable));
+            ResolveIn.Add(resolveable, scope);
+            Resolveables.Enqueue(resolveable);
         }
 
-        public void InScope(IScope scope, Node node)
+        public void DeclareIn(IScope scope, Node node)
         {
-            Where.Add(node, scope);
+            DeclaredIn.Add(node, scope);
+        }
+
+        public void Resolve()
+        {
+            var resolver = new ResolveWalker(this);
+
+            while (Resolveables.Count > 0)
+            {
+                var node = Resolveables.Dequeue();
+                resolver.Walk(node);
+            }
         }
 
         public void Dump(Writer writer)

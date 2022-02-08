@@ -12,7 +12,7 @@ compilation-unit
     ;
 
 code-unit
-    : prelude 'namespace' names ';' usings declarations
+    : '@skip'? prelude 'namespace' names ';' usings declarations
     ;
 
 //*****************************************************************************
@@ -189,7 +189,16 @@ attribute-body
     ;
 
 block-body
-    | '{' usings declarations statements '}'
+    | '{' usings statelarations '}'
+    ;
+
+statelarations
+    : statelaration*
+    ;
+
+statelaration
+    : statement
+    | declaration
     ;
 
 expression-body
@@ -359,10 +368,6 @@ argument
 //
 // STATEMENT
 //
-
-statements
-    : statement*
-    ;
 
 statement
     | return-statement

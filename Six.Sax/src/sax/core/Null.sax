@@ -1,4 +1,6 @@
-﻿namespace sax.core;
+﻿@skip
+
+namespace sax.core;
  
 """
 The type of the [[null]] value. Any union type of form `Null|T` is considered

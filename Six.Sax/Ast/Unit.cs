@@ -11,6 +11,7 @@ namespace Six.Sax.Ast
     {
         public sealed record Code(
             IRNode Tree, 
+            bool Skip,
             Prelude Prelude, 
             Names Namespace, 
             Using.Usings Usings,

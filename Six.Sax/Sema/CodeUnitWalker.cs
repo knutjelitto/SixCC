@@ -24,6 +24,11 @@ namespace Six.Sax.Sema
 
         private void Walk(Unit.Code code)
         {
+            if (code.Skip)
+            {
+                return;
+            }
+
             foreach (var declaration in code.Declarations)
             {
                 Walk(Into, declaration);

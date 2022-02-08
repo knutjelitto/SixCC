@@ -7,5 +7,7 @@ namespace Six.Sax.Sema
         Global Global { get; }
         void Declare(INamed named);
         void ToResolve(Node node);
+
+        bool TryFind(Name name, [MaybeNullWhen(false)] out INamed? node);
     }
 }
