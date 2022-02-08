@@ -20,5 +20,6 @@ example:
 
 evaluates to `"ceylon.language::Integer"` on every platform.
 """
-tagged("Metamodel") see (function type)
+tagged ("Metamodel")
+see (function type)
 shared native function String className(Anything obj);

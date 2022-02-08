@@ -9,9 +9,9 @@
  ********************************************************************************/
 namespace six.core.meta.declaration;
 
-"An open intersection type."
-shared sealed interface OpenIntersection satisfies OpenType {
-    
-    "This intersection's list of satisfied open types."
-    shared formal List<OpenType> satisfiedTypes;
+"An open union type."
+shared sealed interface OpenUnion satisfies OpenType
+{    
+    "The list of case types for this open union type."
+    shared formal List<OpenType> caseTypes;
 }

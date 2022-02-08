@@ -12,7 +12,11 @@ compilation-unit
     ;
 
 code-unit
-    : '@skip'? prelude 'namespace' names ';' usings declarations
+    : '@skip'? namespace usings declarations
+    ;
+
+namespace
+    : prelude 'namespace' names ';'
     ;
 
 //*****************************************************************************
@@ -120,7 +124,11 @@ generic-parameter-list
     ;
 
 generic-parameter
-    : variance? name
+    : variance? name type-default?
+    ;
+
+type-default
+    : '=' type
     ;
 
 variance

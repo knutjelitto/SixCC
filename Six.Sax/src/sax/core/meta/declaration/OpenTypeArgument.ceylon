@@ -7,12 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-namespace six.core.meta.declaration;
+namespace sax.core.meta.declaration;
 
-"An open class type."
-shared sealed interface OpenClassType
-    satisfies OpenClassOrInterfaceType {
-    
-    "This class declaration."
-    shared actual formal ClassDeclaration declaration;
-}
+"A tuple representing an open type argument and its use-site variance."
+shared alias OpenTypeArgument => [OpenType,Variance];

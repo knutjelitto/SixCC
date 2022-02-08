@@ -67,18 +67,26 @@ namespace Six.Sax.Compiler
         {
             var skip = Exists(element.Literal);
 
-            var prelude = Walk<Prelude>(element.Prelude);
-            var names = Walk<Names>(element.Names);
-            var declarations = Walk<Declarations>(element.Declarations);
-            var usings = Walk<Using.Usings>(element.Usings);
+            var nspace = Walk<Namespace>(element.Namespace);
 
-            element.Value = new Unit.Code(element, skip, prelude, names, usings, declarations);
+            var usings = Walk<Using.Usings>(element.Usings);
+            var declarations = Walk<Declarations>(element.Declarations);
+
+            element.Value = new Unit.Code(element, skip, nspace, usings, declarations);
         }
 
         protected override void Visit(CModuleDescriptor element)
         {
             var names = Walk<Names>(element.Names);
             element.Value = new Unit.Module(element, names);
+        }
+
+        protected override void Visit(CNamespace element)
+        {
+            var prelude = Walk<Prelude>(element.Prelude);
+            var names = Walk<Names>(element.Names);
+
+            element.Value = new Namespace(element, prelude, names);
         }
 
         protected override void Visit(CNames element)
@@ -305,6 +313,14 @@ namespace Six.Sax.Compiler
             element.Value = new Type.Union(element, left, right);
         }
 
+        protected override void Visit(CIntersectionType element)
+        {
+            var left = Walk<Type>(element.IntersectionlevelType);
+            var right = Walk<Type>(element.PrimaryType);
+
+            element.Value = new Type.Intersection(element, left, right);
+        }
+
         protected override void Visit(CFunctionSpecifier element)
         {
             element.Value = Walk<Expression>(element.Expression);
@@ -393,6 +409,11 @@ namespace Six.Sax.Compiler
             {
                 element.Value = new Using.Element.Named(element, name2, name1, elements);
             }
+        }
+
+        protected override void Visit(CUsingNameSpecifier element)
+        {
+            element.Value = Walk<Name>(element.Identifier);
         }
 
         protected override void Visit(CUsingWildcard element)

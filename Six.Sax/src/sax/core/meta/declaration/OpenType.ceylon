@@ -9,6 +9,13 @@
  ********************************************************************************/
 namespace six.core.meta.declaration;
 
-"A tuple representing an open type argument and its use-site variance."
-since("1.2.0")
-shared alias OpenTypeArgument => [OpenType,Variance];
+"An open type.
+ 
+ An open type is a type which may contain unbound type variables, such as `List<T>`."
+shared sealed interface OpenType
+    of  OpenClassOrInterfaceType
+    |   OpenTypeVariable
+    |   OpenUnion
+    |   OpenIntersection
+    |   nothingType
+{}

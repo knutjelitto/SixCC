@@ -12,8 +12,7 @@ namespace Six.Sax.Ast
         public sealed record Code(
             IRNode Tree, 
             bool Skip,
-            Prelude Prelude, 
-            Names Namespace, 
+            Namespace Namespace,
             Using.Usings Usings,
             Declarations Declarations) : Unit;
         public sealed record Module(IRNode Tree, Names Names) : Unit;

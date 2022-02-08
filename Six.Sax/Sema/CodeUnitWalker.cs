@@ -1,21 +1,27 @@
-﻿using Six.Sax.Ast;
+﻿using Six.Core;
+using Six.Sax.Ast;
+using System;
 
 namespace Six.Sax.Sema
 {
     public class CodeUnitWalker
     {
+        private Stack<IScope> scopes = new Stack<IScope>();
+
         private CodeUnitWalker(Global global, NamespaceScope scope)
         {
             Global = global;
-            Into = scope;
+
+            scopes.Push(scope);
         }
 
         public Global Global { get; }
-        public NamespaceScope Into { get; }
+
+        public IScope Into => scopes.Peek();
 
         public static void Walk(Global global, Unit.Code code)
         {
-            var scope = global.Open(code.Namespace.Select(n => n.Text));
+            var scope = global.Open(code.Namespace.Names.Select(n => n.Text));
 
             var walker = new CodeUnitWalker(global, scope);
 
@@ -31,58 +37,66 @@ namespace Six.Sax.Sema
 
             foreach (var declaration in code.Declarations)
             {
-                Walk(Into, declaration);
+                Walk(declaration);
             }
         }
 
-        private void Walk(IScope into, Node? node)
+        private void Walk(Node? node)
         {
             if (node != null)
             {
-                Visit(into, (dynamic)node);
+                Visit((dynamic)node);
             }
         }
 
-        private void WalkMany(IScope into, IEnumerable<Node>? nodes)
+        private void WalkMany(IEnumerable<Node>? nodes)
         {
             if (nodes != null)
             {
                 foreach (var node in nodes)
                 {
-                    Walk(into, node);
+                    Walk(node);
                 }
             }
         }
 
-        private void Visit(IScope into, Node node)
+        private IDisposable Push(IScope scope)
+        {
+            scopes.Push(scope);
+
+            return new Disposable(() => scopes.Pop());
+        }
+
+        private void Visit(Node node)
         {
             Assert(false);
         }
 
-        private void Visit(IScope into, Declaration.Entity.Impl node)
+        private void Visit(Declaration.Entity.Impl node)
         {
-            into.Declare(node);
+            Into.Declare(node);
 
-            var ds = new DeclarationScope(into);
-
-            WalkMany(ds, node.Generics);
-            WalkMany(ds, node.Parameters);
+            using (Push(new DeclarationScope(Into)))
+            {
+                WalkMany(node.Generics);
+                WalkMany(node.Parameters);
+            }
         }
 
-        private void Visit(IScope into, Declaration.Entity.Class node)
+        private void Visit(Declaration.Entity.Class node)
         {
-            into.Declare(node);
+            Into.Declare(node);
         }
 
-        private void Visit(IScope into, Parameter node)
+        private void Visit(Parameter node)
         {
-            into.Declare(node);
-            into.ToResolve(node.Type);
+            Into.Declare(node);
+            Into.ToResolve(node.Type);
         }
 
-        private void Visit(IScope into, Generic.Parameter node)
+        private void Visit(Generic.Parameter node)
         {
-            into.Declare(node);
+            Into.Declare(node);
         }
     }
 }
