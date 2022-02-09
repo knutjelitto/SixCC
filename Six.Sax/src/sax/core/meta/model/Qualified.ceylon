@@ -23,8 +23,8 @@ namespace six.core.meta.model;
 "
 since("1.2.0")
 shared sealed interface Qualified<out Kind=Anything, in Container=Nothing> 
-        satisfies Kind(Container) {
-    
+    satisfies Kind(Container)
+{
     "Type-unsafe container binding, to be used when the container type is unknown until runtime.
      
      A null argument is only permitted for `static` members (which 

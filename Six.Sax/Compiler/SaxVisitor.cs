@@ -230,7 +230,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CParameters element)
         {
-            element.Value = Walk<Parameters>(element.ParameterList);
+            element.Value = Walk<Parameters>(element.ParameterList) ?? new Parameters(element);
         }
 
         protected override void Visit(CParameterList element)
@@ -553,6 +553,27 @@ namespace Six.Sax.Compiler
             var expression = Walk<Expression>(element.NotlevelExpression);
 
             element.Value = new Expression.Not(element, expression);
+        }
+
+        protected override void Visit(CVariadicTypeZero element)
+        {
+            var type = Walk<Type>(element.UnionlevelType);
+
+            element.Value = new Type.ZeroOrMore(element, type);
+        }
+
+        protected override void Visit(CVariadicTypeOne element)
+        {
+            var type = Walk<Type>(element.UnionlevelType);
+
+            element.Value = new Type.OneOrMore(element, type);
+        }
+
+        protected override void Visit(CNullableType element)
+        {
+            var type = Walk<Type>(element.PrimaryType);
+
+            element.Value = new Type.Nullable(element, type);
         }
     }
 }

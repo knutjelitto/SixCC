@@ -13,9 +13,15 @@ namespace Six.Sax.Sema
         {
             return node.GetType().Name;
         }
+
         public static bool IsShared(this Node node)
         {
             return node is IPreluded preluded && preluded.Prelude.Attributes.Any(a => a.Name.Text == "shared");
+        }
+
+        public static bool IsNative(this Node node)
+        {
+            return node is IPreluded preluded && preluded.Prelude.Attributes.Any(a => a.Name.Text == "native");
         }
     }
 }

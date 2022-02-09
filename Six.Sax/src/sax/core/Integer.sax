@@ -8,4 +8,4 @@ shared native class Int64
 {
 }
 
-shared native alias int => Int32;
+shared alias int => Int32;

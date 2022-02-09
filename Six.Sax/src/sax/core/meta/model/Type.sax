@@ -1,4 +1,4 @@
-@skip namespace sax.core.meta.model;
+namespace sax.core.meta.model;
 
 using sax.core.meta.model { AppliedType = Type }
 

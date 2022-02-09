@@ -313,7 +313,21 @@ type
 
 unionlevel-type
     : union-type
+    | variadic-type
     | intersectionlevel-type
+    ;
+
+variadic-type
+    | variadic-type-zero
+    | variadic-type-one
+    ;
+
+variadic-type-zero
+    : unionlevel-type '*'
+    ;
+
+variadic-type-one
+    : unionlevel-type '+'
     ;
 
 union-type
@@ -330,10 +344,15 @@ intersection-type
     ;
 
 primary-type
-    : reference
+    | nullable-type
+    | array-type
+    | reference
     | type-selector
     | constructor
-    | array-type
+    ;
+
+nullable-type
+    | primary-type '?'
     ;
 
 array-type

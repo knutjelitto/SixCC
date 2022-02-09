@@ -12,7 +12,8 @@ namespace six.core.meta.model;
 import ceylon.language.meta.declaration{FunctionDeclaration}
 
 """
-A function model represents the model of a Ceylon function that you can invoke and inspect.
+A function model represents the model of a Ceylon function that you can invoke
+and inspect.
 
 A function is a toplevel binding, declared on a package.
 

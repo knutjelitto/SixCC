@@ -7,8 +7,18 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-namespace six.core.meta.model;
+namespace sax.core;
 
-"An interface model that you can inspect."
-shared sealed interface Interface<out Type=Anything>
-    satisfies InterfaceModel<Type> {}
+"""
+Determine if the arguments are [[identical]]. Equivalent to `x === y`. Only
+instances of [[Identifiable]] have well-defined identity.
+"""
+see (function identityHash)
+tagged ("Comparisons")
+shared function Boolean identical(
+    "An object with well-defined identity."
+    Identifiable x, 
+    "A second object with well-defined identity."
+    Identifiable y
+) 
+    => x === y;

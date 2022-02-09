@@ -9,9 +9,11 @@
  ********************************************************************************/
 namespace six.core.meta.model;
 
-"A member interface model that you can inspect."
+"""
+A member interface model that you can inspect.
+"""
 shared sealed interface MemberInterface<in Container=Nothing, out Type=Anything>
-    satisfies InterfaceModel<Type> & Member<Container, Interface<Type>> {
-    
+    satisfies InterfaceModel<Type> & Member<Container, Interface<Type>>
+{
     shared actual formal Interface<Type> bind(Anything container);
 }

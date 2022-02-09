@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-namespace six.core.meta.declaration;
+namespace sax.core.meta.declaration;
 
 """
 A declaration.
@@ -22,11 +22,11 @@ shared sealed interface Declaration of AnnotatedDeclaration | TypeParameter
     """
     The name of this declaration. For example, the [[Declaration]] class is named "Declaration".
     """
-    shared formal String name;
+    shared formal value String name;
     
     """
     The qualified name of this declaration. This includes the container qualified name. For example,
     the [[Declaration]] class' qualified name is "ceylon.language.meta.declaration::Declaration".
     """
-    shared formal String qualifiedName;
+    shared formal value String qualifiedName;
 }

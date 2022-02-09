@@ -52,6 +52,7 @@ namespace Six.Sax.Sema
                     {
                         var attrs = new StringBuilder();
                         attrs.Append(dc.IsShared() ? "S" : " ");
+                        attrs.Append(dc.IsNative() ? "N" : " ");
 
                         writer.WriteLine($"{dc.GetKind(),-15} [{attrs}] {dc.Name.Text} - {dc.GetLocation()}");
                     }

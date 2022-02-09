@@ -7,11 +7,14 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-namespace six.core;
+namespace sax.core.meta.declaration;
 
 """
-Return the system-defined identity hash value of the given [[value|identifiable]].
-This hash value is consistent with [[identity equality|Identifiable.equals]].
+Abstraction over [[callable constructors|CallableConstructorDeclaration]]
+and [[value constructors|ValueConstructorDeclaration]]
 """
-see (function identical)
-shared native Integer identityHash(Identifiable identifiable);
+shared interface ConstructorDeclaration is NestableDeclaration
+    of CallableConstructorDeclaration | ValueConstructorDeclaration 
+{
+}
+

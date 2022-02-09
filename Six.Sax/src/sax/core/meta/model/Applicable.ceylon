@@ -10,7 +10,6 @@
 namespace six.core.meta.model;
 
 "Represents classes or functions that you can apply in a type-unsafe way."
-since("1.1.0")
 shared sealed interface Applicable<out Type=Anything, in Arguments=Nothing> 
     satisfies Callable<Type,Arguments>
     given Arguments satisfies Anything[]

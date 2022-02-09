@@ -9,12 +9,16 @@
  ********************************************************************************/
 namespace six.core.meta.declaration;
 
-"A type parameter declaration."
+"""
+A type parameter declaration.
+"""
 shared sealed interface TypeParameter satisfies Declaration
 {    
     // FIXME: make it NestableDeclaration&GenericDeclaration?
-    "The declaration that declared this type parameter. This is either a [[ClassOrInterfaceDeclaration]] or a
-     [[FunctionDeclaration]]."
+    """
+    The declaration that declared this type parameter. This is either a
+    [[ClassOrInterfaceDeclaration]] or a [[FunctionDeclaration]].
+    """
     shared formal NestableDeclaration container;
     
     "True if this type parameter has a default type argument and can be omitted."

@@ -7,18 +7,11 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-namespace six.core;
+
+namespace sax.core;
 
 """
-Determine if the arguments are [[identical]]. Equivalent to `x === y`. Only
-instances of [[Identifiable]] have well-defined identity.
+Abstract supertype of resources whose lifecyle may be managed by the `try` statement.
 """
-see (function identityHash)
-tagged("Comparisons")
-shared Boolean identical(
-    "An object with well-defined identity."
-    Identifiable x, 
-    "A second object with well-defined identity."
-    Identifiable y
-) 
-    => x === y;
+tagged("Basic types")
+shared interface Usable of Destroyable | Obtainable {}

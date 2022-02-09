@@ -1,5 +1,3 @@
-@skip
-
 namespace sax.core;
 
 using sax.core.meta { type }

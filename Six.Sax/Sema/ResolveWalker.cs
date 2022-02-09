@@ -18,7 +18,7 @@ namespace Six.Sax.Sema
 
         private void Visit(IScope scope, Node node)
         {
-            Assert(false);
+            Assert(true);
         }
 
         private void Visit(IScope scope, Reference node)
