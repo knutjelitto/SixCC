@@ -1,5 +1,6 @@
 ﻿using Six.Sax.Compiler;
-using Six.Sax.Sema;
+
+using S = Six.Sax.Sema;
 
 namespace Six.Sax
 {
@@ -29,7 +30,7 @@ namespace Six.Sax
 
             if (module != null)
             {
-                var global = new Global();
+                var global = new S.Module();
                 var compiler = new SaxCompiler(global, configuration);
 
                 try

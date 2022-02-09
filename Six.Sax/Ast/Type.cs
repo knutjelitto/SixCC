@@ -2,7 +2,7 @@
 
 namespace Six.Sax.Ast
 {
-    public interface Type : IResolveable, Node, Generic.Argument
+    public interface Type : IResolveable, TreeNode, Generic.Argument
     {
         public sealed record Union(IRNode Tree, Type Left, Type Right) : Type;
         public sealed record Intersection(IRNode Tree, Type Left, Type Right) : Type;

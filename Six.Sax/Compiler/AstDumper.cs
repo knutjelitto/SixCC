@@ -59,7 +59,7 @@ namespace Six.Sax.Compiler
             wl($"{name} : {str.GetType().Name} = {str.Text}");
         }
 
-        private void Dump(string name, Node astNode)
+        private void Dump(string name, TreeNode astNode)
         {
             var node = Ref.Get(astNode.GetType());
 

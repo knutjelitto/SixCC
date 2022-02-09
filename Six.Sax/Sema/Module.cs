@@ -1,31 +1,34 @@
 ﻿using Six.Core;
 using Six.Core.Errors;
-using Six.Sax.Ast;
+
+using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
-    public class Global
+    public class Module
     {
-        public readonly IdentityDictionary<Node, IScope> DeclaredIn = new();
-        public readonly IdentityDictionary<Node, IScope> ResolveIn = new();
-        public readonly IdentityDictionary<Node, Node> ResolvedTo = new();
+        public readonly IdentityDictionary<A.TreeNode, IScope> DeclaredIn = new();
+        public readonly IdentityDictionary<A.TreeNode, IScope> ResolveIn = new();
+        public readonly IdentityDictionary<A.TreeNode, A.TreeNode> ResolvedTo = new();
 
         private readonly List<Diagnostic> Diagnostics = new();
-        private readonly Queue<IResolveable> Resolveables = new();
+        private readonly Queue<A.IResolveable> Resolveables = new();
 
-        public Global()
+        public Module()
         {
-            Root = new NamespaceScope(this, null, "");
+            Root = new Namespace(this, null, "");
+            Name = "::";
         }
 
-        public NamespaceScope Root { get; }
+        public Namespace Root { get; }
+        public string Name { get; }
 
-        public NamespaceScope Open(IEnumerable<string> names)
+        public Container Open(A.Namespace @namespace)
         {
             var current = Root;
-            foreach (var name in names)
+            foreach (var name in @namespace.Names)
             {
-                current = current.Open(name);
+                current = current.Open(name.Text);
             }
             return current;
         }
@@ -35,16 +38,6 @@ namespace Six.Sax.Sema
             Diagnostics.Add(diagnostic);
         }
 
-        public void ToResolve(IScope scope, IResolveable resolveable)
-        {
-            ResolveIn.Add(resolveable, scope);
-            Resolveables.Enqueue(resolveable);
-        }
-
-        public void DeclareIn(IScope scope, Node node)
-        {
-            DeclaredIn.Add(node, scope);
-        }
 
         public void Resolve()
         {
@@ -59,7 +52,15 @@ namespace Six.Sax.Sema
 
         public void Dump(Writer writer)
         {
-            Root.Dump(writer);
+            foreach (var ns in Root.EnumerateChildren())
+            {
+                if (ns.Entities.Count > 0)
+                {
+                    writer.WriteLine(ns.GetPath());
+
+                    ns.DumpDeclarations(writer);
+                }
+            }
 
             if (Diagnostics.Count > 0)
             {

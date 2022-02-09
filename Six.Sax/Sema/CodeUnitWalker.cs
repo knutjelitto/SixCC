@@ -1,47 +1,29 @@
 ﻿using Six.Core;
-using Six.Sax.Ast;
 using System;
+
+using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
     public class CodeUnitWalker
     {
-        private Stack<IScope> scopes = new Stack<IScope>();
+        private readonly Stack<Container> current = new();
 
-        private CodeUnitWalker(Global global, NamespaceScope scope)
+        private CodeUnitWalker(Module module)
         {
-            Global = global;
-
-            scopes.Push(scope);
+            Module = module;
         }
 
-        public Global Global { get; }
+        public Module Module { get; }
 
-        public IScope Into => scopes.Peek();
+        public Container Into => current.Peek();
 
-        public static void Walk(Global global, Unit.Code code)
+        public static void Walk(Module module, A.Unit.Code code)
         {
-            var scope = global.Open(code.Namespace.Names.Select(n => n.Text));
-
-            var walker = new CodeUnitWalker(global, scope);
-
-            walker.Walk(code);
+            new CodeUnitWalker(module).Walk(code);
         }
 
-        private void Walk(Unit.Code code)
-        {
-            if (code.Skip)
-            {
-                return;
-            }
-
-            foreach (var declaration in code.Declarations)
-            {
-                Walk(declaration);
-            }
-        }
-
-        private void Walk(Node? node)
+        private void Walk(A.Node? node)
         {
             if (node != null)
             {
@@ -49,7 +31,7 @@ namespace Six.Sax.Sema
             }
         }
 
-        private void WalkMany(IEnumerable<Node>? nodes)
+        private void WalkMany(IEnumerable<A.Node>? nodes)
         {
             if (nodes != null)
             {
@@ -60,43 +42,60 @@ namespace Six.Sax.Sema
             }
         }
 
-        private IDisposable Push(IScope scope)
+        private IDisposable Push(Container container)
         {
-            scopes.Push(scope);
+            current.Push(container);
 
-            return new Disposable(() => scopes.Pop());
+            return new Disposable(() => current.Pop());
         }
 
-        private void Visit(Node node)
-        {
-            Assert(false);
-        }
 
-        private void Visit(Declaration.Entity.Impl node)
+        private void Visit(A.Unit.Code code)
         {
-            Into.Declare(node);
-
-            using (Push(new DeclarationScope(Into)))
+            using (Push(Module.Open(code.Namespace)))
             {
-                WalkMany(node.Generics);
-                WalkMany(node.Parameters);
+                WalkMany(code.Declarations);
             }
         }
 
-        private void Visit(Declaration.Entity.Class node)
+        private void Visit(A.Declaration node)
         {
-            Into.Declare(node);
+            var content = new DeclarationScope(Into);
+
+            Into.Add(Declaration.New(node, content));
+
+            if (node is A.With.Body with)
+            {
+                using (Push(content))
+                {
+                    Walk(with.Body);
+                }
+            }
         }
 
-        private void Visit(Parameter node)
+        private void Visit(A.Statement node)
         {
-            Into.Declare(node);
-            Into.ToResolve(node.Type);
+            Into.Add(Statement.New(node));
         }
 
-        private void Visit(Generic.Parameter node)
+        private void Visit(A.Body.Block node)
         {
-            Into.Declare(node);
+            WalkMany(node.Statelarations);
+        }
+
+        private void Visit(A.Body.Function node)
+        {
+            //Walk(node.Expression);
+        }
+
+        private void Visit(A.Body.Null node)
+        {
+            //Walk(node.Expression);
+        }
+
+        private void Visit(A.Node node)
+        {
+            Assert(false);
         }
     }
 }

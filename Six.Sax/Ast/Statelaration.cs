@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Six.Sax.Ast
 {
-    public interface Statelaration : Node
+    public interface Statelaration : TreeNode
     {
     }
 

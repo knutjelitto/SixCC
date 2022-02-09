@@ -2,7 +2,7 @@
 
 namespace Six.Sax.Ast
 {
-    public record Module(IRNode Tree) : Node
+    public record Module(IRNode Tree) : TreeNode
     {
     }
 }

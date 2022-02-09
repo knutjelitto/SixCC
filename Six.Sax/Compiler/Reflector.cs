@@ -46,7 +46,7 @@ namespace Six.Sax.Compiler
             {
                 var super = type.BaseType;
 
-                if (super != null && typeof(Ast.Node).IsAssignableFrom(super))
+                if (super != null && typeof(Ast.TreeNode).IsAssignableFrom(super))
                 {
                     AddProperties(super);
                 }
@@ -67,7 +67,7 @@ namespace Six.Sax.Compiler
                     {
                         getters.Add(new Getter(prop));
                     }
-                    else if (typeof(Ast.Node).IsAssignableFrom(prop.PropertyType))
+                    else if (typeof(Ast.TreeNode).IsAssignableFrom(prop.PropertyType))
                     {
                         getters.Add(new Getter(prop));
                     }
@@ -97,7 +97,7 @@ namespace Six.Sax.Compiler
                 public PropertyInfo Prop { get; }
                 public string Name { get; }
 
-                public object? Get(Ast.Node node)
+                public object? Get(Ast.TreeNode node)
                 {
                     return Prop.GetValue(node);
                 }

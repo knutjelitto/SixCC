@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Six.Sax.Ast
 {
-    public interface Unit : Node
+    public interface Unit : TreeNode
     {
         public sealed record Code(
             IRNode Tree, 

@@ -1,21 +1,20 @@
 namespace sax.core;
 
 """
-A type capable of representing the values [[true]] and [[false]] of Boolean logic.
+A type capable of representing the values [[true]] and [[false]] of Boolean
+logic.
 """
 tagged ("Basic types")
 shared native abstract class Boolean of true | false
 {
     """
-    The `Boolean` value of the given string representation of a boolean value, or `null` if the string does not represent a
-    boolean value.
+    The `Boolean` value of the given string representation of a boolean value, or
+    `null` if the string does not represent a boolean value.
     
     Recognized string representations are the strings `"true"` and `"false"`.
     """
     tagged ("Basic types")
     shared static function Boolean|ParseException parse(String string) => parseBooleanInternal(string);
-    
-    //shared new () {}
 }
 
 """

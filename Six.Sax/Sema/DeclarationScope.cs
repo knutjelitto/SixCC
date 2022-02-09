@@ -1,23 +1,27 @@
-﻿using Six.Sax.Ast;
+﻿using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
-    public class DeclarationScope : Scope
+    public class DeclarationScope : Scope, Contained
     {
-        public DeclarationScope(IScope up)
-            : base(up.Global)
+        public DeclarationScope(Container container)
+            : base(container.Module)
         {
-            Up = up;
+            Container = container;
         }
 
-        public IScope Up { get; }
+        public Container Container { get; }
 
-        public override bool TryFind(Name name, out INamed? node)
+        public override bool TryFind(A.Name name, out A.With.Name? node)
         {
+#if true
+            node = null;
+#else
             if (!base.TryFind(name, out node))
             {
                 return Up.TryFind(name, out node);
             }
+#endif
             return true;
         }
     }

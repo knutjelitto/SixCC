@@ -4,19 +4,19 @@ namespace Six.Sax.Sema
 {
     public sealed class ResolveWalker
     {
-        public ResolveWalker(Global global)
+        public ResolveWalker(Module global)
         {
             Global = global;
         }
 
-        public Global Global { get; }
+        public Module Global { get; }
 
         public void Walk(IResolveable node)
         {
             Visit(Global.ResolveIn[node], (dynamic)node);
         }
 
-        private void Visit(IScope scope, Node node)
+        private void Visit(IScope scope, TreeNode node)
         {
             Assert(true);
         }
@@ -26,7 +26,6 @@ namespace Six.Sax.Sema
             if (scope.TryFind(node.Name, out var found))
             {
                 Assert(found != null);
-                Global.ResolvedTo.Add(node.Name, found);
             }
             else
             {

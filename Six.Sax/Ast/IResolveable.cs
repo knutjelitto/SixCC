@@ -1,6 +1,6 @@
 ﻿namespace Six.Sax.Ast
 {
-    public interface IResolveable : Node
+    public interface IResolveable : TreeNode
     {
     }
 }

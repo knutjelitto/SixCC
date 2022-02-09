@@ -1,13 +1,13 @@
 ﻿namespace Six.Sax.Sema
 {
-    public class BlockScope : Scope
+    public class BlockScope : Scope, Contained
     {
-        public BlockScope(IScope up)
-            : base(up.Global)
+        public BlockScope(Container container)
+            : base(container.Module)
         {
-            Up = up;
+            Container = container;
         }
 
-        public IScope Up { get; }
+        public Container Container { get; }
     }
 }

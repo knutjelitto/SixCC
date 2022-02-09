@@ -1,13 +1,10 @@
-﻿using Six.Sax.Ast;
+﻿using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
     public interface IScope
     {
-        Global Global { get; }
-        void Declare(INamed named);
-        void ToResolve(Node node);
-
-        bool TryFind(Name name, [MaybeNullWhen(false)] out INamed? node);
+        Module Module { get; }
+        bool TryFind(A.Name name, [MaybeNullWhen(false)] out A.With.Name? node);
     }
 }

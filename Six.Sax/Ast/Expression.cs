@@ -2,7 +2,7 @@
 
 namespace Six.Sax.Ast
 {
-    public interface Expression : Node, Argument
+    public interface Expression : TreeNode, Argument
     {
         public interface Literal : Expression
         {

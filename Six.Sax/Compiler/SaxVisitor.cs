@@ -16,7 +16,7 @@ namespace Six.Sax.Compiler
         }
 
         private IEnumerable<T> WalkMany<T>(RNode element)
-            where T : class, Node
+            where T : class, TreeNode
         {
             return element.Children.Select(child => Walk<T>(child));
         }

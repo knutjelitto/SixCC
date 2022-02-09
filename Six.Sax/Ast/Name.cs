@@ -3,7 +3,7 @@ using System;
 
 namespace Six.Sax.Ast
 {
-    public interface Name : Node, Expression, IComparable<Name>
+    public interface Name : TreeNode, Expression, IComparable<Name>
     {
         string Text { get; }
 

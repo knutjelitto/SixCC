@@ -10,13 +10,13 @@ namespace Six.Sax.Compiler
 {
     public class SaxCompiler : Compiler<SaxParser>
     {
-        private readonly Global Global;
+        private readonly Sema.Module Global;
         private readonly CompilerConfiguration Configuration;
         private readonly SaxVisitor visitor;
 
         private readonly List<SourceFile> files = new();
 
-        public SaxCompiler(Global global, CompilerConfiguration configuration)
+        public SaxCompiler(Sema.Module global, CompilerConfiguration configuration)
         {
             Global = global;
             Configuration = configuration;
