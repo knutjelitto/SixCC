@@ -11,18 +11,5 @@ namespace Six.Sax.Sema
         }
 
         public Container Container { get; }
-
-        public override bool TryFind(A.Name name, out A.With.Name? node)
-        {
-#if true
-            node = null;
-#else
-            if (!base.TryFind(name, out node))
-            {
-                return Up.TryFind(name, out node);
-            }
-#endif
-            return true;
-        }
     }
 }

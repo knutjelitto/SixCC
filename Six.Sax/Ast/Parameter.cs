@@ -8,4 +8,6 @@ namespace Six.Sax.Ast
     {
         public Parameters(IRNode Tree) : this(Tree, Enumerable.Empty<Parameter>()) { }
     }
+
+    public record MultiParameters(IRNode Tree, IEnumerable<Parameters> Items) : Many<Parameters>(Tree, Items);
 }

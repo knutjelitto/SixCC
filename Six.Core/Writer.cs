@@ -45,6 +45,8 @@
             sink.Write(text);
         }
 
+        public int Indentation => prefix.Length * level;
+
         public void Plus()
         {
             level += 1;

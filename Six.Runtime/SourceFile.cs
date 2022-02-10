@@ -26,7 +26,7 @@ namespace Six.Runtime
         public TimeSpan ParseTime { get; set; }
         public int ParseLines { get; set; }
         public string Content => content ??= ContentLoader();
-        public Source Source => source ??= Source.FromString(Name, Content);
+        public Source Source => source ??= Source.FromString(ShortPath, Content);
         public Nonterminal? Sppf { get; set; }
         public RNode? Tree { get; set; }
     }

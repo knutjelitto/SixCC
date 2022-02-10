@@ -83,14 +83,8 @@ namespace Six.Sax.Sema
             WalkMany(node.Statelarations);
         }
 
-        private void Visit(A.Body.Function node)
+        private void Visit(A.Body.Deferred node)
         {
-            //Walk(node.Expression);
-        }
-
-        private void Visit(A.Body.Null node)
-        {
-            //Walk(node.Expression);
         }
 
         private void Visit(A.Node node)

@@ -12,5 +12,10 @@ namespace Six.Sax.Ast
     }
 
     public sealed record Statelarations(IRNode Tree, IEnumerable<Statelaration> Items)
-        : Many<Statelaration>(Tree, Items);
+        : Many<Statelaration>(Tree, Items)
+    {
+        public Statelarations(IRNode Tree, params Statelaration[] items)
+            : this(Tree, items.AsEnumerable())
+        { }
+    }
 }

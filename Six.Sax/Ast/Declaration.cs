@@ -43,10 +43,10 @@ namespace Six.Sax.Ast
                 Name Name,
                 Generic.Parameters? Generics,
                 Type Result,
-                Parameters Parameters,
+                MultiParameters MultiParameters,
                 Generic.Constraints? Constraints,
                 Body Body)
-                : Impl(Tree, Prelude, Name, Generics, Parameters, null, null, null, Constraints), With.Body;
+                : Impl(Tree, Prelude, Name, Generics, null, null, null, null, Constraints), With.Body;
 
             public sealed record Attribute(
                 IRNode Tree, 

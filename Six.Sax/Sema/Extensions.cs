@@ -23,6 +23,11 @@ namespace Six.Sax.Sema
             return declaration.Ast.GetType().Name;
         }
 
+        public static string GetKindOne(this Declaration declaration)
+        {
+            return declaration.Ast.GetType().Name.Substring(0, 1);
+        }
+
         public static string GetKind(this Statement statement)
         {
             return statement.Ast.GetType().Name;

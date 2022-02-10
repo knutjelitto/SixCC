@@ -4,38 +4,69 @@ namespace Six.Sax.Sema
 {
     public static class DumpExtensions
     {
-        public static void DumpDeclarations(this Container container, Writer writer)
+        private static int dcMax = 100;
+        private static int dcCount = 0;
+
+        public static void Dump(this Declaration declaration, Writer writer)
         {
-            using (writer.Indent())
+            var attrs = new StringBuilder();
+            attrs.Append(declaration.IsShared ? "S" : " ");
+            attrs.Append(declaration.IsNative ? "N" : " ");
+
+            writer.WriteLine($"{declaration.GetKindOne()} [{attrs}] {declaration.GetName()}");
+
+            declaration.Content.Dump(writer);
+
+            dcCount++;
+        }
+
+        public static void Dump(this Statement statement, Writer writer)
+        {
+            writer.WriteLine($"{statement.GetKind()}");
+        }
+
+        public static void Dump(this Container container, Writer writer)
+        {
+            if (dcCount < dcMax)
             {
-                foreach (var dc in container.GetDeclarations())
+                using (writer.Indent())
                 {
-                    var attrs = new StringBuilder();
-                    attrs.Append(dc.IsShared() ? "S" : " ");
-                    attrs.Append(dc.IsNative() ? "N" : " ");
-
-                    writer.WriteLine($"{dc.GetKind(),-15} [{attrs}] {dc.GetName()} - {dc.GetLocation()}");
-
-                    var line = dc.Content.GetDeclarations().Any() && dc.Content.GetStatements().Any();
-                    dc.Content.DumpDeclarations(writer);
-                    if (line)
+                    foreach (var entitiy in container.Entities)
                     {
-                        writer.WriteLine("--");
+                        entitiy.DumpIntern(writer);
+
+                        if (dcCount == dcMax)
+                        {
+                            break;
+                        }
                     }
-                    dc.Content.DumpStatements(writer);
                 }
             }
         }
 
-        public static void DumpStatements(this Container container, Writer writer)
+        public static void DumpReferences(this Module module, Writer writer)
         {
-            using (writer.Indent())
+            foreach (var ns in module.GetNamespaces())
             {
-                foreach (var st in container.GetStatements())
+                foreach (var declaration in ns.Entities.OfType<Declaration>())
                 {
-                    writer.WriteLine($"XXXXX {st.GetKind(),-15}");
+                    var attrs = new StringBuilder();
+                    attrs.Append(declaration.IsShared ? "S" : " ");
+                    attrs.Append(declaration.IsNative ? "N" : " ");
+
+                    writer.WriteLine($"{declaration.GetKindOne()} [{attrs}] {declaration.GetName(),-50} {declaration.GetLocation()}");
                 }
             }
+        }
+
+        private static void DumpIntern(this Entity entity, Writer writer)
+        {
+            Dump((dynamic)entity, writer);
+        }
+
+        private static void Dump(this Entity entity, Writer writer)
+        {
+            Assert(false);
         }
     }
 }

@@ -13,24 +13,6 @@ namespace Six.Sax.Sema
 
         public void Walk(IResolveable node)
         {
-            Visit(Global.ResolveIn[node], (dynamic)node);
-        }
-
-        private void Visit(IScope scope, TreeNode node)
-        {
-            Assert(true);
-        }
-
-        private void Visit(IScope scope, Reference node)
-        {
-            if (scope.TryFind(node.Name, out var found))
-            {
-                Assert(found != null);
-            }
-            else
-            {
-                Assert(false);
-            }
         }
     }
 }

@@ -4,19 +4,19 @@ using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
-    public class Namespace : Scope, Container
+    public class Namespace : Scope, Container, Contained
     {
         private readonly Dictionary<string, Namespace> children = new();
 
-        public Namespace(Module module, Namespace? parent, string name)
+        public Namespace(Module module, Container container, string name)
             : base(module)
         {
-            Parent = parent;
+            Container = container;
             Name = name;
         }
 
-        public Namespace? Parent { get; }
         public string Name { get; }
+        public Container Container { get; }
 
         public Namespace Open(string name)
         {
@@ -30,47 +30,28 @@ namespace Six.Sax.Sema
 
         public string GetPath()
         {
-            if (Parent == null)
+            if (Container is Namespace ns)
             {
-                return "";
+                if (ns.GetPath().EndsWith("::"))
+                    return "::" + Name;
+
+                return (ns.GetPath() + "." + Name).TrimStart('.');
             }
-            return (Parent.GetPath() + "." + Name).TrimStart('.');
+            else
+            {
+                return ((Module)Container).Name;
+            }
         }
 
-        public IEnumerable<Namespace> EnumerateChildren()
+        public IEnumerable<Namespace> GetNamespaces()
         {
             foreach (var child in children.Values)
             {
                 yield return child;
-                foreach (var childchild in child.EnumerateChildren())
+                foreach (var childchild in child.GetNamespaces())
                 {
                     yield return childchild;
                 }
-            }
-        }
-
-
-        public void DumpP(Writer writer)
-        {
-            //DumpP("", writer);
-        }
-
-        private void DumpP(string prefix, Writer writer)
-        {
-            if (prefix.Length > 0)
-            {
-                prefix = $"{prefix}.{Name}";
-            }
-            else
-            {
-                prefix = Name;
-            }
-
-            if (prefix.Length > 0)
-            {
-                writer.WriteLine($"namespace {prefix}:");
-
-                this.DumpDeclarations(writer);
             }
         }
     }

@@ -1,5 +1,7 @@
 namespace sax.core;
 
+shared alias bool => Boolean;
+
 """
 A type capable of representing the values [[true]] and [[false]] of Boolean
 logic.
