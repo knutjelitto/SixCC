@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Ceylon\\Ceylon.six" at="03.02.2022 18:02:27" />
+// <generated from="C:\\Dev\\Knut\\SixCC\\Six.Ceylon\\Ceylon.six" at="10.02.2022 09:21:14" />
 
 using Six.Runtime;
 using Six.Runtime.Dfa;
