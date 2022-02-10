@@ -37,8 +37,6 @@ namespace Six.Sax
                 {
                     if (compiler.BuildModule(module))
                     {
-                        global.Resolve();
-
                         compiler.Report();
                     }
                 }

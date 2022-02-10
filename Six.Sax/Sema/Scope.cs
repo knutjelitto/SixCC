@@ -3,7 +3,7 @@ using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
-    public abstract class Scope : IScope, Container
+    public abstract class Scope : Container
     {
         private readonly Dictionary<A.Name, A.With.Name> items = new();
         private readonly List<Entity> entities = new();
@@ -22,14 +22,19 @@ namespace Six.Sax.Sema
             entities.Add(entity);
         }
 
+        public IEnumerable<Entity> GetAllEntities()
+        {
+            return entities;
+        }
+
+        public IEnumerable<Declaration> GetAllDeclarations()
+        {
+            return GetAllEntities().OfType<Declaration>();
+        }
+
         public virtual bool TryFind(A.Name name, [MaybeNullWhen(false)] out A.With.Name? node)
         {
             return items.TryGetValue(name, out node);
-        }
-
-        public IEnumerable<Declaration> GetDeclarations()
-        {
-            return entities.OfType<Declaration>();
         }
 
         private void DupError(A.With.Name item)

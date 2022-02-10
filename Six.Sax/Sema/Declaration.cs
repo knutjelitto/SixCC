@@ -7,6 +7,9 @@ namespace Six.Sax.Sema
         A.Declaration Ast { get; }
         Container Content { get; }
 
+        public bool IsShared => this.IsShared();
+        public bool IsNative => this.IsNative();
+
         public static Declaration New(A.Declaration declaration, Container content)
         {
             return new Impl(declaration, content);

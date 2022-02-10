@@ -5,23 +5,22 @@ using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
-    public class Module
+    public class Module : Container
     {
-        public readonly IdentityDictionary<A.TreeNode, IScope> DeclaredIn = new();
-        public readonly IdentityDictionary<A.TreeNode, IScope> ResolveIn = new();
-        public readonly IdentityDictionary<A.TreeNode, A.TreeNode> ResolvedTo = new();
-
         private readonly List<Diagnostic> Diagnostics = new();
-        private readonly Queue<A.IResolveable> Resolveables = new();
 
         public Module()
         {
-            Root = new Namespace(this, null, "");
+            Root = new Namespace(this, this, "");
             Name = "::";
         }
 
         public Namespace Root { get; }
         public string Name { get; }
+
+        Module Container.Module => this;
+
+        public IReadOnlyList<Entity> Entities => Enumerable.Empty<Entity>().ToList();
 
         public Container Open(A.Namespace @namespace)
         {
@@ -38,39 +37,41 @@ namespace Six.Sax.Sema
             Diagnostics.Add(diagnostic);
         }
 
-
-        public void Resolve()
+        public IEnumerable<Namespace> GetNamespaces()
         {
-            var resolver = new ResolveWalker(this);
-
-            while (Resolveables.Count > 0)
-            {
-                var node = Resolveables.Dequeue();
-                resolver.Walk(node);
-            }
+            return Root.GetNamespaces();
         }
 
         public void Dump(Writer writer)
         {
-            foreach (var ns in Root.EnumerateChildren())
+            foreach (var ns in Root.GetNamespaces())
             {
                 if (ns.Entities.Count > 0)
                 {
                     writer.WriteLine(ns.GetPath());
 
-                    ns.DumpDeclarations(writer);
+                    ns.Dump(writer);
                 }
             }
 
             if (Diagnostics.Count > 0)
             {
                 writer.WriteLine();
-                writer.WriteLine("==========");
+                writer.WriteLine("========== ERROR");
                 foreach (var diagnostic in Diagnostics)
                 {
                     diagnostic.Report(writer);
                 }
             }
+
+            writer.WriteLine();
+            writer.WriteLine("========== DEFINED");
+            this.DumpReferences(writer);
+        }
+
+        public void Add(Entity entity)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -157,7 +157,7 @@ declaration
     ;
 
 function-declaration
-    : prelude 'function' type name generic-parameters? parameters constraints? function-body
+    : prelude 'function' type name generic-parameters? multi-parameters constraints? function-body
     ;
 
 attribute-declaration
@@ -367,6 +367,10 @@ constructor
     : primary-type arguments
     ;
 
+multi-parameters
+    : parameters+
+    ;
+
 parameters
     : '(' parameter-list? ')'
     ;
@@ -393,7 +397,7 @@ argument
 
 //*****************************************************************************
 //
-// STATEMENT
+// STATEMENTS
 //
 
 statement
@@ -411,58 +415,76 @@ assert-statement
 
 //*****************************************************************************
 //
-// EXPRESSION
+// EXPRESSIONS
 //
 
 expression
-    : notlevel-expression
+    : level-dis-expression
     ;
 
-notlevel-expression
+level-dis-expression
+    | disjunction-expression
+    | level-con-expression
+    ;
+
+disjunction-expression
+    : level-dis-expression '||' level-con-expression
+    ;
+
+level-con-expression
+    | conjunction-expression
+    | level-not-expression
+    ;
+
+conjunction-expression
+    : level-con-expression '&&' level-not-expression
+    ;
+
+level-not-expression
     | not-expression
-    | equallevel-expression
+    | level-eq-expression
     ;
 
 not-expression
-    : '!' notlevel-expression
+    : '!' level-not-expression
     ;
 
-equallevel-expression
+level-eq-expression
     | equal-expression
     | not-equal-expression
     | identical-expression
     | not-identical-expression
-    | addlevel-expression
+    | level-add-expression
     ;
 
 equal-expression
-    : addlevel-expression '==' addlevel-expression
+    : level-add-expression '==' level-add-expression
     ;
 
 not-equal-expression
-    : addlevel-expression '!=' addlevel-expression
+    : level-add-expression '!=' level-add-expression
     ;
 
 identical-expression
-    : addlevel-expression '===' addlevel-expression
+    : level-add-expression '===' level-add-expression
     ;
 
 not-identical-expression
-    : addlevel-expression '!==' addlevel-expression
+    : level-add-expression '!==' level-add-expression
     ;
 
-addlevel-expression
+level-add-expression
     | add-expression
     | sub-expression
     | mullevel-expression
     ;
 
 add-expression
-    : addlevel-expression '+' mullevel-expression
+    : level-add-expression '+' mullevel-expression
     ;
 
 sub-expression
-    : addlevel-expression '-' mullevel-expression
+    : level-add-expression '-' mullevel-expression
     ;
 
 mullevel-expression
