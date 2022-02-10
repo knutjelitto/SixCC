@@ -13,4 +13,4 @@ shared function Boolean or<in Value>(
 )(
     Value val
 ) 
-    => p(val) || q(val);
+=> p(val) || q(val);

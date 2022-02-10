@@ -9,17 +9,22 @@
  ********************************************************************************/
 namespace six.core;
 
-"The type of the value that indicates that an [[Iterator]] 
- is exhausted and has no more values to return."
+"""
+The type of the value that indicates that an [[Iterator]] is exhausted and has
+no more values to return.
+"""
 see (interface Iterator)
 tagged("Streams")
-shared abstract class Finished() of finished {}
+shared abstract class Finished of finished {}
 
-"A value that indicates that an [[Iterator]] is exhausted 
- and has no more values to return."
+"""
+A value that indicates that an [[Iterator]] is exhausted and has no more values
+to return.
+"""
 see (interface Iterator)
 tagged("Streams")
-shared object finished extends Finished() {
+shared object finished : Finished
+{
     string => "finished";
 }
 

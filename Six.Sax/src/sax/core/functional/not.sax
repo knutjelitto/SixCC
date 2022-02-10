@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
-namespace six.core;
+namespace sax.core;
 
 """
 Returns a function which is the logical negation of the given predicate

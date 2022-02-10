@@ -163,16 +163,11 @@ namespace six.core;
        {Float*} xs = ... ;
        {Float*} ys = ... ;
        Boolean same = corresponding(xs, ys);"""
-see (interface Collection, 
-     function corresponding,
-     interface Iterator)
-by ("Gavin")
-tagged("Streams")
-shared interface Iterable<out Element=Anything, 
-                          out Absent=Null>
-        satisfies Category<>
-        given Absent satisfies Null {
-    
+see (interface Collection, function corresponding, interface Iterator)
+tagged ("Streams")
+shared interface Iterable<out Element=Anything, out Absent=Null> is Category
+    where Absent is Null
+{    
     "An iterator for the elements belonging to this stream.
      
      If this is a nonempty stream with type `{Element+}`,

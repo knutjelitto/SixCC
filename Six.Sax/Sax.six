@@ -222,7 +222,16 @@ function-specifier
     ;
 
 extends
-    : ':' type
+    : ':' extend-type
+    ;
+
+extend-type
+    : type
+    | constructor
+    ;
+
+constructor
+    : primary-type arguments
     ;
 
 satisfies
@@ -249,9 +258,17 @@ case-type-list
     : type ('|' type)*
     ;
 
+pattern
+    : name-pattern
+    ;
+
+name-pattern
+    :: name
+    ;
+
 //*****************************************************************************
 //
-// PRELUDE
+// PRELUDES/METAS
 //
 
 prelude
@@ -305,16 +322,15 @@ function-reference
 
 //*****************************************************************************
 //
-// TYPE
+// TYPES
 //
 type
-    : unionlevel-type
+    | entry-type
+    | union-type
     ;
 
-unionlevel-type
-    : union-type
-    | variadic-type
-    | intersectionlevel-type
+entry-type
+    : union-type '->' union-type
     ;
 
 variadic-type
@@ -323,39 +339,37 @@ variadic-type
     ;
 
 variadic-type-zero
-    : unionlevel-type '*'
+    : union-type '*'
     ;
 
 variadic-type-one
-    : unionlevel-type '+'
+    : union-type '+'
     ;
 
 union-type
-    : unionlevel-type '|' intersectionlevel-type
-    ;
-
-intersectionlevel-type
-    : intersection-type
-    | primary-type
+    : intersection-type ('|' intersection-type)*
     ;
 
 intersection-type
-    : intersectionlevel-type '&' primary-type
+    : primary-type ('&' primary-type)*
     ;
 
 primary-type
     | nullable-type
-    | array-type
+    | sequence-type
     | reference
     | type-selector
-    | constructor
+    | callable-type
+    | empty-type
+    | tuple-type
+    | iterable-type
     ;
 
 nullable-type
     | primary-type '?'
     ;
 
-array-type
+sequence-type
     : primary-type '[' ']'
     ;
 
@@ -363,10 +377,45 @@ type-selector
     : primary-type '.' reference
     ;
 
-constructor
-    : primary-type arguments
+callable-type
+    : primary-type '(' callable-arguments? ')'
     ;
 
+callable-arguments
+    : type-list
+    | spread-type
+    ;
+
+type-list
+    : type-list-type (',' type-list-type )*
+    ;
+
+type-list-type
+    | type
+    | defaulted-type
+    | variadic-type
+    ;
+
+defaulted-type
+    : type '='
+    ;
+
+spread-type
+    : '*' union-type
+    ;
+
+empty-type
+    : '[' ']'
+    ;
+
+tuple-type
+    : '[' type-list ']'
+    ;
+
+iterable-type
+    : '{' variadic-type '}'
+    ;
+    
 multi-parameters
     : parameters+
     ;
@@ -380,7 +429,12 @@ parameter-list
     ;
 
 parameter
-    : prelude type name
+    : prelude parameter-type name
+    ;
+
+parameter-type
+    | type
+    | variadic-type
     ;
 
 arguments
@@ -401,8 +455,26 @@ argument
 //
 
 statement
+    | if-statement
+    | for-statement
     | return-statement
     | assert-statement
+    ;
+
+if-statement
+    : 'if' conditions block-body else-if* else-block?
+    ;
+
+else-if
+    : 'else' 'if' conditions block-body
+    ;
+
+else-block
+    : 'else' block-body
+    ;
+
+for-statement
+    : 'for' '(' pattern 'in' expression ')' block-body
     ;
 
 return-statement
@@ -419,75 +491,114 @@ assert-statement
 //
 
 expression
-    : level-dis-expression
+    | level-coalesce-expression
+    | if-expression
     ;
 
-level-dis-expression
+level-coalesce-expression
+    | then-expression
+    | else-expression
+    | level-disjunction-expression
+    ;
+
+then-expression
+    : level-coalesce-expression 'then' level-disjunction-expression
+    ;
+
+else-expression
+    : level-coalesce-expression 'else' level-disjunction-expression
+    ;
+
+level-disjunction-expression
     | disjunction-expression
-    | level-con-expression
+    | level-conjunction-expression
     ;
 
 disjunction-expression
-    : level-dis-expression '||' level-con-expression
+    : level-disjunction-expression '||' level-conjunction-expression
     ;
 
-level-con-expression
+level-conjunction-expression
     | conjunction-expression
     | level-not-expression
     ;
 
 conjunction-expression
-    : level-con-expression '&&' level-not-expression
+    : level-conjunction-expression '&&' level-not-expression
     ;
 
 level-not-expression
     | not-expression
-    | level-eq-expression
+    | level-equality-expression
     ;
 
 not-expression
     : '!' level-not-expression
     ;
 
-level-eq-expression
+level-equality-expression
     | equal-expression
     | not-equal-expression
     | identical-expression
     | not-identical-expression
-    | level-add-expression
+    | level-compare-expression
     ;
 
 equal-expression
-    : level-add-expression '==' level-add-expression
+    : level-compare-expression '==' level-compare-expression
     ;
 
 not-equal-expression
-    : level-add-expression '!=' level-add-expression
+    : level-compare-expression '!=' level-compare-expression
     ;
 
 identical-expression
-    : level-add-expression '===' level-add-expression
+    : level-compare-expression '===' level-compare-expression
     ;
 
 not-identical-expression
-    : level-add-expression '!==' level-add-expression
+    : level-compare-expression '!==' level-compare-expression
+    ;
+
+level-compare-expression
+    : lt-expression
+    | le-expression
+    | gt-expression
+    | ge-expression
+    | level-add-expression
+    ;
+
+lt-expression
+    : level-add-expression '<' level-add-expression
+    ;
+
+le-expression
+    : level-add-expression '<=' level-add-expression
+    ;
+
+gt-expression
+    : level-add-expression '>' level-add-expression
+    ;
+
+ge-expression
+    : level-add-expression '>=' level-add-expression
     ;
 
 level-add-expression
     | add-expression
     | sub-expression
-    | mullevel-expression
+    | level-mul-expression
     ;
 
 add-expression
-    : level-add-expression '+' mullevel-expression
+    : level-add-expression '+' level-mul-expression
     ;
 
 sub-expression
-    : level-add-expression '-' mullevel-expression
+    : level-add-expression '-' level-mul-expression
     ;
 
-mullevel-expression
+level-mul-expression
     | mul-expression
     | div-expression
     | rem-expression
@@ -495,15 +606,15 @@ mullevel-expression
     ;
 
 mul-expression
-    : mullevel-expression '*' primary-expression
+    : level-mul-expression '*' primary-expression
     ;
 
 div-expression
-    : mullevel-expression '/' primary-expression
+    : level-mul-expression '/' primary-expression
     ;
 
 rem-expression
-    : mullevel-expression '%' primary-expression
+    : level-mul-expression '%' primary-expression
     ;
 
 primary-expression
@@ -529,6 +640,36 @@ literal
 string-literal
     | plain-string-literal
     | verbatim-string-literal
+    ;
+
+//-----------------------------------------------------------------------------
+if-expression
+    : 'if' conditions if-then if-else
+    ;
+
+if-then
+    : 'then' conditional-expression
+    ;
+
+if-else
+    : 'else' conditional-expression
+    ;
+
+conditional-expression
+    | if-expression
+    | level-disjunction-expression
+    ;
+
+conditions
+    : '(' condition-list ')'
+    ;
+
+condition-list
+    : condition (',' condition)*
+    ;
+
+condition
+    | expression
     ;
     
 

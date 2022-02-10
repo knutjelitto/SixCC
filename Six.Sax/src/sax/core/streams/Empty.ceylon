@@ -10,13 +10,14 @@
 namespace six.core;
 
 """
-A sequence with no elements. The type `Empty` may be abbreviated `[]`, and an instance is produced
-by the expression `[]`. That is, in the following expression, `none` has type `[]` and refers to
-the value `[]`:
+A sequence with no elements. The type `Empty` may be abbreviated `[]`, and an
+instance is produced by the expression `[]`. That is, in the following
+expression, `none` has type `[]` and refers to the value `[]`:
 
 [] none = [];
 
-(Whether the syntax `[]` refers to the type or the value depends upon how it occurs grammatically.)
+(Whether the syntax `[]` refers to the type or the value depends upon how it
+occurs grammatically.)
 """
 see (interface Sequence)
 tagged("Sequences")

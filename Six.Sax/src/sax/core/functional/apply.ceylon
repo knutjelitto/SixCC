@@ -28,4 +28,4 @@ see (function unflatten)
 tagged("Functions")
 shared function Return apply<Return,Args>(Callable<Return,Args> f, Args args)
     where Args is Anything[]
-    => f(*args);
+=> f(*args);

@@ -12,4 +12,4 @@ shared function Boolean and<in Value>(
 )(
     Value val
 ) 
-    => p(val) && q(val);
+=> p(val) && q(val);
