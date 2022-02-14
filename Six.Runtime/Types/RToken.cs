@@ -3,7 +3,7 @@ using Six.Runtime.Sppf;
 
 namespace Six.Runtime.Types
 {
-    public class RToken : RNode
+    public class RToken : RNode, IRLocated
     {
         public RToken(params Node[] nodes)
             : this((Terminal)nodes[0])

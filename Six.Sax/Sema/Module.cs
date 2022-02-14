@@ -7,20 +7,38 @@ namespace Six.Sax.Sema
 {
     public class Module : Container
     {
+        private static readonly string Language = "sax";
+        private static readonly string Core = "core";
+        private static readonly string CoreNull = "Null";
+        private static readonly string CoreNothing = "Nothing";
+        private static readonly string CoreIterable = "Iterable";
+        private static readonly string CoreCallable = "Callable";
+        private static readonly string CoreSequence = "Sequence";
+        private static readonly string CoreSequential = "Sequential";
+        private static readonly string CoreTuple = "Tuple";
+        private static readonly string CoreEmpty = "Empty";
+
         private readonly List<Diagnostic> Diagnostics = new();
 
         public Module()
         {
-            Root = new Namespace(this, this, "");
+            Root = new Namespace("", this);
             Name = "::";
+            Resolver = new Resolver(this);
         }
 
         public Namespace Root { get; }
         public string Name { get; }
-
+        public Container Parent => this;
         Module Container.Module => this;
+        public Resolver Resolver { get; }
 
-        public IReadOnlyList<Entity> Entities => Enumerable.Empty<Entity>().ToList();
+        public IReadOnlyList<Entity> Children => Enumerable.Empty<Entity>().ToList();
+
+        public Entity AddChild(Entity entity)
+        {
+            throw new System.InvalidOperationException();
+        }
 
         public Container Open(A.Namespace @namespace)
         {
@@ -42,36 +60,110 @@ namespace Six.Sax.Sema
             return Root.GetNamespaces();
         }
 
-        public void Dump(Writer writer)
+        public void DumpEntities()
         {
-            foreach (var ns in Root.GetNamespaces())
+            foreach (var ns in GetNamespaces())
             {
-                if (ns.Entities.Count > 0)
+                var path = ns.GetPath().Replace(".", "/");
+                foreach (var top in ns.Children)
                 {
-                    writer.WriteLine(ns.GetPath());
-
-                    ns.Dump(writer);
+                    if (top is Named named)
+                    {
+                        var name = $"entities/{path}/{named.Name}.txt";
+                        using (var writer = name.Writer())
+                        {
+                            new SemaDumper(writer).DumpEntity(named);
+                        }
+                    }
                 }
             }
+        }
 
+        public void Dump(Writer writer)
+        {
             if (Diagnostics.Count > 0)
             {
-                writer.WriteLine();
                 writer.WriteLine("========== ERROR");
                 foreach (var diagnostic in Diagnostics)
                 {
                     diagnostic.Report(writer);
                 }
+                writer.WriteLine();
             }
 
-            writer.WriteLine();
             writer.WriteLine("========== DEFINED");
-            this.DumpReferences(writer);
+            DumpReferences(writer);
         }
 
-        public void Add(Entity entity)
+        private void DumpReferences(Writer writer)
         {
-            throw new System.NotImplementedException();
+            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.Children).OrderBy(e => e.Name))
+            {
+                var attrs = new StringBuilder();
+                attrs.Append(declaration.IsShared ? "S" : " ");
+                attrs.Append(declaration.IsNative ? "N" : " ");
+
+                writer.WriteLine($"{declaration.GetKind(),-12} [{attrs}] {declaration.GetName(),-30} {declaration.GetLocation()}");
+            }
+        }
+
+        public Declaration? Resolve(string name)
+        {
+            return null;
+        }
+
+        public Entity? CoreFind(string name)
+        {
+            var language = Root.Get(Language);
+            if (language != null)
+            {
+                var core = language.Get(Core);
+                if (core != null)
+                {
+                    return core.Find(name);
+                }
+            }
+            return null;
+        }
+
+        public Entity? CoreFindNull()
+        {
+            return CoreFind(CoreNull);
+        }
+
+        public Entity? CoreFindIterable()
+        {
+            return CoreFind(CoreIterable);
+        }
+
+        public Entity? CoreFindCallable()
+        {
+            return CoreFind(CoreCallable);
+        }
+
+        public Entity? CoreFindTuple()
+        {
+            return CoreFind(CoreTuple);
+        }
+
+        public Entity? CoreFindEmpty()
+        {
+            return CoreFind(CoreEmpty);
+        }
+
+        public Entity? CoreFindSequential()
+        {
+            return CoreFind(CoreSequential);
+        }
+
+        public Entity? CoreFindSequence()
+        {
+            return CoreFind(CoreSequence);
+        }
+
+        public Entity? CoreFindNothing()
+        {
+            return CoreFind(CoreNothing);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Six.Sax
                 new CompilerConfiguration
                 { 
                     WithRuleIndex = true, 
+                    DumpSppf = false,
                     DumpTree = false, 
                     BuildAst = true, 
                     DumpAst = true,  
@@ -35,10 +36,7 @@ namespace Six.Sax
 
                 try
                 {
-                    if (compiler.BuildModule(module))
-                    {
-                        compiler.Report();
-                    }
+                    compiler.BuildModule(module);
                 }
                 catch (System.Exception exception)
                 {

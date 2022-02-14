@@ -4,13 +4,13 @@ namespace Six.Sax.Sema
 {
     public interface Statement : Entity
     {
-        A.Statement Ast { get; }
-
-        public static Statement New(A.Statement statement)
+        public interface Block : Entity
         {
-            return new Impl(statement);
+            public static Block New(A.Body body, Container container) => new Impl(body, container);
+            private sealed record Impl(A.TreeNode Ast, Container Container) : Block;
         }
 
-        private sealed record Impl(A.Statement Ast) : Statement;
+        public static Statement New(A.Statement statement, Container container) => new Impl(statement, container);
+        private sealed record Impl(A.TreeNode Ast, Container Container) : Statement;
     }
 }

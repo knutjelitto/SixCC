@@ -7,6 +7,6 @@ Multiply the given [[Numeric]] values.
 """
 see (function plus, function product)
 tagged("Numbers")
-shared function Value times<Value>(Value x, Value y)
+shared Value times<Value>(Value x, Value y)
     where Value is Numeric<Value>
     => x * y;

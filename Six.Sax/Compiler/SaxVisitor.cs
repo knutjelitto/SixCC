@@ -35,7 +35,7 @@ namespace Six.Sax.Compiler
             return value;
         }
 
-        private T? Walk<T>(ROptional node)
+        private T? WalkOptional<T>(ROptional node)
             where T : class
         {
             Walk(node);
@@ -47,7 +47,7 @@ namespace Six.Sax.Compiler
             return value;
         }
 
-        private bool Exists(ROptional node)
+        private static bool Exists(ROptional node)
         {
             return node.Children.Length > 0;
         }
@@ -101,7 +101,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CPrelude element)
         {
-            var doc = Walk<Expression.String>(element.StringLiteral);
+            var doc = WalkOptional<Expression.String>(element.StringLiteral);
             var attributes = new Attributes(element, WalkMany<Attribute>(element.Attribute));
 
             element.Value = new Prelude(element, doc, attributes);
@@ -109,15 +109,15 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CAttribute element)
         {
-            var name = Walk<Name>(element.Name);
-            var arguments = Walk<Arguments>(element.AttributeArguments);
+            //var name = Walk<Name>(element.Name);
+            var arguments = WalkOptional<Arguments>(element.AttributeArguments);
 
-            element.Value = new Attribute(element, name, arguments);
+            element.Value = new Attribute(element, element.AttributeName, arguments);
         }
 
         protected override void Visit(CAttributeArguments element)
         {
-            element.Value = Walk<Arguments>(element.AttributeArgumentList);
+            element.Value = WalkOptional<Arguments>(element.AttributeArgumentList);
         }
 
         protected override void Visit(CAttributeArgumentList element)
@@ -135,6 +135,21 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.String.Verbatim(element);
         }
 
+        protected override void Visit(CStringStart element)
+        {
+            element.Value = new Expression.String.Start(element);
+        }
+
+        protected override void Visit(CStringMid element)
+        {
+            element.Value = new Expression.String.Mid(element);
+        }
+
+        protected override void Visit(CStringEnd element)
+        {
+            element.Value = new Expression.String.End(element);
+        }
+
         protected override void Visit(CDeclarations element)
         {
             element.Value = new Declarations(element, WalkMany<Declaration>(element));
@@ -148,81 +163,81 @@ namespace Six.Sax.Compiler
         protected override void Visit(CFunctionDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var type = Walk<Type>(element.Type);
+            var type = WalkOptional<Type>(element.Type);
             var name = Walk<Name>(element.Name);
-            var genrics = Walk<Generic.Parameters>(element.GenericParameters);
+            var generics = WalkOptional<Generic.TypeParameters>(element.GenericParameters);
             var parameters = Walk<MultiParameters>(element.MultiParameters);
-            var constraints = Walk<Generic.Constraints>(element.Constraints);
+            var constraints = WalkOptional<Generic.Constraints>(element.Constraints);
             var body = Walk<Body>(element.FunctionBody);
 
-            element.Value = new Declaration.Entity.Function(element, prelude, name, genrics, type, parameters, constraints, body);
+            element.Value = new Declaration.Function(element, prelude, name, generics, constraints, type, parameters, body);
         }
 
         protected override void Visit(CAttributeDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var type = Walk<Type>(element.Type);
+            var type = WalkOptional<Type>(element.Type);
             var name = Walk<Name>(element.Name);
             var body = Walk<Body>(element.AttributeBody);
 
-            element.Value = new Declaration.Entity.Attribute(element, prelude, name, type, body);
+            element.Value = new Declaration.Attribute(element, prelude, name, type, body);
         }
 
         protected override void Visit(CClassDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var genrics = Walk<Generic.Parameters>(element.GenericParameters);
-            var parameters = Walk<Parameters>(element.Parameters);
-            var extends = Walk<Type>(element.Extends);
-            var satifies = Walk<Types>(element.Satisfies);
-            var cases = Walk<Types>(element.CaseTypes);
-            var constraints = Walk<Generic.Constraints>(element.Constraints);
+            var generics = WalkOptional<Generic.TypeParameters>(element.GenericParameters);
+            var parameters = WalkOptional<Parameters>(element.Parameters);
+            var extends = WalkOptional<Type>(element.Extends);
+            var satifies = WalkOptional<Type.Types>(element.Satisfies);
+            var cases = WalkOptional<Type.Types>(element.CaseTypes);
+            var constraints = WalkOptional<Generic.Constraints>(element.Constraints);
             var body = Walk<Body>(element.BlockBody);
 
-            element.Value = new Declaration.Entity.Class(element, prelude, name, genrics, parameters, extends, satifies, cases, constraints, body);
+            element.Value = new Declaration.Class(element, prelude, name, generics, constraints, parameters, extends, satifies, cases, body);
         }
 
         protected override void Visit(CInterfaceDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var genrics = Walk<Generic.Parameters>(element.GenericParameters);
-            var parameters = Walk<Parameters>(element.Parameters);
-            var satifies = Walk<Types>(element.Satisfies);
-            var cases = Walk<Types>(element.CaseTypes);
-            var constraints = Walk<Generic.Constraints>(element.Constraints);
+            var generics = WalkOptional<Generic.TypeParameters>(element.GenericParameters);
+            var parameters = WalkOptional<Parameters>(element.Parameters);
+            var satifies = WalkOptional<Type.Types>(element.Satisfies);
+            var cases = WalkOptional<Type.Types>(element.CaseTypes);
+            var constraints = WalkOptional<Generic.Constraints>(element.Constraints);
             var body = Walk<Body>(element.BlockBody);
 
-            element.Value = new Declaration.Entity.Interface(element, prelude, name, genrics, parameters, satifies, cases, constraints, body);
+            element.Value = new Declaration.Interface(element, prelude, name, generics, constraints, parameters, satifies, cases, body);
         }
 
         protected override void Visit(CObjectDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var extends = Walk<Type>(element.Extends);
-            var satifies = Walk<Types>(element.Satisfies);
+            var extends = WalkOptional<Type>(element.Extends);
+            var satifies = WalkOptional<Type.Types>(element.Satisfies);
             var body = Walk<Body>(element.BlockBody);
 
-            element.Value = new Declaration.Entity.Object(element, prelude, name, extends, satifies, body);
+            element.Value = new Declaration.Object(element, prelude, name, extends, satifies, body);
         }
 
         protected override void Visit(CAliasDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var generics = Walk<Generic.Parameters>(element.GenericParameters);
-            var constraints = Walk<Generic.Constraints>(element.Constraints);
+            var generics = WalkOptional<Generic.TypeParameters>(element.GenericParameters);
+            var constraints = WalkOptional<Generic.Constraints>(element.Constraints);
             var type = Walk<Type>(element.Type);
 
-            element.Value = new Declaration.Entity.Alias(element, prelude, name, generics, constraints, type);
+            element.Value = new Declaration.Alias(element, prelude, name, generics, constraints, type);
         }
 
         protected override void Visit(CReference element)
         {
             var name = Walk<Name>(element.Name);
-            var arguments = Walk<Generic.Arguments>(element.GenericArguments);
+            var arguments = WalkOptional<Generic.TypeArguments>(element.GenericArguments);
 
             element.Value = new Reference(element, name, arguments);
         }
@@ -230,7 +245,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CParameters element)
         {
-            element.Value = Walk<Parameters>(element.ParameterList) ?? new Parameters(element);
+            element.Value = WalkOptional<Parameters>(element.ParameterList) ?? new Parameters(element);
         }
 
         protected override void Visit(CMultiParameters element)
@@ -243,13 +258,14 @@ namespace Six.Sax.Compiler
             element.Value = new Parameters(element, WalkMany<Parameter>(element));
         }
 
-        protected override void Visit(CParameter element)
+        protected override void Visit(CValueParameter element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var type = Walk<Type>(element.ParameterType);
+            var type = WalkOptional<Type>(element.ParameterType);
             var name = Walk<Name>(element.Name);
+            var @default = WalkOptional<Expression>(element.ValueDefault);
 
-            element.Value = new Parameter(element, prelude, name, type);
+            element.Value = new ValueParameter(element, prelude, name, type, @default);
         }
 
         protected override void Visit(CNullBody element)
@@ -275,7 +291,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CReturnStatement element)
         {
-            element.Value = new Statement.Return(element, Walk<Expression>(element.Expression));
+            element.Value = new Statement.Return(element, WalkOptional<Expression>(element.Expression));
         }
 
         protected override void Visit(CIfStatement element)
@@ -288,7 +304,7 @@ namespace Six.Sax.Compiler
             items.AddRange(WalkMany<Statement.Guarded>(element.ElseIf));
             var guardeds = new Statement.Guardeds(element.ElseIf, items);
 
-            var elseBlock = Walk<Body.Block>(element.ElseBlock);
+            var elseBlock = WalkOptional<Body.Block>(element.ElseBlock);
 
             element.Value = new Statement.If(element, guardeds, elseBlock);
         }
@@ -298,18 +314,24 @@ namespace Six.Sax.Compiler
             var pattern = Walk<Pattern>(element.Pattern);
             var expression = Walk<Expression>(element.Expression);
             var block = Walk<Body.Block>(element.BlockBody);
+            var elseBlock = WalkOptional<Body.Block>(element.ElseBlock);
 
-            element.Value = new Statement.For(element, pattern, expression, block);
+            element.Value = new Statement.For(element, pattern, expression, block, elseBlock);
+        }
+
+        protected override void Visit(CElseBlock element)
+        {
+            element.Value = Walk<Body.Block>(element.BlockBody);
         }
 
         protected override void Visit(CCaseTypes element)
         {
-            element.Value = Walk<Types>(element.CaseTypeList);
+            element.Value = Walk<Type.Types>(element.CaseTypeList);
         }
 
         protected override void Visit(CCaseTypeList element)
         {
-            element.Value = new Types(element, WalkMany<Type>(element));
+            element.Value = new Type.Types(element, WalkMany<Type>(element));
         }
 
         protected override void Visit(CObjectReference element)
@@ -378,7 +400,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CArguments element)
         {
-            element.Value = Walk<Arguments>(element.ArgumentList);
+            element.Value = WalkOptional<Arguments>(element.ArgumentList);
         }
 
         protected override void Visit(CArgumentList element)
@@ -399,19 +421,19 @@ namespace Six.Sax.Compiler
         protected override void Visit(CCallableType element)
         {
             var type = Walk<Type>(element.PrimaryType);
-            var arguments = Walk<Type>(element.CallableArguments) ?? new Types(element.CallableArguments);
+            var arguments = WalkOptional<Type>(element.CallableArguments) ?? new Type.Types(element.CallableArguments);
 
             element.Value = new Type.Callable(element, type, arguments);
         }
 
         protected override void Visit(CSatisfies element)
         {
-            element.Value = Walk<Types>(element.UnionTypeList);
+            element.Value = Walk<Type.Types>(element.UnionTypeList);
         }
 
         protected override void Visit(CUnionTypeList element)
         {
-            element.Value = new Types(element, WalkMany<Type>(element));
+            element.Value = new Type.Types(element, WalkMany<Type>(element));
         }
 
         protected override void Visit(CUsings element)
@@ -429,7 +451,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CUsingElements element)
         {
-            element.Value = Walk<Using.ElementList>(element.UsingElementList);
+            element.Value = WalkOptional<Using.ElementList>(element.UsingElementList);
         }
 
         protected override void Visit(CUsingElementList element)
@@ -440,8 +462,8 @@ namespace Six.Sax.Compiler
         protected override void Visit(CUsingNamed element)
         {
             var name1 = Walk<Name>(element.UsingName);
-            var name2 = Walk<Name>(element.UsingNameSpecifier);
-            var elements = Walk<Using.ElementList>(element.UsingElements);
+            var name2 = WalkOptional<Name>(element.UsingNameSpecifier);
+            var elements = WalkOptional<Using.ElementList>(element.UsingElements);
 
             if (name2 == null)
             {
@@ -471,9 +493,17 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.Select(element, primary, reference);
         }
 
+        protected override void Visit(CNullsafeSelectExpression element)
+        {
+            var primary = Walk<Expression>(element.PrimaryExpression);
+            var reference = Walk<Reference>(element.Reference);
+
+            element.Value = new Expression.NullsafeSelect(element, primary, reference);
+        }
+
         protected override void Visit(CAssertStatement element)
         {
-            var message = Walk<Expression.String>(element.StringLiteral);
+            var message = WalkOptional<Expression.String>(element.StringLiteral);
             var arguments = Walk<Arguments>(element.Arguments);
 
             element.Value = new Statement.Assert(element, message, arguments);
@@ -481,20 +511,21 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CGenericParameters element)
         {
-            element.Value = Walk<Generic.Parameters>(element.GenericParameterList);
+            element.Value = WalkOptional<Generic.TypeParameters>(element.GenericParameterList);
         }
 
         protected override void Visit(CGenericParameterList element)
         {
-            element.Value = new Generic.Parameters(element, WalkMany<Generic.Parameter>(element));
+            element.Value = new Generic.TypeParameters(element, WalkMany<Generic.TypeParameter>(element));
         }
 
         protected override void Visit(CGenericParameter element)
         {
+            var variance = WalkOptional<string>(element.Variance);
             var name = Walk<Name>(element.Name);
-            var variance = Walk<string>(element.Variance);
+            var @default = WalkOptional<Type>(element.TypeDefault);
 
-            element.Value = new Generic.Parameter(element, variance, name);
+            element.Value = new Generic.TypeParameter(element, variance, name, @default);
         }
 
         protected override void Visit(CVariance element)
@@ -510,9 +541,9 @@ namespace Six.Sax.Compiler
         protected override void Visit(CConstraint element)
         {
             var name = Walk<Name>(element.Name);
-            var parameters = Walk<Generic.Parameters>(element.GenericParameters);
-            var cases = Walk<Types>(element.CaseTypes);
-            var satifies = Walk<Types>(element.Satisfies);
+            var parameters = WalkOptional<Generic.TypeParameters>(element.GenericParameters);
+            var cases = WalkOptional<Type.Types>(element.CaseTypes);
+            var satifies = WalkOptional<Type.Types>(element.Satisfies);
 
             element.Value = new Generic.Constraint(element, name, parameters, cases, satifies);
         }
@@ -526,12 +557,12 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CGenericArguments element)
         {
-            element.Value = Walk<Generic.Arguments>(element.GenericArgumentList);
+            element.Value = WalkOptional<Generic.TypeArguments>(element.GenericArgumentList);
         }
 
         protected override void Visit(CGenericArgumentList element)
         {
-            element.Value = new Generic.Arguments(element, WalkMany<Generic.Argument>(element));
+            element.Value = new Generic.TypeArguments(element, WalkMany<Type>(element));
         }
 
         protected override void Visit(CAddExpression element)
@@ -553,7 +584,7 @@ namespace Six.Sax.Compiler
         protected override void Visit(CMulExpression element)
         {
             var left = Walk<Expression>(element.LevelMulExpression);
-            var right = Walk<Expression>(element.PrimaryExpression);
+            var right = Walk<Expression>(element.LevelUnionExpression);
 
             element.Value = new Expression.Mul(element, left, right);
         }
@@ -590,7 +621,7 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.NotEqual(element, left, right);
         }
 
-        protected override void Visit(CGtExpression element)
+        protected override void Visit(CGreaterExpression element)
         {
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
@@ -598,7 +629,7 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.Greater(element, left, right);
         }
 
-        protected override void Visit(CGeExpression element)
+        protected override void Visit(CGreaterEqualExpression element)
         {
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
@@ -606,7 +637,7 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.GreaterEqual(element, left, right);
         }
 
-        protected override void Visit(CLtExpression element)
+        protected override void Visit(CLessExpression element)
         {
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
@@ -614,7 +645,7 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.Less(element, left, right);
         }
 
-        protected override void Visit(CLeExpression element)
+        protected override void Visit(CLessEqualExpression element)
         {
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
@@ -698,7 +729,7 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CTupleType element)
         {
-            var type = Walk<Types>(element.TypeList);
+            var type = Walk<Type.Types>(element.TypeList);
 
             element.Value = new Type.Tuple(element, type);
         }
@@ -718,19 +749,99 @@ namespace Six.Sax.Compiler
 
         protected override void Visit(CTypeList element)
         {
-            element.Value = new Types(element, WalkMany<Type>(element));
+            element.Value = new Type.Types(element, WalkMany<Type>(element));
         }
 
-        protected override void Visit(CIterableType element)
+        protected override void Visit(CIterableTypeZero element)
         {
-            var variadic = Walk<Type.Variadic>(element.VariadicType);
+            var variadic = Walk<Type>(element.UnionType);
 
-            element.Value = new Type.Iterable(element, variadic);
+            element.Value = new Type.IterableZeroOrMore(element, variadic);
+        }
+
+        protected override void Visit(CIterableTypeOne element)
+        {
+            var variadic = Walk<Type>(element.UnionType);
+
+            element.Value = new Type.IterableOneOrMore(element, variadic);
         }
 
         protected override void Visit(CNamePattern element)
         {
             element.Value = new Pattern.Ident(element, Walk<Name>(element.Name));
+        }
+
+        protected override void Visit(CExpressionArgument element)
+        {
+            element.Value = new Argument.Expression(element, Walk<Expression>(element.Expression));
+        }
+
+        protected override void Visit(CSpreadArgument element)
+        {
+            element.Value = new Argument.Expression(element, Walk<Expression>(element.LevelUnionExpression));
+        }
+
+        protected override void Visit(CMetaArgument element)
+        {
+            element.Value = new Argument.Expression(element, Walk<Expression>(element.MetaReference));
+        }
+
+        protected override void Visit(CLiteralArgument element)
+        {
+            element.Value = new Argument.Expression(element, Walk<Expression>(element.StringLiteral));
+        }
+
+        protected override void Visit(CSpreadType element)
+        {
+            element.Value = new Type.Spread(element, Walk<Type>(element.UnionType));
+        }
+
+        protected override void Visit(CNothingType element)
+        {
+            element.Value = new Type.Nothing(element);
+        }
+
+        protected override void Visit(CTypeSelector element)
+        {
+            var type = Walk<Type>(element.PrimaryType);
+            var reference = Walk<Reference>(element.Reference);
+
+            element.Value = new Type.Selector(element, type, reference);
+        }
+
+        protected override void Visit(CTypeDefault element)
+        {
+            element.Value = Walk<Type>(element.Type);
+        }
+
+        protected override void Visit(CValueDefault element)
+        {
+            element.Value = Walk<Expression>(element.Expression);
+        }
+
+        protected override void Visit(CElseExpression element)
+        {
+            var left = Walk<Expression>(element.LevelCoalesceExpression);
+            var right = Walk<Expression>(element.LevelDisjunctionExpression);
+
+            element.Value = new Expression.Else(element, left, right);
+        }
+
+        protected override void Visit(CStringInterpolation element)
+        {
+            var str = Walk<Expression.String>(element.StringStart);
+            var expr = Walk<Expression>(element.Expression);
+            var interpolations = new List<Expression.InterpolationPart>();
+            interpolations.Add(new Expression.InterpolationPart(element, str, expr));
+            foreach (var part in element.InterpolationPart)
+            {
+                str = Walk<Expression.String>(part.StringMid);
+                expr = Walk<Expression>(part.Expression);
+                interpolations.Add(new Expression.InterpolationPart(element, str, expr));
+            }
+            str = Walk<Expression.String>(element.StringEnd);
+
+            element.Value = new Expression.StringInterpolation(element, new Expression.InterpolationParts(element, interpolations), str);
         }
     }
 }

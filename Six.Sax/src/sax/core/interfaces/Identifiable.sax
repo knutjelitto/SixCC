@@ -9,7 +9,6 @@ For the sake of convenience, this interface defines a default implementation of
 value equality equivalent to identity. Of course, subtypes are encouraged to
 refine this implementation.
 """
-by ("Gavin")
 tagged("Basic types")
 shared interface Identifiable
 {
@@ -19,7 +18,7 @@ shared interface Identifiable
     respect the constraint that if `x===y` then `x==y` (equality is consistent
     with identity).
     """
-    shared default actual function Boolean equals(Object that)
+    shared default actual Boolean equals(Object that)
         ;/*
         =>  if (is Identifiable that)
             then this === that
@@ -32,5 +31,5 @@ shared interface Identifiable
     general contract defined by [[Object.equals]].
     """
     see (function identityHash)
-    shared default actual value Integer hash => identityHash(this);
+    shared default actual Integer hash => identityHash(this);
 }

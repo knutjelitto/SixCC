@@ -2,7 +2,7 @@
 
 namespace Six.Sax.Ast
 {
-    public interface Expression : TreeNode, Argument
+    public interface Expression : TreeNode
     {
         public interface Literal : Expression
         {
@@ -21,6 +21,21 @@ namespace Six.Sax.Ast
                 private string? text;
                 public string Text => text ??= ((RToken)Tree).VerbatimText();
             }
+            public record Start(IRNode Tree) : String
+            {
+                private string? text;
+                public string Text => text ??= ((RToken)Tree).StartText();
+            }
+            public record Mid(IRNode Tree) : String
+            {
+                private string? text;
+                public string Text => text ??= ((RToken)Tree).MidText();
+            }
+            public record End(IRNode Tree) : String
+            {
+                private string? text;
+                public string Text => text ??= ((RToken)Tree).EndText();
+            }
         }
 
         public record Number(IRNode Tree) : Literal
@@ -29,7 +44,10 @@ namespace Six.Sax.Ast
             public string Text => text ??= ((RToken)Tree).Text;
         }
 
-        public sealed record If(IRNode Tree, Conditions Conditions, Expression Then, Expression Else) : Expression;
+        public sealed record InterpolationPart(IRNode Tree, String String, Expression Expression) : TreeNode;
+        public sealed record InterpolationParts(IRNode Tree, IEnumerable<InterpolationPart> Items)
+            : Many<InterpolationPart>(Tree, Items);
+        public sealed record StringInterpolation(IRNode Tree, InterpolationParts Parts, String Last) : Expression;
 
 
         public interface Binary : Expression
@@ -62,8 +80,12 @@ namespace Six.Sax.Ast
         public sealed record Less(IRNode Tree, Expression Left, Expression Right) : Binary;
         public sealed record LessEqual(IRNode Tree, Expression Left, Expression Right) : Binary;
 
+        public sealed record If(IRNode Tree, Conditions Conditions, Expression Then, Expression Else) : Expression;
+        public sealed record Else(IRNode Tree, Expression Left, Expression Right) : Binary;
+
         public sealed record Call(IRNode Tree, Expression Primary, Arguments Arguments) : Expression;
         public sealed record Select(IRNode Tree, Expression Primary, Reference Reference) : Expression;
+        public sealed record NullsafeSelect(IRNode Tree, Expression Primary, Reference Reference) : Expression;
 
         public sealed record Conditions(IRNode Tree, IEnumerable<Expression> Items): Many<Expression>(Tree, Items);
     }

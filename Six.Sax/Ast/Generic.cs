@@ -4,22 +4,22 @@ namespace Six.Sax.Ast
 {
     public interface Generic : TreeNode
     {
-        public record Parameter(IRNode Tree, string? Variance, Name Name) : Generic, With.Name;
+        public record TypeParameter(IRNode Tree, string? Variance, Name Name, Type? Default) : Generic, With.Name;
 
-        public record Parameters(IRNode Tree, IEnumerable<Parameter> Items)
-            : Many<Parameter>(Tree, Items);
+        public record TypeParameters(IRNode Tree, IEnumerable<TypeParameter> Items)
+            : Many<TypeParameter>(Tree, Items);
 
-        public interface Argument : TreeNode { }
+        public interface TypeArgument : TreeNode { }
 
-        public record Arguments(IRNode Tree, IEnumerable<Argument> Items)
-            : Many<Argument>(Tree, Items);
+        public record TypeArguments(IRNode Tree, IEnumerable<Type> Items)
+            : Many<Type>(Tree, Items);
 
         public sealed record Constraint(
             IRNode Tree, 
             Name Name, 
-            Parameters? Parameters,
-            Types? Cases,
-            Types? Satisfies) : Generic;
+            TypeParameters? Parameters,
+            Type.Types? Cases,
+            Type.Types? Satisfies) : Generic;
 
         public record Constraints(IRNode Tree, IEnumerable<Constraint> Items)
             : Many<Constraint>(Tree, Items);

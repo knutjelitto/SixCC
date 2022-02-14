@@ -13,7 +13,7 @@ see (function byIncreasing, function decreasing, function Iterable.max, function
 tagged("Functions", "Comparisons")
 shared function Comparison byDecreasing<Element,Value>(Value comparable(Element e))(Element x, Element y)
     where Value is Comparable<Value>
-=> comparable(y)<=>comparable(x);
+=> comparable(y) <=> comparable(x);
 
 """
 A comparator function which orders elements in decreasing

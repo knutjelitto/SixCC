@@ -10,12 +10,12 @@ namespace Six.Sax.Sema
 {
     public class Location : ILocation
     {
-        private Location(RToken token)
+        private Location(IRLocated located)
         {
-            Token = token;
+            Token = located;
         }
 
-        public RToken Token { get; }
+        public IRLocated Token { get; }
 
         public Source Source => Token.Source;
 
@@ -25,7 +25,7 @@ namespace Six.Sax.Sema
 
         public static Location From(IRNode node)
         {
-            if (node is RToken token)
+            if (node is IRLocated token)
             {
                 return new Location(token);
             }

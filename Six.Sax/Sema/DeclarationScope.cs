@@ -2,14 +2,11 @@
 
 namespace Six.Sax.Sema
 {
-    public class DeclarationScope : Scope, Contained
+    public class DeclarationScope : ContainerCore
     {
-        public DeclarationScope(Container container)
-            : base(container.Module)
+        public DeclarationScope(Container parent)
+            : base(parent)
         {
-            Container = container;
         }
-
-        public Container Container { get; }
     }
 }

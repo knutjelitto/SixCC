@@ -13,6 +13,6 @@ performance-sensitive code_.
 """
 see (interface Comparable, function largest, function min, function Integer.smallest, function Float.smallest)
 tagged("Comparisons")
-shared function Element smallest<Element>(Element x, Element y) 
+shared Element smallest<Element>(Element x, Element y) 
     where Element is Comparable<Element> 
     => if ( x != x || y < x) then y else x;

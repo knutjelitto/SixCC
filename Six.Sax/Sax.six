@@ -131,6 +131,10 @@ type-default
     : '=' type
     ;
 
+value-default
+    : '=' expression
+    ;
+
 variance
     : 'in'
     | 'out'
@@ -157,11 +161,11 @@ declaration
     ;
 
 function-declaration
-    : prelude 'function' type name generic-parameters? multi-parameters constraints? function-body
+    : prelude type? name generic-parameters? multi-parameters constraints? function-body
     ;
 
 attribute-declaration
-    : prelude 'value' type? name attribute-body
+    : prelude type? name attribute-body
     ;
 
 class-declaration
@@ -197,7 +201,7 @@ attribute-body
     ;
 
 block-body
-    | '{' usings statelarations '}'
+    : '{' usings statelarations '}'
     ;
 
 statelarations
@@ -205,12 +209,12 @@ statelarations
     ;
 
 statelaration
-    : statement
+    | statement
     | declaration
     ;
 
 expression-body
-    | function-specifier ';'
+    : function-specifier ';'
     ;
 
 null-body
@@ -226,7 +230,7 @@ extends
     ;
 
 extend-type
-    : type
+    | type
     | constructor
     ;
 
@@ -276,8 +280,24 @@ prelude
     ;
 
 attribute
-    : name attribute-arguments?
+    : attribute-name attribute-arguments?
     ;
+
+attribute-name
+    :<  'tagged'
+    |   'see'
+    |   'throws'
+    |   'shared'
+    |   'native'
+    |   'static'
+    |   'abstract'
+    |   'actual'
+    |   'formal'
+    |   'final'
+    |   'sealed'
+    |   'default'
+    |   'serializable'
+    >;
 
 attribute-arguments
     : '(' attribute-argument-list? ')'
@@ -288,8 +308,16 @@ attribute-argument-list
     ;
 
 attribute-argument
-    : string-literal
-    | meta-reference
+    : literal-argument
+    | meta-argument
+    ;
+
+literal-argument
+    :: string-literal
+    ;
+
+meta-argument
+    :: meta-reference
     ;
 
 meta-reference
@@ -363,6 +391,7 @@ primary-type
     | empty-type
     | tuple-type
     | iterable-type
+    | nothing-type
     ;
 
 nullable-type
@@ -413,9 +442,22 @@ tuple-type
     ;
 
 iterable-type
-    : '{' variadic-type '}'
+    | iterable-type-zero
+    | iterable-type-one
     ;
-    
+
+iterable-type-zero
+    : '{' union-type '*' '}'
+    ;
+
+iterable-type-one
+    : '{' union-type '+' '}'
+    ;
+
+nothing-type
+    :: 'Nothing'
+    ;
+
 multi-parameters
     : parameters+
     ;
@@ -429,7 +471,11 @@ parameter-list
     ;
 
 parameter
-    : prelude parameter-type name
+    | value-parameter
+    ;
+
+value-parameter
+    : prelude parameter-type? name value-default?
     ;
 
 parameter-type
@@ -446,7 +492,16 @@ argument-list
     ;
 
 argument
-    : expression
+    | expression-argument
+    | spread-argument
+    ;
+
+expression-argument
+    :: expression
+    ;
+
+spread-argument
+    : '*' level-union-expression
     ;
 
 //*****************************************************************************
@@ -474,7 +529,7 @@ else-block
     ;
 
 for-statement
-    : 'for' '(' pattern 'in' expression ')' block-body
+    : 'for' '(' pattern 'in' expression ')' block-body else-block?
     ;
 
 return-statement
@@ -561,26 +616,26 @@ not-identical-expression
     ;
 
 level-compare-expression
-    : lt-expression
-    | le-expression
-    | gt-expression
-    | ge-expression
+    : less-expression
+    | less-equal-expression
+    | greater-expression
+    | greater-equal-expression
     | level-add-expression
     ;
 
-lt-expression
+less-expression
     : level-add-expression '<' level-add-expression
     ;
 
-le-expression
+less-equal-expression
     : level-add-expression '<=' level-add-expression
     ;
 
-gt-expression
+greater-expression
     : level-add-expression '>' level-add-expression
     ;
 
-ge-expression
+greater-equal-expression
     : level-add-expression '>=' level-add-expression
     ;
 
@@ -602,26 +657,43 @@ level-mul-expression
     | mul-expression
     | div-expression
     | rem-expression
-    | primary-expression
+    | level-union-expression
     ;
 
 mul-expression
-    : level-mul-expression '*' primary-expression
+    : level-mul-expression '*' level-union-expression
     ;
 
 div-expression
-    : level-mul-expression '/' primary-expression
+    : level-mul-expression '/' level-union-expression
     ;
 
 rem-expression
-    : level-mul-expression '%' primary-expression
+    : level-mul-expression '%' level-union-expression
     ;
+
+level-union-expression
+    | union-expression
+    | complement-expression
+    | primary-expression
+    ;
+
+union-expression
+    : level-union-expression '|' primary-expression
+    ;
+
+complement-expression
+    : level-union-expression '~' primary-expression
+    ;
+
 
 primary-expression
     : reference
     | literal
+    | string-expression
     | call-expression
     | select-expression
+    | nullsafe-select-expression
     ;
 
 call-expression
@@ -632,14 +704,30 @@ select-expression
     : primary-expression '.' reference
     ;
 
+nullsafe-select-expression
+    : primary-expression '?.' reference
+    ;
+
 literal
-    | string-literal
     | natural-literal
+    ;
+
+string-expression
+    | string-literal
+    | string-interpolation
     ;
 
 string-literal
     | plain-string-literal
     | verbatim-string-literal
+    ;
+
+string-interpolation
+    : string-start expression interpolation-part* string-end
+    ;
+
+interpolation-part
+    : string-mid expression
     ;
 
 //-----------------------------------------------------------------------------
@@ -795,7 +883,7 @@ identifier-part
 letter
     | 'a' .. 'z' 
     | 'A' .. 'Z' 
-    | '\u{0080}' .. '\u{ffff}'
+    | '\u{00A0}' .. '\u{ffff}'
     ;
 
 decimal-digit

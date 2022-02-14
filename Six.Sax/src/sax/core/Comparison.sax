@@ -9,7 +9,7 @@ tagged("Comparisons")
 shared abstract class Comparison(shared actual String string) of larger | smaller | equal
 {
     "The reversed value of this comparison."
-    shared formal value Comparison reversed;
+    shared formal Comparison reversed;
 }
 
 """
@@ -18,7 +18,7 @@ The value is exactly equal to the given value.
 tagged("Comparisons")
 shared object equal : Comparison("equal")
 {
-    value reversed => this;
+    reversed => this;
 }
 
 """
@@ -27,7 +27,7 @@ The value is smaller than the given value.
 tagged("Comparisons")
 shared object smaller : Comparison("smaller")
 {
-    value reversed => larger;
+    reversed => larger;
 }
 
 """
@@ -36,5 +36,5 @@ The value is larger than the given value.
 tagged("Comparisons")
 shared object larger : Comparison("larger")
 {
-    value reversed => smaller;
+    reversed => smaller;
 }

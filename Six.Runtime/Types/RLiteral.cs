@@ -3,7 +3,7 @@ using Six.Runtime.Sppf;
 
 namespace Six.Runtime.Types
 {
-    public class RLiteral : RNode
+    public class RLiteral : RNode, IRLocated
     {
         public RLiteral(params Node[] nodes)
             : this((Terminal)nodes[0])
@@ -22,6 +22,8 @@ namespace Six.Runtime.Types
         public int Core { get; }
         public int End { get; }
         public Source Source { get; }
+
+        public string Text => GetText();
 
         public string GetText()
         {

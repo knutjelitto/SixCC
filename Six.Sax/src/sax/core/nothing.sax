@@ -8,7 +8,7 @@ assignable to any type, but produces an exception when evaluated.
 """
 throws (class AssertionError, "when evaluated")
 tagged("Basic types")
-shared value Nothing nothing
+shared Nothing nothing
 {
     "nothing may not be evaluated"
     assert (false);

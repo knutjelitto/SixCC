@@ -9,7 +9,7 @@ comparator function.
 """
 see (interface Comparable, function Iterable.sort)
 tagged("Streams", "Comparisons")
-shared function [Element+] | []&Iterable<Element,Absent>
+shared [Element+] | []&Iterable<Element,Absent>
 sort<Element,Absent>
 (
     "The unsorted stream of elements."

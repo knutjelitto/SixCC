@@ -9,79 +9,87 @@
  ********************************************************************************/
 namespace six.core;
 
-"A collection in which each distinct element occurs at most 
- once. Two non-[[identical|Identifiable]] values are 
- considered distinct only if they are unequal, according to
- their own definition of [[value equality|Object.equals]].
- 
- A `Set` is a [[Collection]] of its elements. Sets may not
- have [[null|Null]] elements.
- 
- A new `Set` may be obtained by calling the function [[set]].
-     
-     value words = set { \"hello\", \"world\" };
-     value greetings = set { \"hello\", \"goodbye\", \"hola\", \"adios\" };
- 
- The [[emptySet]] is a `Set` with no elements.
- 
- Sets may be the subject of the binary union, intersection, 
- and complement operators `|`, `&`, and `~`.
- 
-     value greetingsInWords = words & greetings;
-     value allWords = words | greetings;
- 
- An implementation of `Set` may compare elements for 
- equality using [[Object.equals]] or [[Comparable.compare]]."
+"""
+A collection in which each distinct element occurs at most once. Two
+non-[[identical|Identifiable]] values are considered distinct only if they are
+unequal, according to their own definition of [[value equality|Object.equals]].
+
+A `Set` is a [[Collection]] of its elements. Sets may not have [[null|Null]]
+elements.
+
+A new `Set` may be obtained by calling the function [[set]].
+    
+    value words = set { \"hello\", \"world\" };
+    value greetings = set { \"hello\", \"goodbye\", \"hola\", \"adios\" };
+
+The [[emptySet]] is a `Set` with no elements.
+
+Sets may be the subject of the binary union, intersection, and complement
+operators `|`, `&`, and `~`.
+
+    value greetingsInWords = words & greetings;
+    value allWords = words | greetings;
+
+An implementation of `Set` may compare elements for equality using
+[[Object.equals]] or [[Comparable.compare]].
+"""
 tagged("Collections")
 see (function package.set, value emptySet)
-shared interface Set<out Element=Object>
-        satisfies Collection<Element>
-        given Element satisfies Object {
+shared interface Set<out Element = Object> is Collection<Element> where Element is Object
+{
+    """
+    The fundamental operation for `Set`s. Determines if the given value belongs to
+    this set.
+    """
+    shared actual default Boolean contains(Object element) => super.contains(element);
     
-    "The fundamental operation for `Set`s. Determines if the
-     given value belongs to this set."
-    shared actual default Boolean contains(Object element)
-            => super.contains(element);
+    """
+    A shallow copy of this set, that is, a set with the same elements as this set,
+    which do not change if the elements of this set change.
+    """
+    shared actual default Set<Element> clone() => package.set(this);
     
-    "A shallow copy of this set, that is, a set with the
-     same elements as this set, which do not change if the
-     elements of this set change."
-    shared actual default Set<Element> clone() 
-            => package.set(this);
-    
-    "Determines if this set is a superset of the given 
-     `Set`, that is, if this set contains all of the 
-     elements in the given set."
-    shared default Boolean superset(Set<> set) {
-        for (element in set) {
-            if (!contains(element)) {
+    """
+    Determines if this set is a superset of the given `Set`, that is, if this set
+    contains all of the elements in the given set.
+    """
+    shared default Boolean superset(Set set)
+    {
+        for (element in set)
+        {
+            if (!contains(element))
+            {
                 return false;
             }
         }
-        else {
+        else
+        {
             return true;
         }
     }
     
-    "Determines if this set is a subset of the given `Set`, 
-     that is, if the given set contains all of the elements 
-     in this set."
-    shared default Boolean subset(Set<> set) {
-        for (element in this) {
-            if (!element in set) {
+    """
+    Determines if this set is a subset of the given `Set`, that is, if the given
+    set contains all of the elements in this set.
+    """
+    shared default Boolean subset(Set<> set)
+    {
+        for (element in this)
+        {
+            if (!element in set)
+            {
                 return false;
             }
         }
-        else {
+        else
+        {
             return true;
         }
     }
     
     distinct => this;
     
-    shared actual {Element*} 
-    defaultNullElements<Default>(Default defaultValue)
-            given Default satisfies Object => this;
+    shared actual {Element*} defaultNullElements<Default>(Default defaultValue) where Default is Object => this;
     
     "Returns a new `Set` containing all the elements of this 
      set and all the elements of the given `Set`.
@@ -103,9 +111,7 @@ shared interface Set<out Element=Object>
      
      produces the set `{ 1 }`."
     shared default 
-    Set<Element|Other> union<Other>(Set<Other> set)
-            given Other satisfies Object 
-            => package.set(chain(set));
+    Set<Element|Other> union<Other>(Set<Other> set) where Other is Object => package.set(chain(set));
     
     "Returns a new `Set` containing only the elements that 
      are present in both this set and the given `Set` and 
@@ -127,9 +133,8 @@ shared interface Set<out Element=Object>
      produces the empty set `{}`."
     shared default 
     Set<Element&Other> intersection<Other>(Set<Other> set)
-            given Other satisfies Object
-            => package.set(filter((e) => e in set)
-                    .narrow<Other>());
+        where Other is Object
+    => package.set(filter((e) => e in set).narrow<Other>());
     
     "Returns a new `Set` containing all the elements in this 
      set that are not contained in the given `Set`.
@@ -141,8 +146,8 @@ shared interface Set<out Element=Object>
      Produces the set `{ \"world\" }` of type `Set<String>`."
     shared default 
     Set<Element> complement<Other>(Set<Other> set)
-            given Other satisfies Object 
-            => package.set(filter((e) => !e in set));
+        where Other is Object 
+    => package.set(filter((e) => !e in set));
     
     "Returns a new `Set` containing only the elements 
      contained in either this set or the given `Set`, but no 
@@ -159,14 +164,19 @@ shared interface Set<out Element=Object>
      [[contains]]. Equivalently, a set is equal to a second 
      set if it is both a subset and a superset of the second
      set."
-    shared actual default Boolean equals(Object that) {
-        if (is Set<> that, that.size==size) {
-            for (element in this) {
-                if (!element in that) {
+    shared actual default Boolean equals(Object that)
+    {
+        if (is Set<> that, that.size==size)
+        {
+            for (element in this)
+            {
+                if (!element in that)
+                {
                     return false;
                 }
             }
-            else {
+            else
+            {
                 return true;
             }
         }
@@ -196,69 +206,61 @@ shared interface Set<out Element=Object>
  This is an eager operation and the resulting set does not 
  reflect changes to the given [[stream]]."
 see(value Iterable.distinct)
-since("1.2.0")
 shared Set<Element> set<Element>(
     "The stream of elements."
     {Element*} stream,
     "A function that chooses between duplicate elements. By 
      default, the element that occurs _earlier_ in the 
      stream is chosen."
-    Element choosing(Element earlier, Element later) 
-            => earlier)
-        given Element satisfies Object
-        => IterableSet(stream, choosing);
+    Element choosing(Element earlier, Element later) => earlier
+)
+    where Element is Object
+    => IterableSet(stream, choosing);
 
-class IterableSet<Element>(
-    {Element*} stream,
-    Element choosing(Element earlier, Element later))
-        extends Object()
-        satisfies Set<Element>
-        given Element satisfies Object {
-    
+class IterableSet<Element>({Element*} stream, Element choosing(Element earlier, Element later))
+    : Object
+    is Set<Element>
+    where Element is Object
+{
     value elements =
-            stream.summarize(identity,
-                (Element? current, element)
-                        => if (exists current)
-                        then choosing(current, element)
-                        else element);
-    
+        stream.summarize(
+            identity,
+            (Element? current, element)
+                =>  if (exists current)
+                    then choosing(current, element)
+                    else element
+        );
+
     contains(Object element) => elements.defines(element);
-    
+
     iterator() => elements.keys.iterator();
-    
+
     size => elements.size;
-    
+
     empty => elements.empty;
-    
+
     clone() => this;
-    
 }
 
 "An immutable [[Set]] with no elements."
 tagged("Collections")
-shared object emptySet 
-        extends Object() 
-        satisfies Set<Nothing> {
+shared object emptySet : Object is Set<Nothing>
+{
+    shared actual 
+    Set<Other> union<Other>(Set<Other> set) where Other is Object
+    => set;
     
     shared actual 
-    Set<Other> union<Other>(Set<Other> set)
-            given Other satisfies Object
-            => set;
+    Set<Nothing> intersection<Other>(Set<Other> set) where Other is Object
+    => this;
     
     shared actual 
-    Set<Nothing> intersection<Other>(Set<Other> set)
-            given Other satisfies Object
-            => this;
+    Set<Other> exclusiveUnion<Other>(Set<Other> set) where Other is Object
+    => set;
     
     shared actual 
-    Set<Other> exclusiveUnion<Other>(Set<Other> set)
-            given Other satisfies Object
-            => set;
-    
-    shared actual 
-    Set<Nothing> complement<Other>(Set<Other> set)
-            given Other satisfies Object
-            => this;
+    Set<Nothing> complement<Other>(Set<Other> set) where Other is Object
+    => this;
     
     subset(Set<> set) => true;
     superset(Set<> set) => set.empty;
@@ -277,12 +279,10 @@ shared object emptySet
     every(Boolean selecting(Nothing element)) => true;
     
     shared actual 
-    Null find(Boolean selecting(Nothing element)) 
-            => null;
+    Null find(Boolean selecting(Nothing element)) => null;
     
     shared actual 
-    Null findLast(Boolean selecting(Nothing element))
-            => null;
+    Null findLast(Boolean selecting(Nothing element)) => null;
     
     skip(Integer skipping) => this;
     take(Integer taking) => this;

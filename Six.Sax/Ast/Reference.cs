@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Six.Sax.Ast
 {
-    public sealed record Reference(IRNode Tree, Name Name, Generic.Arguments? Arguments)
+    public sealed record Reference(IRNode Tree, Name Name, Generic.TypeArguments? Arguments)
         : Expression, Type
     {
     }

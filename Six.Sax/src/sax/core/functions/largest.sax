@@ -12,6 +12,6 @@ in performance-sensitive code._
 """
 see (interface Comparable, function smallest, function max, function Integer.largest, function Float.largest)
 tagged("Comparisons")
-shared function Element largest<Element>(Element x, Element y) 
+shared Element largest<Element>(Element x, Element y) 
      where Element is Comparable<Element> 
 => if (x != x || y > x) then y else x;

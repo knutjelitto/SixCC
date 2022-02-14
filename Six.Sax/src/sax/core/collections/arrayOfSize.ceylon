@@ -10,8 +10,9 @@
 namespace six.core;
 
 """
-Create an array of the specified [[size]], populating every index with the given [[element]]. The specified `size` must
-be no larger than [[runtime.maxArraySize]]. If `size <= 0`, the new array will have no elements.
+Create an array of the specified [[size]], populating every index with the
+given [[element]]. The specified `size` must be no larger than
+[[runtime.maxArraySize]]. If `size <= 0`, the new array will have no elements.
 """
 see (value runtime.maxArraySize) tagged("Collections")
 throws (class AssertionError, "if `size > runtime.maxArraySize`")
@@ -22,4 +23,4 @@ shared Array<Element> arrayOfSize<Element>(
     "The element value with which to populate the array. All elements of the resulting array will have the same value." 
     Element element
 ) 
-    => Array.ofSize(size, element);
+=> Array.ofSize(size, element);

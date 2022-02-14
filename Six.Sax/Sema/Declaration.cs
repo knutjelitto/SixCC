@@ -2,19 +2,16 @@
 
 namespace Six.Sax.Sema
 {
-    public interface Declaration : Entity
+    public interface Declaration : Entity, Named
     {
-        A.Declaration Ast { get; }
-        Container Content { get; }
-
-        public bool IsShared => this.IsShared();
-        public bool IsNative => this.IsNative();
-
-        public static Declaration New(A.Declaration declaration, Container content)
-        {
-            return new Impl(declaration, content);
-        }
-
-        private sealed record Impl(A.Declaration Ast, Container Content) : Declaration;
+        public sealed record Function(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Class(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Attribute(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Object(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Interface(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Alias(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Parameter(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record TypeParameter(A.TreeNode Ast, Container Container) : Declaration;
+        public sealed record Any(A.TreeNode Ast, Container Container) : Declaration;
     }
 }

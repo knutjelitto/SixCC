@@ -25,7 +25,8 @@ not instances of the same class. For example, the [[Integer]] value `1` and the
 [[Float]] value `1.0` are considered equal. Except in these extreme cases,
 instances of different classes are considered unequal.
 """
-see (class Basic, class Null) tagged("Basic types")
+see (class Basic, class Null)
+tagged ("Basic types")
 shared abstract class Object : Anything
 {
     """
@@ -37,9 +38,9 @@ shared abstract class Object : Anything
     
     Implementations should respect the constraints that:
     
-    - if `x===y` then `x==y` (reflexivity), 
-    - if `x==y` then `y==x` (symmetry), 
-    - if `x==y` and `y==z` then `x==z` (transitivity).
+    - if `x === y` then `x == y` (reflexivity), 
+    - if `x == y` then `y == x` (symmetry), 
+    - if `x == y` and `y == z` then `x == z` (transitivity).
     
     Furthermore it is recommended that implementations ensure that if `x==y` then
     `x` and `y` have the same  concrete class.
@@ -56,7 +57,7 @@ shared abstract class Object : Anything
     [[function references|Callable]], it is acceptable for `equals()` to be
     defined to return `false` for every argument.
     """
-    shared formal function Boolean equals(Object that);
+    shared formal Boolean equals(Object that);
     
     """
     The hash value of the value, which allows the value to be an element of a
@@ -76,12 +77,12 @@ shared abstract class Object : Anything
     32 highest-order bits, before returning the value to the caller.
     """
     see (function identityHash)
-    shared formal value Integer hash;
+    shared formal Integer hash;
     
     """
     A developer-friendly string representing the instance. Concatenates the name of
     the concrete class of the instance with the `hash` of the instance. Subclasses 
     are encouraged to refine this implementation to produce a more meaningful representation.
     """
-    shared default value String string => className(this) + "@" + Integer.format(hash, #10);
+    shared default String string => className(this) + "@" + Integer.format(hash, #10);
 }

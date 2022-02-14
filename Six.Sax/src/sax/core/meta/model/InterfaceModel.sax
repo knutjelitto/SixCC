@@ -19,5 +19,5 @@ shared sealed interface InterfaceModel<out Type=Anything> is ClassOrInterface<Ty
     The declaration model of this class, which is necessarily an
     [[InterfaceDeclaration]].
     """
-    shared formal actual value InterfaceDeclaration declaration;
+    shared formal actual InterfaceDeclaration declaration;
 }

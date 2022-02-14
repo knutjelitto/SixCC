@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0 
  ********************************************************************************/
 namespace sax.core;
- 
+
 """
 Given a function with two parameter lists, return a function with the order of
 the argument lists reversed. The parameter lists may have any number of
@@ -21,7 +21,7 @@ This function is often used in conjunction with `curry()`.
 """
 see (function curry)
 tagged("Functions")
-shared Result(*FirstArgs)(*SecondArgs) shuffle<Result, FirstArgs, SecondArgs>(Result(*SecondArgs)(*FirstArgs) f)
+shared function Result(*FirstArgs)(*SecondArgs) shuffle<Result, FirstArgs, SecondArgs>(Result(*SecondArgs)(*FirstArgs) f)
     where FirstArgs is Anything[]
     where SecondArgs is Anything[]
 => flatten((SecondArgs secondArgs) 

@@ -20,7 +20,7 @@ shared interface Destroyable is Usable
 {
     "Destroy this resource. Called when execution of the body of the `try` statement ends, even if
      an exception propagates out of the body of the `try`."
-    shared formal function void destroy(
+    shared formal void destroy(
         "The exception propagating out of the body of the `try` statement, or `null` if no exception
          was propagated."
         Throwable? error);

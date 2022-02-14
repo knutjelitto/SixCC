@@ -9,6 +9,27 @@ namespace Six.Sax.Ast
 {
     public static class LiteralExtensions
     {
+        public static string StartText(this RToken token)
+        {
+            Assert(token.Text.StartsWith("\"") && token.Text.EndsWith("``"));
+
+            return Decode(token.Text[1..^2]);
+        }
+
+        public static string MidText(this RToken token)
+        {
+            Assert(token.Text.StartsWith("``") && token.Text.EndsWith("``"));
+
+            return Decode(token.Text[2..^2]);
+        }
+
+        public static string EndText(this RToken token)
+        {
+            Assert(token.Text.StartsWith("``") && token.Text.EndsWith("\""));
+
+            return Decode(token.Text[2..^1]);
+        }
+
         public static string PlainText(this RToken token)
         {
             Assert(token.Text.StartsWith("\"") && token.Text.EndsWith("\""));

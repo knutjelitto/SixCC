@@ -4,21 +4,21 @@ using Six.Runtime;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
-using Six.Sax.Sema;
+using S = Six.Sax.Sema;
 
 namespace Six.Sax.Compiler
 {
     public class SaxCompiler : Compiler<SaxParser>
     {
-        private readonly Sema.Module Global;
+        private readonly S.Module Module;
         private readonly CompilerConfiguration Configuration;
         private readonly SaxVisitor visitor;
 
         private readonly List<SourceFile> files = new();
 
-        public SaxCompiler(Sema.Module global, CompilerConfiguration configuration)
+        public SaxCompiler(S.Module module, CompilerConfiguration configuration)
         {
-            Global = global;
+            Module = module;
             Configuration = configuration;
 
             if (Configuration.WithRuleIndex)
@@ -29,7 +29,7 @@ namespace Six.Sax.Compiler
             visitor = new SaxVisitor();
         }
 
-        public void Report()
+        private void Report()
         {
             if (ruleIndex != null)
             {
@@ -43,8 +43,10 @@ namespace Six.Sax.Compiler
             {
                 using (var writer = $"{parser.__Name}-Global.txt".Writer())
                 {
-                    Global.Dump(writer);
+                    Module.Dump(writer);
                 }
+
+                Module.DumpEntities();
             }
 
 
@@ -94,12 +96,19 @@ namespace Six.Sax.Compiler
                         break;
                     }
                 }
+
+                if (ok)
+                {
+                    Module.Resolver.Resolve();
+
+                    Report();
+                }
             }
 
             return ok;
         }
 
-        public bool BuildFolder(Folder folder)
+        private bool BuildFolder(Folder folder)
         {
             Console.Write($"  {folder.Name[(folder.Name.IndexOf('.') + 1)..],-26}");
 
@@ -161,7 +170,7 @@ namespace Six.Sax.Compiler
                 {
                     if (file.Tree?.Value is Ast.Unit.Code root)
                     {
-                        CodeUnitWalker.Walk(Global, root);
+                        S.CodeWalker.Walk(Module, root);
                     }
                 }
             }

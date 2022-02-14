@@ -26,5 +26,4 @@ Declarations belonging to this package need not be explicitly imported by other 
 
 [sdk]: https://modules.ceylon-lang.org/categories/SDK
 """
-by ("Gavin King", "Tom Bentley", "Tako Schotanus", "Stephane Epardaud", "Enrique Zamudio")
 namespace sax.core;

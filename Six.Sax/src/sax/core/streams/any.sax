@@ -10,7 +10,7 @@ If there are no boolean values, return `false`.
 """
 see (function every, function Iterable.any)
 tagged("Streams")
-shared function Boolean any({Boolean*} values)
+shared Boolean any({Boolean*} values)
 {
     for (val in values)
     {

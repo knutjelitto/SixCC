@@ -74,21 +74,21 @@ shared interface Comparable<in Other> where Other is Comparable<Other>
     - if `x > y` and `y > z` then `x > z` (transitivity).
     """
     see (function equals)
-    shared formal function Comparison compare(Other other);
+    shared formal Comparison compare(Other other);
     
     "Determines if this value is strictly larger than the given value."
-    shared default function Boolean largerThan(Other other)
+    shared default Boolean largerThan(Other other)
         => compare(other) === larger; 
     
     "Determines if this value is strictly smaller than the given value."
-    shared default function Boolean smallerThan(Other other)
+    shared default Boolean smallerThan(Other other)
         => compare(other) === smaller; 
     
     "Determines if this value is larger than or equal to the given value."
-    shared default function Boolean notSmallerThan(Other other)
+    shared default Boolean notSmallerThan(Other other)
         => compare(other) !== smaller; 
     
     "Determines if this value is smaller than or equal to the given value."
-    shared default function Boolean notLargerThan(Other other)
+    shared default Boolean notLargerThan(Other other)
         => compare(other) !== larger; 
 }

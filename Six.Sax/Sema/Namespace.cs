@@ -4,42 +4,46 @@ using A = Six.Sax.Ast;
 
 namespace Six.Sax.Sema
 {
-    public class Namespace : Scope, Container, Contained
+    public class Namespace : ContainerCore, Container
     {
         private readonly Dictionary<string, Namespace> children = new();
 
-        public Namespace(Module module, Container container, string name)
-            : base(module)
+        public Namespace(string name, Container parent)
+            : base(parent)
         {
-            Container = container;
             Name = name;
         }
 
         public string Name { get; }
-        public Container Container { get; }
 
         public Namespace Open(string name)
         {
             if (!children.TryGetValue(name, out var scope))
             {
-                scope = new Namespace(Module, this, name);
+                scope = new Namespace(name, this);
                 children.Add(name, scope);
             }
             return scope;
         }
 
+        public Namespace? Get(string name)
+        {
+            if (children.TryGetValue(name, out var ns))
+            {
+                return ns;
+            }
+            return null;
+        }
+
         public string GetPath()
         {
-            if (Container is Namespace ns)
+            if (Parent is Namespace parent)
             {
-                if (ns.GetPath().EndsWith("::"))
-                    return "::" + Name;
-
-                return (ns.GetPath() + "." + Name).TrimStart('.');
+                return (parent.GetPath() + "." + Name).TrimStart('.');
             }
             else
             {
-                return ((Module)Container).Name;
+                return "";
             }
         }
 
