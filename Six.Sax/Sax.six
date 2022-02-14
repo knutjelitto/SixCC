@@ -158,6 +158,8 @@ declaration
     | object-declaration
     | alias-declaration
     | constructor-declaration
+    | let-declaration
+    | var-declaration
     ;
 
 function-declaration
@@ -167,6 +169,15 @@ function-declaration
 attribute-declaration
     : prelude type? name attribute-body
     ;
+
+var-declaration
+    : prelude 'var' type? name '=' expression ';'
+    ;
+
+let-declaration
+    : prelude 'let' type? name '=' expression ';'
+    ;
+
 
 class-declaration
     : prelude 'class' name generic-parameters? parameters? extends? satisfies? case-types? constraints? block-body
@@ -297,6 +308,7 @@ attribute-name
     |   'sealed'
     |   'default'
     |   'serializable'
+    |   'aliased'
     >;
 
 attribute-arguments
@@ -510,10 +522,20 @@ spread-argument
 //
 
 statement
+    | assign-statement
+    | expression-statement
     | if-statement
     | for-statement
     | return-statement
     | assert-statement
+    ;
+
+assign-statement
+    : name '=' expression ';'
+    ;
+
+expression-statement
+    : expression ';'
     ;
 
 if-statement
@@ -537,7 +559,7 @@ return-statement
     ;
 
 assert-statement
-    : string-literal? 'assert' arguments ';'
+    : string-literal? 'assert' conditions ';'
     ;
 
 //*****************************************************************************
@@ -546,8 +568,8 @@ assert-statement
 //
 
 expression
-    | level-coalesce-expression
     | if-expression
+    | level-coalesce-expression
     ;
 
 level-coalesce-expression
@@ -620,6 +642,7 @@ level-compare-expression
     | less-equal-expression
     | greater-expression
     | greater-equal-expression
+    | bounds-expression
     | level-add-expression
     ;
 
@@ -637,6 +660,36 @@ greater-expression
 
 greater-equal-expression
     : level-add-expression '>=' level-add-expression
+    ;
+
+bounds-expression
+    : lower-bound level-add-expression upper-bound
+    ;
+
+lower-bound
+    | lower-less-bound
+    | lower-less-equal-bound
+    ;
+
+lower-less-bound
+    : level-add-expression '<'
+    ;
+
+lower-less-equal-bound
+    : level-add-expression '<='
+    ;
+
+upper-bound
+    | upper-less-bound
+    | upper-less-equal-bound
+    ;
+
+upper-less-bound
+    : '<' level-add-expression
+    ;
+
+upper-less-equal-bound
+    : '<=' level-add-expression
     ;
 
 level-add-expression
@@ -675,15 +728,42 @@ rem-expression
 level-union-expression
     | union-expression
     | complement-expression
-    | primary-expression
+    | level-exclusive-expression
     ;
 
 union-expression
-    : level-union-expression '|' primary-expression
+    : level-union-expression '|' level-exclusive-expression
     ;
 
 complement-expression
-    : level-union-expression '~' primary-expression
+    : level-union-expression '~' level-exclusive-expression
+    ;
+
+level-exclusive-expression
+    | exclusive-expression
+    | level-intersection-expression
+    ;
+
+exclusive-expression
+    : level-exclusive-expression '^' level-intersection-expression
+    ;
+
+level-intersection-expression
+    | intersection-expression
+    | level-negate-expression
+    ;
+
+intersection-expression
+    : level-intersection-expression '&' level-negate-expression
+    ;
+
+level-negate-expression
+    : negate-expression
+    | primary-expression
+    ;
+
+negate-expression
+    : '-' !'-' level-negate-expression
     ;
 
 
@@ -694,6 +774,11 @@ primary-expression
     | call-expression
     | select-expression
     | nullsafe-select-expression
+    | grouped-expression
+    ;
+
+grouped-expression
+    : '(' expression ')'
     ;
 
 call-expression
@@ -757,7 +842,12 @@ condition-list
     ;
 
 condition
+    | is-condition
     | expression
+    ;
+
+is-condition
+    : '!'? 'is' type name
     ;
     
 

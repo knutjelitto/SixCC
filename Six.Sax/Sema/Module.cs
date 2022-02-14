@@ -9,14 +9,14 @@ namespace Six.Sax.Sema
     {
         private static readonly string Language = "sax";
         private static readonly string Core = "core";
-        private static readonly string CoreNull = "Null";
-        private static readonly string CoreNothing = "Nothing";
-        private static readonly string CoreIterable = "Iterable";
-        private static readonly string CoreCallable = "Callable";
-        private static readonly string CoreSequence = "Sequence";
-        private static readonly string CoreSequential = "Sequential";
-        private static readonly string CoreTuple = "Tuple";
-        private static readonly string CoreEmpty = "Empty";
+        public static readonly string CoreNull = "Null";
+        public static readonly string CoreNothing = "Nothing";
+        public static readonly string CoreIterable = "Iterable";
+        public static readonly string CoreCallable = "Callable";
+        public static readonly string CoreSequence = "Sequence";
+        public static readonly string CoreSequential = "Sequential";
+        public static readonly string CoreTuple = "Tuple";
+        public static readonly string CoreEmpty = "Empty";
 
         private readonly List<Diagnostic> Diagnostics = new();
 

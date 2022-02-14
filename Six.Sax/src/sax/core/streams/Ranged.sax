@@ -81,7 +81,7 @@ namespace sax.core;
  - `ranged[x..y]==ranged[x:n]`."
 see (interface List, interface Sequence, class String, class StringBuilder)
 shared interface Ranged<in Index, out Element, out Subrange> is {Element*}
-    where Subrange is Ranged<Index,Element,Subrange>
+    where Subrange is Ranged<Index, Element, Subrange>
 {    
     "Obtain a span containing the elements between the two 
      given indices.

@@ -11,6 +11,7 @@ namespace Six.Sax.Ast
         public sealed record Intersection(IRNode Tree, IEnumerable<Type> Items) : Many<Type>(Tree, Items), Type;
         public sealed record Nothing(IRNode Tree) : Type;
         public sealed record Spread(IRNode Tree, Type Type) : Type;
+        public sealed record Defaulted(IRNode Tree, Type Type) : Type;
         public sealed record Selector(IRNode Tree, Type Type, Reference Reference) : Type;
         public sealed record Callable(IRNode Tree, Type Type, Type Arguments) : Type;
         public sealed record Constructor(IRNode Tree, Type Type, Arguments Arguments) : Type;

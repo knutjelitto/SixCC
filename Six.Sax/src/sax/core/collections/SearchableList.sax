@@ -1,13 +1,4 @@
-/********************************************************************************
- * Copyright (c) 2011-2017 Red Hat Inc. and/or its affiliates and others
- *
- * This program and the accompanying materials are made available under the 
- * terms of the Apache License, Version 2.0 which is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-License-Identifier: Apache-2.0 
- ********************************************************************************/
-namespace six.core;
+namespace sax.core;
 
 "A [[List]] which can be efficiently searched for 
  occurrences of a given element, or for inclusions of a 
@@ -42,10 +33,9 @@ namespace six.core;
  - `\"\".inclusions(\"x\")` is the empty stream `{}`, but
  - `\"\".inclusions(\"\")` is the stream `{ 0 }`."
 see (class String, class Array)
-since("1.2.0")
-shared interface SearchableList<Element> 
-        satisfies List<Element> {
-    
+shared interface SearchableList<Element> is List<Element>
+{
+/*TODO
     "Determines if the given [[value|element]] occurs at the 
      given index in this list."
     shared default 
@@ -236,8 +226,8 @@ shared interface SearchableList<Element>
         Integer from = 0) 
             //performance of comprehension was 
             //worse than hand-written iterable
-            /*=> { for (i in from:size+1-from-sublist.size) 
-                 if (includesAt(i, sublist)) i };*/
+            //> { for (i in from:size+1-from-sublist.size) 
+            //     if (includesAt(i, sublist)) i };
             => object satisfies Iterable<Integer> {
         value len = outer.size;
         iterator() 
@@ -320,5 +310,5 @@ shared interface SearchableList<Element>
             return null;
         }
     }
-    
+*/
 }

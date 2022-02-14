@@ -1,13 +1,4 @@
-/********************************************************************************
- * Copyright (c) 2011-2017 Red Hat Inc. and/or its affiliates and others
- *
- * This program and the accompanying materials are made available under the 
- * terms of the Apache License, Version 2.0 which is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-License-Identifier: Apache-2.0 
- ********************************************************************************/
-namespace six.core;
+namespace sax.core;
 
 """
 A nonempty, immutable sequence of values. The type `Sequence<Element>` may be abbreviated
@@ -37,10 +28,10 @@ nonempty or non-null output when given a nonempty input are called _emptiness-pr
 - [[Singleton]], a sequence of just one element.
 """
 see (interface Empty, interface Sequential, class ArraySequence, class Range, class Tuple, class Singleton)
-by ("Gavin")
 tagged("Sequences")
-shared sealed interface Sequence<out Element=Anything> satisfies Element[] & {Element+}
-{    
+shared sealed interface Sequence<out Element=Anything> is Element[] & {Element+}
+{ 
+/*TODO   
     "The first element of the sequence, that is, the element with index `0`."
     shared actual formal Element first;
 
@@ -354,39 +345,12 @@ shared sealed interface Sequence<out Element=Anything> satisfies Element[] & {El
                 };
         
     }
-    
+*/    
 }
 
-"A [[nonempty sequence|Sequence]] of the given [[elements]], 
- or  `null` if the given stream is empty. A non-null, but
- possibly empty, [[sequence|Sequential]] may be obtained 
- using the `else` operator:
- 
-     [Element*] sequenceOfElements = sequence(elements) else [];"
-by ("Gavin")
-see (function Iterable.sequence)
-tagged("Sequences")
-since("1.1.0")
-deprecated("Since 1.3.2, [[Iterable.sequence]] has a more
-            precise return type, and so this function is no 
-            longer useful.")
-shared [Element+]|Absent sequence<Element,Absent=Null>
-        (Iterable<Element, Absent> elements)
-        given Absent satisfies Null {
-    if (nonempty sequence = elements.sequence()) {
-        return sequence;
-    }
-    else {
-        assert (is Absent null);
-        return null;
-    }
-}
-
-class JoinedSequence<Element>
-        ([Element+] firstSeq, [Element+] secondSeq)
-        extends Object()
-        satisfies [Element+] {
-    
+class JoinedSequence<Element> ([Element+] firstSeq, [Element+] secondSeq) : Object is [Element+]
+{
+/*TODO
     size => firstSeq.size + secondSeq.size;
     
     first => firstSeq.first;
@@ -446,5 +410,6 @@ class JoinedSequence<Element>
     }
     
     iterator() => ChainedIterator(firstSeq,secondSeq);    
+*/
 }
 

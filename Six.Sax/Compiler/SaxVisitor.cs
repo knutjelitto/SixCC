@@ -234,6 +234,26 @@ namespace Six.Sax.Compiler
             element.Value = new Declaration.Alias(element, prelude, name, generics, constraints, type);
         }
 
+        protected override void Visit(CLetDeclaration element)
+        {
+            var prelude = Walk<Prelude>(element.Prelude);
+            var type = WalkOptional<Type>(element.Type);
+            var name = Walk<Name>(element.Name);
+            var value = Walk<Expression>(element.Expression);
+
+            element.Value = new Declaration.Let(element, prelude, name, type, value);
+        }
+
+        protected override void Visit(CVarDeclaration element)
+        {
+            var prelude = Walk<Prelude>(element.Prelude);
+            var type = WalkOptional<Type>(element.Type);
+            var name = Walk<Name>(element.Name);
+            var value = Walk<Expression>(element.Expression);
+
+            element.Value = new Declaration.Var(element, prelude, name, type, value);
+        }
+
         protected override void Visit(CReference element)
         {
             var name = Walk<Name>(element.Name);
@@ -294,6 +314,11 @@ namespace Six.Sax.Compiler
             element.Value = new Statement.Return(element, WalkOptional<Expression>(element.Expression));
         }
 
+        protected override void Visit(CExpressionStatement element)
+        {
+            element.Value = new Statement.Expr(element, Walk<Expression>(element.Expression));
+        }
+
         protected override void Visit(CIfStatement element)
         {
             var conditions = Walk<Expression.Conditions>(element.Conditions);
@@ -308,6 +333,15 @@ namespace Six.Sax.Compiler
 
             element.Value = new Statement.If(element, guardeds, elseBlock);
         }
+
+        protected override void Visit(CElseIf element)
+        {
+            var conditions = Walk<Expression.Conditions>(element.Conditions);
+            var block = Walk<Body.Block>(element.BlockBody);
+
+            element.Value = new Statement.Guarded(element, conditions, block);
+        }
+
 
         protected override void Visit(CForStatement element)
         {
@@ -504,9 +538,9 @@ namespace Six.Sax.Compiler
         protected override void Visit(CAssertStatement element)
         {
             var message = WalkOptional<Expression.String>(element.StringLiteral);
-            var arguments = Walk<Arguments>(element.Arguments);
+            var conditions = Walk<Expression.Conditions>(element.Conditions);
 
-            element.Value = new Statement.Assert(element, message, arguments);
+            element.Value = new Statement.Assert(element, message, conditions);
         }
 
         protected override void Visit(CGenericParameters element)
@@ -589,6 +623,14 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.Mul(element, left, right);
         }
 
+        protected override void Visit(CRemExpression element)
+        {
+            var left = Walk<Expression>(element.LevelMulExpression);
+            var right = Walk<Expression>(element.LevelUnionExpression);
+
+            element.Value = new Expression.Rem(element, left, right);
+        }
+
         protected override void Visit(CIdenticalExpression element)
         {
             var left = Walk<Expression>(element.LevelCompareExpression);
@@ -660,6 +702,11 @@ namespace Six.Sax.Compiler
             element.Value = new Expression.Not(element, expression);
         }
 
+        protected override void Visit(CGroupedExpression element)
+        {
+            element.Value = Walk<Expression>(element.Expression);
+        }
+
         protected override void Visit(CIfExpression element)
         {
             var conditions = Walk<Expression.Conditions>(element.Conditions);
@@ -684,11 +731,19 @@ namespace Six.Sax.Compiler
             element.Value = Walk<Expression.Conditions>(element.ConditionList);
         }
 
-
         protected override void Visit(CConditionList element)
         {
             element.Value = new Expression.Conditions(element, WalkMany<Expression>(element));
         }
+
+        protected override void Visit(CIsCondition element)
+        {
+            var type = Walk<Type>(element.Type);
+            var name = Walk<Name>(element.Name);
+
+            element.Value = new Expression.IsType(element, type, name);
+        }
+
 
         protected override void Visit(CConjunctionExpression element)
         {
@@ -809,6 +864,11 @@ namespace Six.Sax.Compiler
             element.Value = new Type.Selector(element, type, reference);
         }
 
+        protected override void Visit(CDefaultedType element)
+        {
+            element.Value = new Type.Defaulted(element, Walk<Type>(element.Type));
+        }
+
         protected override void Visit(CTypeDefault element)
         {
             element.Value = Walk<Type>(element.Type);
@@ -819,12 +879,66 @@ namespace Six.Sax.Compiler
             element.Value = Walk<Expression>(element.Expression);
         }
 
+        protected override void Visit(CThenExpression element)
+        {
+            var left = Walk<Expression>(element.LevelCoalesceExpression);
+            var right = Walk<Expression>(element.LevelDisjunctionExpression);
+
+            element.Value = new Expression.Then(element, left, right);
+        }
+
         protected override void Visit(CElseExpression element)
         {
             var left = Walk<Expression>(element.LevelCoalesceExpression);
             var right = Walk<Expression>(element.LevelDisjunctionExpression);
 
             element.Value = new Expression.Else(element, left, right);
+        }
+
+        protected override void Visit(CNegateExpression element)
+        {
+            var expr = Walk<Expression>(element.LevelNegateExpression);
+
+            element.Value = new Expression.Negate(element, expr);
+        }
+
+        protected override void Visit(CBoundsExpression element)
+        {
+            var lower = Walk<Expression.UpperLower>(element.LowerBound);
+            var expr = Walk<Expression>(element.LevelAddExpression);
+            var upper = Walk<Expression.UpperLower>(element.UpperBound);
+
+            element.Value = new Expression.Bounds(element, lower, expr, upper);
+        }
+
+        protected override void Visit(CLowerLessEqualBound element)
+        {
+            element.Value = new Expression.LowerLessEqualsBound(element, Walk<Expression>(element.LevelAddExpression));
+        }
+
+        protected override void Visit(CLowerLessBound element)
+        {
+            element.Value = new Expression.LowerLessBound(element, Walk<Expression>(element.LevelAddExpression));
+        }
+
+        protected override void Visit(CUpperLessEqualBound element)
+        {
+            element.Value = new Expression.UpperLessEqualsBound(element, Walk<Expression>(element.LevelAddExpression));
+        }
+
+        protected override void Visit(CUpperLessBound element)
+        {
+            element.Value = new Expression.UpperLessBound(element, Walk<Expression>(element.LevelAddExpression));
+        }
+
+
+
+        protected override void Visit(CAssignStatement element)
+        {
+            var name = Walk<Name>(element.Name);
+            var expr = Walk<Expression>(element.Expression);
+
+            element.Value = new Statement.Assign(element, name, expr);
         }
 
         protected override void Visit(CStringInterpolation element)

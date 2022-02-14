@@ -39,10 +39,14 @@ namespace Six.Sax.Sema
                         {
                             if (node.Arguments != null)
                             {
-                                var arguments = resolve(node.Arguments);
+                                var arguments = resolveMany(node.Arguments);
                                 if (arguments != null)
                                 {
                                     return new Type.Reference(entity, arguments);
+                                }
+                                else
+                                {
+                                    return null;
                                 }
                             }
                             else
@@ -55,12 +59,16 @@ namespace Six.Sax.Sema
                     }
                 case A.Type.Nullable node:
                     {
-                        var @null = reference(Module.CoreFindNull());
-                        var type = Resolve(container, node.Type);
+                        var nullEntity = Module.CoreFindNull();
 
-                        if (@null != null && type != null)
+                        if (nullEntity != null)
                         {
-                            return new Type.Union(@null, type);
+                            var @null = new Type.Reference(nullEntity);
+                            var type = Resolve(container, node.Type);
+                            if (type != null)
+                            {
+                                return new Type.Union(@null, type);
+                            }
                         }
 
                         didnt(node, "nullable");
@@ -93,7 +101,7 @@ namespace Six.Sax.Sema
                             var type = Resolve(container, node.Type);
                             if (type != null)
                             {
-                                return new Type.Reference(sequential, type);
+                                return new Type.Sequential(sequential, type);
                             }
                         }
 
@@ -102,36 +110,89 @@ namespace Six.Sax.Sema
                     }
                 case A.Type.IterableZeroOrMore node:
                     {
-                        var iterable = Module.CoreFindIterable();
-                        if (iterable != null)
+                        var nullEntity = Module.CoreFindNull();
+                        if (nullEntity == null)
                         {
-                            var @null = reference(Module.CoreFindNull());
-                            if (@null != null)
-                            {
-                                var type = Resolve(container, node.Type);
-                                if (type != null)
-                                {
-                                    return new Type.Reference(iterable, type, @null);
-                                }
-                            }
+                            didnt(node, "Null");
+                            return null;
+                        }
+                        var iterable = Module.CoreFindIterable();
+                        if (iterable == null)
+                        {
+                            didnt(node, "Iterable");
+                            return null;
+                        }
+                        var @null = new Type.Reference(nullEntity);
+                        var type = Resolve(container, node.Type);
+                        if (type != null)
+                        {
+                            return new Type.Reference(iterable, type, @null);
                         }
 
-                        didnt(node, "iterable*");
+                        return null;
+                    }
+                case A.Type.IterableOneOrMore node:
+                    {
+                        var iterable = Module.CoreFindIterable();
+                        if (iterable == null)
+                        {
+                            didnt(node, Module.CoreIterable);
+                            return null;
+                        }
+                        var type = Resolve(container, node.Type);
+                        if (type != null)
+                        {
+                            return new Type.Reference(iterable, type, new Type.Nothing());
+                        }
+
                         return null;
                     }
                 case A.Type.ZeroOrMore node:
                     {
                         var sequential = Module.CoreFindSequential();
-                        if (sequential != null)
+                        if (sequential == null)
                         {
-                            var type = Resolve(container, node.Type);
-                            if (type != null)
-                            {
-                                return new Type.Variadic(new Type.Reference(sequential, type));
-                            }
+                            didnt(node, Module.CoreSequential);
+                            return null;
                         }
 
-                        didnt(node, "variadic*");
+                        var type = Resolve(container, node.Type);
+                        if (type != null)
+                        {
+                            return new Type.Variadic(new Type.Sequential(sequential, type));
+                        }
+
+                        return null;
+                    }
+                case A.Type.OneOrMore node:
+                    {
+                        var sequence = Module.CoreFindSequence();
+                        if (sequence == null)
+                        {
+                            didnt(node, Module.CoreSequence);
+                            return null;
+                        }
+                        var type = Resolve(container, node.Type);
+                        if (type != null)
+                        {
+                            return new Type.Variadic(new Type.Sequence(sequence, type));
+                        }
+
+                        return null;
+                    }
+                case A.Type.Defaulted node:
+                    {
+                        var empty = Module.CoreFindEmpty();
+                        if (empty == null)
+                        {
+                            didnt(node, Module.CoreEmpty);
+                            return null;
+                        }
+                        var type = Resolve(container, node.Type);
+                        if (type != null)
+                        {
+                            return new Type.Defaulted(new Type.Reference(empty), type);
+                        }
                         return null;
                     }
                 case A.Type.Intersection node:
@@ -156,12 +217,54 @@ namespace Six.Sax.Sema
                     }
                 case A.Type.Types node:
                     {
+                        var empty = Module.CoreFindEmpty();
+                        if (empty == null)
+                        {
+                            didnt(node, "Empty not found");
+                        }
+                        var sequence = Module.CoreFindSequence();
+                        if (sequence == null)
+                        {
+                            didnt(node, "Sequence not found");
+                        }
+                        var sequential = Module.CoreFindSequential();
+                        if (sequential == null)
+                        {
+                            didnt(node, "Sequence not found");
+                        }
+                        var tuple = Module.CoreFindTuple();
+                        if (tuple == null)
+                        {
+                            didnt(node, "Tuple not found");
+                        }
+
                         if (asTuple)
                         {
-                            var tuple = Module.CoreFindTuple();
-                            if (tuple != null)
+                            var types = resolveMany(node);
+                            if (types != null)
                             {
-                                var types = node.Select(type => Resolve(container, type)).ToList();
+                                return tuplize(types, 0);
+                            }
+
+                            Type tuplize(Type[] types, int offset)
+                            {
+                                if (offset == types.Length)
+                                {
+                                    return new Type.Reference(empty!);
+                                }
+                                var first = types[offset];
+                                if (first is Type.Variadic variadic)
+                                {
+                                    Assert(offset + 1 == types.Length);
+                                    return variadic.Type;
+                                }
+                                else
+                                {
+                                    var rest = tuplize(types, offset + 1);
+                                    var type = new Type.Union(first, rest);
+
+                                    return new Type.Reference(tuple!, type, first, rest);
+                                }
                             }
                         }
                         else
@@ -174,35 +277,31 @@ namespace Six.Sax.Sema
                     }
                 case A.Type.Tuple node:
                     {
-                        didnt(node, "tuple");
-                        return null;
-                    }
-                case A.Type.IterableOneOrMore node:
-                    {
-                        var iterable = Module.CoreFindIterable();
-                        var entity = Resolve(container, node.Type);
-
-                        didnt(node, "iterable+");
-                        return null;
-                    }
-                case A.Type.OneOrMore node:
-                    {
-                        var entity = Resolve(container, node.Type);
-
-                        didnt(node, "variadic+");
-                        return null;
+                        return Resolve(container, node.Types, true);
                     }
                 case A.Type.Sequence node:
                     {
                         var sequence = Module.CoreFindSequence();
-                        var type = Resolve(container, node.Type);
+                        if (sequence != null)
+                        {
+                            var type = Resolve(container, node.Type);
+                            if (type != null)
+                            {
+                                return new Type.Sequence(sequence, type);
+                            }
+                        }
 
                         didnt(node, "sequence");
                         return null;
                     }
                 case A.Type.Constructor node:
                     {
-                        didnt(node, "constructor");
+                        var type = Resolve(container, node.Type);
+
+                        if (type != null)
+                        {
+                            return type;
+                        }
                         return null;
                     }
                 case A.Type.Empty node:
@@ -215,7 +314,7 @@ namespace Six.Sax.Sema
                         didnt(node, "empty");
                         return null;
                     }
-                case A.Type.Nothing node:
+                case A.Type.Nothing:
                     {
                         return new Type.Nothing();
                     }
@@ -229,16 +328,7 @@ namespace Six.Sax.Sema
                 Module.Add(new Six.Core.Errors.SemanticError(Location.From(node.Tree), $"didn't resolve type: {what}"));
             }
 
-            Type? reference(Entity? entity, params Type[] arguments)
-            {
-                if (entity != null)
-                {
-                    return new Type.Reference(entity, arguments);
-                }
-                return null;
-            }
-
-            Type[]? resolve(A.Many<A.Type> types)
+            Type[]? resolveMany(A.Many<A.Type> types)
             {
                 var results = new List<Type>();
                 foreach (var arg in types)

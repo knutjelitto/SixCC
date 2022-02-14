@@ -197,6 +197,11 @@ namespace Six.Sax.Sema
             Parent.AddChild(Statement.New(node, Parent));
         }
 
+        private void Declare(A.Statement.If node)
+        {
+            Parent.AddChild(Statement.New(node, Parent));
+        }
+
         private void Declare(A.Body.Block node)
         {
             var entity = Parent.AddChild(Statement.Block.New(node, new BlockScope(Parent)));

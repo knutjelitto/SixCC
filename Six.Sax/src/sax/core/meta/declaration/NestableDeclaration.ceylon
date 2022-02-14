@@ -1,13 +1,4 @@
-/********************************************************************************
- * Copyright (c) 2011-2017 Red Hat Inc. and/or its affiliates and others
- *
- * This program and the accompanying materials are made available under the 
- * terms of the Apache License, Version 2.0 which is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-License-Identifier: Apache-2.0 
- ********************************************************************************/
-namespace six.core.meta.declaration;
+namespace sax.core.meta.declaration;
 
 """
 A declaration which can be contained in a [[Package]] or in another
@@ -16,12 +7,12 @@ A declaration which can be contained in a [[Package]] or in another
 Functions, values, classes, interfaces and aliases are such declarations.
 """
 shared sealed interface NestableDeclaration
-    of  FunctionOrValueDeclaration |
-        ClassOrInterfaceDeclaration |
-        ConstructorDeclaration |
-        SetterDeclaration |
-        AliasDeclaration
-    satisfies AnnotatedDeclaration & TypedDeclaration
+    is AnnotatedDeclaration & TypedDeclaration
+    of  FunctionOrValueDeclaration
+    |   ClassOrInterfaceDeclaration
+    |   ConstructorDeclaration
+    |   SetterDeclaration
+    |   AliasDeclaration
 {
     "This declaration's immediate container, which can be either a [[NestableDeclaration]]
      or a [[Package]]."

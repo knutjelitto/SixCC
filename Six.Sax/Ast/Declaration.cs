@@ -52,6 +52,9 @@ namespace Six.Sax.Ast
         {
         }
 
+        public sealed record Let(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value) : Entity;
+        public sealed record Var(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value) : Entity;
+
         public abstract record EntityImpl(
             IRNode Tree,
             Prelude Prelude,

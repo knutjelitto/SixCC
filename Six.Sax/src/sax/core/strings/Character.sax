@@ -1,14 +1,4 @@
-/********************************************************************************
- * Copyright (c) 2011-2017 Red Hat Inc. and/or its affiliates and others
- *
- * This program and the accompanying materials are made available under the 
- * terms of the Apache License, Version 2.0 which is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-License-Identifier: Apache-2.0 
- ********************************************************************************/
-
-namespace six.core;
+namespace sax.core;
 
 """
 A 32-bit [Unicode][] character.
@@ -36,13 +26,11 @@ since `'a'.integer < 'b'.integer`.
 [Unicode]: http://www.unicode.org/
 """
 see (class String)
-by ("Gavin")
 tagged ("Basic types", "Strings")
 shared final native
-class Character(Character character)
-    extends Object()
-    satisfies Comparable<Character> & Enumerable<Character>
+class Character(Character character) : Object is Comparable<Character> & Enumerable<Character>
 {
+/*TODO
     """
     A string containing just this character.
     """
@@ -118,13 +106,7 @@ class Character(Character character)
     
     "Determine if this character is an ISO control character."
     shared native Boolean control;
-    
-    /*"The general category of the character"
-    shared native CharacterCategory category;*/
-    
-    /*"The directionality of the character."
-    shared native CharacterDirectionality directionality;*/
-    
+        
     "The Unicode code point of the character, an [[Integer]] in the range `0..#10FFFF`."
     aliased ("codePoint")
     shared native Integer integer;
@@ -187,4 +169,5 @@ class Character(Character character)
     """
     shared actual native Boolean notLargerThan(Character other)
         => this.integer <= other.integer; 
+*/
 }
