@@ -1,0 +1,971 @@
+﻿ grammar Six;
+
+%start      = compilation-unit;
+%whitespace = skip;
+%keywords   = identifier;
+
+%namespace  = 'Six.Six';
+
+compilation-unit
+    | module-descriptor
+    | code-unit
+    ;
+
+code-unit
+    : '@skip'? namespace usings declarations
+    ;
+
+namespace
+    : prelude 'namespace' names ';'
+    ;
+
+//*****************************************************************************
+//
+// MODULE
+//
+
+module-descriptor
+    : 'module' names module-body
+    ;
+
+module-body
+    : '{' module-body-element* '}'
+    ;
+
+module-body-element
+    : module-import
+    ;
+
+module-import
+    : 'import' names ';'
+    ;
+
+//*****************************************************************************
+//
+// USING
+//
+
+usings
+    : using-declaration*
+    ;
+
+using-declaration
+    : 'using' names using-elements
+    ;
+
+using-elements
+    : '{' using-element-list? '}'
+    ;
+
+using-element-list
+    : using-element (',' using-element)*
+    ;
+
+using-element
+    | using-named
+    | using-wildcard
+    ;
+
+using-named
+    : using-name using-name-specifier? using-elements?
+    ;
+
+using-name
+    : identifier
+    ;
+
+using-name-specifier
+    : '=' identifier
+    ;
+
+using-wildcard
+    : '...'
+    ;
+    
+//*****************************************************************************
+//
+// MISC
+//
+
+name
+    | identifier
+    ;
+
+names
+    : name ('.' name)*
+    ;
+
+reference
+    : name generic-arguments?
+    ;
+
+generic-arguments
+    : '<' generic-argument-list? '>'
+    ;
+
+generic-argument-list
+    : generic-argument (',' generic-argument)*
+    ;
+
+generic-argument
+    : type
+    ;
+
+generic-parameters
+    : '<' generic-parameter-list? '>'
+    ;
+
+generic-parameter-list
+    : generic-parameter (',' generic-parameter)*
+    ;
+
+generic-parameter
+    : variance? name type-default?
+    ;
+
+type-default
+    : '=' type
+    ;
+
+variance
+    : 'in'
+    | 'out'
+    ;
+
+
+//*****************************************************************************
+//
+// DECLARATION
+//
+
+declarations
+    : declaration*
+    ;
+
+declaration
+    | function-declaration
+    | attribute-declaration
+    | class-declaration
+    | interface-declaration
+    | object-declaration
+    | alias-declaration
+    | constructor-declaration
+    | let-declaration
+    | var-declaration
+    ;
+
+function-declaration
+    : prelude type? name generic-parameters? multi-parameters constraints? function-body
+    ;
+
+attribute-declaration
+    : prelude type? name attribute-body
+    ;
+
+var-declaration
+    : prelude 'var' type? name '=' expression ';'
+    ;
+
+let-declaration
+    : prelude 'let' type? name '=' expression ';'
+    ;
+
+
+class-declaration
+    : prelude 'class' name generic-parameters? parameters? extends? satisfies? case-types? constraints? block-body
+    ;
+
+interface-declaration
+    : prelude 'interface' name generic-parameters? parameters? satisfies? case-types? constraints? block-body
+    ;
+
+object-declaration
+    : prelude 'object' name extends? satisfies? block-body
+    ;
+
+alias-declaration
+    : prelude 'alias' name generic-parameters? constraints? '=>' type ';'
+    ;
+
+constructor-declaration
+    : prelude 'new' name? parameters extends? function-body
+    ;
+
+function-body
+    | expression-body
+    | block-body
+    | null-body
+    ;
+
+attribute-body
+    | expression-body
+    | block-body
+    | null-body
+    ;
+
+block-body
+    : '{' usings statelarations '}'
+    ;
+
+statelarations
+    : statelaration*
+    ;
+
+statelaration
+    | statement
+    | declaration
+    ;
+
+expression-body
+    : function-specifier ';'
+    ;
+
+null-body
+    :: ';'
+    ;
+
+function-specifier
+    : '=>' expression
+    ;
+
+extends
+    : ':' extend-type
+    ;
+
+extend-type
+    | type
+    | constructor
+    ;
+
+constructor
+    : primary-type arguments
+    ;
+
+satisfies
+    : 'is' union-type-list
+    ;
+
+constraints
+    : constraint+
+    ;
+
+constraint
+    : 'where' name generic-parameters? case-types? satisfies?
+    ;
+
+union-type-list
+    : type (',' type)*
+    ;
+
+case-types
+    : 'of' case-type-list
+    ;
+
+case-type-list
+    : type ('|' type)*
+    ;
+
+pattern
+    : name-pattern
+    ;
+
+name-pattern
+    :: name
+    ;
+
+//*****************************************************************************
+//
+// PRELUDES/METAS
+//
+
+prelude
+    : string-literal? attribute*
+    ;
+
+attribute
+    : attribute-name attribute-arguments?
+    ;
+
+attribute-name
+    :<  'tagged'
+    |   'see'
+    |   'throws'
+    |   'shared'
+    |   'native'
+    |   'static'
+    |   'abstract'
+    |   'actual'
+    |   'formal'
+    |   'final'
+    |   'sealed'
+    |   'default'
+    |   'serializable'
+    |   'aliased'
+    |   'deprecated'
+    >;
+
+attribute-arguments
+    : '(' attribute-argument-list? ')'
+    ;
+
+attribute-argument-list
+    : attribute-argument (',' attribute-argument)*
+    ;
+
+attribute-argument
+    : string-literal
+    | meta-reference
+    ;
+
+meta-reference
+    | class-reference
+    | object-reference
+    | value-reference
+    | interface-reference
+    | function-reference
+    ;
+
+class-reference
+    : 'class' names
+    ;
+
+object-reference
+    : 'object' names
+    ;
+
+value-reference
+    : 'value' names
+    ;
+
+interface-reference
+    : 'interface' names
+    ;
+
+function-reference
+    : 'function' names
+    ;
+
+//*****************************************************************************
+//
+// TYPES
+//
+type
+    | entry-type
+    | union-type
+    ;
+
+entry-type
+    : union-type '->' union-type
+    ;
+
+variadic-type
+    | variadic-type-zero
+    | variadic-type-one
+    ;
+
+variadic-type-zero
+    : union-type '*'
+    ;
+
+variadic-type-one
+    : union-type '+'
+    ;
+
+union-type
+    : intersection-type ('|' intersection-type)*
+    ;
+
+intersection-type
+    : primary-type ('&' primary-type)*
+    ;
+
+primary-type
+    | nullable-type
+    | sequence-type
+    | reference
+    | type-selector
+    | callable-type
+    | empty-type
+    | tuple-type
+    | iterable-type
+    | nothing-type
+    ;
+
+nullable-type
+    | primary-type '?'
+    ;
+
+sequence-type
+    : primary-type '[' ']'
+    ;
+
+type-selector
+    : primary-type '.' reference
+    ;
+
+callable-type
+    : primary-type '(' callable-arguments? ')'
+    ;
+
+callable-arguments
+    : type-list
+    | spread-type
+    ;
+
+type-list
+    : type-list-type (',' type-list-type )*
+    ;
+
+type-list-type
+    | type
+    | defaulted-type
+    | variadic-type
+    ;
+
+defaulted-type
+    : type '='
+    ;
+
+spread-type
+    : '*' union-type
+    ;
+
+empty-type
+    : '[' ']'
+    ;
+
+tuple-type
+    : '[' type-list ']'
+    ;
+
+iterable-type
+    | iterable-type-zero
+    | iterable-type-one
+    ;
+
+iterable-type-zero
+    : '{' union-type '*' '}'
+    ;
+
+iterable-type-one
+    : '{' union-type '+' '}'
+    ;
+
+nothing-type
+    :: 'Nothing'
+    ;
+
+multi-parameters
+    : parameters+
+    ;
+
+parameters
+    : '(' parameter-list? ')'
+    ;
+
+parameter-list
+    : parameter (',' parameter)*
+    ;
+
+parameter
+    | value-parameter
+    ;
+
+value-parameter
+    : prelude parameter-type? name value-default?
+    ;
+
+value-default
+    : '=' expression
+    ;
+
+parameter-type
+    | type
+    | variadic-type
+    ;
+
+arguments
+    : '(' expression-list? ')'
+    ;
+
+expression-list
+    : expression (',' expression)*
+    ;
+
+//*****************************************************************************
+//
+// STATEMENTS
+//
+
+statement
+    | assign-statement
+    | expression-statement
+    | if-statement
+    | for-statement
+    | assert-statement
+    | return-statement
+    | throw-statement
+    ;
+
+assign-statement
+    : name '=' expression ';'
+    ;
+
+expression-statement
+    : expression ';'
+    ;
+
+if-statement
+    : 'if' conditions block-body else-if* else-block?
+    ;
+
+else-if
+    : 'else' 'if' conditions block-body
+    ;
+
+else-block
+    : 'else' block-body
+    ;
+
+for-statement
+    : 'for' '(' pattern 'in' expression ')' block-body else-block?
+    ;
+
+return-statement
+    : 'return' expression? ';'
+    ;
+
+throw-statement
+    : 'throw' expression? ';'
+    ;
+
+assert-statement
+    : string-literal? 'assert' conditions ';'
+    ;
+
+//*****************************************************************************
+//
+// EXPRESSIONS
+//
+
+expression
+    | if-expression
+    | level-coalesce-expression
+    ;
+
+level-coalesce-expression
+    | then-expression
+    | else-expression
+    | level-disjunction-expression
+    ;
+
+then-expression
+    : level-coalesce-expression 'then' level-disjunction-expression
+    ;
+
+else-expression
+    : level-coalesce-expression 'else' level-disjunction-expression
+    ;
+
+level-disjunction-expression
+    | disjunction-expression
+    | level-conjunction-expression
+    ;
+
+disjunction-expression
+    : level-disjunction-expression '||' level-conjunction-expression
+    ;
+
+level-conjunction-expression
+    | conjunction-expression
+    | level-not-expression
+    ;
+
+conjunction-expression
+    : level-conjunction-expression '&&' level-not-expression
+    ;
+
+level-not-expression
+    | not-expression
+    | level-equality-expression
+    ;
+
+not-expression
+    : '!' level-not-expression
+    ;
+
+level-equality-expression
+    | equal-expression
+    | not-equal-expression
+    | identical-expression
+    | not-identical-expression
+    | level-compare-expression
+    ;
+
+equal-expression
+    : level-compare-expression '==' level-compare-expression
+    ;
+
+not-equal-expression
+    : level-compare-expression '!=' level-compare-expression
+    ;
+
+identical-expression
+    : level-compare-expression '===' level-compare-expression
+    ;
+
+not-identical-expression
+    : level-compare-expression '!==' level-compare-expression
+    ;
+
+level-compare-expression
+    : less-expression
+    | less-equal-expression
+    | greater-expression
+    | greater-equal-expression
+    | bounds-expression
+    | level-add-expression
+    ;
+
+less-expression
+    : level-add-expression '<' level-add-expression
+    ;
+
+less-equal-expression
+    : level-add-expression '<=' level-add-expression
+    ;
+
+greater-expression
+    : level-add-expression '>' level-add-expression
+    ;
+
+greater-equal-expression
+    : level-add-expression '>=' level-add-expression
+    ;
+
+bounds-expression
+    : lower-bound level-add-expression upper-bound
+    ;
+
+lower-bound
+    | lower-less-bound
+    | lower-less-equal-bound
+    ;
+
+lower-less-bound
+    : level-add-expression '<'
+    ;
+
+lower-less-equal-bound
+    : level-add-expression '<='
+    ;
+
+upper-bound
+    | upper-less-bound
+    | upper-less-equal-bound
+    ;
+
+upper-less-bound
+    : '<' level-add-expression
+    ;
+
+upper-less-equal-bound
+    : '<=' level-add-expression
+    ;
+
+level-add-expression
+    | add-expression
+    | sub-expression
+    | level-mul-expression
+    ;
+
+add-expression
+    : level-add-expression '+' level-mul-expression
+    ;
+
+sub-expression
+    : level-add-expression '-' level-mul-expression
+    ;
+
+level-mul-expression
+    | mul-expression
+    | div-expression
+    | rem-expression
+    | level-union-expression
+    ;
+
+mul-expression
+    : level-mul-expression '*' level-union-expression
+    ;
+
+div-expression
+    : level-mul-expression '/' level-union-expression
+    ;
+
+rem-expression
+    : level-mul-expression '%' level-union-expression
+    ;
+
+level-union-expression
+    | union-expression
+    | complement-expression
+    | level-exclusive-expression
+    ;
+
+union-expression
+    : level-union-expression '|' level-exclusive-expression
+    ;
+
+complement-expression
+    : level-union-expression '~' level-exclusive-expression
+    ;
+
+level-exclusive-expression
+    | exclusive-expression
+    | level-intersection-expression
+    ;
+
+exclusive-expression
+    : level-exclusive-expression '^' level-intersection-expression
+    ;
+
+level-intersection-expression
+    | intersection-expression
+    | level-negate-expression
+    ;
+
+intersection-expression
+    : level-intersection-expression '&' level-negate-expression
+    ;
+
+level-negate-expression
+    : negate-expression
+    | primary-expression
+    ;
+
+negate-expression
+    : '-' level-negate-expression
+    ;
+
+primary-expression
+    : reference
+    | literal
+    | string-expression
+    | call-expression
+    | select-expression
+    | nullsafe-select-expression
+    | grouped-expression
+    ;
+
+grouped-expression
+    : '(' expression ')'
+    ;
+
+call-expression
+    : primary-expression arguments
+    ;
+
+select-expression
+    : primary-expression '.' reference
+    ;
+
+nullsafe-select-expression
+    : primary-expression '?.' reference
+    ;
+
+literal
+    | natural-literal
+    ;
+
+string-expression
+    | string-literal
+    | string-interpolation
+    ;
+
+string-literal
+    | plain-string-literal
+    | verbatim-string-literal
+    ;
+
+string-interpolation
+    : string-start expression interpolation-part* string-end
+    ;
+
+interpolation-part
+    : string-mid expression
+    ;
+
+//-----------------------------------------------------------------------------
+if-expression
+    : 'if' conditions if-then if-else
+    ;
+
+if-then
+    : 'then' conditional-expression
+    ;
+
+if-else
+    : 'else' conditional-expression
+    ;
+
+conditional-expression
+    | if-expression
+    | level-disjunction-expression
+    ;
+
+conditions
+    : '(' condition-list ')'
+    ;
+
+condition-list
+    : condition (',' condition)*
+    ;
+
+condition
+    | is-condition
+    | expression
+    ;
+
+is-condition
+    : '!'? 'is' type name
+    ;
+    
+
+//*****************************************************************************
+//
+// LEXER
+//
+
+decimal-digits
+    | decimal-digit ('_' | decimal-digit)*
+    ;
+
+hex-digits
+    | hex-digit ('_' | hex-digit)*
+    ;
+
+binary-digits
+    | binary-digit ('_' | binary-digit)*
+    ;
+
+exponent
+    | ( 'e' | 'E' ) ( '+' | '-' )? decimal-digit*
+    ;
+
+literal-float
+    | < decimal-digits '.' decimal-digits exponent? >
+    ;
+
+natural-literal
+    | < decimal-digits | '#' hex-digits | '$' binary-digits >
+    ;
+
+literal-char
+    | < '\'' char-part '\'' >
+    ;
+
+string-start
+    | < '"' string-part '``' >
+    ;
+
+string-mid
+    | < '``' string-part '``' >
+    ;
+
+string-end
+    | < '``' string-part '`'* '"' >
+    ;
+
+plain-string-literal
+    | < '"' string-part '`'* '"' >
+    ;
+
+verbatim-string-literal
+    | < '"""' (~'"' | '"' ~'"' | '""' ~'"')* '"""' >
+    ;
+
+char-part
+    | ( ~('\\' | '\'') | escape-sequence )*
+    ;
+
+string-part
+    | ( ~('\\'| '"' | '`') | ('`' ~('`' | '"' | '\\')) | '`\\' escape-core | escape-sequence )*
+    ;
+
+escape-sequence
+    | '\\' (~'{' | '{' (~'}')* '}' )
+    ;
+
+escape-core
+    | ~'{'
+    | '{' (~'}')* '}'?
+    ;
+
+skip
+    | white
+    | comment
+    ;
+
+white
+    | ( ' ' | '\r' | '\t' | '\f' | '\n' )+
+    ;
+
+line-end
+    | '\r' '\n'
+    | '\n'
+    | '\r'
+    ;
+
+line-ender
+    | '\r'
+    | '\n'
+    ;
+
+comment
+    | line-comment
+    | block-comment
+    ;
+
+line-comment
+    | '//' (~line-ender)* line-end?
+    ;   
+
+block-comment
+    | '/*' ( ~'*' | '*'+ ~('*'|'/') )* '*'+ '/'
+    ;
+
+identifier
+    | < identifier-start identifier-part* >
+    ;
+
+identifier-start
+    | '_'
+    | 'a' .. 'z'
+    | 'A' .. 'Z'
+    ;
+    
+identifier-part
+    | '_'
+    | decimal-digit
+    | letter
+    ;
+
+letter
+    | 'a' .. 'z' 
+    | 'A' .. 'Z' 
+    | '\u{00A0}' .. '\u{ffff}'
+    ;
+
+decimal-digit
+    | '0' .. '9'
+    ;
+
+hex-digit
+    | '0' .. '9'
+    | 'A' .. 'F'
+    | 'a' .. 'f'
+    ;
+
+binary-digit
+    | '0' | '1'
+    ;

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -16,7 +16,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Six.Ast\Six.Ast.csproj" />
 		<ProjectReference Include="..\Six.Core\Six.Core.csproj" />
-		<ProjectReference Include="..\Six.Samples\Six.Samples.csproj" />
 	</ItemGroup>
 
 </Project>
