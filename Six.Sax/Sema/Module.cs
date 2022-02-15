@@ -67,7 +67,7 @@ namespace Six.Sax.Sema
                 var path = ns.GetPath().Replace(".", "/");
                 foreach (var top in ns.Children)
                 {
-                    if (top is Named named)
+                    if (top is Declaration named)
                     {
                         var name = $"entities/{path}/{named.Name}.txt";
                         using (var writer = name.Writer())
@@ -97,7 +97,7 @@ namespace Six.Sax.Sema
 
         private void DumpReferences(Writer writer)
         {
-            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.Children).OrderBy(e => e.Name))
+            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.Children).OfType<Declaration>().OrderBy(e => e.Name))
             {
                 var attrs = new StringBuilder();
                 attrs.Append(declaration.IsShared ? "S" : " ");

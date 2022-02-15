@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using A = Six.Sax.Ast;
+
 namespace Six.Sax.Sema
 {
     public class SemaDumper
@@ -19,7 +21,28 @@ namespace Six.Sax.Sema
         public void DumpEntity(Entity entity)
         {
             Dump((dynamic)entity);
+            using (Writer.Indent())
+            {
+                DumpTree(entity.Ast);
+            }
         }
+
+        private void DumpTree(A.TreeNode tree)
+        {
+            Dump((dynamic)tree);
+        }
+
+        private void Dump(A.TreeNode tree)
+        {
+            Assert(true);
+        }
+
+        private void Dump(A.Statement.Expr tree)
+        {
+            Writer.WriteLine($"Expr.Statement");
+            Assert(true);
+        }
+
 
         private void DumpInner(Entity entity)
         {

@@ -1,8 +1,10 @@
 namespace sax.core;
 
 """
-A fixed-sized array of mutable elements. An _empty_ array is an array of [[size]] `0`. An array may be created with a
-list of initial elements, or, via the constructor [[ofSize]], with a size and single initial value for all elements.
+A fixed-sized array of mutable elements. An _empty_ array is an array of
+[[size]] `0`. An array may be created with a list of initial elements, or, via
+the constructor [[ofSize]], with a size and single initial value for all
+elements.
 
     value array = Array { "hello", "world" };
     value ints = Array.ofSize(1k, 0);
@@ -12,25 +14,30 @@ Arrays are mutable. Any element of an array may be set to a new value.
     value array = Array { "hello", "world" };
     array[0] = "goodbye";
 
-Arrays are lists and support all operations inherited from [[List]], along with certain additional operations for
-efficient mutation of the array: [[set]], [[swap]], [[move]], [[sortInPlace]], [[reverseInPlace]], and [[copyTo]].
+Arrays are lists and support all operations inherited from [[List]], along with
+certain additional operations for efficient mutation of the array: [[set]],
+[[swap]], [[move]], [[sortInPlace]], [[reverseInPlace]], and [[copyTo]].
 
-This class is provided primarily to ease interoperation with Java, and for some performance-critical low-level 
-programming tasks.
+This class is provided primarily to ease interoperation with Java, and for some
+performance-critical low-level programming tasks.
 
-On the JVM, for "primitive" element types [[Integer]], [[Float]], [[Byte]], [[Character]], and [[Boolean]], `Array`
-is easily the most efficient sort of `List` in Ceylon. However, certain optimizations made by the compiler are
-impossible if the `Array` is assigned to a more generic type such as [[Iterable]]. Peak efficiency is obtained for 
-algorithms coded to the static type `Array`.
+On the JVM, for "primitive" element types [[Integer]], [[Float]], [[Byte]],
+[[Character]], and [[Boolean]], `Array` is easily the most efficient sort of
+`List` in Ceylon. However, certain optimizations made by the compiler are
+impossible if the `Array` is assigned to a more generic type such as
+[[Iterable]]. Peak efficiency is obtained for algorithms coded to the static
+type `Array`.
 
-Furthermore, `Array` is itself a compromise between raw performance, polymorphism, and portability. An instance of the
-Java primitive array type `java.lang.LongArray` (written `long[]` in Java) exhibits superior micro-level performance
-to an `Array<Integer>`, but:
+Furthermore, `Array` is itself a compromise between raw performance,
+polymorphism, and portability. An instance of the Java primitive array type
+`java.lang.LongArray` (written `long[]` in Java) exhibits superior micro-level
+performance to an `Array<Integer>`, but:
 
-- is not a `List`, and
-- is not available except when compiling for the JVM.
+-   is not a `List`, and
+-   is not available except when compiling for the JVM.
 
-Fortunately, given a Java primitive array, it's easy to obtain an `Array` backed by the primitive array:
+Fortunately, given a Java primitive array, it's easy to obtain an `Array`
+backed by the primitive array:
 
     //unportable JVM-specific code 
     LongArray longArray = LongArray(size);
@@ -38,10 +45,14 @@ Fortunately, given a Java primitive array, it's easy to obtain an `Array` backed
 """
 tagged("Collections")
 shared final serializable native 
-class Array<Element> is SearchableList<Element> & Ranged<Integer,Element,Array<Element>> & IndexedCorrespondenceMutator<Element>
+class Array<Element>
+    is  SearchableList<Element>
+      & Ranged<Integer,Element,Array<Element>>
+      & IndexedCorrespondenceMutator<Element>
 {
-/*TODO
-    "Create an array with the given [[elements]]."
+    """
+    Create an array with the given [[elements]].
+    """
     shared native new ({Element*} elements) {}
     
     "Create an array of the specified [[size]], populating every index with the given [[element]]. The specified `size`
@@ -96,6 +107,7 @@ class Array<Element> is SearchableList<Element> & Ranged<Integer,Element,Array<E
         Element element
     );
     
+/*TODO
     "Efficiently copy the elements in the measure `sourcePosition:length` of this array to the measure
      `destinationPosition:length` of the given [[array|destination]], which may be this array.
      

@@ -43,7 +43,6 @@ shared interface Integral<Other>
     of Other
     where Other is Integral<Other>
 {
-/*TODO
     """
     The remainder, after dividing this number by the given number. The sign of the remainder depends upon the sign of this
     number, and of the argument [[divisor|other]]:
@@ -70,7 +69,7 @@ shared interface Integral<Other>
         {
             throw AssertionError("modulus must be positive: ``modulus``");
         }
-        value result = remainder(modulus);
+        let result = remainder(modulus);
         if (result.negative)
         {
             return result + modulus;
@@ -78,13 +77,21 @@ shared interface Integral<Other>
         return result;
     }
     
-    "Determine if the number is the additive identity."
+    """
+    Determine if the number is the additive identity.
+    """
     shared formal Boolean zero;
     
-    "Determine if the number is the multiplicative identity."
+    """
+    Determine if the number is the multiplicative identity.
+    """
     shared formal Boolean unit;
     
-    "Determine if this number is a factor of the given number, that is, if `remainder(other).zero` evaluates to `true`."
+/*TODO==>
+    """
+    Determine if this number is a factor of the given number, that is, if
+    `remainder(other).zero` evaluates to `true`.
+    """
     shared default Boolean divides(Other other) 
         => (other % (this of Other)).zero;    
 */

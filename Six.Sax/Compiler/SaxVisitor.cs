@@ -234,6 +234,17 @@ namespace Six.Sax.Compiler
             element.Value = new Declaration.Alias(element, prelude, name, generics, constraints, type);
         }
 
+        protected override void Visit(CConstructorDeclaration element)
+        {
+            var prelude = Walk<Prelude>(element.Prelude);
+            var name = WalkOptional<Name>(element.Name);
+            var parameters = Walk<Parameters>(element.Parameters);
+            var extends = WalkOptional<Type>(element.Extends);
+            var body = Walk<Body>(element.FunctionBody);
+
+            element.Value = new Declaration.Constructor(element, prelude, name, parameters, body);
+        }
+
         protected override void Visit(CLetDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
@@ -312,6 +323,11 @@ namespace Six.Sax.Compiler
         protected override void Visit(CReturnStatement element)
         {
             element.Value = new Statement.Return(element, WalkOptional<Expression>(element.Expression));
+        }
+
+        protected override void Visit(CThrowStatement element)
+        {
+            element.Value = new Statement.Throw(element, WalkOptional<Expression>(element.Expression));
         }
 
         protected override void Visit(CExpressionStatement element)

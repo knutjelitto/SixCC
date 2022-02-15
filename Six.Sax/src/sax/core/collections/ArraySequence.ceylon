@@ -1,25 +1,15 @@
-/********************************************************************************
- * Copyright (c) 2011-2017 Red Hat Inc. and/or its affiliates and others
- *
- * This program and the accompanying materials are made available under the 
- * terms of the Apache License, Version 2.0 which is available at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * SPDX-License-Identifier: Apache-2.0 
- ********************************************************************************/
-namespace six.core;
+namespace sax.core;
 
 """
 A [[Sequence]] backed by an [[Array]]. 
 
-Since [[Array]]s are mutable, this class is private to the language module, where we can be sure the `Array` is not
-modified after the `ArraySequence` has been initialized.
+Since [[Array]]s are mutable, this class is private to the language module,
+where we can be sure the `Array` is not modified after the `ArraySequence` has
+been initialized.
 """
-by ("Tom")
-shared sealed final
-serializable
 tagged("Collections", "Sequences")
-class ArraySequence<out Element>(array) extends Object() satisfies [Element+]
+shared sealed final serializable
+class ArraySequence<out Element>(array) : Object is [Element+]
 {    
     Array<Element> array;
     
@@ -33,21 +23,27 @@ class ArraySequence<out Element>(array) extends Object() satisfies [Element+]
     
     iterator() => array.iterator();
     
-    shared actual Element first {
-        if (exists first = array.first) {
+    shared actual Element first
+    {
+        if (exists first = array.first)
+        {
             return first;
         }
-        else {
+        else
+        {
             assert (is Element null);
             return null;
         }
     }
     
-    shared actual Element last {
-        if (exists last = array.last) {
+    shared actual Element last
+    {
+        if (exists last = array.last)
+        {
             return last;
         }
-        else {
+        else
+        {
             assert (is Element null);
             return null;
         }

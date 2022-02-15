@@ -59,9 +59,9 @@ namespace Six.Sax.Sema
         {
             using (Push(entity.Container))
             {
-                if (entity.Ast is A.With.TypeParameters withTypeParams)
+                if (entity.Ast is A.With.Generics withTypeParams)
                 {
-                    WalkMany(withTypeParams.Generics);
+                    WalkMany(withTypeParams.TypeParameters);
                 }
 
                 if (entity.Ast is A.With.MultiParameters withMulti)
@@ -88,7 +88,7 @@ namespace Six.Sax.Sema
                     {
                         OnResolve(() =>
                         {
-                            Resolver.Resolve(entity.Container, withExtends.Extends);
+                            Resolver.ResolveType(entity.Container, withExtends.Extends);
                         });
                     }
                 }
@@ -101,7 +101,7 @@ namespace Six.Sax.Sema
                         {
                             foreach (var type in withSatisfies.Satisfies)
                             {
-                                Resolver.Resolve(entity.Container, type);
+                                Resolver.ResolveType(entity.Container, type);
                             }
                         });
                     }
@@ -125,7 +125,7 @@ namespace Six.Sax.Sema
             {
                 OnResolve(() =>
                 {
-                    Resolver.Resolve(entity.Container, node.Default);
+                    Resolver.ResolveType(entity.Container, node.Default);
                 });
             }
         }
@@ -138,7 +138,7 @@ namespace Six.Sax.Sema
             {
                 OnResolve(() =>
                 {
-                    Resolver.Resolve(entity.Container, node.Type);
+                    Resolver.ResolveType(entity.Container, node.Type);
                     if (node.Default != null)
                     {
                         Resolver.Resolve(entity.Container, node.Default);
@@ -150,6 +150,21 @@ namespace Six.Sax.Sema
         private void Declare(A.Declaration node)
         {
             DoDeclaration(Parent.AddChild(new Declaration.Any(node, new DeclarationScope(Parent))));
+        }
+
+        private void Declare(A.Declaration.Constructor node)
+        {
+            DoDeclaration(Parent.AddChild(new Declaration.CTor(node, new DeclarationScope(Parent))));
+        }
+
+        private void Declare(A.Declaration.Var node)
+        {
+            DoDeclaration(Parent.AddChild(new Declaration.Var(node, new DeclarationScope(Parent))));
+        }
+
+        private void Declare(A.Declaration.Let node)
+        {
+            DoDeclaration(Parent.AddChild(new Declaration.Let(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Function node)
@@ -184,7 +199,16 @@ namespace Six.Sax.Sema
 
         private void Declare(A.Statement.Return node)
         {
-            Parent.AddChild(Statement.New(node, Parent));
+            var entity = Parent.AddChild(Statement.New(node, Parent));
+
+            if (node.Expression != null)
+            {
+                OnResolve(() =>
+                {
+                    Resolver.ResolveExpression(entity.Container, node.Expression);
+                });
+
+            }
         }
 
         private void Declare(A.Statement.Assert node)
@@ -200,6 +224,16 @@ namespace Six.Sax.Sema
         private void Declare(A.Statement.If node)
         {
             Parent.AddChild(Statement.New(node, Parent));
+        }
+
+        private void Declare(A.Statement.Expr node)
+        {
+            var entity = Parent.AddChild(Statement.New(node, Parent));
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(entity.Container, node.Expression);
+            });
         }
 
         private void Declare(A.Body.Block node)

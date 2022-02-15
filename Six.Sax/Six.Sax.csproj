@@ -32,9 +32,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="src\sax\**\*.sax">
+    <None Update="src\**\*.sax">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="src\main\" />
   </ItemGroup>
 
 </Project>

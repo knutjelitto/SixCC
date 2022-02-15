@@ -1,0 +1,6 @@
+namespace first;
+
+shared void main()
+{
+    print("hello world!");
+}

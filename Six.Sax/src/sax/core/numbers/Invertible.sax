@@ -20,14 +20,11 @@ Subtraction must be defined so that it is consistent with the additive inverse:
 see (class Integer, class Float)
 tagged ("Numbers")
 shared interface Invertible<Other> is Summable<Other>
-    of Other 
-    where Other is Invertible<Other>
+    of Other where Other is Invertible<Other>
 {
     "The additive inverse of this value."
     shared formal Other negated;
     
-/*TODO
     "The difference between this number and the given number. Must produce the value `x + -y`."
     shared default Other minus(Other other) => this + -other;
-*/
 }

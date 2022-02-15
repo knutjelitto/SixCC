@@ -8,11 +8,12 @@ namespace Six.Sax
     {
         public const string Prefix = "src";
         public const string SaxRoot = "sax";
+        public const string FirstRoot = "first";
 
         public static void Run()
         {
             Generator.Run();
-            AllModules(
+            LoadModule(
                 fromRoot: SaxRoot, 
                 new CompilerConfiguration
                 { 
@@ -25,7 +26,7 @@ namespace Six.Sax
                 });
         }
 
-        private static void AllModules(string fromRoot, CompilerConfiguration configuration)
+        private static void LoadModule(string fromRoot, CompilerConfiguration configuration)
         {
             var module = new SaxLoader(Prefix).GetModule(fromRoot);
 

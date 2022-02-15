@@ -1,21 +1,23 @@
 namespace sax.core;
 
 """
-Abstraction of types which support a multiplication operator `x * y`. For [[numeric types|Numeric]], this is just
-familiar numeric multiplication.
+Abstraction of types which support a multiplication operator `x * y`. For
+[[numeric types|Numeric]], this is just familiar numeric multiplication.
 
     Float c = 2 * pi * r;
 
-A concrete class that implements this interface should be a mathematical _semigroup_. That is, the multiplication
-operation should be associative, satisfying:
+A concrete class that implements this interface should be a mathematical
+_semigroup_. That is, the multiplication operation should be associative,
+satisfying:
 
-- `(x*y)*z == x*(y*z)`
+-   `(x * y) * z == x * (y *z )`
 
-A `Multiplicable` type might be a _monoid_, that is, a semigroup with an additive identity element, usually denoted `1`,
-but this is not required. For example:
+A `Multiplicable` type might be a _monoid_, that is, a semigroup with an
+additive identity element, usually denoted `1`, but this is not required. For
+example:
 
-- `Float` is a monoid with identity element `1.0`, and 
-- `Integer` is a monoid with identity element `1`.
+-   `Float` is a monoid with identity element `1.0`, and 
+-   `Integer` is a monoid with identity element `1`.
 
 For any monoid, the multiplication operation must satisfy:
 
@@ -24,8 +26,7 @@ For any monoid, the multiplication operation must satisfy:
 see (interface Numeric)
 tagged("Numbers")
 shared interface Multiplicable<Other>
-    of Other
-    where Other is Multiplicable<Other>
+    of Other where Other is Multiplicable<Other>
 {    
     """
     The result of multiplying the given value by this value. This operation

@@ -28,34 +28,65 @@ namespace Six.Sax.Sema
             this.onResolve.Enqueue(onResolve);
         }
 
-        public Type? Resolve(Container container, A.Type typeNode, bool asTuple = false)
+        public Expression? ResolveExpression(Container container, A.Expression expressionNode)
+        {
+            switch (expressionNode)
+            {
+                case A.Reference node:
+                    {
+                        var entity = container.Resolve(node.Name.Text);
+                        if (entity == null)
+                        {
+                            didnt(node, $"reference - {node.Name.Text}");
+                            return null;
+                        }
+                        return null;
+                    }
+                case A.Expression.Call node:
+                    {
+                        var expr = ResolveExpression(container, node.Expr);
+                        return null;
+                    }
+                default:
+                    didnt(expressionNode, expressionNode.GetType().Name);
+                    return null;
+            }
+
+            void didnt(A.Expression node, string what)
+            {
+                Module.Add(new Six.Core.Errors.SemanticError(Location.From(node.Tree), $"didn't resolve expression: {what}"));
+            }
+
+        }
+
+        public Type? ResolveType(Container container, A.Type typeNode, bool asTuple = false)
         {
             switch (typeNode)
             {
                 case A.Reference node:
                     {
                         var entity = container.Resolve(node.Name.Text);
-                        if (entity != null)
+                        if (entity == null)
                         {
-                            if (node.Arguments != null)
+                            didnt(node, $"reference - {node.Name.Text}");
+                            return null;
+                        }
+                        if (node.Arguments != null)
+                        {
+                            var arguments = resolveMany(node.Arguments);
+                            if (arguments != null)
                             {
-                                var arguments = resolveMany(node.Arguments);
-                                if (arguments != null)
-                                {
-                                    return new Type.Reference(entity, arguments);
-                                }
-                                else
-                                {
-                                    return null;
-                                }
+                                return new Type.Reference(entity, arguments);
                             }
                             else
                             {
-                                return new Type.Reference(entity);
+                                return null;
                             }
                         }
-                        didnt(node, $"reference - {node.Name.Text}");
-                        return null;
+                        else
+                        {
+                            return new Type.Reference(entity);
+                        }
                     }
                 case A.Type.Nullable node:
                     {
@@ -64,7 +95,7 @@ namespace Six.Sax.Sema
                         if (nullEntity != null)
                         {
                             var @null = new Type.Reference(nullEntity);
-                            var type = Resolve(container, node.Type);
+                            var type = ResolveType(container, node.Type);
                             if (type != null)
                             {
                                 return new Type.Union(@null, type);
@@ -79,10 +110,10 @@ namespace Six.Sax.Sema
                         var callable = Module.CoreFindCallable();
                         if (callable != null)
                         {
-                            var type = Resolve(container, node.Type);
+                            var type = ResolveType(container, node.Type);
                             if (type != null)
                             {
-                                var arguments = Resolve(container, node.Arguments, true);
+                                var arguments = ResolveType(container, node.Arguments, true);
                                 if (arguments != null)
                                 {
                                     return new Type.Reference(callable, type, arguments);
@@ -98,7 +129,7 @@ namespace Six.Sax.Sema
                         var sequential = Module.CoreFindSequential();
                         if (sequential != null)
                         {
-                            var type = Resolve(container, node.Type);
+                            var type = ResolveType(container, node.Type);
                             if (type != null)
                             {
                                 return new Type.Sequential(sequential, type);
@@ -123,7 +154,7 @@ namespace Six.Sax.Sema
                             return null;
                         }
                         var @null = new Type.Reference(nullEntity);
-                        var type = Resolve(container, node.Type);
+                        var type = ResolveType(container, node.Type);
                         if (type != null)
                         {
                             return new Type.Reference(iterable, type, @null);
@@ -139,7 +170,7 @@ namespace Six.Sax.Sema
                             didnt(node, Module.CoreIterable);
                             return null;
                         }
-                        var type = Resolve(container, node.Type);
+                        var type = ResolveType(container, node.Type);
                         if (type != null)
                         {
                             return new Type.Reference(iterable, type, new Type.Nothing());
@@ -156,7 +187,7 @@ namespace Six.Sax.Sema
                             return null;
                         }
 
-                        var type = Resolve(container, node.Type);
+                        var type = ResolveType(container, node.Type);
                         if (type != null)
                         {
                             return new Type.Variadic(new Type.Sequential(sequential, type));
@@ -172,7 +203,7 @@ namespace Six.Sax.Sema
                             didnt(node, Module.CoreSequence);
                             return null;
                         }
-                        var type = Resolve(container, node.Type);
+                        var type = ResolveType(container, node.Type);
                         if (type != null)
                         {
                             return new Type.Variadic(new Type.Sequence(sequence, type));
@@ -188,7 +219,7 @@ namespace Six.Sax.Sema
                             didnt(node, Module.CoreEmpty);
                             return null;
                         }
-                        var type = Resolve(container, node.Type);
+                        var type = ResolveType(container, node.Type);
                         if (type != null)
                         {
                             return new Type.Defaulted(new Type.Reference(empty), type);
@@ -201,7 +232,7 @@ namespace Six.Sax.Sema
 
                         foreach (var member in node)
                         {
-                            var type = Resolve(container, member);
+                            var type = ResolveType(container, member);
                             if (type != null)
                             {
                                 types.Add(type);
@@ -277,14 +308,14 @@ namespace Six.Sax.Sema
                     }
                 case A.Type.Tuple node:
                     {
-                        return Resolve(container, node.Types, true);
+                        return ResolveType(container, node.Types, true);
                     }
                 case A.Type.Sequence node:
                     {
                         var sequence = Module.CoreFindSequence();
                         if (sequence != null)
                         {
-                            var type = Resolve(container, node.Type);
+                            var type = ResolveType(container, node.Type);
                             if (type != null)
                             {
                                 return new Type.Sequence(sequence, type);
@@ -296,7 +327,7 @@ namespace Six.Sax.Sema
                     }
                 case A.Type.Constructor node:
                     {
-                        var type = Resolve(container, node.Type);
+                        var type = ResolveType(container, node.Type);
 
                         if (type != null)
                         {
@@ -333,7 +364,7 @@ namespace Six.Sax.Sema
                 var results = new List<Type>();
                 foreach (var arg in types)
                 {
-                    var result = Resolve(container, arg);
+                    var result = ResolveType(container, arg);
                     if (result != null)
                     {
                         results.Add(result);

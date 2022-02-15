@@ -93,8 +93,8 @@ namespace Six.Sax.Ast
         public sealed record Then(IRNode Tree, Expression Left, Expression Right) : Binary;
         public sealed record Else(IRNode Tree, Expression Left, Expression Right) : Binary;
 
-        public sealed record Call(IRNode Tree, Expression Primary, Arguments Arguments) : Expression;
-        public sealed record Select(IRNode Tree, Expression Primary, Reference Reference) : Expression;
+        public sealed record Call(IRNode Tree, Expression Expr, Arguments Arguments) : Expression;
+        public sealed record Select(IRNode Tree, Expression Expr, Reference Reference) : Expression;
         public sealed record NullsafeSelect(IRNode Tree, Expression Primary, Reference Reference) : Expression;
 
         public sealed record IsType(IRNode Tree, Type Type, Name Name) : Expression;

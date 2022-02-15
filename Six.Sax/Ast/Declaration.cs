@@ -29,9 +29,9 @@ namespace Six.Sax.Ast
             Ast.MultiParameters MultiParameters { get; }
         }
 
-        public interface TypeParameters : Node
+        public interface Generics : Node
         {
-            Ast.Generic.TypeParameters? Generics { get; }
+            Ast.Generic.TypeParameters? TypeParameters { get; }
             Ast.Generic.Constraints? Constraints { get; }
         }
 
@@ -59,7 +59,7 @@ namespace Six.Sax.Ast
             IRNode Tree,
             Prelude Prelude,
             Name Name,
-            Generic.TypeParameters? Generics,
+            Generic.TypeParameters? TypeParameters,
             Generic.Constraints? Constraints,
             Parameters? Parameters,
             Type? Extends,
@@ -78,9 +78,9 @@ namespace Six.Sax.Ast
             MultiParameters MultiParameters,
             Body Body)
         :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, null, null, null, null),
-            With.Body,
-            With.TypeParameters,
-            With.MultiParameters;
+            With.Generics,
+            With.MultiParameters,
+            With.Body;
 
         public sealed record Attribute(
             IRNode Tree, 
@@ -104,7 +104,7 @@ namespace Six.Sax.Ast
             Body Body)
         :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, Parameters, Extends, Satisfies, Cases),
             With.Body,
-            With.TypeParameters,
+            With.Generics,
             With.Parameters,
             With.Extends,
             With.Satisfies;
@@ -121,7 +121,7 @@ namespace Six.Sax.Ast
             Body Body)
         :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, Parameters, null, Satisfies, Cases),
             With.Body,
-            With.TypeParameters,
+            With.Generics,
             With.Parameters,
             With.Satisfies;
 
@@ -145,7 +145,17 @@ namespace Six.Sax.Ast
             Generic.Constraints? Constraints,
             Type Result)
         :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, null, null, null, null),
-            With.TypeParameters;
+            With.Generics;
+
+        public sealed record Constructor(
+            IRNode Tree,
+            Prelude Prelude,
+            Name? Name,
+            Parameters Parameters,
+            Body Body)
+        : EntityImpl(Tree, Prelude, Name ?? new Name.ArtificalId("default.ctor"), null, null, Parameters, null, null, null),
+            With.Parameters,
+            With.Body;
     }
 
     public sealed record Declarations(IRNode Tree, IEnumerable<Declaration> Items) : Many<Declaration>(Tree, Items);

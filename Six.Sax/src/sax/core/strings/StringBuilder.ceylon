@@ -10,9 +10,10 @@
 namespace six.core;
 
 """
-Builder utility for constructing [[strings|String]] by incrementally appending strings or characters.
+Builder utility for constructing [[strings|String]] by incrementally appending
+strings or characters.
 
-    value builder = StringBuilder();
+    var builder = StringBuilder();
     builder.append("hello");
     builder.appendCharacter(' ');
     builder.append("world");
@@ -20,9 +21,9 @@ Builder utility for constructing [[strings|String]] by incrementally appending s
 """
 tagged("Strings")
 shared native("jvm") final class StringBuilder() 
-    satisfies SearchableList<Character> &
-              Ranged<Integer,Character,String> &
-              IndexedCorrespondenceMutator<Character>
+    is  SearchableList<Character>
+      & Ranged<Integer,Character,String>
+      & IndexedCorrespondenceMutator<Character>
 {
     import java.lang { JStringBuilder=StringBuilder, JCharacter=Character { toChars, charCount }, IndexOutOfBoundsException }
     

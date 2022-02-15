@@ -9,6 +9,6 @@ namespace Six.Sax.Sema
 
         A.TreeNode Ast { get; }
         Container Container { get; }
-        public string Name => (Ast is A.With.Name named) ? named.Name.Text : "--no-name--";
+        //public string Name => (Ast is A.With.Name named) ? named.Name.Text : "--no-name--";
     }
 }

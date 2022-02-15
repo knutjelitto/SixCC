@@ -10,48 +10,46 @@
 
  namespace six.core;
  
-"An IEEE 754 64-bit [floating point number][]. A `Float` is 
- capable of approximately representing numeric values 
- between:
- 
- - 2<sup>-1022</sup>, approximately 
-   1.79769\{#00D7}10<sup>308</sup>, and 
- - (2-2<sup>-52</sup>)\{#00D7}2<sup>1023</sup>, 
-   approximately 5\{#00D7}10<sup>-324</sup>.
- 
- Zero is represented by distinct instances `+0.0`, `-0.0`, 
- but these instances are equal. `-0.0` can be distinguished
- from `+0.0` using `f == 0.0 && f.strictlyNegative`.
- 
- In addition, the following special values exist:
- 
- - [[infinity]] and `-infinity`, and
- - [[undefined values|undefined]], denoted [NaN][] by the
-   IEEE standard.
- 
- As required by the IEEE standard no undefined value is 
- equal to any other value, nor even to itself. Thus, the 
- definition of [[equals]] for `Float` violates the general 
- contract defined by [[Object.equals]].
- 
- A floating point value with a zero [[fractionalPart]] is
- considered equal to its [[integer]] part.
- 
- Literal floating point values are written with a decimal
- point and, optionally, a magnitude or exponent:
- 
-     1.0
-     1.0E6
-     1.0M
-     1.0E-6
-     1.0u
- 
- In the case of a fractional magnitude, the decimal point is
- optional. Underscores may be used to group digits into 
- groups of three.
- 
- [floating point number]: http://www.validlab.com/goldberg/paper.pdf
- [NaN]: http://en.wikipedia.org/wiki/NaN"
+"""
+An IEEE 754 64-bit [floating point number][]. A `Float` is capable of
+approximately representing numeric values between:
+
+-   2<sup>-1022</sup>, approximately 1.79769\{#00D7}10<sup>308</sup>, and 
+-   (2-2<sup>-52</sup>)\{#00D7}2<sup>1023</sup>, approximately
+    5\{#00D7}10<sup>-324</sup>.
+
+Zero is represented by distinct instances `+0.0`, `-0.0`, but these instances
+are equal. `-0.0` can be distinguished from `+0.0` using
+`f == 0.0 && f.strictlyNegative`.
+
+In addition, the following special values exist:
+
+-   [[infinity]] and `-infinity`, and
+-   [[undefined values|undefined]], denoted [NaN][] by the IEEE standard.
+
+As required by the IEEE standard no undefined value is equal to any other
+value, nor even to itself. Thus, the definition of [[equals]] for `Float`
+violates the general contract defined by [[Object.equals]].
+
+A floating point value with a zero [[fractionalPart]] is considered equal to
+its [[integer]] part.
+
+Literal floating point values are written with a decimal point and, optionally,
+a magnitude or exponent:
+
+    1.0
+    1.0E6
+    1.0M
+    1.0E-6
+    1.0u
+
+In the case of a fractional magnitude, the decimal point is
+optional. Underscores may be used to group digits into 
+groups of three.
+
+[floating point number]: http://www.validlab.com/goldberg/paper.pdf
+[NaN]: http://en.wikipedia.org/wiki/NaN
+"""
 tagged("Basic types", "Numbers")
 shared native final class Float
         extends Object
@@ -67,7 +65,6 @@ shared native final class Float
      point values:
      
          Float.sum(list) / list.size"
-    since("1.3.2")
     shared static Float sum({Float*} floats) {
         variable value sum = 0.0;
         for (float in floats) {

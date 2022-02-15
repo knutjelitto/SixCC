@@ -196,7 +196,7 @@ alias-declaration
     ;
 
 constructor-declaration
-    : prelude 'new' name? extends? function-body
+    : prelude 'new' name? parameters extends? function-body
     ;
 
 function-body
@@ -309,6 +309,7 @@ attribute-name
     |   'default'
     |   'serializable'
     |   'aliased'
+    |   'deprecated'
     >;
 
 attribute-arguments
@@ -526,8 +527,9 @@ statement
     | expression-statement
     | if-statement
     | for-statement
-    | return-statement
     | assert-statement
+    | return-statement
+    | throw-statement
     ;
 
 assign-statement
@@ -556,6 +558,10 @@ for-statement
 
 return-statement
     : 'return' expression? ';'
+    ;
+
+throw-statement
+    : 'throw' expression? ';'
     ;
 
 assert-statement

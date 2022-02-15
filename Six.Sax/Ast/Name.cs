@@ -7,7 +7,29 @@ namespace Six.Sax.Ast
     {
         string Text { get; }
 
-        public sealed class Id : Name, IComparable<Id>
+        int IComparable<Name>.CompareTo(Name? other)
+        {
+            Assert(other != null);
+
+            return Text.CompareTo(other.Text);
+        }
+
+        bool Equals(object? obj)
+        {
+            return obj is Name that && that.Text == Text;
+        }
+
+        int GetHashCode()
+        {
+            return Text.GetHashCode();
+        }
+
+        string? ToString()
+        {
+            return Text;
+        }
+
+        public sealed class Id : Name
         {
             public Id(IRNode tree)
             {
@@ -19,35 +41,17 @@ namespace Six.Sax.Ast
 
             public IRNode Tree { get; }
             public string Text { get; }
+        }
 
-            public int CompareTo(Id? other)
+        public sealed class ArtificalId : Name
+        {
+            public ArtificalId(string text)
             {
-                Assert(other != null);
-
-                return Text.CompareTo(other.Text);
+                Text = text;
             }
 
-            public int CompareTo(Name? other)
-            {
-                Assert(other != null && other is Id);
-
-                return Text.CompareTo(((Id)other).Text);
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is Id that && that.Text == Text;
-            }
-
-            public override int GetHashCode()
-            {
-                return Text.GetHashCode();
-            }
-
-            public override string ToString()
-            {
-                return Text;
-            }
+            public IRNode Tree => throw new System.InvalidOperationException();
+            public string Text { get; }
         }
     }
 
