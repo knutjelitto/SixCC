@@ -1,6 +1,8 @@
 ﻿using Six.Core;
 using Six.Core.Errors;
-
+using Six.Runtime.Types;
+using System;
+using System.IO;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -64,19 +66,40 @@ namespace Six.Six.Sema
             foreach (var ns in GetNamespaces())
             {
                 var path = ns.GetPath().Replace(".", "/");
-                foreach (var top in ns.Children)
+                foreach (var top in ns.GetDeclarations())
                 {
-                    if (top is Declaration named)
+                    var idx = 0;
+                    if (top.Count > 1)
                     {
-                        var subst = named.Name
+                        idx = 1;
+                    }
+                    foreach (var declaration in top)
+                    {
+                        var subst = declaration.Name.Text
+                            .Replace("!", "@not@")
                             .Replace("|", "@or@")
-                            .Replace("+", "@plus@")
+                            .Replace("&", "@and@")
+                            .Replace("^", "@xor@")
+                            .Replace("+", "@add@")
+                            .Replace("-", "@sub@")
+                            .Replace("*", "@mul@")
+                            .Replace("/", "@div@")
+                            .Replace("%", "@rem@")
                             ;
+
+                        if (idx > 0)
+                        {
+                            subst = $"{subst}-{idx}";
+                            idx += 1;
+                        }
+
+                        var invalid = Path.GetInvalidFileNameChars();
+                        Assert(!subst.Any(c => invalid.Contains(c)));
 
                         var name = $"entities/{path}/{subst}.txt";
                         using (var writer = name.Writer())
                         {
-                            new SemaDumper(writer).DumpEntity(named);
+                            new SemaDumper(writer).DumpEntity(declaration);
                         }
                     }
                 }
@@ -105,7 +128,7 @@ namespace Six.Six.Sema
         private void DumpDeclarations(Writer writer)
         {
             var count = 0;
-            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.GetDeclarations()).OrderBy(e => e.Name))
+            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.GetDeclarationsFlat()).OrderBy(e => e.Name))
             {
                 count += 1;
 
@@ -117,57 +140,63 @@ namespace Six.Six.Sema
             }
         }
 
-        public Declarations Resolve(string name)
+        public Declarations Resolve(A.Reference reference)
         {
             Assert(false);
-            throw new System.InvalidOperationException();
+            throw new InvalidOperationException();
         }
 
-        public Declarations CoreFind(string name)
+        public Declarations Resolve(RLiteral literal)
+        {
+            Assert(false);
+            throw new InvalidOperationException();
+        }
+
+        public Declarations CoreFind(A.TreeNode usage, string name)
         {
             var language = Root.Get(Language);
             Assert(language != null);
-            return language.Find(name);
+            return language.Find(usage, name);
         }
 
-        public Declarations CoreFindNull()
+        public Declarations CoreFindNull(A.TreeNode usage)
         {
-            return CoreFind(CoreNull);
+            return CoreFind(usage, CoreNull);
         }
 
-        public Declarations CoreFindIterable()
+        public Declarations CoreFindIterable(A.TreeNode usage)
         {
-            return CoreFind(CoreIterable);
+            return CoreFind(usage, CoreIterable);
         }
 
-        public Declarations CoreFindCallable()
+        public Declarations CoreFindCallable(A.TreeNode usage)
         {
-            return CoreFind(CoreCallable);
+            return CoreFind(usage, CoreCallable);
         }
 
-        public Declarations CoreFindTuple()
+        public Declarations CoreFindTuple(A.TreeNode usage)
         {
-            return CoreFind(CoreTuple);
+            return CoreFind(usage, CoreTuple);
         }
 
-        public Declarations CoreFindEmpty()
+        public Declarations CoreFindEmpty(A.TreeNode usage)
         {
-            return CoreFind(CoreEmpty);
+            return CoreFind(usage, CoreEmpty);
         }
 
-        public Declarations CoreFindSequential()
+        public Declarations CoreFindSequential(A.TreeNode usage)
         {
-            return CoreFind(CoreSequential);
+            return CoreFind(usage, CoreSequential);
         }
 
-        public Declarations CoreFindSequence()
+        public Declarations CoreFindSequence(A.TreeNode usage)
         {
-            return CoreFind(CoreSequence);
+            return CoreFind(usage, CoreSequence);
         }
 
-        public Declarations CoreFindNothing()
+        public Declarations CoreFindNothing(A.TreeNode usage)
         {
-            return CoreFind(CoreNothing);
+            return CoreFind(usage, CoreNothing);
         }
     }
 }

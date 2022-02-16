@@ -487,7 +487,7 @@ namespace Six.Six.Compiler
 
         protected override void Visit(CNaturalLiteral element)
         {
-            element.Value = new Expression.Number(element);
+            element.Value = new Expression.NaturalNumber(element);
         }
 
         protected override void Visit(CCallableType element)
@@ -635,7 +635,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelMulExpression);
 
-            element.Value = new Expression.Add(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CSubExpression element)
@@ -643,7 +643,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelMulExpression);
 
-            element.Value = new Expression.Sub(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CMulExpression element)
@@ -651,7 +651,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelMulExpression);
             var right = Walk<Expression>(element.LevelUnionExpression);
 
-            element.Value = new Expression.Mul(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CRemExpression element)
@@ -659,7 +659,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelMulExpression);
             var right = Walk<Expression>(element.LevelUnionExpression);
 
-            element.Value = new Expression.Rem(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CIdenticalExpression element)
@@ -667,7 +667,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelCompareExpression);
             var right = Walk<Expression>(element.LevelCompareExpression2);
 
-            element.Value = new Expression.Identical(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CNotIdenticalExpression element)
@@ -675,7 +675,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelCompareExpression);
             var right = Walk<Expression>(element.LevelCompareExpression2);
 
-            element.Value = new Expression.NotIdentical(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CEqualExpression element)
@@ -683,7 +683,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelCompareExpression);
             var right = Walk<Expression>(element.LevelCompareExpression2);
 
-            element.Value = new Expression.Equal(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CNotEqualExpression element)
@@ -691,7 +691,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelCompareExpression);
             var right = Walk<Expression>(element.LevelCompareExpression2);
 
-            element.Value = new Expression.NotEqual(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CGreaterExpression element)
@@ -699,7 +699,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
 
-            element.Value = new Expression.Greater(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CGreaterEqualExpression element)
@@ -707,7 +707,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
 
-            element.Value = new Expression.GreaterEqual(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CLessExpression element)
@@ -715,7 +715,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
 
-            element.Value = new Expression.Less(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CLessEqualExpression element)
@@ -723,14 +723,14 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelAddExpression);
             var right = Walk<Expression>(element.LevelAddExpression2);
 
-            element.Value = new Expression.LessEqual(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CNotExpression element)
         {
             var expression = Walk<Expression>(element.LevelNotExpression);
 
-            element.Value = new Expression.Not(element, expression);
+            element.Value = new Expression.Prefix(element, new Reference(element.Literal), expression);
         }
 
         protected override void Visit(CGroupedExpression element)
@@ -862,7 +862,7 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelCoalesceExpression);
             var right = Walk<Expression>(element.LevelDisjunctionExpression);
 
-            element.Value = new Expression.Then(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CElseExpression element)
@@ -870,14 +870,14 @@ namespace Six.Six.Compiler
             var left = Walk<Expression>(element.LevelCoalesceExpression);
             var right = Walk<Expression>(element.LevelDisjunctionExpression);
 
-            element.Value = new Expression.Else(element, left, right);
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
         protected override void Visit(CNegateExpression element)
         {
             var expr = Walk<Expression>(element.LevelNegateExpression);
 
-            element.Value = new Expression.Neg(element, expr);
+            element.Value = new Expression.Prefix(element, new Reference(element.Literal), expr);
         }
 
         protected override void Visit(CAssignStatement element)

@@ -6,8 +6,6 @@ namespace Six.Six.Sema
 {
     public sealed partial class Resolver
     {
-        private readonly IdentityDictionary<A.TreeNode, Attrib> Assoc = new(); 
-
         private readonly Queue<Action> onResolve = new();
 
         public Resolver(Module global)
@@ -29,16 +27,6 @@ namespace Six.Six.Sema
         {
             this.onResolve.Enqueue(onResolve);
         }
-
-        private Attrib? Ass(A.TreeNode node)
-        {
-            if (Assoc.TryGetValue(node, out var attr))
-            {
-                return attr;
-            }
-            return null;
-        }
-
 
         private Type[]? ResolveMany(Container container, A.Many<A.Type> types)
         {
@@ -63,10 +51,9 @@ namespace Six.Six.Sema
             Module.Add(new Core.Errors.SemanticError(Location.From(node.Tree), $"didn't resolve {node.GetType().Name}: {what}"));
         }
 
-        private T? ResolveReference<T>(Container container, A.Reference node, Func<Declarations, Type[], T> make)
-            where T : class
+        private Reference? ResolveReference(Container container, A.Reference node)
         {
-            var declarations = container.Resolve(node.Name.Text);
+            var declarations = container.Resolve(node);
             if (declarations.Count == 0)
             {
                 Didnt(node, $"`{node.Name.Text}´");
@@ -79,7 +66,7 @@ namespace Six.Six.Sema
                     var arguments = ResolveMany(container, node.Arguments);
                     if (arguments != null)
                     {
-                        return make(declarations, arguments);
+                        return new Reference(declarations, arguments);
                     }
                     else
                     {
@@ -88,7 +75,7 @@ namespace Six.Six.Sema
                 }
                 else
                 {
-                    return make(declarations, Array.Empty<Type>());
+                    return new Reference(declarations, Array.Empty<Type>());
                 }
             }
         }

@@ -11,15 +11,15 @@ namespace Six.Six.Sema
             {
                 case A.Reference node:
                     {
-                        return ResolveReference(container, node, (e, t) => new Type.Reference(e, t));
+                        return ResolveReference(container, node);
                     }
                 case A.Type.Nullable node:
                     {
-                        var nullEntity = Module.CoreFindNull();
+                        var nullEntity = Module.CoreFindNull(node);
 
                         if (nullEntity != null)
                         {
-                            var @null = new Type.Reference(nullEntity);
+                            var @null = new Reference(nullEntity);
                             var type = ResolveType(container, node.Type);
                             if (type != null)
                             {
@@ -32,7 +32,7 @@ namespace Six.Six.Sema
                     }
                 case A.Type.Callable node:
                     {
-                        var callable = Module.CoreFindCallable();
+                        var callable = Module.CoreFindCallable(node);
                         if (callable != null)
                         {
                             var type = ResolveType(container, node.Type);
@@ -41,7 +41,7 @@ namespace Six.Six.Sema
                                 var arguments = ResolveType(container, node.Arguments, true);
                                 if (arguments != null)
                                 {
-                                    return new Type.Reference(callable, type, arguments);
+                                    return new Reference(callable, type, arguments);
                                 }
                             }
                         }
@@ -49,58 +49,11 @@ namespace Six.Six.Sema
                         Didnt(node, "callable");
                         return null;
                     }
-                case A.Type.IterableZeroOrMore node:
-                    {
-                        var nullEntity = Module.CoreFindNull();
-                        if (nullEntity == null)
-                        {
-                            Didnt(node, "Null");
-                            return null;
-                        }
-                        var iterable = Module.CoreFindIterable();
-                        if (iterable == null)
-                        {
-                            Didnt(node, "Iterable");
-                            return null;
-                        }
-                        var @null = new Type.Reference(nullEntity);
-                        var type = ResolveType(container, node.Type);
-                        if (type != null)
-                        {
-                            return new Type.Reference(iterable, type, @null);
-                        }
-
-                        return null;
-                    }
-                case A.Type.IterableOneOrMore node:
-                    {
-                        var iterable = Module.CoreFindIterable();
-                        if (iterable == null)
-                        {
-                            Didnt(node, Module.CoreIterable);
-                            return null;
-                        }
-                        var type = ResolveType(container, node.Type);
-                        if (type != null)
-                        {
-                            return new Type.Reference(iterable, type, new Type.Nothing());
-                        }
-
-                        return null;
-                    }
                 case A.Type.Intersection node:
                     {
-                        var types = new List<Type>();
+                        var types = ResolveMany(container, node);
 
-                        foreach (var member in node)
-                        {
-                            var type = ResolveType(container, member);
-                            if (type != null)
-                            {
-                                types.Add(type);
-                            }
-                        }
-                        if (types.Count == node.Count)
+                        if (types != null)
                         {
                             return new Type.Intersection(types.ToArray());
                         }
@@ -108,24 +61,36 @@ namespace Six.Six.Sema
                         Didnt(node, "intersection");
                         return null;
                     }
+                case A.Type.Union node:
+                    {
+                        var types = ResolveMany(container, node);
+
+                        if (types != null)
+                        {
+                            return new Type.Union(types.ToArray());
+                        }
+
+                        Didnt(node, "union");
+                        return null;
+                    }
                 case A.Type.Types node:
                     {
-                        var empty = Module.CoreFindEmpty();
+                        var empty = Module.CoreFindEmpty(node);
                         if (empty == null)
                         {
                             Didnt(node, "Empty not found");
                         }
-                        var sequence = Module.CoreFindSequence();
+                        var sequence = Module.CoreFindSequence(node);
                         if (sequence == null)
                         {
                             Didnt(node, "Sequence not found");
                         }
-                        var sequential = Module.CoreFindSequential();
+                        var sequential = Module.CoreFindSequential(node);
                         if (sequential == null)
                         {
                             Didnt(node, "Sequence not found");
                         }
-                        var tuple = Module.CoreFindTuple();
+                        var tuple = Module.CoreFindTuple(node);
                         if (tuple == null)
                         {
                             Didnt(node, "Tuple not found");
@@ -143,21 +108,13 @@ namespace Six.Six.Sema
                             {
                                 if (offset == types.Length)
                                 {
-                                    return new Type.Reference(empty!);
+                                    return new Reference(empty!);
                                 }
                                 var first = types[offset];
-                                if (first is Type.Variadic variadic)
-                                {
-                                    Assert(offset + 1 == types.Length);
-                                    return variadic.Type;
-                                }
-                                else
-                                {
-                                    var rest = tuplize(types, offset + 1);
-                                    var type = new Type.Union(first, rest);
+                                var rest = tuplize(types, offset + 1);
+                                var type = new Type.Union(first, rest);
 
-                                    return new Type.Reference(tuple!, type, first, rest);
-                                }
+                                return new Reference(tuple!, type, first, rest);
                             }
                         }
                         else
@@ -184,10 +141,10 @@ namespace Six.Six.Sema
                     }
                 case A.Type.Empty node:
                     {
-                        var empty = Module.CoreFindEmpty();
+                        var empty = Module.CoreFindEmpty(node);
                         if (empty != null)
                         {
-                            return new Type.Reference(empty);
+                            return new Reference(empty);
                         }
                         Didnt(node, "empty");
                         return null;

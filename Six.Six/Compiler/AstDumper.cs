@@ -54,7 +54,7 @@ namespace Six.Six.Compiler
             wl($"{name} : {str.GetType().Name} = {str.Text.ShortEsc(100)}");
         }
 
-        private void Dump(string name, Expression.Number str)
+        private void Dump(string name, Expression.NaturalNumber str)
         {
             wl($"{name} : {str.GetType().Name} = {str.Text}");
         }

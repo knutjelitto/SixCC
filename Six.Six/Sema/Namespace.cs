@@ -1,10 +1,10 @@
 ﻿using Six.Core;
-
+using Six.Runtime.Types;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public class Namespace : ContainerCore, Container
+    public class Namespace : ContainerCore
     {
         private readonly Dictionary<string, Namespace> children = new();
 
@@ -15,6 +15,11 @@ namespace Six.Six.Sema
         }
 
         public string Name { get; }
+
+        public override Declarations Resolve(A.Reference reference)
+        {
+            return Find(reference, reference.Name.Text);
+        }
 
         public Namespace Open(string name)
         {

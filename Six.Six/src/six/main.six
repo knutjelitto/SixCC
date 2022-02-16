@@ -5,5 +5,5 @@ void main()
     let x = 12;
     let y = 13;
 
-    print(x * y);
+    print(-x * -y);
 }

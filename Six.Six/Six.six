@@ -511,6 +511,7 @@ statement
     | expression-statement
     | if-statement
     | for-statement
+    | while-statement
     | assert-statement
     | return-statement
     | throw-statement
@@ -538,6 +539,10 @@ else-block
 
 for-statement
     : 'for' '(' pattern 'in' expression ')' block-body else-block?
+    ;
+
+while-statement
+    : 'while' conditions block-body
     ;
 
 return-statement

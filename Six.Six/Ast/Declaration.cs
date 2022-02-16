@@ -9,7 +9,7 @@ namespace Six.Six.Ast
             Ast.Prelude Prelude { get; }
         }
 
-        public interface Name : Node
+        public interface Name : TreeNode
         {
             Ast.Name Name { get; }
         }
@@ -19,14 +19,19 @@ namespace Six.Six.Ast
             Ast.Body Body { get; }
         }
 
+        public interface Type : Node
+        {
+            Ast.Type? Type { get; }
+        }
+
+        public interface Value : Node
+        {
+            Ast.Expression? Value { get; }
+        }
+
         public interface Parameters : Node
         {
             Ast.Parameters? Parameters { get; }
-        }
-
-        public interface MultiParameters : Node
-        {
-            Ast.MultiParameters MultiParameters { get; }
         }
 
         public interface Generics : Node
@@ -44,6 +49,11 @@ namespace Six.Six.Ast
         {
             Ast.Type.Types? Satisfies { get; }
         }
+
+        public interface Cases : Node
+        {
+            Ast.Type.Types? Cases { get; }
+        }
     }
 
     public interface Declaration : TreeNode, Statelaration
@@ -52,8 +62,15 @@ namespace Six.Six.Ast
         {
         }
 
-        public sealed record Let(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value) : Entity;
-        public sealed record Var(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value) : Entity;
+        public sealed record Let(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
+            :   Entity,
+                With.Type,
+                With.Value;
+
+        public sealed record Var(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
+            :   Entity,
+                With.Type,
+                With.Value;
 
         public abstract record EntityImpl(
             IRNode Tree,
@@ -68,10 +85,18 @@ namespace Six.Six.Ast
             )
             : Entity;
 
-        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name) : Entity;
+        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name)
+            :   Entity;
 
-        public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, DefinitiveParameter Left, DefinitiveParameter Right, Body Body) : Entity;
-        public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, DefinitiveParameter Parameter, Body Body) : Entity;
+        public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameter Left, Parameter Right, Body Body)
+            :   Entity,
+                With.Type,
+                With.Body;
+
+        public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameter Parameter, Body Body)
+            :   Entity,
+                With.Type,
+                With.Body;
 
         public sealed record Function(
             IRNode Tree, 
@@ -112,7 +137,8 @@ namespace Six.Six.Ast
             With.Generics,
             With.Parameters,
             With.Extends,
-            With.Satisfies;
+            With.Satisfies,
+            With.Cases;
 
         public sealed record Interface(
             IRNode Tree, 
@@ -128,7 +154,8 @@ namespace Six.Six.Ast
             With.Body,
             With.Generics,
             With.Parameters,
-            With.Satisfies;
+            With.Satisfies,
+            With.Cases;
 
         public sealed record Object(
             IRNode Tree,

@@ -5,46 +5,50 @@ namespace Six.Six.Sema
 {
     public sealed partial class Resolver
     {
-
-        public Expression? ResolveExpression(Container container, A.Expression expressionNode)
+        public ITyped? ResolveExpression(Container container, A.Expression expressionNode)
         {
-            var assoc = Ass(expressionNode);
-            Assert(assoc == null);
-            Assoc.Add(expressionNode, new Attrib(container, expressionNode));
-
             switch (expressionNode)
             {
+                case A.Expression.Call node:
+                    {
+                        var expr = ResolveExpression(container, node.Expr);
+                        if (expr != null)
+                        {
+                            var args = new List<ITyped>();
+                            foreach (var arg in node.Arguments)
+                            {
+                                var resolved = ResolveExpression(container, arg);
+                                if (resolved != null)
+                                {
+                                    args.Add(resolved);
+                                }
+                            }
+                            if (args.Count == node.Arguments.Count)
+                            {
+                                return new ITyped.Call(expr, args.ToArray());
+                            }
+                        }
+                        Didnt(expressionNode, expressionNode.GetType().Name);
+                        return null;
+                    }
                 case A.Reference node:
-                    return ResolveReference(container, node, (e, t) => new Expression.Reference(e, t));
-                //case A.Expression.Call node:
-                case A.Expression.Not node:
-                    return Unary(node, expr => new Expression.Not(expr));
-                case A.Expression.Neg node:
-                    return Unary(node, expr => new Expression.Neg(expr));
-                case A.Expression.AndThen node:
-                    return Binary(node, (left, right) => new Expression.AndThen(left, right));
-                case A.Expression.OrElse node:
-                    return Binary(node, (left, right) => new Expression.OrElse(left, right));
-                case A.Expression.Identical node:
-                    return Binary(node, (left, right) => new Expression.Identical(left, right));
-                case A.Expression.NotIdentical node:
-                    return Binary(node, (left, right) => new Expression.NotIdentical(left, right));
-                case A.Expression.Add node:
-                    return Binary(node, (left, right) => new Expression.Add(left, right));
-                case A.Expression.Sub node:
-                    return Binary(node, (left, right) => new Expression.Sub(left, right));
-                case A.Expression.Mul node:
-                    return Binary(node, (left, right) => new Expression.Mul(left, right));
-                case A.Expression.Div node:
-                    return Binary(node, (left, right) => new Expression.Div(left, right));
-                case A.Expression.Rem node:
-                    return Binary(node, (left, right) => new Expression.Rem(left, right));
+                    {
+                        return ResolveReference(container, node);
+                    }
+                case A.Expression.Prefix node:
+                    {
+                        return Prefix(node, expr => new ITyped.Prefix(expr));
+                    }
+                case A.Expression.Infix node:
+                    {
+                        return Infix(node, (left, right) => new ITyped.Infix(left, right));
+                    }
                 default:
                     Didnt(expressionNode, expressionNode.GetType().Name);
                     return null;
             }
 
-            Expression? Unary(A.Expression.Unary node, Func<Expression, Expression> create)
+            ITyped? Prefix(A.Expression.IPrefix node, Func<ITyped, ITyped> create)
             {
                 var expr = ResolveExpression(container, node.Expr);
                 if (expr != null)
@@ -54,8 +58,9 @@ namespace Six.Six.Sema
                 return null;
             }
 
-            Expression? Binary(A.Expression.Binary node, Func<Expression, Expression, Expression> create)
+            ITyped? Infix(A.Expression.IInfix node, Func<ITyped, ITyped, ITyped> create)
             {
+                var declarations = container.Resolve(node.Op);
                 var left = ResolveExpression(container, node.Left);
                 if (left != null)
                 {

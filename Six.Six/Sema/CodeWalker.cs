@@ -55,7 +55,7 @@ namespace Six.Six.Sema
             return new Disposable(() => into.Pop());
         }
 
-        private void DoDeclaration(Entity entity)
+        private void DoDeclare(Entity entity)
         {
             using (Push(entity.Container))
             {
@@ -64,17 +64,18 @@ namespace Six.Six.Sema
                     WalkMany(withTypeParams.TypeParameters);
                 }
 
-                if (entity.Ast is A.With.MultiParameters withMulti)
-                {
-                    foreach (var parameters in withMulti.MultiParameters)
-                    {
-                        WalkMany(parameters);
-                    }
-                }
-
                 if (entity.Ast is A.With.Parameters withParams)
                 {
                     WalkMany(withParams.Parameters);
+                }
+                else if (entity.Ast is A.Declaration.Infix infix)
+                {
+                    Walk(infix.Left);
+                    Walk(infix.Right);
+                }
+                else if (entity.Ast is A.Declaration.Prefix prefix)
+                {
+                    Walk(prefix.Parameter);
                 }
 
                 if (entity.Ast is A.With.Body with)
@@ -82,29 +83,50 @@ namespace Six.Six.Sema
                     Walk(with.Body);
                 }
 
-                if (entity.Ast is A.With.Extends withExtends)
+                if (entity.Ast is A.With.Type withType && withType.Type != null)
                 {
-                    if (withExtends.Extends != null)
+                    OnResolve(() =>
                     {
-                        OnResolve(() =>
-                        {
-                            Resolver.ResolveType(entity.Container, withExtends.Extends);
-                        });
-                    }
+                        Resolver.ResolveType(entity.Container, withType.Type);
+                    });
                 }
 
-                if (entity.Ast is A.With.Satisfies withSatisfies)
+                if (entity.Ast is A.With.Value withValue && withValue.Value != null)
                 {
-                    if (withSatisfies.Satisfies != null)
+                    OnResolve(() =>
                     {
-                        OnResolve(() =>
+                        Resolver.ResolveExpression(entity.Container, withValue.Value);
+                    });
+                }
+
+                if (entity.Ast is A.With.Extends withExtends && withExtends.Extends != null)
+                {
+                    OnResolve(() =>
+                    {
+                        Resolver.ResolveType(entity.Container, withExtends.Extends);
+                    });
+                }
+
+                if (entity.Ast is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
+                {
+                    OnResolve(() =>
+                    {
+                        foreach (var type in withSatisfies.Satisfies)
                         {
-                            foreach (var type in withSatisfies.Satisfies)
-                            {
-                                Resolver.ResolveType(entity.Container, type);
-                            }
-                        });
-                    }
+                            Resolver.ResolveType(entity.Container, type);
+                        }
+                    });
+                }
+
+                if (entity.Ast is A.With.Cases withCases && withCases.Cases != null)
+                {
+                    OnResolve(() =>
+                    {
+                        foreach (var type in withCases.Cases)
+                        {
+                            Resolver.ResolveType(entity.Container, type);
+                        }
+                    });
                 }
             }
         }
@@ -130,6 +152,16 @@ namespace Six.Six.Sema
             }
         }
 
+        private void Declare(A.DefinitiveParameter node)
+        {
+            var entity = Parent.AddChild(new Declaration.Parameter(node, Container.Empty(Parent)));
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveType(entity.Container, node.Type);
+            });
+        }
+
         private void Declare(A.ValueParameter node)
         {
             var entity = Parent.AddChild(new Declaration.Parameter(node, Container.Empty(Parent)));
@@ -149,52 +181,71 @@ namespace Six.Six.Sema
 
         private void Declare(A.Declaration node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Any(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Any(node, new DeclarationScope(Parent))));
+        }
+
+        private void Declare(A.Parameter node)
+        {
+            DoDeclare(Parent.AddChild(new Declaration.Parameter(node, new DeclarationScope(Parent))));
+        }
+
+        private void Declare(A.Declaration.Prefix node)
+        {
+            DoDeclare(Parent.AddChild(new Declaration.Prefix(node, new DeclarationScope(Parent))));
+        }
+        private void Declare(A.Declaration.Infix node)
+        {
+            DoDeclare(Parent.AddChild(new Declaration.Infix(node, new DeclarationScope(Parent))));
+        }
+
+        private void Declare(A.Declaration.Primitive node)
+        {
+            DoDeclare(Parent.AddChild(new Declaration.Primitive(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Constructor node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.CTor(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.CTor(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Var node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Var(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Var(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Let node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Let(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Let(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Function node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Function(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Function(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Class node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Class(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Class(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Attribute node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Attribute(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Attribute(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Object node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Object(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Object(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Interface node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Interface(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Interface(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Declaration.Alias node)
         {
-            DoDeclaration(Parent.AddChild(new Declaration.Alias(node, new DeclarationScope(Parent))));
+            DoDeclare(Parent.AddChild(new Declaration.Alias(node, new DeclarationScope(Parent))));
         }
 
         private void Declare(A.Statement.Return node)

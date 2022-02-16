@@ -1,4 +1,5 @@
 ﻿using Six.Core.Errors;
+using Six.Runtime.Types;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -30,7 +31,12 @@ namespace Six.Six.Sema
             return entity;
         }
 
-        public IEnumerable<Declaration> GetDeclarations()
+        public IEnumerable<Declarations> GetDeclarations()
+        {
+            return items.Values;
+        }
+
+        public IEnumerable<Declaration> GetDeclarationsFlat()
         {
             return items.Values.SelectMany(decls => decls);
         }
@@ -40,30 +46,32 @@ namespace Six.Six.Sema
             return children;
         }
 
-        public Declarations Resolve(string name)
+        public virtual Declarations Resolve(A.Reference reference)
         {
-            if (items.TryGetValue(name, out var declaration))
+            if (items.TryGetValue(reference.Name.Text, out var declaration))
             {
                 return declaration;
             }
-            return Parent.Resolve(name);
+            return Parent.Resolve(reference);
         }
 
-        public virtual Declarations Find(string name)
+        public virtual Declarations Find(A.TreeNode usage, string name)
         {
-            if (items.TryGetValue(name, out var declarations))
+            if (!items.TryGetValue(name, out var declarations))
             {
-                return declarations;
+                declarations = new Declarations(name);
+                items.Add(name, declarations);
             }
-            return new Declarations(name);
+            declarations.Use(usage);
+            return declarations;
         }
 
         private void Declare(Declaration declaration)
         {
-            if (!items.TryGetValue(declaration.Name, out var declarations))
+            if (!items.TryGetValue(declaration.Name.Text, out var declarations))
             {
-                declarations = new Declarations(declaration.Name);
-                items.Add(declaration.Name, declarations);
+                declarations = new Declarations(declaration.Name.Text);
+                items.Add(declaration.Name.Text, declarations);
             }
             declarations.Add(declaration);
         }
