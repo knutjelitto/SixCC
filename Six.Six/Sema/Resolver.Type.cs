@@ -49,21 +49,6 @@ namespace Six.Six.Sema
                         Didnt(node, "callable");
                         return null;
                     }
-                case A.Type.Spread node:
-                    {
-                        var sequential = Module.CoreFindSequential();
-                        if (sequential != null)
-                        {
-                            var type = ResolveType(container, node.Type);
-                            if (type != null)
-                            {
-                                return new Type.Sequential(sequential, type);
-                            }
-                        }
-
-                        Didnt(node, "spread");
-                        return null;
-                    }
                 case A.Type.IterableZeroOrMore node:
                     {
                         var nullEntity = Module.CoreFindNull();
@@ -101,54 +86,6 @@ namespace Six.Six.Sema
                             return new Type.Reference(iterable, type, new Type.Nothing());
                         }
 
-                        return null;
-                    }
-                case A.Type.ZeroOrMore node:
-                    {
-                        var sequential = Module.CoreFindSequential();
-                        if (sequential == null)
-                        {
-                            Didnt(node, Module.CoreSequential);
-                            return null;
-                        }
-
-                        var type = ResolveType(container, node.Type);
-                        if (type != null)
-                        {
-                            return new Type.Variadic(new Type.Sequential(sequential, type));
-                        }
-
-                        return null;
-                    }
-                case A.Type.OneOrMore node:
-                    {
-                        var sequence = Module.CoreFindSequence();
-                        if (sequence == null)
-                        {
-                            Didnt(node, Module.CoreSequence);
-                            return null;
-                        }
-                        var type = ResolveType(container, node.Type);
-                        if (type != null)
-                        {
-                            return new Type.Variadic(new Type.Sequence(sequence, type));
-                        }
-
-                        return null;
-                    }
-                case A.Type.Defaulted node:
-                    {
-                        var empty = Module.CoreFindEmpty();
-                        if (empty == null)
-                        {
-                            Didnt(node, Module.CoreEmpty);
-                            return null;
-                        }
-                        var type = ResolveType(container, node.Type);
-                        if (type != null)
-                        {
-                            return new Type.Defaulted(new Type.Reference(empty), type);
-                        }
                         return null;
                     }
                 case A.Type.Intersection node:
@@ -234,21 +171,6 @@ namespace Six.Six.Sema
                 case A.Type.Tuple node:
                     {
                         return ResolveType(container, node.Types, true);
-                    }
-                case A.Type.Sequence node:
-                    {
-                        var sequence = Module.CoreFindSequence();
-                        if (sequence != null)
-                        {
-                            var type = ResolveType(container, node.Type);
-                            if (type != null)
-                            {
-                                return new Type.Sequence(sequence, type);
-                            }
-                        }
-
-                        Didnt(node, "sequence");
-                        return null;
                     }
                 case A.Type.Constructor node:
                     {

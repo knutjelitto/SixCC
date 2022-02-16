@@ -63,30 +63,33 @@ namespace Six.Six.Sema
             Module.Add(new Core.Errors.SemanticError(Location.From(node.Tree), $"didn't resolve {node.GetType().Name}: {what}"));
         }
 
-        private T? ResolveReference<T>(Container container, A.Reference node, Func<Entity, Type[], T> make)
+        private T? ResolveReference<T>(Container container, A.Reference node, Func<Declarations, Type[], T> make)
             where T : class
         {
-            var entity = container.Resolve(node.Name.Text);
-            if (entity == null)
+            var declarations = container.Resolve(node.Name.Text);
+            if (declarations.Count == 0)
             {
-                Didnt(node, $"{node.Name.Text}");
+                Didnt(node, $"`{node.Name.Text}´");
                 return null;
-            }
-            if (node.Arguments != null)
-            {
-                var arguments = ResolveMany(container, node.Arguments);
-                if (arguments != null)
-                {
-                    return make(entity, arguments);
-                }
-                else
-                {
-                    return null;
-                }
             }
             else
             {
-                return make(entity, Array.Empty<Type>());
+                if (node.Arguments != null)
+                {
+                    var arguments = ResolveMany(container, node.Arguments);
+                    if (arguments != null)
+                    {
+                        return make(declarations, arguments);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return make(declarations, Array.Empty<Type>());
+                }
             }
         }
     }

@@ -103,9 +103,9 @@ namespace Six.Six.Ast
         public sealed record Conditions(IRNode Tree, IEnumerable<Expression> Items): Many<Expression>(Tree, Items);
     }
 
-    public sealed record Expressions(IRNode Tree, IEnumerable<Expression> Items) : Many<Expression>(Tree, Items)
+    public sealed record Arguments(IRNode Tree, IEnumerable<Expression> Items) : Many<Expression>(Tree, Items)
     {
-        public Expressions(IRNode tree, params Expression[] items)
+        public Arguments(IRNode tree, params Expression[] items)
             : this(tree, items.AsEnumerable())
         { }
     }

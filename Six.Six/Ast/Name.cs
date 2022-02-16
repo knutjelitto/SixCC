@@ -31,12 +31,10 @@ namespace Six.Six.Ast
 
         public sealed class Id : Name
         {
-            public Id(IRNode tree)
+            public Id(IRLocated tree)
             {
-                Assert(tree is RToken);
-
                 Tree = tree;
-                Text = ((RToken)tree).Text;
+                Text = tree.Text;
             }
 
             public IRNode Tree { get; }

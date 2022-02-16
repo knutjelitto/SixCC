@@ -11,8 +11,7 @@ namespace Six.Six.Ast
     {
         public sealed record Code(
             IRNode Tree, 
-            bool Skip,
-            Namespace Namespace,
+            NamespaceIntro Namespace,
             Using.Usings Usings,
             Declarations Declarations) : Unit;
         public sealed record Module(IRNode Tree, Names Names) : Unit;

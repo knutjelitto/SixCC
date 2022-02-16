@@ -250,6 +250,10 @@ namespace Six.Six.Sema
         {
         }
 
+        private void Declare(A.Body.Builtin node)
+        {
+        }
+
         private void Declare(A.Node node)
         {
             Assert(false);

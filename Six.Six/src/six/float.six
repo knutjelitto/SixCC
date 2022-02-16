@@ -1,0 +1,7 @@
+namespace six;
+
+builtin f32;
+builtin f64;
+
+alias float => f32;
+alias double => f64;

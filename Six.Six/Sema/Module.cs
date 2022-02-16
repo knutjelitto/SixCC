@@ -7,8 +7,7 @@ namespace Six.Six.Sema
 {
     public class Module : Container
     {
-        private static readonly string Language = "sax";
-        private static readonly string Core = "core";
+        private static readonly string Language = "six";
         public static readonly string CoreNull = "Null";
         public static readonly string CoreNothing = "Nothing";
         public static readonly string CoreIterable = "Iterable";
@@ -40,7 +39,7 @@ namespace Six.Six.Sema
             throw new System.InvalidOperationException();
         }
 
-        public Container Open(A.Namespace @namespace)
+        public Container Open(A.NamespaceIntro @namespace)
         {
             var current = Root;
             foreach (var name in @namespace.Names)
@@ -69,7 +68,12 @@ namespace Six.Six.Sema
                 {
                     if (top is Declaration named)
                     {
-                        var name = $"entities/{path}/{named.Name}.txt";
+                        var subst = named.Name
+                            .Replace("|", "@or@")
+                            .Replace("+", "@plus@")
+                            ;
+
+                        var name = $"entities/{path}/{subst}.txt";
                         using (var writer = name.Writer())
                         {
                             new SemaDumper(writer).DumpEntity(named);
@@ -92,76 +96,76 @@ namespace Six.Six.Sema
             }
 
             writer.WriteLine("========== DEFINED");
-            DumpReferences(writer);
+            DumpDeclarations(writer);
+
+            writer.WriteLine();
+            writer.WriteLine("========== UNDEFINED");
         }
 
-        private void DumpReferences(Writer writer)
+        private void DumpDeclarations(Writer writer)
         {
-            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.Children).OfType<Declaration>().OrderBy(e => e.Name))
+            var count = 0;
+            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.GetDeclarations()).OrderBy(e => e.Name))
             {
+                count += 1;
+
                 var attrs = new StringBuilder();
                 attrs.Append(declaration.IsShared ? "S" : " ");
                 attrs.Append(declaration.IsNative ? "N" : " ");
 
-                writer.WriteLine($"{declaration.GetKind(),-12} [{attrs}] {declaration.GetName(),-30} {declaration.GetLocation()}");
+                writer.WriteLine($"{count,3} {declaration.GetKind(),-12} [{attrs}] {declaration.GetName(),-30} {declaration.GetLocation()}");
             }
         }
 
-        public Declaration? Resolve(string name)
+        public Declarations Resolve(string name)
         {
-            return null;
+            Assert(false);
+            throw new System.InvalidOperationException();
         }
 
-        public Entity? CoreFind(string name)
+        public Declarations CoreFind(string name)
         {
             var language = Root.Get(Language);
-            if (language != null)
-            {
-                var core = language.Get(Core);
-                if (core != null)
-                {
-                    return core.Find(name);
-                }
-            }
-            return null;
+            Assert(language != null);
+            return language.Find(name);
         }
 
-        public Entity? CoreFindNull()
+        public Declarations CoreFindNull()
         {
             return CoreFind(CoreNull);
         }
 
-        public Entity? CoreFindIterable()
+        public Declarations CoreFindIterable()
         {
             return CoreFind(CoreIterable);
         }
 
-        public Entity? CoreFindCallable()
+        public Declarations CoreFindCallable()
         {
             return CoreFind(CoreCallable);
         }
 
-        public Entity? CoreFindTuple()
+        public Declarations CoreFindTuple()
         {
             return CoreFind(CoreTuple);
         }
 
-        public Entity? CoreFindEmpty()
+        public Declarations CoreFindEmpty()
         {
             return CoreFind(CoreEmpty);
         }
 
-        public Entity? CoreFindSequential()
+        public Declarations CoreFindSequential()
         {
             return CoreFind(CoreSequential);
         }
 
-        public Entity? CoreFindSequence()
+        public Declarations CoreFindSequence()
         {
             return CoreFind(CoreSequence);
         }
 
-        public Entity? CoreFindNothing()
+        public Declarations CoreFindNothing()
         {
             return CoreFind(CoreNothing);
         }

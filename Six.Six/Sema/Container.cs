@@ -10,7 +10,7 @@ namespace Six.Six.Sema
         public Module Module => Parent.Module;
         IReadOnlyList<Entity> Children { get; }
         Entity AddChild(Entity entity);
-        Declaration? Resolve(string name);
+        Declarations Resolve(string name);
 
         public static Container Empty(Container parent)
         {
@@ -26,7 +26,7 @@ namespace Six.Six.Sema
             public Container Parent { get; }
             public IReadOnlyList<Entity> Children { get; } = Array.Empty<Entity>();
             public Entity AddChild(Entity entity) => throw new NotImplementedException();
-            public Declaration? Resolve(string name) => Parent.Resolve(name);
+            public Declarations Resolve(string name) => Parent.Resolve(name);
         }
     }
 }

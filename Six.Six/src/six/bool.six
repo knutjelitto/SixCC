@@ -1,0 +1,13 @@
+namespace six;
+
+builtin Boolean;
+
+alias bool => Boolean;
+
+bool true => builtin;
+bool false => builtin;
+
+infix bool | (bool left, bool right) => builtin;
+infix bool & (bool left, bool right) => builtin;
+infix bool ^ (bool left, bool right) => builtin;
+prefix bool ! (bool value) => builtin;

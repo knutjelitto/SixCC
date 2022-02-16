@@ -4,8 +4,6 @@ namespace sax.core;
 The result of a comparison between two [[Comparable]] objects: [[larger]],
 [[smaller]], or [[equal]].
 """
-see (interface Comparable)
-tagged("Comparisons")
 shared abstract class Comparison(shared actual String string) of larger | smaller | equal
 {
     "The reversed value of this comparison."

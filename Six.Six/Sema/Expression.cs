@@ -4,7 +4,7 @@ namespace Six.Six.Sema
 {
     public interface Expression
     {
-        public record Reference(Entity Entity, params Type[] Arguments) : Expression;
+        public record Reference(Declarations Declarations, params Type[] Arguments) : Expression;
         public record AndThen(Expression Left, Expression Right) : Expression;
         public record OrElse(Expression Left, Expression Right) : Expression;
         public record Not(Expression Expr) : Expression;

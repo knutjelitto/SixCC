@@ -5,7 +5,7 @@ namespace Six.Six.Sema
 {
     public abstract class ContainerCore : Container
     {
-        private readonly Dictionary<string, Declaration> items = new();
+        private readonly Dictionary<string, Declarations> items = new();
         private readonly List<Entity> children = new();
 
         public ContainerCore(Container parent)
@@ -30,42 +30,45 @@ namespace Six.Six.Sema
             return entity;
         }
 
+        public IEnumerable<Declaration> GetDeclarations()
+        {
+            return items.Values.SelectMany(decls => decls);
+        }
+
         public IEnumerable<Entity> GetAllEntities()
         {
             return children;
         }
 
-        public Declaration? Resolve(string name)
+        public Declarations Resolve(string name)
         {
-            if (items.TryGetValue(name, out var entity))
+            if (items.TryGetValue(name, out var declaration))
             {
-                return entity;
+                return declaration;
             }
             return Parent.Resolve(name);
         }
 
-        public virtual Declaration? Find(string name)
+        public virtual Declarations Find(string name)
         {
-            if (items.TryGetValue(name, out var entity))
+            if (items.TryGetValue(name, out var declarations))
             {
-                return entity;
+                return declarations;
             }
-            return null;
-        }
-
-        public virtual bool TryFind(A.Name name, [MaybeNullWhen(false)] out Declaration? entity)
-        {
-            return items.TryGetValue(name.Text, out entity);
+            return new Declarations(name);
         }
 
         private void Declare(Declaration declaration)
         {
-            if (!items.TryAdd(declaration.Name, declaration))
+            if (!items.TryGetValue(declaration.Name, out var declarations))
             {
-                DupError(declaration);
+                declarations = new Declarations(declaration.Name);
+                items.Add(declaration.Name, declarations);
             }
+            declarations.Add(declaration);
         }
 
+#if false
         private void DupError(Declaration named)
         {
             if (!items.TryGetValue(named.Name, out var already))
@@ -77,5 +80,6 @@ namespace Six.Six.Sema
             Module.Add(diagnostic1);
             Module.Add(diagnostic2);
         }
+#endif
     }
 }

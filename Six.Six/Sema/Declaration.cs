@@ -1,7 +1,29 @@
-﻿using A = Six.Six.Ast;
+﻿using System.Collections;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
+    public class Declarations : IReadOnlyList<Declaration>
+    {
+        private readonly List<Declaration> items = new();
+        public Declarations(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; }
+
+        public void Add(Declaration declaration)
+        {
+            items.Add(declaration);
+        }
+
+        public Declaration this[int index] => items[index];
+        public int Count => items.Count;
+        public IEnumerator<Declaration> GetEnumerator() => items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)items).GetEnumerator();
+    }
+
     public interface Declaration : Entity, Named
     {
         public string Name => (Ast is A.With.Name named) ? named.Name.Text : "--no-name--";

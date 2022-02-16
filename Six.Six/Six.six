@@ -12,11 +12,15 @@ compilation-unit
     ;
 
 code-unit
-    : '@skip'? namespace usings declarations
+    : namespace-intro usings top-declarations
     ;
 
 namespace
     : prelude 'namespace' names ';'
+    ;
+
+namespace-intro
+    : 'namespace' names ';'
     ;
 
 //*****************************************************************************
@@ -25,7 +29,7 @@ namespace
 //
 
 module-descriptor
-    : 'module' names module-body
+    : prelude 'module' names module-body namespace*
     ;
 
 module-body
@@ -138,24 +142,66 @@ variance
 // DECLARATION
 //
 
-declarations
-    : declaration*
+top-declarations
+    : top-declaration*
     ;
 
-declaration
+top-declaration
+    | primitive-declaration
+    | operator-declaration
+    | universal-declaration
+    ;
+
+universal-declaration
     | function-declaration
-    | attribute-declaration
     | class-declaration
     | interface-declaration
     | object-declaration
     | alias-declaration
+    | attribute-declaration
+    ;
+
+nested-declaration
+    | universal-declaration
     | constructor-declaration
     | let-declaration
     | var-declaration
     ;
 
+primitive-declaration
+    : prelude 'builtin' name ';'
+    ;
+
+operator-declaration
+    : prefix-declaration
+    | infix-declaration
+    ;
+
+prefix-declaration
+    : prelude 'prefix' type prefix-operator '(' definitive-parameter ')' function-body
+    ;
+
+prefix-operator
+    | '-'
+    | '!'
+    ;
+
+infix-declaration
+    : prelude 'infix' type infix-operator '(' definitive-parameter ',' definitive-parameter ')' function-body
+    ;
+
+infix-operator
+    | '+' | '-'
+    | '*' | '/' | '%'
+    | '<' | '<=' | '>' | '>='
+    | '==' | '!=' | '===' | '!=='
+    | '|'
+    | '&'
+    | '^'
+    ;
+
 function-declaration
-    : prelude type? name generic-parameters? multi-parameters constraints? function-body
+    : prelude type? name generic-parameters? parameters constraints? function-body
     ;
 
 attribute-declaration
@@ -169,7 +215,6 @@ var-declaration
 let-declaration
     : prelude 'let' type? name '=' expression ';'
     ;
-
 
 class-declaration
     : prelude 'class' name generic-parameters? parameters? extends? satisfies? case-types? constraints? block-body
@@ -195,12 +240,14 @@ function-body
     | expression-body
     | block-body
     | null-body
+    | builtin-body
     ;
 
 attribute-body
     | expression-body
     | block-body
     | null-body
+    | builtin-body
     ;
 
 block-body
@@ -213,7 +260,7 @@ statelarations
 
 statelaration
     | statement
-    | declaration
+    | nested-declaration
     ;
 
 expression-body
@@ -222,6 +269,10 @@ expression-body
 
 null-body
     :: ';'
+    ;
+
+builtin-body
+    :: '=>' 'builtin' ';'
     ;
 
 function-specifier
@@ -283,7 +334,7 @@ prelude
     ;
 
 attribute
-    : attribute-name attribute-arguments?
+    : attribute-name arguments?
     ;
 
 attribute-name
@@ -300,8 +351,6 @@ attribute-name
     |   'sealed'
     |   'default'
     |   'serializable'
-    |   'aliased'
-    |   'deprecated'
     >;
 
 attribute-arguments
@@ -350,25 +399,7 @@ function-reference
 // TYPES
 //
 type
-    | entry-type
-    | union-type
-    ;
-
-entry-type
-    : union-type '->' union-type
-    ;
-
-variadic-type
-    | variadic-type-zero
-    | variadic-type-one
-    ;
-
-variadic-type-zero
-    : union-type '*'
-    ;
-
-variadic-type-one
-    : union-type '+'
+    : union-type
     ;
 
 union-type
@@ -381,22 +412,16 @@ intersection-type
 
 primary-type
     | nullable-type
-    | sequence-type
     | reference
     | type-selector
     | callable-type
     | empty-type
     | tuple-type
-    | iterable-type
     | nothing-type
     ;
 
 nullable-type
     | primary-type '?'
-    ;
-
-sequence-type
-    : primary-type '[' ']'
     ;
 
 type-selector
@@ -409,7 +434,6 @@ callable-type
 
 callable-arguments
     : type-list
-    | spread-type
     ;
 
 type-list
@@ -419,15 +443,10 @@ type-list
 type-list-type
     | type
     | defaulted-type
-    | variadic-type
     ;
 
 defaulted-type
     : type '='
-    ;
-
-spread-type
-    : '*' union-type
     ;
 
 empty-type
@@ -438,25 +457,8 @@ tuple-type
     : '[' type-list ']'
     ;
 
-iterable-type
-    | iterable-type-zero
-    | iterable-type-one
-    ;
-
-iterable-type-zero
-    : '{' union-type '*' '}'
-    ;
-
-iterable-type-one
-    : '{' union-type '+' '}'
-    ;
-
 nothing-type
     :: 'Nothing'
-    ;
-
-multi-parameters
-    : parameters+
     ;
 
 parameters
@@ -471,8 +473,16 @@ parameter
     | value-parameter
     ;
 
+operator-parameter
+    | definitive-parameter
+    ;
+
 value-parameter
     : prelude parameter-type? name value-default?
+    ;
+
+definitive-parameter
+    : prelude parameter-type name
     ;
 
 value-default
@@ -481,14 +491,13 @@ value-default
 
 parameter-type
     | type
-    | variadic-type
     ;
 
 arguments
-    : '(' expression-list? ')'
+    : '(' argument-list? ')'
     ;
 
-expression-list
+argument-list
     : expression (',' expression)*
     ;
 
@@ -623,7 +632,6 @@ level-compare-expression
     | less-equal-expression
     | greater-expression
     | greater-equal-expression
-    | bounds-expression
     | level-add-expression
     ;
 
@@ -641,36 +649,6 @@ greater-expression
 
 greater-equal-expression
     : level-add-expression '>=' level-add-expression
-    ;
-
-bounds-expression
-    : lower-bound level-add-expression upper-bound
-    ;
-
-lower-bound
-    | lower-less-bound
-    | lower-less-equal-bound
-    ;
-
-lower-less-bound
-    : level-add-expression '<'
-    ;
-
-lower-less-equal-bound
-    : level-add-expression '<='
-    ;
-
-upper-bound
-    | upper-less-bound
-    | upper-less-equal-bound
-    ;
-
-upper-less-bound
-    : '<' level-add-expression
-    ;
-
-upper-less-equal-bound
-    : '<=' level-add-expression
     ;
 
 level-add-expression

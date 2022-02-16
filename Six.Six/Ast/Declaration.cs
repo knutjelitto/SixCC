@@ -68,6 +68,11 @@ namespace Six.Six.Ast
             )
             : Entity;
 
+        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name) : Entity;
+
+        public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, DefinitiveParameter Left, DefinitiveParameter Right, Body Body) : Entity;
+        public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, DefinitiveParameter Parameter, Body Body) : Entity;
+
         public sealed record Function(
             IRNode Tree, 
             Prelude Prelude,
@@ -75,11 +80,11 @@ namespace Six.Six.Ast
             Generic.TypeParameters? Generics,
             Generic.Constraints? Constraints,
             Type? Result,
-            MultiParameters MultiParameters,
+            Parameters Parameters,
             Body Body)
-        :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, null, null, null, null),
+        :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, Parameters, null, null, null),
             With.Generics,
-            With.MultiParameters,
+            With.Parameters,
             With.Body;
 
         public sealed record Attribute(

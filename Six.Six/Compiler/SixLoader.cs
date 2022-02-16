@@ -5,8 +5,8 @@ namespace Six.Six.Compiler
 {
     public class SixLoader : Loader
     {
-        private const string moduleFile = "module.sax";
-        private const string fileGlob = "*.sax";
+        private const string moduleFile = "module.six";
+        private const string fileGlob = "*.six";
 
         public string Prefix { get; }
 

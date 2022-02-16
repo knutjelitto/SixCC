@@ -1,0 +1,5 @@
+namespace six;
+
+builtin string;
+
+infix string + (string left, string right) => builtin;

@@ -23,14 +23,13 @@ namespace Six.Gen
                         generator.Generate(name, content);
                         generated = generator.ToString();
                     }
+
+                    File.WriteAllText(generatedFile, generated);
                 }
                 catch (DiagnosticException exception)
                 {
                     Error(exception, context, additional);
                 }
-
-                File.WriteAllText(generatedFile, generated);
-
 #if false
                 context.AddSource(fileHint, generated);
 #endif

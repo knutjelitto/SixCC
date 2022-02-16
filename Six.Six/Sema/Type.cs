@@ -4,9 +4,7 @@ namespace Six.Six.Sema
 {
     public interface Type
     {
-        public record Reference(Entity Entity, params Type[] Arguments) : Type;
-        public sealed record Sequential(Entity Entity, params Type[] Arguments) : Reference(Entity, Arguments);
-        public sealed record Sequence(Entity Entity, params Type[] Arguments) : Reference(Entity, Arguments);
+        public record Reference(Declarations Declarations, params Type[] Arguments) : Type;
 
         public record Union(params Type[] Types) : Type;
         public sealed record Defaulted(Reference Empty, Type Type) : Union(Empty, Type);

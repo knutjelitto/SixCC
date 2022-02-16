@@ -2,7 +2,7 @@
 
 namespace Six.Runtime.Types
 {
-    public interface IRLocated
+    public interface IRLocated : IRNode
     {
         int Core { get; }
         int End { get; }
