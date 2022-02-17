@@ -6,6 +6,7 @@ namespace Six.Six.Ast
     {
         public sealed record If(IRNode Tree, Guardeds Guardeds, Body.Block? Else) : Statement;
         public sealed record For(IRNode Tree, Pattern Pattern, Expression Expression, Body.Block Block, Body.Block? Else) : Statement;
+        public sealed record While(IRNode Tree, Guarded Guarded) : Statement;
         public sealed record Return(IRNode Tree, Expression? Expression) : Statement;
         public sealed record Throw(IRNode Tree, Expression? Expression) : Statement;
         public sealed record Assert(IRNode Tree, Expression.Literal.String? Message, Expression.Conditions Conditions) : Statement;

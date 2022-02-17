@@ -2,9 +2,9 @@
 
 namespace Six.Six.Sema
 {
-    public interface Statement : Entity
+    public interface Statement : Entity, WithContainer
     {
-        public interface Block : Entity
+        public interface Block : Entity, WithContainer
         {
             public static Block New(A.Body body, Container container) => new Impl(body, container);
             private sealed record Impl(A.TreeNode Ast, Container Container) : Block;

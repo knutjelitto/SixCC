@@ -44,9 +44,9 @@ namespace Six.Six.Sema
 
         public IReadOnlyList<Entity> Children => Enumerable.Empty<Entity>().ToList();
 
-        public Entity AddChild(Entity entity)
+        public T AddChild<T>(T entity) where T: Entity
         {
-            throw new System.InvalidOperationException();
+            throw new InvalidOperationException();
         }
 
         public Container Open(A.NamespaceIntro @namespace)

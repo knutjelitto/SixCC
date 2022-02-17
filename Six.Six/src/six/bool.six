@@ -2,10 +2,10 @@ namespace six;
 
 shared builtin Boolean
 {
-    shared infix bool | (bool rhs) => builtin;
-    shared infix bool & (bool rhs) => builtin;
-    shared infix bool ^ (bool rhs) => builtin;
-    shared prefix bool ! () => builtin;
+    shared operator bool _|_ (bool rhs) => builtin;
+    shared operator bool _&_ (bool rhs) => builtin;
+    shared operator bool _^_ (bool rhs) => builtin;
+    shared operator bool !_ () => builtin;
 }
 
 shared alias bool => Boolean;

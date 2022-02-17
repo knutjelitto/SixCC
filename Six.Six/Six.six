@@ -178,23 +178,35 @@ operator-declaration
     ;
 
 prefix-declaration
-    : prelude 'prefix' type prefix-operator '(' ')' function-body
+    : prelude 'operator' type prefix-operator '(' ')' function-body
     ;
 
 prefix-operator
-    | '-' | '!'
+    | '-_'
+    | '!_'
     ;
 
 infix-declaration
-    : prelude 'infix' type infix-operator '(' definitive-parameter ')' function-body
+    : prelude 'operator' type infix-operator '(' definitive-parameter ')' function-body
     ;
 
 infix-operator
-    | '+' | '-'
-    | '*' | '/' | '%'
-    | '<' | '<=' | '>' | '>='
-    | '==' | '!=' | '===' | '!=='
-    | '|' | '&' | '^'
+    | '_+_'
+    | '_-_'
+    | '_*_'
+    | '_/_'
+    | '_%_'
+    | '_<_' 
+    | '_<=_' 
+    | '_>_'
+    | '_>=_'
+    | '_==_' 
+    | '_!=_' 
+    | '_===_'
+    | '_!==_'
+    | '_|_'
+    | '_&_'
+    | '_^_'
     ;
 
 function-declaration

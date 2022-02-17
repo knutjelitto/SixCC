@@ -1,5 +1,4 @@
-﻿using Six.Runtime.Types;
-using System;
+﻿using System;
 
 using A = Six.Six.Ast;
 
@@ -10,7 +9,7 @@ namespace Six.Six.Sema
         Container Parent { get; }
         public Module Module => Parent.Module;
         IReadOnlyList<Entity> Children { get; }
-        Entity AddChild(Entity entity);
+        T AddChild<T>(T entity) where T : Entity;
         Declarations Resolve(A.Reference reference);
 
         public static Container Empty(Container parent)
@@ -26,7 +25,7 @@ namespace Six.Six.Sema
             }
             public Container Parent { get; }
             public IReadOnlyList<Entity> Children { get; } = Array.Empty<Entity>();
-            public Entity AddChild(Entity entity) => throw new NotImplementedException();
+            public T AddChild<T>(T entity) where T: Entity => throw new NotImplementedException();
             public Declarations Resolve(A.Reference reference) => Parent.Resolve(reference);
         }
     }

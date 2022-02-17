@@ -5,9 +5,12 @@ shared builtin i16{}
 
 shared builtin i32
 {
-    shared prefix int -() => builtin;
-    shared infix int +(int rhs) => builtin;
-    shared infix int *(int rhs) => builtin;
+    shared operator int -_() => builtin;
+    shared operator int _+_(int rhs) => builtin;
+    shared operator int _-_(int rhs) => builtin;
+    shared operator int _*_(int rhs) => builtin;
+    shared operator int _/_(int rhs) => builtin;
+    shared operator int _%_(int rhs) => builtin;
 }
 
 shared builtin i64{}
@@ -17,8 +20,11 @@ shared builtin u16{}
 
 shared builtin u32
 {
-    shared infix uint +(uint rhs) => builtin;
-    shared infix uint *(uint rhs) => builtin;
+    shared operator uint _+_(uint rhs) => builtin;
+    shared operator uint _-_(uint rhs) => builtin;
+    shared operator uint _*_(uint rhs) => builtin;
+    shared operator uint _/_(uint rhs) => builtin;
+    shared operator uint _%_(uint rhs) => builtin;
 }
 
 shared builtin u64{}

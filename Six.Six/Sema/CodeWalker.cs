@@ -55,74 +55,74 @@ namespace Six.Six.Sema
             return new Disposable(() => into.Pop());
         }
 
-        private void DoDeclare(Entity entity)
+        private void DoDeclare(Declaration declaration)
         {
-            using (Push(entity.Container))
+            using (Push(declaration.Container))
             {
-                if (entity.Ast is A.With.Generics withTypeParams)
+                if (declaration.Ast is A.With.Generics withTypeParams)
                 {
                     WalkMany(withTypeParams.TypeParameters);
                 }
 
-                if (entity.Ast is A.With.Parameters withParams)
+                if (declaration.Ast is A.With.Parameters withParams)
                 {
                     WalkMany(withParams.Parameters);
                 }
-                else if (entity.Ast is A.Declaration.Infix infix)
+                else if (declaration.Ast is A.Declaration.Infix infix)
                 {
                     Walk(infix.Rhs);
                 }
-                else if (entity.Ast is A.Declaration.Prefix prefix)
+                else if (declaration.Ast is A.Declaration.Prefix prefix)
                 {
                 }
 
-                if (entity.Ast is A.With.Body with)
+                if (declaration.Ast is A.With.Body with)
                 {
                     Walk(with.Body);
                 }
 
-                if (entity.Ast is A.With.Type withType && withType.Type != null)
+                if (declaration.Ast is A.With.Type withType && withType.Type != null)
                 {
                     OnResolve(() =>
                     {
-                        Resolver.ResolveType(entity.Container, withType.Type);
+                        Resolver.ResolveType(declaration.Container, withType.Type);
                     });
                 }
 
-                if (entity.Ast is A.With.Value withValue && withValue.Value != null)
+                if (declaration.Ast is A.With.Value withValue && withValue.Value != null)
                 {
                     OnResolve(() =>
                     {
-                        Resolver.ResolveExpression(entity.Container, withValue.Value);
+                        Resolver.ResolveExpression(declaration.Container, withValue.Value);
                     });
                 }
 
-                if (entity.Ast is A.With.Extends withExtends && withExtends.Extends != null)
+                if (declaration.Ast is A.With.Extends withExtends && withExtends.Extends != null)
                 {
                     OnResolve(() =>
                     {
-                        Resolver.ResolveType(entity.Container, withExtends.Extends);
+                        Resolver.ResolveType(declaration.Container, withExtends.Extends);
                     });
                 }
 
-                if (entity.Ast is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
+                if (declaration.Ast is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
                 {
                     OnResolve(() =>
                     {
                         foreach (var type in withSatisfies.Satisfies)
                         {
-                            Resolver.ResolveType(entity.Container, type);
+                            Resolver.ResolveType(declaration.Container, type);
                         }
                     });
                 }
 
-                if (entity.Ast is A.With.Cases withCases && withCases.Cases != null)
+                if (declaration.Ast is A.With.Cases withCases && withCases.Cases != null)
                 {
                     OnResolve(() =>
                     {
                         foreach (var type in withCases.Cases)
                         {
-                            Resolver.ResolveType(entity.Container, type);
+                            Resolver.ResolveType(declaration.Container, type);
                         }
                     });
                 }

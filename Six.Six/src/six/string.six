@@ -2,7 +2,7 @@ namespace six;
 
 shared builtin String
 {
-    shared infix string + (string rhs) => builtin;
+    shared operator string _+_ (string rhs) => builtin;
 }
 
 shared alias string => String;

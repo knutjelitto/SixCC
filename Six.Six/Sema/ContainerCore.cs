@@ -19,7 +19,7 @@ namespace Six.Six.Sema
 
         public IReadOnlyList<Entity> Children => children;
 
-        public Entity AddChild(Entity entity)
+        public T AddChild<T>(T entity) where T: Entity
         {
             children.Add(entity);
 

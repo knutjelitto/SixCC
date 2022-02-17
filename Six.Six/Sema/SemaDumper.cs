@@ -49,7 +49,8 @@ namespace Six.Six.Sema
             using (Writer.Indent())
             {
                 DumpAttrs(entity);
-                foreach (var child in entity.Container.Children)
+                if (entity is WithContainer with)
+                foreach (var child in with.Container.Children)
                 {
                     DumpEntity(child);
                 }
