@@ -1,5 +1,4 @@
-﻿using System;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -22,7 +21,7 @@ namespace Six.Six.Sema
                     }
                 case A.Reference node:
                     {
-                        return ResolveReference(container, node);
+                        return Reference(node);
                     }
                 case A.Expression.Prefix node:
                     {
@@ -31,6 +30,10 @@ namespace Six.Six.Sema
                 case A.Expression.Infix node:
                     {
                         return Infix(node);
+                    }
+                case A.Expression.Select node:
+                    {
+                        return Select(node);
                     }
                 case A.Expression.NaturalNumber node:
                     {
@@ -45,6 +48,32 @@ namespace Six.Six.Sema
                 default:
                     Didnt(expressionNode, expressionNode.GetType().Name);
                     return null;
+            }
+
+
+            Expression? Reference(A.Reference node)
+            {
+                var reference = ResolveReference(container, node);
+
+                if (reference != null)
+                {
+                    if (reference.Declarations.Count == 1)
+                    {
+                        var declaration = reference.Declarations[0];
+                        var container = declaration.Container;
+                    }
+                }
+
+                return reference;
+            }
+
+
+            Expression? Select(A.Expression.Select node)
+            {
+                _ = ResolveExpression(container, node.Expr);
+
+                Didnt(expressionNode, expressionNode.GetType().Name);
+                return null;
             }
 
             Type? NaturalType(A.TreeNode node, ulong value)

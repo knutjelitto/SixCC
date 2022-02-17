@@ -148,7 +148,6 @@ top-declarations
 
 top-declaration
     | primitive-declaration
-    | operator-declaration
     | universal-declaration
     ;
 
@@ -166,10 +165,11 @@ nested-declaration
     | constructor-declaration
     | let-declaration
     | var-declaration
+    | operator-declaration
     ;
 
 primitive-declaration
-    : prelude 'builtin' name ';'
+    : prelude 'builtin' name block-body
     ;
 
 operator-declaration
@@ -178,16 +178,15 @@ operator-declaration
     ;
 
 prefix-declaration
-    : prelude 'prefix' type prefix-operator '(' definitive-parameter ')' function-body
+    : prelude 'prefix' type prefix-operator '(' ')' function-body
     ;
 
 prefix-operator
-    | '-'
-    | '!'
+    | '-' | '!'
     ;
 
 infix-declaration
-    : prelude 'infix' type infix-operator '(' definitive-parameter ',' definitive-parameter ')' function-body
+    : prelude 'infix' type infix-operator '(' definitive-parameter ')' function-body
     ;
 
 infix-operator
@@ -195,9 +194,7 @@ infix-operator
     | '*' | '/' | '%'
     | '<' | '<=' | '>' | '>='
     | '==' | '!=' | '===' | '!=='
-    | '|'
-    | '&'
-    | '^'
+    | '|' | '&' | '^'
     ;
 
 function-declaration
@@ -245,6 +242,7 @@ function-body
 
 attribute-body
     | expression-body
+    | value-body
     | block-body
     | null-body
     | builtin-body
@@ -267,6 +265,10 @@ expression-body
     : function-specifier ';'
     ;
 
+value-body
+    : value-specifier ';'
+    ;
+
 null-body
     :: ';'
     ;
@@ -277,6 +279,10 @@ builtin-body
 
 function-specifier
     : '=>' expression
+    ;
+
+value-specifier
+    : '=' expression
     ;
 
 extends
@@ -518,7 +524,7 @@ statement
     ;
 
 assign-statement
-    : name '=' expression ';'
+    : primary-expression '=' expression ';'
     ;
 
 expression-statement

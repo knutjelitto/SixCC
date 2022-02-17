@@ -70,12 +70,10 @@ namespace Six.Six.Sema
                 }
                 else if (entity.Ast is A.Declaration.Infix infix)
                 {
-                    Walk(infix.Left);
-                    Walk(infix.Right);
+                    Walk(infix.Rhs);
                 }
                 else if (entity.Ast is A.Declaration.Prefix prefix)
                 {
-                    Walk(prefix.Parameter);
                 }
 
                 if (entity.Ast is A.With.Body with)
@@ -287,6 +285,17 @@ namespace Six.Six.Sema
             });
         }
 
+        private void Declare(A.Statement.Assign node)
+        {
+            var entity = Parent.AddChild(Statement.New(node, Parent));
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(entity.Container, node.Left);
+                Resolver.ResolveExpression(entity.Container, node.Right);
+            });
+        }
+
         private void Declare(A.Body.Block node)
         {
             var entity = Parent.AddChild(Statement.Block.New(node, new BlockScope(Parent)));
@@ -295,6 +304,16 @@ namespace Six.Six.Sema
             {
                 WalkMany(node.Statelarations);
             }
+        }
+
+        private void Declare(A.Body.Value node)
+        {
+            var container = Parent;
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(container, node.Expression);
+            });
         }
 
         private void Declare(A.Body.Deferred node)

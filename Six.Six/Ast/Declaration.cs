@@ -88,12 +88,12 @@ namespace Six.Six.Ast
         public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name)
             :   Entity;
 
-        public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameter Left, Parameter Right, Body Body)
+        public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameter Rhs, Body Body)
             :   Entity,
                 With.Type,
                 With.Body;
 
-        public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameter Parameter, Body Body)
+        public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Body Body)
             :   Entity,
                 With.Type,
                 With.Body;

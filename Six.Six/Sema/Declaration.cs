@@ -43,20 +43,20 @@ namespace Six.Six.Sema
         }
 
         public sealed record Function(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
-        public sealed record Infix(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Prefix(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Class(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Attribute(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Object(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Interface(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Alias(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Parameter(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record TypeParameter(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Var(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Let(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record CTor(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Primitive(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
-        public sealed record Any(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);
+        public sealed record Infix(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Prefix(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Class(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Attribute(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Object(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Interface(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Alias(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Parameter(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record TypeParameter(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Var(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Let(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record CTor(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Primitive(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
+        public sealed record Any(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
 
         public abstract record DeclarationImpl(A.TreeNode Ast, Container Container) : Declaration
         {

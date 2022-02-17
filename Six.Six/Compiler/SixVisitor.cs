@@ -169,11 +169,10 @@ namespace Six.Six.Compiler
             var prelude = Walk<Prelude>(element.Prelude);
             var type = Walk<Type>(element.Type);
             var name = Walk<Name>(element.InfixOperator);
-            var left = Walk<DefinitiveParameter>(element.DefinitiveParameter);
-            var right = Walk<DefinitiveParameter>(element.DefinitiveParameter2);
+            var rhs = Walk<DefinitiveParameter>(element.DefinitiveParameter);
             var body = Walk<Body>(element.FunctionBody);
 
-            element.Value = new Declaration.Infix(element, prelude, name, type, left, right, body);
+            element.Value = new Declaration.Infix(element, prelude, name, type, rhs, body);
         }
 
 
@@ -182,10 +181,9 @@ namespace Six.Six.Compiler
             var prelude = Walk<Prelude>(element.Prelude);
             var type = Walk<Type>(element.Type);
             var name = Walk<Name>(element.PrefixOperator);
-            var parameter = Walk<DefinitiveParameter>(element.DefinitiveParameter);
             var body = Walk<Body>(element.FunctionBody);
 
-            element.Value = new Declaration.Prefix(element, prelude, name, type, parameter, body);
+            element.Value = new Declaration.Prefix(element, prelude, name, type, body);
         }
 
         protected override void Visit(CInfixOperator element)
@@ -301,6 +299,20 @@ namespace Six.Six.Compiler
             var value = Walk<Expression>(element.Expression);
 
             element.Value = new Declaration.Var(element, prelude, name, type, value);
+        }
+
+        protected override void Visit(CValueBody element)
+        {
+            var expr = Walk<Expression>(element.ValueSpecifier);
+
+            element.Value = new Body.Value(element, expr);
+        }
+
+        protected override void Visit(CValueSpecifier element)
+        {
+            var expr = Walk<Expression>(element.Expression);
+
+            element.Value = expr;
         }
 
         protected override void Visit(CReference element)
@@ -882,10 +894,10 @@ namespace Six.Six.Compiler
 
         protected override void Visit(CAssignStatement element)
         {
-            var name = Walk<Name>(element.Name);
-            var expr = Walk<Expression>(element.Expression);
+            var left = Walk<Expression>(element.PrimaryExpression);
+            var right = Walk<Expression>(element.Expression);
 
-            element.Value = new Statement.Assign(element, name, expr);
+            element.Value = new Statement.Assign(element, left, right);
         }
 
         protected override void Visit(CStringInterpolation element)

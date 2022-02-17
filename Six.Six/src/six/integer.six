@@ -1,14 +1,27 @@
 namespace six;
 
-shared builtin i8;
-shared builtin i16;
-shared builtin i32;
-shared builtin i64;
+shared builtin i8{}
+shared builtin i16{}
 
-shared builtin u8;
-shared builtin u16;
-shared builtin u32;
-shared builtin u64;
+shared builtin i32
+{
+    shared prefix int -() => builtin;
+    shared infix int +(int rhs) => builtin;
+    shared infix int *(int rhs) => builtin;
+}
+
+shared builtin i64{}
+
+shared builtin u8{}
+shared builtin u16{}
+
+shared builtin u32
+{
+    shared infix uint +(uint rhs) => builtin;
+    shared infix uint *(uint rhs) => builtin;
+}
+
+shared builtin u64{}
 
 shared alias byte => u8;
 
@@ -21,9 +34,3 @@ shared alias uint => u32;
 shared alias long => i64;
 shared alias ulong => u64;
 
-shared infix uint +(uint left, uint right) => builtin;
-shared infix uint *(uint left, uint right) => builtin;
-
-shared prefix int -(int value) => builtin;
-shared infix int +(int left, int right) => builtin;
-shared infix int *(int left, int right) => builtin;

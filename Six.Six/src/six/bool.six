@@ -1,13 +1,15 @@
 namespace six;
 
-shared builtin Boolean;
+shared builtin Boolean
+{
+    shared infix bool | (bool rhs) => builtin;
+    shared infix bool & (bool rhs) => builtin;
+    shared infix bool ^ (bool rhs) => builtin;
+    shared prefix bool ! () => builtin;
+}
 
 shared alias bool => Boolean;
 
 shared bool true => builtin;
 shared bool false => builtin;
 
-shared infix bool | (bool left, bool right) => builtin;
-shared infix bool & (bool left, bool right) => builtin;
-shared infix bool ^ (bool left, bool right) => builtin;
-shared prefix bool ! (bool value) => builtin;

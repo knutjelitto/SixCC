@@ -78,7 +78,7 @@ namespace Six.Six.Sema
             var declarations = container.Resolve(node);
             if (declarations.Count == 0)
             {
-                Didnt(node, $"`{node.Name.Text}´");
+                Didnt(node, $"unresolved: `{node.Name.Text}´");
                 return null;
             }
             else
