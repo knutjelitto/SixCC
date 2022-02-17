@@ -31,9 +31,16 @@ namespace Six.Six.Sema
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)items).GetEnumerator();
     }
 
-    public interface Declaration : Entity, Named
+    public interface Declaration : Entity, Named, Type
     {
-        public A.Name Name =>  ((A.With.Name)Ast).Name;
+        public A.Name Name
+        {
+            get
+            {
+                Assert(Ast is A.With.Name);
+                return ((A.With.Name)Ast).Name;
+            }
+        }
 
         public sealed record Function(A.With.Name Named, Container Container) : DeclarationImpl(Named, Container);
         public sealed record Infix(A.TreeNode Ast, Container Container) : DeclarationImpl(Ast, Container);

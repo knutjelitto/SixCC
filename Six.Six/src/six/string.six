@@ -1,7 +1,7 @@
 namespace six;
 
-builtin String;
+shared builtin String;
 
-alias string => String;
+shared alias string => String;
 
-infix string + (string left, string right) => builtin;
+shared infix string + (string left, string right) => builtin;

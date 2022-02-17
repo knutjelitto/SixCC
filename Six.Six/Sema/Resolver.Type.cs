@@ -1,11 +1,35 @@
-﻿using System;
+﻿using Six.Core;
+using System;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
     partial class Resolver
     {
-        public Type? ResolveType(Container container, A.Type typeNode, bool asTuple = false)
+        private readonly IdentityDictionary<A.TreeNode, Type> types = new();
+
+        private Type? TypeOf(A.TreeNode tree)
+        {
+            if (types.TryGetValue(tree, out var type))
+            {
+                return type;
+            }
+            return null;
+        }
+
+        public void ResolveType(Container container, A.Type typeNode)
+        {
+            var type = ResolveTypeIntern(container, typeNode);
+
+            if (type != null)
+            {
+                Assert(!types.ContainsKey(typeNode));
+
+                types.Add(typeNode, type);
+            }
+        }
+
+        private Type? ResolveTypeIntern(Container container, A.Type typeNode, bool asTuple = false)
         {
             switch (typeNode)
             {
@@ -15,19 +39,13 @@ namespace Six.Six.Sema
                     }
                 case A.Type.Nullable node:
                     {
-                        var nullEntity = Module.CoreFindNull(node);
+                        var @null = ResolveInCore(node, Module.CoreNull);
+                        var type = ResolveTypeIntern(container, node.Type);
 
-                        if (nullEntity != null)
+                        if (@null != null && type != null)
                         {
-                            var @null = new Reference(nullEntity);
-                            var type = ResolveType(container, node.Type);
-                            if (type != null)
-                            {
-                                return new Type.Union(@null, type);
-                            }
+                            return new Type.Union(@null, type);
                         }
-
-                        Didnt(node, "nullable");
                         return null;
                     }
                 case A.Type.Callable node:
@@ -35,13 +53,13 @@ namespace Six.Six.Sema
                         var callable = Module.CoreFindCallable(node);
                         if (callable != null)
                         {
-                            var type = ResolveType(container, node.Type);
+                            var type = ResolveTypeIntern(container, node.Type);
                             if (type != null)
                             {
-                                var arguments = ResolveType(container, node.Arguments, true);
+                                var arguments = ResolveTypeIntern(container, node.Arguments, true);
                                 if (arguments != null)
                                 {
-                                    return new Reference(callable, type, arguments);
+                                    return new Reference(node, callable, type, arguments);
                                 }
                             }
                         }
@@ -108,13 +126,13 @@ namespace Six.Six.Sema
                             {
                                 if (offset == types.Length)
                                 {
-                                    return new Reference(empty!);
+                                    return new Reference(node, empty!);
                                 }
                                 var first = types[offset];
                                 var rest = tuplize(types, offset + 1);
                                 var type = new Type.Union(first, rest);
 
-                                return new Reference(tuple!, type, first, rest);
+                                return new Reference(node, tuple!, type, first, rest);
                             }
                         }
                         else
@@ -127,11 +145,11 @@ namespace Six.Six.Sema
                     }
                 case A.Type.Tuple node:
                     {
-                        return ResolveType(container, node.Types, true);
+                        return ResolveTypeIntern(container, node.Types, true);
                     }
                 case A.Type.Constructor node:
                     {
-                        var type = ResolveType(container, node.Type);
+                        var type = ResolveTypeIntern(container, node.Type);
 
                         if (type != null)
                         {
@@ -144,7 +162,7 @@ namespace Six.Six.Sema
                         var empty = Module.CoreFindEmpty(node);
                         if (empty != null)
                         {
-                            return new Reference(empty);
+                            return new Reference(node, empty);
                         }
                         Didnt(node, "empty");
                         return null;
@@ -157,6 +175,17 @@ namespace Six.Six.Sema
                     Assert(false);
                     throw new NotImplementedException();
             }
+        }
+
+        private Reference? ResolveInCore(A.TreeNode node, string type)
+        {
+            var found = Module.CoreFind(node, type);
+            if (found != null && found.Count == 1)
+            {
+                return new Reference(node, found);
+            }
+            Didnt(node, $"must be in core: `{type}´");
+            return null;
         }
     }
 }

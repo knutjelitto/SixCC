@@ -10,6 +10,14 @@ namespace Six.Six.Sema
     public class Module : Container
     {
         private static readonly string Language = "six";
+        public static readonly string UInt64 = "u64";
+        public static readonly string Int64 = "i64";
+        public static readonly string UInt32 = "u32";
+        public static readonly string Int32 = "i32";
+        public static readonly string UInt16 = "u16";
+        public static readonly string Int16 = "u16";
+        public static readonly string UInt8 = "u8";
+        public static readonly string Int8 = "i8";
         public static readonly string CoreNull = "Null";
         public static readonly string CoreNothing = "Nothing";
         public static readonly string CoreIterable = "Iterable";
@@ -120,9 +128,6 @@ namespace Six.Six.Sema
 
             writer.WriteLine("========== DEFINED");
             DumpDeclarations(writer);
-
-            writer.WriteLine();
-            writer.WriteLine("========== UNDEFINED");
         }
 
         private void DumpDeclarations(Writer writer)

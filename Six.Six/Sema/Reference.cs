@@ -1,4 +1,7 @@
-﻿namespace Six.Six.Sema
+﻿using A = Six.Six.Ast;
+
+namespace Six.Six.Sema
 {
-    public record Reference(Declarations Declarations, params Type[] Arguments) : Type, ITyped;
+    public record Reference(A.TreeNode Ast, Declarations Declarations, params Type[]? Arguments)
+        : Type, Expression;
 }

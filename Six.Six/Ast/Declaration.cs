@@ -56,9 +56,9 @@ namespace Six.Six.Ast
         }
     }
 
-    public interface Declaration : TreeNode, Statelaration
+    public interface Declaration : TreeNode, Statelaration, With.Name
     {
-        public interface Entity : Declaration, With.Prelude, With.Name
+        public interface Entity : Declaration, With.Prelude
         {
         }
 

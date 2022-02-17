@@ -28,12 +28,34 @@ namespace Six.Six.Sema
             this.onResolve.Enqueue(onResolve);
         }
 
-        private Type[]? ResolveMany(Container container, A.Many<A.Type> types)
+        private Type[]? ResolveMany(Container container, A.Many<A.Type>? types)
         {
-            var results = new List<Type>();
+            if (types != null)
+            {
+                var results = new List<Type>();
+                foreach (var arg in types)
+                {
+                    var result = ResolveTypeIntern(container, arg);
+                    if (result != null)
+                    {
+                        results.Add(result);
+                    }
+                }
+                if (results.Count == types.Count)
+                {
+                    return results.ToArray();
+                }
+            }
+            return null;
+        }
+
+
+        private Expression[]? ResolveMany(Container container, A.Many<A.Expression> types)
+        {
+            var results = new List<Expression>();
             foreach (var arg in types)
-{
-                var result = ResolveType(container, arg);
+            {
+                var result = ResolveExpression(container, arg);
                 if (result != null)
                 {
                     results.Add(result);
@@ -61,22 +83,8 @@ namespace Six.Six.Sema
             }
             else
             {
-                if (node.Arguments != null)
-                {
-                    var arguments = ResolveMany(container, node.Arguments);
-                    if (arguments != null)
-                    {
-                        return new Reference(declarations, arguments);
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                else
-                {
-                    return new Reference(declarations, Array.Empty<Type>());
-                }
+                var arguments = ResolveMany(container, node.Arguments);
+                return new Reference(node, declarations, arguments);
             }
         }
     }

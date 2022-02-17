@@ -1,7 +1,7 @@
 namespace six;
 
-builtin f32;
-builtin f64;
+shared builtin f32;
+shared builtin f64;
 
-alias float => f32;
-alias double => f64;
+shared alias float => f32;
+shared alias double => f64;

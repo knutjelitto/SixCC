@@ -5,30 +5,19 @@ namespace Six.Six.Sema
 {
     public sealed partial class Resolver
     {
-        public ITyped? ResolveExpression(Container container, A.Expression expressionNode)
+        public Expression? ResolveExpression(Container container, A.Expression expressionNode)
         {
             switch (expressionNode)
             {
                 case A.Expression.Call node:
                     {
                         var expr = ResolveExpression(container, node.Expr);
-                        if (expr != null)
+                        var args = ResolveMany(container, node.Arguments);
+                        if (expr != null && args != null)
                         {
-                            var args = new List<ITyped>();
-                            foreach (var arg in node.Arguments)
-                            {
-                                var resolved = ResolveExpression(container, arg);
-                                if (resolved != null)
-                                {
-                                    args.Add(resolved);
-                                }
-                            }
-                            if (args.Count == node.Arguments.Count)
-                            {
-                                return new ITyped.Call(expr, args.ToArray());
-                            }
+                            var type = TypeOf(expr.Ast);
+                            return new Expression.Call(node, expr, args.ToArray());
                         }
-                        Didnt(expressionNode, expressionNode.GetType().Name);
                         return null;
                     }
                 case A.Reference node:
@@ -37,40 +26,153 @@ namespace Six.Six.Sema
                     }
                 case A.Expression.Prefix node:
                     {
-                        return Prefix(node, expr => new ITyped.Prefix(expr));
+                        return Prefix(node);
                     }
                 case A.Expression.Infix node:
                     {
-                        return Infix(node, (left, right) => new ITyped.Infix(left, right));
+                        return Infix(node);
+                    }
+                case A.Expression.NaturalNumber node:
+                    {
+                        var value = ConvertNatural(node.Text);
+                        var type = NaturalType(node, value);
+                        if (type != null)
+                        {
+                            return new Expression.NaturalLiteral(node, type, value);
+                        }
+                        return null;
                     }
                 default:
                     Didnt(expressionNode, expressionNode.GetType().Name);
                     return null;
             }
 
-            ITyped? Prefix(A.Expression.IPrefix node, Func<ITyped, ITyped> create)
+            Type? NaturalType(A.TreeNode node, ulong value)
             {
-                var expr = ResolveExpression(container, node.Expr);
-                if (expr != null)
+                Type? type = ResolveInCore(node, Module.UInt64);
+                if (type != null && value <= long.MaxValue)
                 {
-                    return create(expr);
+                    type = type.UnionWith(ResolveInCore(node, Module.Int64));
+                    if (type != null && value <= uint.MaxValue)
+                    {
+                        type = type.UnionWith(ResolveInCore(node, Module.UInt32));
+                        if (type != null && value <= int.MaxValue)
+                        {
+                            type = type.UnionWith(ResolveInCore(node, Module.Int32));
+                            if (type != null && value <= ushort.MaxValue)
+                            {
+                                type = type.UnionWith(ResolveInCore(node, Module.UInt16));
+                                if (type != null && value <= (ulong)short.MaxValue)
+                                {
+                                    type = type.UnionWith(ResolveInCore(node, Module.Int16));
+                                    if (type != null && value <= byte.MaxValue)
+                                    {
+                                        type = type.UnionWith(ResolveInCore(node, Module.UInt8));
+                                        if (type != null && value <= (ulong)sbyte.MaxValue)
+                                        {
+                                            type = type.UnionWith(ResolveInCore(node, Module.Int8));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return type;
+            }
+
+            Expression? Prefix(A.Expression.IPrefix node)
+            {
+                var declarations = ResolveOp(node, "prefix");
+                var expr = ResolveExpression(container, node.Expr);
+                if (declarations != null && expr != null)
+                {
+                    Assert(declarations.Count > 0);
+                    return new Expression.Prefix(node, expr);
                 }
                 return null;
             }
 
-            ITyped? Infix(A.Expression.IInfix node, Func<ITyped, ITyped, ITyped> create)
+            Expression? Infix(A.Expression.IInfix node)
             {
-                var declarations = container.Resolve(node.Op);
+                var declarations = ResolveOp(node, "infix");
                 var left = ResolveExpression(container, node.Left);
-                if (left != null)
+                var right = ResolveExpression(container, node.Right);
+                if (declarations != null && left != null && right != null)
                 {
-                    var right = ResolveExpression(container, node.Right);
-                    if (right != null)
-                    {
-                        return create(left, right);
-                    }
+                    Assert(declarations.Count > 0);
+                    return new Expression.Infix(node, left, right);
                 }
                 return null;
+            }
+
+            Declarations? ResolveOp(A.Expression.OpExpression node, string xfix)
+            {
+                var declarations = container.Resolve(node.Op);
+                if (declarations.Count == 0)
+                {
+                    Didnt(node.Op, $"{xfix}-operator `{node.Op.Name.Text}´");
+                    return null;
+                }
+                return declarations;
+            }
+        }
+
+        private ulong ConvertNatural(string text)
+        {
+            if (text.StartsWith('#'))
+            {
+                ulong value = 0;
+                foreach (var c in text[1..])
+                {
+                    value = value * 16 + (ulong)hexValue(c);
+                }
+                return value;
+            }
+            else if (text.StartsWith('$'))
+            {
+                ulong value = 0;
+                foreach (var c in text[1..])
+                {
+                    value = value * 2 + (ulong)binValue(c);
+                }
+                return value;
+            }
+            else
+            {
+                ulong value = 0;
+                foreach (var c in text)
+                {
+                    value = value * 10 + (ulong)decValue(c);
+                }
+                return value;
+            }
+
+            int binValue(char c)
+            {
+                Assert('0' <= c && c <= '1');
+                return c - '0';
+            }
+
+            int decValue(char c)
+            {
+                Assert('0' <= c && c <= '9');
+                return c - '0';
+            }
+
+            int hexValue(char c)
+            {
+                Assert('0' <= c && c <= '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'A');
+                if ('0' <= c && c <= '9')
+                {
+                    return c - '0';
+                }
+                if ('a' <= c && c <= 'f')
+                {
+                    return 10 + c - 'a';
+                }
+                return 10 + c - 'A';
             }
         }
     }
