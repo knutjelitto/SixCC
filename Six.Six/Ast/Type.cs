@@ -4,11 +4,14 @@ namespace Six.Six.Ast
 {
     public interface Type : TreeNode
     {
-        public sealed record Union(IRNode Tree, IEnumerable<Type> Items) : Many<Type>(Tree, Items), Type
+        public sealed record Union(IRNode Tree, IEnumerable<Type> Items)
+            : Many<Type>(Tree, Items), Type
         {
             public Union(IRNode tree, params Type[] items) : this(tree, items.AsEnumerable()) { }
         }
-        public sealed record Intersection(IRNode Tree, IEnumerable<Type> Items) : Many<Type>(Tree, Items), Type;
+        public sealed record Intersection(IRNode Tree, IEnumerable<Type> Items)
+            : Many<Type>(Tree, Items), Type;
+
         public sealed record Nothing(IRNode Tree) : Type;
         public sealed record Spread(IRNode Tree, Type Type) : Type;
         public sealed record Defaulted(IRNode Tree, Type Type) : Type;

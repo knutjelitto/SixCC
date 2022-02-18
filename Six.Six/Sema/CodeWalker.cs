@@ -7,8 +7,6 @@ namespace Six.Six.Sema
 {
     public class CodeWalker
     {
-        private readonly Stack<Container> into = new();
-
         private CodeWalker(Module module)
         {
             Module = module;
@@ -17,8 +15,6 @@ namespace Six.Six.Sema
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
 
-        public Container Parent => into.Peek();
-
         private void OnResolve(Action onResolve)
         {
             Resolver.OnResolve(onResolve);
@@ -26,305 +22,293 @@ namespace Six.Six.Sema
 
         public static void Walk(Module module, A.Unit.Code code)
         {
-            new CodeWalker(module).Walk(code);
+            new CodeWalker(module).CodeUnit(code);
         }
 
-        private void Walk(A.Node? node)
+        private void CodeUnit(A.Unit.Code code)
+        {
+            var @namespace = Module.Open(code.Namespace);
+
+            WalkMany(@namespace, code.Declarations);
+        }
+
+        private void Walk(Container container, A.Node? node)
         {
             if (node != null)
             {
-                Declare((dynamic)node);
+                Declare(container, (dynamic)node);
             }
         }
 
-        private void WalkMany(IEnumerable<A.Node>? nodes)
+        private void WalkMany(Container container, IEnumerable<A.Node>? nodes)
         {
             if (nodes != null)
             {
                 foreach (var node in nodes)
                 {
-                    Walk(node);
+                    Walk(container, node);
                 }
             }
         }
 
-        private IDisposable Push(Container container)
+        private void DoDeclare(Container container, A.Decl declaration)
         {
-            into.Push(container);
-
-            return new Disposable(() => into.Pop());
-        }
-
-        private void DoDeclare(Declaration declaration)
-        {
-            using (Push(declaration.Container))
+            if (declaration is A.With.Generics withTypeParams)
             {
-                if (declaration.Ast is A.With.Generics withTypeParams)
-                {
-                    WalkMany(withTypeParams.TypeParameters);
-                }
-
-                if (declaration.Ast is A.With.Parameters withParams)
-                {
-                    WalkMany(withParams.Parameters);
-                }
-                else if (declaration.Ast is A.Declaration.Infix infix)
-                {
-                    Walk(infix.Rhs);
-                }
-                else if (declaration.Ast is A.Declaration.Prefix prefix)
-                {
-                }
-
-                if (declaration.Ast is A.With.Body with)
-                {
-                    Walk(with.Body);
-                }
-
-                if (declaration.Ast is A.With.Type withType && withType.Type != null)
-                {
-                    OnResolve(() =>
-                    {
-                        Resolver.ResolveType(declaration.Container, withType.Type);
-                    });
-                }
-
-                if (declaration.Ast is A.With.Value withValue && withValue.Value != null)
-                {
-                    OnResolve(() =>
-                    {
-                        Resolver.ResolveExpression(declaration.Container, withValue.Value);
-                    });
-                }
-
-                if (declaration.Ast is A.With.Extends withExtends && withExtends.Extends != null)
-                {
-                    OnResolve(() =>
-                    {
-                        Resolver.ResolveType(declaration.Container, withExtends.Extends);
-                    });
-                }
-
-                if (declaration.Ast is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
-                {
-                    OnResolve(() =>
-                    {
-                        foreach (var type in withSatisfies.Satisfies)
-                        {
-                            Resolver.ResolveType(declaration.Container, type);
-                        }
-                    });
-                }
-
-                if (declaration.Ast is A.With.Cases withCases && withCases.Cases != null)
-                {
-                    OnResolve(() =>
-                    {
-                        foreach (var type in withCases.Cases)
-                        {
-                            Resolver.ResolveType(declaration.Container, type);
-                        }
-                    });
-                }
+                WalkMany(container, withTypeParams.TypeParameters);
             }
-        }
 
-        private void Declare(A.Unit.Code code)
-        {
-            using (Push(Module.Open(code.Namespace)))
+            if (declaration is A.With.Parameters withParams)
             {
-                WalkMany(code.Declarations);
+                WalkMany(container, withParams.Parameters);
             }
-        }
+            else if (declaration is A.Decl.Infix infix)
+            {
+                Walk(container, infix.Rhs);
+            }
+            else if (declaration is A.Decl.Prefix prefix)
+            {
+            }
 
-        private void Declare(A.Generic.TypeParameter node)
-        {
-            var entity = Parent.AddChild(new Declaration.TypeParameter(node, Container.Empty(Parent)));
+            if (declaration is A.With.Body with)
+            {
+                Walk(container, with.Body);
+            }
 
-            if (node.Default != null)
+            if (declaration is A.With.Type withType && withType.Type != null)
             {
                 OnResolve(() =>
                 {
-                    Resolver.ResolveType(entity.Container, node.Default);
+                    Resolver.ResolveType(container, withType.Type);
                 });
             }
-        }
 
-        private void Declare(A.DefinitiveParameter node)
-        {
-            var entity = Parent.AddChild(new Declaration.Parameter(node, Container.Empty(Parent)));
-
-            OnResolve(() =>
-            {
-                Resolver.ResolveType(entity.Container, node.Type);
-            });
-        }
-
-        private void Declare(A.ValueParameter node)
-        {
-            var entity = Parent.AddChild(new Declaration.Parameter(node, Container.Empty(Parent)));
-
-            if (node.Type != null)
+            if (declaration is A.With.Result withResult && withResult.Result != null)
             {
                 OnResolve(() =>
                 {
-                    Resolver.ResolveType(entity.Container, node.Type);
-                    if (node.Default != null)
+                    Resolver.ResolveType(container, withResult.Result);
+                });
+            }
+
+            if (declaration is A.With.Value withValue && withValue.Value != null)
+            {
+                OnResolve(() =>
+                {
+                    Resolver.ResolveExpression(container, withValue.Value);
+                });
+            }
+
+            if (declaration is A.With.Extends withExtends && withExtends.Extends != null)
+            {
+                OnResolve(() =>
+                {
+                    Resolver.ResolveType(container, withExtends.Extends);
+                });
+            }
+
+            if (declaration is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
+            {
+                OnResolve(() =>
+                {
+                    foreach (var type in withSatisfies.Satisfies)
                     {
-                        Resolver.ResolveExpression(entity.Container, node.Default);
+                        Resolver.ResolveType(container, type);
+                    }
+                });
+            }
+
+            if (declaration is A.With.Cases withCases && withCases.Cases != null)
+            {
+                OnResolve(() =>
+                {
+                    foreach (var type in withCases.Cases)
+                    {
+                        Resolver.ResolveType(container, type);
                     }
                 });
             }
         }
 
-        private void Declare(A.Declaration node)
+        private static void Declare(Container parent, A.TreeNode node)
         {
-            DoDeclare(Parent.AddChild(new Declaration.Any(node, new DeclarationScope(Parent))));
+            Assert(false);
+            throw new NotImplementedException();
         }
 
-        private void Declare(A.Parameter node)
+        private void Declare(Container parent, A.TypeParameter node)
         {
-            DoDeclare(Parent.AddChild(new Declaration.Parameter(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Prefix node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Prefix(node, new DeclarationScope(Parent))));
-        }
-        private void Declare(A.Declaration.Infix node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Infix(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Primitive node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Primitive(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Constructor node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.CTor(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Var node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Var(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Let node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Let(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Function node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Function(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Class node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Class(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Attribute node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Attribute(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Object node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Object(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Interface node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Interface(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Declaration.Alias node)
-        {
-            DoDeclare(Parent.AddChild(new Declaration.Alias(node, new DeclarationScope(Parent))));
-        }
-
-        private void Declare(A.Statement.Return node)
-        {
-            var entity = Parent.AddChild(Statement.New(node, Parent));
-
-            if (node.Expression != null)
-            {
-                OnResolve(() =>
-                {
-                    Resolver.ResolveExpression(entity.Container, node.Expression);
-                });
-
-            }
-        }
-
-        private void Declare(A.Statement.Assert node)
-        {
-            Parent.AddChild(Statement.New(node, Parent));
-        }
-
-        private void Declare(A.Statement.For node)
-        {
-            Parent.AddChild(Statement.New(node, Parent));
-        }
-
-        private void Declare(A.Statement.If node)
-        {
-            Parent.AddChild(Statement.New(node, Parent));
-        }
-
-        private void Declare(A.Statement.Expr node)
-        {
-            var entity = Parent.AddChild(Statement.New(node, Parent));
+            parent.AddChild(node);
 
             OnResolve(() =>
             {
-                Resolver.ResolveExpression(entity.Container, node.Expression);
+                Resolver.ResolveType(parent, node.Default);
             });
         }
 
-        private void Declare(A.Statement.Assign node)
+        private void Declare(Container parent, A.DefinitiveParameter node)
         {
-            var entity = Parent.AddChild(Statement.New(node, Parent));
+            parent.AddChild(node);
 
             OnResolve(() =>
             {
-                Resolver.ResolveExpression(entity.Container, node.Left);
-                Resolver.ResolveExpression(entity.Container, node.Right);
+                Resolver.ResolveType(parent, node.Type);
             });
         }
 
-        private void Declare(A.Body.Block node)
+        private void Declare(Container parent, A.ValueParameter node)
         {
-            var entity = Parent.AddChild(Statement.Block.New(node, new BlockScope(Parent)));
-
-            using (Push(entity.Container))
-            {
-                WalkMany(node.Statelarations);
-            }
-        }
-
-        private void Declare(A.Body.Value node)
-        {
-            var container = Parent;
+            parent.AddChild(node);
 
             OnResolve(() =>
             {
-                Resolver.ResolveExpression(container, node.Expression);
+                Resolver.ResolveType(parent, node.Type);
+                Resolver.ResolveExpression(parent, node.Default);
             });
         }
 
-        private void Declare(A.Body.Deferred node)
+        private void Declare(Container parent, A.Decl.Prefix node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+        private void Declare(Container parent, A.Decl.Infix node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Primitive node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Constructor node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Var node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Let node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Function node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Class node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Attribute node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Object node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Interface node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Decl.Alias node)
+        {
+            var content = new DeclarationScope(parent);
+            DoDeclare(content, parent.AddChild(node));
+        }
+
+        private void Declare(Container parent, A.Stmt.Return node)
+        {
+            parent.AddChild(node);
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(parent, node.Expression);
+            });
+        }
+
+        private void Declare(Container parent, A.Stmt.Assert node)
+        {
+            parent.AddChild(node);
+        }
+
+        private void Declare(Container parent, A.Stmt.For node)
+        {
+            parent.AddChild(node);
+        }
+
+        private void Declare(Container parent, A.Stmt.If node)
+        {
+            parent.AddChild(node);
+        }
+
+        private void Declare(Container parent, A.Stmt.Expr node)
+        {
+            parent.AddChild(node);
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(parent, node.Expression);
+            });
+        }
+
+        private void Declare(Container parent, A.Stmt.Assign node)
+        {
+            parent.AddChild(node);
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(parent, node.Left);
+                Resolver.ResolveExpression(parent, node.Right);
+            });
+        }
+
+        private void Declare(Container parent, A.Body.Block node)
+        {
+            var content = new BlockScope(parent);
+            parent.AddChild(node);
+
+            WalkMany(content, node.Statelarations);
+        }
+
+        private void Declare(Container parent, A.Body.Value node)
+        {
+            OnResolve(() =>
+            {
+                Resolver.ResolveExpression(parent, node.Expression);
+            });
+        }
+
+        private void Declare(Container parent, A.Body.Deferred node)
         {
         }
 
-        private void Declare(A.Body.Builtin node)
+        private void Declare(Container parent, A.Body.Builtin node)
         {
         }
 
-        private void Declare(A.Node node)
+        private void Declare(Container parent, A.Node node)
         {
             Assert(false);
         }

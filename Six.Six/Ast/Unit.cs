@@ -12,7 +12,7 @@ namespace Six.Six.Ast
         public sealed record Code(
             IRNode Tree, 
             NamespaceIntro Namespace,
-            Using.Usings Usings,
+            Usings Usings,
             Declarations Declarations) : Unit;
         public sealed record Module(IRNode Tree, Names Names) : Unit;
     }

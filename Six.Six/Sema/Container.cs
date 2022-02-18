@@ -8,8 +8,8 @@ namespace Six.Six.Sema
     {
         Container Parent { get; }
         public Module Module => Parent.Module;
-        IReadOnlyList<Entity> Children { get; }
-        T AddChild<T>(T entity) where T : Entity;
+        IReadOnlyList<A.TreeNode> Children { get; }
+        T AddChild<T>(T node) where T : A.TreeNode;
         Declarations Resolve(A.Reference reference);
 
         public static Container Empty(Container parent)
@@ -24,8 +24,8 @@ namespace Six.Six.Sema
                 Parent = parent;
             }
             public Container Parent { get; }
-            public IReadOnlyList<Entity> Children { get; } = Array.Empty<Entity>();
-            public T AddChild<T>(T entity) where T: Entity => throw new NotImplementedException();
+            public IReadOnlyList<A.TreeNode> Children { get; } = Array.Empty<A.TreeNode>();
+            public T AddChild<T>(T node) where T: A.TreeNode => throw new NotImplementedException();
             public Declarations Resolve(A.Reference reference) => Parent.Resolve(reference);
         }
     }

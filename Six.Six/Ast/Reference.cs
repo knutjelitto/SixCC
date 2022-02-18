@@ -2,7 +2,7 @@
 
 namespace Six.Six.Ast
 {
-    public sealed record Reference(IRNode Tree, Name Name, Generic.TypeArguments? Arguments)
+    public sealed record Reference(IRNode Tree, Name Name, TypeArguments? Arguments)
         : Expression, Type
     {
         public Reference(RLiteral literal) : this(literal, new Name.Id(literal), null)

@@ -4,56 +4,46 @@ namespace Six.Six.Sema
 {
     public static class Extensions
     {
-        public static Location GetLocation(this Entity entity)
+        public static Location GetLocation(this A.TreeNode node)
         {
-            if (entity.Ast is A.With.Name named)
+            if (node is A.With.Name named)
             {
                 return Location.From(named.Name.Tree);
             }
             else
             {
 
-                return Location.From(entity.Ast.Tree);
+                return Location.From(node.Tree);
             }
         }
 
-        public static string GetKindOne(this Entity entity)
+        public static string GetKindOne(this A.TreeNode node)
         {
-            return entity.GetKind().Substring(0, 1);
+            return node.GetKind().Substring(0, 1);
         }
 
-        public static string GetKind(this Entity entity)
+        public static string GetKind(this A.TreeNode node)
         {
-            return entity.Ast.GetType().Name;
+            return node.GetType().Name;
         }
 
-        public static string GetName(this Entity entity)
+        public static string GetName(this A.TreeNode node)
         {
-            if (entity.Ast is A.With.Name named)
+            if (node is A.With.Name named)
             {
                 return named.Name.Text;
             }
             return "--no-name--";
         }
 
-        public static IEnumerable<Declaration> GetDeclarations(this Container container)
+        public static bool IsShared(this A.TreeNode node)
         {
-            return container.Children.OfType<Declaration>();
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith("shared");
         }
 
-        public static IEnumerable<Statement> GetStatements(this Container container)
+        public static bool IsNative(this A.TreeNode node)
         {
-            return container.Children.OfType<Statement>();
-        }
-
-        public static bool IsShared(this Entity entity)
-        {
-            return entity.Ast is A.With.Prelude withPrelude && withPrelude.IsWith("shared");
-        }
-
-        public static bool IsNative(this Entity entity)
-        {
-            return entity.Ast is A.With.Prelude withPrelude && withPrelude.IsWith("native");
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith("native");
         }
 
         public static bool IsWith(this A.With.Prelude withPrelude, string attribute)

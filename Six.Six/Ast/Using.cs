@@ -14,8 +14,12 @@ namespace Six.Six.Ast
             public sealed record Wildcard(IRNode Tree)
                 : Element(Tree);
         }
+    }
 
-        public sealed record Usings(IRNode Tree, IEnumerable<Using> Items)
-            : Many<Using>(Tree, Items);
+    public sealed record Usings(IRNode Tree, IEnumerable<Using> Items)
+        : Many<Using>(Tree, Items)
+    {
+        public Usings(IRNode Tree, params Using[] Items) : this(Tree, Items.AsEnumerable())
+        { }
     }
 }

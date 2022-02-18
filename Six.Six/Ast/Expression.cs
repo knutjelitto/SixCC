@@ -54,19 +54,8 @@ namespace Six.Six.Ast
             Reference Op { get; }
         }
 
-        public interface IInfix : OpExpression
-        {
-            Expression Left { get; }
-            Expression Right { get; }
-        }
-
-        public interface IPrefix : OpExpression
-        {
-            Expression Expr { get; }
-        }
-
-        public sealed record Prefix(IRNode Tree, Reference Op, Expression Expr) : IPrefix;
-        public sealed record Infix(IRNode Tree, Reference Op, Expression Left, Expression Right) : IInfix;
+        public sealed record Prefix(IRNode Tree, Reference Op, Expression Expr) : OpExpression;
+        public sealed record Infix(IRNode Tree, Reference Op, Expression Left, Expression Right) : OpExpression;
 
         public sealed record AndThen(IRNode Tree, Expression Left, Expression Right) : Expression;
         public sealed record OrElse(IRNode Tree, Expression Left, Expression Right) : Expression;

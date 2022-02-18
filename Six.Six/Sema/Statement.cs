@@ -10,7 +10,7 @@ namespace Six.Six.Sema
             private sealed record Impl(A.TreeNode Ast, Container Container) : Block;
         }
 
-        public static Statement New(A.Statement statement, Container container) => new Impl(statement, container);
+        public static Statement New(A.Stmt statement, Container container) => new Impl(statement, container);
         private sealed record Impl(A.TreeNode Ast, Container Container) : Statement;
     }
 }

@@ -18,13 +18,9 @@ namespace Six.Six.Sema
             Writer = writer;
         }
 
-        public void DumpEntity(Entity entity)
+        public void DumpEntity(A.TreeNode node)
         {
-            Dump((dynamic)entity);
-            using (Writer.Indent())
-            {
-                DumpTree(entity.Ast);
-            }
+            DumpTree(node);
         }
 
         private void DumpTree(A.TreeNode tree)
@@ -37,59 +33,10 @@ namespace Six.Six.Sema
             Assert(true);
         }
 
-        private void Dump(A.Statement.Expr tree)
+        private void Dump(A.Stmt.Expr tree)
         {
             Writer.WriteLine($"Expr.Statement");
             Assert(true);
-        }
-
-
-        private void DumpInner(Entity entity)
-        {
-            using (Writer.Indent())
-            {
-                DumpAttrs(entity);
-                if (entity is WithContainer with)
-                foreach (var child in with.Container.Children)
-                {
-                    DumpEntity(child);
-                }
-            }
-        }
-
-        private void Dump(Declaration declaration)
-        {
-            Writer.WriteLine($"{declaration.GetKind()} {declaration.GetName()}");
-
-            DumpInner(declaration);
-        }
-
-        private void Dump(Statement statement)
-        {
-            Writer.WriteLine($"{nameof(Statement)} {statement.GetKind()}");
-        }
-
-        private void Dump(Statement.Block block)
-        {
-            Writer.WriteLine($"{nameof(Statement.Block)}");
-
-            Writer.WriteLine("{");
-            DumpInner(block);
-            Writer.WriteLine("}");
-        }
-
-        private void Dump(Entity entity)
-        {
-            Assert(false);
-        }
-
-        private void DumpAttrs(Entity entity)
-        {
-            var attrs = Attrs(entity);
-            if (attrs != null)
-            {
-                Writer.WriteLine(attrs);
-            }
         }
 
         private static string? Attrs(Entity declaration)

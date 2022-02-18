@@ -4,8 +4,13 @@ namespace Six.Six.Sema
 {
     public sealed partial class Resolver
     {
-        public Expression? ResolveExpression(Container container, A.Expression expressionNode)
+        public Expression? ResolveExpression(Container container, A.Expression? expressionNode)
         {
+            if (expressionNode == null)
+            {
+                return null;
+            }
+
             switch (expressionNode)
             {
                 case A.Expression.Call node:
@@ -60,7 +65,6 @@ namespace Six.Six.Sema
                     if (reference.Declarations.Count == 1)
                     {
                         var declaration = reference.Declarations[0];
-                        var container = declaration.Container;
                     }
                 }
 
@@ -111,7 +115,7 @@ namespace Six.Six.Sema
                 return type;
             }
 
-            Expression? Prefix(A.Expression.IPrefix node)
+            Expression? Prefix(A.Expression.Prefix node)
             {
                 var declarations = ResolveOp(node, "prefix");
                 var expr = ResolveExpression(container, node.Expr);
@@ -123,7 +127,7 @@ namespace Six.Six.Sema
                 return null;
             }
 
-            Expression? Infix(A.Expression.IInfix node)
+            Expression? Infix(A.Expression.Infix node)
             {
                 var declarations = ResolveOp(node, "infix");
                 var left = ResolveExpression(container, node.Left);

@@ -7,6 +7,7 @@ namespace Six.Six.Sema
         public sealed record Union(params Type[] Types) : Type;
         public sealed record Intersection(params Type[] Types) : Type;
         public sealed record Nothing() : Type;
+        public sealed record Empty() : Type;
 
         public Type? UnionWith(Type? type)
         {

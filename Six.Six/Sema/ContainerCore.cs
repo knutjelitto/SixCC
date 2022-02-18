@@ -7,7 +7,7 @@ namespace Six.Six.Sema
     public abstract class ContainerCore : Container
     {
         private readonly Dictionary<string, Declarations> items = new();
-        private readonly List<Entity> children = new();
+        private readonly List<A.TreeNode> children = new();
 
         public ContainerCore(Container parent)
         {
@@ -17,13 +17,13 @@ namespace Six.Six.Sema
         public Module Module => Parent.Module;
         public Container Parent { get; }
 
-        public IReadOnlyList<Entity> Children => children;
+        public IReadOnlyList<A.TreeNode> Children => children;
 
-        public T AddChild<T>(T entity) where T: Entity
+        public T AddChild<T>(T entity) where T: A.TreeNode
         {
             children.Add(entity);
 
-            if (entity is Declaration declaration)
+            if (entity is A.Decl declaration)
             {
                 Declare(declaration);
             }
@@ -36,12 +36,12 @@ namespace Six.Six.Sema
             return items.Values;
         }
 
-        public IEnumerable<Declaration> GetDeclarationsFlat()
+        public IEnumerable<A.Decl> GetDeclarationsFlat()
         {
             return items.Values.SelectMany(decls => decls);
         }
 
-        public IEnumerable<Entity> GetAllEntities()
+        public IEnumerable<A.TreeNode> GetAllEntities()
         {
             return children;
         }
@@ -66,8 +66,12 @@ namespace Six.Six.Sema
             return declarations;
         }
 
-        private void Declare(Declaration declaration)
+        private void Declare(A.Decl declaration)
         {
+            if (declaration.Name.Text == "_+_")
+            {
+                Assert(true);
+            }
             if (!items.TryGetValue(declaration.Name.Text, out var declarations))
             {
                 declarations = new Declarations(declaration.Name.Text);

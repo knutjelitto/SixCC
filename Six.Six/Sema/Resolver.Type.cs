@@ -17,8 +17,13 @@ namespace Six.Six.Sema
             return null;
         }
 
-        public void ResolveType(Container container, A.Type typeNode)
+        public void ResolveType(Container container, A.Type? typeNode)
         {
+            if (typeNode == null)
+            {
+                return;
+            }
+
             var type = ResolveTypeIntern(container, typeNode);
 
             if (type != null)

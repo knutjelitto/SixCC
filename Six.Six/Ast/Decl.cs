@@ -24,6 +24,11 @@ namespace Six.Six.Ast
             Ast.Type? Type { get; }
         }
 
+        public interface Result : Node
+        {
+            Ast.Type? Result { get; }
+        }
+
         public interface Value : Node
         {
             Ast.Expression? Value { get; }
@@ -36,8 +41,8 @@ namespace Six.Six.Ast
 
         public interface Generics : Node
         {
-            Ast.Generic.TypeParameters? TypeParameters { get; }
-            Ast.Generic.Constraints? Constraints { get; }
+            Ast.TypeParameters? TypeParameters { get; }
+            Ast.TypeConstraints? Constraints { get; }
         }
 
         public interface Extends : Node
@@ -56,45 +61,42 @@ namespace Six.Six.Ast
         }
     }
 
-    public interface Declaration : TreeNode, Statelaration, With.Name
-    {
-        public interface Entity : Declaration, With.Prelude
-        {
-        }
+    public sealed record Declarations(IRNode Tree, IEnumerable<Decl> Items)
+        : Many<Decl>(Tree, Items);
 
+    public interface Decl : StmtOrDecl, With.Name
+    {
         public sealed record Let(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
-            :   Entity,
+            :   Decl,
+                With.Name,
+                With.Prelude,
                 With.Type,
                 With.Value;
 
         public sealed record Var(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
-            :   Entity,
+            :   Decl,
+                With.Name,
+                With.Prelude,
                 With.Type,
                 With.Value;
 
-        public abstract record EntityImpl(
-            IRNode Tree,
-            Prelude Prelude,
-            Name Name,
-            Generic.TypeParameters? TypeParameters,
-            Generic.Constraints? Constraints,
-            Parameters? Parameters,
-            Type? Extends,
-            Type.Types? Satisfies,
-            Type.Types? Cases
-            )
-            : Entity;
-
-        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name)
-            :   Entity;
+        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name, Body Body)
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Body;
 
         public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameter Rhs, Body Body)
-            :   Entity,
+            :   Decl,
+                With.Name,
+                With.Prelude,
                 With.Type,
                 With.Body;
 
         public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Body Body)
-            :   Entity,
+            :   Decl,
+                With.Name,
+                With.Prelude,
                 With.Type,
                 With.Body;
 
@@ -102,15 +104,18 @@ namespace Six.Six.Ast
             IRNode Tree, 
             Prelude Prelude,
             Name Name,
-            Generic.TypeParameters? Generics,
-            Generic.Constraints? Constraints,
+            TypeParameters? TypeParameters,
+            TypeConstraints? Constraints,
             Type? Result,
             Parameters Parameters,
             Body Body)
-        :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, Parameters, null, null, null),
-            With.Generics,
-            With.Parameters,
-            With.Body;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Generics,
+                With.Parameters,
+                With.Result,
+                With.Body;
 
         public sealed record Attribute(
             IRNode Tree, 
@@ -118,44 +123,51 @@ namespace Six.Six.Ast
             Name Name,
             Type? Type,
             Body Body)
-        :   EntityImpl(Tree, Prelude, Name, null, null, null, null, null, null),
-            With.Body;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Type,
+                With.Body;
 
         public sealed record Class(
             IRNode Tree, 
             Prelude Prelude,
             Name Name,
-            Generic.TypeParameters? Generics,
-            Generic.Constraints? Constraints,
+            TypeParameters? TypeParameters,
+            TypeConstraints? Constraints,
             Parameters? Parameters,
             Type? Extends,
             Type.Types? Satisfies,
             Type.Types? Cases,
             Body Body)
-        :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, Parameters, Extends, Satisfies, Cases),
-            With.Body,
-            With.Generics,
-            With.Parameters,
-            With.Extends,
-            With.Satisfies,
-            With.Cases;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Body,
+                With.Generics,
+                With.Parameters,
+                With.Extends,
+                With.Satisfies,
+                With.Cases;
 
         public sealed record Interface(
             IRNode Tree, 
             Prelude Prelude,
             Name Name,
-            Generic.TypeParameters? Generics,
-            Generic.Constraints? Constraints,
+            TypeParameters? TypeParameters,
+            TypeConstraints? Constraints,
             Parameters? Parameters,
             Type.Types? Satisfies,
             Type.Types? Cases,
             Body Body)
-        :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, Parameters, null, Satisfies, Cases),
-            With.Body,
-            With.Generics,
-            With.Parameters,
-            With.Satisfies,
-            With.Cases;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Body,
+                With.Generics,
+                With.Parameters,
+                With.Satisfies,
+                With.Cases;
 
         public sealed record Object(
             IRNode Tree,
@@ -164,31 +176,35 @@ namespace Six.Six.Ast
             Type? Extends,
             Type.Types? Satisfies,
             Body Body)
-        :   EntityImpl(Tree, Prelude, Name, null, null, null, Extends, Satisfies, null),
-            With.Body,
-            With.Extends,
-            With.Satisfies;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Body,
+                With.Extends,
+                With.Satisfies;
 
         public sealed record Alias(
             IRNode Tree,
             Prelude Prelude,
             Name Name,
-            Generic.TypeParameters? Generics,
-            Generic.Constraints? Constraints,
+            TypeParameters? TypeParameters,
+            TypeConstraints? Constraints,
             Type Result)
-        :   EntityImpl(Tree, Prelude, Name, Generics, Constraints, null, null, null, null),
-            With.Generics;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Generics;
 
         public sealed record Constructor(
             IRNode Tree,
             Prelude Prelude,
-            Name? Name,
+            Name Name,
             Parameters Parameters,
             Body Body)
-        : EntityImpl(Tree, Prelude, Name ?? new Name.ArtificalId("default.ctor"), null, null, Parameters, null, null, null),
-            With.Parameters,
-            With.Body;
+            :   Decl,
+                With.Name,
+                With.Prelude,
+                With.Parameters,
+                With.Body;
     }
-
-    public sealed record Declarations(IRNode Tree, IEnumerable<Declaration> Items) : Many<Declaration>(Tree, Items);
 }

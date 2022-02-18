@@ -4,8 +4,8 @@ namespace Six.Six.Sema
 {
     public interface Entity : WithContainer
     {
-        public bool IsShared => this.IsShared();
-        public bool IsNative => this.IsNative();
+        public bool IsShared => Ast.IsShared();
+        public bool IsNative => Ast.IsNative();
 
         A.TreeNode Ast { get; }
     }

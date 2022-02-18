@@ -42,9 +42,9 @@ namespace Six.Six.Sema
         Module Container.Module => this;
         public Resolver Resolver { get; }
 
-        public IReadOnlyList<Entity> Children => Enumerable.Empty<Entity>().ToList();
+        public IReadOnlyList<A.TreeNode> Children => Enumerable.Empty<A.TreeNode>().ToList();
 
-        public T AddChild<T>(T entity) where T: Entity
+        public T AddChild<T>(T node) where T: A.TreeNode
         {
             throw new InvalidOperationException();
         }
@@ -138,8 +138,8 @@ namespace Six.Six.Sema
                 count += 1;
 
                 var attrs = new StringBuilder();
-                attrs.Append(declaration.IsShared ? "S" : " ");
-                attrs.Append(declaration.IsNative ? "N" : " ");
+                attrs.Append(declaration.IsShared() ? "S" : " ");
+                attrs.Append(declaration.IsNative() ? "N" : " ");
 
                 writer.WriteLine($"{count,3} {declaration.GetKind(),-12} [{attrs}] {declaration.GetName(),-30} {declaration.GetLocation()}");
             }
