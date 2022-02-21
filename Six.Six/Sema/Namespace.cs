@@ -16,9 +16,9 @@ namespace Six.Six.Sema
 
         public string Name { get; }
 
-        public override Declarations Resolve(A.Reference reference)
+        public override A.Decl? Resolve(A.Reference reference)
         {
-            return Find(reference, reference.Name.Text);
+            return Find(reference.Name.Text);
         }
 
         public Namespace Open(string name)

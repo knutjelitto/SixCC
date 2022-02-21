@@ -1,154 +1,241 @@
-﻿using A = Six.Six.Ast;
+﻿using Six.Core.Errors;
+using System;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
     public sealed partial class Resolver
     {
-        public Expression? ResolveExpression(Container container, A.Expression? expressionNode)
+        public void ResolveExpression(Container container, A.Expression? expressionNode)
         {
             if (expressionNode == null)
             {
-                return null;
+                return;
             }
 
-            switch (expressionNode)
+            try
             {
-                case A.Expression.Call node:
-                    {
-                        var expr = ResolveExpression(container, node.Expr);
-                        var args = ResolveMany(container, node.Arguments);
-                        if (expr != null && args != null)
-                        {
-                            var type = TypeOf(expr.Ast);
-                            return new Expression.Call(node, expr, args.ToArray());
-                        }
-                        return null;
-                    }
-                case A.Reference node:
-                    {
-                        return Reference(node);
-                    }
-                case A.Expression.Prefix node:
-                    {
-                        return Prefix(node);
-                    }
-                case A.Expression.Infix node:
-                    {
-                        return Infix(node);
-                    }
-                case A.Expression.Select node:
-                    {
-                        return Select(node);
-                    }
-                case A.Expression.NaturalNumber node:
-                    {
-                        var value = ConvertNatural(node.Text);
-                        var type = NaturalType(node, value);
-                        if (type != null)
-                        {
-                            return new Expression.NaturalLiteral(node, type, value);
-                        }
-                        return null;
-                    }
-                default:
-                    Didnt(expressionNode, expressionNode.GetType().Name);
-                    return null;
+                ResolveExpressionIntern(container, expressionNode);
             }
-
-
-            Expression? Reference(A.Reference node)
+            catch (DiagnosticException diagnostics)
             {
-                var reference = ResolveReference(container, node);
-
-                if (reference != null)
+                var retry = false;
+                foreach (var diagnostic in diagnostics.Diagnostics)
                 {
-                    if (reference.Declarations.Count == 1)
+                    Module.Add(diagnostic);
+
+                    if (diagnostic is SemanticError semantic)
                     {
-                        var declaration = reference.Declarations[0];
+                        retry = retry || semantic.Message.EndsWith("XXX");
                     }
                 }
 
-                return reference;
-            }
-
-
-            Expression? Select(A.Expression.Select node)
-            {
-                _ = ResolveExpression(container, node.Expr);
-
-                Didnt(expressionNode, expressionNode.GetType().Name);
-                return null;
-            }
-
-            Type? NaturalType(A.TreeNode node, ulong value)
-            {
-                Type? type = ResolveInCore(node, Module.UInt64);
-                if (type != null && value <= long.MaxValue)
+                if (retry)
                 {
-                    type = type.UnionWith(ResolveInCore(node, Module.Int64));
-                    if (type != null && value <= uint.MaxValue)
+                    throw new InvalidProgramException("RETRY");
+                }
+            }
+            catch (Exception)
+            {
+                Didnt(expressionNode, expressionNode.GetType().Name);
+            }
+        }
+
+        private Expression ResolveExpressionIntern(Container container, A.Expression expressionNode)
+        {
+            var resolved = resolve(container, expressionNode);
+            this[expressionNode].Expr = resolved;
+            this[expressionNode].Type = resolved.Type;
+
+            return resolved;
+
+
+            Expression resolve(Container container, A.Expression expressionNode)
+            {
+
+                switch (expressionNode)
+                {
+                    case A.Reference node:
+                        return Reference(node);
+                    case A.Expression.Call node:
+                        return Call(node);
+                    case A.Expression.Prefix node:
+                        return Prefix(node);
+                    case A.Expression.Infix node:
+                        return Infix(node);
+                    case A.Expression.Select node:
+                        return Select(node);
+                    case A.Expression.NaturalNumber node:
+                        return Natural(node);
+                    default:
+                        throw new NotImplementedException($"resolving `{expressionNode.GetType().Name}´");
+                }
+            }
+
+
+            Expression Reference(A.Reference node)
+            {
+                return ResolveReference(container, node);
+            }
+
+
+            Expression Natural(A.Expression.NaturalNumber node)
+            {
+                var value = ConvertNatural(node.Text);
+                var type = NaturalType(node, value);
+
+                return new Expression.NaturalLiteral(Assoc.From(this, node), type, value);
+
+                Type NaturalType(A.TreeNode node, ulong value)
+                {
+                    if (value > long.MaxValue)
                     {
-                        type = type.UnionWith(ResolveInCore(node, Module.UInt32));
-                        if (type != null && value <= int.MaxValue)
+                        return ResolveInCore(node, Module.Core.UInt64);
+                    }
+                    else if (value > int.MaxValue)
+                    {
+                        return ResolveInCore(node, Module.Core.Int64);
+                    }
+                    else
+                    {
+                        return ResolveInCore(node, Module.Core.Int32);
+                    }
+                }
+            }
+
+
+            Expression Call(A.Expression.Call node)
+            {
+                var primary = ResolveExpressionIntern(container, node.Expr);
+                var args = ResolveMany(container, node.Arguments);
+                
+                var exprType = primary.Type.Resolved;
+
+                if (exprType is Expression.Callable callable)
+                {
+                    Assert(args.Length == callable.Arguments.Length);
+                    return new Expression.Call(Assoc.From(this, node), callable.Type, callable, args);
+                }
+
+                Assert(exprType is Type.Classy);
+                if (exprType is Type.Classy classy)
+                {
+                    if (classy.Node() is A.Decl.Class)
+                    {
+                        var assoc = this[classy.Node()];
+                        Assert(assoc.Scope is WhiteMemberScope);
+                        if (assoc.Scope is WhiteMemberScope white)
                         {
-                            type = type.UnionWith(ResolveInCore(node, Module.Int32));
-                            if (type != null && value <= ushort.MaxValue)
+                            // default constructor
+                            var dctor = white.Members.Find(Module.DefaultCtor);
+                            Assert(dctor != null);
+                            if (dctor != null)
                             {
-                                type = type.UnionWith(ResolveInCore(node, Module.UInt16));
-                                if (type != null && value <= (ulong)short.MaxValue)
+                                var type = this[classy.Assoc.Node].Type;
+                                Assert(type != null);
+                                return new Expression.CallCtor(Assoc.From(this, node), type, primary, args);
+                            }
+                        }
+                    }
+                    else if (classy.Node() is A.Decl.Primitive)
+                    {
+                        Assert(false);
+                    }
+                }
+
+                Assert(false);
+                throw new NotImplementedException();
+            }
+
+
+            Expression Select(A.Expression.Select node)
+            {
+                var expr = ResolveExpressionIntern(container, node.Expr);
+                var exprType = expr.Type.Resolved;
+
+                Assert(exprType is Type.Classy);
+                if (exprType is Type.Classy classy)
+                {
+                    var scope = classy.Scope();
+                    Assert(scope is WhiteMemberScope);
+                    if (scope is WhiteMemberScope white)
+                    {
+                        var member = ResolveMember(white, node.Reference);
+                        return new Expression.Select(Assoc.From(this, node), expr, member);
+                    }
+                }
+
+                throw Diagnostic(node, "not implemented");
+            }
+
+            Expression Prefix(A.Expression.Prefix node)
+            {
+                var primary = ResolveExpressionIntern(container, node.Expr);
+                var type = primary.Type.Resolved;
+
+                if (type is Type.Classy classy)
+                {
+                    var scope = classy.Scope();
+                    Assert(scope is WhiteMemberScope);
+                    if (scope is WhiteMemberScope white)
+                    {
+                        var member = ResolveMember(white, node.Op, node.Op.Name.Text + "_");
+                        Assert(member is Expression.Callable);
+                        if (member is Expression.Callable callable)
+                        {
+                            Assert(callable.Node() is A.Decl.Prefix);
+                            return new Expression.Call(Assoc.From(this, node), callable.Type, callable);
+                        }
+                    }
+                }
+
+                throw Diagnostic(node, "not implemented");
+            }
+
+            Expression Infix(A.Expression.Infix node)
+            {
+                var left = ResolveExpressionIntern(container, node.Left);
+                var right = ResolveExpressionIntern(container, node.Right);
+                if (left != null && right != null)
+                {
+                    if (this[node.Left].ResolvedType() is Type.Classy classy)
+                    {
+                        var assoc = this[classy.Assoc.Node];
+                        Assert(assoc.Scope is WhiteMemberScope);
+                        if (assoc.Scope is WhiteMemberScope white)
+                        {
+                            var name = "_" + node.Op.Name.Text + "_";
+                            if (white.Members.Find(name) is A.Decl.Infix infix)
+                            {
+                                var result = this[infix.Type].Type;
+                                Assert(result != null);
+                                if (result != null)
                                 {
-                                    type = type.UnionWith(ResolveInCore(node, Module.Int16));
-                                    if (type != null && value <= byte.MaxValue)
+                                    var rightType = this[node.Right].ResolvedType();
+                                    var rhsType = this[infix.Parameters[0]].ResolvedType();
+                                    if (rightType != null && rhsType != null && ReferenceEquals(rightType, rhsType))
                                     {
-                                        type = type.UnionWith(ResolveInCore(node, Module.UInt8));
-                                        if (type != null && value <= (ulong)sbyte.MaxValue)
-                                        {
-                                            type = type.UnionWith(ResolveInCore(node, Module.Int8));
-                                        }
+                                        return new Expression.Infix(Assoc.From(this, node), result, left, right);
                                     }
                                 }
                             }
                         }
                     }
                 }
+                ResolveOp(node, "infix");
 
-                return type;
+                throw new NotImplementedException();
             }
 
-            Expression? Prefix(A.Expression.Prefix node)
+            A.Decl? ResolveOp(A.Expression.OpExpression node, string xfix)
             {
-                var declarations = ResolveOp(node, "prefix");
-                var expr = ResolveExpression(container, node.Expr);
-                if (declarations != null && expr != null)
+                var decl = container.Resolve(node.Op);
+                if (decl == null)
                 {
-                    Assert(declarations.Count > 0);
-                    return new Expression.Prefix(node, expr);
-                }
-                return null;
-            }
-
-            Expression? Infix(A.Expression.Infix node)
-            {
-                var declarations = ResolveOp(node, "infix");
-                var left = ResolveExpression(container, node.Left);
-                var right = ResolveExpression(container, node.Right);
-                if (declarations != null && left != null && right != null)
-                {
-                    Assert(declarations.Count > 0);
-                    return new Expression.Infix(node, left, right);
-                }
-                return null;
-            }
-
-            Declarations? ResolveOp(A.Expression.OpExpression node, string xfix)
-            {
-                var declarations = container.Resolve(node.Op);
-                if (declarations.Count == 0)
-                {
-                    Didnt(node.Op, $"{xfix}-operator `{node.Op.Name.Text}´");
+                    Didnt(node.Op, $"unresolved {xfix}-operator `{node.Op.Name.Text}´");
                     return null;
                 }
-                return declarations;
+                return decl;
             }
         }
 

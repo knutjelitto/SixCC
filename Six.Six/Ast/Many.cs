@@ -3,18 +3,18 @@ using System.Collections;
 
 namespace Six.Six.Ast
 {
-    public record Many<T> : NodeList, IReadOnlyList<T>
+    public record Many<T> : TreeNodeImpl, NodeList, IReadOnlyList<T>
         where T : TreeNode
     {
         private readonly List<T> items;
 
         public Many(IRNode tree, IEnumerable<T> items)
+            : base(tree)
         {
             this.items = items.ToList();
             Tree = tree;
         }
 
-        public IRNode Tree { get; }
         IEnumerable<TreeNode> NodeList.Items => (IEnumerable<TreeNode>)items;
 
         public T this[int index] => items[index];

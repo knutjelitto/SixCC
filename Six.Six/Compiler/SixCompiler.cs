@@ -26,7 +26,7 @@ namespace Six.Six.Compiler
                 ruleIndex = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
             }
 
-            visitor = new SixVisitor();
+            visitor = new SixVisitor(Module.Resolver);
         }
 
         private void Report()

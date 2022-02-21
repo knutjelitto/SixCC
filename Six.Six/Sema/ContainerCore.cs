@@ -6,9 +6,10 @@ namespace Six.Six.Sema
 {
     public abstract class ContainerCore : Container
     {
-        private readonly Dictionary<string, Declarations> items = new();
+        private readonly Dictionary<string, A.Decl> items = new();
         private readonly List<A.TreeNode> children = new();
 
+        [DebuggerStepThrough]
         public ContainerCore(Container parent)
         {
             Parent = parent;
@@ -19,6 +20,7 @@ namespace Six.Six.Sema
 
         public IReadOnlyList<A.TreeNode> Children => children;
 
+        [DebuggerStepThrough]
         public T AddChild<T>(T entity) where T: A.TreeNode
         {
             children.Add(entity);
@@ -31,14 +33,9 @@ namespace Six.Six.Sema
             return entity;
         }
 
-        public IEnumerable<Declarations> GetDeclarations()
+        public IEnumerable<A.Decl> GetDeclarations()
         {
             return items.Values;
-        }
-
-        public IEnumerable<A.Decl> GetDeclarationsFlat()
-        {
-            return items.Values.SelectMany(decls => decls);
         }
 
         public IEnumerable<A.TreeNode> GetAllEntities()
@@ -46,44 +43,39 @@ namespace Six.Six.Sema
             return children;
         }
 
-        public virtual Declarations Resolve(A.Reference reference)
+        public virtual A.Decl? Resolve(A.Reference reference)
         {
-            if (items.TryGetValue(reference.Name.Text, out var declaration))
+            if (items.TryGetValue(reference.Name.Text, out var decl))
             {
-                return declaration;
+                return decl;
             }
             return Parent.Resolve(reference);
         }
 
-        public virtual Declarations Find(A.TreeNode usage, string name)
+        public virtual A.Decl? Find(string name)
         {
-            if (!items.TryGetValue(name, out var declarations))
+            if (items.TryGetValue(name, out var decl))
             {
-                declarations = new Declarations(name);
-                items.Add(name, declarations);
+                return decl;
             }
-            declarations.Use(usage);
-            return declarations;
+            return null;
         }
 
-        private void Declare(A.Decl declaration)
+        private void Declare(A.Decl decl)
         {
-            if (declaration.Name.Text == "_+_")
+            if (items.ContainsKey(decl.Name.Text))
             {
-                Assert(true);
+                DupError(decl);
             }
-            if (!items.TryGetValue(declaration.Name.Text, out var declarations))
+            else
             {
-                declarations = new Declarations(declaration.Name.Text);
-                items.Add(declaration.Name.Text, declarations);
+                items[decl.Name.Text] = decl;
             }
-            declarations.Add(declaration);
         }
-
-#if false
-        private void DupError(Declaration named)
+        
+        private void DupError(A.Decl named)
         {
-            if (!items.TryGetValue(named.Name, out var already))
+            if (!items.TryGetValue(named.Name.Text, out var already))
                 throw new System.InvalidOperationException("--internal--");
 
             var diagnostic1 = new SemanticError(named.GetLocation(), $"identifier '{named.Name}' already introduced elsewhere");
@@ -92,6 +84,5 @@ namespace Six.Six.Sema
             Module.Add(diagnostic1);
             Module.Add(diagnostic2);
         }
-#endif
     }
 }

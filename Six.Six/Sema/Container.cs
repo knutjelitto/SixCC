@@ -10,8 +10,9 @@ namespace Six.Six.Sema
         public Module Module => Parent.Module;
         IReadOnlyList<A.TreeNode> Children { get; }
         T AddChild<T>(T node) where T : A.TreeNode;
-        Declarations Resolve(A.Reference reference);
+        A.Decl? Resolve(A.Reference reference);
 
+        [DebuggerStepThrough]
         public static Container Empty(Container parent)
         {
             return new EmptyContainer(parent);
@@ -19,6 +20,7 @@ namespace Six.Six.Sema
 
         private class EmptyContainer : Container
         {
+            [DebuggerStepThrough]
             public EmptyContainer(Container parent)
             {
                 Parent = parent;
@@ -26,7 +28,7 @@ namespace Six.Six.Sema
             public Container Parent { get; }
             public IReadOnlyList<A.TreeNode> Children { get; } = Array.Empty<A.TreeNode>();
             public T AddChild<T>(T node) where T: A.TreeNode => throw new NotImplementedException();
-            public Declarations Resolve(A.Reference reference) => Parent.Resolve(reference);
+            public A.Decl? Resolve(A.Reference reference) => Parent.Resolve(reference);
         }
     }
 }

@@ -210,7 +210,7 @@ infix-operator
     ;
 
 function-declaration
-    : prelude type? name generic-parameters? parameters constraints? function-body
+    : prelude type name generic-parameters? parameters constraints? function-body
     ;
 
 attribute-declaration
@@ -496,7 +496,7 @@ operator-parameter
     ;
 
 value-parameter
-    : prelude parameter-type? name value-default?
+    : prelude parameter-type name value-default?
     ;
 
 definitive-parameter

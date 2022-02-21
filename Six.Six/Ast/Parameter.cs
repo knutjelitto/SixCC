@@ -9,7 +9,7 @@ namespace Six.Six.Ast
     {
     }
 
-    public record ValueParameter(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression? Default)
+    public record ValueParameter(IRNode Tree, Prelude Prelude, Name Name, Type Type, Expression? Default)
         :   Parameter,
             With.Prelude,
             With.Name,

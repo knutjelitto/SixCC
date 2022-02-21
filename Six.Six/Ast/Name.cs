@@ -39,6 +39,8 @@ namespace Six.Six.Ast
 
             public IRNode Tree { get; }
             public string Text { get; }
+
+            public override string ToString() => Text;
         }
 
         public sealed class ArtificalId : Name

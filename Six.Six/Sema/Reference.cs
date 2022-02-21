@@ -2,6 +2,7 @@
 
 namespace Six.Six.Sema
 {
-    public record Reference(A.TreeNode Ast, Declarations Declarations, params Type[]? Arguments)
+    [DebuggerStepThrough]
+    public record Reference(Assoc Assoc, Type Type, A.Decl Decl, params Type[]? Arguments)
         : Type, Expression;
 }

@@ -1,12 +1,27 @@
-﻿using A = Six.Six.Ast;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public interface Entity : WithContainer
+    public interface Entity
     {
-        public bool IsShared => Ast.IsShared();
-        public bool IsNative => Ast.IsNative();
+        Assoc Assoc { get; }       
+    }
 
-        A.TreeNode Ast { get; }
+    public static class EntityExtensions
+    {
+        public static Container? Scope(this Entity entity)
+        {
+            return entity.Assoc.Scope;
+        }
+        public static A.TreeNode Node(this Entity entity)
+        {
+            return entity.Assoc.Node;
+        }
     }
 }

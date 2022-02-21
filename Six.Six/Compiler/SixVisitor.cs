@@ -2,11 +2,19 @@
 using Six.Runtime.Types;
 using Six.Six.Ast;
 using static Six.Six.SixTree;
+using S = Six.Six.Sema;
 
 namespace Six.Six.Compiler
 {
     public partial class SixVisitor : DynamicSixVisitor
     {
+        public S.Resolver Resolver { get; }
+
+        public SixVisitor(S.Resolver resolver)
+        {
+            Resolver = resolver;
+        }
+
         public void Walk(SourceFile source)
         {
             if (source.Tree != null)
@@ -170,10 +178,10 @@ namespace Six.Six.Compiler
             var prelude = Walk<Prelude>(element.Prelude);
             var type = Walk<Type>(element.Type);
             var name = Walk<Name>(element.InfixOperator);
-            var rhs = Walk<DefinitiveParameter>(element.DefinitiveParameter);
+            var parameters = new Parameters(element.DefinitiveParameter, Walk<DefinitiveParameter>(element.DefinitiveParameter));
             var body = Walk<Body>(element.FunctionBody);
 
-            element.Value = new Decl.Infix(element, prelude, name, type, rhs, body);
+            element.Value = new Decl.Infix(element, prelude, name, type, parameters, body);
         }
 
 
@@ -182,9 +190,10 @@ namespace Six.Six.Compiler
             var prelude = Walk<Prelude>(element.Prelude);
             var type = Walk<Type>(element.Type);
             var name = Walk<Name>(element.PrefixOperator);
+            var parameters = new Parameters(element.FunctionBody);
             var body = Walk<Body>(element.FunctionBody);
 
-            element.Value = new Decl.Prefix(element, prelude, name, type, body);
+            element.Value = new Decl.Prefix(element, prelude, name, type, parameters, body);
         }
 
         protected override void Visit(CInfixOperator element)
@@ -200,7 +209,7 @@ namespace Six.Six.Compiler
         protected override void Visit(CFunctionDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var type = WalkOptional<Type>(element.Type);
+            var type = Walk<Type>(element.Type);
             var name = Walk<Name>(element.Name);
             var generics = WalkOptional<TypeParameters>(element.GenericParameters);
             var parameters = Walk<Parameters>(element.Parameters);
@@ -274,7 +283,7 @@ namespace Six.Six.Compiler
         protected override void Visit(CConstructorDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var name = WalkOptional<Name>(element.Name) ?? new Name.ArtificalId("default@ctor");
+            var name = WalkOptional<Name>(element.Name) ?? new Name.ArtificalId(S.Module.DefaultCtor);
             var parameters = Walk<Parameters>(element.Parameters);
             var extends = WalkOptional<Type>(element.Extends);
             var body = Walk<Body>(element.FunctionBody);
@@ -338,7 +347,7 @@ namespace Six.Six.Compiler
         protected override void Visit(CValueParameter element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var type = WalkOptional<Type>(element.ParameterType);
+            var type = Walk<Type>(element.ParameterType);
             var name = Walk<Name>(element.Name);
             var @default = WalkOptional<Expression>(element.ValueDefault);
 

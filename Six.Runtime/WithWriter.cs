@@ -14,6 +14,7 @@ namespace Six.Runtime
         public void wl(string content) => Writer.WriteLine(content);
         public void wl() => Writer.WriteLine();
         public void w(string content) => Writer.Write(content);
+
         public void indent(Action content)
         {
             using (Writer.Indent())

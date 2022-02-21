@@ -1,0 +1,7 @@
+namespace six;
+
+shared class Anything
+{
+}
+
+shared alias void => Anything;

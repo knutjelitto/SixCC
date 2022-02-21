@@ -5,9 +5,16 @@ shared class Point
     shared int x = -1;
     shared int y = -1;
 
+    shared new ();
+
     shared int sum()
     {
         return x + y;
+    }
+
+    shared void moveX(int dx)
+    {
+        x = x + dx;
     }
 }
 
@@ -16,7 +23,8 @@ void main()
     let x = -12;
     let y = -13;
 
-    var p = Point();
+    var q = Point();
+    var p = q;
     p.x = x;
     p.y = y;
 

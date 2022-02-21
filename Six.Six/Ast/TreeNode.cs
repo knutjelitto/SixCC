@@ -1,5 +1,7 @@
 ﻿using Six.Runtime.Types;
 
+using S = Six.Six.Sema;
+
 namespace Six.Six.Ast
 {
     public interface Node
@@ -15,5 +17,9 @@ namespace Six.Six.Ast
     {
         IEnumerable<TreeNode> Items { get; }
         int Count { get; }
+    }
+
+    public record TreeNodeImpl(IRNode Tree) : TreeNode
+    {
     }
 }

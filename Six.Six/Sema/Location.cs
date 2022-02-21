@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using A = Six.Six.Ast;
+
 namespace Six.Six.Sema
 {
     public class Location : ILocation
@@ -22,6 +24,15 @@ namespace Six.Six.Sema
         public int Offset => Token.Core;
 
         public int Length => Token.End - Token.Core;
+
+        public static Location From(A.TreeNode node)
+        {
+            if (node is A.With.Name named)
+            {
+                return From(named.Name.Tree);
+            }
+            return From(node.Tree);
+        }
 
         public static Location From(IRNode node)
         {

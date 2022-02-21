@@ -36,7 +36,7 @@ namespace Six.Six.Sema
         {
             if (node != null)
             {
-                Declare(container, (dynamic)node);
+                Declare((dynamic)container, (dynamic)node);
             }
         }
 
@@ -51,47 +51,39 @@ namespace Six.Six.Sema
             }
         }
 
-        private void DoDeclare(Container container, A.Decl declaration)
+        private void DoDeclareClassy(MemberScope scope, A.Decl.Classy decl)
         {
-            if (declaration is A.With.Generics withTypeParams)
+            Resolver[decl].Type = new Type.Classy(Assoc.From(Resolver, decl));
+            Resolver[decl].Scope = scope;
+            scope.Parent.AddChild(decl);
+            DoDeclare(scope, decl);
+        }
+
+        private void DoDeclareAssoc(Container scope, A.Decl decl)
+        {
+            Resolver[decl].Scope = scope;
+            scope.Parent.AddChild(decl);
+            DoDeclare(scope, decl);
+        }
+
+        private void DoDeclare(Container container, A.Decl decl)
+        {
+            if (decl is A.With.Generics withTypeParams)
             {
                 WalkMany(container, withTypeParams.TypeParameters);
             }
 
-            if (declaration is A.With.Parameters withParams)
+            if (decl is A.With.Parameters withParams)
             {
                 WalkMany(container, withParams.Parameters);
             }
-            else if (declaration is A.Decl.Infix infix)
-            {
-                Walk(container, infix.Rhs);
-            }
-            else if (declaration is A.Decl.Prefix prefix)
-            {
-            }
 
-            if (declaration is A.With.Body with)
+            if (decl is A.With.Body with)
             {
                 Walk(container, with.Body);
             }
 
-            if (declaration is A.With.Type withType && withType.Type != null)
-            {
-                OnResolve(() =>
-                {
-                    Resolver.ResolveType(container, withType.Type);
-                });
-            }
-
-            if (declaration is A.With.Result withResult && withResult.Result != null)
-            {
-                OnResolve(() =>
-                {
-                    Resolver.ResolveType(container, withResult.Result);
-                });
-            }
-
-            if (declaration is A.With.Value withValue && withValue.Value != null)
+            if (decl is A.With.Value withValue && withValue.Value != null)
             {
                 OnResolve(() =>
                 {
@@ -99,7 +91,15 @@ namespace Six.Six.Sema
                 });
             }
 
-            if (declaration is A.With.Extends withExtends && withExtends.Extends != null)
+            if (decl is A.With.Type withType && withType.Type != null)
+            {
+                OnResolve(() =>
+                {
+                    Resolver.ResolveType(container, withType.Type);
+                });
+            }
+
+            if (decl is A.With.Extends withExtends && withExtends.Extends != null)
             {
                 OnResolve(() =>
                 {
@@ -107,7 +107,7 @@ namespace Six.Six.Sema
                 });
             }
 
-            if (declaration is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
+            if (decl is A.With.Satisfies withSatisfies && withSatisfies.Satisfies != null)
             {
                 OnResolve(() =>
                 {
@@ -118,7 +118,7 @@ namespace Six.Six.Sema
                 });
             }
 
-            if (declaration is A.With.Cases withCases && withCases.Cases != null)
+            if (decl is A.With.Cases withCases && withCases.Cases != null)
             {
                 OnResolve(() =>
                 {
@@ -134,6 +134,25 @@ namespace Six.Six.Sema
         {
             Assert(false);
             throw new NotImplementedException();
+        }
+
+        private void Declare(Container parent, A.Decl.Classy node)
+        {
+            DoDeclareClassy(new ClassyScope(parent), node);
+        }
+
+        private void Declare(Container parent, A.Decl.Funcy node)
+        {
+            DoDeclareAssoc(new FunctionScope(parent), node);
+
+            if (node is A.Decl.Function function)
+            {
+                OnResolve(() =>
+                {
+                    Assert(Resolver[function.Type].Type != null);
+                    Resolver[node].Type = Resolver[function.Type].Type;
+                });
+            }
         }
 
         private void Declare(Container parent, A.TypeParameter node)
@@ -153,6 +172,8 @@ namespace Six.Six.Sema
             OnResolve(() =>
             {
                 Resolver.ResolveType(parent, node.Type);
+
+                Resolver[node].Type = Resolver[node.Type].Type;
             });
         }
 
@@ -164,78 +185,73 @@ namespace Six.Six.Sema
             {
                 Resolver.ResolveType(parent, node.Type);
                 Resolver.ResolveExpression(parent, node.Default);
+
+                Resolver[node].Type = Resolver[node.Type].Type;
             });
-        }
-
-        private void Declare(Container parent, A.Decl.Prefix node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
-        private void Declare(Container parent, A.Decl.Infix node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
-
-        private void Declare(Container parent, A.Decl.Primitive node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
-
-        private void Declare(Container parent, A.Decl.Constructor node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
         }
 
         private void Declare(Container parent, A.Decl.Var node)
         {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
+            parent.AddChild(node);
+
+            OnResolve(() =>
+            {
+                Resolver.ResolveType(parent, node.Type);
+                Resolver.ResolveExpression(parent, node.Value);
+
+                if (node.Type != null)
+                {
+                    Assert(Resolver[node.Type].Type != null);
+                    Resolver[node].Type = Resolver[node.Type].Type;
+                }
+                else
+                {
+                    Assert(Resolver[node.Value].Type != null);
+                    Resolver[node].Type = Resolver[node.Value].Type;
+                }
+            });
         }
 
         private void Declare(Container parent, A.Decl.Let node)
         {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
+            parent.AddChild(node);
 
-        private void Declare(Container parent, A.Decl.Function node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
+            OnResolve(() =>
+            {
+                Resolver.ResolveType(parent, node.Type);
+                Resolver.ResolveExpression(parent, node.Value);
 
-        private void Declare(Container parent, A.Decl.Class node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
+                if (node.Type != null)
+                {
+                    Assert(Resolver[node.Type].Type != null);
+                    Resolver[node].Type = Resolver[node.Type].Type;
+                }
+                else
+                {
+                    Assert(Resolver[node.Value].Type != null);
+                    Resolver[node].Type = Resolver[node.Value].Type;
+                }
+            });
         }
 
         private void Declare(Container parent, A.Decl.Attribute node)
         {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
+            DoDeclareAssoc(Container.Empty(parent), node);
 
-        private void Declare(Container parent, A.Decl.Object node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
-        }
-
-        private void Declare(Container parent, A.Decl.Interface node)
-        {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
+            OnResolve(() =>
+            {
+                if (node.Type != null)
+                {
+                    var type = Resolver[node.Type].Type;
+                    Resolver[node].Type = type;
+                }
+            });
         }
 
         private void Declare(Container parent, A.Decl.Alias node)
         {
-            var content = new DeclarationScope(parent);
-            DoDeclare(content, parent.AddChild(node));
+            Resolver[node].Type = new Type.Alias(Assoc.From(Resolver, node));
+            DoDeclare(new DeclarationScope(parent), parent.AddChild(node));
         }
 
         private void Declare(Container parent, A.Stmt.Return node)
@@ -284,9 +300,33 @@ namespace Six.Six.Sema
             });
         }
 
+        private void Declare(MemberScope parent, A.Body.Class node)
+        {
+            parent.AddChild(node);
+
+            WalkMany(parent.Members, node.Block.Usings);
+            WalkMany(parent.Members, node.Block.Statelarations);
+        }
+
+        private void Declare(MemberScope parent, A.Body.Interface node)
+        {
+            parent.AddChild(node);
+
+            WalkMany(parent.Members, node.Block.Usings);
+            WalkMany(parent.Members, node.Block.Statelarations);
+        }
+
         private void Declare(Container parent, A.Body.Block node)
         {
-            var content = new BlockScope(parent);
+            Container content;
+            if (parent is MemberScope memberScope)
+            {
+                content = memberScope.Members;
+            }
+            else
+            {
+                content = new BlockScope(parent);
+            }
             parent.AddChild(node);
 
             WalkMany(content, node.Statelarations);

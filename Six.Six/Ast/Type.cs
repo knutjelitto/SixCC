@@ -9,6 +9,7 @@ namespace Six.Six.Ast
         {
             public Union(IRNode tree, params Type[] items) : this(tree, items.AsEnumerable()) { }
         }
+
         public sealed record Intersection(IRNode Tree, IEnumerable<Type> Items)
             : Many<Type>(Tree, Items), Type;
 

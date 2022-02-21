@@ -9,23 +9,30 @@ namespace Six.Six.Sema
 {
     public class Module : Container
     {
+        public static readonly string DefaultCtor = "@dctor";
         private static readonly string Language = "six";
-        public static readonly string UInt64 = "u64";
-        public static readonly string Int64 = "i64";
-        public static readonly string UInt32 = "u32";
-        public static readonly string Int32 = "i32";
-        public static readonly string UInt16 = "u16";
-        public static readonly string Int16 = "u16";
-        public static readonly string UInt8 = "u8";
-        public static readonly string Int8 = "i8";
-        public static readonly string CoreNull = "Null";
-        public static readonly string CoreNothing = "Nothing";
-        public static readonly string CoreIterable = "Iterable";
-        public static readonly string CoreCallable = "Callable";
-        public static readonly string CoreSequence = "Sequence";
-        public static readonly string CoreSequential = "Sequential";
-        public static readonly string CoreTuple = "Tuple";
-        public static readonly string CoreEmpty = "Empty";
+
+        public static class Core
+        {
+            public static readonly string UInt64 = "u64";
+            public static readonly string Int64 = "i64";
+            public static readonly string UInt32 = "u32";
+            public static readonly string Int32 = "i32";
+            public static readonly string UInt16 = "u16";
+            public static readonly string Int16 = "u16";
+            public static readonly string UInt8 = "u8";
+            public static readonly string Int8 = "i8";
+            public static readonly string Null = "Null";
+            public static readonly string Nothing = "Nothing";
+            public static readonly string Anything = "Anything";
+            public static readonly string Iterable = "Iterable";
+            public static readonly string Callable = "Callable";
+            public static readonly string Sequence = "Sequence";
+            public static readonly string Sequential = "Sequential";
+            public static readonly string Tuple = "Tuple";
+            public static readonly string Empty = "Empty";
+        }
+
 
         private readonly List<Diagnostic> Diagnostics = new();
 
@@ -74,41 +81,27 @@ namespace Six.Six.Sema
             foreach (var ns in GetNamespaces())
             {
                 var path = ns.GetPath().Replace(".", "/");
-                foreach (var top in ns.GetDeclarations())
+                foreach (var declaration in ns.GetDeclarations())
                 {
-                    var idx = 0;
-                    if (top.Count > 1)
+                    var subst = declaration.Name.Text
+                        .Replace("!", "@not@")
+                        .Replace("|", "@or@")
+                        .Replace("&", "@and@")
+                        .Replace("^", "@xor@")
+                        .Replace("+", "@add@")
+                        .Replace("-", "@sub@")
+                        .Replace("*", "@mul@")
+                        .Replace("/", "@div@")
+                        .Replace("%", "@rem@")
+                        ;
+
+                    var invalid = Path.GetInvalidFileNameChars();
+                    Assert(!subst.Any(c => invalid.Contains(c)));
+
+                    var name = $"entities/{path}/{subst}.txt";
+                    using (var writer = name.Writer())
                     {
-                        idx = 1;
-                    }
-                    foreach (var declaration in top)
-                    {
-                        var subst = declaration.Name.Text
-                            .Replace("!", "@not@")
-                            .Replace("|", "@or@")
-                            .Replace("&", "@and@")
-                            .Replace("^", "@xor@")
-                            .Replace("+", "@add@")
-                            .Replace("-", "@sub@")
-                            .Replace("*", "@mul@")
-                            .Replace("/", "@div@")
-                            .Replace("%", "@rem@")
-                            ;
-
-                        if (idx > 0)
-                        {
-                            subst = $"{subst}-{idx}";
-                            idx += 1;
-                        }
-
-                        var invalid = Path.GetInvalidFileNameChars();
-                        Assert(!subst.Any(c => invalid.Contains(c)));
-
-                        var name = $"entities/{path}/{subst}.txt";
-                        using (var writer = name.Writer())
-                        {
-                            new SemaDumper(writer).DumpEntity(declaration);
-                        }
+                        new SemaDumper(writer, Resolver).DumpEntity(declaration);
                     }
                 }
             }
@@ -133,7 +126,7 @@ namespace Six.Six.Sema
         private void DumpDeclarations(Writer writer)
         {
             var count = 0;
-            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.GetDeclarationsFlat()).OrderBy(e => e.Name))
+            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.GetDeclarations()).OrderBy(e => e.Name))
             {
                 count += 1;
 
@@ -145,63 +138,23 @@ namespace Six.Six.Sema
             }
         }
 
-        public Declarations Resolve(A.Reference reference)
+        public A.Decl Resolve(A.Reference reference)
         {
             Assert(false);
             throw new InvalidOperationException();
         }
 
-        public Declarations Resolve(RLiteral literal)
+        public A.Decl Resolve(RLiteral literal)
         {
             Assert(false);
             throw new InvalidOperationException();
         }
 
-        public Declarations CoreFind(A.TreeNode usage, string name)
+        public A.Decl? CoreFind(string name)
         {
             var language = Root.Get(Language);
             Assert(language != null);
-            return language.Find(usage, name);
-        }
-
-        public Declarations CoreFindNull(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreNull);
-        }
-
-        public Declarations CoreFindIterable(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreIterable);
-        }
-
-        public Declarations CoreFindCallable(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreCallable);
-        }
-
-        public Declarations CoreFindTuple(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreTuple);
-        }
-
-        public Declarations CoreFindEmpty(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreEmpty);
-        }
-
-        public Declarations CoreFindSequential(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreSequential);
-        }
-
-        public Declarations CoreFindSequence(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreSequence);
-        }
-
-        public Declarations CoreFindNothing(A.TreeNode usage)
-        {
-            return CoreFind(usage, CoreNothing);
+            return language.Find(name);
         }
     }
 }
