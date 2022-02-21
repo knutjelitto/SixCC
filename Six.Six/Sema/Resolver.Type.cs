@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using Six.Core.Errors;
 using System;
 using A = Six.Six.Ast;
 
@@ -13,10 +14,28 @@ namespace Six.Six.Sema
                 return;
             }
 
-            this[typeNode].Type = ResolveTypeIntern(container, typeNode);
+            try
+            {
+                this[typeNode].Type = ResolveTypeIntern(container, typeNode);
+            }
+            catch (DiagnosticException diagnostics)
+            {
+                foreach (var diagnostic in diagnostics.Diagnostics)
+                {
+                    Module.Add(diagnostic);
+                }
+            }
+            catch (InvalidProgramException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                Didnt(typeNode, typeNode.GetType().Name);
+            }
         }
 
-        private Type? ResolveTypeIntern(Container container, A.Type typeNode, bool asTuple = false)
+        private Type ResolveTypeIntern(Container container, A.Type typeNode, bool asTuple = false)
         {
             switch (typeNode)
             {
@@ -29,45 +48,21 @@ namespace Six.Six.Sema
                         var @null = ResolveInCore(node, Module.Core.Null);
                         var type = ResolveTypeIntern(container, node.Type);
 
-                        if (@null != null && type != null)
-                        {
-                            return new Type.Union(@null, type);
-                        }
-                        return null;
+                        return new Type.Union(@null, type);
                     }
                 case A.Type.Intersection node:
                     {
                         var types = ResolveMany(container, node);
-
-                        if (types != null)
-                        {
-                            return new Type.Intersection(types.ToArray());
-                        }
-
-                        Didnt(node, "intersection");
-                        return null;
+                        return new Type.Intersection(types);
                     }
                 case A.Type.Union node:
                     {
                         var types = ResolveMany(container, node);
-
-                        if (types != null)
-                        {
-                            return new Type.Union(types.ToArray());
-                        }
-
-                        Didnt(node, "union");
-                        return null;
+                        return new Type.Union(types);
                     }
                 case A.Type.Constructor node:
                     {
-                        var type = ResolveTypeIntern(container, node.Type);
-
-                        if (type != null)
-                        {
-                            return type;
-                        }
-                        return null;
+                        return ResolveTypeIntern(container, node.Type);
                     }
                 case A.Type.Nothing:
                     {

@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Six\\Six.six" at="19.02.2022 19:48:05" />
+// <generated from="C:\\Dev\\Knut\\Six\\Six.Six\\Six.six" at="21.02.2022 15:47:04" />
 
 using Six.Runtime;
 using Six.Runtime.Dfa;
@@ -284,9 +284,9 @@ namespace Six.Six
                 /* 260 OptionalOp       */ __Matchers[260] = new Mx.Optional(this, 260, "?(>generic-parameters)") { Builder = nodes => new ROptional<CGenericParameters>(nodes) };
                 /* 261 OptionalOp       */ __Matchers[261] = new Mx.Optional(this, 261, "?(>constraints)") { Builder = nodes => new ROptional<CConstraints>(nodes) };
                 /* 262 SeqOp            */ __Matchers[262] = new Mx.Seq(this, 262, "_262:(>prelude,>type,>name,?(>generic-parameters),>parameters,?(>constraints),>function-body)") { Builder = nodes => new CFunctionDeclaration(nodes) };
-                /* 263 OptionalOp       */ __Matchers[263] = new Mx.Optional(this, 263, "?(>type)") { Builder = nodes => new ROptional<ICType>(nodes) };
-                /* 264 SeqOp            */ __Matchers[264] = new Mx.Seq(this, 264, "_264:(>prelude,?(>type),>name,>attribute-body)") { Builder = nodes => new CAttributeDeclaration(nodes) };
-                /* 265 StringOp         */ __Matchers[265] = new Mx.Keyword(this, 265, "'var'", "var") { Creator = node => new RLiteral(node) };
+                /* 263 SeqOp            */ __Matchers[263] = new Mx.Seq(this, 263, "_263:(>prelude,>type,>name,>attribute-body)") { Builder = nodes => new CAttributeDeclaration(nodes) };
+                /* 264 StringOp         */ __Matchers[264] = new Mx.Keyword(this, 264, "'var'", "var") { Creator = node => new RLiteral(node) };
+                /* 265 OptionalOp       */ __Matchers[265] = new Mx.Optional(this, 265, "?(>type)") { Builder = nodes => new ROptional<ICType>(nodes) };
                 /* 266 SeqOp            */ __Matchers[266] = new Mx.Seq(this, 266, "_266:(>prelude,'var',?(>type),>name,'=',>expression,';')") { Builder = nodes => new CVarDeclaration(nodes) };
                 /* 267 StringOp         */ __Matchers[267] = new Mx.Keyword(this, 267, "'let'", "let") { Creator = node => new RLiteral(node) };
                 /* 268 SeqOp            */ __Matchers[268] = new Mx.Seq(this, 268, "_268:(>prelude,'let',?(>type),>name,'=',>expression,';')") { Builder = nodes => new CLetDeclaration(nodes) };
@@ -518,7 +518,7 @@ namespace Six.Six
                 /*  39 PlainRuleOp      */ _infixDeclaration.Set(__Matchers[242]);
                 /*  40 PlainRuleOp      */ _infixOperator.Set(__Matchers[259]);
                 /*  41 PlainRuleOp      */ _functionDeclaration.Set(__Matchers[262]);
-                /*  42 PlainRuleOp      */ _attributeDeclaration.Set(__Matchers[264]);
+                /*  42 PlainRuleOp      */ _attributeDeclaration.Set(__Matchers[263]);
                 /*  43 PlainRuleOp      */ _varDeclaration.Set(__Matchers[266]);
                 /*  44 PlainRuleOp      */ _letDeclaration.Set(__Matchers[268]);
                 /*  45 PlainRuleOp      */ _classDeclaration.Set(__Matchers[274]);
@@ -701,10 +701,10 @@ namespace Six.Six
                 /* 260 OptionalOp       */ __Matchers[260].Set(_genericParameters);
                 /* 261 OptionalOp       */ __Matchers[261].Set(_constraints);
                 /* 262 SeqOp            */ __Matchers[262].Set(_prelude, _type, _name, __Matchers[260], _parameters, __Matchers[261], _functionBody);
-                /* 263 OptionalOp       */ __Matchers[263].Set(_type);
-                /* 264 SeqOp            */ __Matchers[264].Set(_prelude, __Matchers[263], _name, _attributeBody);
-                /* 266 SeqOp            */ __Matchers[266].Set(_prelude, __Matchers[265], __Matchers[263], _name, __Matchers[200], _expression, __Matchers[175]);
-                /* 268 SeqOp            */ __Matchers[268].Set(_prelude, __Matchers[267], __Matchers[263], _name, __Matchers[200], _expression, __Matchers[175]);
+                /* 263 SeqOp            */ __Matchers[263].Set(_prelude, _type, _name, _attributeBody);
+                /* 265 OptionalOp       */ __Matchers[265].Set(_type);
+                /* 266 SeqOp            */ __Matchers[266].Set(_prelude, __Matchers[264], __Matchers[265], _name, __Matchers[200], _expression, __Matchers[175]);
+                /* 268 SeqOp            */ __Matchers[268].Set(_prelude, __Matchers[267], __Matchers[265], _name, __Matchers[200], _expression, __Matchers[175]);
                 /* 270 OptionalOp       */ __Matchers[270].Set(_parameters);
                 /* 271 OptionalOp       */ __Matchers[271].Set(_extends);
                 /* 272 OptionalOp       */ __Matchers[272].Set(_satisfies);
@@ -2437,7 +2437,7 @@ namespace Six.Six
             public CAttributeDeclaration(params RNode[] children) : base(children) {}
 
             public CPrelude Prelude => Get<CPrelude>(0);
-            public ROptional<ICType> Type => Get<ROptional<ICType>>(1);
+            public ICType Type => Get<ICType>(1);
             public ICName Name => Get<ICName>(2);
             public ICAttributeBody AttributeBody => Get<ICAttributeBody>(3);
         }

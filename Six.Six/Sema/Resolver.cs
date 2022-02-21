@@ -52,31 +52,20 @@ namespace Six.Six.Sema
             }
         }
 
-        private Type[]? ResolveMany(Container container, A.Many<A.Type>? types)
+        private Type[] ResolveMany(Container container, A.Many<A.Type> types)
         {
-            if (types != null)
-            {
-                var results = new List<Type>();
-                foreach (var arg in types)
-                {
-                    var result = ResolveTypeIntern(container, arg);
-                    if (result != null)
-                    {
-                        results.Add(result);
-                    }
-                }
-                if (results.Count == types.Count)
-                {
-                    return results.ToArray();
-                }
-            }
-            return null;
+            return types.Select(type => ResolveTypeIntern(container, type)).ToArray();
         }
 
 
         private Expression[] ResolveMany(Container container, A.Many<A.Expression> expressions)
         {
             return expressions.Select(expression => ResolveExpressionIntern(container, expression)).ToArray();
+        }
+
+        private Type[] ResolveMany(Container container, IEnumerable<A.Type> types)
+        {
+            return types.Select(type => ResolveTypeIntern(container, type)).ToArray();
         }
 
         private void Didnt(A.TreeNode node, string what)
@@ -91,9 +80,14 @@ namespace Six.Six.Sema
             );
         }
 
-        private DiagnosticException NoTypeYet(A.TreeNode node, string what)
+        private DiagnosticException WhiteScopeExpected(A.TreeNode node)
         {
-            return Diagnostic(node, $"type not yet resolved for `{what}´XXX");
+            return Diagnostic(node, "<internal> expected white scope");
+        }
+
+        private InvalidProgramException NoTypeYet(A.TreeNode node, string what)
+        {
+            return new InvalidProgramException($"type not yet resolved for `{what}´");
         }
 
         private Type ResolveTypeReference(Container container, A.Reference node)
@@ -103,7 +97,7 @@ namespace Six.Six.Sema
             var decl = container.Resolve(node)
                 ?? throw Diagnostic(node, $"can't resolve `{name}´");
 
-            var arguments = ResolveMany(container, node.Arguments);
+            var arguments = node.Arguments == null ? null : ResolveMany(container, node.Arguments);
 
             var type = this[decl].Type
                 ?? throw NoTypeYet(node, name);
@@ -111,60 +105,70 @@ namespace Six.Six.Sema
             return new Reference(Assoc.From(this, node), type, decl, arguments);
         }
 
-        private Expression ResolveRest(Container container, A.Reference node, string name, A.Decl decl)
+        private Expression ResolveRest(Container container, A.Reference node, string name, A.Decl referenced)
         {
-            var arguments = ResolveMany(container, node.Arguments);
+            var arguments = node.Arguments == null ? null : ResolveMany(container, node.Arguments);
 
-            if (decl is A.Decl.Funcy)
-            {
-                if (decl is A.Decl.Function function)
-                {
-                    Assert(true);
-
-                    var result = this[function.Type].Type
-                            ?? throw NoTypeYet(function, function.Name.Text);
-
-                    var types = new List<Type>();
-                    foreach (var parameter in function.Parameters)
-                    {
-                        var paramtype = this[parameter].Type
-                            ?? throw NoTypeYet(parameter, parameter.Name.Text);
-                        types.Add(paramtype);
-                    }
-
-                    return new Expression.Callable(Assoc.From(this, decl), result, types.ToArray());
-                }
-                else if (decl is A.Decl.Prefix prefix)
-                {
-                    Assert(true);
-
-                    var result = this[prefix.Type].Type
-                              ?? throw NoTypeYet(prefix.Type, name);
-
-                    return new Expression.Callable(Assoc.From(this, decl), result);
-                }
-                else if (decl is A.Decl.Infix infix)
-                {
-                    Assert(false);
-                }
-                else
-                {
-                    Assert(false);
-                }
-            }
-            else if (decl is A.Decl.Attribute)
+            if (referenced is A.Decl.Function function)
             {
                 Assert(true);
+
+                var result = this[function.Type].Type
+                        ?? throw NoTypeYet(function, function.Name.Text);
+
+                var types = ResolveMany(container, function.Parameters.Select(p => p.Type));
+
+                return new Expression.Callable(Assoc.From(this, function), result, types);
+            }
+            else if (referenced is A.Decl.Prefix prefix)
+            {
+                Assert(true);
+
+                var result = this[prefix.Type].Type
+                          ?? throw NoTypeYet(prefix.Type, name);
+
+                var types = ResolveMany(container, prefix.Parameters.Select(p => p.Type!));
+                Assert(types.Length == 0);
+
+                return new Expression.Callable(Assoc.From(this, prefix), result, types);
+            }
+            else if (referenced is A.Decl.Infix infix)
+            {
+                Assert(true);
+
+                var result = this[infix.Type].Type
+                        ?? throw NoTypeYet(infix, infix.Name.Text);
+
+                var types = ResolveMany(container, infix.Parameters.Select(p => p.Type!));
+                Assert(types.Length == 1);
+
+                return new Expression.Callable(Assoc.From(this, infix), result, types);
+            }
+            else if (referenced is A.Decl.Attribute attribute)
+            {
+                Assert(true);
+
+                var result = this[attribute.Type].Type
+                        ?? throw NoTypeYet(attribute, attribute.Name.Text);
+
+                return new Expression.Attribute(Assoc.From(this, attribute), result);
+            }
+            else if (referenced is A.Decl.Class klass)
+            {
+                Assert(false);
+            }
+            else if (referenced is A.Decl.ValueParameter parameter)
+            {
+                Assert(false);
             }
             else
             {
-                Assert(true);
+                Assert(false);
             }
 
-            var type = this[decl].Type
-                ?? throw NoTypeYet(node, name);
+            var type = this[referenced].Type ?? throw NoTypeYet(referenced, name);
 
-            return new Reference(Assoc.From(this, node), type, decl, arguments);
+            return new Reference(Assoc.From(this, node), type, referenced, arguments);
 
         }
 
@@ -186,6 +190,16 @@ namespace Six.Six.Sema
                 ?? throw Diagnostic(node, $"can't resolve `{name}´ in members");
 
             return ResolveRest(white, node, name, decl);
+        }
+
+        private Expression ResolveInfix(WhiteMemberScope white, A.Reference node)
+        {
+            return ResolveMember(white, node, "_" + node.Name.Text + "_");
+        }
+
+        private Expression ResolvePrefix(WhiteMemberScope white, A.Reference node)
+        {
+            return ResolveMember(white, node, node.Name.Text + "_");
         }
     }
 }

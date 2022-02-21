@@ -165,7 +165,7 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Declare(Container parent, A.DefinitiveParameter node)
+        private void Declare(Container parent, A.Decl.DefinitiveParameter node)
         {
             parent.AddChild(node);
 
@@ -177,7 +177,7 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Declare(Container parent, A.ValueParameter node)
+        private void Declare(Container parent, A.Decl.ValueParameter node)
         {
             parent.AddChild(node);
 

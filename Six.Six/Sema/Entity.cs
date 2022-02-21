@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -19,6 +13,12 @@ namespace Six.Six.Sema
         {
             return entity.Assoc.Scope;
         }
+
+        public static WhiteMemberScope? WhiteScope(this Entity entity)
+        {
+            return entity.Assoc.Scope as WhiteMemberScope;
+        }
+
         public static A.TreeNode Node(this Entity entity)
         {
             return entity.Assoc.Node;

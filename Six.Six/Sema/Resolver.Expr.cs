@@ -19,21 +19,14 @@ namespace Six.Six.Sema
             }
             catch (DiagnosticException diagnostics)
             {
-                var retry = false;
                 foreach (var diagnostic in diagnostics.Diagnostics)
                 {
                     Module.Add(diagnostic);
-
-                    if (diagnostic is SemanticError semantic)
-                    {
-                        retry = retry || semantic.Message.EndsWith("XXX");
-                    }
                 }
-
-                if (retry)
-                {
-                    throw new InvalidProgramException("RETRY");
-                }
+            }
+            catch (InvalidProgramException)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -43,20 +36,20 @@ namespace Six.Six.Sema
 
         private Expression ResolveExpressionIntern(Container container, A.Expression expressionNode)
         {
-            var resolved = resolve(container, expressionNode);
+            var resolved = resolve(expressionNode);
             this[expressionNode].Expr = resolved;
             this[expressionNode].Type = resolved.Type;
 
             return resolved;
 
 
-            Expression resolve(Container container, A.Expression expressionNode)
+            Expression resolve(A.Expression expressionNode)
             {
 
                 switch (expressionNode)
                 {
                     case A.Reference node:
-                        return Reference(node);
+                        return ResolveReference(container, node);
                     case A.Expression.Call node:
                         return Call(node);
                     case A.Expression.Prefix node:
@@ -70,12 +63,6 @@ namespace Six.Six.Sema
                     default:
                         throw new NotImplementedException($"resolving `{expressionNode.GetType().Name}´");
                 }
-            }
-
-
-            Expression Reference(A.Reference node)
-            {
-                return ResolveReference(container, node);
             }
 
 
@@ -103,41 +90,47 @@ namespace Six.Six.Sema
                 }
             }
 
-
             Expression Call(A.Expression.Call node)
             {
                 var primary = ResolveExpressionIntern(container, node.Expr);
                 var args = ResolveMany(container, node.Arguments);
-                
-                var exprType = primary.Type.Resolved;
 
-                if (exprType is Expression.Callable callable)
+                if (primary is Expression.Callable callable)
                 {
                     Assert(args.Length == callable.Arguments.Length);
                     return new Expression.Call(Assoc.From(this, node), callable.Type, callable, args);
                 }
 
+                var exprType = primary.Type.Resolved;
+
+                if (exprType is Expression.Callable callable2)
+                {
+                    Assert(args.Length == callable2.Arguments.Length);
+                    return new Expression.Call(Assoc.From(this, node), callable2.Type, callable2, args);
+                }
+
                 Assert(exprType is Type.Classy);
                 if (exprType is Type.Classy classy)
                 {
+                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(primary.Node());
+
                     if (classy.Node() is A.Decl.Class)
                     {
-                        var assoc = this[classy.Node()];
-                        Assert(assoc.Scope is WhiteMemberScope);
-                        if (assoc.Scope is WhiteMemberScope white)
+                        // default constructor
+                        var dctor = white.Members.Find(Module.DefaultCtor);
+                        Assert(dctor != null);
+                        if (dctor != null)
                         {
-                            // default constructor
-                            var dctor = white.Members.Find(Module.DefaultCtor);
-                            Assert(dctor != null);
-                            if (dctor != null)
-                            {
-                                var type = this[classy.Assoc.Node].Type;
-                                Assert(type != null);
-                                return new Expression.CallCtor(Assoc.From(this, node), type, primary, args);
-                            }
+                            var type = this[classy.Assoc.Node].Type;
+                            Assert(type != null);
+                            return new Expression.CallCtor(Assoc.From(this, node), type, primary, args);
                         }
                     }
                     else if (classy.Node() is A.Decl.Primitive)
+                    {
+                        Assert(false);
+                    }
+                    else
                     {
                         Assert(false);
                     }
@@ -147,7 +140,6 @@ namespace Six.Six.Sema
                 throw new NotImplementedException();
             }
 
-
             Expression Select(A.Expression.Select node)
             {
                 var expr = ResolveExpressionIntern(container, node.Expr);
@@ -156,13 +148,10 @@ namespace Six.Six.Sema
                 Assert(exprType is Type.Classy);
                 if (exprType is Type.Classy classy)
                 {
-                    var scope = classy.Scope();
-                    Assert(scope is WhiteMemberScope);
-                    if (scope is WhiteMemberScope white)
-                    {
-                        var member = ResolveMember(white, node.Reference);
-                        return new Expression.Select(Assoc.From(this, node), expr, member);
-                    }
+                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(node);
+                 
+                    var member = ResolveMember(white, node.Reference);
+                    return new Expression.Select(Assoc.From(this, node), expr, member);
                 }
 
                 throw Diagnostic(node, "not implemented");
@@ -170,60 +159,43 @@ namespace Six.Six.Sema
 
             Expression Prefix(A.Expression.Prefix node)
             {
-                var primary = ResolveExpressionIntern(container, node.Expr);
-                var type = primary.Type.Resolved;
+                var expr = ResolveExpressionIntern(container, node.Expr);
 
-                if (type is Type.Classy classy)
+                if (expr.Type.Resolved is Type.Classy classy)
                 {
-                    var scope = classy.Scope();
-                    Assert(scope is WhiteMemberScope);
-                    if (scope is WhiteMemberScope white)
+                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(node);
+
+                    var member = ResolvePrefix(white, node.Op);
+                    if (member is Expression.Callable callable)
                     {
-                        var member = ResolveMember(white, node.Op, node.Op.Name.Text + "_");
-                        Assert(member is Expression.Callable);
-                        if (member is Expression.Callable callable)
-                        {
-                            Assert(callable.Node() is A.Decl.Prefix);
-                            return new Expression.Call(Assoc.From(this, node), callable.Type, callable);
-                        }
+                        return new Expression.Call(Assoc.From(this, node), callable.Type, callable);
                     }
                 }
 
-                throw Diagnostic(node, "not implemented");
+
+                ResolveOp(node, "prefix");
+                Assert(false);
+                throw new NotImplementedException();
             }
 
             Expression Infix(A.Expression.Infix node)
             {
                 var left = ResolveExpressionIntern(container, node.Left);
                 var right = ResolveExpressionIntern(container, node.Right);
-                if (left != null && right != null)
+
+                if (left.Type.Resolved is Type.Classy classy)
                 {
-                    if (this[node.Left].ResolvedType() is Type.Classy classy)
+                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(node);
+
+                    var member = ResolveInfix(white, node.Op);
+                    if (member is Expression.Callable callable)
                     {
-                        var assoc = this[classy.Assoc.Node];
-                        Assert(assoc.Scope is WhiteMemberScope);
-                        if (assoc.Scope is WhiteMemberScope white)
-                        {
-                            var name = "_" + node.Op.Name.Text + "_";
-                            if (white.Members.Find(name) is A.Decl.Infix infix)
-                            {
-                                var result = this[infix.Type].Type;
-                                Assert(result != null);
-                                if (result != null)
-                                {
-                                    var rightType = this[node.Right].ResolvedType();
-                                    var rhsType = this[infix.Parameters[0]].ResolvedType();
-                                    if (rightType != null && rhsType != null && ReferenceEquals(rightType, rhsType))
-                                    {
-                                        return new Expression.Infix(Assoc.From(this, node), result, left, right);
-                                    }
-                                }
-                            }
-                        }
+                        return new Expression.Call(Assoc.From(this, node), callable.Type, callable, right);
                     }
                 }
-                ResolveOp(node, "infix");
 
+                ResolveOp(node, "infix");
+                Assert(false);
                 throw new NotImplementedException();
             }
 

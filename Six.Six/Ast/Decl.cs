@@ -21,23 +21,28 @@ namespace Six.Six.Ast
 
         public interface Type : Node
         {
+            Ast.Type Type { get; }
+        }
+
+        public interface OptionalType : Node
+        {
             Ast.Type? Type { get; }
         }
 
         public interface Value : Node
         {
-            Ast.Expression? Value { get; }
+            Expression? Value { get; }
         }
 
         public interface Parameters : Node
         {
-            Ast.Parameters? Parameters { get; }
+            Decl.Parameters? Parameters { get; }
         }
 
         public interface Generics : Node
         {
-            Ast.TypeParameters? TypeParameters { get; }
-            Ast.TypeConstraints? Constraints { get; }
+            TypeParameters? TypeParameters { get; }
+            TypeConstraints? Constraints { get; }
         }
 
         public interface Extends : Node
@@ -64,25 +69,30 @@ namespace Six.Six.Ast
         public interface Classy : Decl { }
         public interface Funcy : Decl { }
 
-        public sealed record Let(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
+        public sealed record Let(
+            IRNode Tree, 
+            Prelude Prelude, 
+            Name Name, 
+            Type? Type,
+            Expression Value)
             : Decl,
               With.Name,
               With.Prelude,
-              With.Type,
+              With.OptionalType,
               With.Value;
 
         public sealed record Var(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
             : Decl,
               With.Name,
               With.Prelude,
-              With.Type,
+              With.OptionalType,
               With.Value;
 
         public sealed record Attribute(
             IRNode Tree,
             Prelude Prelude,
             Name Name,
-            Type? Type,
+            Type Type,
             Body Body)
             : Decl,
               With.Name,
@@ -90,7 +100,13 @@ namespace Six.Six.Ast
               With.Type,
               With.Body;
 
-        public sealed record Prefix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameters Parameters, Body Body)
+        public sealed record Prefix(
+            IRNode Tree, 
+            Prelude Prelude, 
+            Name Name, 
+            Type Type, 
+            Parameters Parameters, 
+            Body Body)
             : Funcy,
               With.Prelude,
               With.Name,
@@ -98,7 +114,13 @@ namespace Six.Six.Ast
               With.Parameters,
               With.Body;
 
-        public sealed record Infix(IRNode Tree, Prelude Prelude, Name Name, Type Type, Parameters Parameters, Body Body)
+        public sealed record Infix(
+            IRNode Tree, 
+            Prelude Prelude, 
+            Name Name, 
+            Type Type, 
+            Parameters Parameters,
+            Body Body)
             : Funcy,
               With.Prelude,
               With.Name,
@@ -111,11 +133,13 @@ namespace Six.Six.Ast
             Prelude Prelude,
             Name Name,
             Parameters Parameters,
+            Type? Extends,
             Body Body)
             : Funcy,
               With.Prelude,
               With.Name,
               With.Parameters,
+              With.Extends,
               With.Body;
 
         public sealed record Function(
@@ -207,5 +231,32 @@ namespace Six.Six.Ast
               With.Prelude,
               With.Generics,
               With.Type;
+
+        public interface Parameter
+            : Decl,
+                With.Prelude,
+                With.Name,
+                With.Type
+        {
+        }
+
+        public record ValueParameter(IRNode Tree, Prelude Prelude, Name Name, Type Type, Expression? Default)
+            : Parameter,
+                With.Prelude,
+                With.Name,
+                With.Type;
+
+        public record DefinitiveParameter(IRNode Tree, Prelude Prelude, Name Name, Type Type)
+            : Parameter,
+                With.Prelude,
+                With.Name,
+                With.Type;
+
+        public record Parameters(IRNode Tree, IEnumerable<Parameter> Items)
+            : Many<Parameter>(Tree, Items)
+        {
+            public Parameters(IRNode Tree, params Parameter[] items) : this(Tree, items.AsEnumerable()) { }
+        }
+
     }
 }
