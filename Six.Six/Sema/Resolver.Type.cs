@@ -74,7 +74,7 @@ namespace Six.Six.Sema
             }
         }
 
-        private Reference ResolveInCore(A.TreeNode node, string name)
+        private Type ResolveInCore(A.TreeNode node, string name)
         {
             var found = Module.CoreFind(name)
                 ?? throw Diagnostic(node, $"can't resolve core type `{name}´");
@@ -82,7 +82,7 @@ namespace Six.Six.Sema
             var type = this[found].Type
                 ?? throw NoTypeYet(node, name);
 
-            return new Reference(Assoc.From(this, found), type, found);
+            return new Type.Classy(Assoc.From(this, found));
         }
     }
 }

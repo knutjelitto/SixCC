@@ -15,6 +15,10 @@ namespace Six.Six.Sema
 
         public record Callable(Assoc Assoc, Type Type, params Type[] Arguments) : Expression;
         public record Attribute(Assoc Assoc, Type Type) : Expression;
+        public record Parameter(Assoc Assoc, Type Type) : Expression;
+        public record Var(Assoc Assoc, Type Type, Expression Value) : Expression;
+        public record Let(Assoc Assoc, Type Type, Expression Value) : Expression;
+        public record Class(Assoc Assoc, Type Type) : Expression;
 
         public record NaturalLiteral(Assoc Assoc, Type Type, ulong Value) : Expression;
     }

@@ -81,7 +81,12 @@ namespace Six.Six.Ast
               With.OptionalType,
               With.Value;
 
-        public sealed record Var(IRNode Tree, Prelude Prelude, Name Name, Type? Type, Expression Value)
+        public sealed record Var(
+            IRNode Tree, 
+            Prelude Prelude, 
+            Name Name, 
+            Type? Type, 
+            Expression Value)
             : Decl,
               With.Name,
               With.Prelude,

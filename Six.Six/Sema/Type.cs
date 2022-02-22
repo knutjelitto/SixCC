@@ -20,6 +20,9 @@ namespace Six.Six.Sema
             }
         }
 
+        [DebuggerStepThrough]
+        public record Reference(Assoc Assoc, Type Type, A.Decl Decl, params Type[]? Arguments) : Type;
+
         public sealed record Union(params Type[] Types) : Type;
         public sealed record Intersection(params Type[] Types) : Type;
         public sealed record Nothing() : Type;

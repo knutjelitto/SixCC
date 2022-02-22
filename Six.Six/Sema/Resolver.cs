@@ -80,7 +80,7 @@ namespace Six.Six.Sema
             );
         }
 
-        private DiagnosticException WhiteScopeExpected(A.TreeNode node)
+        private DiagnosticException InternalWhiteExpected(A.TreeNode node)
         {
             return Diagnostic(node, "<internal> expected white scope");
         }
@@ -99,15 +99,14 @@ namespace Six.Six.Sema
 
             var arguments = node.Arguments == null ? null : ResolveMany(container, node.Arguments);
 
-            var type = this[decl].Type
-                ?? throw NoTypeYet(node, name);
+            var type = this[decl].Type ?? throw NoTypeYet(node, name);
 
-            return new Reference(Assoc.From(this, node), type, decl, arguments);
+            return new Type.Reference(Assoc.From(this, node), type, decl, arguments);
         }
 
-        private Expression ResolveRest(Container container, A.Reference node, string name, A.Decl referenced)
+        private Expression ResolveRest(Container scope, A.Reference node, string name, A.Decl referenced)
         {
-            var arguments = node.Arguments == null ? null : ResolveMany(container, node.Arguments);
+            var arguments = node.Arguments == null ? null : ResolveMany(scope, node.Arguments);
 
             if (referenced is A.Decl.Function function)
             {
@@ -116,7 +115,7 @@ namespace Six.Six.Sema
                 var result = this[function.Type].Type
                         ?? throw NoTypeYet(function, function.Name.Text);
 
-                var types = ResolveMany(container, function.Parameters.Select(p => p.Type));
+                var types = ResolveMany(scope, function.Parameters.Select(p => p.Type));
 
                 return new Expression.Callable(Assoc.From(this, function), result, types);
             }
@@ -127,7 +126,7 @@ namespace Six.Six.Sema
                 var result = this[prefix.Type].Type
                           ?? throw NoTypeYet(prefix.Type, name);
 
-                var types = ResolveMany(container, prefix.Parameters.Select(p => p.Type!));
+                var types = ResolveMany(scope, prefix.Parameters.Select(p => p.Type!));
                 Assert(types.Length == 0);
 
                 return new Expression.Callable(Assoc.From(this, prefix), result, types);
@@ -139,7 +138,7 @@ namespace Six.Six.Sema
                 var result = this[infix.Type].Type
                         ?? throw NoTypeYet(infix, infix.Name.Text);
 
-                var types = ResolveMany(container, infix.Parameters.Select(p => p.Type!));
+                var types = ResolveMany(scope, infix.Parameters.Select(p => p.Type!));
                 Assert(types.Length == 1);
 
                 return new Expression.Callable(Assoc.From(this, infix), result, types);
@@ -147,28 +146,63 @@ namespace Six.Six.Sema
             else if (referenced is A.Decl.Attribute attribute)
             {
                 Assert(true);
+                Assert(arguments == null);
 
                 var result = this[attribute.Type].Type
                         ?? throw NoTypeYet(attribute, attribute.Name.Text);
 
                 return new Expression.Attribute(Assoc.From(this, attribute), result);
             }
-            else if (referenced is A.Decl.Class klass)
-            {
-                Assert(false);
-            }
             else if (referenced is A.Decl.ValueParameter parameter)
             {
-                Assert(false);
+                Assert(true);
+
+                var result = this[parameter.Type].Type
+                        ?? throw NoTypeYet(parameter, parameter.Name.Text);
+
+                return new Expression.Parameter(Assoc.From(this, parameter), result);
+            }
+            else if (referenced is A.Decl.Var var)
+            {
+                Assert(true);
+
+                var value = ResolveExpressionIntern(scope, var.Value);
+
+                var result =
+                    var.Type != null 
+                    ? this[var.Type].Type ?? throw NoTypeYet(var, var.Name.Text)
+                    : value.Type;
+
+                return new Expression.Var(Assoc.From(this, var), result, value);
+            }
+            else if (referenced is A.Decl.Let let)
+            {
+                Assert(true);
+
+                var value = ResolveExpressionIntern(scope, let.Value);
+
+                var result =
+                    let.Type != null
+                    ? this[let.Type].Type ?? throw NoTypeYet(let, let.Name.Text)
+                    : value.Type;
+
+                return new Expression.Let(Assoc.From(this, let), result, value);
+            }
+            else if (referenced is A.Decl.Class klass)
+            {
+                Assert(true);
+
+                var result = this[klass].Type
+                        ?? throw NoTypeYet(klass, klass.Name.Text);
+
+                return new Expression.Callable(Assoc.From(this, klass), result);
             }
             else
             {
                 Assert(false);
             }
 
-            var type = this[referenced].Type ?? throw NoTypeYet(referenced, name);
-
-            return new Reference(Assoc.From(this, node), type, referenced, arguments);
+            throw new NotImplementedException();
 
         }
 

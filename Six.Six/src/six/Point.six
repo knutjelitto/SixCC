@@ -1,0 +1,23 @@
+namespace six;
+
+shared class Point
+{
+    shared int x = -1;
+    shared int y = -1;
+
+    shared new ()
+    {
+        x = 0;
+        y = 0;
+    }
+
+    shared int sum()
+    {
+        return x + y;
+    }
+
+    shared void moveX(int dx)
+    {
+        x = x + dx;
+    }
+}

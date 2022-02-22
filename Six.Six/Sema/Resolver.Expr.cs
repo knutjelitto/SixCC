@@ -57,7 +57,7 @@ namespace Six.Six.Sema
                     case A.Expression.Infix node:
                         return Infix(node);
                     case A.Expression.Select node:
-                        return Select(node);
+                        return Member(node);
                     case A.Expression.NaturalNumber node:
                         return Natural(node);
                     default:
@@ -112,7 +112,7 @@ namespace Six.Six.Sema
                 Assert(exprType is Type.Classy);
                 if (exprType is Type.Classy classy)
                 {
-                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(primary.Node());
+                    var white = classy.WhiteScope() ?? throw InternalWhiteExpected(primary.Node());
 
                     if (classy.Node() is A.Decl.Class)
                     {
@@ -140,18 +140,20 @@ namespace Six.Six.Sema
                 throw new NotImplementedException();
             }
 
-            Expression Select(A.Expression.Select node)
+            Expression Member(A.Expression.Select node)
             {
                 var expr = ResolveExpressionIntern(container, node.Expr);
-                var exprType = expr.Type.Resolved;
 
-                Assert(exprType is Type.Classy);
-                if (exprType is Type.Classy classy)
+                if (expr.Type.Resolved is Type.Classy classy)
                 {
-                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(node);
+                    var white = classy.WhiteScope() ?? throw InternalWhiteExpected(node);
                  
                     var member = ResolveMember(white, node.Reference);
                     return new Expression.Select(Assoc.From(this, node), expr, member);
+                }
+                else
+                {
+                    Assert(false);
                 }
 
                 throw Diagnostic(node, "not implemented");
@@ -163,7 +165,7 @@ namespace Six.Six.Sema
 
                 if (expr.Type.Resolved is Type.Classy classy)
                 {
-                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(node);
+                    var white = classy.WhiteScope() ?? throw InternalWhiteExpected(node);
 
                     var member = ResolvePrefix(white, node.Op);
                     if (member is Expression.Callable callable)
@@ -185,7 +187,7 @@ namespace Six.Six.Sema
 
                 if (left.Type.Resolved is Type.Classy classy)
                 {
-                    var white = classy.WhiteScope() ?? throw WhiteScopeExpected(node);
+                    var white = classy.WhiteScope() ?? throw InternalWhiteExpected(node);
 
                     var member = ResolveInfix(white, node.Op);
                     if (member is Expression.Callable callable)

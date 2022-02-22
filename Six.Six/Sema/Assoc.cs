@@ -23,7 +23,7 @@ namespace Six.Six.Sema
 
         public Type? ResolvedType()
         {
-            if (Type is Reference reference)
+            if (Type is Type.Reference reference)
             {
                 return Resolver[reference.Decl].ResolvedType();
             }
