@@ -1,8 +1,8 @@
 ﻿namespace Six.Six.Sema
 {
-    public class BlockScope : ContainerCore
+    public class BlockScope : ScopeCore
     {
-        public BlockScope(Container parent)
+        public BlockScope(Scope parent)
             : base(parent)
         {
         }

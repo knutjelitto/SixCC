@@ -4,22 +4,17 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public class Namespace : ContainerCore
+    public class Namespace : ScopeCore
     {
         private readonly Dictionary<string, Namespace> children = new();
 
-        public Namespace(string name, Container parent)
+        public Namespace(string name, Scope parent)
             : base(parent)
         {
             Name = name;
         }
 
         public string Name { get; }
-
-        public override A.Decl? Resolve(A.Reference reference)
-        {
-            return Find(reference.Name.Text);
-        }
 
         public Namespace Open(string name)
         {

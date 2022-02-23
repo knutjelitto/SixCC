@@ -24,6 +24,11 @@ namespace Six.Six.Ast
             Ast.Type Type { get; }
         }
 
+        public interface Result : Node
+        {
+            Ast.Type Result { get; }
+        }
+
         public interface OptionalType : Node
         {
             Ast.Type? Type { get; }
@@ -64,10 +69,10 @@ namespace Six.Six.Ast
     public sealed record Declarations(IRNode Tree, IEnumerable<Decl> Items)
         : Many<Decl>(Tree, Items);
 
-    public interface Decl : StmtOrDecl, With.Name
+    public interface Decl : StmtOrDecl, With.Name, With.Prelude
     {
-        public interface Classy : Decl { }
-        public interface Funcy : Decl { }
+        public interface Classy : Decl, With.Body { }
+        public interface Funcy : Decl, With.Parameters, With.Body { }
 
         public sealed record Let(
             IRNode Tree, 
@@ -76,8 +81,6 @@ namespace Six.Six.Ast
             Type? Type,
             Expression Value)
             : Decl,
-              With.Name,
-              With.Prelude,
               With.OptionalType,
               With.Value;
 
@@ -88,8 +91,6 @@ namespace Six.Six.Ast
             Type? Type, 
             Expression Value)
             : Decl,
-              With.Name,
-              With.Prelude,
               With.OptionalType,
               With.Value;
 
@@ -100,8 +101,6 @@ namespace Six.Six.Ast
             Type Type,
             Body Body)
             : Decl,
-              With.Name,
-              With.Prelude,
               With.Type,
               With.Body;
 
@@ -109,29 +108,21 @@ namespace Six.Six.Ast
             IRNode Tree, 
             Prelude Prelude, 
             Name Name, 
-            Type Type, 
+            Type Result, 
             Parameters Parameters, 
             Body Body)
             : Funcy,
-              With.Prelude,
-              With.Name,
-              With.Type,
-              With.Parameters,
-              With.Body;
+              With.Result;
 
         public sealed record Infix(
             IRNode Tree, 
             Prelude Prelude, 
             Name Name, 
-            Type Type, 
+            Type Result, 
             Parameters Parameters,
             Body Body)
             : Funcy,
-              With.Prelude,
-              With.Name,
-              With.Type,
-              With.Parameters,
-              With.Body;
+              With.Result;
 
         public sealed record Constructor(
             IRNode Tree,
@@ -141,11 +132,7 @@ namespace Six.Six.Ast
             Type? Extends,
             Body Body)
             : Funcy,
-              With.Prelude,
-              With.Name,
-              With.Parameters,
-              With.Extends,
-              With.Body;
+              With.Extends;
 
         public sealed record Function(
             IRNode Tree, 
@@ -153,16 +140,12 @@ namespace Six.Six.Ast
             Name Name,
             TypeParameters? TypeParameters,
             TypeConstraints? Constraints,
-            Type Type,
+            Type Result,
             Parameters Parameters,
             Body Body)
             : Funcy,
-              With.Prelude,
-              With.Name,
               With.Generics,
-              With.Type,
-              With.Parameters,
-              With.Body;
+              With.Result;
 
         public sealed record Class(
             IRNode Tree, 
@@ -176,9 +159,6 @@ namespace Six.Six.Ast
             Type.Types? Cases,
             Body Body)
             : Classy,
-              With.Name,
-              With.Prelude,
-              With.Body,
               With.Generics,
               With.Parameters,
               With.Extends,
@@ -196,19 +176,13 @@ namespace Six.Six.Ast
             Type.Types? Cases,
             Body Body)
             : Classy,
-              With.Name,
-              With.Prelude,
-              With.Body,
               With.Generics,
               With.Parameters,
               With.Satisfies,
               With.Cases;
 
         public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name, Body Body)
-            : Classy,
-              With.Name,
-              With.Prelude,
-              With.Body;
+            : Classy;
 
         public sealed record Object(
             IRNode Tree,
@@ -218,9 +192,6 @@ namespace Six.Six.Ast
             Type.Types? Satisfies,
             Body Body)
             : Classy,
-              With.Name,
-              With.Prelude,
-              With.Body,
               With.Extends,
               With.Satisfies;
 
@@ -232,30 +203,29 @@ namespace Six.Six.Ast
             TypeConstraints? Constraints,
             Type Type)
             : Decl,
-              With.Name,
-              With.Prelude,
               With.Generics,
               With.Type;
 
         public interface Parameter
             : Decl,
-                With.Prelude,
-                With.Name,
-                With.Type
+              With.Type
         {
         }
 
-        public record ValueParameter(IRNode Tree, Prelude Prelude, Name Name, Type Type, Expression? Default)
-            : Parameter,
-                With.Prelude,
-                With.Name,
-                With.Type;
+        public record ValueParameter(
+            IRNode Tree, 
+            Prelude Prelude, 
+            Name Name, 
+            Type Type,
+            Expression? Default)
+            : Parameter;
 
-        public record DefinitiveParameter(IRNode Tree, Prelude Prelude, Name Name, Type Type)
-            : Parameter,
-                With.Prelude,
-                With.Name,
-                With.Type;
+        public record DefinitiveParameter(
+            IRNode Tree, 
+            Prelude Prelude, 
+            Name Name, 
+            Type Type)
+            : Parameter;
 
         public record Parameters(IRNode Tree, IEnumerable<Parameter> Items)
             : Many<Parameter>(Tree, Items)

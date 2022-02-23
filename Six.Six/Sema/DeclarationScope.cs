@@ -2,10 +2,10 @@
 
 namespace Six.Six.Sema
 {
-    public class DeclarationScope : ContainerCore
+    public class DeclarationScope : ScopeCore
     {
         [DebuggerStepThrough]
-        public DeclarationScope(Container parent)
+        public DeclarationScope(Scope parent)
             : base(parent)
         {
         }

@@ -10,6 +10,6 @@ shared builtin Boolean
 
 shared alias bool => Boolean;
 
-shared bool true => builtin;
-shared bool false => builtin;
+shared Boolean true => builtin;
+shared Boolean false => builtin;
 

@@ -7,10 +7,9 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public class Module : Container
+    public class Module : Scope
     {
-        public static readonly string DefaultCtor = "@dctor";
-        private static readonly string Language = "six";
+        public static readonly string DefaultCtor = "@default.ctor";
 
         public static class Core
         {
@@ -45,18 +44,9 @@ namespace Six.Six.Sema
 
         public Namespace Root { get; }
         public string Name { get; }
-        public Container Parent => this;
-        Module Container.Module => this;
         public Resolver Resolver { get; }
 
-        public IReadOnlyList<A.TreeNode> Children => Enumerable.Empty<A.TreeNode>().ToList();
-
-        public T AddChild<T>(T node) where T: A.TreeNode
-        {
-            throw new InvalidOperationException();
-        }
-
-        public Container Open(A.NamespaceIntro @namespace)
+        public Scope Open(A.NamespaceIntro @namespace)
         {
             var current = Root;
             foreach (var name in @namespace.Names)
@@ -101,7 +91,7 @@ namespace Six.Six.Sema
                     var name = $"entities/{path}/{subst}.txt";
                     using (var writer = name.Writer())
                     {
-                        new SemaDumper(writer, Resolver).DumpEntity(declaration);
+                        new SemaDumper(writer, Resolver).DumpDeclaration(declaration);
                     }
                 }
             }
@@ -131,17 +121,11 @@ namespace Six.Six.Sema
                 count += 1;
 
                 var attrs = new StringBuilder();
-                attrs.Append(declaration.IsShared() ? "S" : " ");
-                attrs.Append(declaration.IsNative() ? "N" : " ");
+                attrs.Append(declaration.ADecl.IsShared() ? "S" : " ");
+                attrs.Append(declaration.ADecl.IsNative() ? "N" : " ");
 
-                writer.WriteLine($"{count,3} {declaration.GetKind(),-12} [{attrs}] {declaration.GetName(),-30} {declaration.GetLocation()}");
+                writer.WriteLine($"{count,3} {declaration.ADecl.GetKind(),-12} [{attrs}] {declaration.ADecl.GetName(),-30} {declaration.ADecl.GetLocation()}");
             }
-        }
-
-        public A.Decl Resolve(A.Reference reference)
-        {
-            Assert(false);
-            throw new InvalidOperationException();
         }
 
         public A.Decl Resolve(RLiteral literal)
@@ -150,11 +134,9 @@ namespace Six.Six.Sema
             throw new InvalidOperationException();
         }
 
-        public A.Decl? CoreFind(string name)
-        {
-            var language = Root.Get(Language);
-            Assert(language != null);
-            return language.Find(name);
-        }
+        Scope Scope.Parent => this;
+        Module Scope.Module => this;
+        IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
+        T Scope.Add<T>(T member) => throw new NotImplementedException();
     }
 }

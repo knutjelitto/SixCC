@@ -99,7 +99,9 @@ namespace Six.Six.Compiler
 
                 if (ok)
                 {
+#if false
                     Module.Resolver.Resolve();
+#endif
 
                     Report();
                 }
@@ -170,7 +172,7 @@ namespace Six.Six.Compiler
                 {
                     if (file.Tree?.Value is Ast.Unit.Code root)
                     {
-                        S.CodeWalker.Walk(Module, root);
+                        S.DeclarationWalker.Walk(Module, root);
                     }
                 }
             }

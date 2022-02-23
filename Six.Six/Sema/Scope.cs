@@ -1,0 +1,14 @@
+﻿using System;
+
+using A = Six.Six.Ast;
+
+namespace Six.Six.Sema
+{
+    public interface Scope
+    {
+        Scope Parent { get; }
+        public Module Module => Parent.Module;
+        IReadOnlyList<Member> Members { get; }
+        T Add<T>(T member) where T : Member;
+    }
+}

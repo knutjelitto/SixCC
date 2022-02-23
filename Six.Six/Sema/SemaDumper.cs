@@ -1,10 +1,5 @@
 ﻿using Six.Core;
 using Six.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using A = Six.Six.Ast;
 
@@ -20,36 +15,38 @@ namespace Six.Six.Sema
 
         public Resolver Resolver { get; }
 
-        public void DumpEntity(A.Decl node)
+        public void DumpDeclaration(Decl decl)
         {
-            Walk(node);
+            Walk(decl);
         }
 
-        private void Walk(A.TreeNode? node)
+        private void Walk(Member member)
         {
-            if (node != null)
+            Visit((dynamic)member);
+        }
+
+        private void Visit(Decl decl)
+        {
+            wl(Name(decl.ADecl));
+            indent(() =>
             {
-                wl(Name(node));
-
-                indent(() =>
+                if (decl.Container is ContentScope content && content.Content.Members.Count > 0)
                 {
-                    var assoc = Resolver[node];
-                    Dump((dynamic)node);
-
-                    if (assoc.Expr is Expression expr)
+                    wl("content");
+                    indent(() =>
                     {
-                        Assert(true);
-
-                        wl($"-----{expr.GetType().FullName!.Substring(13)}");
-                        Dump((dynamic)expr);
-                    }
-                });
-            }
+                        foreach (var member in content.Content.Members)
+                        {
+                            Walk(member);
+                        }
+                    });
+                }
+            });
         }
 
-        void Dump(Expression expr)
+        private void Visit(Stmt stmt)
         {
-
+            wl(Name(stmt.AStmt));
         }
 
         private string Name(A.TreeNode node)
@@ -72,7 +69,36 @@ namespace Six.Six.Sema
                 Assert(false);
             }
             var name = node is A.With.Name named ? $" {named.Name.Text}" : "";
-            return $"{prefix}{node.GetType().Name}{name}";
+            return $"{prefix}{node.GetType().Name.ToLowerInvariant()}{name}";
+        }
+
+
+#if false
+        private void Walk(A.TreeNode? node)
+        {
+            if (node != null)
+            {
+                wl(Name(node));
+
+                indent(() =>
+                {
+                    var assoc = Resolver[node];
+                    Dump((dynamic)node);
+
+                    if (assoc.Expr is Expression expr)
+                    {
+                        Assert(true);
+
+                        wl($"-----{expr.GetType().FullName![13..]}");
+                        Dump((dynamic)expr);
+                    }
+                });
+            }
+        }
+
+        void Dump(Expression expr)
+        {
+
         }
 
         private void Dump(A.Decl.Let node)
@@ -163,5 +189,6 @@ namespace Six.Six.Sema
                 }
             }
         }
+#endif
     }
 }
