@@ -169,7 +169,7 @@ nested-declaration
     ;
 
 primitive-declaration
-    : prelude 'builtin' name block-body
+    : prelude 'builtin' name case-types? block-body
     ;
 
 operator-declaration
@@ -246,14 +246,14 @@ constructor-declaration
     ;
 
 function-body
-    | expression-body
+    | calc-body
     | block-body
     | null-body
     | builtin-body
     ;
 
 attribute-body
-    | expression-body
+    | calc-body
     | value-body
     | block-body
     | null-body
@@ -273,7 +273,7 @@ statelaration
     | nested-declaration
     ;
 
-expression-body
+calc-body
     : function-specifier ';'
     ;
 

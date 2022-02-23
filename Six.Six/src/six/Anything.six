@@ -4,4 +4,36 @@ shared class Anything
 {
 }
 
+shared abstract class Basic : Object is Identifiable
+{
+}
+
+shared interface Identifiable
+{
+    shared default actual Boolean equals(Object that)
+        ;/*TODO
+        =>  if (is Identifiable that)
+            then this === that
+            else false;
+        */
+    
+    shared default actual Integer hash => identityHash(this);
+}
+
+shared abstract class Object : Anything
+{
+    shared formal Boolean equals(Object that);
+    shared formal Integer hash;
+    shared default String string => className(this) + "@" + Integer.format(hash, #10);
+}
+
+shared abstract class Null : Anything of null
+{
+}
+
+shared object null : Null
+{
+}
+
+
 shared alias void => Anything;

@@ -1,6 +1,6 @@
 namespace six;
 
-shared builtin Boolean
+shared builtin Boolean of true | false
 {
     shared operator bool _|_ (bool rhs) => builtin;
     shared operator bool _&_ (bool rhs) => builtin;

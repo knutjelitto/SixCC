@@ -17,34 +17,55 @@ namespace Six.Six.Sema
 
         public void DumpDeclaration(Decl decl)
         {
-            Walk(decl);
+            Walk(decl, true);
         }
 
-        private void Walk(Member member)
+        private void Walk(Member member, bool complex)
         {
-            Visit((dynamic)member);
+            Visit((dynamic)member, complex);
         }
 
-        private void Visit(Decl decl)
+        private void WalkMany(IEnumerable<Member> members, bool complex)
+        {
+            foreach (var member in members)
+            {
+                Walk(member, complex);
+            }
+        }
+
+        private void Visit(Decl decl, bool complex)
         {
             wl(Name(decl.ADecl));
+            if (!complex)
+            {
+                return;
+            }
+
             indent(() =>
             {
-                if (decl.Container is ContentScope content && content.Content.Members.Count > 0)
+                if (decl.Container is ContentScope content)
                 {
-                    wl("content");
-                    indent(() =>
+                    if (content.Members.Count > 0)
                     {
-                        foreach (var member in content.Content.Members)
+                        wl("declarations");
+                        indent(() =>
                         {
-                            Walk(member);
-                        }
-                    });
+                            WalkMany(content.Members, false);
+                        });
+                    }
+                    if (content.Content.Members.Count > 0)
+                    {
+                        wl("content");
+                        indent(() =>
+                        {
+                            WalkMany(content.Content.Members, true);
+                        });
+                    }
                 }
             });
         }
 
-        private void Visit(Stmt stmt)
+        private void Visit(Stmt stmt, bool complex)
         {
             wl(Name(stmt.AStmt));
         }
@@ -71,124 +92,5 @@ namespace Six.Six.Sema
             var name = node is A.With.Name named ? $" {named.Name.Text}" : "";
             return $"{prefix}{node.GetType().Name.ToLowerInvariant()}{name}";
         }
-
-
-#if false
-        private void Walk(A.TreeNode? node)
-        {
-            if (node != null)
-            {
-                wl(Name(node));
-
-                indent(() =>
-                {
-                    var assoc = Resolver[node];
-                    Dump((dynamic)node);
-
-                    if (assoc.Expr is Expression expr)
-                    {
-                        Assert(true);
-
-                        wl($"-----{expr.GetType().FullName![13..]}");
-                        Dump((dynamic)expr);
-                    }
-                });
-            }
-        }
-
-        void Dump(Expression expr)
-        {
-
-        }
-
-        private void Dump(A.Decl.Let node)
-        {
-            Walk(node.Type);
-            Walk(node.Value);
-        }
-
-        private void Dump(A.Decl.Var node)
-        {
-            Walk(node.Type);
-            Walk(node.Value);
-        }
-
-        private void Dump(A.Expression.Prefix node)
-        {
-            Walk(node.Op);
-            Walk(node.Expr);
-        }
-
-        private void Dump(A.Expression.Infix node)
-        {
-            var assoc = Resolver[node];
-
-            Walk(node.Op);
-            Walk(node.Left);
-            Walk(node.Right);
-        }
-
-        private void Dump(A.Expression.Select node)
-        {
-            Walk(node.Expr);
-            Walk(node.Reference);
-        }
-
-        private void Dump(A.Stmt.Return node)
-        {
-            Walk(node.Expression);
-        }
-
-        private void Dump(A.Stmt.Assign node)
-        {
-            Walk(node.Left);
-            Walk(node.Right);
-        }
-
-        private void Dump(A.Reference reference)
-        {
-            var assoc = Resolver[reference];
-            var type = Resolver[reference].Type;
-            var expr = assoc.Expr;
-            Assert(expr == null || expr is Expression);
-        }
-
-        private void Dump(A.TreeNode node)
-        {
-            var assoc = Resolver[node];
-
-            if (assoc.ResolvedType() is Type.Classy classy && classy.Node() is A.With.Name named)
-            {
-                wl($"type: {named.Name.Text}");
-            }
-
-            if (assoc.Scope != null)
-            {
-                if (assoc.Scope.Children.Count > 0)
-                {
-                    wl("children:");
-                    indent(() =>
-                    {
-                        foreach (var child in assoc.Scope.Children)
-                        {
-                            Walk(child);
-                        }
-                    });
-                }
-
-                if (assoc.Scope is MemberScope members)
-                {
-                    wl("members:");
-                    indent(() =>
-                    {
-                        foreach (var child in members.Members.Children)
-                        {
-                            Walk(child);
-                        }
-                    });
-                }
-            }
-        }
-#endif
     }
 }

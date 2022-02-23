@@ -34,6 +34,15 @@ namespace Six.Six.Sema
             return null;
         }
 
+        public Decl? Resolve(string name)
+        {
+            if (declarations.TryGetValue(name, out var decl))
+                {
+                return decl;
+            }
+            return Parent.Resolve(name);
+        }
+
         public T Add<T>(T member) where T : Member
         {
             if (member is Decl decl)

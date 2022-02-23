@@ -1,6 +1,4 @@
-﻿using Six.Core;
-using System;
-
+﻿using static System.Formats.Asn1.AsnWriter;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -62,6 +60,19 @@ namespace Six.Six.Sema
         {
             var scope = new ClassyScope(container);
             container.Add(new Declaration(scope, node));
+
+            if (node is A.With.Extends extends && extends.Extends != null)
+            {
+
+            }
+            if (node is A.With.Satisfies satisfies && satisfies.Satisfies != null)
+            {
+
+            }
+            if (node is A.With.Cases cases && cases.Cases != null)
+            {
+
+            }
             if (node is A.With.Body body)
             {
                 Walk(scope.Content, body.Body);
@@ -70,11 +81,27 @@ namespace Six.Six.Sema
 
         private void Declare(Scope container, A.Decl.Funcy node)
         {
-            var scope = new FuncyScope(container);
-            container.Add(new Declaration(scope, node));
+            var funcy = new FuncyScope(container);
+            container.Add(new Declaration(funcy, node));
+
+            if (node is A.With.Parameters parameters)
+            {
+                Walk(funcy, parameters.Parameters);
+            }
             if (node is A.With.Body body)
             {
-                Walk(scope.Content, body.Body);
+                Walk(funcy.Content, body.Body);
+            }
+            if (node is A.With.Result result && result.Result is A.Reference reference)
+            {
+                Resolver.Schedule(() =>
+                {
+                    var name = reference.Name.Text;
+
+                    var decl = funcy.Resolve(name);
+
+                    Assert(decl != null);
+                });
             }
         }
 
@@ -111,9 +138,27 @@ namespace Six.Six.Sema
         {
         }
 
+        private void Declare(BlockScope container, A.Body.Deferred node)
+        {
+        }
+
+        private void Declare(BlockScope container, A.Body.Value node)
+        {
+        }
+
         private void Declare(BlockScope container, A.Stmt node)
         {
             container.Add(new Statement(container, node));
+        }
+
+        private void Declare(Scope container, A.Decl.Parameters node)
+        {
+            WalkMany(container, node);
+        }
+
+        private void Declare(Scope container, A.Decl.Parameter node)
+        {
+            container.Add(new Declaration(container, node));
         }
     }
 }

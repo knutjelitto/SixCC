@@ -10,5 +10,6 @@ namespace Six.Six.Sema
         public Module Module => Parent.Module;
         IReadOnlyList<Member> Members { get; }
         T Add<T>(T member) where T : Member;
+        Decl? Resolve(string name);
     }
 }

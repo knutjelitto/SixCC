@@ -1,11 +1,4 @@
-﻿using Six.Six.Ast;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using A = Six.Six.Ast;
+﻿using System;
 
 namespace Six.Six.Sema
 {
@@ -19,5 +12,6 @@ namespace Six.Six.Sema
         public Scope Parent { get; }
         public IReadOnlyList<Member> Members { get; } = Array.Empty<Member>();
         public T Add<T>(T member) where T : Member => throw new NotImplementedException();
+        public Decl? Resolve(string name) => Parent.Resolve(name);
     }
 }

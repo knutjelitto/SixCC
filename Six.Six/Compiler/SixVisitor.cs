@@ -168,9 +168,10 @@ namespace Six.Six.Compiler
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
+            var cases = WalkOptional<Type.Types>(element.CaseTypes);
             var body = Walk<Body>(element.BlockBody);
 
-            element.Value = new Decl.Primitive(element, prelude, name, body);
+            element.Value = new Decl.Primitive(element, prelude, name, cases, body);
         }
 
         protected override void Visit(CInfixDeclaration element)
@@ -381,14 +382,11 @@ namespace Six.Six.Compiler
             element.Value = new Body.Block(element, usings, statelarations);
         }
 
-        protected override void Visit(CExpressionBody element)
+        protected override void Visit(CCalcBody element)
         {
-            var expression = Walk<Expression>(element.FunctionSpecifier)!;
-            var @return = new Stmt.Return(element, expression);
-            var usings = new Usings(element);
-            var statements = new Statelarations(element, @return);
+            var expression = Walk<Expression>(element.FunctionSpecifier);
 
-            element.Value = new Body.Block(element, usings, statements);
+            element.Value = new Body.Calc(element, expression);
         }
 
         protected override void Visit(CReturnStatement element)

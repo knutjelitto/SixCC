@@ -99,9 +99,7 @@ namespace Six.Six.Compiler
 
                 if (ok)
                 {
-#if false
                     Module.Resolver.Resolve();
-#endif
 
                     Report();
                 }

@@ -181,8 +181,9 @@ namespace Six.Six.Ast
               With.Satisfies,
               With.Cases;
 
-        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name, Body Body)
-            : Classy;
+        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name, Type.Types? Cases, Body Body)
+            : Classy,
+              With.Cases;
 
         public sealed record Object(
             IRNode Tree,
