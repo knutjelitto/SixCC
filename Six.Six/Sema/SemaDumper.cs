@@ -44,6 +44,14 @@ namespace Six.Six.Sema
                     break;
                 case Type.Callable node:
                     wl($"{name}: {node.GetType().Name.ToLowerInvariant()} {Name(node.Decl)}");
+                    indent(() =>
+                    {
+                        TypeProp("result", node.Result);
+                        foreach (var parameter in node.Parameters)
+                        {
+                            TypeProp("param ", parameter);
+                        }
+                    });
                     break;
                 default:
                     Assert(false);
