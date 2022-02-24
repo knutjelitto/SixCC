@@ -33,16 +33,39 @@ namespace Six.Six.Sema
             }
         }
 
+        private void TypeProp(string name, Type? type)
+        {
+            if (type == null) return;
+
+            switch(type)
+            {
+                case Type.Reference node:
+                    wl($"{name}: {node.GetType().Name.ToLowerInvariant()} {Name(node.Decl)}");
+                    break;
+                case Type.Callable node:
+                    wl($"{name}: {node.GetType().Name.ToLowerInvariant()} {Name(node.Decl)}");
+                    break;
+                default:
+                    Assert(false);
+                    break;
+            }
+        }
+
         private void Visit(Decl decl, bool complex)
         {
             wl(Name(decl.ADecl));
-            if (!complex)
-            {
-                return;
-            }
-
+            
             indent(() =>
             {
+                TypeProp("result ", decl.GetResult());
+                TypeProp("type   ", decl.Type);
+                TypeProp("extends", decl.GetExtends());
+
+                if (!complex)
+                {
+                    return;
+                }
+
                 if (decl.Container is ContentScope content)
                 {
                     if (content.Members.Count > 0)
@@ -53,12 +76,12 @@ namespace Six.Six.Sema
                             WalkMany(content.Members, false);
                         });
                     }
-                    if (content.Content.Members.Count > 0)
+                    if (content.Block.Members.Count > 0)
                     {
                         wl("content");
                         indent(() =>
                         {
-                            WalkMany(content.Content.Members, true);
+                            WalkMany(content.Block.Members, true);
                         });
                     }
                 }
@@ -68,6 +91,11 @@ namespace Six.Six.Sema
         private void Visit(Stmt stmt, bool complex)
         {
             wl(Name(stmt.AStmt));
+        }
+
+        private string Name(Decl decl)
+        {
+            return Name(decl.ADecl);
         }
 
         private string Name(A.TreeNode node)

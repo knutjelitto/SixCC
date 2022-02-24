@@ -11,5 +11,6 @@ namespace Six.Six.Sema
         IReadOnlyList<Member> Members { get; }
         T Add<T>(T member) where T : Member;
         Decl? Resolve(string name);
+        Decl? Find(string name);
     }
 }

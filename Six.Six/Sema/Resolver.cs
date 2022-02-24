@@ -28,7 +28,31 @@ namespace Six.Six.Sema
             }
         }
 
-        private ulong ConvertNatural(string text)
+        public Type NaturalType(ulong value)
+        {
+            Decl? decl = null;
+
+            if (value > long.MaxValue)
+            {
+                decl = Module.CoreFind(Module.Core.UInt64);
+            }
+            else if (value > int.MaxValue)
+            {
+                decl = Module.CoreFind(Module.Core.Int64);
+            }
+            else
+            {
+                decl = Module.CoreFind(Module.Core.Int32);
+            }
+
+            Assert(decl != null);
+
+            var type = new Type.Reference(decl);
+
+            return type;
+        }
+
+        public ulong ConvertNatural(string text)
         {
             if (text.StartsWith('#'))
             {

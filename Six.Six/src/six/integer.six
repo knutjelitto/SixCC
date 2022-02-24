@@ -5,12 +5,12 @@ shared builtin i16{}
 
 shared builtin i32
 {
-    shared operator int -_() => builtin;
-    shared operator int _+_(int rhs) => builtin;
-    shared operator int _-_(int rhs) => builtin;
-    shared operator int _*_(int rhs) => builtin;
-    shared operator int _/_(int rhs) => builtin;
-    shared operator int _%_(int rhs) => builtin;
+    shared operator i32 -_() => builtin;
+    shared operator i32 _+_(i32 rhs) => builtin;
+    shared operator i32 _-_(i32 rhs) => builtin;
+    shared operator i32 _*_(i32 rhs) => builtin;
+    shared operator i32 _/_(i32 rhs) => builtin;
+    shared operator i32 _%_(i32 rhs) => builtin;
 }
 
 shared builtin i64{}
@@ -20,11 +20,11 @@ shared builtin u16{}
 
 shared builtin u32
 {
-    shared operator uint _+_(uint rhs) => builtin;
-    shared operator uint _-_(uint rhs) => builtin;
-    shared operator uint _*_(uint rhs) => builtin;
-    shared operator uint _/_(uint rhs) => builtin;
-    shared operator uint _%_(uint rhs) => builtin;
+    shared operator u32 _+_(u32 rhs) => builtin;
+    shared operator u32 _-_(u32 rhs) => builtin;
+    shared operator u32 _*_(u32 rhs) => builtin;
+    shared operator u32 _/_(u32 rhs) => builtin;
+    shared operator u32 _%_(u32 rhs) => builtin;
 }
 
 shared builtin u64{}
@@ -39,4 +39,6 @@ shared alias uint => u32;
 
 shared alias long => i64;
 shared alias ulong => u64;
+
+shared alias Integer => int;
 

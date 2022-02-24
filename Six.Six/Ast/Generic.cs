@@ -23,9 +23,12 @@ namespace Six.Six.Ast
     public record TypeConstraints(IRNode Tree, IEnumerable<TypeConstraint> Items)
         : Many<TypeConstraint>(Tree, Items);
 
-    public record TypeParameter(IRNode Tree, string? Variance, Name Name, Type? Default)
-        :   Generic,
-            With.Name;
+    public record TypeParameter(
+        IRNode Tree,
+        string? Variance,
+        Name Name,
+        Type? Default)
+        : Decl;
 
     public record TypeParameters(IRNode Tree, IEnumerable<TypeParameter> Items)
         : Many<TypeParameter>(Tree, Items);

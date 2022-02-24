@@ -69,10 +69,11 @@ namespace Six.Six.Ast
     public sealed record Declarations(IRNode Tree, IEnumerable<Decl> Items)
         : Many<Decl>(Tree, Items);
 
-    public interface Decl : StmtOrDecl, With.Name, With.Prelude
+    public interface Decl : StmtOrDecl, With.Name
     {
-        public interface Classy : Decl, With.Body { }
-        public interface Funcy : Decl, With.Parameters, With.Body { }
+        public interface Preluded : Decl, With.Prelude { }
+        public interface Classy : Preluded, With.Body { }
+        public interface Funcy : Preluded, With.Parameters, With.Body { }
 
         public sealed record Let(
             IRNode Tree, 
@@ -80,7 +81,7 @@ namespace Six.Six.Ast
             Name Name, 
             Type? Type,
             Expression Value)
-            : Decl,
+            : Preluded,
               With.OptionalType,
               With.Value;
 
@@ -90,7 +91,7 @@ namespace Six.Six.Ast
             Name Name, 
             Type? Type, 
             Expression Value)
-            : Decl,
+            : Preluded,
               With.OptionalType,
               With.Value;
 
@@ -100,7 +101,7 @@ namespace Six.Six.Ast
             Name Name,
             Type Type,
             Body Body)
-            : Decl,
+            : Preluded,
               With.Type,
               With.Body;
 
@@ -203,12 +204,12 @@ namespace Six.Six.Ast
             TypeParameters? TypeParameters,
             TypeConstraints? Constraints,
             Type Type)
-            : Decl,
+            : Preluded,
               With.Generics,
               With.Type;
 
         public interface Parameter
-            : Decl,
+            : Preluded,
               With.Type
         {
         }

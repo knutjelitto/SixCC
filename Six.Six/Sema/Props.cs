@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Sema
 {
+    public interface WithProps
+    {
+        Props Props { get; }
+    }
+
     public class Props
     {
-        private readonly Dictionary<string, Member> pairs = new();
+        private readonly Dictionary<string, Entity> pairs = new();
 
-        public Member? Get(string name)
+        public Entity? Get(string name)
         {
             if (pairs.TryGetValue(name, out var result))
             {
@@ -19,16 +24,11 @@ namespace Six.Six.Sema
             return null;
         }
 
-        public T? Get<T>(string name) where T : Member => (T?)Get(name);
+        public T? Get<T>(string name) where T : Entity => (T?)Get(name);
 
-        public void Set(string name, Member value)
+        public bool TrySet(string name, Entity? value)
         {
-            pairs[name] = value;
-        }
-
-        public bool TrySet(string name, Member value)
-        {
-            if (pairs.ContainsKey(name))
+            if (value == null || pairs.ContainsKey(name))
             {
                 return false;
             }

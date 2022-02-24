@@ -6,4 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Sema
 {
+    public interface Entity
+    {
+    }
 }

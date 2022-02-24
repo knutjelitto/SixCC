@@ -1,14 +1,14 @@
 namespace six;
 
+shared alias bool => Boolean;
+
 shared builtin Boolean of true | false
 {
-    shared operator bool _|_ (bool rhs) => builtin;
-    shared operator bool _&_ (bool rhs) => builtin;
-    shared operator bool _^_ (bool rhs) => builtin;
-    shared operator bool !_ () => builtin;
+    shared operator Boolean _|_ (Boolean rhs) => builtin;
+    shared operator Boolean _&_ (Boolean rhs) => builtin;
+    shared operator Boolean _^_ (Boolean rhs) => builtin;
+    shared operator Boolean !_ () => builtin;
 }
-
-shared alias bool => Boolean;
 
 shared Boolean true => builtin;
 shared Boolean false => builtin;

@@ -16,8 +16,12 @@ shared class Point
         return x + y;
     }
 
-    shared void moveX(int dx)
+    shared YY moveX(int dx)
     {
         x = x + dx;
+    }
+
+    shared class YY
+    {
     }
 }

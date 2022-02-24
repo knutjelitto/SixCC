@@ -13,5 +13,6 @@ namespace Six.Six.Sema
         public IReadOnlyList<Member> Members { get; } = Array.Empty<Member>();
         public T Add<T>(T member) where T : Member => throw new NotImplementedException();
         public Decl? Resolve(string name) => Parent.Resolve(name);
+        public Decl? Find(string name) => null;
     }
 }

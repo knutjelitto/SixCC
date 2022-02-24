@@ -37,7 +37,7 @@ namespace Six.Six.Sema
         public Decl? Resolve(string name)
         {
             if (declarations.TryGetValue(name, out var decl))
-                {
+            {
                 return decl;
             }
             return Parent.Resolve(name);

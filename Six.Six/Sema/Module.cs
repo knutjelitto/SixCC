@@ -9,6 +9,7 @@ namespace Six.Six.Sema
 {
     public class Module : Scope
     {
+        public static readonly string Language = "six";
         public static readonly string DefaultCtor = "@default.ctor";
 
         public static class Core
@@ -87,8 +88,9 @@ namespace Six.Six.Sema
 
                     var invalid = Path.GetInvalidFileNameChars();
                     Assert(!subst.Any(c => invalid.Contains(c)));
+                    var decl = declaration.ADecl.GetType().Name.ToLowerInvariant();
 
-                    var name = $"entities/{path}/{subst}.txt";
+                    var name = $"entities/{path}/{decl}/{subst}.txt";
                     using (var writer = name.Writer())
                     {
                         new SemaDumper(writer, Resolver).DumpDeclaration(declaration);
@@ -128,10 +130,18 @@ namespace Six.Six.Sema
             }
         }
 
+        public Decl? CoreFind(string name)
+        {
+            var language = Root.Get(Language);
+            Assert(language != null);
+            return language.Find(name);
+        }
+
         Scope Scope.Parent => this;
         Module Scope.Module => this;
         IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
         T Scope.Add<T>(T member) => throw new NotImplementedException();
-        Decl Scope.Resolve(string name) => throw new NotImplementedException();
+        Decl? Scope.Resolve(string name) => null;
+        Decl? Scope.Find(string name) => null;
     }
 }

@@ -605,7 +605,7 @@ namespace Six.Six.Compiler
 
         protected override void Visit(CGenericParameters element)
         {
-            element.Value = WalkOptional<Generic>(element.GenericParameterList);
+            element.Value = WalkOptional<TypeParameters>(element.GenericParameterList);
         }
 
         protected override void Visit(CGenericParameterList element)
@@ -669,6 +669,14 @@ namespace Six.Six.Compiler
         }
 
         protected override void Visit(CMulExpression element)
+        {
+            var left = Walk<Expression>(element.LevelMulExpression);
+            var right = Walk<Expression>(element.LevelUnionExpression);
+
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
+        }
+
+        protected override void Visit(CDivExpression element)
         {
             var left = Walk<Expression>(element.LevelMulExpression);
             var right = Walk<Expression>(element.LevelUnionExpression);
