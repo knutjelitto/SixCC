@@ -33,7 +33,6 @@ namespace Six.Six.Sema
     {
         private const string _result = "Result";
         private const string _extends = "Extends";
-        private const string _expr = "Expression";
 
         public static Type? GetExtends(this WithProps decl)
         {
@@ -42,15 +41,6 @@ namespace Six.Six.Sema
         public static bool SetExtends(this WithProps decl, Type? type)
         {
             return decl.Props.TrySet(_extends, type);
-        }
-
-        public static Expr? GetExpr(this WithProps decl)
-        {
-            return decl.Props.Get<Expr>(_expr);
-        }
-        public static bool SetExpr(this WithProps decl, Expr? expr)
-        {
-            return decl.Props.TrySet(_expr, expr);
         }
 
         public static Type? GetResult(this WithProps decl)

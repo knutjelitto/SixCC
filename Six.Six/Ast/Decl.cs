@@ -26,7 +26,7 @@ namespace Six.Six.Ast
 
         public interface Result : Node
         {
-            Ast.Type Result { get; }
+            Ast.Type Type { get; }
         }
 
         public interface OptionalType : Node
@@ -109,21 +109,21 @@ namespace Six.Six.Ast
             IRNode Tree, 
             Prelude Prelude, 
             Name Name, 
-            Type Result, 
+            Type Type, 
             Parameters Parameters, 
             Body Body)
             : Funcy,
-              With.Result;
+              With.Type;
 
         public sealed record Infix(
             IRNode Tree, 
             Prelude Prelude, 
             Name Name, 
-            Type Result, 
+            Type Type, 
             Parameters Parameters,
             Body Body)
             : Funcy,
-              With.Result;
+              With.Type;
 
         public sealed record Constructor(
             IRNode Tree,
@@ -141,12 +141,12 @@ namespace Six.Six.Ast
             Name Name,
             TypeParameters? TypeParameters,
             TypeConstraints? Constraints,
-            Type Result,
+            Type Type,
             Parameters Parameters,
             Body Body)
             : Funcy,
               With.Generics,
-              With.Result;
+              With.Type;
 
         public sealed record Class(
             IRNode Tree, 

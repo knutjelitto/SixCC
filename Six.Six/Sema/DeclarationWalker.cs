@@ -115,7 +115,7 @@ namespace Six.Six.Sema
 
             Resolver.Schedule(() =>
             {
-                if (node.Result is A.Reference result)
+                if (node.Type is A.Reference result)
                 {
                     var resultType = ResolveType(funcy, result);
                     if (resultType != null)
@@ -170,13 +170,13 @@ namespace Six.Six.Sema
             {
                 WalkBody(funcy.Block, body.Body);
             }
-            if (node is A.With.Result result)
+            if (node is A.With.Type result)
             {
-                if (result.Result is A.Reference reference)
+                if (result.Type is A.Reference reference)
                 {
                     Resolver.Schedule(() =>
                     {
-                        decl.SetResult(ResolveType(funcy, reference));
+                        decl.Type = ResolveType(funcy, reference);
                     });
                 }
                 else
