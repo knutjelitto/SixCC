@@ -20,7 +20,7 @@ namespace Six.Six.Sema
             Walk(decl, true);
         }
 
-        private void Walk(Member member, bool complex)
+        private void Walk(Entity member, bool complex)
         {
             Visit((dynamic)member, complex);
         }
@@ -33,23 +33,55 @@ namespace Six.Six.Sema
             }
         }
 
+        private string TypeProp(Type? type)
+        {
+            if (type == null) return string.Empty;
+
+            switch (type)
+            {
+                case Type.Reference node:
+                    return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
+                case Type.Callable node:
+                    return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
+                default:
+                    Assert(false);
+                    return string.Empty;
+            }
+        }
+
+        private string Head(string text)
+        {
+            const int nameWidth = -12;
+
+            return $"{text, nameWidth}:";
+        }
+
         private void TypeProp(string name, Type? type)
         {
             if (type == null) return;
 
-            switch(type)
+            w($"{Head(name)}{TypeProp(type)}");
+            var resolvedType = Resolver.ResolveType(type);
+            if (resolvedType != null)
+            {
+                if (!ReferenceEquals(type.Decl, resolvedType.Decl))
+                {
+                    w($" =>{TypeProp(resolvedType) }");
+                }
+            }
+            wl();
+
+            switch (type)
             {
                 case Type.Reference node:
-                    wl($"{name}: {node.GetType().Name.ToLowerInvariant()} {Name(node.Decl)}");
                     break;
                 case Type.Callable node:
-                    wl($"{name}: {node.GetType().Name.ToLowerInvariant()} {Name(node.Decl)}");
                     indent(() =>
                     {
                         TypeProp("result", node.Result);
                         foreach (var parameter in node.Parameters)
                         {
-                            TypeProp("param ", parameter);
+                            TypeProp("param", parameter);
                         }
                     });
                     break;
@@ -61,12 +93,12 @@ namespace Six.Six.Sema
 
         private void Visit(Decl decl, bool complex)
         {
-            wl(Name(decl.ADecl));
+            wl($"{decl.ADecl.GetType().Name}{Name(decl.ADecl)}");
             
             indent(() =>
             {
-                TypeProp("result ", decl.GetResult());
-                TypeProp("type   ", decl.Type);
+                TypeProp("result", decl.GetResult());
+                TypeProp("type", decl.Type);
                 TypeProp("extends", decl.GetExtends());
 
                 if (!complex)
@@ -98,7 +130,100 @@ namespace Six.Six.Sema
 
         private void Visit(Stmt stmt, bool complex)
         {
-            wl(Name(stmt.AStmt));
+            wl(Ref(stmt.AStmt));
+        }
+
+        private void Visit(Stmt.Return stmt, bool complex)
+        {
+            wl(Ref(stmt.AStmt));
+            Assert(stmt.Expr != null);
+            
+            if (stmt.Expr is Expr.Delayed delayed)
+            {
+                if (delayed.Resolved != null)
+                {
+                    indent(() =>
+                    {
+                        Walk(delayed.Resolved, complex);
+                    });
+                }
+                else
+                {
+                    Assert(false);
+                }
+            }
+        }
+
+        private void Visit(Type type, bool complex)
+        {
+            Assert(false);
+        }
+
+        private void Visit(Type.Callable type, bool complex)
+        {
+            wl($"{type.GetType().Name}");
+            indent(() =>
+            {
+                w($"{Head("result")} ");  Walk(type.Result, false);
+                for (var i = 0; i < type.Parameters.Length; ++i)
+                {
+                    w($"{Head($"param[{i}]")} "); Walk(type.Parameters[i], false);
+                }
+            });
+        }
+        private void Visit(Type.Reference type, bool complex)
+        {
+            wl($"{type.GetType().Name}");
+            indent(() =>
+            {
+                Walk(type.Decl, false);
+            });
+        }
+
+        private void Visit(Expr expr, bool complex)
+        {
+            Assert(false);
+        }
+
+        private void Visit(Expr.Delayed expr, bool complex)
+        {
+            if (expr.Resolved != null)
+            {
+                Walk(expr.Resolved, complex);
+            }
+            else
+            {
+                Assert(false);
+            }
+        }
+
+        private void Visit(Expr.ParameterReference expr, bool complex)
+        {
+            w($"{Head("parameter")} "); Walk(expr.Decl, false);
+        }
+
+        private void Visit(Expr.Reference expr, bool complex)
+        {
+            wl($"<<reference>>");
+        }
+
+        private void Visit(Expr.Natural expr, bool complex)
+        {
+            wl($"{expr.value}");
+        }
+
+        private void Visit(Expr.CallMember expr, bool complex)
+        {
+            wl($"{expr.GetType().Name}");
+            indent(() =>
+            {
+                Walk(expr.Make, false);
+                Walk(expr.Callable, false);
+                for (var i = 0; i < expr.Arguments.Length; ++i)
+                {
+                    w($"{Head($"argument[{i}]")} "); Walk(expr.Arguments[i], false);
+                }
+            });
         }
 
         private string Name(Decl decl)
@@ -107,6 +232,17 @@ namespace Six.Six.Sema
         }
 
         private string Name(A.TreeNode node)
+        {
+            return node is A.With.Name named ? $" {named.Name.Text}" : "";
+        }
+
+
+        private string Ref(Decl decl)
+        {
+            return Ref(decl.ADecl);
+        }
+
+        private string Ref(A.TreeNode node)
         {
             var prefix = "";
             if (node is A.Stmt)
@@ -125,8 +261,7 @@ namespace Six.Six.Sema
             {
                 Assert(false);
             }
-            var name = node is A.With.Name named ? $" {named.Name.Text}" : "";
-            return $"{prefix}{node.GetType().Name.ToLowerInvariant()}{name}";
+            return $"{prefix}{node.GetType().Name}{Name(node)}";
         }
     }
 }

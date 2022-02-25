@@ -9,7 +9,7 @@ namespace Six.Six.Sema
         Scope Parent { get; }
         public Module Module => Parent.Module;
         IReadOnlyList<Member> Members { get; }
-        T Add<T>(T member) where T : Member;
+        T AddMember<T>(T member) where T : Member;
         Decl? Resolve(string name);
         Decl? Find(string name);
     }

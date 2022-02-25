@@ -1,0 +1,22 @@
+namespace six;
+
+shared class i32
+{
+    shared operator int _+_ (int that);
+    shared operator int _-_ (int that);
+    shared operator int _*_ (int that);
+    shared operator int _/_ (int that);
+    shared operator int _%_ (int that);
+}
+
+shared alias int => i32;
+
+shared int result_with_consts(int a, int b, int c, int d, int e, int f)
+{
+    return 1 + 2 - 3 * 4 / 5 % 6;
+}
+
+shared int result_with_parameters(int a, int b, int c, int d, int e, int f)
+{
+    return a + b - c * d / e % f;
+}
