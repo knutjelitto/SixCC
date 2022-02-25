@@ -2,11 +2,18 @@ namespace six;
 
 shared class i32
 {
-    shared operator int _+_ (int that);
-    shared operator int _-_ (int that);
-    shared operator int _*_ (int that);
-    shared operator int _/_ (int that);
-    shared operator int _%_ (int that);
+    shared static i32 Zero = 0;
+    shared static i32 One = 1;
+    shared static i32 MinValue;
+    shared static i32 MaxValue;
+    shared static i32 Bits = 32;
+
+    shared operator i32 -_ ();
+    shared operator i32 _+_ (i32 that);
+    shared operator i32 _-_ (i32 that);
+    shared operator i32 _*_ (i32 that);
+    shared operator i32 _/_ (i32 that);
+    shared operator i32 _%_ (i32 that);
 }
 
 shared alias int => i32;
