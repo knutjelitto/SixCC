@@ -25,7 +25,12 @@ namespace Six.Six.Sema
             public Type? Type => Decl.Type;
         }
 
-        public sealed record CallMember(Decl.Classy classy, Type.Callable Callable, params Expr[] Arguments) : Expr
+        public sealed record ParameterReference(Decl Decl) : Expr
+        {
+            public Type? Type => Decl.Type;
+        }
+
+        public sealed record CallMember(Expr Make, Type.Callable Callable, params Expr[] Arguments) : Expr
         {
             public Type? Type => Callable.Result;
         }

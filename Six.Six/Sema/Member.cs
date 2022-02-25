@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Sema
 {
-    public interface Member
+    public interface Member : Entity
     {
         Scope Container { get; }
     }

@@ -140,7 +140,7 @@ namespace Six.Six.Sema
         Scope Scope.Parent => this;
         Module Scope.Module => this;
         IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
-        T Scope.Add<T>(T member) => throw new NotImplementedException();
+        T Scope.AddMember<T>(T member) => throw new NotImplementedException();
         Decl? Scope.Resolve(string name) => null;
         Decl? Scope.Find(string name) => null;
     }

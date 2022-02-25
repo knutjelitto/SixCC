@@ -43,7 +43,7 @@ namespace Six.Six.Sema
             return Parent.Resolve(name);
         }
 
-        public T Add<T>(T member) where T : Member
+        public T AddMember<T>(T member) where T : Member
         {
             if (member is Decl decl)
             {

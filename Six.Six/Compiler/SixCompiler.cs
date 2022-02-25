@@ -170,7 +170,7 @@ namespace Six.Six.Compiler
                 {
                     if (file.Tree?.Value is Ast.Unit.Code root)
                     {
-                        S.DeclarationWalker.Walk(Module, root);
+                        Module.Resolver.Walk(root);
                     }
                 }
             }

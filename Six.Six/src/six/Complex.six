@@ -1,0 +1,19 @@
+namespace six;
+
+shared class Complex<T>
+    where T is Number
+{
+    shared f64 re = -1;
+    shared f64 im = -1;
+
+    shared new ()
+    {
+        re = 0;
+        im = 0;
+    }
+
+    shared f64 sum()
+    {
+        return re + im;
+    }
+}

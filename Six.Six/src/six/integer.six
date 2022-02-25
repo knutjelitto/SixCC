@@ -5,6 +5,8 @@ shared builtin i16{}
 
 shared builtin i32
 {
+    shared static i32 zero = 0;
+    shared static i32 one = 1;
     shared operator i32 -_() => builtin;
     shared operator i32 _+_(i32 rhs) => builtin;
     shared operator i32 _-_(i32 rhs) => builtin;
