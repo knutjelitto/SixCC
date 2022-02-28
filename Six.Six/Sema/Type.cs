@@ -1,4 +1,6 @@
-﻿namespace Six.Six.Sema
+﻿using Six.Six.Builtins;
+
+namespace Six.Six.Sema
 {
     public interface Type : Entity
     {
@@ -6,6 +8,8 @@
         {
             Decl Decl { get; }
         }
+
+        public sealed record BuiltinReference(Builtin Builtin) : Type;
 
         public sealed record Reference(Decl Decl) : Declared;
 

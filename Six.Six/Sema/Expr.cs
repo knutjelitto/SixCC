@@ -54,7 +54,7 @@ namespace Six.Six.Sema
             }
         }
 
-        public sealed record Natural(Type Type, ulong Value, Insn Insn) : ConcreteExpr(Type, Insn)
+        public sealed record Natural(Type Type, ulong Value) : ConcreteExpr(Type)
         { 
         }
 

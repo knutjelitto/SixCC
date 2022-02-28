@@ -53,6 +53,11 @@ namespace Six.Six.Sema
                             Assert(false);
                         }
                     }
+                    else if (ResolveType(left.Resolved) is Type.BuiltinReference builtin)
+                    {
+                        var builder = builtin.Builtin.Infix(node.Op.Name.Text);
+                        var primitive = builder(left.Resolved, right.Resolved);
+                    }
                     else
                     {
                         Assert(false);
@@ -74,9 +79,9 @@ namespace Six.Six.Sema
 
             var value = ConvertNatural(tree.Text);
 
-            var (type, insn) = NaturalType(tree, value);
+            var type = NaturalType(tree, value);
 
-            expr.Resolved = new Expr.Natural(type, value, insn);
+            expr.Resolved = new Expr.Natural(type, value);
 
             return expr;
         }

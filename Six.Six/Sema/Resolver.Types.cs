@@ -31,6 +31,16 @@ namespace Six.Six.Sema
             {
                 if (type is Type.Reference reference)
                 {
+                    if (reference.Decl.ADecl is A.Decl.Primitive primitive)
+                    {
+                        var name = primitive.Name.Text;
+
+                        Assert(true);
+
+                        var builtin = Builtins.Builtin.Resolve(name);
+
+                        return new Type.BuiltinReference(builtin);
+                    }
                     return ResolveType(reference.Decl);
                 }
             }
@@ -52,6 +62,12 @@ namespace Six.Six.Sema
         {
             var resolved = scope.Resolve(tree, tree.Name.Text);
 
+            if (resolved.ADecl is A.Decl.Primitive primitive)
+            {
+                var builtin = Builtins.Builtin.Resolve(primitive.Name.Text);
+
+                return new Type.BuiltinReference(builtin);
+            }
             return new Type.Reference(resolved);
         }
     }
