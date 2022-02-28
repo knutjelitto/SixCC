@@ -105,6 +105,8 @@ namespace Six.Six.Compiler
                 }
             }
 
+            Module.WhenDiagnostics();
+
             return ok;
         }
 

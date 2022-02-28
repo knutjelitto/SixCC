@@ -4,10 +4,10 @@ namespace Six.Six.Sema
 {
     public abstract class ContentScope : ScopeCore
     {
-        protected ContentScope(Scope parent)
-            : base(parent)
+        protected ContentScope(string name, Scope parent)
+            : base(name, parent)
         {
-            Block = new BlockScope(this);
+            Block = new BlockScope("block", this);
         }
 
         public BlockScope Block { get; }
@@ -15,16 +15,16 @@ namespace Six.Six.Sema
 
     public class ClassyScope : ContentScope
     {
-        public ClassyScope(Scope parent)
-            : base(parent)
+        public ClassyScope(string name, Scope parent)
+            : base(name, parent)
         {
         }
     }
 
     public class FuncyScope : ContentScope
     {
-        public FuncyScope(Scope parent)
-            : base(parent)
+        public FuncyScope(string name, Scope parent)
+            : base(name, parent)
         {
         }
     }

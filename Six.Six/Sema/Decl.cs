@@ -2,55 +2,64 @@
 
 namespace Six.Six.Sema
 {
-    public interface Decl : Member, WithProps
+    public interface Decl : Member
     {
         A.Decl ADecl { get; }
         A.Name Name => ADecl.Name;
         Type? Type { get; }
 
-        public record Classy : Decl
+        public class Classy : Declaration
         {
             public Classy(Scope container, A.Decl aDecl)
+                : base(container, aDecl)
             {
-                Container = container;
-                ADecl = aDecl;
                 Type = new Type.Reference(this);
             }
-            public Props Props { get; } = new Props();
-            public Type? Type { get; }
-            public A.Decl ADecl { get; }
-            public Scope Container { get; }
+        }
+
+        public class Funcy : Declaration
+        {
+            public Funcy(FuncyScope container, A.Decl.Funcy aDecl)
+                : base(container, aDecl)
+            {
+            }
+
+            public List<Parameter> Parameters { get; } = new();
+        }
+
+        public class Function : Funcy
+        {
+            public Function(FuncyScope container, A.Decl.Funcy aDecl)
+                : base(container, aDecl)
+            {
+            }
+
+            public Type? Result { get; set; } = null;
+        }
+
+        public sealed class Parameter : Declaration
+        {
+            public Parameter(FuncyScope Container, A.Decl ADecl, uint index)
+                : base(Container, ADecl)
+            {
+                Index = index;
+            }
+
+            public uint Index { get; }
+            public Expr? Default { get; set; }
         }
     }
 
-    public record Declaration(Scope Container, A.Decl ADecl) : Decl
+    public class Declaration : Decl
     {
-        public Props Props { get; } = new Props();
+        public Declaration(Scope container, A.Decl aDecl)
+        {
+            Container = container;
+            ADecl = aDecl;
+        }
+
+        public Scope Container { get; }
+        public A.Decl ADecl { get; }
         public Type? Type { get; set; } = null;
     }
-
-    public static class PropsExtensions
-    {
-        private const string _result = "Result";
-        private const string _extends = "Extends";
-
-        public static Type? GetExtends(this WithProps decl)
-        {
-            return decl.Props.Get<Type>(_extends);
-        }
-        public static bool SetExtends(this WithProps decl, Type? type)
-        {
-            return decl.Props.TrySet(_extends, type);
-        }
-
-        public static Type? GetResult(this WithProps decl)
-        {
-            return decl.Props.Get<Type>(_result);
-        }
-        public static bool SetResult(this WithProps decl, Type? type)
-        {
-            return decl.Props.TrySet(_result, type);
-        }
-    }
-
 }

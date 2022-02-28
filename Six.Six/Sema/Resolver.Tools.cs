@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Six.Instructions;
+using System;
 using static System.Formats.Asn1.AsnWriter;
 using A = Six.Six.Ast;
 
@@ -11,28 +12,30 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type NaturalType(ulong value)
+        public (Type, Insn) NaturalType(A.TreeNode tree, ulong value)
         {
-            Decl? decl = null;
+            Decl decl;
+            Insn insn;
 
             if (value > long.MaxValue)
             {
-                decl = Module.CoreFind(Module.Core.UInt64);
+                decl = Module.CoreFind(tree, Module.Core.UInt64);
+                insn = Insn.I64.Const(value);
             }
             else if (value > int.MaxValue)
             {
-                decl = Module.CoreFind(Module.Core.Int64);
+                decl = Module.CoreFind(tree, Module.Core.Int64);
+                insn = Insn.I64.Const(value);
             }
             else
             {
-                decl = Module.CoreFind(Module.Core.Int32);
+                decl = Module.CoreFind(tree, Module.Core.Int32);
+                insn = Insn.I32.Const((uint)value);
             }
-
-            Assert(decl != null);
 
             var type = new Type.Reference(decl);
 
-            return type;
+            return (type, insn);
         }
 
         public ulong ConvertNatural(string text)

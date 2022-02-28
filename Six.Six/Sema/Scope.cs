@@ -7,10 +7,11 @@ namespace Six.Six.Sema
     public interface Scope
     {
         Scope Parent { get; }
+        string FullName { get; }
         public Module Module => Parent.Module;
         IReadOnlyList<Member> Members { get; }
         T AddMember<T>(T member) where T : Member;
-        Decl? Resolve(string name);
-        Decl? Find(string name);
+        Decl Resolve(A.TreeNode tree, string name);
+        Decl Find(A.TreeNode tree, string name);
     }
 }

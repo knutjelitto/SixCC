@@ -4,6 +4,11 @@ namespace Six.Six.Sema
 {
     public static class Extensions
     {
+        public static Location GetLocation(this Decl node)
+        {
+            return node.ADecl.GetLocation();
+        }
+
         public static Location GetLocation(this A.TreeNode node)
         {
             if (node is A.With.Name named)

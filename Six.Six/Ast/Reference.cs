@@ -8,5 +8,10 @@ namespace Six.Six.Ast
         public Reference(RLiteral literal) : this(literal, new Name.Id(literal), null)
         {
         }
+
+        public override string ToString()
+        {
+            return Name.Text;
+        }
     }
 }

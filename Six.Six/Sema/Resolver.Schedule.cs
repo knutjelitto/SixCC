@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Core.Errors;
+using System;
 using static System.Formats.Asn1.AsnWriter;
 using A = Six.Six.Ast;
 
@@ -24,7 +25,17 @@ namespace Six.Six.Sema
             {
                 var action = scheduled.Dequeue();
 
-                action();
+                try
+                {
+                    action();
+                }
+                catch (DiagnosticException diagnostics)
+                {
+                    foreach (var diagnostic in diagnostics.Diagnostics)
+                    {
+                        Module.Add(diagnostic);
+                    }
+                }
             }
         }
     }

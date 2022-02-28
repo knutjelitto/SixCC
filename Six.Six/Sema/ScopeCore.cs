@@ -10,37 +10,59 @@ namespace Six.Six.Sema
         private readonly List<Member> members = new();
 
         [DebuggerStepThrough]
-        public ScopeCore(Scope parent)
+        public ScopeCore(string name, Scope parent)
         {
+            Name = name;
             Parent = parent;
         }
 
         public Module Module => Parent.Module;
+
+        public string Name { get; }
         public Scope Parent { get; }
 
+        public virtual string FullName
+        {
+            get
+            {
+                var full = Parent.FullName;
+                if (full.EndsWith("::"))
+                {
+                    return $"{full}{Name}";
+                }
+                return $"{full}.{Name}";
+            }
+        }
         public IReadOnlyList<Member> Members => members;
-
         public IEnumerable<Decl> GetDeclarations()
         {
             return declarations.Values;
         }
 
-        public virtual Decl? Find(string name)
+        public virtual Decl Find(A.TreeNode tree, string name)
         {
             if (declarations.TryGetValue(name, out var decl))
             {
                 return decl;
             }
-            return null;
+
+            throw new DiagnosticException(
+                new SemanticError(tree.GetLocation(), $"can't find ``{tree}´´"));
         }
 
-        public Decl? Resolve(string name)
+        public Decl Resolve(A.TreeNode tree, string name)
         {
             if (declarations.TryGetValue(name, out var decl))
             {
                 return decl;
             }
-            return Parent.Resolve(name);
+            if (Parent is Module)
+            {
+                throw new DiagnosticException(
+                    new SemanticError(tree.GetLocation(), $"can't find ``{tree}´´"));
+            }
+
+            return Parent.Resolve(tree, name);
         }
 
         public T AddMember<T>(T member) where T : Member

@@ -18,8 +18,6 @@ namespace Six.Six.Sema
 
         public Module Module { get; }
 
-        public Resolver ResolverX => this;
-
         public void Walk(A.Unit.Code code)
         {
             CodeUnit(code);

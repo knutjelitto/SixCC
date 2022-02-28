@@ -11,7 +11,7 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type? ResolveType(Expr expr)
+        public Type? ResolveType(Expr.Concrete expr)
         {
             return ResolveType(expr.Type);
         }
@@ -37,24 +37,22 @@ namespace Six.Six.Sema
             return type;
         }
 
-        private Decl? FindInScope(Scope scope, string name)
+        private Type ResolveType(Scope scope, A.Type tree)
         {
-            return scope.Find(name);
+            return DoResolveType(scope, (dynamic)tree);
         }
 
-        private Type? ResolveType(Scope scope, A.Reference reference)
+        private Type DoResolveType(Scope scope, A.Type tree)
         {
-            var resolved = scope.Resolve(reference.Name.Text);
+            Assert(false);
+            throw new NotImplementedException();
+        }
 
-            if (resolved != null)
-            {
-                return new Type.Reference(resolved);
-            }
-            else
-            {
-                Assert(false);
-                return null;
-            }
+        private Type DoResolveType(Scope scope, A.Reference tree)
+        {
+            var resolved = scope.Resolve(tree, tree.Name.Text);
+
+            return new Type.Reference(resolved);
         }
     }
 }

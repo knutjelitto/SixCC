@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Six.Core;
+using Six.Six.Instructions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,31 +10,75 @@ namespace Six.Six.Sema
 {
     public interface Expr : Entity
     {
-        Type? Type { get; }
+        void Emit(Writer writer);
 
         public sealed record Delayed : Expr
         {
-            public Expr? Resolved { get; set; } = null;
-            public Type? Type => Resolved?.Type;
+            public Concrete? Resolved { get; set; } = null;
 
-            public bool Ok => Resolved != null;
+            public void Emit(Writer writer) 
+            { 
+                Resolved?.Emit(writer);
+            }
         }
 
-        public sealed record Natural(Type Type, ulong value) : Expr;
-
-        public sealed record Reference(Decl Decl) : Expr
+        public interface Concrete : Expr
         {
-            public Type? Type => Decl.Type;
+            Type? Type { get; }
+            Insn[] Insns { get; }
         }
 
-        public sealed record ParameterReference(Decl Decl) : Expr
+        public abstract record ConcreteExpr : Concrete
         {
-            public Type? Type => Decl.Type;
+            public ConcreteExpr(params Insn[] insns)
+            {
+                Insns = insns;
+            }
+
+            public ConcreteExpr(Type? type, params Insn[] insns)
+            {
+                Type = type;
+                Insns = insns;
+            }
+
+            public virtual Type? Type { get; set; }
+
+            public Insn[] Insns { get; }
+
+            public virtual void Emit(Writer writer)
+            {
+                foreach (var insn in Insns)
+                {
+                    writer.WriteLine($"{insn}");
+                }
+            }
         }
 
-        public sealed record CallMember(Expr Make, Type.Callable Callable, params Expr[] Arguments) : Expr
+        public sealed record Natural(Type Type, ulong Value, Insn Insn) : ConcreteExpr(Type, Insn)
+        { 
+        }
+
+        public record Reference(Decl Decl) : ConcreteExpr
         {
-            public Type? Type => Callable.Result;
+            public override Type? Type => Decl.Type;
+        }
+
+        public sealed record ParameterReference(Decl Decl) : Reference(Decl);
+
+        public sealed record CallMember(Expr Make, Type.Callable Callable, params Expr[] Arguments)
+            : ConcreteExpr
+        {
+            public override Type? Type => Callable.Result;
+
+            public override void Emit(Writer writer)
+            {
+                Make.Emit(writer);
+                foreach (var argument in Arguments)
+                {
+                    argument.Emit(writer); 
+                }
+                writer.WriteLine($"{Insn.ToDo("callable")}");
+            }
         }
     }
 }

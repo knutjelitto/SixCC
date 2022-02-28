@@ -33,13 +33,12 @@ namespace Six.Six.Sema
             public static readonly string Empty = "Empty";
         }
 
-
         private readonly List<Diagnostic> Diagnostics = new();
 
         public Module()
         {
             Root = new Namespace("", this);
-            Name = "::";
+            Name = "six";
             Resolver = new Resolver(this);
         }
 
@@ -60,6 +59,14 @@ namespace Six.Six.Sema
         public void Add(Diagnostic diagnostic)
         {
             Diagnostics.Add(diagnostic);
+        }
+
+        public void WhenDiagnostics()
+        {
+            if (Diagnostics.Count > 0)
+            {
+                throw new DiagnosticException(Diagnostics.ToArray());
+            }
         }
 
         public IEnumerable<Namespace> GetNamespaces()
@@ -130,18 +137,19 @@ namespace Six.Six.Sema
             }
         }
 
-        public Decl? CoreFind(string name)
+        public Decl CoreFind(A.TreeNode tree, string name)
         {
             var language = Root.Get(Language);
             Assert(language != null);
-            return language.Find(name);
+            return language.Find(tree, name);
         }
 
         Scope Scope.Parent => this;
         Module Scope.Module => this;
         IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
         T Scope.AddMember<T>(T member) => throw new NotImplementedException();
-        Decl? Scope.Resolve(string name) => null;
-        Decl? Scope.Find(string name) => null;
+        Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
+        Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
+        string Scope.FullName => $"{Name}::";
     }
 }

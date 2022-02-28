@@ -5,8 +5,8 @@ namespace Six.Six.Sema
     public class DeclarationScope : ScopeCore
     {
         [DebuggerStepThrough]
-        public DeclarationScope(Scope parent)
-            : base(parent)
+        public DeclarationScope(string name, Scope parent)
+            : base(name, parent)
         {
         }
     }

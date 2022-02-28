@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Six.Instructions;
+using System;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -21,15 +22,13 @@ namespace Six.Six.Sema
 
             if (node.Expression != null)
             {
-                Schedule(() =>
-                {
-                    stmt.Expr = WalkExpression(container, node.Expression);
-                });
+                Schedule(() => stmt.Expr = ResolveExpression(container, node.Expression));
             }
         }
 
         private void Statement(BlockScope container, A.Stmt node)
         {
+            Assert(false);
             container.AddMember(new Statement(container, node));
         }
     }

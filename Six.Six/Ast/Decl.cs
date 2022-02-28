@@ -24,11 +24,6 @@ namespace Six.Six.Ast
             Ast.Type Type { get; }
         }
 
-        public interface Result : Node
-        {
-            Ast.Type Type { get; }
-        }
-
         public interface OptionalType : Node
         {
             Ast.Type? Type { get; }
@@ -39,9 +34,14 @@ namespace Six.Six.Ast
             Expression? Value { get; }
         }
 
+        public interface Default : Node
+        {
+            Expression? Default { get; }
+        }
+
         public interface Parameters : Node
         {
-            Decl.Parameters? Parameters { get; }
+            Decl.Parameters Parameters { get; }
         }
 
         public interface Generics : Node
@@ -154,15 +154,13 @@ namespace Six.Six.Ast
             Name Name,
             TypeParameters? TypeParameters,
             TypeConstraints? Constraints,
-            Parameters? Parameters,
             Type? Extends,
             Type.Types? Satisfies,
             Type.Types? Cases,
             Body Body)
             : Classy,
-              With.Generics,
-              With.Parameters,
               With.Extends,
+              With.Generics,
               With.Satisfies,
               With.Cases;
 
@@ -172,13 +170,11 @@ namespace Six.Six.Ast
             Name Name,
             TypeParameters? TypeParameters,
             TypeConstraints? Constraints,
-            Parameters? Parameters,
             Type.Types? Satisfies,
             Type.Types? Cases,
             Body Body)
             : Classy,
               With.Generics,
-              With.Parameters,
               With.Satisfies,
               With.Cases;
 
@@ -220,14 +216,8 @@ namespace Six.Six.Ast
             Name Name, 
             Type Type,
             Expression? Default)
-            : Parameter;
-
-        public record DefinitiveParameter(
-            IRNode Tree, 
-            Prelude Prelude, 
-            Name Name, 
-            Type Type)
-            : Parameter;
+            : Parameter,
+              With.Default;
 
         public record Parameters(IRNode Tree, IEnumerable<Parameter> Items)
             : Many<Parameter>(Tree, Items)

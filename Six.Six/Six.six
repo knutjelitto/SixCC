@@ -226,11 +226,11 @@ let-declaration
     ;
 
 class-declaration
-    : prelude 'class' name generic-parameters? parameters? extends? satisfies? case-types? constraints? block-body
+    : prelude 'class' name generic-parameters? extends? satisfies? case-types? constraints? block-body
     ;
 
 interface-declaration
-    : prelude 'interface' name generic-parameters? parameters? satisfies? case-types? constraints? block-body
+    : prelude 'interface' name generic-parameters? satisfies? case-types? constraints? block-body
     ;
 
 object-declaration

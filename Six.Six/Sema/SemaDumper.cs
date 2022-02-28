@@ -3,6 +3,11 @@ using Six.Runtime;
 
 using A = Six.Six.Ast;
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+
 namespace Six.Six.Sema
 {
     public class SemaDumper : WithWriter
@@ -17,20 +22,96 @@ namespace Six.Six.Sema
 
         public void DumpDeclaration(Decl decl)
         {
-            Walk(decl, true);
+            Walk(decl);
         }
 
-        private void Walk(Entity member, bool complex)
+        private void Walk(Entity? member)
         {
-            Visit((dynamic)member, complex);
+            if (member == null) return;
+
+            Visit((dynamic)member);
         }
 
-        private void WalkMany(IEnumerable<Member> members, bool complex)
+        private void WalkMany(IEnumerable<Member> members)
         {
             foreach (var member in members)
             {
-                Walk(member, complex);
+                Walk(member);
             }
+        }
+
+        private void WalkMany(string header, IReadOnlyList<Member> members)
+        {
+            if (members.Count > 0)
+            {
+                wl(header);
+                indent(() =>
+                {
+                    foreach (var member in members)
+                    {
+                        Walk(member);
+                    }
+                });
+            }
+        }
+
+        private string Head(string text)
+        {
+            const int nameWidth = -12;
+
+            return $"{text, nameWidth}: ";
+        }
+
+        private string TypeOf(Type? type)
+        {
+            if (type == null) return "";
+
+            if (type is Type.Declared declared)
+            {
+                if (Resolver.ResolveType(type) is Type.Declared resolved)
+                {
+                    if (!ReferenceEquals(declared.Decl, resolved.Decl))
+                    {
+                        type = resolved;
+                    }
+                }
+            }
+
+            switch (type)
+            {
+                case Type.Reference node:
+                    return node.Decl.Name.Text;
+                case Type.Callable node:
+                    return $"{TypeOf(node.Result)}({string.Join(",", node.Parameters.Select(p => TypeOf(p)))})";
+                default:
+                    Assert(false);
+                    return "<<TYPE-ERROR>>";
+            }
+        }
+
+        private string ExprOf(Expr? entity)
+        {
+            if (entity == null) return "";
+
+            switch (entity)
+            {
+                case Expr.Delayed expr:
+                    return ExprOf(expr.Resolved);
+                case Expr.Natural expr:
+                    return expr.Value.ToString();
+                default:
+                    Assert(false);
+                    return "<<EXPR-ERROR>>";
+            }
+        }
+
+        private string DefaultOf(Expr? entity)
+        {
+            if (entity != null)
+            {
+                return $" = {ExprOf(entity)}";
+            }
+            return "";
         }
 
         private string TypeProp(Type? type)
@@ -49,27 +130,32 @@ namespace Six.Six.Sema
             }
         }
 
-        private string Head(string text)
-        {
-            const int nameWidth = -12;
-
-            return $"{text, nameWidth}:";
-        }
-
-        private void TypeProp(string name, Type? type)
+        private void TypeProp(string header, Type? type)
         {
             if (type == null) return;
 
-            w($"{Head(name)}{TypeProp(type)}");
-            var resolvedType = Resolver.ResolveType(type);
-            if (resolvedType != null)
+            if (type is Type.Declared declared)
             {
-                if (!ReferenceEquals(type.Decl, resolvedType.Decl))
+                if (Resolver.ResolveType(type) is Type.Declared resolved)
                 {
-                    w($" =>{TypeProp(resolvedType) }");
+                    if (!ReferenceEquals(declared.Decl, resolved.Decl))
+                    {
+                        wl($"{Head(header)}{TypeProp(resolved)} (via {TypeProp(type)})");
+                    }
+                    else
+                    {
+                        wl($"{Head(header)}{TypeProp(type)}");
+                    }
+                }
+                else
+                {
+                    wl($"{Head(header)}{TypeProp(type)}");
                 }
             }
-            wl();
+            else
+            {
+                wl($"{Head(header)}{TypeProp(type)}");
+            }
 
             switch (type)
             {
@@ -91,21 +177,55 @@ namespace Six.Six.Sema
             }
         }
 
-        private void Visit(Decl decl, bool complex)
+        private void Visit(Decl.Function decl)
         {
-            wl($"{decl.ADecl.GetType().Name}{Name(decl.ADecl)}");
+            wl($"{decl.GetType().Name} {Name(decl)} <{decl.Container.Parent.FullName}::{Name(decl)}>");
+
+            indent(() =>
+            {
+                WalkMany("parameters", decl.Parameters);
+
+                //TypeProp("result", decl.GetResult());
+                TypeProp("type", decl.Type);
+                //TypeProp("extends", decl.GetExtends());
+
+                if (decl.Container is ContentScope content)
+                {
+                    if (content.Block.Members.Count > 0)
+                    {
+                        wl("content");
+                        indent(() =>
+                        {
+                            WalkMany(content.Block.Members);
+                        });
+                    }
+                }
+            });
+        }
+
+        private void Visit(Decl.Parameter decl)
+        {
+            wl($"[{decl.Index}] {TypeOf(decl.Type)} {Name(decl)}{DefaultOf(decl.Default)}");
+        }
+
+        private void ExprProp(string head, Expr? expr)
+        {
+            if (expr == null) return;
+
+            w(Head(head)); Walk(expr);
+        }
+
+        private void Visit(Decl decl)
+        {
+            wl($"{decl.GetType().Name} {Name(decl)} <{decl.Container.Parent.FullName}::{Name(decl)}>");
             
             indent(() =>
             {
-                TypeProp("result", decl.GetResult());
+                //TypeProp("result", decl.GetResult());
                 TypeProp("type", decl.Type);
-                TypeProp("extends", decl.GetExtends());
+                //TypeProp("extends", decl.GetExtends());
 
-                if (!complex)
-                {
-                    return;
-                }
-
+#if false
                 if (decl.Container is ContentScope content)
                 {
                     if (content.Members.Count > 0)
@@ -113,7 +233,7 @@ namespace Six.Six.Sema
                         wl("declarations");
                         indent(() =>
                         {
-                            WalkMany(content.Members, false);
+                            WalkMany(content.Members);
                         });
                     }
                     if (content.Block.Members.Count > 0)
@@ -121,22 +241,26 @@ namespace Six.Six.Sema
                         wl("content");
                         indent(() =>
                         {
-                            WalkMany(content.Block.Members, true);
+                            WalkMany(content.Block.Members);
                         });
                     }
                 }
+#endif
             });
         }
 
-        private void Visit(Stmt stmt, bool complex)
+        private void Visit(Stmt stmt)
         {
+            Assert(false);
             wl(Ref(stmt.AStmt));
         }
 
-        private void Visit(Stmt.Return stmt, bool complex)
+        private void Visit(Stmt.Return stmt)
         {
+            wl("-----");
+            stmt.Emit(Writer);
+            wl("-----");
             wl(Ref(stmt.AStmt));
-            Assert(stmt.Expr != null);
             
             if (stmt.Expr is Expr.Delayed delayed)
             {
@@ -144,7 +268,7 @@ namespace Six.Six.Sema
                 {
                     indent(() =>
                     {
-                        Walk(delayed.Resolved, complex);
+                        Walk(delayed.Resolved);
                     });
                 }
                 else
@@ -152,44 +276,48 @@ namespace Six.Six.Sema
                     Assert(false);
                 }
             }
+            else
+            {
+                Assert(false);
+            }
         }
 
-        private void Visit(Type type, bool complex)
+        private void Visit(Type type)
         {
             Assert(false);
         }
 
-        private void Visit(Type.Callable type, bool complex)
+        private void Visit(Type.Callable type)
         {
             wl($"{type.GetType().Name}");
             indent(() =>
             {
-                w($"{Head("result")} ");  Walk(type.Result, false);
+                w(Head("result"));  Walk(type.Result);
                 for (var i = 0; i < type.Parameters.Length; ++i)
                 {
-                    w($"{Head($"param[{i}]")} "); Walk(type.Parameters[i], false);
+                    w(Head($"param[{i}]")); Walk(type.Parameters[i]);
                 }
             });
         }
-        private void Visit(Type.Reference type, bool complex)
+        private void Visit(Type.Reference type)
         {
             wl($"{type.GetType().Name}");
             indent(() =>
             {
-                Walk(type.Decl, false);
+                Walk(type.Decl);
             });
         }
 
-        private void Visit(Expr expr, bool complex)
+        private void Visit(Expr expr)
         {
             Assert(false);
         }
 
-        private void Visit(Expr.Delayed expr, bool complex)
+        private void Visit(Expr.Delayed expr)
         {
             if (expr.Resolved != null)
             {
-                Walk(expr.Resolved, complex);
+                Walk(expr.Resolved);
             }
             else
             {
@@ -197,38 +325,38 @@ namespace Six.Six.Sema
             }
         }
 
-        private void Visit(Expr.ParameterReference expr, bool complex)
+        private void Visit(Expr.ParameterReference expr)
         {
-            w($"{Head("parameter")} "); Walk(expr.Decl, false);
+            w($"{Head("parameter")}"); Walk(expr.Decl);
         }
 
-        private void Visit(Expr.Reference expr, bool complex)
+        private void Visit(Expr.Reference expr)
         {
             wl($"<<reference>>");
         }
 
-        private void Visit(Expr.Natural expr, bool complex)
+        private void Visit(Expr.Natural expr)
         {
-            wl($"{expr.value}");
+            wl($"{expr.Value}");
         }
 
-        private void Visit(Expr.CallMember expr, bool complex)
+        private void Visit(Expr.CallMember expr)
         {
             wl($"{expr.GetType().Name}");
             indent(() =>
             {
-                Walk(expr.Make, false);
-                Walk(expr.Callable, false);
+                Walk(expr.Make);
+                Walk(expr.Callable);
                 for (var i = 0; i < expr.Arguments.Length; ++i)
                 {
-                    w($"{Head($"argument[{i}]")} "); Walk(expr.Arguments[i], false);
+                    w(Head($"argument[{i}]")); Walk(expr.Arguments[i]);
                 }
             });
         }
 
         private string Name(Decl decl)
         {
-            return Name(decl.ADecl);
+            return decl.Name.Text;
         }
 
         private string Name(A.TreeNode node)

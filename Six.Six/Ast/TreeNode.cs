@@ -18,8 +18,4 @@ namespace Six.Six.Ast
         IEnumerable<TreeNode> Items { get; }
         int Count { get; }
     }
-
-    public record TreeNodeImpl(IRNode Tree) : TreeNode
-    {
-    }
 }

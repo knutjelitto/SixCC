@@ -2,8 +2,8 @@
 {
     public class BlockScope : ScopeCore
     {
-        public BlockScope(Scope parent)
-            : base(parent)
+        public BlockScope(string name, Scope parent)
+            : base(name, parent)
         {
         }
     }

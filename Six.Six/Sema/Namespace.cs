@@ -9,12 +9,9 @@ namespace Six.Six.Sema
         private readonly Dictionary<string, Namespace> children = new();
 
         public Namespace(string name, Scope parent)
-            : base(parent)
+            : base(name, parent)
         {
-            Name = name;
         }
-
-        public string Name { get; }
 
         public Namespace Open(string name)
         {
