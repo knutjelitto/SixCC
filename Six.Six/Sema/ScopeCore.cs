@@ -65,17 +65,18 @@ namespace Six.Six.Sema
             return Parent.Resolve(tree, name);
         }
 
-        public T AddMember<T>(T member) where T : Member
+        public T AddMember<T>(T member, string? name = null) where T : Member
         {
             if (member is Decl decl)
             {
-                if (declarations.ContainsKey(decl.Name.Text))
+                name ??= decl.Name.Text;
+                if (declarations.ContainsKey(name))
                 {
                     DupError(decl);
                 }
                 else
                 {
-                    declarations[decl.Name.Text] = decl;
+                    declarations[name] = decl;
                 }
             }
             members.Add(member);

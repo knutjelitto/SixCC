@@ -14,7 +14,7 @@ namespace Six.Six.Sema
     {
         private readonly Queue<Action> scheduled = new();
 
-        public void Schedule(Action action)
+        public void ResolveLater(Action action)
         {
             scheduled.Enqueue(action);
         }
