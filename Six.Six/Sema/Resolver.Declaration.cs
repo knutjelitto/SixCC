@@ -43,7 +43,7 @@ namespace Six.Six.Sema
             {
                 if (extends.Extends is A.Reference reference)
                 {
-                    Schedule(() =>
+                    ResolveLater(() =>
                     {
                         //decl.SetExtends(ResolveType(container, reference));
                     });
@@ -70,18 +70,34 @@ namespace Six.Six.Sema
         private void Declare(Scope container, A.Decl.Infix node)
         {
             var funcy = new FuncyScope(node.Name.Text, container);
-            var decl = container.AddMember(new Declaration(funcy, node));
+            var decl = container.AddMember(new Declaration(funcy, node), InfixName(node));
 
             Assert(node.Parameters.Count == 1);
 
             WalkDeclaration(funcy, node.Parameters[0]);
             WalkBody(funcy.Block, node.Body);
 
-            Schedule(() =>
+            ResolveLater(() =>
             {
                 var resultType = ResolveType(funcy, node.Type);
                 var paramType = ResolveType(funcy, node.Parameters[0].Type);
                 decl.Type = new Type.Callable(decl, resultType, paramType);
+            });
+        }
+
+        private void Declare(Scope container, A.Decl.Prefix node)
+        {
+            var funcy = new FuncyScope(node.Name.Text, container);
+            var decl = container.AddMember(new Declaration(funcy, node), PrefixName(node));
+
+            Assert(node.Parameters.Count == 0);
+
+            WalkBody(funcy.Block, node.Body);
+
+            ResolveLater(() =>
+            {
+                var resultType = ResolveType(funcy, node.Type);
+                decl.Type = new Type.Callable(decl, resultType);
             });
         }
 
@@ -90,7 +106,7 @@ namespace Six.Six.Sema
             var funcy = new FuncyScope(node.Name.Text, container);
             var decl = container.AddMember(new Decl.Function(funcy, node));
 
-            Schedule(() => decl.Result = ResolveType(funcy, node.Type));
+            ResolveLater(() => decl.Result = ResolveType(funcy, node.Type));
 
             uint index = 0;
             foreach (var p in node.Parameters)
@@ -99,10 +115,10 @@ namespace Six.Six.Sema
 
                 decl.Parameters.Add(param);
 
-                Schedule(() => param.Type = ResolveType(funcy, p.Type));
+                ResolveLater(() => param.Type = ResolveType(funcy, p.Type));
                 if (p is A.With.Default dflt && dflt.Default != null)
                 {
-                    Schedule(() => param.Default = ResolveExpression(funcy, dflt.Default));
+                    ResolveLater(() => param.Default = ResolveExpression(funcy, dflt.Default));
                 }
             }
 
@@ -132,7 +148,7 @@ namespace Six.Six.Sema
             {
                 if (result.Type is A.Reference reference)
                 {
-                    Schedule(() =>
+                    ResolveLater(() =>
                     {
                         Assert(true || decl.Type == null);
                         decl.Type = ResolveType(funcy, reference);
@@ -176,7 +192,7 @@ namespace Six.Six.Sema
 
             if (node.Type is A.Reference reference)
             {
-                Schedule(() =>
+                ResolveLater(() =>
                 {
                     decl.Type = ResolveType(scope, reference);
                 });
@@ -194,7 +210,7 @@ namespace Six.Six.Sema
 
             if (node.Type is A.Reference reference)
             {
-                Schedule(() =>
+                ResolveLater(() =>
                 {
                     decl.Type = ResolveType(scope, reference);
                 });
@@ -238,7 +254,7 @@ namespace Six.Six.Sema
 
             if (node.Type is A.Reference reference)
             {
-                Schedule(() =>
+                ResolveLater(() =>
                 {
                     decl.Type = ResolveType(container, reference);
                 });

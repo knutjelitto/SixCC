@@ -147,7 +147,7 @@ namespace Six.Six.Sema
         Scope Scope.Parent => this;
         Module Scope.Module => this;
         IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
-        T Scope.AddMember<T>(T member) => throw new NotImplementedException();
+        T Scope.AddMember<T>(T member, string? name) => throw new NotImplementedException();
         Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
         Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
         string Scope.FullName => $"{Name}::";

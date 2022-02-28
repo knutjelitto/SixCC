@@ -22,7 +22,7 @@ namespace Six.Six.Sema
 
             if (node.Expression != null)
             {
-                Schedule(() => stmt.Expr = ResolveExpression(container, node.Expression));
+                ResolveLater(() => stmt.Expr = ResolveExpression(container, node.Expression));
             }
         }
 
