@@ -25,6 +25,7 @@ namespace Six.Six.Sema
             }
 
             public List<Parameter> Parameters { get; } = new();
+            public List<Local> Locals { get; } = new();
         }
 
         public class Function : Funcy
@@ -37,16 +38,33 @@ namespace Six.Six.Sema
             public Type? Result { get; set; } = null;
         }
 
-        public sealed class Parameter : Declaration
+        public abstract class Local : Declaration
         {
-            public Parameter(FuncyScope Container, A.Decl ADecl, uint index)
+            public Local(DeclarationScope Container, A.Decl ADecl, uint index)
                 : base(Container, ADecl)
             {
                 Index = index;
             }
 
             public uint Index { get; }
-            public Expr? Default { get; set; }
+        }
+
+        public sealed class Parameter : Local
+        {
+            public Parameter(FuncyScope Container, A.Decl ADecl, uint index)
+                : base(Container, ADecl, index)
+            {
+            }
+
+            public Expr.Concrete? Default { get; set; }
+        }
+
+        public sealed class Let : Local
+        {
+            public Let(DeclarationScope Container, A.Decl ADecl, uint index)
+                : base(Container, ADecl, index)
+            {
+            }
         }
     }
 

@@ -6,7 +6,7 @@ namespace Six.Six.Sema
     {
         public static string FullName(this Decl node)
         {
-            return $"{node.Container.FullName}::{node.Name}";
+            return $"{node.Container.Parent.FullName}::{node.Name}";
         }
 
         public static Location GetLocation(this Decl node)

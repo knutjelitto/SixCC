@@ -118,7 +118,13 @@ namespace Six.Six.Sema
                 ResolveLater(() => param.Type = ResolveType(funcy, p.Type));
                 if (p is A.With.Default dflt && dflt.Default != null)
                 {
-                    ResolveLater(() => param.Default = ResolveExpression(funcy, dflt.Default));
+                    var dfltValue = ResolveExpression(funcy, dflt.Default);
+
+                    ResolveLater(() =>
+                    {
+                        Assert(dfltValue.Resolved != null);
+                        param.Default = dfltValue.Resolved;
+                    });
                 }
             }
 
@@ -230,7 +236,7 @@ namespace Six.Six.Sema
         private void Declare(Scope container, A.Decl.Let node)
         {
             var scope = new DeclarationScope(node.Name.Text, container);
-            container.AddMember(new Declaration(scope, node));
+            container.AddMember(new Decl.Let(scope, node, 42));
         }
 
         private void Declare(Scope container, A.TypeParameters node)

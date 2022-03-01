@@ -11,9 +11,9 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type? ResolveType(Expr.Concrete expr)
+        public Type? ResolveType(Expr.Concrete? expr)
         {
-            return ResolveType(expr.Type);
+            return ResolveType(expr?.Type);
         }
 
         public Type? ResolveType(Decl decl)

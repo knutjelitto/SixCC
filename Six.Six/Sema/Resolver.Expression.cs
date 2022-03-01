@@ -61,14 +61,36 @@ namespace Six.Six.Sema
                 {
                     if (function.Resolved is Expr.FunctionReference reference)
                     {
-                        Assert(reference.Decl.Parameters.Count > 0);
+                        var prms = reference.Decl.Parameters;
+
+                        Assert(prms.Count >= args.Count);
+                        var arguments = new List<Expr.Concrete>();
+
+                        var index = 0;
+                        for (; index < Math.Min(prms.Count, args.Count); ++index)
+                        {
+                            var argType = ResolveType(args[index].Resolved);
+                            var prmType = ResolveType(prms[index]);
+
+                            Assert(ReferenceEquals(argType, prmType));
+
+                            arguments.Add(args[index].Resolved!);
+                        }
+                        for (; index < prms.Count; ++index)
+                        {
+                            Assert(prms[index].Default != null);
+
+                            arguments.Add(prms[index].Default!);
+                        }
+
+                        Assert(arguments.Count == prms.Count);
+
+                        delayed.Resolved = new Expr.CallFunction(reference, arguments);
                     }
                     else
                     {
                         Assert(false);
                     }
-
-                    Assert(false);
                 }
                 else
                 {
@@ -220,6 +242,9 @@ namespace Six.Six.Sema
                     return new Expr.ParameterReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
                 case Decl.Function node:
                     return new Expr.FunctionReference(node, ResolveType(node.Result) ?? throw new NullReferenceException());
+                case Decl.Let node:
+                    Assert(false);
+                    break;
                 default:
                     Assert(false);
                     break;

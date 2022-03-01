@@ -231,28 +231,6 @@ namespace Six.Six.Sema
                 //TypeProp("result", decl.GetResult());
                 TypeProp("type", decl.Type);
                 //TypeProp("extends", decl.GetExtends());
-
-#if false
-                if (decl.Container is ContentScope content)
-                {
-                    if (content.Members.Count > 0)
-                    {
-                        wl("declarations");
-                        indent(() =>
-                        {
-                            WalkMany(content.Members);
-                        });
-                    }
-                    if (content.Block.Members.Count > 0)
-                    {
-                        wl("content");
-                        indent(() =>
-                        {
-                            WalkMany(content.Block.Members);
-                        });
-                    }
-                }
-#endif
             });
         }
 
@@ -267,21 +245,7 @@ namespace Six.Six.Sema
             wl("-----");
             stmt.Emit(Writer);
             wl("-----");
-            wl(Ref(stmt.AStmt));
 
-#if false
-            if (stmt.Expr != null && stmt.Expr.Resolved != null)
-            {
-                indent(() =>
-                {
-                    Walk(stmt.Expr.Resolved);
-                });
-            }
-            else
-            {
-                Assert(false);
-            }
-#endif
         }
 
         private void Visit(Type type)

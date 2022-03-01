@@ -2,7 +2,7 @@
 
 namespace Six.Six.Sema
 {
-    public abstract class ContentScope : ScopeCore
+    public abstract class ContentScope : DeclarationScope
     {
         protected ContentScope(string name, Scope parent)
             : base(name, parent)

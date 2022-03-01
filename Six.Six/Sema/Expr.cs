@@ -84,14 +84,36 @@ namespace Six.Six.Sema
             }
         }
 
-        public sealed record Binop(Builtin Builtin, Insn Insn, Expr.Concrete Oper1, Expr.Concrete Oper2)
+        public sealed record Binop(Builtin Builtin, Insn Insn, Concrete Arg1, Concrete Arg2)
             : Primitive(Builtin)
         {
             public override void Emit(Emitter emitter)
             {
-                Oper1.Emit(emitter);
-                Oper2.Emit(emitter);
+                Arg1.Emit(emitter);
+                Arg2.Emit(emitter);
                 emitter.Add(Insn);
+            }
+        }
+
+        public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
+            : Primitive(Function.Type!)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                foreach (var argument in Arguments)
+                {
+                    argument.Emit(emitter);
+                }
+                emitter.Add(Insn.CallStatic(Function.Decl.FullName()));
+            }
+        }
+
+        public sealed record FunctionReference(Decl.Function Decl, Type Type)
+            : Primitive(Type)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                emitter.Add(Insn.CallStatic(Decl.FullName()));
             }
         }
 
@@ -103,12 +125,12 @@ namespace Six.Six.Sema
             }
         }
 
-        public sealed record FunctionReference(Decl.Function Decl, Type Type)
+        public sealed record LocalReference(Decl.Let Decl, Type Type)
             : Primitive(Type)
         {
             public override void Emit(Emitter emitter)
             {
-                emitter.Add(Insn.CallStatic(Decl.FullName()));
+                emitter.Add(Insn.Local.Get(42));
             }
         }
 
