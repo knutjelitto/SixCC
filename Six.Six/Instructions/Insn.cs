@@ -44,7 +44,7 @@ namespace Six.Six.Instructions
 
         public static class Local
         {
-            public static LocalGet Get(uint index) => new(index);
+            public static LocalGet Get(int index) => new(index);
         }
 
         public static class I32
@@ -115,17 +115,17 @@ namespace Six.Six.Instructions
 
         public abstract class IndexRef : Insn
         {
-            public IndexRef(uint index)
+            public IndexRef(int index)
             {
                 Index = index;
             }
 
-            public uint Index { get; }
+            public int Index { get; }
         }
 
         public class LocalGet : IndexRef
         {
-            public LocalGet(uint index)
+            public LocalGet(int index)
                 : base(index)
             {
             }

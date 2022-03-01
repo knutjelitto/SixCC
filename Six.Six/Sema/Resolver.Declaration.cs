@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Core;
+using System;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -10,6 +11,15 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
+        private readonly Stack<Decl.Function> functions = new();
+        private Decl.Function CurrentFunction => functions.Peek();
+
+        private IDisposable UseFunction(Decl.Function function)
+        {
+            functions.Push(function);
+            return new Disposable(() => functions.Pop());
+        }
+
         private void WalkDeclarationMany(Scope scope, IEnumerable<A.Decl>? nodes)
         {
             if (nodes != null)
@@ -36,7 +46,7 @@ namespace Six.Six.Sema
 
         private void Declare(Scope container, A.Decl.Classy node)
         {
-            var scope = new ClassyScope(node.Name.Text, container);
+            var scope = new ClassyScope(container, node.Name.Text);
             var decl = container.AddMember(new Decl.Classy(scope, node));
 
             if (node is A.With.Extends extends && extends.Extends != null)
@@ -69,12 +79,12 @@ namespace Six.Six.Sema
 
         private void Declare(Scope container, A.Decl.Infix node)
         {
-            var funcy = new FuncyScope(node.Name.Text, container);
+            var funcy = new FuncyScope(container, node.Name.Text);
             var decl = container.AddMember(new Declaration(funcy, node), InfixName(node));
 
             Assert(node.Parameters.Count == 1);
 
-            WalkDeclaration(funcy, node.Parameters[0]);
+            WalkDeclarationMany(funcy, node.Parameters);
             WalkBody(funcy.Block, node.Body);
 
             ResolveLater(() =>
@@ -85,10 +95,10 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Declare(Scope container, A.Decl.Prefix node)
+        private void Declare(Scope parent, A.Decl.Prefix node)
         {
-            var funcy = new FuncyScope(node.Name.Text, container);
-            var decl = container.AddMember(new Declaration(funcy, node), PrefixName(node));
+            var funcy = new FuncyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Declaration(funcy, node), PrefixName(node));
 
             Assert(node.Parameters.Count == 0);
 
@@ -101,54 +111,59 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Declare(Scope container, A.Decl.Function node)
+        private void Declare(Scope parent, A.Decl.Function node)
         {
-            var funcy = new FuncyScope(node.Name.Text, container);
-            var decl = container.AddMember(new Decl.Function(funcy, node));
+            var funcy = new FuncyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Decl.Function(funcy, node));
 
-            ResolveLater(() => decl.Result = ResolveType(funcy, node.Type));
-
-            uint index = 0;
-            foreach (var p in node.Parameters)
+            using (UseFunction(decl))
             {
-                var param = funcy.AddMember(new Decl.Parameter(funcy, p, index++));
+                ResolveLater(() => decl.Result = ResolveType(funcy, node.Type));
 
-                decl.Parameters.Add(param);
-
-                ResolveLater(() => param.Type = ResolveType(funcy, p.Type));
-                if (p is A.With.Default dflt && dflt.Default != null)
+#if true
+                WalkDeclarationMany(funcy, node.Parameters);
+#else
+                foreach (var p in node.Parameters)
                 {
-                    var dfltValue = ResolveExpression(funcy, dflt.Default);
+                    var param = funcy.AddMember(new Decl.Parameter(funcy, p, decl.Parameters.Count));
 
-                    ResolveLater(() =>
+                    decl.Parameters.Add(param);
+
+                    ResolveLater(() => param.Type = ResolveType(funcy, p.Type));
+                    if (p is A.With.Default dflt && dflt.Default != null)
                     {
-                        Assert(dfltValue.Resolved != null);
-                        param.Default = dfltValue.Resolved;
-                    });
+                        var dfltValue = ResolveExpression(funcy, dflt.Default);
+
+                        ResolveLater(() =>
+                        {
+                            Assert(dfltValue.Resolved != null);
+                            param.Default = dfltValue.Resolved;
+                        });
+                    }
                 }
-            }
+#endif
 
-            if (node is A.With.Body body)
-            {
-                WalkBody(funcy.Block, body.Body);
-            }
-
-            if (node is A.With.Generics generics)
-            {
-                if (generics.TypeParameters != null)
+                if (node is A.With.Body body)
                 {
-                    Assert(true);
+                    WalkBody(funcy.Block, body.Body);
                 }
-                WalkDeclarationMany(funcy, generics.TypeParameters);
+
+                if (node is A.With.Generics generics)
+                {
+                    if (generics.TypeParameters != null)
+                    {
+                        Assert(true);
+                    }
+                    WalkDeclarationMany(funcy, generics.TypeParameters);
+                }
             }
         }
 
 
-        private void Declare(Scope container, A.Decl.Funcy node)
+        private void Declare(Scope parent, A.Decl.Funcy node)
         {
-            var funcy = new FuncyScope(node.Name.Text, container);
-            var decl = container.AddMember(new Decl.Funcy(funcy, node));
-
+            var funcy = new FuncyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Decl.Funcy(funcy, node));
 
             if (node is A.With.Type result)
             {
@@ -169,7 +184,7 @@ namespace Six.Six.Sema
 
             if (node is A.With.Parameters parameters)
             {
-                uint index = 0;
+                var index = 0;
                 foreach (var param in parameters.Parameters)
                 {
                     decl.Parameters.Add(new Decl.Parameter(funcy, param, index++));
@@ -237,6 +252,20 @@ namespace Six.Six.Sema
         {
             var scope = new DeclarationScope(node.Name.Text, container);
             container.AddMember(new Decl.Let(scope, node, 42));
+
+            var value = ResolveExpression(scope, node.Value);
+
+            ResolveLater(() =>
+            {
+                if (value.Resolved != null)
+                {
+
+                }
+                else
+                {
+                    Assert(false);
+                }
+            });
         }
 
         private void Declare(Scope container, A.TypeParameters node)
@@ -254,15 +283,35 @@ namespace Six.Six.Sema
             WalkDeclarationMany(container, node);
         }
 
-        private void Declare(Scope container, A.Decl.ValueParameter node)
+        private void Declare(Scope parent, A.Decl.ValueParameter node)
         {
-            var decl = container.AddMember(new Declaration(container, node));
+            Assert(functions.Count > 0);
+
+#if false
+            var param = funcy.AddMember(new Decl.Parameter(funcy, p, decl.Parameters.Count));
+
+            decl.Parameters.Add(param);
+
+            ResolveLater(() => param.Type = ResolveType(funcy, p.Type));
+            if (p is A.With.Default dflt && dflt.Default != null)
+            {
+                var dfltValue = ResolveExpression(funcy, dflt.Default);
+
+                ResolveLater(() =>
+                {
+                    Assert(dfltValue.Resolved != null);
+                    param.Default = dfltValue.Resolved;
+                });
+            }
+#endif
+
+            var decl = parent.AddMember(new Declaration(parent, node));
 
             if (node.Type is A.Reference reference)
             {
                 ResolveLater(() =>
                 {
-                    decl.Type = ResolveType(container, reference);
+                    decl.Type = ResolveType(parent, reference);
                 });
             }
             else

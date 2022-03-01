@@ -240,11 +240,10 @@ namespace Six.Six.Sema
             {
                 case Decl.Parameter node:
                     return new Expr.ParameterReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
+                case Decl.Let node:
+                    return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
                 case Decl.Function node:
                     return new Expr.FunctionReference(node, ResolveType(node.Result) ?? throw new NullReferenceException());
-                case Decl.Let node:
-                    Assert(false);
-                    break;
                 default:
                     Assert(false);
                     break;

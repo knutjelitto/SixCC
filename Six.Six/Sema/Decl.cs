@@ -30,7 +30,7 @@ namespace Six.Six.Sema
 
         public class Function : Funcy
         {
-            public Function(FuncyScope container, A.Decl.Funcy aDecl)
+            public Function(FuncyScope container, A.Decl.Function aDecl)
                 : base(container, aDecl)
             {
             }
@@ -40,18 +40,18 @@ namespace Six.Six.Sema
 
         public abstract class Local : Declaration
         {
-            public Local(DeclarationScope Container, A.Decl ADecl, uint index)
+            public Local(DeclarationScope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl)
             {
                 Index = index;
             }
 
-            public uint Index { get; }
+            public int Index { get; }
         }
 
         public sealed class Parameter : Local
         {
-            public Parameter(FuncyScope Container, A.Decl ADecl, uint index)
+            public Parameter(FuncyScope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl, index)
             {
             }
@@ -61,7 +61,7 @@ namespace Six.Six.Sema
 
         public sealed class Let : Local
         {
-            public Let(DeclarationScope Container, A.Decl ADecl, uint index)
+            public Let(DeclarationScope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl, index)
             {
             }
