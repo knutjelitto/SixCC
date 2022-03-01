@@ -38,7 +38,9 @@ namespace Six.Six.Instructions
 
         public static ToDoInsn ToDo(string text) => new(text);
 
-        public static Simplest Return => new("return");
+        public static Simplest Return { get; } = new("return");
+
+        public static Simplest CallStatic(string functionName) => new($"call {functionName}");
 
         public static class Local
         {
@@ -47,12 +49,20 @@ namespace Six.Six.Instructions
 
         public static class I32
         {
-            public static Const Const(uint value) => new(new Value.ValueI32(value));
+            public static Const Const(int value) => new(new Value.ValueI32(value));
+            public static Binop Add() => Binop.Add(ValueType.I32);
+            public static Binop Sub() => Binop.Sub(ValueType.I32);
+            public static Binop Mul() => Binop.Mul(ValueType.I32);
         }
 
         public static class I64
         {
-            public static Const Const(ulong value) => new(new Value.ValueI64(value));
+            public static Const Const(long value) => new(new Value.ValueI64(value));
+        }
+
+        public static class U64
+        {
+            public static Const Const(ulong value) => new(new Value.ValueU64(value));
         }
 
         public static class F32
@@ -63,6 +73,29 @@ namespace Six.Six.Instructions
         public static class F64
         {
             public static Const Const(double value) => new(new Value.ValueF64(value));
+        }
+
+        public class Binop : Insn
+        {
+            private Binop(ValueType type, string name, OpSign sign)
+            {
+                Type = type;
+                Name = name;
+                Sign = sign;
+            }
+
+            public ValueType Type { get; }
+            public string Name { get; }
+            public OpSign Sign { get; }
+
+            public override string ToString()
+            {
+                return $"{Type}.{Name}{Sign}";
+            }
+
+            public static Binop Add(ValueType type) => new(type, "add", OpSign.Neutral);
+            public static Binop Sub(ValueType type) => new(type, "sub", OpSign.Neutral);
+            public static Binop Mul(ValueType type) => new(type, "mul", OpSign.Neutral);
         }
 
         public class Const : Insn
@@ -96,6 +129,11 @@ namespace Six.Six.Instructions
                 : base(index)
             {
             }
+
+            public override string ToString()
+            {
+                return $"local.get {Index}";
+            }
         }
     }
 
@@ -124,49 +162,79 @@ namespace Six.Six.Instructions
 
         public ValueType Type { get; }
 
-        public class ValueI32 : ValueT<uint>
+        public class ValueI32 : ValueT<int>
         {
-            public ValueI32(uint value) : base(new NumberType.I32(), value)
+            public ValueI32(int value) : base(ValueType.I32, value)
             {
             }
         }
 
-        public class ValueI64 : ValueT<ulong>
+        public class ValueI64 : ValueT<long>
         {
-            public ValueI64(ulong value) : base(new NumberType.I64(), value)
+            public ValueI64(long value) : base(ValueType.I64, value)
+            {
+            }
+        }
+
+        public class ValueU64 : ValueT<ulong>
+        {
+            public ValueU64(ulong value) : base(ValueType.I64, value)
             {
             }
         }
 
         public class ValueF32 : ValueT<float>
         {
-            public ValueF32(float value) : base(new NumberType.F32(), value)
+            public ValueF32(float value) : base(ValueType.F32, value)
             {
             }
         }
 
         public class ValueF64 : ValueT<double>
         {
-            public ValueF64(double value) : base(new NumberType.F64(), value)
+            public ValueF64(double value) : base(ValueType.F64, value)
             {
             }
         }
 
     }
 
-    public abstract class ValueType
+    public class OpSign
     {
+        private OpSign(string text)
+        {
+            Text = text;
+        }
+
+        public string Text { get; }
+
         public override string ToString()
         {
-            return GetType().Name.ToLowerInvariant();
+            return $"{Text}";
         }
+
+        public static OpSign Neutral { get; } = new OpSign("");
+        public static OpSign Signed { get; } = new OpSign("_s");
+        public static OpSign Unsigned { get; } = new OpSign("_u");
     }
 
-    public class NumberType : ValueType
+    public class ValueType
     {
-        public class I32 : NumberType { }
-        public class I64 : NumberType { }
-        public class F32 : NumberType { }
-        public class F64 : NumberType { }
+        private ValueType(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; }
+
+        public override string ToString()
+        {
+            return Name.ToLowerInvariant();
+        }
+
+        public static ValueType I32 { get; } = new ValueType("i32");
+        public static ValueType I64 { get; } = new ValueType("i64");
+        public static ValueType F32 { get; } = new ValueType("f32");
+        public static ValueType F64 { get; } = new ValueType("f64");
     }
 }

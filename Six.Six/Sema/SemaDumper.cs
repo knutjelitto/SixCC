@@ -97,7 +97,11 @@ namespace Six.Six.Sema
             {
                 case Expr.Delayed expr:
                     return ExprOf(expr.Resolved);
-                case Expr.Natural expr:
+                case Expr.ConstI32 expr:
+                    return expr.Value.ToString();
+                case Expr.ConstI64 expr:
+                    return expr.Value.ToString();
+                case Expr.ConstU64 expr:
                     return expr.Value.ToString();
                 default:
                     Assert(false);
@@ -124,6 +128,8 @@ namespace Six.Six.Sema
                     return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
                 case Type.Callable node:
                     return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
+                case Type.BuiltinReference node:
+                    return $"{node.Builtin}";
                 default:
                     Assert(false);
                     return string.Empty;
@@ -159,7 +165,8 @@ namespace Six.Six.Sema
 
             switch (type)
             {
-                case Type.Reference node:
+                case Type.Reference:
+                case Type.BuiltinReference:
                     break;
                 case Type.Callable node:
                     indent(() =>
@@ -261,25 +268,20 @@ namespace Six.Six.Sema
             stmt.Emit(Writer);
             wl("-----");
             wl(Ref(stmt.AStmt));
-            
-            if (stmt.Expr is Expr.Delayed delayed)
+
+#if false
+            if (stmt.Expr != null && stmt.Expr.Resolved != null)
             {
-                if (delayed.Resolved != null)
+                indent(() =>
                 {
-                    indent(() =>
-                    {
-                        Walk(delayed.Resolved);
-                    });
-                }
-                else
-                {
-                    Assert(false);
-                }
+                    Walk(stmt.Expr.Resolved);
+                });
             }
             else
             {
                 Assert(false);
             }
+#endif
         }
 
         private void Visit(Type type)
@@ -335,7 +337,17 @@ namespace Six.Six.Sema
             wl($"<<reference>>");
         }
 
-        private void Visit(Expr.Natural expr)
+        private void Visit(Expr.ConstI32 expr)
+        {
+            wl($"{expr.Value}");
+        }
+
+        private void Visit(Expr.ConstI64 expr)
+        {
+            wl($"{expr.Value}");
+        }
+
+        private void Visit(Expr.ConstU64 expr)
         {
             wl($"{expr.Value}");
         }

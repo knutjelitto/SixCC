@@ -13,24 +13,27 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type NaturalType(A.TreeNode tree, ulong value)
+        public Expr.Concrete NaturalConst(A.Expression.NaturalNumber tree)
         {
             Builtin builtin;
+
+            var value = ConvertNatural(tree.Text);
 
             if (value > long.MaxValue)
             {
                 builtin = Builtin.Resolve(Module.Core.UInt64);
+                return new Expr.ConstU64(builtin, value);
             }
             else if (value > int.MaxValue)
             {
                 builtin = Builtin.Resolve(Module.Core.Int64);
+                return new Expr.ConstI64(builtin, (long)value);
             }
             else
             {
                 builtin = Builtin.Resolve(Module.Core.Int32);
+                return new Expr.ConstI32(builtin, (int)value);
             }
-
-            return new Type.BuiltinReference(builtin);
         }
 
         public ulong ConvertNatural(string text)

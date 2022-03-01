@@ -27,3 +27,8 @@ shared int result_with_parameters(int a = 2, int b = 3, int c = 4)
 {
     return -a * -b + -c;
 }
+
+shared int call_with_default(int a, int b)
+{
+    return result_with_parameters(a, b);
+}

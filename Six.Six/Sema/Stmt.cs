@@ -8,20 +8,24 @@ namespace Six.Six.Sema
     {
         A.Stmt AStmt { get; }
         Insn[] Insns { get; }
-        void Emit(Writer writer);
 
         public sealed record Return(Scope Container, A.Stmt AStmt)
             : Statement(Container, AStmt, Insn.Return)
         {
-            public Expr? Expr { get; set; } = null;
+            public Expr.Delayed? Expr { get; set; } = null;
 
             public override void Emit(Writer writer)
             {
+                var emitter = new Emitter();
+
                 if (Expr != null)
                 {
-                    Expr.Emit(writer);
+                    Assert(Expr.Resolved != null);
+                    Expr.Resolved.Emit(emitter);
                 }
-                base.Emit(writer);
+                emitter.Add(Insn.Return);
+
+                emitter.Dump(writer);
             }
         }
     }

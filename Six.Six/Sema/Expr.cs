@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using Six.Six.Builtins;
 using Six.Six.Instructions;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,22 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Sema
 {
+    public interface Emitting
+    {
+        void Emit(Emitter emitter);
+    }
+
     public interface Expr : Entity
     {
-        void Emit(Writer writer);
-
         public sealed record Delayed : Expr
         {
             public Concrete? Resolved { get; set; } = null;
-
-            public void Emit(Writer writer) 
-            { 
-                Resolved?.Emit(writer);
-            }
         }
 
-        public interface Concrete : Expr
+        public interface Concrete : Expr, Emitting
         {
-            Type? Type { get; }
+            Type? Type { get; set; }
+            Type? FinalType { get; set; }
             Insn[] Insns { get; }
         }
 
@@ -43,41 +43,94 @@ namespace Six.Six.Sema
 
             public virtual Type? Type { get; set; }
 
+            public virtual Type? FinalType { get; set; }
+
             public Insn[] Insns { get; }
 
-            public virtual void Emit(Writer writer)
+            public abstract void Emit(Emitter emitter);
+        }
+
+        public abstract record Primitive : ConcreteExpr
+        {
+            public Primitive(Builtin Builtin) : base(new Type.BuiltinReference(Builtin))
+            { }
+            public Primitive(Type Type) : base(Type)
+            { }
+        }
+
+        public sealed record ConstI32(Builtin Builtin, int Value) : Primitive(Builtin)
+        {
+            public override void Emit(Emitter emitter)
             {
-                foreach (var insn in Insns)
-                {
-                    writer.WriteLine($"{insn}");
-                }
+                emitter.Add(Insn.I32.Const(Value));
             }
         }
 
-        public sealed record Natural(Type Type, ulong Value) : ConcreteExpr(Type)
-        { 
+        public sealed record ConstI64(Builtin Builtin, long Value)
+            : Primitive(Builtin)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                emitter.Add(Insn.I64.Const(Value));
+            }
         }
+
+        public sealed record ConstU64(Builtin Builtin, ulong Value)
+            : Primitive(Builtin)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                emitter.Add(Insn.U64.Const(Value));
+            }
+        }
+
+        public sealed record Binop(Builtin Builtin, Insn Insn, Expr.Concrete Oper1, Expr.Concrete Oper2)
+            : Primitive(Builtin)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                Oper1.Emit(emitter);
+                Oper2.Emit(emitter);
+                emitter.Add(Insn);
+            }
+        }
+
+        public sealed record ParameterReference(Decl.Parameter Decl, Type Type) : Primitive(Type)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                emitter.Add(Insn.Local.Get(Decl.Index));
+            }
+        }
+
+        public sealed record FunctionReference(Decl.Function Decl, Type Type)
+            : Primitive(Type)
+        {
+            public override void Emit(Emitter emitter)
+            {
+                emitter.Add(Insn.CallStatic(Decl.FullName()));
+            }
+        }
+
 
         public record Reference(Decl Decl) : ConcreteExpr
         {
             public override Type? Type => Decl.Type;
+
+            public override void Emit(Emitter emitter)
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public sealed record ParameterReference(Decl Decl) : Reference(Decl);
-
-        public sealed record CallMember(Expr Make, Type.Callable Callable, params Expr[] Arguments)
+        public sealed record CallMember(Type.Callable Callable, Expr Make, params Expr[] Arguments)
             : ConcreteExpr
         {
             public override Type? Type => Callable.Result;
 
-            public override void Emit(Writer writer)
+            public override void Emit(Emitter emitter)
             {
-                Make.Emit(writer);
-                foreach (var argument in Arguments)
-                {
-                    argument.Emit(writer); 
-                }
-                writer.WriteLine($"{Insn.ToDo("callable")}");
+                throw new NotImplementedException();
             }
         }
     }

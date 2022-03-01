@@ -4,6 +4,11 @@ namespace Six.Six.Sema
 {
     public static class Extensions
     {
+        public static string FullName(this Decl node)
+        {
+            return $"{node.Container.FullName}::{node.Name}";
+        }
+
         public static Location GetLocation(this Decl node)
         {
             return node.ADecl.GetLocation();

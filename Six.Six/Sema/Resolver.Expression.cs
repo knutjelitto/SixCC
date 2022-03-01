@@ -1,4 +1,5 @@
 ﻿using Six.Six.Instructions;
+using Six.Six.Builtins;
 using System;
 using A = Six.Six.Ast;
 
@@ -47,9 +48,49 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
+        private Expr.Delayed Expression(Scope container, A.Expression.Call node)
+        {
+            var delayed = new Expr.Delayed();
+
+            var function = ResolveExpression(container, node.Expr);
+            var args = ResolveArguments(container, node.Arguments).ToList();
+
+            ResolveLater(() =>            
+            {
+                if (function.Resolved != null && args.All(arg => arg.Resolved != null))
+                {
+                    if (function.Resolved is Expr.FunctionReference reference)
+                    {
+                        Assert(reference.Decl.Parameters.Count > 0);
+                    }
+                    else
+                    {
+                        Assert(false);
+                    }
+
+                    Assert(false);
+                }
+                else
+                {
+                    Assert(false);
+                }
+
+            });
+
+            return delayed;
+        }
+
+        private IEnumerable<Expr.Delayed> ResolveArguments(Scope container, A.Arguments arguments)
+        {
+            foreach (var argument in arguments)
+            {
+                yield return ResolveExpression(container, argument);
+            }
+        }
+
         private Expr.Delayed Expression(Scope container, A.Expression.Infix node)
         {
-            var expr = new Expr.Delayed();
+            var delayed = new Expr.Delayed();
 
             var left = ResolveExpression(container, node.Left);
             var right = ResolveExpression(container, node.Right);
@@ -58,7 +99,10 @@ namespace Six.Six.Sema
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
-                    if (ResolveType(left.Resolved) is Type.Reference reference &&
+                    left.Resolved.FinalType = ResolveType(left.Resolved);
+                    right.Resolved.FinalType = ResolveType(right.Resolved);
+
+                    if (left.Resolved.FinalType is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
                         classy.Container is ContentScope content &&
                         classy.ADecl is A.Decl.Primitive)
@@ -67,17 +111,16 @@ namespace Six.Six.Sema
                         var result = ResolveType(infix);
                         if (result is Type.Callable callable)
                         {
-                            expr.Resolved = new Expr.CallMember(left, callable, right);
+                            delayed.Resolved = new Expr.CallMember(callable, left, right);
                         }
                         else
                         {
                             Assert(false);
                         }
                     }
-                    else if (ResolveType(left.Resolved) is Type.BuiltinReference builtin)
+                    else if (left.Resolved.FinalType is Type.BuiltinReference builtin)
                     {
-                        var builder = builtin.Builtin.Infix(node.Op.Name.Text);
-                        var primitive = builder(left.Resolved, right.Resolved);
+                        delayed.Resolved = builtin.Infix(node.Op, left, right);
                     }
                     else
                     {
@@ -91,21 +134,23 @@ namespace Six.Six.Sema
 
             });
 
-            return expr;
+            return delayed;
         }
 
 
         private Expr.Delayed Expression(Scope container, A.Expression.Prefix node)
         {
-            var expr = new Expr.Delayed();
+            var delayed = new Expr.Delayed();
 
-            var left = ResolveExpression(container, node.Expr);
+            var right = ResolveExpression(container, node.Expr);
 
             ResolveLater(() =>
             {
-                if (left.Resolved != null)
+                if (right.Resolved != null)
                 {
-                    if (ResolveType(left.Resolved) is Type.Reference reference &&
+                    right.Resolved.FinalType = ResolveType(right.Resolved);
+
+                    if (right.Resolved.FinalType is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
                         classy.Container is ContentScope content)
                     {
@@ -115,7 +160,7 @@ namespace Six.Six.Sema
                             var result = ResolveType(prefix);
                             if (result is Type.Callable callable)
                             {
-                                expr.Resolved = new Expr.CallMember(left, callable);
+                                delayed.Resolved = new Expr.CallMember(callable, right);
                             }
                             else
                             {
@@ -127,6 +172,10 @@ namespace Six.Six.Sema
                             Assert(false);
                         }
                     }
+                    else if (right.Resolved.FinalType is Type.BuiltinReference builtin)
+                    {
+                        delayed.Resolved = builtin.Prefix(node.Op, right);
+                    }
                     else
                     {
                         Assert(false);
@@ -139,32 +188,28 @@ namespace Six.Six.Sema
 
             });
 
-            return expr;
+            return delayed;
         }
 
         private Expr.Delayed Expression(Scope container, A.Expression.NaturalNumber tree)
         {
-            var expr = new Expr.Delayed();
+            var delayed = new Expr.Delayed();
 
-            var value = ConvertNatural(tree.Text);
+            delayed.Resolved = NaturalConst(tree);
 
-            var type = NaturalType(tree, value);
-
-            expr.Resolved = new Expr.Natural(type, value);
-
-            return expr;
+            return delayed;
         }
 
         private Expr.Delayed Expression(Scope container, A.Reference tree)
         {
-            var expr = new Expr.Delayed();
+            var delayed = new Expr.Delayed();
 
             ResolveLater(() =>
             {
-                expr.Resolved = WalkReference(container.Resolve(tree, tree.Name.Text));
+                delayed.Resolved = WalkReference(container.Resolve(tree, tree.Name.Text));
             });
 
-            return expr;
+            return delayed;
         }
 
         private Expr.Concrete WalkReference(Decl decl)
@@ -172,8 +217,9 @@ namespace Six.Six.Sema
             switch (decl)
             {
                 case Decl.Parameter node:
-                    var insn = Insn.Local.Get(node.Index);
-                    return new Expr.ParameterReference(decl);
+                    return new Expr.ParameterReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
+                case Decl.Function node:
+                    return new Expr.FunctionReference(node, ResolveType(node.Result) ?? throw new NullReferenceException());
                 default:
                     Assert(false);
                     break;
