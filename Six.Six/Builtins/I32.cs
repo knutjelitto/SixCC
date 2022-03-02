@@ -21,64 +21,59 @@ namespace Six.Six.Builtins
             infix.Add("%", Rem);
         }
 
-
         public Expr.Primitive Neg(Expr.Concrete right)
         {
-            Assert(right.Type != null);
-            Assert(right.Type is Sema.Type.BuiltinReference rightRef && rightRef.Builtin == this);
-            if (right is Expr.ConstI32 natural)
-            {
-                var value = -natural.Value;
-                return new Expr.ConstI32(this, value);
-            }
+            Assert(ReferenceEquals(right.Type, this));
 
             var zero = new Expr.ConstI32(this, 0);
             return Sub(zero, right);
         }
+
         public Expr.Primitive Not(Expr.Concrete right)
         {
+            Assert(ReferenceEquals(right.Type, this));
+
             throw new NotImplementedException();
         }
+
         public Expr.Primitive Add(Expr.Concrete left, Expr.Concrete right)
         {
-            Assert(left.Type is Sema.Type.BuiltinReference leftRef && leftRef.Builtin == this);
-            Assert(right.Type is Sema.Type.BuiltinReference rightRef && rightRef.Builtin == this);
-            if (left is Expr.ConstI32 natural1 && right is Expr.ConstI32 natural2)
-            {
-                var value = natural1.Value + natural2.Value;
-                return new Expr.ConstI32(this, value);
-            }
-            return new Expr.Binop(this, Insn.I32.Add(), left, right);
+            Assert(ReferenceEquals(left.Type, this));
+            Assert(ReferenceEquals(right.Type, this));
+
+            return new Expr.Binop(this, Insn.I32.Add, left, right);
         }
+
         public Expr.Primitive Sub(Expr.Concrete left, Expr.Concrete right)
         {
-            Assert(left.Type is Sema.Type.BuiltinReference leftRef && leftRef.Builtin == this);
-            Assert(right.Type is Sema.Type.BuiltinReference rightRef && rightRef.Builtin == this);
-            if (left is Expr.ConstI32 natural1 && right is Expr.ConstI32 natural2)
-            {
-                var value = natural1.Value - natural2.Value;
-                return new Expr.ConstI32(this, value);
-            }
-            return new Expr.Binop(this, Insn.I32.Sub(), left, right);
+            Assert(ReferenceEquals(left.Type, this));
+            Assert(ReferenceEquals(right.Type, this));
+
+            return new Expr.Binop(this, Insn.I32.Sub, left, right);
         }
+
         public Expr.Primitive Mul(Expr.Concrete left, Expr.Concrete right)
         {
-            Assert(left.Type is Sema.Type.BuiltinReference leftRef && leftRef.Builtin == this);
-            Assert(right.Type is Sema.Type.BuiltinReference rightRef && rightRef.Builtin == this);
-            if (left is Expr.ConstI32 natural1 && right is Expr.ConstI32 natural2)
-            {
-                var value = natural1.Value * natural2.Value;
-                return new Expr.ConstI32(this, value);
-            }
-            return new Expr.Binop(this, Insn.I32.Mul(), left, right);
+            Assert(ReferenceEquals(left.Type, this));
+            Assert(ReferenceEquals(right.Type, this));
+
+            return new Expr.Binop(this, Insn.I32.Mul, left, right);
         }
+
         public Expr.Primitive Div(Expr.Concrete left, Expr.Concrete right)
         {
-            throw new NotImplementedException();
+            Assert(ReferenceEquals(left.Type, this));
+            Assert(ReferenceEquals(right.Type, this));
+
+            return new Expr.Binop(this, Insn.I32.Div, left, right);
         }
+
         public Expr.Primitive Rem(Expr.Concrete left, Expr.Concrete right)
         {
-            throw new NotImplementedException();
+            Assert(ReferenceEquals(left.Type, this));
+            Assert(ReferenceEquals(right.Type, this));
+
+            return new Expr.Binop(this, Insn.I32.Rem, left, right);
         }
     }
 }

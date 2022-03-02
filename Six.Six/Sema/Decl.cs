@@ -1,4 +1,5 @@
-﻿using A = Six.Six.Ast;
+﻿using Six.Six.Instructions;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -30,7 +31,7 @@ namespace Six.Six.Sema
 
         public class Function : Funcy
         {
-            public Function(FuncyScope container, A.Decl.Function aDecl)
+            public Function(FuncyScope container, A.Decl.Funcy aDecl)
                 : base(container, aDecl)
             {
             }
@@ -40,7 +41,7 @@ namespace Six.Six.Sema
 
         public abstract class Local : Declaration
         {
-            public Local(DeclarationScope Container, A.Decl ADecl, int index)
+            public Local(Scope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl)
             {
                 Index = index;
@@ -51,7 +52,7 @@ namespace Six.Six.Sema
 
         public sealed class Parameter : Local
         {
-            public Parameter(FuncyScope Container, A.Decl ADecl, int index)
+            public Parameter(FuncyScope Container, A.Decl.Parameter ADecl, int index)
                 : base(Container, ADecl, index)
             {
             }
@@ -59,11 +60,26 @@ namespace Six.Six.Sema
             public Expr.Concrete? Default { get; set; }
         }
 
-        public sealed class Let : Local
+        public sealed class Let : Local, Emitting
         {
-            public Let(DeclarationScope Container, A.Decl ADecl, int index)
+            public Let(Scope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl, index)
             {
+            }
+
+            public Expr.Concrete? Value { get; set; }
+
+            public void Emit(Emitter emitter)
+            {
+                if (Value != null)
+                {
+                    Value.Emit(emitter);
+                    emitter.Add(Insn.Local.Set(Index));
+                }
+                else
+                {
+                    Assert(false);
+                }
             }
         }
     }

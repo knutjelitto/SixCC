@@ -25,64 +25,44 @@ namespace Six.Six.Sema
         {
             Type? Type { get; set; }
             Type? FinalType { get; set; }
-            Insn[] Insns { get; }
         }
 
         public abstract record ConcreteExpr : Concrete
         {
-            public ConcreteExpr(params Insn[] insns)
+            public ConcreteExpr()
             {
-                Insns = insns;
             }
 
-            public ConcreteExpr(Type? type, params Insn[] insns)
+            public ConcreteExpr(Type? type)
             {
                 Type = type;
-                Insns = insns;
             }
 
             public virtual Type? Type { get; set; }
 
             public virtual Type? FinalType { get; set; }
 
-            public Insn[] Insns { get; }
-
             public abstract void Emit(Emitter emitter);
         }
 
         public abstract record Primitive : ConcreteExpr
         {
-            public Primitive(Builtin Builtin) : base(new Type.BuiltinReference(Builtin))
-            { }
             public Primitive(Type Type) : base(Type)
-            { }
-        }
-
-        public sealed record ConstI32(Builtin Builtin, int Value) : Primitive(Builtin)
-        {
-            public override void Emit(Emitter emitter)
             {
-                emitter.Add(Insn.I32.Const(Value));
             }
         }
 
-        public sealed record ConstI64(Builtin Builtin, long Value)
-            : Primitive(Builtin)
+        public abstract record Const(Builtin Builtin, Insn Insn) : Primitive(Builtin)
         {
             public override void Emit(Emitter emitter)
             {
-                emitter.Add(Insn.I64.Const(Value));
+                emitter.Add(Insn);
             }
         }
 
-        public sealed record ConstU64(Builtin Builtin, ulong Value)
-            : Primitive(Builtin)
-        {
-            public override void Emit(Emitter emitter)
-            {
-                emitter.Add(Insn.U64.Const(Value));
-            }
-        }
+        public sealed record ConstI32(Builtin Builtin, int Value) : Const(Builtin, Insn.I32.Const(Value));
+        public sealed record ConstI64(Builtin Builtin, long Value) : Const(Builtin, Insn.I64.Const(Value));
+        public sealed record ConstU64(Builtin Builtin, ulong Value) : Const(Builtin, Insn.U64.Const(Value));
 
         public sealed record Binop(Builtin Builtin, Insn Insn, Concrete Arg1, Concrete Arg2)
             : Primitive(Builtin)
@@ -130,7 +110,7 @@ namespace Six.Six.Sema
         {
             public override void Emit(Emitter emitter)
             {
-                emitter.Add(Insn.Local.Get(42));
+                emitter.Add(Insn.Local.Get(Decl.Index));
             }
         }
 
@@ -141,6 +121,7 @@ namespace Six.Six.Sema
 
             public override void Emit(Emitter emitter)
             {
+                Assert(false);
                 throw new NotImplementedException();
             }
         }
@@ -152,6 +133,7 @@ namespace Six.Six.Sema
 
             public override void Emit(Emitter emitter)
             {
+                Assert(false);
                 throw new NotImplementedException();
             }
         }

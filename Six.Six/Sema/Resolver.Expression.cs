@@ -121,8 +121,8 @@ namespace Six.Six.Sema
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
-                    left.Resolved.FinalType = ResolveType(left.Resolved);
-                    right.Resolved.FinalType = ResolveType(right.Resolved);
+                    left.Resolved.FinalType = ResolveType(left.Resolved.Type);
+                    right.Resolved.FinalType = ResolveType(right.Resolved.Type);
 
                     if (left.Resolved.FinalType is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
@@ -140,7 +140,7 @@ namespace Six.Six.Sema
                             Assert(false);
                         }
                     }
-                    else if (left.Resolved.FinalType is Type.BuiltinReference builtin)
+                    else if (left.Resolved.FinalType is Type.Builtin builtin)
                     {
                         delayed.Resolved = builtin.Infix(node.Op, left, right);
                     }
@@ -194,7 +194,7 @@ namespace Six.Six.Sema
                             Assert(false);
                         }
                     }
-                    else if (right.Resolved.FinalType is Type.BuiltinReference builtin)
+                    else if (right.Resolved.FinalType is Type.Builtin builtin)
                     {
                         delayed.Resolved = builtin.Prefix(node.Op, right);
                     }

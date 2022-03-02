@@ -4,12 +4,16 @@ namespace Six.Six.Sema
 {
     public interface Type : Entity
     {
+        //Type? Base { get; }
+
         public interface Declared : Type
         {
             Decl Decl { get; }
         }
 
-        public sealed record BuiltinReference(Builtin Builtin) : Type;
+        public interface Builtin : Type
+        {
+        }
 
         public sealed record Reference(Decl Decl) : Declared;
 

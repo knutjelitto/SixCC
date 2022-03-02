@@ -10,18 +10,20 @@ namespace Six.Six.Builtins
 {
     public static class Extensions
     {
-        public static Expr.Concrete Infix(this Six.Sema.Type.BuiltinReference builtin, A.Reference named, Expr.Delayed left, Expr.Delayed right)
+        public static Expr.Concrete Infix(this Six.Sema.Type.Builtin builtin, A.Reference named, Expr.Delayed left, Expr.Delayed right)
         {
             Assert(left.Resolved != null && right.Resolved != null);
-            var builder = builtin.Builtin.Infix(named.Name.Text);
+            var concrete = builtin as Builtin ?? throw new InvalidCastException();
+            var builder = concrete.Infix(named.Name.Text);
             var primitive = builder(left.Resolved, right.Resolved);
             return primitive;
         }
 
-        public static Expr.Concrete Prefix(this Six.Sema.Type.BuiltinReference builtin, A.Reference named, Expr.Delayed right)
+        public static Expr.Concrete Prefix(this Six.Sema.Type.Builtin builtin, A.Reference named, Expr.Delayed right)
         {
             Assert(right.Resolved != null);
-            var builder = builtin.Builtin.Prefix(named.Name.Text);
+            var concrete = builtin as Builtin ?? throw new InvalidCastException();
+            var builder = concrete.Prefix(named.Name.Text);
             var primitive = builder(right.Resolved);
             return primitive;
         }

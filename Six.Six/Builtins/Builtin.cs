@@ -1,9 +1,10 @@
 ﻿using Six.Six.Sema;
 using System;
+using Type = Six.Six.Sema.Type;
 
 namespace Six.Six.Builtins
 {
-    public class Builtin
+    public class Builtin : Type.Builtin
     {
         private static readonly Dictionary<string, Builtin> buildins = new();
         protected readonly Dictionary<string, Func<Expr.Concrete, Expr.Primitive>> prefix = new();

@@ -39,7 +39,7 @@ namespace Six.Six.Sema
 
                         var builtin = Builtins.Builtin.Resolve(name);
 
-                        return new Type.BuiltinReference(builtin);
+                        return builtin;
                     }
                     return ResolveType(reference.Decl);
                 }
@@ -61,12 +61,13 @@ namespace Six.Six.Sema
         private Type DoResolveType(Scope scope, A.Reference tree)
         {
             var resolved = scope.Resolve(tree, tree.Name.Text);
+            var xxx = ResolveType(resolved);
 
             if (resolved.ADecl is A.Decl.Primitive primitive)
             {
                 var builtin = Builtins.Builtin.Resolve(primitive.Name.Text);
 
-                return new Type.BuiltinReference(builtin);
+                return builtin;
             }
             return new Type.Reference(resolved);
         }

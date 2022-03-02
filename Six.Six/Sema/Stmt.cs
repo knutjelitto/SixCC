@@ -10,34 +10,23 @@ namespace Six.Six.Sema
         Insn[] Insns { get; }
 
         public sealed record Return(Scope Container, A.Stmt AStmt)
-            : Statement(Container, AStmt, Insn.Return)
+            : Statement(Container, AStmt, Insn.Return), Emitting
         {
-            public Expr.Delayed? Expr { get; set; } = null;
+            public Expr.Concrete? Expr { get; set; } = null;
 
-            public override void Emit(Writer writer)
+            public void Emit(Emitter emitter)
             {
-                var emitter = new Emitter();
-
                 if (Expr != null)
                 {
-                    Assert(Expr.Resolved != null);
-                    Expr.Resolved.Emit(emitter);
+                    Assert(Expr != null);
+                    Expr.Emit(emitter);
                 }
                 emitter.Add(Insn.Return);
-
-                emitter.Dump(writer);
             }
         }
     }
 
     public record Statement(Scope Container, A.Stmt AStmt, params Insn[] Insns) : Stmt
     {
-        public virtual void Emit(Writer writer)
-        {
-            foreach (var insn in Insns)
-            {
-                writer.WriteLine($"{insn}");
-            }
-        }
     }
 }

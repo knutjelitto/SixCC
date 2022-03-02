@@ -16,7 +16,22 @@ namespace Six.Six.Sema
 
         public void ResolveLater(Action action)
         {
-            scheduled.Enqueue(action);
+            if (functions.Count > 0)
+            {
+                var function = CurrentFunction;
+
+                scheduled.Enqueue(() =>
+                {
+                    using (UseFunction(function))
+                    {
+                        action();
+                    }
+                });
+            }
+            else
+            {
+                scheduled.Enqueue(action);
+            }
         }
 
         public void Resolve()

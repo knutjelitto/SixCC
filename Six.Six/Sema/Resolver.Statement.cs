@@ -22,7 +22,37 @@ namespace Six.Six.Sema
 
             if (node.Expression != null)
             {
-                ResolveLater(() => stmt.Expr = ResolveExpression(container, node.Expression));
+                var result = ResolveExpression(container, node.Expression);
+
+                ResolveLater(() =>
+                {
+                    if (result.Resolved != null)
+                    {
+                        var function = CurrentFunction as Decl.Function;
+                        if (function != null)
+                        {
+                            var functionType = ResolveType(function.Result);
+                            var returnType = ResolveType(result.Resolved);
+
+                            if (ReferenceEquals(functionType, returnType))
+                            {
+                                stmt.Expr = result.Resolved;
+                            }
+                            else
+                            {
+                                Assert(false);
+                            }
+                        }
+                        else
+                        {
+                            Assert(false);
+                        }
+                    }
+                    else
+                    {
+                        Assert(false);
+                    }
+                });
             }
         }
 

@@ -36,23 +36,36 @@ namespace Six.Six.Instructions
             }
         }
 
-        public static ToDoInsn ToDo(string text) => new(text);
+        public static Insn ToDo(string text) => new ToDoInsn(text);
 
-        public static Simplest Return { get; } = new("return");
+        public static Insn Return { get; } = new Simplest("return");
 
-        public static Simplest CallStatic(string functionName) => new($"call {functionName}");
+        public static Insn CallStatic(string functionName) => new Simplest($"call {functionName}");
 
         public static class Local
         {
             public static LocalGet Get(int index) => new(index);
+            public static LocalSet Set(int index) => new(index);
         }
 
         public static class I32
         {
             public static Const Const(int value) => new(new Value.ValueI32(value));
-            public static Binop Add() => Binop.Add(ValueType.I32);
-            public static Binop Sub() => Binop.Sub(ValueType.I32);
-            public static Binop Mul() => Binop.Mul(ValueType.I32);
+            public static Insn Add => Binop.Add(ValueType.I32);
+            public static Insn Sub => Binop.Sub(ValueType.I32);
+            public static Insn Mul => Binop.Mul(ValueType.I32);
+            public static Insn Div => Binop.DivS(ValueType.I32);
+            public static Insn Rem => Binop.RemS(ValueType.I32);
+        }
+
+        public static class U32
+        {
+            public static Const Const(uint value) => new(new Value.ValueU32(value));
+            public static Insn Add => Binop.Add(ValueType.I32);
+            public static Insn Sub => Binop.Sub(ValueType.I32);
+            public static Insn Mul => Binop.Mul(ValueType.I32);
+            public static Insn Div => Binop.DivU(ValueType.I32);
+            public static Insn Rem => Binop.RemU(ValueType.I32);
         }
 
         public static class I64
@@ -93,9 +106,14 @@ namespace Six.Six.Instructions
                 return $"{Type}.{Name}{Sign}";
             }
 
-            public static Binop Add(ValueType type) => new(type, "add", OpSign.Neutral);
-            public static Binop Sub(ValueType type) => new(type, "sub", OpSign.Neutral);
-            public static Binop Mul(ValueType type) => new(type, "mul", OpSign.Neutral);
+            public static Insn Add(ValueType type) => new Binop(type, "add", OpSign.Neutral);
+            public static Insn Sub(ValueType type) => new Binop(type, "sub", OpSign.Neutral);
+            public static Insn Mul(ValueType type) => new Binop(type, "mul", OpSign.Neutral);
+            public static Insn Div(ValueType type) => new Binop(type, "div", OpSign.Neutral);
+            public static Insn DivS(ValueType type) => new Binop(type, "div", OpSign.Signed);
+            public static Insn DivU(ValueType type) => new Binop(type, "div", OpSign.Unsigned);
+            public static Insn RemS(ValueType type) => new Binop(type, "rem", OpSign.Signed);
+            public static Insn RemU(ValueType type) => new Binop(type, "rem", OpSign.Unsigned);
         }
 
         public class Const : Insn
@@ -135,6 +153,19 @@ namespace Six.Six.Instructions
                 return $"local.get {Index}";
             }
         }
+
+        public class LocalSet : IndexRef
+        {
+            public LocalSet(int index)
+                : base(index)
+            {
+            }
+
+            public override string ToString()
+            {
+                return $"local.set {Index}";
+            }
+        }
     }
 
     public abstract class Value
@@ -165,6 +196,13 @@ namespace Six.Six.Instructions
         public class ValueI32 : ValueT<int>
         {
             public ValueI32(int value) : base(ValueType.I32, value)
+            {
+            }
+        }
+
+        public class ValueU32 : ValueT<uint>
+        {
+            public ValueU32(uint value) : base(ValueType.I32, value)
             {
             }
         }

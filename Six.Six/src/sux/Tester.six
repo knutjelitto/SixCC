@@ -18,11 +18,11 @@ shared builtin i32
 
 shared alias int => i32;
 
-shared int result_with_consts()
+shared int result_with_consts(int c = -4)
 {
     let a = -2;
 
-    return a * -3 + -4;
+    return a * -3 + c;
 }
 
 shared int result_with_parameters(int a = 2, int b = 3, int c = 4)

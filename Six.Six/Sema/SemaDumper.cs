@@ -1,6 +1,7 @@
 ﻿using Six.Core;
 using Six.Runtime;
-
+using Six.Six.Builtins;
+using Six.Six.Instructions;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -16,9 +17,11 @@ namespace Six.Six.Sema
             : base(writer)
         {
             Resolver = resolver;
+            Content = new ContentDumper(this, writer);
         }
 
         public Resolver Resolver { get; }
+        private ContentDumper Content { get; }
 
         public void DumpDeclaration(Decl decl)
         {
@@ -83,6 +86,8 @@ namespace Six.Six.Sema
                     return node.Decl.Name.Text;
                 case Type.Callable node:
                     return $"{TypeOf(node.Result)}({string.Join(",", node.Parameters.Select(p => TypeOf(p)))})";
+                case Type.Builtin node:
+                    return node.ToString()!;
                 default:
                     Assert(false);
                     return "<<TYPE-ERROR>>";
@@ -97,12 +102,10 @@ namespace Six.Six.Sema
             {
                 case Expr.Delayed expr:
                     return ExprOf(expr.Resolved);
-                case Expr.ConstI32 expr:
-                    return expr.Value.ToString();
-                case Expr.ConstI64 expr:
-                    return expr.Value.ToString();
-                case Expr.ConstU64 expr:
-                    return expr.Value.ToString();
+                case Expr.Const expr:
+                    return $"({expr.Insn})";
+                case Expr.Binop expr:
+                    return $"({expr.Insn} {ExprOf(expr.Arg1)} {ExprOf(expr.Arg2)})";
                 default:
                     Assert(false);
                     return "<<EXPR-ERROR>>";
@@ -113,7 +116,8 @@ namespace Six.Six.Sema
         {
             if (entity != null)
             {
-                return $" = {ExprOf(entity)}";
+                //return $" = {ExprOf(entity)}";
+                return $" = ...";
             }
             return "";
         }
@@ -128,8 +132,8 @@ namespace Six.Six.Sema
                     return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
                 case Type.Callable node:
                     return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
-                case Type.BuiltinReference node:
-                    return $"{node.Builtin}";
+                case Type.Builtin node:
+                    return $"{node}";
                 default:
                     Assert(false);
                     return string.Empty;
@@ -166,7 +170,7 @@ namespace Six.Six.Sema
             switch (type)
             {
                 case Type.Reference:
-                case Type.BuiltinReference:
+                case Type.Builtin:
                     break;
                 case Type.Callable node:
                     indent(() =>
@@ -191,10 +195,9 @@ namespace Six.Six.Sema
             indent(() =>
             {
                 WalkMany("parameters", decl.Parameters);
+                TypeProp("results", decl.Result);
+                WalkMany("locals", decl.Locals);
 
-                //TypeProp("result", decl.GetResult());
-                TypeProp("type", decl.Type);
-                //TypeProp("extends", decl.GetExtends());
 
                 if (decl.Container is ContentScope content)
                 {
@@ -203,7 +206,7 @@ namespace Six.Six.Sema
                         wl("content");
                         indent(() =>
                         {
-                            WalkMany(content.Block.Members);
+                            Content.WalkMany(content.Block.Members);
                         });
                     }
                 }
@@ -213,6 +216,11 @@ namespace Six.Six.Sema
         private void Visit(Decl.Parameter decl)
         {
             wl($"[{decl.Index}] {TypeOf(decl.Type)} {Name(decl)}{DefaultOf(decl.Default)}");
+        }
+
+        private void Visit(Decl.Let decl)
+        {
+            wl($"[{decl.Index}] {TypeOf(decl.Type)} {Name(decl)}{DefaultOf(decl.Value)}");
         }
 
         private void ExprProp(string head, Expr? expr)
@@ -237,15 +245,6 @@ namespace Six.Six.Sema
         private void Visit(Stmt stmt)
         {
             Assert(false);
-            wl(Ref(stmt.AStmt));
-        }
-
-        private void Visit(Stmt.Return stmt)
-        {
-            wl("-----");
-            stmt.Emit(Writer);
-            wl("-----");
-
         }
 
         private void Visit(Type type)
@@ -366,6 +365,51 @@ namespace Six.Six.Sema
                 Assert(false);
             }
             return $"{prefix}{node.GetType().Name}{Name(node)}";
+        }
+
+        private class ContentDumper : WithWriter
+        {
+            public ContentDumper(SemaDumper sema, Writer writer)
+                : base(writer)
+            {
+                Sema = sema;
+            }
+
+            public SemaDumper Sema { get; }
+
+            public void WalkMany(IEnumerable<Member> members)
+            {
+                var emitter = new Emitter();
+                wl("----------");
+                foreach (var member in members)
+                {
+                    Walk(emitter, member);
+                }
+                emitter.Dump(Writer);
+                wl("----------");
+            }
+
+            private void Walk(Emitter emitter, Member member)
+            {
+                if (member == null) return;
+
+                Visit(emitter, (dynamic)member);
+            }
+
+            private void Visit(Emitter emitter, Member member)
+            {
+                Assert(false);
+            }
+
+            private void Visit(Emitter emitter, Stmt.Return stmt)
+            {
+                stmt.Emit(emitter);
+            }
+
+            private void Visit(Emitter emitter, Decl.Let let)
+            {
+                let.Emit(emitter);
+            }
         }
     }
 }
