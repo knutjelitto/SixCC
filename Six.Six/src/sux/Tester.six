@@ -16,7 +16,12 @@ shared builtin i32
     shared infix i32 % (i32 that);
 }
 
+shared builtin u32
+{
+}
+
 shared alias int => i32;
+shared alias uint => u32;
 
 shared int result_with_consts(int c = -4)
 {
@@ -33,4 +38,9 @@ shared int result_with_parameters(int a = 2, int b = 3, int c = 4)
 shared int call_with_default(int a, int b)
 {
     return result_with_parameters(a, b);
+}
+
+shared uint call_unsigned(uint a, uint b)
+{
+    return a + b;
 }

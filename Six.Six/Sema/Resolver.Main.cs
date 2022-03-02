@@ -18,6 +18,8 @@ namespace Six.Six.Sema
 
         public Module Module { get; }
 
+        public Builtins.Builtins Builtins => Module.Builtins;
+
         public void Walk(A.Unit.Code code)
         {
             CodeUnit(code);

@@ -1,11 +1,6 @@
-﻿using Six.Core;
-using Six.Six.Builtins;
+﻿using Six.Six.Builtins;
 using Six.Six.Instructions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Six.Sema
 {
@@ -61,6 +56,7 @@ namespace Six.Six.Sema
         }
 
         public sealed record ConstI32(Builtin Builtin, int Value) : Const(Builtin, Insn.I32.Const(Value));
+        public sealed record ConstU32(Builtin Builtin, uint Value) : Const(Builtin, Insn.U32.Const(Value));
         public sealed record ConstI64(Builtin Builtin, long Value) : Const(Builtin, Insn.I64.Const(Value));
         public sealed record ConstU64(Builtin Builtin, ulong Value) : Const(Builtin, Insn.U64.Const(Value));
 
@@ -97,7 +93,8 @@ namespace Six.Six.Sema
             }
         }
 
-        public sealed record ParameterReference(Decl.Parameter Decl, Type Type) : Primitive(Type)
+        public sealed record ParameterReference(Decl.Parameter Decl, Type Type)
+            : Primitive(Type)
         {
             public override void Emit(Emitter emitter)
             {
@@ -115,7 +112,8 @@ namespace Six.Six.Sema
         }
 
 
-        public record Reference(Decl Decl) : ConcreteExpr
+        public record Reference(Decl Decl)
+            : ConcreteExpr
         {
             public override Type? Type => Decl.Type;
 

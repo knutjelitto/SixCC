@@ -1,8 +1,4 @@
-﻿using Six.Six.Builtins;
-using Six.Six.Instructions;
-using System;
-using static System.Formats.Asn1.AsnWriter;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1822 // Mark members as static
@@ -15,24 +11,19 @@ namespace Six.Six.Sema
     {
         public Expr.Concrete NaturalConst(A.Expression.NaturalNumber tree)
         {
-            Builtin builtin;
-
             var value = ConvertNatural(tree.Text);
 
             if (value > long.MaxValue)
             {
-                builtin = Builtin.Resolve(Module.Core.UInt64);
-                return new Expr.ConstU64(builtin, value);
+                return new Expr.ConstU64(Builtins.Resolve(Module.Core.UInt64), value);
             }
             else if (value > int.MaxValue)
             {
-                builtin = Builtin.Resolve(Module.Core.Int64);
-                return new Expr.ConstI64(builtin, (long)value);
+                return new Expr.ConstI64(Builtins.Resolve(Module.Core.Int64), (long)value);
             }
             else
             {
-                builtin = Builtin.Resolve(Module.Core.Int32);
-                return new Expr.ConstI32(builtin, (int)value);
+                return new Expr.ConstI32(Builtins.Resolve(Module.Core.Int32), (int)value);
             }
         }
 

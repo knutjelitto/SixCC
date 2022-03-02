@@ -1,5 +1,6 @@
 ﻿using System;
-using static System.Formats.Asn1.AsnWriter;
+using Six.Six.Builtins;
+
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -37,7 +38,7 @@ namespace Six.Six.Sema
 
                         Assert(true);
 
-                        var builtin = Builtins.Builtin.Resolve(name);
+                        var builtin = Builtins.Resolve(name);
 
                         return builtin;
                     }
@@ -65,9 +66,13 @@ namespace Six.Six.Sema
 
             if (resolved.ADecl is A.Decl.Primitive primitive)
             {
-                var builtin = Builtins.Builtin.Resolve(primitive.Name.Text);
+                var builtin = Builtins.Resolve(primitive.Name.Text);
 
                 return builtin;
+            }
+            if (xxx != null)
+            {
+                return xxx;
             }
             return new Type.Reference(resolved);
         }

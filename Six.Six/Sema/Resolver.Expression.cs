@@ -1,5 +1,4 @@
-﻿using Six.Six.Instructions;
-using Six.Six.Builtins;
+﻿using Six.Six.Builtins;
 using System;
 using A = Six.Six.Ast;
 

@@ -40,11 +40,13 @@ namespace Six.Six.Sema
             Root = new Namespace("", this);
             Name = "six";
             Resolver = new Resolver(this);
+            Builtins = new Builtins.Builtins(this);
         }
 
         public Namespace Root { get; }
         public string Name { get; }
         public Resolver Resolver { get; }
+        public Builtins.Builtins Builtins { get; }
 
         public Scope Open(A.NamespaceIntro @namespace)
         {

@@ -1,11 +1,7 @@
-﻿using Six.Six.Builtins;
-
-namespace Six.Six.Sema
+﻿namespace Six.Six.Sema
 {
     public interface Type : Entity
     {
-        //Type? Base { get; }
-
         public interface Declared : Type
         {
             Decl Decl { get; }

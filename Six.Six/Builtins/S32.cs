@@ -1,16 +1,12 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
-    public class I32 : Integral
+    public class S32 : Integral
     {
-        public I32()
+        public S32()
         {
             prefix.Add("-", Neg);
             prefix.Add("!", Not);
