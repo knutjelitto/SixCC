@@ -13,6 +13,7 @@ namespace Six.Six.Builtins
 
             buildins.Add(Module.Core.Int32, new S32());
             buildins.Add(Module.Core.UInt32, new U32());
+            buildins.Add(Module.Core.Float64, new F64());
         }
 
         public Module Module { get; }

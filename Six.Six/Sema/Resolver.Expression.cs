@@ -63,7 +63,8 @@ namespace Six.Six.Sema
                         if (found is Decl.Attribute attribute)
                         {
                             Assert(attribute.IsStatic());
-                            Assert(false);
+                            Assert(attribute.Type != null);
+                            delayed.Resolved = new Expr.SelectAttribute(classyRef, attribute, attribute.Type);
                         }
                         else
                         {

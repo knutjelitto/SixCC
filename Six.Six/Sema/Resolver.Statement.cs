@@ -16,6 +16,27 @@ namespace Six.Six.Sema
             Statement((dynamic)scope, (dynamic)node);
         }
 
+        private void Statement(BlockScope container, A.Stmt.Assign node)
+        {
+            var stmt = container.AddMember(new Stmt.Assign(container, node));
+            CurrentFunction.Members.Add(stmt);
+
+            var left = ResolveExpression(container, node.Left);
+            var right = ResolveExpression(container, node.Right);
+
+            ResolveLater(() =>
+            {
+                if (left.Resolved != null && right.Resolved != null)
+                {
+                    Assert(false);
+                }
+                else
+                {
+                    Assert(false);
+                }
+            });
+        }
+
         private void Statement(BlockScope container, A.Stmt.Return node)
         {
             var stmt = container.AddMember(new Stmt.Return(container, node));

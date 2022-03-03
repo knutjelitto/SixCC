@@ -1,0 +1,14 @@
+namespace six.tests;
+
+shared class Complex
+{
+    double re = 0;
+    double im = 0;
+
+    shared new()
+    {
+        re = 0;
+    }
+
+    shared infix Complex +(Complex other);
+}

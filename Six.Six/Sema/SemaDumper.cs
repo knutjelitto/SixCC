@@ -17,11 +17,9 @@ namespace Six.Six.Sema
             : base(writer)
         {
             Resolver = resolver;
-            Content = new ContentDumper(this, writer);
         }
 
         public Resolver Resolver { get; }
-        private ContentDumper Content { get; }
 
         public void DumpDeclaration(Decl decl)
         {
@@ -204,10 +202,6 @@ namespace Six.Six.Sema
                     if (content.Block.Members.Count > 0)
                     {
                         wl("content");
-                        indent(() =>
-                        {
-                            Content.WalkMany(content.Block.Members);
-                        });
                     }
                 }
             });
@@ -363,51 +357,6 @@ namespace Six.Six.Sema
                 Assert(false);
             }
             return $"{prefix}{node.GetType().Name}{Name(node)}";
-        }
-
-        private class ContentDumper : WithWriter
-        {
-            public ContentDumper(SemaDumper sema, Writer writer)
-                : base(writer)
-            {
-                Sema = sema;
-            }
-
-            public SemaDumper Sema { get; }
-
-            public void WalkMany(IEnumerable<Member> members)
-            {
-                var bag = new InsnBag();
-                wl("----------");
-                foreach (var member in members)
-                {
-                    Walk(bag, member);
-                }
-                bag.Dump(Writer);
-                wl("----------");
-            }
-
-            private void Walk(InsnBag bag, Member member)
-            {
-                if (member == null) return;
-
-                Visit(bag, (dynamic)member);
-            }
-
-            private void Visit(InsnBag bag, Member member)
-            {
-                Assert(false);
-            }
-
-            private void Visit(InsnBag bag, Stmt.Return stmt)
-            {
-                stmt.Emit(bag);
-            }
-
-            private void Visit(InsnBag bag, Decl.Let let)
-            {
-                let.Emit(bag);
-            }
         }
     }
 }

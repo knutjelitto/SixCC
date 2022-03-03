@@ -15,6 +15,7 @@ namespace Six.Six.Sema
 
         public static class Core
         {
+            public static readonly string Float64 = "f64";
             public static readonly string UInt64 = "u64";
             public static readonly string Int64 = "i64";
             public static readonly string UInt32 = "u32";
@@ -54,7 +55,7 @@ namespace Six.Six.Sema
             using (var writer = new Writer())
             {
                 var emitter = new Emitter(this, writer);
-                emitter.Emit();
+                emitter.EmitModule();
 
                 return writer.ToString();
             }

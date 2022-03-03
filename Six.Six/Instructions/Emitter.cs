@@ -28,7 +28,7 @@ namespace Six.Six.Instructions
             Handle((dynamic)entity);
         }
 
-        public void Emit()
+        public void EmitModule()
         {
             wl($"(module");
             foreach (var ns in Module.GetNamespaces())
@@ -46,21 +46,9 @@ namespace Six.Six.Instructions
             }
             indent(() =>
             {
-                foreach (var export in exports)
-                {
-                    wl(export);
-                }
+                Vertical(exports.Select(export => new Action(() => wl(export))));
                 wl();
-                var more = false;
-                foreach (var function in functions)
-                {
-                    if (more)
-                    {
-                        wl();
-                    }
-                    function();
-                    more = true;
-                }
+                VerticalSpaced(functions.Select(function => function));
             });
             wl($")");
         }
@@ -89,37 +77,11 @@ namespace Six.Six.Instructions
                 wl($"(func ${decl.Container.FullName}");
                 indent(() =>
                 {
-                    var more = false;
-                    foreach (var param in decl.Parameters)
-                    {
-                        if (more)
-                        {
-                            w(" ");
-                        }
-                        w($"{Param(param)}");
-                        more = true;
-                    }
-                    if (more)
-                    {
-                        wl();
-                    }
+                    Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
 
                     wlif(Result(decl.Result!));
 
-                    more = false;
-                    foreach (var local in decl.Locals)
-                    {
-                        if (more)
-                        {
-                            w(" ");
-                        }
-                        w($"{Local(local)}");
-                        more = true;
-                    }
-                    if (more)
-                    {
-                        wl();
-                    }
+                    Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
 
                     wl("(;=====;)");
                     foreach (var member in decl.Members)
@@ -134,6 +96,19 @@ namespace Six.Six.Instructions
         }
 
         private void Handle(Decl.Let decl)
+        {
+            if (decl.Value != null)
+            {
+                Emit(decl.Value);
+                wl($"{Insn.Local.Set(decl.Index)}");
+            }
+            else
+            {
+                Assert(false);
+            }
+        }
+
+        private void Handle(Decl.Var decl)
         {
             if (decl.Value != null)
             {
@@ -180,6 +155,11 @@ namespace Six.Six.Instructions
         private void Handle(Expr.FunctionReference expr)
         {
             wl($"{Insn.CallStatic(expr.Decl.FullName())}");
+        }
+
+        private void Handle(Expr.SelectAttribute expr)
+        {
+            wl($"TODO: select attribute");
         }
 
         private void Handle(Expr.CallFunction expr)

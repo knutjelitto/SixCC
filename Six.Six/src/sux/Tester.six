@@ -26,13 +26,19 @@ shared builtin u32
 {
 }
 
+shared builtin f64
+{
+}
+
 shared alias int => i32;
 shared alias uint => u32;
+
+shared alias double => f64;
 
 shared int result_with_consts(int c = -4)
 {
     var a = -2;
-    let b = i32.Zero;
+    let b = 0;
 
     return a * -3 + c;
 }

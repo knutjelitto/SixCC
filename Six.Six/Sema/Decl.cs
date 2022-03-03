@@ -70,7 +70,7 @@ namespace Six.Six.Sema
             public Expr.Concrete? Default { get; set; }
         }
 
-        public sealed class Let : Local, Emitting
+        public sealed class Let : Local
         {
             public Let(Scope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl, index)
@@ -78,22 +78,9 @@ namespace Six.Six.Sema
             }
 
             public Expr.Concrete? Value { get; set; }
-
-            public void Emit(InsnBag bag)
-            {
-                if (Value != null)
-                {
-                    Value.Emit(bag);
-                    bag.Add(Insn.Local.Set(Index));
-                }
-                else
-                {
-                    Assert(false);
-                }
-            }
         }
 
-        public sealed class Var : Local, Emitting
+        public sealed class Var : Local
         {
             public Var(Scope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl, index)
@@ -101,19 +88,6 @@ namespace Six.Six.Sema
             }
 
             public Expr.Concrete? Value { get; set; }
-
-            public void Emit(InsnBag bag)
-            {
-                if (Value != null)
-                {
-                    Value.Emit(bag);
-                    bag.Add(Insn.Local.Set(Index));
-                }
-                else
-                {
-                    Assert(false);
-                }
-            }
         }
 
         public sealed class Alias : Declaration

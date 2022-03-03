@@ -53,5 +53,45 @@ namespace Six.Six.Instructions
                     return $"(result <!<?????>!>)";
             }
         }
+
+        private void Horizontal(IEnumerable<Action> actions)
+        {
+            var more = false;
+            foreach (var action in actions)
+            {
+                if (more)
+                {
+                    w(" ");
+                }
+                action();
+                more = true;
+            }
+            if (more)
+            {
+                wl();
+            }
+        }
+
+        private void Vertical(IEnumerable<Action> actions)
+        {
+            foreach (var action in actions)
+            {
+                action();
+            }
+        }
+
+        private void VerticalSpaced(IEnumerable<Action> actions)
+        {
+            var more = false;
+            foreach (var action in actions)
+            {
+                if (more)
+                {
+                    wl();
+                }
+                action();
+                more = true;
+            }
+        }
     }
 }

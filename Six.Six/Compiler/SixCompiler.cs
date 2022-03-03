@@ -35,7 +35,7 @@ namespace Six.Six.Compiler
             using (var writer = $"{parser.__Name}.wat".Writer())
             {
                 var emitter = new Emitter(Module, writer);
-                emitter.Emit();
+                emitter.EmitModule();
             }
         }
 
