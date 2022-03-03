@@ -43,7 +43,7 @@ namespace Six.Six.Sema
             }
         }
 
-        private void WalkMany(string header, IReadOnlyList<Member> members)
+        private void WalkMany(string header, IReadOnlyList<Entity> members)
         {
             if (members.Count > 0)
             {
@@ -190,12 +190,12 @@ namespace Six.Six.Sema
 
         private void Visit(Decl.Function decl)
         {
-            wl($"{decl.GetType().Name} {Name(decl)} <{decl.Container.Parent.FullName}::{Name(decl)}>");
+            wl($"{decl.GetType().Name} {Name(decl)} <{decl.Container.FullName}>");
 
             indent(() =>
             {
                 WalkMany("parameters", decl.Parameters);
-                TypeProp("results", decl.Result);
+                WalkMany("result", new List<Entity> { decl.Result! });
                 WalkMany("locals", decl.Locals);
 
 
@@ -223,13 +223,6 @@ namespace Six.Six.Sema
             wl($"[{decl.Index}] {TypeOf(decl.Type)} {Name(decl)}{DefaultOf(decl.Value)}");
         }
 
-        private void ExprProp(string head, Expr? expr)
-        {
-            if (expr == null) return;
-
-            w(Head(head)); Walk(expr);
-        }
-
         private void Visit(Decl decl)
         {
             wl($"{decl.GetType().Name} {Name(decl)} <{decl.Container.Parent.FullName}::{Name(decl)}>");
@@ -250,6 +243,11 @@ namespace Six.Six.Sema
         private void Visit(Type type)
         {
             Assert(false);
+        }
+
+        private void Visit(Type.Builtin type)
+        {
+            wl($"{type}");
         }
 
         private void Visit(Type.Callable type)
@@ -379,36 +377,36 @@ namespace Six.Six.Sema
 
             public void WalkMany(IEnumerable<Member> members)
             {
-                var emitter = new Emitter();
+                var bag = new InsnBag();
                 wl("----------");
                 foreach (var member in members)
                 {
-                    Walk(emitter, member);
+                    Walk(bag, member);
                 }
-                emitter.Dump(Writer);
+                bag.Dump(Writer);
                 wl("----------");
             }
 
-            private void Walk(Emitter emitter, Member member)
+            private void Walk(InsnBag bag, Member member)
             {
                 if (member == null) return;
 
-                Visit(emitter, (dynamic)member);
+                Visit(bag, (dynamic)member);
             }
 
-            private void Visit(Emitter emitter, Member member)
+            private void Visit(InsnBag bag, Member member)
             {
                 Assert(false);
             }
 
-            private void Visit(Emitter emitter, Stmt.Return stmt)
+            private void Visit(InsnBag bag, Stmt.Return stmt)
             {
-                stmt.Emit(emitter);
+                stmt.Emit(bag);
             }
 
-            private void Visit(Emitter emitter, Decl.Let let)
+            private void Visit(InsnBag bag, Decl.Let let)
             {
-                let.Emit(emitter);
+                let.Emit(bag);
             }
         }
     }

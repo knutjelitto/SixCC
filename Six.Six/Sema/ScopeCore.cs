@@ -26,9 +26,9 @@ namespace Six.Six.Sema
             get
             {
                 var full = Parent.FullName;
-                if (full.EndsWith("::"))
+                if (full == "")
                 {
-                    return $"{full}{Name}";
+                    return $"{Name}";
                 }
                 return $"{full}.{Name}";
             }

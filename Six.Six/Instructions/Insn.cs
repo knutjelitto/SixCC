@@ -40,7 +40,9 @@ namespace Six.Six.Instructions
 
         public static Insn Return { get; } = new Simplest("return");
 
-        public static Insn CallStatic(string functionName) => new Simplest($"call {functionName}");
+        public static Insn drop { get; } = new Simplest("drop");
+
+        public static Insn CallStatic(string functionName) => new Simplest($"call ${functionName}");
 
         public static class Local
         {

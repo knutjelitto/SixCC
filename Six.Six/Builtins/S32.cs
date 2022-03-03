@@ -4,7 +4,7 @@ using System;
 
 namespace Six.Six.Builtins
 {
-    public class S32 : Integral
+    public class S32 : I32
     {
         public S32()
         {

@@ -19,6 +19,7 @@ namespace Six.Six.Sema
         private void Statement(BlockScope container, A.Stmt.Return node)
         {
             var stmt = container.AddMember(new Stmt.Return(container, node));
+            CurrentFunction.Members.Add(stmt);
 
             if (node.Expression != null)
             {
@@ -32,7 +33,7 @@ namespace Six.Six.Sema
                         if (function != null)
                         {
                             var functionType = ResolveType(function.Result);
-                            var returnType = ResolveType(result.Resolved);
+                            var returnType = ResolveExprType(result.Resolved);
 
                             if (ReferenceEquals(functionType, returnType))
                             {

@@ -47,6 +47,43 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
+        private Expr.Delayed Expression(Scope container, A.Expression.Select node)
+        {
+            var delayed = new Expr.Delayed();
+            var primary = ResolveExpression(container, node.Expr);
+
+            ResolveLater(() =>
+            {
+                if (primary.Resolved != null)
+                {
+                    if (primary.Resolved is Expr.ClassyReference classyRef)
+                    {
+                        var found = classyRef.Decl.ClassyFind(node.Reference);
+
+                        if (found is Decl.Attribute attribute)
+                        {
+                            Assert(attribute.IsStatic());
+                            Assert(false);
+                        }
+                        else
+                        {
+                            Assert(false);
+                        }
+                    }
+                    else
+                    {
+                        Assert(false);
+                    }
+                }
+                else
+                {
+                    Assert(false);
+                }
+            });
+
+            return delayed;
+        }
+
         private Expr.Delayed Expression(Scope container, A.Expression.Call node)
         {
             var delayed = new Expr.Delayed();
@@ -68,8 +105,8 @@ namespace Six.Six.Sema
                         var index = 0;
                         for (; index < Math.Min(prms.Count, args.Count); ++index)
                         {
-                            var argType = ResolveType(args[index].Resolved);
-                            var prmType = ResolveType(prms[index]);
+                            var argType = ResolveExprType(args[index].Resolved);
+                            var prmType = ResolveDeclType(prms[index]);
 
                             Assert(ReferenceEquals(argType, prmType));
 
@@ -129,7 +166,7 @@ namespace Six.Six.Sema
                         classy.ADecl is A.Decl.Primitive)
                     {
                         var infix = content.Block.Find(node.Op, InfixName(node));
-                        var result = ResolveType(infix);
+                        var result = ResolveDeclType(infix);
                         if (result is Type.Callable callable)
                         {
                             delayed.Resolved = new Expr.CallMember(callable, left, right);
@@ -169,7 +206,7 @@ namespace Six.Six.Sema
             {
                 if (right.Resolved != null)
                 {
-                    right.Resolved.FinalType = ResolveType(right.Resolved);
+                    right.Resolved.FinalType = ResolveExprType(right.Resolved);
 
                     if (right.Resolved.FinalType is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
@@ -178,7 +215,7 @@ namespace Six.Six.Sema
                         if (classy.ADecl is A.Decl.Primitive)
                         {
                             var prefix = content.Block.Find(node.Op, PrefixName(node));
-                            var result = ResolveType(prefix);
+                            var result = ResolveDeclType(prefix);
                             if (result is Type.Callable callable)
                             {
                                 delayed.Resolved = new Expr.CallMember(callable, right);
@@ -241,8 +278,12 @@ namespace Six.Six.Sema
                     return new Expr.ParameterReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
                 case Decl.Let node:
                     return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
+                case Decl.Var node:
+                    return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
                 case Decl.Function node:
                     return new Expr.FunctionReference(node, ResolveType(node.Result) ?? throw new NullReferenceException());
+                case Decl.Primitive node:
+                    return new Expr.PrimitiveReference(node);
                 default:
                     Assert(false);
                     break;

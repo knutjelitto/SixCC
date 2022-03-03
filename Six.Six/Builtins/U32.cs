@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
-    public class U32 : Integral
+    public class U32 : I32
     {
         public U32()
         {

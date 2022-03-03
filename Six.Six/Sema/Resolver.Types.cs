@@ -12,12 +12,12 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type? ResolveType(Expr.Concrete? expr)
+        public Type? ResolveExprType(Expr.Concrete? expr)
         {
             return ResolveType(expr?.Type);
         }
 
-        public Type? ResolveType(Decl decl)
+        public Type? ResolveDeclType(Decl decl)
         {
             if (decl is Decl.Classy)
             {
@@ -42,7 +42,7 @@ namespace Six.Six.Sema
 
                         return builtin;
                     }
-                    return ResolveType(reference.Decl);
+                    return ResolveDeclType(reference.Decl);
                 }
             }
             return type;
@@ -62,7 +62,7 @@ namespace Six.Six.Sema
         private Type DoResolveType(Scope scope, A.Reference tree)
         {
             var resolved = scope.Resolve(tree, tree.Name.Text);
-            var xxx = ResolveType(resolved);
+            var xxx = ResolveDeclType(resolved);
 
             if (resolved.ADecl is A.Decl.Primitive primitive)
             {

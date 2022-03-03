@@ -14,20 +14,23 @@ namespace Six.Six
         public static void Run()
         {
             Generator.Run();
-            LoadModule(
+            var module = LoadModule(
                 fromRoot: SixRoot, 
                 new CompilerConfiguration
                 { 
                     WithRuleIndex = true, 
                     DumpSppf = false,
                     DumpTree = false, 
-                    BuildAst = true, 
                     DumpAst = true,  
-                    BuildTypes = true
                 });
+
+            if (module != null)
+            {
+                new Wasm().Run(module);
+            }
         }
 
-        private static void LoadModule(string fromRoot, CompilerConfiguration configuration)
+        private static S.Module? LoadModule(string fromRoot, CompilerConfiguration configuration)
         {
             var module = new SixLoader(Prefix).GetModule(fromRoot);
 
@@ -39,6 +42,7 @@ namespace Six.Six
                 try
                 {
                     compiler.BuildModule(module);
+                    return global;
                 }
                 catch (System.Exception exception)
                 {
@@ -46,7 +50,10 @@ namespace Six.Six
                     System.Console.WriteLine(exception.Message);
                     System.Console.WriteLine(exception.ToString());
                 }
+
             }
+
+            return null;
         }
     }
 }

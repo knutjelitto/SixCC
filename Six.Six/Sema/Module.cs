@@ -1,6 +1,7 @@
 ﻿using Six.Core;
 using Six.Core.Errors;
 using Six.Runtime.Types;
+using Six.Six.Instructions;
 using System;
 using System.IO;
 using A = Six.Six.Ast;
@@ -48,6 +49,17 @@ namespace Six.Six.Sema
         public Resolver Resolver { get; }
         public Builtins.Builtins Builtins { get; }
 
+        public string Emit()
+        {
+            using (var writer = new Writer())
+            {
+                var emitter = new Emitter(this, writer);
+                emitter.Emit();
+
+                return writer.ToString();
+            }
+        }
+
         public Scope Open(A.NamespaceIntro @namespace)
         {
             var current = Root;
@@ -69,11 +81,6 @@ namespace Six.Six.Sema
             {
                 throw new DiagnosticException(Diagnostics.ToArray());
             }
-        }
-
-        public IEnumerable<Namespace> GetNamespaces()
-        {
-            return Root.GetNamespaces();
         }
 
         public void DumpEntities()
@@ -99,10 +106,16 @@ namespace Six.Six.Sema
                     Assert(!subst.Any(c => invalid.Contains(c)));
                     var decl = declaration.ADecl.GetType().Name.ToLowerInvariant();
 
-                    var name = $"entities/{path}/{decl}/{subst}.txt";
-                    using (var writer = name.Writer())
+                    var dumpName = $"dump/{path}/{decl}/{subst}.txt";
+                    using (var writer = dumpName.Writer())
                     {
                         new SemaDumper(writer, Resolver).DumpDeclaration(declaration);
+                    }
+
+                    var watName = $"wat/{path}/{decl}/{subst}.wat";
+                    using (var writer = watName.Writer())
+                    {
+                        new Emitter(this, writer).Emit(declaration);
                     }
                 }
             }
@@ -122,6 +135,11 @@ namespace Six.Six.Sema
 
             writer.WriteLine("========== DEFINED");
             DumpDeclarations(writer);
+        }
+
+        public IEnumerable<Namespace> GetNamespaces()
+        {
+            return Root.GetNamespaces();
         }
 
         private void DumpDeclarations(Writer writer)
@@ -152,6 +170,6 @@ namespace Six.Six.Sema
         T Scope.AddMember<T>(T member, string? name) => throw new NotImplementedException();
         Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
         Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
-        string Scope.FullName => $"{Name}::";
+        string Scope.FullName => "";
     }
 }

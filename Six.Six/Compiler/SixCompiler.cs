@@ -4,6 +4,7 @@ using Six.Runtime;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
+using Six.Six.Instructions;
 using S = Six.Six.Sema;
 
 namespace Six.Six.Compiler
@@ -29,6 +30,15 @@ namespace Six.Six.Compiler
             visitor = new SixVisitor(Module.Resolver);
         }
 
+        private void Emit()
+        {
+            using (var writer = $"{parser.__Name}.wat".Writer())
+            {
+                var emitter = new Emitter(Module, writer);
+                emitter.Emit();
+            }
+        }
+
         private void Report()
         {
             if (ruleIndex != null)
@@ -39,15 +49,12 @@ namespace Six.Six.Compiler
                 }
             }
 
-            if (Configuration.BuildTypes)
+            using (var writer = $"{parser.__Name}-Global.txt".Writer())
             {
-                using (var writer = $"{parser.__Name}-Global.txt".Writer())
-                {
-                    Module.Dump(writer);
-                }
-
-                Module.DumpEntities();
+                Module.Dump(writer);
             }
+
+            Module.DumpEntities();
 
 
             using (var writer = $"{parser.__Name}-Timing.txt".Writer())
@@ -101,6 +108,8 @@ namespace Six.Six.Compiler
                 {
                     Module.Resolver.Resolve();
 
+                    Emit();
+
                     Report();
                 }
             }
@@ -139,10 +148,7 @@ namespace Six.Six.Compiler
 
             if (ok)
             {
-                if (Configuration.BuildAst)
-                {
-                    visitor.Walk(file);
-                }
+                 visitor.Walk(file);
 
                 if (Configuration.DumpSppf && file.Sppf != null)
                 {
@@ -168,12 +174,9 @@ namespace Six.Six.Compiler
                     }
                 }
 
-                if (Configuration.BuildTypes && file.Tree?.Value != null)
+                if (file.Tree?.Value is Ast.Unit.Code root)
                 {
-                    if (file.Tree?.Value is Ast.Unit.Code root)
-                    {
-                        Module.Resolver.Walk(root);
-                    }
+                    Module.Resolver.Walk(root);
                 }
             }
 

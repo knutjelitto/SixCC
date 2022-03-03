@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Wasmtime" Version="0.34.0-preview1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Six.Runtime\Six.Runtime.csproj" />
     <ProjectReference Include="..\Six.Core\Six.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
     <ProjectReference Include="..\Six.Ast\Six.Ast.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />

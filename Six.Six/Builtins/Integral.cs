@@ -1,6 +1,6 @@
 ﻿namespace Six.Six.Builtins
 {
-    public class Integral : Builtin
+    public abstract class Integral : Number
     {
     }
 }

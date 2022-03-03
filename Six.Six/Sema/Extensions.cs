@@ -1,12 +1,28 @@
-﻿using A = Six.Six.Ast;
+﻿using System;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
     public static class Extensions
     {
+        public static ClassyScope ClassyScope(this Decl node)
+        {
+            return node.Container as ClassyScope ?? throw new InvalidCastException();
+        }
+
+        public static Decl ClassyFind(this Decl node, A.Reference reference)
+        {
+            return node.ClassyScope().Block.Find(reference, reference.Name.Text);
+        }
+
         public static string FullName(this Decl node)
         {
             return $"{node.Container.Parent.FullName}::{node.Name}";
+        }
+
+        public static string FullName(this Decl.Function node)
+        {
+            return $"{node.Container.FullName}";
         }
 
         public static Location GetLocation(this Decl node)
@@ -54,6 +70,11 @@ namespace Six.Six.Sema
         public static bool IsNative(this A.TreeNode node)
         {
             return node is A.With.Prelude withPrelude && withPrelude.IsWith("native");
+        }
+
+        public static bool IsStatic(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith("static");
         }
 
         public static bool IsWith(this A.With.Prelude withPrelude, string attribute)

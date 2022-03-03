@@ -1,19 +1,25 @@
-namespace six;
+namespace six.tests;
+
+shared class Anything
+{
+}
+
+shared alias void => Anything;
 
 shared builtin i32
 {
     shared static i32 Zero = 0;
     shared static i32 One = 1;
-    shared static i32 MinValue;
-    shared static i32 MaxValue;
+    shared static i32 MinValue = #8000000;
+    shared static i32 MaxValue = #7FFFFFF;
     shared static i32 Bits = 32;
 
     shared prefix i32 - ();
-    shared infix i32 + (i32 that);
-    shared infix i32 - (i32 that);
-    shared infix i32 * (i32 that);
-    shared infix i32 / (i32 that);
-    shared infix i32 % (i32 that);
+    shared infix i32 + (i32 other);
+    shared infix i32 - (i32 other);
+    shared infix i32 * (i32 other);
+    shared infix i32 / (i32 other);
+    shared infix i32 % (i32 other);
 }
 
 shared builtin u32
@@ -25,7 +31,8 @@ shared alias uint => u32;
 
 shared int result_with_consts(int c = -4)
 {
-    let a = -2;
+    var a = -2;
+    let b = i32.Zero;
 
     return a * -3 + c;
 }
@@ -42,5 +49,12 @@ shared int call_with_default(int a, int b)
 
 shared uint call_unsigned(uint a, uint b)
 {
-    return a + b;
+    return a * b;
+}
+
+shared void call_unsigned_void(uint a, uint b)
+{
+    let x = a * b;
+
+    return;
 }

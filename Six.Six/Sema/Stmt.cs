@@ -14,14 +14,13 @@ namespace Six.Six.Sema
         {
             public Expr.Concrete? Expr { get; set; } = null;
 
-            public void Emit(Emitter emitter)
+            public void Emit(InsnBag bag)
             {
                 if (Expr != null)
                 {
-                    Assert(Expr != null);
-                    Expr.Emit(emitter);
+                    Expr.Emit(bag);
                 }
-                emitter.Add(Insn.Return);
+                bag.Add(Insn.Return);
             }
         }
     }

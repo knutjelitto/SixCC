@@ -6,7 +6,7 @@ namespace Six.Six.Sema
 {
     public interface Emitting
     {
-        void Emit(Emitter emitter);
+        void Emit(InsnBag bag);
     }
 
     public interface Expr : Entity
@@ -37,7 +37,7 @@ namespace Six.Six.Sema
 
             public virtual Type? FinalType { get; set; }
 
-            public abstract void Emit(Emitter emitter);
+            public abstract void Emit(InsnBag bag);
         }
 
         public abstract record Primitive : ConcreteExpr
@@ -49,9 +49,9 @@ namespace Six.Six.Sema
 
         public abstract record Const(Builtin Builtin, Insn Insn) : Primitive(Builtin)
         {
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
-                emitter.Add(Insn);
+                bag.Add(Insn);
             }
         }
 
@@ -63,51 +63,65 @@ namespace Six.Six.Sema
         public sealed record Binop(Builtin Builtin, Insn Insn, Concrete Arg1, Concrete Arg2)
             : Primitive(Builtin)
         {
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
-                Arg1.Emit(emitter);
-                Arg2.Emit(emitter);
-                emitter.Add(Insn);
+                Arg1.Emit(bag);
+                Arg2.Emit(bag);
+                bag.Add(Insn);
             }
         }
 
         public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
             : Primitive(Function.Type!)
         {
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
                 foreach (var argument in Arguments)
                 {
-                    argument.Emit(emitter);
+                    argument.Emit(bag);
                 }
-                emitter.Add(Insn.CallStatic(Function.Decl.FullName()));
+                bag.Add(Insn.CallStatic(Function.Decl.FullName()));
             }
         }
 
         public sealed record FunctionReference(Decl.Function Decl, Type Type)
             : Primitive(Type)
         {
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
-                emitter.Add(Insn.CallStatic(Decl.FullName()));
+                bag.Add(Insn.CallStatic(Decl.FullName()));
             }
         }
 
         public sealed record ParameterReference(Decl.Parameter Decl, Type Type)
             : Primitive(Type)
         {
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
-                emitter.Add(Insn.Local.Get(Decl.Index));
+                bag.Add(Insn.Local.Get(Decl.Index));
             }
         }
 
-        public sealed record LocalReference(Decl.Let Decl, Type Type)
+        public sealed record LocalReference(Decl.Local Decl, Type Type)
             : Primitive(Type)
         {
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
-                emitter.Add(Insn.Local.Get(Decl.Index));
+                bag.Add(Insn.Local.Get(Decl.Index));
+            }
+        }
+
+        public abstract record ClassyReference(Decl.Classy Decl) : ConcreteExpr
+        {
+        }
+
+        public sealed record PrimitiveReference(Decl.Primitive PrimitiveDecl)
+            : ClassyReference(PrimitiveDecl)
+        {
+            public override void Emit(InsnBag bag)
+            {
+                Assert(false);
+                throw new NotImplementedException();
             }
         }
 
@@ -117,7 +131,7 @@ namespace Six.Six.Sema
         {
             public override Type? Type => Decl.Type;
 
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
                 Assert(false);
                 throw new NotImplementedException();
@@ -129,7 +143,7 @@ namespace Six.Six.Sema
         {
             public override Type? Type => Callable.Result;
 
-            public override void Emit(Emitter emitter)
+            public override void Emit(InsnBag bag)
             {
                 Assert(false);
                 throw new NotImplementedException();

@@ -6,12 +6,21 @@ namespace Six.Six.Sema
     public interface Decl : Member
     {
         A.Decl ADecl { get; }
-        A.Name Name => ADecl.Name;
+        A.Name Name { get; }
         Type? Type { get; }
 
         public class Classy : Declaration
         {
-            public Classy(Scope container, A.Decl aDecl)
+            public Classy(ClassyScope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+                Type = new Type.Reference(this);
+            }
+        }
+
+        public class Primitive : Classy
+        {
+            public Primitive(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
                 Type = new Type.Reference(this);
@@ -27,6 +36,7 @@ namespace Six.Six.Sema
 
             public List<Parameter> Parameters { get; } = new();
             public List<Local> Locals { get; } = new();
+            public List<Member> Members { get; } = new();
         }
 
         public class Function : Funcy
@@ -69,17 +79,56 @@ namespace Six.Six.Sema
 
             public Expr.Concrete? Value { get; set; }
 
-            public void Emit(Emitter emitter)
+            public void Emit(InsnBag bag)
             {
                 if (Value != null)
                 {
-                    Value.Emit(emitter);
-                    emitter.Add(Insn.Local.Set(Index));
+                    Value.Emit(bag);
+                    bag.Add(Insn.Local.Set(Index));
                 }
                 else
                 {
                     Assert(false);
                 }
+            }
+        }
+
+        public sealed class Var : Local, Emitting
+        {
+            public Var(Scope Container, A.Decl ADecl, int index)
+                : base(Container, ADecl, index)
+            {
+            }
+
+            public Expr.Concrete? Value { get; set; }
+
+            public void Emit(InsnBag bag)
+            {
+                if (Value != null)
+                {
+                    Value.Emit(bag);
+                    bag.Add(Insn.Local.Set(Index));
+                }
+                else
+                {
+                    Assert(false);
+                }
+            }
+        }
+
+        public sealed class Alias : Declaration
+        {
+            public Alias(Scope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+            }
+        }
+
+        public sealed class Attribute : Declaration
+        {
+            public Attribute(Scope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
             }
         }
     }
@@ -95,5 +144,6 @@ namespace Six.Six.Sema
         public Scope Container { get; }
         public A.Decl ADecl { get; }
         public Type? Type { get; set; } = null;
+        public A.Name Name => ADecl.Name;
     }
 }

@@ -44,18 +44,30 @@ namespace Six.Six.Sema
             Assert(false);
         }
 
+        private void Declare(Scope container, A.Decl.Primitive node)
+        {
+            var scope = new ClassyScope(container, node.Name.Text);
+            var decl = container.AddMember(new Decl.Primitive(scope, node));
+
+            DeclareClassy(scope, decl, node);
+        }
+
         private void Declare(Scope container, A.Decl.Classy node)
         {
             var scope = new ClassyScope(container, node.Name.Text);
             var decl = container.AddMember(new Decl.Classy(scope, node));
 
+            DeclareClassy(scope, decl, node);
+        }
+
+        private void DeclareClassy(ClassyScope scope, Decl.Classy decl, A.Decl.Classy node)
+        {
             if (node is A.With.Extends extends && extends.Extends != null)
             {
                 if (extends.Extends is A.Reference reference)
                 {
                     ResolveLater(() =>
                     {
-                        //decl.SetExtends(ResolveType(container, reference));
                     });
                 }
                 else
@@ -194,7 +206,7 @@ namespace Six.Six.Sema
         private void Declare(Scope container, A.Decl.Alias node)
         {
             var scope = new DeclarationScope(node.Name.Text, container);
-            var decl = container.AddMember(new Declaration(scope, node));
+            var decl = container.AddMember(new Decl.Alias(scope, node));
 
             if (node.Type is A.Reference reference)
             {
@@ -212,7 +224,7 @@ namespace Six.Six.Sema
         private void Declare(Scope container, A.Decl.Attribute node)
         {
             var scope = new DeclarationScope(node.Name.Text, container);
-            var decl = container.AddMember(new Declaration(scope, node));
+            var decl = container.AddMember(new Decl.Attribute(scope, node));
 
             if (node.Type is A.Reference reference)
             {
@@ -229,8 +241,48 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.Var node)
         {
-            var scope = new DeclarationScope(node.Name.Text, parent);
-            parent.AddMember(new Declaration(scope, node));
+            var function = CurrentFunction;
+            var funcy = function.Container as FuncyScope;
+
+            Assert(funcy != null);
+
+            var decl = parent.AddMember(new Decl.Var(parent, node, function.Parameters.Count + function.Locals.Count));
+            function.Locals.Add(decl);
+            function.Members.Add(decl);
+
+            var value = ResolveExpression(parent, node.Value);
+
+            ResolveLater(() =>
+            {
+                if (node.Type != null)
+                {
+                    decl.Type = ResolveType(parent, node.Type);
+                    Assert(decl.Type != null);
+                }
+
+                if (value.Resolved != null)
+                {
+                    var valueType = ResolveType(value.Resolved.Type);
+                    value.Resolved.FinalType = valueType;
+
+                    var nominalType = ResolveType(decl.Type);
+
+                    if (nominalType != null)
+                    {
+                        Assert(ReferenceEquals(nominalType, valueType));
+                    }
+                    else
+                    {
+                        decl.Type = value.Resolved.Type;
+                    }
+
+                    decl.Value = value.Resolved;
+                }
+                else
+                {
+                    Assert(false);
+                }
+            });
         }
 
         private void Declare(Scope parent, A.Decl.Let node)
@@ -242,6 +294,7 @@ namespace Six.Six.Sema
 
             var decl = parent.AddMember(new Decl.Let(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
+            function.Members.Add(decl);
 
             var value = ResolveExpression(parent, node.Value);
 
@@ -283,10 +336,12 @@ namespace Six.Six.Sema
             WalkDeclarationMany(container, node);
         }
 
+#if false
         private void Declare(Scope container, A.TypeParameter node)
         {
             var decl = container.AddMember(new Declaration(container, node));
         }
+#endif
 
         private void Declare(Scope container, A.Decl.Parameters node)
         {

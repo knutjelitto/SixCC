@@ -12,6 +12,15 @@ namespace Six.Runtime
         public Writer Writer { get; }
 
         public void wl(string content) => Writer.WriteLine(content);
+        public void wlif(string? content)
+        {
+            if (content == null)
+            {
+                return;
+            }
+            Writer.WriteLine(content);
+        }
+
         public void wl() => Writer.WriteLine();
         public void w(string content) => Writer.Write(content);
 
