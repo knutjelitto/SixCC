@@ -6,7 +6,8 @@ namespace Six.Six.Builtins
 {
     public class F64 : Floating
     {
-        public F64()
+        public F64(Resolver resolver)
+            : base(resolver)
         {
             //prefix.Add("-", Neg);
             //infix.Add("+", Add);

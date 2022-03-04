@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Six.Sema;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,11 @@ namespace Six.Six.Builtins
 {
     public abstract class I32 : Integral
     {
+        protected I32(Resolver resolver)
+            : base(resolver)
+        {
+        }
+
         public override string AsWasm => $"i32";
     }
 }

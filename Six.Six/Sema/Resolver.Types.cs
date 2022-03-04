@@ -74,7 +74,7 @@ namespace Six.Six.Sema
             {
                 return xxx;
             }
-            return new Type.Reference(resolved);
+            return new Type.Reference(this, resolved);
         }
     }
 }
