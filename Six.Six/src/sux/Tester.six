@@ -64,3 +64,16 @@ shared void call_unsigned_void(uint a, uint b)
 
     return;
 }
+
+shared class Complex
+{
+    double re = 0;
+    double im = 0;
+
+    shared new()
+    {
+        re = 0;
+    }
+
+    shared infix Complex +(Complex other);
+}

@@ -195,15 +195,7 @@ namespace Six.Six.Sema
                 WalkMany("parameters", decl.Parameters);
                 WalkMany("result", new List<Entity> { decl.Result! });
                 WalkMany("locals", decl.Locals);
-
-
-                if (decl.Container is ContentScope content)
-                {
-                    if (content.Block.Members.Count > 0)
-                    {
-                        wl("content");
-                    }
-                }
+                WalkMany("members", decl.Members);
             });
         }
 
@@ -231,7 +223,7 @@ namespace Six.Six.Sema
 
         private void Visit(Stmt stmt)
         {
-            Assert(false);
+            Assert(true);
         }
 
         private void Visit(Type type)

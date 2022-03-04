@@ -62,6 +62,9 @@ namespace Six.Six.Sema
         public sealed record LocalReference(Decl.Local Decl, Type Type)
             : Primitive(Type);
 
+        public sealed record AttributeReference(Decl.Attribute Decl, Type Type)
+            : Primitive(Type);
+
         public sealed record SelectAttribute(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
             : Primitive(Type);
 

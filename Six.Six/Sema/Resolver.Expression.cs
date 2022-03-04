@@ -252,11 +252,7 @@ namespace Six.Six.Sema
 
         private Expr.Delayed Expression(Scope container, A.Expression.NaturalNumber tree)
         {
-            var delayed = new Expr.Delayed();
-
-            delayed.Resolved = NaturalConst(tree);
-
-            return delayed;
+            return new Expr.Delayed() { Resolved = NaturalConst(tree) };
         }
 
         private Expr.Delayed Expression(Scope container, A.Reference tree)
@@ -281,6 +277,8 @@ namespace Six.Six.Sema
                     return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
                 case Decl.Var node:
                     return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
+                case Decl.Attribute node:
+                    return new Expr.AttributeReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
                 case Decl.Function node:
                     return new Expr.FunctionReference(node, ResolveType(node.Result) ?? throw new NullReferenceException());
                 case Decl.Primitive node:

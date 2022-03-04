@@ -28,7 +28,8 @@ namespace Six.Six.Sema
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
-                    Assert(false);
+                    stmt.Left = left.Resolved;
+                    stmt.Right = right.Resolved;
                 }
                 else
                 {

@@ -8,16 +8,17 @@ namespace Six.Six.Sema
     {
         A.Stmt AStmt { get; }
 
-        public sealed record Return(Scope Container, A.Stmt AStmt)
-            : Statement(Container, AStmt)
+        public sealed record Return(Scope Container, A.Stmt.Return Stmt)
+            : Statement(Container, Stmt)
         {
             public Expr.Concrete? Expr { get; set; } = null;
         }
 
-        public sealed record Assign(Scope Container, A.Stmt AStmt)
-            : Statement(Container, AStmt)
+        public sealed record Assign(Scope Container, A.Stmt.Assign Stmt)
+            : Statement(Container, Stmt)
         {
-            public Expr.Concrete? Expr { get; set; } = null;
+            public Expr.Concrete? Left { get; set; } = null;
+            public Expr.Concrete? Right { get; set; } = null;
         }
     }
 

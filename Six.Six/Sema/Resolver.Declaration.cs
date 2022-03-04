@@ -14,7 +14,7 @@ namespace Six.Six.Sema
         private readonly Stack<Decl.Funcy> functions = new();
         private Decl.Funcy CurrentFunction => functions.Peek();
 
-        private IDisposable UseFunction(Decl.Funcy function)
+        private IDisposable UseFuncy(Decl.Funcy function)
         {
             functions.Push(function);
             return new Disposable(() => functions.Pop());
@@ -44,18 +44,34 @@ namespace Six.Six.Sema
             Assert(false);
         }
 
-        private void Declare(Scope container, A.Decl.Primitive node)
+        private void Declare(Scope parent, A.Decl.Primitive node)
         {
-            var scope = new ClassyScope(container, node.Name.Text);
-            var decl = container.AddMember(new Decl.Primitive(scope, node));
+            var scope = new ClassyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Decl.Primitive(scope, node));
 
             DeclareClassy(scope, decl, node);
         }
 
-        private void Declare(Scope container, A.Decl.Classy node)
+        private void Declare(Scope parent, A.Decl.Class node)
         {
-            var scope = new ClassyScope(container, node.Name.Text);
-            var decl = container.AddMember(new Decl.Classy(scope, node));
+            var scope = new ClassyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Decl.Class(scope, node));
+
+            DeclareClassy(scope, decl, node);
+        }
+
+        private void Declare(Scope parent, A.Decl.Interface node)
+        {
+            var scope = new ClassyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Decl.Interface(scope, node));
+
+            DeclareClassy(scope, decl, node);
+        }
+
+        private void Declare(Scope parent, A.Decl.Classy node)
+        {
+            var scope = new ClassyScope(parent, node.Name.Text);
+            var decl = scope.AddMember(new Decl.Classy(scope, node));
 
             DeclareClassy(scope, decl, node);
         }
@@ -96,7 +112,7 @@ namespace Six.Six.Sema
 
             Assert(node.Parameters.Count == 1);
 
-            using (UseFunction(decl))
+            using (UseFuncy(decl))
             {
                 WalkDeclarationMany(funcy, node.Parameters);
                 WalkBody(funcy.Block, node.Body);
@@ -117,7 +133,7 @@ namespace Six.Six.Sema
 
             Assert(node.Parameters.Count == 0);
 
-            using (UseFunction(decl))
+            using (UseFuncy(decl))
             {
                 WalkBody(funcy.Block, node.Body);
 
@@ -134,7 +150,7 @@ namespace Six.Six.Sema
             var funcy = new FuncyScope(parent, node.Name.Text);
             var decl = parent.AddMember(new Decl.Function(funcy, node));
 
-            using (UseFunction(decl))
+            using (UseFuncy(decl))
             {
                 ResolveLater(() => decl.Result = ResolveType(funcy, node.Type));
 
@@ -156,6 +172,22 @@ namespace Six.Six.Sema
             }
         }
 
+
+        private void Declare(Scope parent, A.Decl.Constructor node)
+        {
+            var funcy = new FuncyScope(parent, node.Name.Text);
+            var decl = parent.AddMember(new Decl.Constructor(funcy, node));
+
+            using (UseFuncy(decl))
+            {
+                WalkDeclarationMany(funcy, node.Parameters);
+
+                if (node is A.With.Body body)
+                {
+                    WalkBody(funcy.Block, body.Body);
+                }
+            }
+        }
 
         private void Declare(Scope parent, A.Decl.Funcy node)
         {
@@ -208,35 +240,21 @@ namespace Six.Six.Sema
             var scope = new DeclarationScope(node.Name.Text, container);
             var decl = container.AddMember(new Decl.Alias(scope, node));
 
-            if (node.Type is A.Reference reference)
+            ResolveLater(() =>
             {
-                ResolveLater(() =>
-                {
-                    decl.Type = ResolveType(scope, reference);
-                });
-            }
-            else
-            {
-                Assert(false);
-            }
+                decl.Type = ResolveType(scope, node.Type);
+            });
         }
 
-        private void Declare(Scope container, A.Decl.Attribute node)
+        private void Declare(Scope parent, A.Decl.Attribute node)
         {
-            var scope = new DeclarationScope(node.Name.Text, container);
-            var decl = container.AddMember(new Decl.Attribute(scope, node));
+            var scope = new DeclarationScope(node.Name.Text, parent);
+            var decl = parent.AddMember(new Decl.Attribute(scope, node));
 
-            if (node.Type is A.Reference reference)
+            ResolveLater(() =>
             {
-                ResolveLater(() =>
-                {
-                    decl.Type = ResolveType(scope, reference);
-                });
-            }
-            else
-            {
-                Assert(false);
-            }
+                decl.Type = ResolveType(scope, node.Type);
+            });
         }
 
         private void Declare(Scope parent, A.Decl.Var node)

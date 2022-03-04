@@ -22,7 +22,7 @@ namespace Six.Six.Sema
 
                 scheduled.Enqueue(() =>
                 {
-                    using (UseFunction(function))
+                    using (UseFuncy(function))
                     {
                         action();
                     }

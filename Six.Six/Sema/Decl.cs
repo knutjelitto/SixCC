@@ -27,6 +27,24 @@ namespace Six.Six.Sema
             }
         }
 
+        public class Class : Classy
+        {
+            public Class(ClassyScope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+                Type = new Type.Reference(this);
+            }
+        }
+
+        public class Interface : Classy
+        {
+            public Interface(ClassyScope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+                Type = new Type.Reference(this);
+            }
+        }
+
         public class Funcy : Declaration
         {
             public Funcy(FuncyScope container, A.Decl.Funcy aDecl)
@@ -47,6 +65,14 @@ namespace Six.Six.Sema
             }
 
             public Type? Result { get; set; } = null;
+        }
+
+        public class Constructor : Funcy
+        {
+            public Constructor(FuncyScope container, A.Decl.Funcy aDecl)
+                : base(container, aDecl)
+            {
+            }
         }
 
         public abstract class Local : Declaration
