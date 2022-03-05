@@ -8,13 +8,6 @@ namespace Six.Six.Compiler
 {
     public partial class SixVisitor : DynamicSixVisitor
     {
-        public S.Resolver Resolver { get; }
-
-        public SixVisitor(S.Resolver resolver)
-        {
-            Resolver = resolver;
-        }
-
         public void Walk(SourceFile source)
         {
             if (source.Tree != null)
@@ -825,6 +818,13 @@ namespace Six.Six.Compiler
             var type = Walk<Type>(element.PrimaryType);
 
             element.Value = new Type.Nullable(element, type);
+        }
+
+        protected override void Visit(CArrayType element)
+        {
+            var type = Walk<Type>(element.PrimaryType);
+
+            element.Value = new Type.Array(element, type);
         }
 
         protected override void Visit(CTupleType element)

@@ -4,9 +4,9 @@ using System;
 
 namespace Six.Six.Builtins
 {
-    public class F64 : Floating
+    public class F32 : Floating
     {
-        public F64()
+        public F32()
         {
             prefix.Add("-", Neg);
             infix.Add("+", Add);
@@ -15,13 +15,13 @@ namespace Six.Six.Builtins
             infix.Add("/", Div);
         }
 
-        public override string AsWasm => "f64";
+        public override string AsWasm => "f32";
 
         public Expr.Primitive Neg(Expr.Concrete right)
         {
             Assert(ReferenceEquals(right.Type, this));
 
-            return new Expr.Unop(this, Insn.F64.Neg, right);
+            return new Expr.Unop(this, Insn.F32.Neg, right);
         }
 
         public Expr.Primitive Add(Expr.Concrete left, Expr.Concrete right)
@@ -29,7 +29,7 @@ namespace Six.Six.Builtins
             Assert(ReferenceEquals(left.Type, this));
             Assert(ReferenceEquals(right.Type, this));
 
-            return new Expr.Binop(this, Insn.F64.Add, left, right);
+            return new Expr.Binop(this, Insn.F32.Add, left, right);
         }
 
         public Expr.Primitive Sub(Expr.Concrete left, Expr.Concrete right)
@@ -37,7 +37,7 @@ namespace Six.Six.Builtins
             Assert(ReferenceEquals(left.Type, this));
             Assert(ReferenceEquals(right.Type, this));
 
-            return new Expr.Binop(this, Insn.F64.Sub, left, right);
+            return new Expr.Binop(this, Insn.F32.Sub, left, right);
         }
 
         public Expr.Primitive Mul(Expr.Concrete left, Expr.Concrete right)
@@ -45,7 +45,7 @@ namespace Six.Six.Builtins
             Assert(ReferenceEquals(left.Type, this));
             Assert(ReferenceEquals(right.Type, this));
 
-            return new Expr.Binop(this, Insn.F64.Mul, left, right);
+            return new Expr.Binop(this, Insn.F32.Mul, left, right);
         }
 
         public Expr.Primitive Div(Expr.Concrete left, Expr.Concrete right)
@@ -53,7 +53,7 @@ namespace Six.Six.Builtins
             Assert(ReferenceEquals(left.Type, this));
             Assert(ReferenceEquals(right.Type, this));
 
-            return new Expr.Binop(this, Insn.F64.Div, left, right);
+            return new Expr.Binop(this, Insn.F32.Div, left, right);
         }
     }
 }

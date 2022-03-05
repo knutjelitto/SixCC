@@ -430,6 +430,7 @@ intersection-type
 
 primary-type
     | nullable-type
+    | array-type
     | reference
     | type-selector
     | callable-type
@@ -440,6 +441,10 @@ primary-type
 
 nullable-type
     | primary-type '?'
+    ;
+
+array-type
+    | primary-type '[' ']'
     ;
 
 type-selector

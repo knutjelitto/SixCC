@@ -17,7 +17,7 @@ namespace Six.Six.Builtins
             {
                 return action;
             }
-            throw new NotImplementedException();
+            throw new ArgumentOutOfRangeException(nameof(name), name);
         }
 
         public Func<Expr.Concrete, Expr.Concrete, Expr.Primitive> Infix(string name)
@@ -26,7 +26,7 @@ namespace Six.Six.Builtins
             {
                 return action;
             }
-            throw new NotImplementedException();
+            throw new ArgumentOutOfRangeException(nameof(name), name);
         }
 
         public override string ToString()

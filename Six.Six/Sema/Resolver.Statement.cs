@@ -79,6 +79,12 @@ namespace Six.Six.Sema
             }
         }
 
+        private void Statement(BlockScope container, A.Stmt.Expr node)
+        {
+            Assert(false);
+            container.AddMember(new Statement(container, node));
+        }
+
         private void Statement(BlockScope container, A.Stmt node)
         {
             Assert(false);

@@ -1,15 +1,31 @@
 namespace six;
 
-void main()
+shared int result_with_consts(int c = -4)
 {
-    var q = Point();
-    var p = q;
+    var a = -2;
+    let b = 0;
 
-    let x = -12;
-    let y = -13;
+    return a * -3 + c;
+}
 
-    p.x = x;
-    p.y = y;
+shared int result_with_parameters(int a = 2, int b = 3, int c = 4)
+{
+    return -a * -b + -c;
+}
 
-    print(p.sum());
+shared int call_with_default(int a, int b)
+{
+    return result_with_parameters(a, b);
+}
+
+shared uint call_unsigned(uint a, uint b)
+{
+    return a * b;
+}
+
+shared void call_unsigned_void(uint a, uint b)
+{
+    let x = a * b;
+
+    return;
 }

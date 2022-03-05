@@ -16,6 +16,8 @@ namespace Six.Six.Sema
             {
                 Type = new Type.Reference(this);
             }
+
+            public List<Decl> Members { get; } = new();
         }
 
         public class Primitive : Classy
@@ -39,6 +41,15 @@ namespace Six.Six.Sema
         public class Interface : Classy
         {
             public Interface(ClassyScope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+                Type = new Type.Reference(this);
+            }
+        }
+
+        public class Object : Classy
+        {
+            public Object(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
                 Type = new Type.Reference(this);

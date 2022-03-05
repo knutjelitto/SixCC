@@ -83,11 +83,46 @@ namespace Six.Six.Instructions
         public static class F32
         {
             public static Const Const(float value) => new(new Value.ValueF32(value));
+
+            public static Insn Neg => Unop.Neg(ValueType.F32);
+
+            public static Insn Add => Binop.Add(ValueType.F32);
+            public static Insn Sub => Binop.Sub(ValueType.F32);
+            public static Insn Mul => Binop.Mul(ValueType.F32);
+            public static Insn Div => Binop.Div(ValueType.F32);
         }
 
         public static class F64
         {
             public static Const Const(double value) => new(new Value.ValueF64(value));
+
+            public static Insn Neg => Unop.Neg(ValueType.F64);
+
+            public static Insn Add => Binop.Add(ValueType.F64);
+            public static Insn Sub => Binop.Sub(ValueType.F64);
+            public static Insn Mul => Binop.Mul(ValueType.F64);
+            public static Insn Div => Binop.Div(ValueType.F64);
+        }
+
+        public class Unop : Insn
+        {
+            private Unop(ValueType type, string name, OpSign sign)
+            {
+                Type = type;
+                Name = name;
+                Sign = sign;
+            }
+
+            public ValueType Type { get; }
+            public string Name { get; }
+            public OpSign Sign { get; }
+
+            public override string ToString()
+            {
+                return $"{Type}.{Name}{Sign}";
+            }
+
+            public static Insn Neg(ValueType type) => new Unop(type, "neg", OpSign.Neutral);
         }
 
         public class Binop : Insn

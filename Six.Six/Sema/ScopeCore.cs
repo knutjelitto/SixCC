@@ -83,7 +83,24 @@ namespace Six.Six.Sema
 
             return member;
         }
-        
+
+        public T Declare<T>(T decl, string? name = null) where T : Decl
+        {
+            name ??= decl.Name.Text;
+            if (declarations.ContainsKey(name))
+            {
+                DupError(decl);
+            }
+            else
+            {
+                declarations[name] = decl;
+            }
+
+            members.Add(decl);
+
+            return decl;
+        }
+
         private void DupError(Decl named)
         {
             if (!declarations.TryGetValue(named.Name.Text, out var already))

@@ -53,6 +53,13 @@ namespace Six.Six.Sema
             return DoResolveType(scope, (dynamic)tree);
         }
 
+        private Type DoResolveType(Scope scope, A.Type.Array tree)
+        {
+            var type = ResolveType(scope, tree.Type);
+
+            return new Type.Array(type);
+        }
+
         private Type DoResolveType(Scope scope, A.Type tree)
         {
             Assert(false);

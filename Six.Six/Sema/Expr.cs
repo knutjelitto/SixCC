@@ -50,6 +50,9 @@ namespace Six.Six.Sema
         public sealed record Binop(Builtin Builtin, Insn Insn, Concrete Arg1, Concrete Arg2)
             : Primitive(Builtin);
 
+        public sealed record Unop(Builtin Builtin, Insn Insn, Concrete Arg)
+            : Primitive(Builtin);
+
         public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
             : Primitive(Function.Type!);
 

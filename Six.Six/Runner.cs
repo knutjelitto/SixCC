@@ -7,8 +7,7 @@ namespace Six.Six
     public static class Runner
     {
         public const string Prefix = "src";
-        //public const string SixRoot = "six";
-        public const string SixRoot = "sux";
+        public const string SixRoot = "six";
         public const string FirstRoot = "first";
 
         public static void Run()
@@ -26,7 +25,7 @@ namespace Six.Six
 
             if (module != null)
             {
-                new Wasm().Run(module);
+                new Wasmtime().Run(module);
             }
         }
 

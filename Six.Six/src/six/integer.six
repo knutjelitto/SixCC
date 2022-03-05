@@ -1,46 +1,47 @@
 namespace six;
 
-shared builtin i8{}
-shared builtin i16{}
+//shared builtin i8{}
+//shared builtin i16{}
 
 shared builtin i32
 {
     shared static i32 zero = 0;
     shared static i32 one = 1;
-    shared operator i32 -_() => builtin;
-    shared operator i32 _+_(i32 rhs) => builtin;
-    shared operator i32 _-_(i32 rhs) => builtin;
-    shared operator i32 _*_(i32 rhs) => builtin;
-    shared operator i32 _/_(i32 rhs) => builtin;
-    shared operator i32 _%_(i32 rhs) => builtin;
+ 
+    shared prefix i32 - ();
+    shared infix i32 + (i32 other);
+    shared infix i32 - (i32 other);
+    shared infix i32 * (i32 other);
+    shared infix i32 / (i32 other);
+    shared infix i32 % (i32 other);
 }
 
-shared builtin i64{}
+//shared builtin i64{}
 
-shared builtin u8{}
-shared builtin u16{}
+//shared builtin u8{}
+//shared builtin u16{}
 
 shared builtin u32
 {
-    shared operator u32 _+_(u32 rhs) => builtin;
-    shared operator u32 _-_(u32 rhs) => builtin;
-    shared operator u32 _*_(u32 rhs) => builtin;
-    shared operator u32 _/_(u32 rhs) => builtin;
-    shared operator u32 _%_(u32 rhs) => builtin;
+    shared infix u32 + (u32 rhs) => builtin;
+    shared infix u32 - (u32 rhs) => builtin;
+    shared infix u32 * (u32 rhs) => builtin;
+    shared infix u32 / (u32 rhs) => builtin;
+    shared infix u32 % (u32 rhs) => builtin;
 }
 
-shared builtin u64{}
+//shared builtin u64{}
 
-shared alias byte => u8;
+//shared alias byte => u8;
 
-shared alias short => i16;
-shared alias ushort => u16;
+//shared alias short => i16;
+//shared alias ushort => u16;
 
 shared alias int => i32;
 shared alias uint => u32;
 
-shared alias long => i64;
-shared alias ulong => u64;
+//shared alias long => i64;
+//shared alias ulong => u64;
 
 shared alias Integer => int;
 

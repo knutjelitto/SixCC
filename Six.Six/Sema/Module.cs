@@ -15,6 +15,7 @@ namespace Six.Six.Sema
 
         public static class Core
         {
+            public static readonly string Float32 = "f32";
             public static readonly string Float64 = "f64";
             public static readonly string UInt64 = "u64";
             public static readonly string Int64 = "i64";
@@ -24,6 +25,7 @@ namespace Six.Six.Sema
             public static readonly string Int16 = "u16";
             public static readonly string UInt8 = "u8";
             public static readonly string Int8 = "i8";
+            public static readonly string Boolean = "Boolean";
             public static readonly string Null = "Null";
             public static readonly string Nothing = "Nothing";
             public static readonly string Anything = "Anything";
@@ -49,6 +51,8 @@ namespace Six.Six.Sema
         public string Name { get; }
         public Resolver Resolver { get; }
         public Builtins.Builtins Builtins { get; }
+
+        public bool Errors => Diagnostics.Count > 0;
 
         public string Emit()
         {
@@ -169,6 +173,7 @@ namespace Six.Six.Sema
         Module Scope.Module => this;
         IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
         T Scope.AddMember<T>(T member, string? name) => throw new NotImplementedException();
+        T Scope.Declare<T>(T decl, string? name) => throw new NotImplementedException();
         Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
         Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
         string Scope.FullName => "";

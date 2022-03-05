@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using Six.Core.Errors;
 using Six.Runtime.Sppf;
 using Six.Runtime.Types;
 
@@ -14,7 +15,7 @@ namespace Six.Runtime
         {
         }
 
-        public bool BuildFile(SourceFile file)
+        public void BuildFile(SourceFile file)
         {
             var ok = Ok(() => Parse(file));
 
@@ -38,16 +39,13 @@ namespace Six.Runtime
                     .Distinct()
                     .ToList();
 
-                var start = furthest.First().Core;
-                var lco = start.Source.NameLineColumn(start.Offset);
+                var first = furthest.First();
 
                 var expected = "'" + string.Join("' | '", terminals) + "'";
-                var message = $"{lco}: expected {expected}";
+                var location = new RuntimeLocation(first.Start.Source, first.Core.Offset, 0);
 
-                Console.WriteLine();
-                Console.WriteLine($"{message}");
-
-                return false;
+                var error = new SyntaxError(location, expected);
+                throw new DiagnosticException(error);
             }
 
             var sppf = SppfBuilder.Build(file.Source, parser, ruleIndex);
@@ -57,14 +55,14 @@ namespace Six.Runtime
                 Console.WriteLine();
                 Console.WriteLine($"sppf: {file.ShortPath}");
 
-                return false;
+                return;
             }
 
             file.Sppf = sppf;
 
             file.Tree = TypedBuilder.Build(sppf);
 
-            return true;
+            return;
         }
 
         private bool Parse(SourceFile job)

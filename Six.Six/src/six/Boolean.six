@@ -4,12 +4,12 @@ shared alias bool => Boolean;
 
 shared builtin Boolean of true | false
 {
-    shared operator Boolean _|_ (Boolean rhs) => builtin;
-    shared operator Boolean _&_ (Boolean rhs) => builtin;
-    shared operator Boolean _^_ (Boolean rhs) => builtin;
-    shared operator Boolean !_ () => builtin;
+    shared prefix Boolean !  () => builtin;
+    shared infix Boolean | (Boolean rhs) => builtin;
+    shared infix Boolean & (Boolean rhs) => builtin;
+    shared infix Boolean ^ (Boolean rhs) => builtin;
 }
 
-shared Boolean true => builtin;
-shared Boolean false => builtin;
+shared bool true => builtin;
+shared bool false => builtin;
 

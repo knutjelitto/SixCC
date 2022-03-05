@@ -6,12 +6,11 @@ shared builtin f32
 
 shared builtin f64
 {
-    shared operator f64 -_() => builtin;
-    shared operator f64 _+_(f64 rhs) => builtin;
-    shared operator f64 _-_(f64 rhs) => builtin;
-    shared operator f64 _*_(f64 rhs) => builtin;
-    shared operator f64 _/_(f64 rhs) => builtin;
-    shared operator f64 _%_(f64 rhs) => builtin;
+    shared prefix f64 - () => builtin;
+    shared infix f64 + (f64 rhs) => builtin;
+    shared infix f64 - (f64 rhs) => builtin;
+    shared infix f64 * (f64 rhs) => builtin;
+    shared infix f64 / (f64 rhs) => builtin;
 }
 
 shared alias float => f32;

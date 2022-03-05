@@ -39,6 +39,7 @@ namespace Six.Six.Instructions
 
         private string? Result(Type type)
         {
+            Assert(type != null);
             switch (type)
             {
                 case Builtin builtin:

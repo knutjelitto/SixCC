@@ -21,6 +21,7 @@ namespace Six.Six.Ast
         public sealed record Constructor(IRNode Tree, Type Type, Arguments Arguments) : Type;
         public sealed record Sequence(IRNode Tree, Type Type) : Type;
         public sealed record Nullable(IRNode Tree, Type Type) : Type;
+        public sealed record Array(IRNode Tree, Type Type) : Type;
         public sealed record Tuple(IRNode Tree, Types Types) : Type;
         public sealed record Empty(IRNode Tree) : Type;
         public abstract record Variadic(IRNode Tree, Type Type) : Type;

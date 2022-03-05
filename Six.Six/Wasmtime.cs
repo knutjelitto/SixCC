@@ -10,10 +10,15 @@ using S = Six.Six.Sema;
 
 namespace Six.Six
 {
-    public class Wasm
+    public class Wasmtime
     {
         public void Run(S.Module smodule)
         {
+            if (smodule.Errors)
+            {
+                return;
+            }
+
             var wat = smodule.Emit();
 
             using var engine = new Engine();
@@ -23,7 +28,7 @@ namespace Six.Six
 
             var instance = linker.Instantiate(store, module);
 
-            var function = instance.GetFunction(store, "six.tests.result_with_consts");
+            var function = instance.GetFunction(store, "six.result_with_consts");
 
             if (function == null)
             {

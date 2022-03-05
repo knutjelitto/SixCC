@@ -13,8 +13,10 @@
 
         public sealed record Reference(Decl Decl) : Declared;
 
+
         public sealed record Callable(Decl Decl, Type Result, params Type[] Parameters) : Declared;
 
+        public sealed record Array(Type Type) : Type;
         public sealed record Tuple(params Type[] Types) : Type;
     }
 }

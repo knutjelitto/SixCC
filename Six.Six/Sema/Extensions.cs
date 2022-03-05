@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Core;
+using System;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -25,12 +26,12 @@ namespace Six.Six.Sema
             return $"{node.Container.FullName}";
         }
 
-        public static Location GetLocation(this Decl node)
+        public static ILocation GetLocation(this Decl node)
         {
             return node.ADecl.GetLocation();
         }
 
-        public static Location GetLocation(this A.TreeNode node)
+        public static ILocation GetLocation(this A.TreeNode node)
         {
             if (node is A.With.Name named)
             {

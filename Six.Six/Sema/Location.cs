@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using Six.Runtime;
 using Six.Runtime.Types;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,9 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public class Location : ILocation
+    public static class Location
     {
-        private Location(IRLocated located)
-        {
-            Token = located;
-        }
-
-        public IRLocated Token { get; }
-
-        public Source Source => Token.Source;
-
-        public int Offset => Token.Core;
-
-        public int Length => Token.End - Token.Core;
-
-        public static Location From(A.TreeNode node)
+        public static ILocation From(A.TreeNode node)
         {
             if (node is A.With.Name named)
             {
@@ -34,26 +22,16 @@ namespace Six.Six.Sema
             return From(node.Tree);
         }
 
-        public static Location From(IRNode node)
+        public static ILocation From(IRNode node)
         {
             if (node is IRLocated token)
             {
-                return new Location(token);
+                return new RuntimeLocation(token.Source, token.Core, token.End - token.Core);
             }
 
             Assert(node.Children.Length > 0);
 
             return From(node.Children[0]);
-        }
-
-        public string GetText()
-        {
-            return Source.GetText(Offset, Length);
-        }
-
-        public override string ToString()
-        {
-            return Token.Source.NameLineColumn(Token.Core);
         }
     }
 }

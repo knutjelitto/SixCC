@@ -58,6 +58,11 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
+        private void Handle(Decl.Attribute decl)
+        {
+            Assert(true);
+        }
+
         private void Handle(Decl.Classy decl)
         {
             Assert(true);

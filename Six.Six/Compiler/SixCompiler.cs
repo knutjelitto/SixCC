@@ -1,5 +1,6 @@
 ﻿using System;
 using Six.Core;
+using Six.Core.Errors;
 using Six.Runtime;
 using Six.Runtime.Matchers;
 using Six.Runtime.Sppf;
@@ -27,15 +28,20 @@ namespace Six.Six.Compiler
                 ruleIndex = new RuleIndex(parser.__Core.__Matchers.OfType<PlainRule>().Select(r => r.Name));
             }
 
-            visitor = new SixVisitor(Module.Resolver);
+            visitor = new SixVisitor();
         }
+
+        public bool Errors => Module.Errors;
 
         private void Emit()
         {
             using (var writer = $"{parser.__Name}.wat".Writer())
             {
-                var emitter = new Emitter(Module, writer);
-                emitter.EmitModule();
+                if (!Errors)
+                {
+                    var emitter = new Emitter(Module, writer);
+                    emitter.EmitModule();
+                }
             }
         }
 
@@ -110,8 +116,9 @@ namespace Six.Six.Compiler
 
                     Emit();
 
-                    Report();
                 }
+
+                Report();
             }
 
             Module.WhenDiagnostics();
@@ -144,11 +151,11 @@ namespace Six.Six.Compiler
         {
             files.Add(file);
 
-            var ok = BuildFile(file);
-
-            if (ok)
+            try
             {
-                 visitor.Walk(file);
+                BuildFile(file);
+
+                visitor.Walk(file);
 
                 if (Configuration.DumpSppf && file.Sppf != null)
                 {
@@ -178,9 +185,18 @@ namespace Six.Six.Compiler
                 {
                     Module.Resolver.Walk(root);
                 }
-            }
 
-            return ok;
+                return true;
+            }
+            catch (DiagnosticException diagnostics)
+            {
+                foreach (var diagnostic in diagnostics.Diagnostics)
+                {
+                    Module.Add(diagnostic);
+                }
+
+                return false;
+            }
         }
     }
 }

@@ -3,8 +3,8 @@ namespace six;
 shared class Complex<T>
     where T is Number
 {
-    shared f64 re = -1;
-    shared f64 im = -1;
+    shared double re = -1;
+    shared double im = -1;
 
     shared new ()
     {
