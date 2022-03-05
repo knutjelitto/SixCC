@@ -19,6 +19,7 @@ namespace Six.Six.Builtins
         }
 
         public Module Module { get; }
+        public Resolver Resolver => Module.Resolver;
 
         public Builtin Resolve(string name)
         {

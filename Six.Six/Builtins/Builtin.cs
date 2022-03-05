@@ -9,6 +9,13 @@ namespace Six.Six.Builtins
         protected readonly Dictionary<string, Func<Expr.Concrete, Expr.Primitive>> prefix = new();
         protected readonly Dictionary<string, Func<Expr.Concrete, Expr.Concrete, Expr.Primitive>> infix = new();
 
+        protected Builtin(Resolver resolver)
+        {
+            Resolver = resolver;
+        }
+
+        public Resolver Resolver { get; }
+
         public abstract string AsWasm { get; }
 
         public Func<Expr.Concrete, Expr.Primitive> Prefix(string name)

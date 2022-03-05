@@ -14,7 +14,7 @@ namespace Six.Six.Sema
             public Classy(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(this);
+                Type = new Type.Reference(container.Module.Resolver, this);
             }
 
             public List<Decl> Members { get; } = new();
@@ -25,7 +25,7 @@ namespace Six.Six.Sema
             public Primitive(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(this);
+                Type = new Type.Reference(container.Module.Resolver, this);
             }
         }
 
@@ -34,7 +34,7 @@ namespace Six.Six.Sema
             public Class(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(this);
+                Type = new Type.Reference(container.Module.Resolver, this);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Six.Six.Sema
             public Interface(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(this);
+                Type = new Type.Reference(container.Module.Resolver, this);
             }
         }
 

@@ -102,7 +102,7 @@ namespace Six.Six.Sema
                 {
                     var resultType = ResolveType(funcy, node.Type);
                     var paramType = ResolveType(funcy, node.Parameters[0].Type);
-                    decl.Type = new Type.Callable(decl, resultType, paramType);
+                    decl.Type = new Type.Callable(this, decl, resultType, paramType);
                 });
             }
         }
@@ -121,7 +121,7 @@ namespace Six.Six.Sema
                 ResolveLater(() =>
                 {
                     var resultType = ResolveType(funcy, node.Type);
-                    decl.Type = new Type.Callable(decl, resultType);
+                    decl.Type = new Type.Callable(this, decl, resultType);
                 });
             }
         }
