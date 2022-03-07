@@ -27,13 +27,20 @@ namespace Six.Six.Instructions
 
         private string Local(Decl.Local decl)
         {
-            switch (decl.Type!)
+            return $"(local (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type!)})";
+        }
+
+        private string WasmTypeFor(Type type)
+        {
+            switch (type)
             {
                 case Builtin builtin:
-                    return $"(local (;{decl.Index}/{decl.Name};) {builtin.AsWasm})";
+                    return $"{builtin.AsWasm}";
+                case Type.Callable callable:
+                    return $"{Builtins.TableIndex.AsWasm}";
                 default:
                     Assert(false);
-                    return $"(local <!<{decl.FullName}>!>)";
+                    return $"(;wasm-type:?????;)";
             }
         }
 

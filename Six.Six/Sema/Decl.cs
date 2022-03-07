@@ -52,7 +52,7 @@ namespace Six.Six.Sema
             public Object(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(this);
+                Type = new Type.Reference(container.Module.Resolver, this);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Six.Six.Sema
 
         public sealed class Alias : Declaration
         {
-            public Alias(Scope container, A.Decl aDecl)
+            public Alias(Scope container, A.Decl.Alias aDecl)
                 : base(container, aDecl)
             {
             }

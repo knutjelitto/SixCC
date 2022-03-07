@@ -3,7 +3,7 @@ namespace six;
 shared int result_with_consts(int c = -4)
 {
     var a = -2;
-    let b = 0;
+    var b = 0;
 
     return a * -3 + c;
 }
@@ -25,7 +25,14 @@ shared uint call_unsigned(uint a, uint b)
 
 shared void call_unsigned_void(uint a, uint b)
 {
-    let x = a * b;
+    var x = a * b;
 
     return;
+}
+
+shared uint function_reference()
+{
+    let fun = call_unsigned_void;
+
+    return fun(2, 3);
 }

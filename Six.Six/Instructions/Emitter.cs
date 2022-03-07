@@ -13,6 +13,7 @@ namespace Six.Six.Instructions
     {
         private readonly List<string> exports = new();
         private readonly List<Action> functions = new();
+        private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionTable = new();
 
         public Emitter(Module module, Writer writer)
             : base(writer)
@@ -22,6 +23,7 @@ namespace Six.Six.Instructions
 
         private Module Module { get; }
         private Resolver Resolver => Module.Resolver;
+        private Builtins.Builtins Builtins => Module.Builtins;
 
         public void Emit(Entity entity)
         {
@@ -49,6 +51,15 @@ namespace Six.Six.Instructions
                 Vertical(exports.Select(export => new Action(() => wl(export))));
                 wl();
                 VerticalSpaced(functions.Select(function => function));
+                if (globalFunctionTable.Count > 0)
+                {
+                    wl();
+                    wl($"(table $table {globalFunctionTable.Count} anyfunc)");
+                    foreach (var (name, element) in globalFunctionTable)
+                    {
+                        wl($"(elem (table $table) ({Insn.U32.Const(element.index)}) ${name})");
+                    }
+                }
             });
             wl($")");
         }
@@ -149,17 +160,33 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.LocalReference expr)
         {
-            wl($"{Insn.Local.Get(expr.Decl.Index)}");
+            wl($"{Insn.Local.Get(expr.LocalDecl.Index)}");
         }
 
         private void Handle(Expr.ParameterReference expr)
         {
-            wl($"{Insn.Local.Get(expr.Decl.Index)}");
+            wl($"{Insn.Local.Get(expr.ParameterDecl.Index)}");
         }
 
         private void Handle(Expr.FunctionReference expr)
         {
-            wl($"{Insn.CallStatic(expr.Decl.FullName())}");
+            var function = expr.FunctionDecl;
+            var name = function.FullName();
+
+            uint index = 0;
+            if (!globalFunctionTable.TryGetValue(name, out var entry))
+            {
+                index = (uint)globalFunctionTable.Count;
+                globalFunctionTable.Add(name, (index, function));
+            }
+            else
+            {
+                index = entry.index;
+            }
+
+            wl($"{Insn.U32.Const(index)}");
+
+            //wl($"{Insn.CallStatic(expr.FunctionDecl.FullName())}");
         }
 
         private void Handle(Expr.SelectAttribute expr)
@@ -173,7 +200,7 @@ namespace Six.Six.Instructions
             {
                 Emit(argument);
             }
-            Emit(expr.Function);
+            wl($"{Insn.CallStatic(expr.Function.FunctionDecl.FullName())}");
         }
     }
 }

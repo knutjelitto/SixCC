@@ -1,0 +1,14 @@
+namespace six;
+
+builtin i32
+{
+}
+
+alias Integer => int;
+
+alias int => i32;
+
+Integer test(Integer a, Integer b)
+{
+    return  a + b;
+}

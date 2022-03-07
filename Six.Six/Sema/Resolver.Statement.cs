@@ -24,7 +24,7 @@ namespace Six.Six.Sema
             var left = ResolveExpression(container, node.Left);
             var right = ResolveExpression(container, node.Right);
 
-            ResolveLater(() =>
+            ScheduleExpr(() =>
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
@@ -45,21 +45,21 @@ namespace Six.Six.Sema
 
             if (node.Expression != null)
             {
-                var result = ResolveExpression(container, node.Expression);
+                var expr = ResolveExpression(container, node.Expression);
 
-                ResolveLater(() =>
+                ScheduleExpr(() =>
                 {
-                    if (result.Resolved != null)
+                    if (expr.Resolved != null)
                     {
                         var function = CurrentFunction as Decl.Function;
                         if (function != null)
                         {
                             var functionType = ResolveType(function.Result);
-                            var returnType = ResolveExprType(result.Resolved);
+                            var returnType = EvalType(expr.Resolved.Type);
 
                             if (ReferenceEquals(functionType, returnType))
                             {
-                                stmt.Expr = result.Resolved;
+                                stmt.Expr = expr.Resolved;
                             }
                             else
                             {

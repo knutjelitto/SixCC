@@ -18,7 +18,7 @@ namespace Six.Six.Builtins
 
         public override string AsWasm => "f64";
 
-        public Expr.Primitive Neg(Expr.Concrete right)
+        public Expr.Unop Neg(Expr.Concrete right)
         {
             Assert(ReferenceEquals(right.Type, this));
 

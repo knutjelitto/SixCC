@@ -13,8 +13,8 @@ namespace Six.Six.Sema
 
         public interface Concrete : Expr
         {
+            Type? NominalType { get; set; }
             Type? Type { get; set; }
-            Type? FinalType { get; set; }
         }
 
         public abstract record ConcreteExpr : Concrete
@@ -25,12 +25,12 @@ namespace Six.Six.Sema
 
             public ConcreteExpr(Type? type)
             {
-                Type = type;
+                Type = NominalType = type;
             }
 
-            public virtual Type? Type { get; set; }
+            public virtual Type? NominalType { get; set; }
 
-            public virtual Type? FinalType { get; set; }
+            public virtual Type? Type { get; set; }
         }
 
         public abstract record Primitive : ConcreteExpr
@@ -53,39 +53,53 @@ namespace Six.Six.Sema
         public sealed record Unop(Builtin Builtin, Insn Insn, Concrete Arg)
             : Primitive(Builtin);
 
-        public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
-            : Primitive(Function.Type!);
+        public sealed record FunctionReference(Decl.Function FunctionDecl)
+            : Reference(FunctionDecl);
 
-        public sealed record FunctionReference(Decl.Function Decl, Type Type)
-            : Primitive(Type);
+        public sealed record ParameterReference(Decl.Parameter ParameterDecl)
+            : Reference(ParameterDecl);
 
-        public sealed record ParameterReference(Decl.Parameter Decl, Type Type)
-            : Primitive(Type);
+        public sealed record LocalReference(Decl.Local LocalDecl)
+            : Reference(LocalDecl);
 
-        public sealed record LocalReference(Decl.Local Decl, Type Type)
-            : Primitive(Type);
+        public sealed record AttributeReference(Decl.Attribute AttributeDecl)
+            : Reference(AttributeDecl);
 
-        public sealed record AttributeReference(Decl.Attribute Decl, Type Type)
-            : Primitive(Type);
-
-        public sealed record SelectAttribute(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
-            : Primitive(Type);
-
-        public abstract record ClassyReference(Decl.Classy Decl) : ConcreteExpr;
+        public abstract record ClassyReference(Decl.Classy ClassyDecl)
+            : Reference(ClassyDecl);
 
         public sealed record PrimitiveReference(Decl.Primitive PrimitiveDecl)
             : ClassyReference(PrimitiveDecl);
 
-        public record Reference(Decl Decl)
+        public sealed record ObjectReference(Decl.Object ObjectDecl)
+            : ClassyReference(ObjectDecl);
+
+        public sealed record ClassReference(Decl.Class ClassDecl)
+            : ClassyReference(ClassDecl);
+
+        public sealed record InterfaceReference(Decl.Interface InterfaceDecl)
+            : ClassyReference(InterfaceDecl);
+
+        public abstract record Reference(Decl Decl)
             : ConcreteExpr
         {
-            public override Type? Type => Decl.Type;
+            public override Type? NominalType => Decl.Type;
         }
+
+        public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
+            : Primitive(Function.NominalType!)
+        {
+            public override Type? Type { get => Function.Type; set => Function.Type = value; }
+        }
+
+
+        public sealed record SelectAttribute(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
+            : Primitive(Type);
 
         public sealed record CallMember(Type.Callable Callable, Expr Make, params Expr[] Arguments)
             : ConcreteExpr
         {
-            public override Type? Type => Callable.Result;
+            public override Type? NominalType => Callable.Result;
         }
     }
 }

@@ -15,12 +15,16 @@
 
         public sealed record Reference(Resolver Resolver, Decl Decl) : Declared;
 
-        public sealed record Callable(Resolver Resolver, Decl Decl, Type Result, params Type[] Parameters) : Declared;
+        public sealed record Callable(Resolver Resolver, Decl Decl, Type Result, List<Type> Parameters) : Declared
+        {
+            public Callable(Resolver Resolver, Decl Decl, Type Result, params Type[] Params)
+                : this(Resolver, Decl, Result, Params.ToList())
+            { }
+        }
 
         public sealed record Tuple(Resolver Resolver, params Type[] Types) : TypeImpl(Resolver);
 
-        public sealed record Array(Type Type) : Type;
-        public sealed record Tuple(params Type[] Types) : Type;
+        public sealed record Array(Resolver Resolver, Type Type) : TypeImpl(Resolver);
         public abstract record TypeImpl(Resolver Resolver) : Type;
     }
 }

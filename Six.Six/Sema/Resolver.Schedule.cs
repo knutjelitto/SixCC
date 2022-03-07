@@ -12,9 +12,60 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private readonly Queue<Action> scheduled = new();
+        private readonly Queue<Action> pendingTypes = new();
+        private readonly Queue<Action> pendingExpressions = new();
 
-        public void ResolveLater(Action action)
+        public void ScheduleType(Action action)
+        {
+            Schedule(pendingTypes, action);
+        }
+
+        public void ScheduleExpr(Action action)
+        {
+            Schedule(pendingExpressions, action);
+        }
+
+        public void Resolve()
+        {
+            while (pendingTypes.Count > 0 || pendingExpressions.Count > 0)
+            {
+                ResolveTypes();
+                ResolveExpressions();
+            }
+        }
+
+        private void PerformAction(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (DiagnosticException diagnostics)
+            {
+                foreach (var diagnostic in diagnostics.Diagnostics)
+                {
+                    Module.Add(diagnostic);
+                }
+            }
+        }
+
+        private void ResolveTypes()
+        {
+            while (pendingTypes.Count > 0)
+            {
+                PerformAction(pendingTypes.Dequeue());
+            }
+        }
+
+        private void ResolveExpressions()
+        {
+            while (pendingTypes.Count == 0 && pendingExpressions.Count > 0)
+            {
+                PerformAction(pendingExpressions.Dequeue());
+            }
+        }
+
+        private void Schedule(Queue<Action> scheduled, Action action)
         {
             if (functions.Count > 0)
             {
@@ -31,26 +82,6 @@ namespace Six.Six.Sema
             else
             {
                 scheduled.Enqueue(action);
-            }
-        }
-
-        public void Resolve()
-        {
-            while (scheduled.Count > 0)
-            {
-                var action = scheduled.Dequeue();
-
-                try
-                {
-                    action();
-                }
-                catch (DiagnosticException diagnostics)
-                {
-                    foreach (var diagnostic in diagnostics.Diagnostics)
-                    {
-                        Module.Add(diagnostic);
-                    }
-                }
             }
         }
     }

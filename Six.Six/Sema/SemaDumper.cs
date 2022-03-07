@@ -242,7 +242,7 @@ namespace Six.Six.Sema
             indent(() =>
             {
                 w(Head("result"));  Walk(type.Result);
-                for (var i = 0; i < type.Parameters.Length; ++i)
+                for (var i = 0; i < type.Parameters.Count; ++i)
                 {
                     w(Head($"param[{i}]")); Walk(type.Parameters[i]);
                 }

@@ -29,7 +29,7 @@ namespace Six.Six.Sema
         {
             var @namespace = Module.Open(code.Namespace);
 
-            WalkDeclarationMany(@namespace, code.Declarations);
+            WalkDeclarations(@namespace, code.Declarations);
         }
     }
 }

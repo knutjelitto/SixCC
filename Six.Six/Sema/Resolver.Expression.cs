@@ -52,7 +52,7 @@ namespace Six.Six.Sema
             var delayed = new Expr.Delayed();
             var primary = ResolveExpression(container, node.Expr);
 
-            ResolveLater(() =>
+            ScheduleType(() =>
             {
                 if (primary.Resolved != null)
                 {
@@ -92,13 +92,15 @@ namespace Six.Six.Sema
             var function = ResolveExpression(container, node.Expr);
             var args = ResolveArguments(container, node.Arguments).ToList();
 
-            ResolveLater(() =>            
+            ScheduleExpr(() =>            
             {
                 if (function.Resolved != null && args.All(arg => arg.Resolved != null))
                 {
                     if (function.Resolved is Expr.FunctionReference reference)
                     {
-                        var prms = reference.Decl.Parameters;
+                        var callable = reference.FunctionDecl.Type as Type.Callable;
+                        Assert(callable != null);
+                        var prms = reference.FunctionDecl.Parameters;
 
                         Assert(prms.Count >= args.Count);
                         var arguments = new List<Expr.Concrete>();
@@ -123,6 +125,35 @@ namespace Six.Six.Sema
                         Assert(arguments.Count == prms.Count);
 
                         delayed.Resolved = new Expr.CallFunction(reference, arguments);
+                    }
+                    else if (function.Resolved is Expr.LocalReference local)
+                    {
+                        var callable = local.LocalDecl.Type as Type.Callable;
+                        Assert(callable != null);
+                        var prms = callable.Parameters;
+
+                        Assert(prms.Count >= args.Count);
+                        var arguments = new List<Expr.Concrete>();
+
+                        var index = 0;
+                        for (; index < Math.Min(prms.Count, args.Count); ++index)
+                        {
+                            var argType = ResolveExprType(args[index].Resolved);
+                            var prmType = ResolveType(prms[index]);
+
+                            Assert(ReferenceEquals(argType, prmType));
+
+                            arguments.Add(args[index].Resolved!);
+                        }
+                        for (; index < prms.Count; ++index)
+                        {
+                            Assert(false);
+
+                        Assert(arguments.Count == prms.Count);
+
+                        delayed.Resolved = new Expr.CallFunction(reference, arguments);
+
+                        Assert(false);
                     }
                     else
                     {
@@ -154,14 +185,14 @@ namespace Six.Six.Sema
             var left = ResolveExpression(container, node.Left);
             var right = ResolveExpression(container, node.Right);
 
-            ResolveLater(() =>
+            ScheduleExpr(() =>
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
-                    left.Resolved.FinalType = ResolveType(left.Resolved.Type);
-                    right.Resolved.FinalType = ResolveType(right.Resolved.Type);
+                    left.Resolved.Type = ResolveType(left.Resolved.NominalType);
+                    right.Resolved.Type = ResolveType(right.Resolved.NominalType);
 
-                    if (left.Resolved.FinalType is Type.Reference reference &&
+                    if (left.Resolved.Type is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
                         classy.Container is ContentScope content &&
                         classy.ADecl is A.Decl.Primitive)
@@ -177,7 +208,7 @@ namespace Six.Six.Sema
                             Assert(false);
                         }
                     }
-                    else if (left.Resolved.FinalType is Type.Builtin builtin)
+                    else if (left.Resolved.Type is Type.Builtin builtin)
                     {
                         delayed.Resolved = builtin.Infix(node.Op, left, right);
                     }
@@ -203,13 +234,13 @@ namespace Six.Six.Sema
 
             var right = ResolveExpression(container, node.Expr);
 
-            ResolveLater(() =>
+            ScheduleExpr(() =>
             {
                 if (right.Resolved != null)
                 {
-                    right.Resolved.FinalType = ResolveExprType(right.Resolved);
+                    right.Resolved.Type = ResolveExprType(right.Resolved);
 
-                    if (right.Resolved.FinalType is Type.Reference reference &&
+                    if (right.Resolved.Type is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
                         classy.Container is ContentScope content)
                     {
@@ -231,7 +262,7 @@ namespace Six.Six.Sema
                             Assert(false);
                         }
                     }
-                    else if (right.Resolved.FinalType is Type.Builtin builtin)
+                    else if (right.Resolved.Type is Type.Builtin builtin)
                     {
                         delayed.Resolved = builtin.Prefix(node.Op, right);
                     }
@@ -259,35 +290,48 @@ namespace Six.Six.Sema
         {
             var delayed = new Expr.Delayed();
 
-            ResolveLater(() =>
+            ScheduleExpr(() =>
             {
-                delayed.Resolved = WalkReference(container.Resolve(tree, tree.Name.Text));
+                var decl = container.Resolve(tree, tree.Name.Text);
+
+                Expr.Reference reference;
+
+                switch (decl)
+                {
+                    case Decl.Parameter node:
+                        reference = new Expr.ParameterReference(node);
+                        Assert(node.Type != null);
+                        break;
+                    case Decl.Let node:
+                        reference = new Expr.LocalReference(node);
+                        Assert(node.Type != null);
+                        break;
+                    case Decl.Var node:
+                        reference = new Expr.LocalReference(node);
+                        Assert(node.Type != null);
+                        break;
+                    case Decl.Attribute node:
+                        reference = new Expr.AttributeReference(node);
+                        Assert(node.Type != null);
+                        break;
+                    case Decl.Function node:
+                        reference = new Expr.FunctionReference(node);
+                        Assert(node.Type != null);
+                        break;
+                    case Decl.Primitive node:
+                        reference = new Expr.PrimitiveReference(node);
+                        Assert(node.Type != null);
+                        break;
+                    default:
+                        Assert(false);
+                        throw new NotImplementedException();
+                }
+
+
+                delayed.Resolved = reference;
             });
 
             return delayed;
-        }
-
-        private Expr.Concrete WalkReference(Decl decl)
-        {
-            switch (decl)
-            {
-                case Decl.Parameter node:
-                    return new Expr.ParameterReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
-                case Decl.Let node:
-                    return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
-                case Decl.Var node:
-                    return new Expr.LocalReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
-                case Decl.Attribute node:
-                    return new Expr.AttributeReference(node, ResolveType(node.Type) ?? throw new NullReferenceException());
-                case Decl.Function node:
-                    return new Expr.FunctionReference(node, ResolveType(node.Result) ?? throw new NullReferenceException());
-                case Decl.Primitive node:
-                    return new Expr.PrimitiveReference(node);
-                default:
-                    Assert(false);
-                    break;
-            }
-            return new Expr.Reference(decl);
         }
     }
 }

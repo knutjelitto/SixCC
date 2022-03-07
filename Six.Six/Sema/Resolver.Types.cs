@@ -14,7 +14,7 @@ namespace Six.Six.Sema
     {
         public Type? ResolveExprType(Expr.Concrete? expr)
         {
-            return ResolveType(expr?.Type);
+            return ResolveType(expr?.NominalType);
         }
 
         public Type? ResolveDeclType(Decl decl)
@@ -24,6 +24,21 @@ namespace Six.Six.Sema
                 return decl.Type;
             }
             return ResolveType(decl.Type);
+        }
+
+        public Type? EvalType(Type? type)
+        {
+            if (type != null)
+            {
+                switch (type)
+                {
+                    case Type.Callable callable:
+                        return ResolveType(callable.Result);
+                    default:
+                        return ResolveType(type);
+                }
+            }
+            return type;
         }
 
         public Type? ResolveType(Type? type)
@@ -42,6 +57,10 @@ namespace Six.Six.Sema
 
                         return builtin;
                     }
+                    else if (reference.Decl.ADecl is A.Decl.Alias alias)
+                    {
+                        return ResolveType(reference.Decl.Container, alias.Type);
+                    }
                     return ResolveDeclType(reference.Decl);
                 }
             }
@@ -57,7 +76,7 @@ namespace Six.Six.Sema
         {
             var type = ResolveType(scope, tree.Type);
 
-            return new Type.Array(type);
+            return new Type.Array(this, type);
         }
 
         private Type DoResolveType(Scope scope, A.Type tree)

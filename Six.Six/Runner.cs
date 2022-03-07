@@ -8,7 +8,7 @@ namespace Six.Six
     {
         public const string Prefix = "src";
         public const string SixRoot = "six";
-        public const string FirstRoot = "first";
+        //public const string SixRoot = "test";
 
         public static void Run()
         {
