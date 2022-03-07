@@ -11,18 +11,23 @@ namespace Six.Six.Builtins
         {
             Module = module;
 
-            buildins.Add(Module.Core.Int32, new S32(Resolver));
-            var u32 = new U32(Resolver);
-            buildins.Add(Module.Core.UInt32, u32);
-            buildins.Add(Module.Core.Float32, new F32(Resolver));
-            buildins.Add(Module.Core.Float64, new F64(Resolver));
-            buildins.Add(Module.Core.Boolean, new Boolean(Resolver));
+            Add(Module.Core.Int32, new S32(Resolver));
+            var u32 = Add(Module.Core.UInt32, new U32(Resolver));
+            Add(Module.Core.Float32, new F32(Resolver));
+            Add(Module.Core.Float64, new F64(Resolver));
+            Add(Module.Core.Boolean, new Boolean(Resolver));
 
             TableIndex = u32;
         }
 
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
+
+        private Builtin Add(string name, Builtin builtin)
+        {
+            buildins.Add(name, builtin);
+            return builtin;
+        }
 
         public Builtin TableIndex { get; }
 

@@ -152,9 +152,7 @@ namespace Six.Six.Sema
 
                         Assert(arguments.Count == prms.Count);
 
-                        delayed.Resolved = new Expr.CallFunction(reference, arguments);
-
-                        Assert(false);
+                        delayed.Resolved = new Expr.CallIndirect(callable, arguments);
                     }
                     else
                     {

@@ -1,5 +1,10 @@
 namespace six;
 
+shared int add(int a, int b)
+{
+    return a + b;
+}
+
 shared int result_with_consts(int c = -4)
 {
     var a = -2;
@@ -30,9 +35,9 @@ shared void call_unsigned_void(uint a, uint b)
     return;
 }
 
-shared uint function_reference()
+shared int function_reference(int a, int b)
 {
-    let fun = call_unsigned_void;
+    let fun = add;
 
-    return fun(2, 3);
+    return fun(a, b);
 }

@@ -13,6 +13,43 @@ namespace Six.Six.Instructions
 {
     public partial class Emitter
     {
+        private string FindType(Type.Callable callable)
+        {
+            var funcType = FuncType(callable);
+
+            if (!functionTypes.TryGetValue(funcType, out var index))
+            {
+                index = (uint)functionTypes.Count;
+
+                functionTypes.Add(funcType, index);
+            }
+
+            return $"$funcType{index}";
+        }
+
+        private string FuncType(Type.Callable callable)
+        {
+            return $"(func {Signature(callable)})";
+        }
+
+        private string Signature(Type.Callable callable)
+        {
+            var builder = new StringBuilder();
+            builder.Append("(param");
+            foreach (var param in callable.Parameters)
+            {
+                builder.Append($" {WasmTypeFor(param)}");
+            }
+            builder.Append($") (result");
+            if (!IsAnythingAkaVoid(callable.Result))
+            {
+                builder.Append($" {WasmTypeFor(callable.Result)}");
+            }
+            builder.Append(')');
+
+            return builder.ToString();
+        }
+
         private string Param(Decl.Parameter decl)
         {
             switch (decl.Type!)
@@ -36,7 +73,7 @@ namespace Six.Six.Instructions
             {
                 case Builtin builtin:
                     return $"{builtin.AsWasm}";
-                case Type.Callable callable:
+                case Type.Callable:
                     return $"{Builtins.TableIndex.AsWasm}";
                 default:
                     Assert(false);
@@ -52,14 +89,18 @@ namespace Six.Six.Instructions
                 case Builtin builtin:
                     return $"(result {builtin.AsWasm})";
                 default:
-                    var resolved = Resolver.ResolveType(type);
-                    if (resolved is Type.Reference reference && reference.Decl.Name.Text == Module.Core.Anything)
+                    if (IsAnythingAkaVoid(type))
                     {
                         return null;
                     }
                     Assert(false);
                     return $"(result <!<?????>!>)";
             }
+        }
+
+        private bool IsAnythingAkaVoid(Type type)
+        {
+            return Resolver.ResolveType(type) is Type.Reference reference && reference.Decl.Name.Text == Module.Core.Anything;
         }
 
         private void Horizontal(IEnumerable<Action> actions)

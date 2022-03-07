@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Wasmtime;
 
@@ -28,15 +24,20 @@ namespace Six.Six
 
             var instance = linker.Instantiate(store, module);
 
-            var function = instance.GetFunction(store, "six.result_with_consts");
+            var v48 = GetFunction(store, instance, "six.result_with_consts").Invoke(store, 42);
+
+            var v5 = GetFunction(store, instance, "six.function_reference").Invoke(store, 2, 3);
+        }
+
+        private Function GetFunction(Store store, Instance instance, string name)
+        {
+            var function = instance.GetFunction(store, name);
 
             if (function == null)
             {
-                Console.WriteLine("error: function export is missing");
-                return;
+                throw new InvalidOperationException("error: function export ``{name}´´ is missing");
             }
-
-            var x = function.Invoke(store, (int)42);
+            return function;
         }
     }
 }

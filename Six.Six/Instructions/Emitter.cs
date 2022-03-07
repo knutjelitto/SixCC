@@ -2,18 +2,17 @@
 using Six.Runtime;
 using Six.Six.Sema;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Six.Instructions
 {
     public partial class Emitter : WithWriter
     {
+        public const string globalFunctionsTableName = "$functionsTable";
+
         private readonly List<string> exports = new();
         private readonly List<Action> functions = new();
-        private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionTable = new();
+        private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionsTable = new();
+        private readonly Dictionary<string, uint> functionTypes = new();
 
         public Emitter(Module module, Writer writer)
             : base(writer)
@@ -28,40 +27,6 @@ namespace Six.Six.Instructions
         public void Emit(Entity entity)
         {
             Handle((dynamic)entity);
-        }
-
-        public void EmitModule()
-        {
-            wl($"(module");
-            foreach (var ns in Module.GetNamespaces())
-            {
-                foreach (var decl in ns.GetDeclarations())
-                {
-                    if (decl is Decl.Function)
-                    {
-                        indent(() =>
-                        {
-                            Emit(decl);
-                        });
-                    }
-                }
-            }
-            indent(() =>
-            {
-                Vertical(exports.Select(export => new Action(() => wl(export))));
-                wl();
-                VerticalSpaced(functions.Select(function => function));
-                if (globalFunctionTable.Count > 0)
-                {
-                    wl();
-                    wl($"(table $table {globalFunctionTable.Count} anyfunc)");
-                    foreach (var (name, element) in globalFunctionTable)
-                    {
-                        wl($"(elem (table $table) ({Insn.U32.Const(element.index)}) ${name})");
-                    }
-                }
-            });
-            wl($")");
         }
 
         private void Handle(Entity entity)
@@ -174,10 +139,10 @@ namespace Six.Six.Instructions
             var name = function.FullName();
 
             uint index = 0;
-            if (!globalFunctionTable.TryGetValue(name, out var entry))
+            if (!globalFunctionsTable.TryGetValue(name, out var entry))
             {
-                index = (uint)globalFunctionTable.Count;
-                globalFunctionTable.Add(name, (index, function));
+                index = (uint)globalFunctionsTable.Count;
+                globalFunctionsTable.Add(name, (index, function));
             }
             else
             {
@@ -185,8 +150,6 @@ namespace Six.Six.Instructions
             }
 
             wl($"{Insn.U32.Const(index)}");
-
-            //wl($"{Insn.CallStatic(expr.FunctionDecl.FullName())}");
         }
 
         private void Handle(Expr.SelectAttribute expr)
@@ -200,7 +163,30 @@ namespace Six.Six.Instructions
             {
                 Emit(argument);
             }
-            wl($"{Insn.CallStatic(expr.Function.FunctionDecl.FullName())}");
+            wl($"{Insn.Call(expr.Function.FunctionDecl.FullName())}");
+        }
+
+        private void Handle(Expr.CallIndirect expr)
+        {
+            foreach (var argument in expr.Arguments)
+            {
+                Emit(argument);
+            }
+            var callable = expr.Callable;
+            var decl = callable.Decl as Decl.Function;
+            Assert(decl != null);
+            var name = decl!.FullName();
+
+            if (globalFunctionsTable.TryGetValue(name, out var entry))
+            {
+                wl($"{Insn.U32.Const(entry.index)} (; ${name} ;)");
+                wl($"{Insn.CallIndirect(globalFunctionsTableName)} (type {FindType(callable)})");
+            }
+            else
+            {
+                wl($"{Insn.ToDo("spoof")}");
+                Assert(false);
+            }
         }
     }
 }

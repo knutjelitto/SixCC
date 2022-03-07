@@ -92,6 +92,11 @@ namespace Six.Six.Sema
             public override Type? Type { get => Function.Type; set => Function.Type = value; }
         }
 
+        public sealed record CallIndirect(Type.Callable Callable, List<Concrete> Arguments)
+            : Primitive(Callable)
+        {
+        }
+
 
         public sealed record SelectAttribute(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
             : Primitive(Type);
