@@ -148,6 +148,7 @@ namespace Six.Six.Sema
                         for (; index < prms.Count; ++index)
                         {
                             Assert(false);
+                        }
 
                         Assert(arguments.Count == prms.Count);
 
