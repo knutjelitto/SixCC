@@ -11,11 +11,11 @@ namespace Six.Six.Builtins
         {
             Module = module;
 
-            Add(Module.Core.Int32, new S32(Resolver));
-            var u32 = Add(Module.Core.UInt32, new U32(Resolver));
-            Add(Module.Core.Float32, new F32(Resolver));
-            Add(Module.Core.Float64, new F64(Resolver));
-            Add(Module.Core.Boolean, new Boolean(Resolver));
+            Add(Module.Core.Int32, new S32());
+            var u32 = Add(Module.Core.UInt32, new U32());
+            Add(Module.Core.Float32, new F32());
+            Add(Module.Core.Float64, new F64());
+            Add(Module.Core.Boolean, new Boolean());
 
             TableIndex = u32;
         }

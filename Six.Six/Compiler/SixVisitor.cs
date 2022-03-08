@@ -506,7 +506,7 @@ namespace Six.Six.Compiler
         protected override void Visit(CCallableType element)
         {
             var type = Walk<Type>(element.PrimaryType);
-            var arguments = WalkOptional<Type>(element.CallableArguments) ?? new Type.Types(element.CallableArguments);
+            var arguments = WalkOptional<Type.Types>(element.CallableArguments) ?? new Type.Types(element.CallableArguments);
 
             element.Value = new Type.Callable(element, type, arguments);
         }

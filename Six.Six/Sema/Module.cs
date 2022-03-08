@@ -15,6 +15,7 @@ namespace Six.Six.Sema
 
         public static class Core
         {
+            public static readonly string SelfValue = "self";
             public static readonly string Float32 = "f32";
             public static readonly string Float64 = "f64";
             public static readonly string UInt64 = "u64";

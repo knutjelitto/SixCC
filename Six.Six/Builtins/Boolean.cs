@@ -9,11 +9,6 @@ namespace Six.Six.Builtins
 {
     public sealed class Boolean : Builtin
     {
-        public Boolean(Resolver resolver)
-            : base(resolver)
-        {
-        }
-
         public override string AsWasm => $"i32";
     }
 }

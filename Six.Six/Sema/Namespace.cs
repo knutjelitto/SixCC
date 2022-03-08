@@ -4,7 +4,7 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public class Namespace : ScopeCore
+    public class Namespace : BlockScope
     {
         private readonly Dictionary<string, Namespace> children = new();
 

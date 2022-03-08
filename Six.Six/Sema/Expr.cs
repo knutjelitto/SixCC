@@ -56,7 +56,10 @@ namespace Six.Six.Sema
         public sealed record FunctionReference(Decl.Function FunctionDecl)
             : Reference(FunctionDecl);
 
-        public sealed record ParameterReference(Decl.Parameter ParameterDecl)
+        public sealed record ConstructorReference(Decl.Constructor ConstructorDecl)
+            : Reference(ConstructorDecl);
+
+        public sealed record ParameterReference(Decl.Local ParameterDecl)
             : Reference(ParameterDecl);
 
         public sealed record LocalReference(Decl.Local LocalDecl)
@@ -91,14 +94,16 @@ namespace Six.Six.Sema
         {
             public override Type? Type { get => Function.Type; set => Function.Type = value; }
         }
-
-        public sealed record CallIndirect(Type.Callable Callable, List<Concrete> Arguments)
+            
+        public sealed record CallIndirect(Concrete Value, Type.Callable Callable, List<Concrete> Arguments)
             : Primitive(Callable)
         {
         }
 
-
         public sealed record SelectAttribute(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
+            : Primitive(Type);
+
+        public sealed record SelectParameter(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
             : Primitive(Type);
 
         public sealed record CallMember(Type.Callable Callable, Expr Make, params Expr[] Arguments)

@@ -24,9 +24,11 @@ namespace Six.Six
 
             var instance = linker.Instantiate(store, module);
 
-            var v48 = GetFunction(store, instance, "six.result_with_consts").Invoke(store, 42);
+            var result = GetFunction(store, instance, "six.result_with_consts").Invoke(store, 42);
+            Assert(result is int value1 && value1 == 48);
 
-            var v5 = GetFunction(store, instance, "six.function_reference").Invoke(store, 2, 3);
+            result = GetFunction(store, instance, "six.function_reference").Invoke(store, 2, 3);
+            Assert(result is int value2 && value2 == 5);
         }
 
         private Function GetFunction(Store store, Instance instance, string name)

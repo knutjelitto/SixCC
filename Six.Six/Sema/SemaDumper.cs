@@ -128,8 +128,6 @@ namespace Six.Six.Sema
             {
                 case Type.Reference node:
                     return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
-                case Type.Callable node:
-                    return $"{Name(node.Decl)} ({node.GetType().Name}{Ref(node.Decl)})";
                 case Type.Builtin node:
                     return $"{node}";
                 default:

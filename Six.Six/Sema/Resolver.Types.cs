@@ -76,13 +76,21 @@ namespace Six.Six.Sema
         {
             var type = ResolveType(scope, tree.Type);
 
-            return new Type.Array(this, type);
+            return new Type.Array(type);
         }
 
         private Type DoResolveType(Scope scope, A.Type tree)
         {
             Assert(false);
             throw new NotImplementedException();
+        }
+
+        private Type DoResolveType(Scope scope, A.Type.Callable tree)
+        {
+            var result = ResolveType(scope, tree.Type);
+            var parameters = tree.Arguments.Select(type => ResolveType(scope, type));
+
+            return new Type.Callable(result, parameters.ToList());
         }
 
         private Type DoResolveType(Scope scope, A.Reference tree)
@@ -100,7 +108,7 @@ namespace Six.Six.Sema
             {
                 return xxx;
             }
-            return new Type.Reference(this, resolved);
+            return new Type.Reference(resolved);
         }
     }
 }

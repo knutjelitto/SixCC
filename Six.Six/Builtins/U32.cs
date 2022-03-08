@@ -10,8 +10,7 @@ namespace Six.Six.Builtins
 {
     public class U32 : I32
     {
-        public U32(Resolver resolver)
-            : base(resolver)
+        public U32()
         {
             prefix.Add("-", Neg);
             prefix.Add("!", Not);

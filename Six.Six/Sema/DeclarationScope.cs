@@ -9,5 +9,11 @@ namespace Six.Six.Sema
             : base(name, parent)
         {
         }
+
+        [DebuggerStepThrough]
+        public DeclarationScope(A.Decl decl, Scope parent)
+            : this(decl.Name.Text, parent)
+        {
+        }
     }
 }

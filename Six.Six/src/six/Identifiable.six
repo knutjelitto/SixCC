@@ -1,0 +1,13 @@
+namespace six;
+
+shared interface Identifiable
+{
+    shared default actual bool equals(Object that)
+        ;/*TODO
+        =>  if (is Identifiable that)
+            then this === that
+            else false;
+        */
+    
+    shared default actual int hash => identityHash(this);
+}

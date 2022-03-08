@@ -51,25 +51,28 @@ namespace Six.Six.Instructions
 
         private void Handle(Decl.Function decl)
         {
-            exports.Add($"(export \"{decl.Container.FullName}\" (func ${decl.Container.FullName}))");
+            //exports.Add($"(export \"{decl.Container.FullName}\" (func ${decl.Container.FullName}))");
 
             functions.Add(() =>
             {
                 wl($"(func ${decl.Container.FullName}");
                 indent(() =>
                 {
+                    wl($"(export \"{decl.Container.FullName}\")");
+                    wl("(;-----;)");
+
                     Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
 
                     wlif(Result(decl.Result!));
 
                     Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
 
-                    wl("(;=====;)");
+                    wl("(;-----;)");
                     foreach (var member in decl.Members)
                     {
                         Emit(member);
                     }
-                    wl("(;=====;)");
+                    wl("(;-----;)");
                 });
                 wl($")");
 
@@ -173,20 +176,9 @@ namespace Six.Six.Instructions
                 Emit(argument);
             }
             var callable = expr.Callable;
-            var decl = callable.Decl as Decl.Function;
-            Assert(decl != null);
-            var name = decl!.FullName();
 
-            if (globalFunctionsTable.TryGetValue(name, out var entry))
-            {
-                wl($"{Insn.U32.Const(entry.index)} (; ${name} ;)");
-                wl($"{Insn.CallIndirect(globalFunctionsTableName)} (type {FindType(callable)})");
-            }
-            else
-            {
-                wl($"{Insn.ToDo("spoof")}");
-                Assert(false);
-            }
+            Emit(expr.Value);
+            wl($"{Insn.CallIndirect(globalFunctionsTableName)} (type {FindType(callable)})");
         }
     }
 }

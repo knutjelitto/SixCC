@@ -15,7 +15,8 @@ namespace Six.Six.Sema
         {
             return node.ClassyScope().Block.Find(reference, reference.Name.Text);
         }
-        public static FuncyScope FuncyScope(this Decl node)
+        
+        public static FuncyScope FuncyScope(this Decl.Funcy node)
         {
             return node.Container as FuncyScope ?? throw new InvalidCastException();
         }
@@ -28,6 +29,16 @@ namespace Six.Six.Sema
         public static string FullName(this Decl.Function node)
         {
             return $"{node.Container.FullName}";
+        }
+
+        public static string FullName(this Decl.Constructor node)
+        {
+            return $"{node.Container.FullName}";
+        }
+
+        public static string FullName(this Decl.Attribute node)
+        {
+            return $"{node.Container.FullName}.{node.Name}";
         }
 
         public static ILocation GetLocation(this Decl node)

@@ -1,19 +1,20 @@
 namespace six;
 
-shared class Complex<T>
-    where T is Number
+class Complex
 {
-    shared double re = -1;
-    shared double im = -1;
+    double re = -1;
+    double im = -1;
 
-    shared new ()
+    new (double re = 0, double im = 0)
     {
-        re = 0;
-        im = 0;
+        self.re = re;
+        self.im = im;
     }
 
-    shared f64 sum()
+/*
+    shared infix Complex + (Complex other)
     {
-        return re + im;
+        return Complex(self.re + other.re, self.im, other.im);
     }
+*/
 }

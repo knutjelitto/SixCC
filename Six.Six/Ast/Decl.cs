@@ -105,26 +105,6 @@ namespace Six.Six.Ast
               With.Type,
               With.Body;
 
-        public sealed record Prefix(
-            IRNode Tree, 
-            Prelude Prelude, 
-            Name Name, 
-            Type Type, 
-            Parameters Parameters, 
-            Body Body)
-            : Funcy,
-              With.Type;
-
-        public sealed record Infix(
-            IRNode Tree, 
-            Prelude Prelude, 
-            Name Name, 
-            Type Type, 
-            Parameters Parameters,
-            Body Body)
-            : Funcy,
-              With.Type;
-
         public sealed record Constructor(
             IRNode Tree,
             Prelude Prelude,
@@ -135,7 +115,7 @@ namespace Six.Six.Ast
             : Funcy,
               With.Extends;
 
-        public sealed record Function(
+        public record Function(
             IRNode Tree, 
             Prelude Prelude,
             Name Name,
@@ -148,6 +128,26 @@ namespace Six.Six.Ast
               With.Generics,
               With.Type;
 
+
+        public sealed record Prefix(
+            IRNode Tree,
+            Prelude Prelude,
+            Name Name,
+            Type Type,
+            Parameters Parameters,
+            Body Body)
+            : Function(Tree, Prelude, Name, null, null, Type, Parameters, Body);
+
+        public sealed record Infix(
+            IRNode Tree,
+            Prelude Prelude,
+            Name Name,
+            Type Type,
+            Parameters Parameters,
+            Body Body)
+            : Function(Tree, Prelude, Name, null, null, Type, Parameters, Body);
+
+        [DebuggerDisplay("class {Name}")]
         public sealed record Class(
             IRNode Tree, 
             Prelude Prelude,

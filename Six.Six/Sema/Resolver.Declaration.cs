@@ -11,15 +11,6 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private readonly Stack<Decl.Funcy> functions = new();
-        private Decl.Funcy CurrentFunction => functions.Peek();
-
-        private IDisposable UseFuncy(Decl.Funcy function)
-        {
-            functions.Push(function);
-            return new Disposable(() => functions.Pop());
-        }
-
         private void WalkDeclarations(Scope scope, IEnumerable<A.Decl>? nodes)
         {
             if (nodes != null)
@@ -46,9 +37,9 @@ namespace Six.Six.Sema
 
         private void DeclareClassy(ClassyScope scope, Decl.Classy decl, A.Decl.Classy node)
         {
-            if (node is A.With.Body body)
+            using (UseMemby(decl))
             {
-                WalkBody(scope.Block, body.Body);
+                WalkBody(scope.Block, node.Body);
             }
         }
 
@@ -86,80 +77,90 @@ namespace Six.Six.Sema
             DeclareClassy(scope, decl, node);
         }
 
+        private void DeclareFunction(Decl.Function decl, A.Decl.Function node)
+        {
+            if (InMemby)
+            {
+                CurrentMemby.Members.Add(decl);
+            }
+            else
+            {
+                Assert(true);
+            }
+            using (UseMemby(decl))
+            {
+                WalkDeclarations(decl.Scope, ((A.With.Parameters)node).Parameters);
+                WalkBody(decl.Scope.Block, node.Body);
+
+                ScheduleType(() =>
+                {
+                    var resultType = ResolveType(decl.Scope, node.Type);
+                    var paramType = ((A.With.Parameters)node).Parameters.Select(param => ResolveType(decl.Scope, param.Type)).ToList();
+                    decl.Result = resultType;
+                    decl.Type = new Type.Callable(resultType, paramType);
+                });
+            }
+        }
+
         private void Declare(Scope container, A.Decl.Infix node)
         {
             Assert(node.Parameters.Count == 1);
 
-            var funcy = new FuncyScope(container, node.Name.Text);
-            var decl = container.Declare(new Decl.Function(funcy, node), InfixName(node));
-
-            using (UseFuncy(decl))
-            {
-                WalkDeclarations(funcy, node.Parameters);
-                WalkBody(funcy.Block, node.Body);
-
-                ScheduleType(() =>
-                {
-                    var resultType = ResolveType(funcy, node.Type);
-                    var paramType = ResolveType(funcy, node.Parameters[0].Type);
-                    decl.Type = new Type.Callable(this, decl, resultType, paramType);
-                });
-            }
+            DeclareFunction(new Decl.Function(container, node, InfixName(node)), node);
         }
 
         private void Declare(Scope parent, A.Decl.Prefix node)
         {
             Assert(node.Parameters.Count == 0);
 
-            var funcy = new FuncyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Function(funcy, node), PrefixName(node));
-
-            using (UseFuncy(decl))
-            {
-                WalkBody(funcy.Block, node.Body);
-
-                ScheduleType(() =>
-                {
-                    var resultType = ResolveType(funcy, node.Type);
-                    decl.Type = new Type.Callable(this, decl, resultType);
-                });
-            }
-        }
-
-        private void Declare(Scope parent, A.Decl.Constructor node)
-        {
-            var funcy = new FuncyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Constructor(funcy, node));
-
-            using (UseFuncy(decl))
-            {
-                WalkDeclarations(funcy, node.Parameters);
-                WalkBody(funcy.Block, node.Body);
-            }
+            DeclareFunction(new Decl.Function(parent, node, PrefixName(node)), node);
         }
 
         private void Declare(Scope parent, A.Decl.Function node)
         {
-            var funcy = new FuncyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Function(funcy, node));
+            DeclareFunction(new Decl.Function(parent, node, null), node);
+        }
 
-            using (UseFuncy(decl))
+        private void DeclareSelf(Decl.Funcy funcy, A.Decl.Funcy aFuncy, Decl.Classy classy)
+        {
+            var self = new Decl.SelfParameter(funcy.FuncyScope(), aFuncy, 0);
+            self.Type = new Type.Reference(classy);
+            funcy.Scope.Declare(self, Module.Core.SelfValue);
+            funcy.Parameters.Add(self);
+        }
+
+        private void Declare(Scope parent, A.Decl.Constructor node)
+        {
+            Assert(InClassy);
+
+            var decl = new Decl.Constructor(parent, node);
+
+            var classy = CurrentMemby as Decl.Classy;
+            Assert(classy != null);
+
+            CurrentMemby.Members.Add(decl);
+
+            using (UseMemby(decl))
             {
-                WalkDeclarations(funcy, node.Parameters);
-                WalkBody(funcy.Block, node.Body);
+
+                DeclareSelf(decl, decl.AFuncyDecl, classy);
+                WalkDeclarations(decl.Scope, ((A.With.Parameters)node).Parameters);
+                WalkBody(decl.Scope.Block, node.Body);
+
                 ScheduleType(() =>
                 {
-                    decl.Result = ResolveType(funcy, node.Type);
-                    var parameterType = CurrentFunction.Parameters.Select(param => param.Type!);
-                    decl.Type = new Type.Callable(this, decl, decl.Result, parameterType.ToArray());
+                    var resultType = ResolveDeclType(classy);
+                    Assert(resultType != null);
+                    var paramType = ((A.With.Parameters)node).Parameters.Select(param => ResolveType(decl.Scope, param.Type)).ToList();
+                    decl.Type = new Type.Callable(resultType, paramType);
                 });
             }
         }
 
-        private void Declare(Scope container, A.Decl.Alias node)
+        private void Declare(Scope parent, A.Decl.Alias node)
         {
-            var scope = new DeclarationScope(node.Name.Text, container);
-            var decl = container.Declare(new Decl.Alias(scope, node));
+            var scope = new DeclarationScope(node.Name.Text, parent);
+            var decl = parent.Declare(new Decl.Alias(scope, node));
 
             ScheduleType(() =>
             {
@@ -167,14 +168,24 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Declare(Scope parent, A.Decl.Attribute node)
+        private void Declare(BlockScope parent, A.Decl.Attribute node)
         {
-            var scope = new DeclarationScope(node.Name.Text, parent);
-            var decl = parent.Declare(new Decl.Attribute(scope, node));
+            var decl = parent.Declare(new Decl.Attribute(parent, node));
+
+            if (InMemby)
+            {
+                CurrentMemby.Members.Add(decl);
+            }
+            else
+            {
+                Assert(true);
+            }
+
+            WalkBody(parent, node.Body);
 
             ScheduleType(() =>
             {
-                decl.Type = ResolveType(scope, node.Type);
+                decl.Type = ResolveType(parent, node.Type);
             });
         }
 
@@ -290,7 +301,7 @@ namespace Six.Six.Sema
             var function = CurrentFunction;
             var funcy = function.FuncyScope();
 
-            var param = funcy.Declare(new Decl.Parameter(funcy, node, CurrentFunction.Parameters.Count));
+            var param = funcy.Declare(new Decl.Parameter(funcy, node, function.Parameters.Count));
             function.Parameters.Add(param);
             
             ScheduleType(() =>

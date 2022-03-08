@@ -50,16 +50,9 @@ namespace Six.Six.Instructions
             return builder.ToString();
         }
 
-        private string Param(Decl.Parameter decl)
+        private string Param(Decl.Local decl)
         {
-            switch (decl.Type!)
-            {
-                case Builtin builtin:
-                    return $"(param (;{decl.Index}/{decl.Name};) {builtin.AsWasm})";
-                default:
-                    Assert(false);
-                    return $"(param <!<{decl.FullName}>!>)";
-            }
+            return $"(param (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type!)})";
         }
 
         private string Local(Decl.Local decl)

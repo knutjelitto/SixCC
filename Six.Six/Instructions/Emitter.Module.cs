@@ -19,8 +19,22 @@ namespace Six.Six.Instructions
 
             indent(() =>
             {
-                Vertical(exports.Select(export => new Action(() => wl(export))));
-                wl();
+                Dump("method", Module.GetMethods().ToList());
+                Dump("attribute", Module.GetAttributes().ToList());
+
+                void Dump<T>(string what, List<T> decls)
+                    where T : Decl
+                {
+                    foreach (var attribute in decls)
+                    {
+                        wl($"(; {what} - {attribute.FullName().Replace(".block.", ".")} ;)");
+                    }
+                    if (decls.Count > 0)
+                    {
+                        wl();
+                    }
+                }
+
                 VerticalSpaced(functions.Select(function => function));
                 if (globalFunctionsTable.Count > 0)
                 {

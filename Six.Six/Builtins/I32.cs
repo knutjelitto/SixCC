@@ -9,11 +9,6 @@ namespace Six.Six.Builtins
 {
     public abstract class I32 : Integral
     {
-        protected I32(Resolver resolver)
-            : base(resolver)
-        {
-        }
-
         public override string AsWasm => $"i32";
     }
 }

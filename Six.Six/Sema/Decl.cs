@@ -9,15 +9,22 @@ namespace Six.Six.Sema
         A.Name Name { get; }
         Type? Type { get; }
 
-        public class Classy : Declaration
+        public class Memby : Declaration
+        {
+            public Memby(Scope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+            }
+            public List<Member> Members { get; } = new();
+        }
+
+        public class Classy : Memby
         {
             public Classy(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(container.Module.Resolver, this);
+                Type = new Type.Reference(this);
             }
-
-            public List<Decl> Members { get; } = new();
         }
 
         public class Primitive : Classy
@@ -25,7 +32,7 @@ namespace Six.Six.Sema
             public Primitive(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(container.Module.Resolver, this);
+                Type = new Type.Reference(this);
             }
         }
 
@@ -34,8 +41,11 @@ namespace Six.Six.Sema
             public Class(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(container.Module.Resolver, this);
+                Scope = container;
+
+                Type = new Type.Reference(this);
             }
+            public ClassyScope Scope { get; }
         }
 
         public class Interface : Classy
@@ -43,7 +53,7 @@ namespace Six.Six.Sema
             public Interface(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(container.Module.Resolver, this);
+                Type = new Type.Reference(this);
             }
         }
 
@@ -52,27 +62,30 @@ namespace Six.Six.Sema
             public Object(ClassyScope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
-                Type = new Type.Reference(container.Module.Resolver, this);
+                Type = new Type.Reference(this);
             }
         }
 
-        public class Funcy : Declaration
+        public class Funcy : Memby
         {
             public Funcy(FuncyScope container, A.Decl.Funcy aDecl)
                 : base(container, aDecl)
             {
+                Scope = container;
             }
 
-            public List<Parameter> Parameters { get; } = new();
+            public FuncyScope Scope { get; }
+
+            public List<Local> Parameters { get; } = new();
             public List<Local> Locals { get; } = new();
-            public List<Member> Members { get; } = new();
         }
 
         public class Function : Funcy
         {
-            public Function(FuncyScope container, A.Decl.Funcy aDecl)
-                : base(container, aDecl)
+            public Function(Scope parent, A.Decl.Funcy aDecl, string? name)
+                : base(new FuncyScope(parent, name ?? aDecl.Name.Text), aDecl)
             {
+                parent.Declare(this, name ?? aDecl.Name.Text);
             }
 
             public Type? Result { get; set; } = null;
@@ -80,10 +93,15 @@ namespace Six.Six.Sema
 
         public class Constructor : Funcy
         {
-            public Constructor(FuncyScope container, A.Decl.Funcy aDecl)
-                : base(container, aDecl)
+            public Constructor(Scope parent, A.Decl.Funcy aFuncyDecl)
+                : base(new FuncyScope(parent, aFuncyDecl.Name.Text), aFuncyDecl)
             {
+                parent.Declare(this);
+                AFuncyDecl = aFuncyDecl;
             }
+
+            public A.Decl.Funcy AFuncyDecl { get; }
+
         }
 
         public abstract class Local : Declaration
@@ -105,6 +123,17 @@ namespace Six.Six.Sema
             }
 
             public Expr.Concrete? Default { get; set; }
+        }
+
+        [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {SelfName}")]
+        public sealed class SelfParameter : Local
+        {
+            public SelfParameter(FuncyScope Container, A.Decl.Funcy ADecl, int index)
+                : base(Container, ADecl, index)
+            {
+            }
+
+            public string SelfName => Module.Core.SelfValue;
         }
 
         public sealed class Let : Local
@@ -144,6 +173,7 @@ namespace Six.Six.Sema
         }
     }
 
+    [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {Name}")]
     public class Declaration : Decl
     {
         public Declaration(Scope container, A.Decl aDecl)

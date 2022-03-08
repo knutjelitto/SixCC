@@ -67,13 +67,13 @@ namespace Six.Six.Sema
 
         private void Schedule(Queue<Action> scheduled, Action action)
         {
-            if (functions.Count > 0)
+            if (membies.Count > 0)
             {
-                var function = CurrentFunction;
+                var memby = CurrentMemby;
 
                 scheduled.Enqueue(() =>
                 {
-                    using (UseFuncy(function))
+                    using (UseMemby(memby))
                     {
                         action();
                     }

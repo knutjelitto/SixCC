@@ -2,8 +2,6 @@
 {
     public interface Type : Entity
     {
-        Resolver Resolver { get; }
-
         public interface Declared : Type
         {
             Decl Decl { get; }
@@ -13,18 +11,18 @@
         {
         }
 
-        public sealed record Reference(Resolver Resolver, Decl Decl) : Declared;
+        public sealed record Reference(Decl Decl) : Declared;
 
-        public sealed record Callable(Resolver Resolver, Decl Decl, Type Result, List<Type> Parameters) : Declared
+        public sealed record Callable(Type Result, List<Type> Parameters) : Type
         {
-            public Callable(Resolver Resolver, Decl Decl, Type Result, params Type[] Params)
-                : this(Resolver, Decl, Result, Params.ToList())
+            public Callable(Type Result, params Type[] Params)
+                : this(Result, Params.ToList())
             { }
         }
 
-        public sealed record Tuple(Resolver Resolver, params Type[] Types) : TypeImpl(Resolver);
+        public sealed record Tuple(params Type[] Types) : TypeImpl;
 
-        public sealed record Array(Resolver Resolver, Type Type) : TypeImpl(Resolver);
-        public abstract record TypeImpl(Resolver Resolver) : Type;
+        public sealed record Array(Type Type) : TypeImpl;
+        public abstract record TypeImpl : Type;
     }
 }

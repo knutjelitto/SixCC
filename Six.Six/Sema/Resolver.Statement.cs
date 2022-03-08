@@ -33,7 +33,7 @@ namespace Six.Six.Sema
                 }
                 else
                 {
-                    Assert(false);
+                    Assert(Module.Errors);
                 }
             });
         }
@@ -63,17 +63,17 @@ namespace Six.Six.Sema
                             }
                             else
                             {
-                                Assert(false);
+                                Assert(Module.Errors);
                             }
                         }
                         else
                         {
-                            Assert(false);
+                            Assert(Module.Errors);
                         }
                     }
                     else
                     {
-                        Assert(false);
+                        Assert(Module.Errors);
                     }
                 });
             }

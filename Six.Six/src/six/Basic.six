@@ -1,0 +1,5 @@
+namespace six;
+
+shared abstract class Basic : Object is Identifiable
+{
+}
