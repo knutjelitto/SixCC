@@ -5,7 +5,7 @@ namespace Six.Six.Sema
     public abstract class ContentScope : DeclarationScope
     {
         protected ContentScope(Scope parent, string name)
-            : base(name, parent)
+            : base(parent, name)
         {
             Block = new BlockScope("block", this);
         }

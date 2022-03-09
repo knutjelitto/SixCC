@@ -4,13 +4,14 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
+    [DebuggerDisplay("scope {FullName}")]
     public abstract class ScopeCore : Scope
     {
         private readonly Dictionary<string, Decl> declarations = new();
         private readonly List<Member> members = new();
 
         [DebuggerStepThrough]
-        public ScopeCore(string name, Scope parent)
+        public ScopeCore(Scope parent, string name)
         {
             Name = name;
             Parent = parent;

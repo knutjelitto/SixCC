@@ -15,10 +15,10 @@ namespace Six.Six.Sema
         {
             return node.ClassyScope().Block.Find(reference, reference.Name.Text);
         }
-        
-        public static FuncyScope FuncyScope(this Decl.Funcy node)
+
+        public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
         {
-            return node.Container as FuncyScope ?? throw new InvalidCastException();
+            return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
         }
 
         public static string FullName(this Decl node)

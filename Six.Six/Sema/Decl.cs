@@ -20,61 +20,73 @@ namespace Six.Six.Sema
 
         public class Classy : Memby
         {
-            public Classy(ClassyScope container, A.Decl aDecl)
-                : base(container, aDecl)
+            private Classy(ClassyScope scope, A.Decl.Classy aDecl)
+                : base(scope, aDecl)
             {
                 Type = new Type.Reference(this);
+                Scope = scope;
             }
+
+            public Classy(Scope parent, A.Decl.Classy aDecl)
+                : this(new ClassyScope(parent, aDecl.Name.Text), aDecl)
+            {
+                parent.Declare(this, aDecl.Name.Text);
+            }
+
+            public ClassyScope Scope { get; }
         }
 
         public class Primitive : Classy
         {
-            public Primitive(ClassyScope container, A.Decl aDecl)
-                : base(container, aDecl)
+            public Primitive(Scope parent, A.Decl.Primitive aDecl)
+                : base(parent, aDecl)
             {
-                Type = new Type.Reference(this);
             }
         }
 
         public class Class : Classy
         {
-            public Class(ClassyScope container, A.Decl aDecl)
-                : base(container, aDecl)
+            public Class(Scope parent, A.Decl.Class aDecl)
+                : base(parent, aDecl)
             {
-                Scope = container;
-
-                Type = new Type.Reference(this);
             }
-            public ClassyScope Scope { get; }
+
+            public Layout Layout { get; } = new Layout(null);
         }
 
         public class Interface : Classy
         {
-            public Interface(ClassyScope container, A.Decl aDecl)
-                : base(container, aDecl)
+            public Interface(Scope parent, A.Decl.Interface aDecl)
+                : base(parent, aDecl)
             {
-                Type = new Type.Reference(this);
             }
         }
 
         public class Object : Classy
         {
-            public Object(ClassyScope container, A.Decl aDecl)
-                : base(container, aDecl)
+            public Object(Scope parent, A.Decl.Object aDecl)
+                : base(parent, aDecl)
             {
-                Type = new Type.Reference(this);
             }
         }
 
         public class Funcy : Memby
         {
-            public Funcy(FuncyScope container, A.Decl.Funcy aDecl)
-                : base(container, aDecl)
+            public Funcy(FuncyScope scope, A.Decl.Funcy aDecl)
+                : base(scope, aDecl)
             {
-                Scope = container;
+                Scope = scope;
+                AFuncyDecl = aDecl;
+            }
+
+            public Funcy(Scope parent, string name, A.Decl.Funcy aDecl)
+                : this(new FuncyScope(parent, name), aDecl)
+            {
+                parent.Declare(this, name);
             }
 
             public FuncyScope Scope { get; }
+            public A.Decl.Funcy AFuncyDecl { get; }
 
             public List<Local> Parameters { get; } = new();
             public List<Local> Locals { get; } = new();
@@ -83,9 +95,8 @@ namespace Six.Six.Sema
         public class Function : Funcy
         {
             public Function(Scope parent, A.Decl.Funcy aDecl, string? name)
-                : base(new FuncyScope(parent, name ?? aDecl.Name.Text), aDecl)
+                : base(parent, name ?? aDecl.Name.Text, aDecl)
             {
-                parent.Declare(this, name ?? aDecl.Name.Text);
             }
 
             public Type? Result { get; set; } = null;
@@ -94,14 +105,9 @@ namespace Six.Six.Sema
         public class Constructor : Funcy
         {
             public Constructor(Scope parent, A.Decl.Funcy aFuncyDecl)
-                : base(new FuncyScope(parent, aFuncyDecl.Name.Text), aFuncyDecl)
+                : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)
             {
-                parent.Declare(this);
-                AFuncyDecl = aFuncyDecl;
             }
-
-            public A.Decl.Funcy AFuncyDecl { get; }
-
         }
 
         public abstract class Local : Declaration

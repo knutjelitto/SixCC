@@ -43,38 +43,39 @@ namespace Six.Six.Sema
             }
         }
 
+        private void DeclareClassy(Decl.Classy decl, A.Decl.Classy node)
+        {
+            DeclareClassy(decl.Scope, decl, node);
+        }
+
         //**
 
         private void Declare(Scope parent, A.Decl.Primitive node)
         {
-            var scope = new ClassyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Primitive(scope, node));
+            var decl = new Decl.Primitive(parent, node);
 
-            DeclareClassy(scope, decl, node);
+            DeclareClassy(decl, node);
         }
 
         private void Declare(Scope parent, A.Decl.Class node)
         {
-            var scope = new ClassyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Class(scope, node));
+            var decl = new Decl.Class(parent, node);
 
-            DeclareClassy(scope, decl, node);
+            DeclareClassy(decl, node);
         }
 
         private void Declare(Scope parent, A.Decl.Interface node)
         {
-            var scope = new ClassyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Interface(scope, node));
+            var decl = new Decl.Interface(parent, node);
 
-            DeclareClassy(scope, decl, node);
+            DeclareClassy(decl, node);
         }
 
         private void Declare(Scope parent, A.Decl.Object node)
         {
-            var scope = new ClassyScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Object(scope, node));
+            var decl = new Decl.Object(parent, node);
 
-            DeclareClassy(scope, decl, node);
+            DeclareClassy(decl, node);
         }
 
         private void DeclareFunction(Decl.Function decl, A.Decl.Function node)
@@ -102,11 +103,11 @@ namespace Six.Six.Sema
             }
         }
 
-        private void Declare(Scope container, A.Decl.Infix node)
+        private void Declare(Scope parent, A.Decl.Infix node)
         {
             Assert(node.Parameters.Count == 1);
 
-            DeclareFunction(new Decl.Function(container, node, InfixName(node)), node);
+            DeclareFunction(new Decl.Function(parent, node, InfixName(node)), node);
         }
 
         private void Declare(Scope parent, A.Decl.Prefix node)
@@ -118,12 +119,14 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.Function node)
         {
+            Assert(node.Parameters.Count >= 0);
+
             DeclareFunction(new Decl.Function(parent, node, null), node);
         }
 
         private void DeclareSelf(Decl.Funcy funcy, A.Decl.Funcy aFuncy, Decl.Classy classy)
         {
-            var self = new Decl.SelfParameter(funcy.FuncyScope(), aFuncy, 0);
+            var self = new Decl.SelfParameter(funcy.Scope, aFuncy, 0);
             self.Type = new Type.Reference(classy);
             funcy.Scope.Declare(self, Module.Core.SelfValue);
             funcy.Parameters.Add(self);
@@ -159,7 +162,7 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.Alias node)
         {
-            var scope = new DeclarationScope(node.Name.Text, parent);
+            var scope = new DeclarationScope(parent, node.Name.Text);
             var decl = parent.Declare(new Decl.Alias(scope, node));
 
             ScheduleType(() =>
@@ -171,6 +174,11 @@ namespace Six.Six.Sema
         private void Declare(BlockScope parent, A.Decl.Attribute node)
         {
             var decl = parent.Declare(new Decl.Attribute(parent, node));
+
+            if (parent.Parent is ClassyScope)
+            {
+                Assert(true);
+            }
 
             if (InMemby)
             {
@@ -192,7 +200,6 @@ namespace Six.Six.Sema
         private void Declare(Scope parent, A.Decl.Var node)
         {
             var function = CurrentFunction;
-            var funcy = function.FuncyScope();
             
             var decl = parent.Declare(new Decl.Var(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
@@ -238,7 +245,6 @@ namespace Six.Six.Sema
         private void Declare(Scope parent, A.Decl.Let node)
         {
             var function = CurrentFunction;
-            var funcy = function.FuncyScope();
 
             var decl = parent.Declare(new Decl.Let(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
@@ -276,7 +282,7 @@ namespace Six.Six.Sema
                 }
                 else
                 {
-                    Assert(false);
+                    Assert(Module.Errors);
                 }
             });
         }
@@ -299,19 +305,19 @@ namespace Six.Six.Sema
         private void Declare(Scope parent, A.Decl.ValueParameter node)
         {
             var function = CurrentFunction;
-            var funcy = function.FuncyScope();
+            var scope = function.Scope;
 
-            var param = funcy.Declare(new Decl.Parameter(funcy, node, function.Parameters.Count));
+            var param = scope.Declare(new Decl.Parameter(scope, node, function.Parameters.Count));
             function.Parameters.Add(param);
             
             ScheduleType(() =>
             {
-                param.Type = ResolveType(funcy, node.Type);
+                param.Type = ResolveType(scope, node.Type);
             });
 
             if (node.Default != null)
             {
-                var dfltValue = ResolveExpression(funcy, node.Default);
+                var dfltValue = ResolveExpression(scope, node.Default);
 
                 ScheduleExpr(() =>
                 {

@@ -5,14 +5,14 @@ namespace Six.Six.Sema
     public class DeclarationScope : ScopeCore
     {
         [DebuggerStepThrough]
-        public DeclarationScope(string name, Scope parent)
-            : base(name, parent)
+        public DeclarationScope(Scope parent, string name)
+            : base(parent, name)
         {
         }
 
         [DebuggerStepThrough]
         public DeclarationScope(A.Decl decl, Scope parent)
-            : this(decl.Name.Text, parent)
+            : this(parent, decl.Name.Text)
         {
         }
     }

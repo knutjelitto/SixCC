@@ -6,13 +6,13 @@ namespace Six.Six.Sema
     {
         [DebuggerStepThrough]
         public BlockScope(string name, Scope parent)
-            : base(name, parent)
+            : base(parent, name)
         {
         }
 
         [DebuggerStepThrough]
         public BlockScope(A.Decl decl, Scope parent)
-            : base(decl.Name.Text, parent)
+            : base(parent, decl.Name.Text)
         {
         }
     }

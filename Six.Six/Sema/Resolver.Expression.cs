@@ -64,7 +64,7 @@ namespace Six.Six.Sema
                 {
                     if (primary.Resolved is Expr.ClassyReference classyRef)
                     {
-                        var found = classyRef.Decl.ClassyFind(node.Reference);
+                        var found = classyRef.ClassyFind(node.Reference);
 
                         if (found is Decl.Attribute attribute)
                         {
@@ -83,7 +83,7 @@ namespace Six.Six.Sema
 
                         if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                         {
-                            var referenced = classy.ClassyScope().Block.Resolve(node.Reference, node.Reference.Name.Text);
+                            var referenced = classy.Scope.Block.Resolve(node.Reference, node.Reference.Name.Text);
                             Assert(false);
                         }
                         else
@@ -99,7 +99,6 @@ namespace Six.Six.Sema
                         {
                             var referenced = classy.ClassyFind(node.Reference);
 
-                            //delayed.Resolved = new Expr.SelectParameter()
                             Assert(false);
                         }
                         else
@@ -342,10 +341,6 @@ namespace Six.Six.Sema
 
             ScheduleExpr(() =>
             {
-                if (tree.Name.Text == Module.Core.SelfValue)
-                {
-                    Assert(true);
-                }
                 var decl = container.Resolve(tree, tree.Name.Text);
 
                 Expr.Reference reference;
@@ -392,7 +387,6 @@ namespace Six.Six.Sema
                         Assert(false);
                         throw new NotImplementedException();
                 }
-
 
                 delayed.Resolved = reference;
             });
