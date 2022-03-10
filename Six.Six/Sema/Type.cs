@@ -11,7 +11,10 @@
         {
         }
 
-        public sealed record Reference(Decl Decl) : Declared;
+        [DebuggerDisplay("reference <{Decl}>")]
+        public sealed record Reference(Decl Decl) : Declared
+        {
+        }
 
         public sealed record Callable(Type Result, List<Type> Parameters) : Type
         {

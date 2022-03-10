@@ -1,6 +1,6 @@
 ﻿"""
 Six language core module.
 """
-module six
+module six.core
 {
 }

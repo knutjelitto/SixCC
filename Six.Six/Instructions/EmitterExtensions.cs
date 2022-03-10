@@ -19,6 +19,11 @@ namespace Six.Six.Instructions
                 .SelectMany(cls => cls.Members);
         }
 
+        public static IEnumerable<Decl.Classy> GetClassies(this Module module)
+        {
+            return module.GetDeclarations().OfType<Decl.Classy>();
+        }
+
         public static IEnumerable<Decl.Function> GetMethods(this Module module)
         {
             return module.GetMembers().OfType<Decl.Function>();

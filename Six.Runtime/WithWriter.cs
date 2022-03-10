@@ -31,5 +31,15 @@ namespace Six.Runtime
                 content();
             }
         }
+
+        public void indent(string before, string after, Action content)
+        {
+            wl(before);
+            using (Writer.Indent())
+            {
+                content();
+            }
+            wl(after);
+        }
     }
 }

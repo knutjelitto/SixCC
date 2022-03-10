@@ -39,16 +39,27 @@ namespace Six.Six.Sema
             }
         }
 
-        private void Body(BlockScope container, A.Body.Builtin node)
-        {
-        }
-
         private void Body(BlockScope container, A.Body.Deferred node)
         {
         }
 
         private void Body(BlockScope container, A.Body.Value node)
         {
+            var delayed = new Expr.Delayed();
+
+            var value = ResolveExpression(container, node.Expression);
+
+            ScheduleExpr(() =>
+            {
+                if (value.Resolved != null)
+                {
+                    delayed.Resolved = value.Resolved;
+                }
+                else
+                {
+                    Assert(Module.Errors);
+                }
+            });
         }
 
         private void Body(BlockScope container, A.Body.Calc node)

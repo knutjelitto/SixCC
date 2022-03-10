@@ -205,7 +205,7 @@ namespace Six.Six.Compiler
             var prelude = Walk<Prelude>(element.Prelude);
             var type = Walk<Type>(element.Type);
             var name = Walk<Name>(element.Name);
-            var generics = WalkOptional<TypeParameters>(element.GenericParameters);
+            var generics = WalkOptional<Decl.TypeParameters>(element.GenericParameters);
             var parameters = Walk<Decl.Parameters>(element.Parameters);
             var constraints = WalkOptional<TypeConstraints>(element.Constraints);
             var body = Walk<Body>(element.FunctionBody);
@@ -227,7 +227,7 @@ namespace Six.Six.Compiler
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var generics = WalkOptional<TypeParameters>(element.GenericParameters);
+            var generics = WalkOptional<Decl.TypeParameters>(element.GenericParameters);
             var extends = WalkOptional<Type>(element.Extends);
             var satifies = WalkOptional<Type.Types>(element.Satisfies);
             var cases = WalkOptional<Type.Types>(element.CaseTypes);
@@ -241,7 +241,7 @@ namespace Six.Six.Compiler
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var generics = WalkOptional<TypeParameters>(element.GenericParameters);
+            var generics = WalkOptional<Decl.TypeParameters>(element.GenericParameters);
             var satifies = WalkOptional<Type.Types>(element.Satisfies);
             var cases = WalkOptional<Type.Types>(element.CaseTypes);
             var constraints = WalkOptional<TypeConstraints>(element.Constraints);
@@ -265,7 +265,7 @@ namespace Six.Six.Compiler
         {
             var prelude = Walk<Prelude>(element.Prelude);
             var name = Walk<Name>(element.Name);
-            var generics = WalkOptional<TypeParameters>(element.GenericParameters);
+            var generics = WalkOptional<Decl.TypeParameters>(element.GenericParameters);
             var constraints = WalkOptional<TypeConstraints>(element.Constraints);
             var type = Walk<Type>(element.Type);
 
@@ -360,11 +360,6 @@ namespace Six.Six.Compiler
             element.Value = new Body.Deferred(element);
         }
 
-        protected override void Visit(CBuiltinBody element)
-        {
-            element.Value = new Body.Builtin(element);
-        }
-
         protected override void Visit(CBlockBody element)
         {
             var usings = Walk<Usings>(element.Usings);
@@ -400,8 +395,10 @@ namespace Six.Six.Compiler
             var conditions = Walk<Expression.Conditions>(element.Conditions);
             var block = Walk<Body.Block>(element.BlockBody);
 
-            var items = new List<Stmt.Guarded>();
-            items.Add(new Stmt.Guarded(element, conditions, block));
+            var items = new List<Stmt.Guarded>
+            {
+                new Stmt.Guarded(element, conditions, block)
+            };
             items.AddRange(WalkMany<Stmt.Guarded>(element.ElseIf));
             var guardeds = new Stmt.Guardeds(element.ElseIf, items);
 
@@ -596,12 +593,12 @@ namespace Six.Six.Compiler
 
         protected override void Visit(CGenericParameters element)
         {
-            element.Value = WalkOptional<TypeParameters>(element.GenericParameterList);
+            element.Value = WalkOptional<Decl.TypeParameters>(element.GenericParameterList);
         }
 
         protected override void Visit(CGenericParameterList element)
         {
-            element.Value = new TypeParameters(element, WalkMany<TypeParameter>(element));
+            element.Value = new Decl.TypeParameters(element, WalkMany<Decl.TypeParameter>(element));
         }
 
         protected override void Visit(CGenericParameter element)
@@ -610,7 +607,7 @@ namespace Six.Six.Compiler
             var name = Walk<Name>(element.Name);
             var @default = WalkOptional<Type>(element.TypeDefault);
 
-            element.Value = new TypeParameter(element, variance, name, @default);
+            element.Value = new Decl.TypeParameter(element, variance, name, @default);
         }
 
         protected override void Visit(CVariance element)
@@ -626,7 +623,7 @@ namespace Six.Six.Compiler
         protected override void Visit(CConstraint element)
         {
             var name = Walk<Name>(element.Name);
-            var parameters = WalkOptional<TypeParameters>(element.GenericParameters);
+            var parameters = WalkOptional<Decl.TypeParameters>(element.GenericParameters);
             var cases = WalkOptional<Type.Types>(element.CaseTypes);
             var satifies = WalkOptional<Type.Types>(element.Satisfies);
 

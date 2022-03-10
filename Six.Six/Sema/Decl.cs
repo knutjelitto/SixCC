@@ -8,17 +8,18 @@ namespace Six.Six.Sema
         A.Decl ADecl { get; }
         A.Name Name { get; }
         Type? Type { get; }
+        string FullName { get; }
 
-        public class Memby : Declaration
+        public abstract class WithMembers : Declaration
         {
-            public Memby(Scope container, A.Decl aDecl)
+            public WithMembers(Scope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
             }
             public List<Member> Members { get; } = new();
         }
 
-        public class Classy : Memby
+        public abstract class Classy : WithMembers
         {
             private Classy(ClassyScope scope, A.Decl.Classy aDecl)
                 : base(scope, aDecl)
@@ -34,6 +35,8 @@ namespace Six.Six.Sema
             }
 
             public ClassyScope Scope { get; }
+
+            public override string FullName => Scope.FullName;
         }
 
         public class Primitive : Classy
@@ -70,7 +73,7 @@ namespace Six.Six.Sema
             }
         }
 
-        public class Funcy : Memby
+        public abstract class Funcy : WithMembers
         {
             public Funcy(FuncyScope scope, A.Decl.Funcy aDecl)
                 : base(scope, aDecl)
@@ -90,6 +93,8 @@ namespace Six.Six.Sema
 
             public List<Local> Parameters { get; } = new();
             public List<Local> Locals { get; } = new();
+
+            public override string FullName => Scope.FullName;
         }
 
         public class Function : Funcy
@@ -119,6 +124,8 @@ namespace Six.Six.Sema
             }
 
             public int Index { get; }
+
+            public override string FullName => ADecl.Name.Text;
         }
 
         public sealed class Parameter : Local
@@ -168,6 +175,8 @@ namespace Six.Six.Sema
                 : base(container, aDecl)
             {
             }
+
+            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
         }
 
         public sealed class Attribute : Declaration
@@ -176,11 +185,23 @@ namespace Six.Six.Sema
                 : base(container, aDecl)
             {
             }
+
+            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
         }
+        public sealed class TypeParameter : Declaration
+        {
+            public TypeParameter(Scope Container, A.Decl.TypeParameter ADecl)
+                : base(Container, ADecl)
+            {
+            }
+
+            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
+        }
+
     }
 
     [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {Name}")]
-    public class Declaration : Decl
+    public abstract class Declaration : Decl
     {
         public Declaration(Scope container, A.Decl aDecl)
         {
@@ -192,5 +213,6 @@ namespace Six.Six.Sema
         public A.Decl ADecl { get; }
         public Type? Type { get; set; } = null;
         public A.Name Name => ADecl.Name;
+        public abstract string FullName { get; }
     }
 }

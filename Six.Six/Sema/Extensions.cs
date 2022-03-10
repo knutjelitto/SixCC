@@ -21,16 +21,6 @@ namespace Six.Six.Sema
             return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
         }
 
-        public static string FullName(this Decl node)
-        {
-            return $"{node.Container.Parent.FullName}::{node.Name}";
-        }
-
-        public static string FullName(this Decl.Function node)
-        {
-            return $"{node.Container.FullName}";
-        }
-
         public static string FullName(this Decl.Constructor node)
         {
             return $"{node.Container.FullName}";

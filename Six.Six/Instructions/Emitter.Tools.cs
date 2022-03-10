@@ -79,13 +79,11 @@ namespace Six.Six.Instructions
             Assert(type != null);
             switch (type)
             {
+                case Builtin builtin when builtin.Name == Module.Core.Anything:
+                    return null;
                 case Builtin builtin:
                     return $"(result {builtin.AsWasm})";
                 default:
-                    if (IsAnythingAkaVoid(type))
-                    {
-                        return null;
-                    }
                     Assert(false);
                     return $"(result <!<?????>!>)";
             }

@@ -35,17 +35,12 @@ namespace Six.Six.Sema
             Assert(false);
         }
 
-        private void DeclareClassy(ClassyScope scope, Decl.Classy decl, A.Decl.Classy node)
+        private void DeclareClassyBody(Decl.Classy decl, A.Decl.Classy node)
         {
             using (UseMemby(decl))
             {
-                WalkBody(scope.Block, node.Body);
+                WalkBody(decl.Scope.Block, node.Body);
             }
-        }
-
-        private void DeclareClassy(Decl.Classy decl, A.Decl.Classy node)
-        {
-            DeclareClassy(decl.Scope, decl, node);
         }
 
         //**
@@ -54,28 +49,41 @@ namespace Six.Six.Sema
         {
             var decl = new Decl.Primitive(parent, node);
 
-            DeclareClassy(decl, node);
+            DeclareClassyBody(decl, node);
         }
 
         private void Declare(Scope parent, A.Decl.Class node)
         {
             var decl = new Decl.Class(parent, node);
 
-            DeclareClassy(decl, node);
+            ScheduleType(() =>
+            {
+                if (node.Extends != null)
+                {
+                    var type = ResolveType(decl.Scope, node.Extends);
+                }
+                else
+                {
+                    var basicDecl = Module.CoreFind(node, Module.Core.Basic);
+                    var basicType = new Type.Reference(basicDecl);
+                }
+            });
+
+            DeclareClassyBody(decl, node);
         }
 
         private void Declare(Scope parent, A.Decl.Interface node)
         {
             var decl = new Decl.Interface(parent, node);
 
-            DeclareClassy(decl, node);
+            DeclareClassyBody(decl, node);
         }
 
         private void Declare(Scope parent, A.Decl.Object node)
         {
             var decl = new Decl.Object(parent, node);
 
-            DeclareClassy(decl, node);
+            DeclareClassyBody(decl, node);
         }
 
         private void DeclareFunction(Decl.Function decl, A.Decl.Function node)
@@ -175,11 +183,6 @@ namespace Six.Six.Sema
         {
             var decl = parent.Declare(new Decl.Attribute(parent, node));
 
-            if (parent.Parent is ClassyScope)
-            {
-                Assert(true);
-            }
-
             if (InMemby)
             {
                 CurrentMemby.Members.Add(decl);
@@ -189,7 +192,28 @@ namespace Six.Six.Sema
                 Assert(true);
             }
 
-            WalkBody(parent, node.Body);
+            if (node.Body is A.Body.Value body)
+            {
+                var delayed = new Expr.Delayed();
+
+                var value = ResolveExpression(parent, body.Expression);
+
+                ScheduleExpr(() =>
+                {
+                    if (value.Resolved != null)
+                    {
+                        delayed.Resolved = value.Resolved;
+                    }
+                    else
+                    {
+                        Assert(Module.Errors);
+                    }
+                });
+            }
+            else
+            {
+                WalkBody(parent, node.Body);
+            }
 
             ScheduleType(() =>
             {
@@ -287,14 +311,14 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Declare(Scope container, A.TypeParameters node)
+        private void Declare(Scope container, A.Decl.TypeParameters node)
         {
             WalkDeclarations(container, node);
         }
 
-        private void Declare(Scope container, A.TypeParameter node)
+        private void Declare(Scope container, A.Decl.TypeParameter node)
         {
-            var decl = container.Declare(new Declaration(container, node));
+            var decl = container.Declare(new Decl.TypeParameter(container, node));
         }
 
         private void Declare(Scope container, A.Decl.Parameters node)

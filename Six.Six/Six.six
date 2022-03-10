@@ -157,7 +157,6 @@ universal-declaration
     | interface-declaration
     | object-declaration
     | alias-declaration
-    | attribute-declaration
     ;
 
 nested-declaration
@@ -166,10 +165,11 @@ nested-declaration
     | let-declaration
     | var-declaration
     | operator-declaration
+    | attribute-declaration
     ;
 
 primitive-declaration
-    : prelude 'builtin' name case-types? block-body
+    : prelude 'primitive' name case-types? block-body
     ;
 
 operator-declaration
@@ -249,7 +249,6 @@ function-body
     | calc-body
     | block-body
     | null-body
-    | builtin-body
     ;
 
 attribute-body
@@ -257,7 +256,6 @@ attribute-body
     | value-body
     | block-body
     | null-body
-    | builtin-body
     ;
 
 block-body
@@ -283,10 +281,6 @@ value-body
 
 null-body
     :: ';'
-    ;
-
-builtin-body
-    :: '=>' 'builtin' ';'
     ;
 
 function-specifier

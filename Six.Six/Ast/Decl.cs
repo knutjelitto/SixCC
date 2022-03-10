@@ -46,7 +46,7 @@ namespace Six.Six.Ast
 
         public interface Generics : Node
         {
-            TypeParameters? TypeParameters { get; }
+            Decl.TypeParameters? TypeParameters { get; }
             TypeConstraints? Constraints { get; }
         }
 
@@ -69,7 +69,7 @@ namespace Six.Six.Ast
     public sealed record Declarations(IRNode Tree, IEnumerable<Decl> Items)
         : Many<Decl>(Tree, Items);
 
-    public interface Decl : StmtOrDecl, With.Name
+    public partial interface Decl : StmtOrDecl, With.Name
     {
         public interface Preluded : Decl, With.Prelude { }
         public interface Classy : Preluded, With.Body { }

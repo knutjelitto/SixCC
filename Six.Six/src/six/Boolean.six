@@ -1,15 +1,20 @@
-namespace six;
+namespace six.core;
 
 shared alias bool => Boolean;
 
-shared builtin Boolean of true | false
+shared primitive Boolean of true | false
 {
-    shared prefix Boolean !  () => builtin;
-    shared infix Boolean | (Boolean rhs) => builtin;
-    shared infix Boolean & (Boolean rhs) => builtin;
-    shared infix Boolean ^ (Boolean rhs) => builtin;
+    shared prefix Boolean !  ();
+    shared infix Boolean | (Boolean rhs);
+    shared infix Boolean & (Boolean rhs);
+    shared infix Boolean ^ (Boolean rhs);
 }
 
-shared bool true => builtin;
-shared bool false => builtin;
+shared object true : Boolean
+{
+}
+
+shared object false : Boolean
+{
+}
 

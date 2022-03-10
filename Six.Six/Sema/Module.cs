@@ -11,6 +11,7 @@ namespace Six.Six.Sema
     public class Module : Scope
     {
         public static readonly string Language = "six";
+        public static readonly string LanguageCore = "core";
         public static readonly string DefaultCtor = "@default.ctor";
 
         public static class Core
@@ -26,6 +27,7 @@ namespace Six.Six.Sema
             public static readonly string Int16 = "u16";
             public static readonly string UInt8 = "u8";
             public static readonly string Int8 = "i8";
+            public static readonly string Basic = "Basic";
             public static readonly string Boolean = "Boolean";
             public static readonly string Null = "Null";
             public static readonly string Nothing = "Nothing";
@@ -167,7 +169,9 @@ namespace Six.Six.Sema
         {
             var language = Root.Get(Language);
             Assert(language != null);
-            return language.Find(tree, name);
+            var core = language.Get(LanguageCore);
+            Assert(core != null);
+            return core.Find(tree, name);
         }
 
         Scope Scope.Parent => this;

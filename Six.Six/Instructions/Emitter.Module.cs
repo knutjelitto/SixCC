@@ -19,23 +19,13 @@ namespace Six.Six.Instructions
 
             indent(() =>
             {
-                Dump("method", Module.GetMethods().ToList());
-                Dump("attribute", Module.GetAttributes().ToList());
-
-                void Dump<T>(string what, List<T> decls)
-                    where T : Decl
+                foreach (var classy in Module.GetClassies())
                 {
-                    foreach (var attribute in decls)
-                    {
-                        wl($"(; {what} - {attribute.FullName().Replace(".block.", ".")} ;)");
-                    }
-                    if (decls.Count > 0)
-                    {
-                        wl();
-                    }
+                    dumper.Dump(classy);
                 }
+                wl();
 
-                VerticalSpaced(functions.Select(function => function));
+                VerticalSpaced(functions);
                 if (globalFunctionsTable.Count > 0)
                 {
                     wl();

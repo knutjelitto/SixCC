@@ -1,6 +1,6 @@
-namespace six;
+namespace six.core;
 
-shared class Anything
+shared abstract primitive Anything of Object | Null
 {
 }
 

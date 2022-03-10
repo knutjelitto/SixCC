@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
-    public class U32 : I32
+    public sealed class U32 : I32
     {
-        public U32()
+        public U32() : base(Module.Core.UInt32)
         {
             prefix.Add("-", Neg);
             prefix.Add("!", Not);

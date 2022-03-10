@@ -15,6 +15,7 @@ namespace Six.Six.Builtins
             var u32 = Add(Module.Core.UInt32, new U32());
             Add(Module.Core.Float32, new F32());
             Add(Module.Core.Float64, new F64());
+            Add(Module.Core.Anything, new Anything());
             Add(Module.Core.Boolean, new Boolean());
 
             TableIndex = u32;

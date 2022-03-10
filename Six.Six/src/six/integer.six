@@ -1,9 +1,9 @@
-namespace six;
+namespace six.core;
 
-//shared builtin i8{}
-//shared builtin i16{}
+//shared primitive i8{}
+//shared primitive i16{}
 
-shared builtin i32
+shared primitive i32
 {
     shared static i32 zero = 0;
     shared static i32 one = 1;
@@ -16,21 +16,21 @@ shared builtin i32
     shared infix i32 % (i32 other);
 }
 
-//shared builtin i64{}
+//shared primitive i64{}
 
-//shared builtin u8{}
-//shared builtin u16{}
+//shared primitive u8{}
+//shared primitive u16{}
 
-shared builtin u32
+shared primitive u32
 {
-    shared infix u32 + (u32 rhs) => builtin;
-    shared infix u32 - (u32 rhs) => builtin;
-    shared infix u32 * (u32 rhs) => builtin;
-    shared infix u32 / (u32 rhs) => builtin;
-    shared infix u32 % (u32 rhs) => builtin;
+    shared infix u32 + (u32 rhs);
+    shared infix u32 - (u32 rhs);
+    shared infix u32 * (u32 rhs);
+    shared infix u32 / (u32 rhs);
+    shared infix u32 % (u32 rhs);
 }
 
-//shared builtin u64{}
+//shared primitive u64{}
 
 //shared alias byte => u8;
 

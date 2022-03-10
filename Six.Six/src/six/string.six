@@ -1,4 +1,4 @@
-namespace six;
+namespace six.core;
 
 shared class String
 {

@@ -11,9 +11,9 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private string InfixName(A.Name name)
+        private string InfixName(A.Name node)
         {
-            return "infix" + name.Text;
+            return $"infix({node.Text})";
         }
         private string InfixName(A.Decl.Infix node)
         {
@@ -25,7 +25,7 @@ namespace Six.Six.Sema
         }
         private string PrefixName(A.Name node)
         {
-            return "prefix" + node.Text;
+            return $"prefix({node.Text})";
         }
         private string PrefixName(A.Expression.OpExpression node)
         {

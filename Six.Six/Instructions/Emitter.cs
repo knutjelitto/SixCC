@@ -14,10 +14,13 @@ namespace Six.Six.Instructions
         private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionsTable = new();
         private readonly Dictionary<string, uint> functionTypes = new();
 
+        private readonly Dumper dumper;
+
         public Emitter(Module module, Writer writer)
             : base(writer)
         {
             Module = module;
+            dumper = new Dumper(writer);
         }
 
         private Module Module { get; }
@@ -139,7 +142,7 @@ namespace Six.Six.Instructions
         private void Handle(Expr.FunctionReference expr)
         {
             var function = expr.FunctionDecl;
-            var name = function.FullName();
+            var name = function.FullName;
 
             uint index = 0;
             if (!globalFunctionsTable.TryGetValue(name, out var entry))
@@ -166,7 +169,7 @@ namespace Six.Six.Instructions
             {
                 Emit(argument);
             }
-            wl($"{Insn.Call(expr.Function.FunctionDecl.FullName())}");
+            wl($"{Insn.Call(expr.Function.FunctionDecl.FullName)}");
         }
 
         private void Handle(Expr.CallIndirect expr)

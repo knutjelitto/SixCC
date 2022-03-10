@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
-    public abstract class I32 : Integral
+    public sealed class Anything : Builtin
     {
-        protected I32(string name) : base(name) { }
+        public Anything()
+            : base(Module.Core.Anything)
+        { }
 
         public override string AsWasm => $"i32";
     }

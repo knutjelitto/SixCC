@@ -14,7 +14,7 @@ namespace Six.Six.Ast
     public sealed record TypeConstraint(
         IRNode Tree,
         Name Name,
-        TypeParameters? Parameters,
+        Decl.TypeParameters? Parameters,
         Type.Types? Cases,
         Type.Types? Satisfies)
         :   Generic,
@@ -23,14 +23,17 @@ namespace Six.Six.Ast
     public record TypeConstraints(IRNode Tree, IEnumerable<TypeConstraint> Items)
         : Many<TypeConstraint>(Tree, Items);
 
-    public record TypeParameter(
-        IRNode Tree,
-        string? Variance,
-        Name Name,
-        Type? Default)
-        : Decl;
+    public partial interface Decl
+    {
+        public record TypeParameter(
+            IRNode Tree,
+            string? Variance,
+            Name Name,
+            Type? Default)
+            : Decl;
 
-    public record TypeParameters(IRNode Tree, IEnumerable<TypeParameter> Items)
-        : Many<TypeParameter>(Tree, Items);
+        public record TypeParameters(IRNode Tree, IEnumerable<TypeParameter> Items)
+            : Many<TypeParameter>(Tree, Items);
+    }
 
 }

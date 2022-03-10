@@ -18,16 +18,16 @@ namespace Six.Six
             var wat = smodule.Emit();
 
             using var engine = new Engine();
-            using var module = Module.FromText(engine, "six", wat);
+            using var module = Module.FromText(engine, "six.core", wat);
             using var linker = new Linker(engine);
             using var store = new Store(engine);
 
             var instance = linker.Instantiate(store, module);
 
-            var result = GetFunction(store, instance, "six.result_with_consts").Invoke(store, 42);
+            var result = GetFunction(store, instance, "six.core.result_with_consts").Invoke(store, 42);
             Assert(result is int value1 && value1 == 48);
 
-            result = GetFunction(store, instance, "six.function_reference").Invoke(store, 2, 3);
+            result = GetFunction(store, instance, "six.core.function_reference").Invoke(store, 2, 3);
             Assert(result is int value2 && value2 == 5);
         }
 
