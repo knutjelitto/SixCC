@@ -2,8 +2,8 @@ namespace six.core;
 
 shared abstract class Object : Anything
 {
-    shared formal Boolean equals(Object that);
-    shared formal Integer hash;
-    //shared default String string => className(this) + "@" + Integer.format(hash, #10);
+    shared formal bool equals(Object that);
+    shared formal int hash;
+    shared default string string => className(self) + "@" + int.format(hash, #10);
 }
 

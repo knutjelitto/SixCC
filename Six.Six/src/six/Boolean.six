@@ -12,6 +12,8 @@ shared primitive Boolean of true | false
 
 shared object true : Boolean
 {
+    int hash => 1234;
+    string string => "true";
 }
 
 shared object false : Boolean

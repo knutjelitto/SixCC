@@ -79,7 +79,7 @@ namespace Six.Six.Instructions
             Assert(type != null);
             switch (type)
             {
-                case Builtin builtin when builtin.Name == Module.Core.Anything:
+                case Builtin builtin when builtin.Name == Names.Core.Anything:
                     return null;
                 case Builtin builtin:
                     return $"(result {builtin.AsWasm})";
@@ -91,7 +91,7 @@ namespace Six.Six.Instructions
 
         private bool IsAnythingAkaVoid(Type type)
         {
-            return Resolver.ResolveType(type) is Type.Reference reference && reference.Decl.Name.Text == Module.Core.Anything;
+            return Resolver.ResolveType(type) is Type.Reference reference && reference.Decl.Name.Text == Names.Core.Anything;
         }
 
         private void Horizontal(IEnumerable<Action> actions)

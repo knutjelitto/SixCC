@@ -14,7 +14,7 @@ namespace Six.Six.Sema
     {
         public Type? ResolveExprType(Expr.Concrete? expr)
         {
-            return ResolveType(expr?.NominalType);
+            return ResolveType(expr?.Type);
         }
 
         public Type? ResolveDeclType(Decl decl)

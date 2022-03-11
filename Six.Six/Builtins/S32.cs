@@ -6,7 +6,7 @@ namespace Six.Six.Builtins
 {
     public class S32 : I32
     {
-        public S32() : base(Module.Core.Int32)
+        public S32() : base(Names.Core.Int32)
         {
             prefix.Add("-", Neg);
             prefix.Add("!", Not);

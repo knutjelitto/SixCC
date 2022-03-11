@@ -10,7 +10,7 @@ namespace Six.Six.Builtins
 {
     public sealed class U32 : I32
     {
-        public U32() : base(Module.Core.UInt32)
+        public U32() : base(Names.Core.UInt32)
         {
             prefix.Add("-", Neg);
             prefix.Add("!", Not);

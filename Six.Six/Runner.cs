@@ -36,7 +36,7 @@ namespace Six.Six
             if (module != null)
             {
                 var global = new S.Module();
-                var compiler = new SixCompiler(global, configuration);
+                var compiler = new Compiler.Compiler(global, configuration);
 
                 try
                 {

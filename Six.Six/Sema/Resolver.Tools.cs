@@ -15,15 +15,15 @@ namespace Six.Six.Sema
 
             if (value > long.MaxValue)
             {
-                return new Expr.ConstU64(Builtins.Resolve(Module.Core.UInt64), value);
+                return new Expr.ConstU64(Builtins.Resolve(Names.Core.UInt64), value);
             }
             else if (value > int.MaxValue)
             {
-                return new Expr.ConstI64(Builtins.Resolve(Module.Core.Int64), (long)value);
+                return new Expr.ConstI64(Builtins.Resolve(Names.Core.Int64), (long)value);
             }
             else
             {
-                return new Expr.ConstI32(Builtins.Resolve(Module.Core.Int32), (int)value);
+                return new Expr.ConstI32(Builtins.Resolve(Names.Core.Int32), (int)value);
             }
         }
 

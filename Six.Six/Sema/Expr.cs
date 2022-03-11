@@ -13,7 +13,6 @@ namespace Six.Six.Sema
 
         public interface Concrete : Expr
         {
-            Type? NominalType { get; set; }
             Type? Type { get; set; }
         }
 
@@ -86,11 +85,11 @@ namespace Six.Six.Sema
         public abstract record Reference(Decl Decl)
             : ConcreteExpr
         {
-            public override Type? NominalType => Decl.Type;
+            public override Type? Type => Decl.Type;
         }
 
         public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
-            : Primitive(Function.NominalType!)
+            : Primitive(Function.Type!)
         {
             public override Type? Type { get => Function.Type; set => Function.Type = value; }
         }
@@ -109,7 +108,7 @@ namespace Six.Six.Sema
         public sealed record CallMember(Type.Callable Callable, Expr Make, params Expr[] Arguments)
             : ConcreteExpr
         {
-            public override Type? NominalType => Callable.Result;
+            public override Type? Type => Callable.Result;
         }
     }
 }

@@ -1,0 +1,6 @@
+namespace six.core;
+
+shared native class Bytes : Anything
+{
+    shared native int Count;
+}

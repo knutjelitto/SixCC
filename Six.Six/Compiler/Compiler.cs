@@ -10,7 +10,7 @@ using S = Six.Six.Sema;
 
 namespace Six.Six.Compiler
 {
-    public class SixCompiler : Compiler<SixParser>
+    public class Compiler : Runtime.Compiler<SixParser>
     {
         private readonly S.Module Module;
         private readonly CompilerConfiguration Configuration;
@@ -18,7 +18,7 @@ namespace Six.Six.Compiler
 
         private readonly List<SourceFile> files = new();
 
-        public SixCompiler(S.Module module, CompilerConfiguration configuration)
+        public Compiler(S.Module module, CompilerConfiguration configuration)
         {
             Module = module;
             Configuration = configuration;

@@ -64,7 +64,7 @@ namespace Six.Six.Sema
                 }
                 else
                 {
-                    var basicDecl = Module.CoreFind(node, Module.Core.Basic);
+                    var basicDecl = Module.CoreFind(node, Names.Core.Basic);
                     var basicType = new Type.Reference(basicDecl);
                 }
             });
@@ -136,7 +136,7 @@ namespace Six.Six.Sema
         {
             var self = new Decl.SelfParameter(funcy.Scope, aFuncy, 0);
             self.Type = new Type.Reference(classy);
-            funcy.Scope.Declare(self, Module.Core.SelfValue);
+            funcy.Scope.Declare(self, Names.Core.SelfValue);
             funcy.Parameters.Add(self);
         }
 
@@ -170,12 +170,11 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.Alias node)
         {
-            var scope = new DeclarationScope(parent, node.Name.Text);
-            var decl = parent.Declare(new Decl.Alias(scope, node));
+            var decl = new Decl.Alias(parent, node);
 
             ScheduleType(() =>
             {
-                decl.Type = ResolveType(scope, node.Type);
+                decl.Type = ResolveType(decl.Scope, node.Type);
             });
         }
 
@@ -192,27 +191,10 @@ namespace Six.Six.Sema
                 Assert(true);
             }
 
-            if (node.Body is A.Body.Value body)
+            var body = WalkBody(parent, node.Body);
+            if (body is Body.Value)
             {
-                var delayed = new Expr.Delayed();
-
-                var value = ResolveExpression(parent, body.Expression);
-
-                ScheduleExpr(() =>
-                {
-                    if (value.Resolved != null)
-                    {
-                        delayed.Resolved = value.Resolved;
-                    }
-                    else
-                    {
-                        Assert(Module.Errors);
-                    }
-                });
-            }
-            else
-            {
-                WalkBody(parent, node.Body);
+                Assert(true);
             }
 
             ScheduleType(() =>
@@ -243,7 +225,7 @@ namespace Six.Six.Sema
             {
                 if (value.Resolved != null)
                 {
-                    var valueType = ResolveType(value.Resolved.NominalType);
+                    var valueType = ResolveType(value.Resolved.Type);
                     value.Resolved.Type = valueType;
 
                     var nominalType = ResolveType(decl.Type);
@@ -254,7 +236,7 @@ namespace Six.Six.Sema
                     }
                     else
                     {
-                        decl.Type = value.Resolved.NominalType;
+                        decl.Type = value.Resolved.Type;
                     }
 
                     decl.Value = value.Resolved;
@@ -288,7 +270,7 @@ namespace Six.Six.Sema
             {
                 if (value.Resolved != null)
                 {
-                    var valueType = ResolveType(value.Resolved.NominalType);
+                    var valueType = ResolveType(value.Resolved.Type);
                     value.Resolved.Type = valueType;
 
                     var nominalType = ResolveType(decl.Type);
@@ -299,7 +281,7 @@ namespace Six.Six.Sema
                     }
                     else
                     {
-                        decl.Type = value.Resolved.NominalType;
+                        decl.Type = value.Resolved.Type;
                     }
 
                     decl.Value = value.Resolved;

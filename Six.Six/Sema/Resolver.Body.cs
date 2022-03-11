@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Core.Errors;
+using System;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -10,17 +11,18 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private void WalkBody(Scope scope, A.Body node)
+        private Body WalkBody(Scope scope, A.Body node)
         {
-            Body((dynamic)scope, (dynamic)node);
+            return Body((dynamic)scope, (dynamic)node);
         }
 
-        private void Body(BlockScope container, A.Body node)
+        private Body Body(BlockScope container, A.Body node)
         {
             Assert(false);
+            throw new NotImplementedException();
         }
 
-        private void Body(BlockScope container, A.Body.Block node)
+        private Body Body(BlockScope container, A.Body.Block node)
         {
             foreach (var member in node.Statelarations)
             {
@@ -37,33 +39,34 @@ namespace Six.Six.Sema
                     Assert(false);
                 }
             }
+
+            return new Body.Dummy();
         }
 
-        private void Body(BlockScope container, A.Body.Deferred node)
+        private Body Body(BlockScope container, A.Body.Deferred node)
         {
+            return new Body.Dummy();
         }
 
-        private void Body(BlockScope container, A.Body.Value node)
+        private Body Body(BlockScope container, A.Body.Value node)
         {
-            var delayed = new Expr.Delayed();
+            var delayed = ResolveExpression(container, node.Expression);
 
-            var value = ResolveExpression(container, node.Expression);
-
-            ScheduleExpr(() =>
+            return new Body.Value(() =>
             {
-                if (value.Resolved != null)
+                if (delayed.Resolved != null)
                 {
-                    delayed.Resolved = value.Resolved;
+                    return delayed.Resolved;
                 }
-                else
-                {
-                    Assert(Module.Errors);
-                }
+
+                throw new DiagnosticException(
+                    new SemanticError(node.GetLocation(), $"can't resolve expression ``{node}´´"));
             });
         }
 
-        private void Body(BlockScope container, A.Body.Calc node)
+        private Body Body(BlockScope container, A.Body.Calc node)
         {
+            return new Body.Dummy();
         }
     }
 }

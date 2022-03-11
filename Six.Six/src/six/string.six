@@ -2,9 +2,9 @@ namespace six.core;
 
 shared class String
 {
-    u32 bytes;
+    shared Bytes bytes;
     
-    shared infix String + (String rhs) => builtin;
+    shared native infix String + (String rhs);
 }
 
 shared alias string => String;

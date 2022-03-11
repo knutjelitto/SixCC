@@ -75,7 +75,7 @@ namespace Six.Six.Sema
 
         public abstract class Funcy : WithMembers
         {
-            public Funcy(FuncyScope scope, A.Decl.Funcy aDecl)
+            private Funcy(FuncyScope scope, A.Decl.Funcy aDecl)
                 : base(scope, aDecl)
             {
                 Scope = scope;
@@ -146,7 +146,7 @@ namespace Six.Six.Sema
             {
             }
 
-            public string SelfName => Module.Core.SelfValue;
+            public string SelfName => Names.Core.SelfValue;
         }
 
         public sealed class Let : Local
@@ -171,10 +171,19 @@ namespace Six.Six.Sema
 
         public sealed class Alias : Declaration
         {
-            public Alias(Scope container, A.Decl.Alias aDecl)
-                : base(container, aDecl)
+            private Alias(DeclarationScope scope, A.Decl.Alias aDecl)
+                : base(scope, aDecl)
             {
+                Scope = scope;
             }
+
+            public Alias(Scope parent, A.Decl.Alias aDecl)
+                : this(new DeclarationScope(parent, aDecl.Name.Text), aDecl)
+            {
+                parent.Declare(this);
+            }
+
+            public DeclarationScope Scope { get; }
 
             public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
         }
@@ -188,6 +197,7 @@ namespace Six.Six.Sema
 
             public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
         }
+
         public sealed class TypeParameter : Declaration
         {
             public TypeParameter(Scope Container, A.Decl.TypeParameter ADecl)
@@ -198,21 +208,20 @@ namespace Six.Six.Sema
             public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
         }
 
-    }
-
-    [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {Name}")]
-    public abstract class Declaration : Decl
-    {
-        public Declaration(Scope container, A.Decl aDecl)
+        [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {Name}")]
+        public abstract class Declaration : Decl
         {
-            Container = container;
-            ADecl = aDecl;
-        }
+            public Declaration(Scope container, A.Decl aDecl)
+            {
+                Container = container;
+                ADecl = aDecl;
+            }
 
-        public Scope Container { get; }
-        public A.Decl ADecl { get; }
-        public Type? Type { get; set; } = null;
-        public A.Name Name => ADecl.Name;
-        public abstract string FullName { get; }
+            public Scope Container { get; }
+            public A.Decl ADecl { get; }
+            public Type? Type { get; set; } = null;
+            public A.Name Name => ADecl.Name;
+            public abstract string FullName { get; }
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace Six.Six.Sema
         {
             var delayed = new Expr.Delayed();
 
-            if (node.Expr is A.Reference reference && reference.Name.Text == Module.Core.SelfValue)
+            if (node.Expr is A.Reference reference && reference.Name.Text == Names.Core.SelfValue)
             {
                 Assert(true);
             }
@@ -238,8 +238,8 @@ namespace Six.Six.Sema
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
-                    left.Resolved.Type = ResolveType(left.Resolved.NominalType);
-                    right.Resolved.Type = ResolveType(right.Resolved.NominalType);
+                    left.Resolved.Type = ResolveType(left.Resolved.Type);
+                    right.Resolved.Type = ResolveType(right.Resolved.Type);
 
                     if (left.Resolved.Type is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
