@@ -191,7 +191,7 @@ namespace Six.Six.Sema
             indent(() =>
             {
                 WalkMany("parameters", decl.Parameters);
-                WalkMany("result", new List<Entity> { decl.Result! });
+                WalkMany("result", new List<Entity> { decl.ResultType! });
                 WalkMany("locals", decl.Locals);
                 WalkMany("members", decl.Members);
             });

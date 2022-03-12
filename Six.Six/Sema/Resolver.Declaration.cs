@@ -56,19 +56,6 @@ namespace Six.Six.Sema
         {
             var decl = new Decl.Class(parent, node);
 
-            ScheduleType(() =>
-            {
-                if (node.Extends != null)
-                {
-                    var type = ResolveType(decl.Scope, node.Extends);
-                }
-                else
-                {
-                    var basicDecl = Module.CoreFind(node, Names.Core.Basic);
-                    var basicType = new Type.Reference(basicDecl);
-                }
-            });
-
             DeclareClassyBody(decl, node);
         }
 
@@ -98,16 +85,8 @@ namespace Six.Six.Sema
             }
             using (UseMemby(decl))
             {
-                WalkDeclarations(decl.Scope, ((A.With.Parameters)node).Parameters);
+                WalkDeclarations(decl.Scope, node.Parameters);
                 WalkBody(decl.Scope.Block, node.Body);
-
-                ScheduleType(() =>
-                {
-                    var resultType = ResolveType(decl.Scope, node.Type);
-                    var paramType = ((A.With.Parameters)node).Parameters.Select(param => ResolveType(decl.Scope, param.Type)).ToList();
-                    decl.Result = resultType;
-                    decl.Type = new Type.Callable(resultType, paramType);
-                });
             }
         }
 
@@ -134,19 +113,18 @@ namespace Six.Six.Sema
 
         private void DeclareSelf(Decl.Funcy funcy, A.Decl.Funcy aFuncy, Decl.Classy classy)
         {
-            var self = new Decl.SelfParameter(funcy.Scope, aFuncy, 0);
-            self.Type = new Type.Reference(classy);
+            var self = new Decl.SelfParameter(funcy.Scope, aFuncy, new Type.Reference(classy), 0);
             funcy.Scope.Declare(self, Names.Core.SelfValue);
             funcy.Parameters.Add(self);
         }
 
         private void Declare(Scope parent, A.Decl.Constructor node)
         {
-            Assert(InClassy);
+            Assert(InClass);
 
-            var decl = new Decl.Constructor(parent, node);
+            var decl = new Decl.Constructor(parent, (Decl.Class)CurrentMemby, node);
 
-            var classy = CurrentMemby as Decl.Classy;
+            var classy = CurrentMemby as Decl.Class;
             Assert(classy != null);
 
             CurrentMemby.Members.Add(decl);
@@ -155,52 +133,23 @@ namespace Six.Six.Sema
             {
 
                 DeclareSelf(decl, decl.AFuncyDecl, classy);
-                WalkDeclarations(decl.Scope, ((A.With.Parameters)node).Parameters);
+                WalkDeclarations(decl.Scope, node.Parameters);
                 WalkBody(decl.Scope.Block, node.Body);
-
-                ScheduleType(() =>
-                {
-                    var resultType = ResolveDeclType(classy);
-                    Assert(resultType != null);
-                    var paramType = ((A.With.Parameters)node).Parameters.Select(param => ResolveType(decl.Scope, param.Type)).ToList();
-                    decl.Type = new Type.Callable(resultType, paramType);
-                });
             }
         }
 
         private void Declare(Scope parent, A.Decl.Alias node)
         {
             var decl = new Decl.Alias(parent, node);
-
-            ScheduleType(() =>
-            {
-                decl.Type = ResolveType(decl.Scope, node.Type);
-            });
         }
 
         private void Declare(BlockScope parent, A.Decl.Attribute node)
         {
             var decl = parent.Declare(new Decl.Attribute(parent, node));
 
-            if (InMemby)
-            {
-                CurrentMemby.Members.Add(decl);
-            }
-            else
-            {
-                Assert(true);
-            }
+            CurrentMemby.Members.Add(decl);
 
             var body = WalkBody(parent, node.Body);
-            if (body is Body.Value)
-            {
-                Assert(true);
-            }
-
-            ScheduleType(() =>
-            {
-                decl.Type = ResolveType(parent, node.Type);
-            });
         }
 
         private void Declare(Scope parent, A.Decl.Var node)
@@ -210,42 +159,6 @@ namespace Six.Six.Sema
             var decl = parent.Declare(new Decl.Var(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
             function.Members.Add(decl);
-
-            if (node.Type != null)
-            {
-                ScheduleType(() =>
-                {
-                    decl.Type = ResolveType(parent, node.Type);
-                });
-            }
-
-            var value = ResolveExpression(parent, node.Value);
-
-            ScheduleExpr(() =>
-            {
-                if (value.Resolved != null)
-                {
-                    var valueType = ResolveType(value.Resolved.Type);
-                    value.Resolved.Type = valueType;
-
-                    var nominalType = ResolveType(decl.Type);
-
-                    if (nominalType != null)
-                    {
-                        Assert(ReferenceEquals(nominalType, valueType));
-                    }
-                    else
-                    {
-                        decl.Type = value.Resolved.Type;
-                    }
-
-                    decl.Value = value.Resolved;
-                }
-                else
-                {
-                    Assert(false);
-                }
-            });
         }
 
         private void Declare(Scope parent, A.Decl.Let node)
@@ -255,42 +168,6 @@ namespace Six.Six.Sema
             var decl = parent.Declare(new Decl.Let(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
             function.Members.Add(decl);
-
-            if (node.Type != null)
-            {
-                ScheduleType(() =>
-                {
-                    decl.Type = ResolveType(parent, node.Type);
-                });
-            }
-
-            var value = ResolveExpression(parent, node.Value);
-
-            ScheduleExpr(() =>
-            {
-                if (value.Resolved != null)
-                {
-                    var valueType = ResolveType(value.Resolved.Type);
-                    value.Resolved.Type = valueType;
-
-                    var nominalType = ResolveType(decl.Type);
-
-                    if (nominalType != null)
-                    {
-                        Assert(ReferenceEquals(nominalType, valueType));
-                    }
-                    else
-                    {
-                        decl.Type = value.Resolved.Type;
-                    }
-
-                    decl.Value = value.Resolved;
-                }
-                else
-                {
-                    Assert(Module.Errors);
-                }
-            });
         }
 
         private void Declare(Scope container, A.Decl.TypeParameters node)
@@ -298,10 +175,12 @@ namespace Six.Six.Sema
             WalkDeclarations(container, node);
         }
 
+#if false
         private void Declare(Scope container, A.Decl.TypeParameter node)
         {
             var decl = container.Declare(new Decl.TypeParameter(container, node));
         }
+#endif
 
         private void Declare(Scope container, A.Decl.Parameters node)
         {
@@ -315,11 +194,6 @@ namespace Six.Six.Sema
 
             var param = scope.Declare(new Decl.Parameter(scope, node, function.Parameters.Count));
             function.Parameters.Add(param);
-            
-            ScheduleType(() =>
-            {
-                param.Type = ResolveType(scope, node.Type);
-            });
 
             if (node.Default != null)
             {

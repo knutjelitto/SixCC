@@ -292,16 +292,11 @@ value-specifier
     ;
 
 extends
-    : ':' extend-type
+    : ':' extended-type
     ;
 
-extend-type
-    | type
-    | constructor
-    ;
-
-constructor
-    : primary-type arguments
+extended-type
+    : type
     ;
 
 satisfies

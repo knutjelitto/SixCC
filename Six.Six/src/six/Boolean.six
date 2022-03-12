@@ -4,10 +4,10 @@ shared alias bool => Boolean;
 
 shared primitive Boolean of true | false
 {
-    shared prefix Boolean !  ();
-    shared infix Boolean | (Boolean rhs);
-    shared infix Boolean & (Boolean rhs);
-    shared infix Boolean ^ (Boolean rhs);
+    shared native prefix Boolean !  ();
+    shared native infix Boolean | (Boolean rhs);
+    shared native infix Boolean & (Boolean rhs);
+    shared native infix Boolean ^ (Boolean rhs);
 }
 
 shared object true : Boolean
@@ -18,5 +18,7 @@ shared object true : Boolean
 
 shared object false : Boolean
 {
+    int hash => 4321;
+    string string => "false";
 }
 

@@ -31,7 +31,7 @@ namespace Six.Six.Ast
 
         public interface Value : Node
         {
-            Expression? Value { get; }
+            Expression Value { get; }
         }
 
         public interface Default : Node

@@ -492,7 +492,7 @@ namespace Six.Six.Compiler
 
         protected override void Visit(CExtends element)
         {
-            element.Value = Walk<Type>(element.ExtendType);
+            element.Value = Walk<Type>(element.ExtendedType);
         }
 
         protected override void Visit(CNaturalLiteral element)
@@ -834,14 +834,6 @@ namespace Six.Six.Compiler
         protected override void Visit(CEmptyType element)
         {
             element.Value = new Type.Empty(element);
-        }
-
-        protected override void Visit(CConstructor element)
-        {
-            var type = Walk<Type>(element.PrimaryType);
-            var arguments = Walk<Arguments>(element.Arguments);
-
-            element.Value = new Type.Constructor(element, type, arguments);
         }
 
         protected override void Visit(CTypeList element)

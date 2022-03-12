@@ -66,7 +66,7 @@ namespace Six.Six.Instructions
 
                     Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
 
-                    wlif(Result(decl.Result!));
+                    wlif(Result(decl.ResultType!));
 
                     Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
 

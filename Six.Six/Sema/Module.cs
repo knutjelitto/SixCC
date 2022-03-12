@@ -132,8 +132,9 @@ namespace Six.Six.Sema
                 count += 1;
 
                 var attrs = new StringBuilder();
-                attrs.Append(declaration.ADecl.IsShared() ? "S" : " ");
-                attrs.Append(declaration.ADecl.IsNative() ? "N" : " ");
+                attrs.Append(declaration.IsShared() ? "P" : " ");
+                attrs.Append(declaration.IsStatic() ? "S" : " ");
+                attrs.Append(declaration.IsNative() ? "N" : " ");
 
                 writer.WriteLine($"{count,3} {declaration.ADecl.GetKind(),-12} [{attrs}] {declaration.ADecl.GetName(),-30} {declaration.ADecl.GetLocation()}");
             }

@@ -14,6 +14,10 @@
         [DebuggerDisplay("reference <{Decl}>")]
         public sealed record Reference(Decl Decl) : Declared
         {
+            public override string ToString()
+            {
+                return $"{Decl}";
+            }
         }
 
         public sealed record Callable(Type Result, List<Type> Parameters) : Type

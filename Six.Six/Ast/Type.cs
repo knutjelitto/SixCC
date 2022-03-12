@@ -18,7 +18,6 @@ namespace Six.Six.Ast
         public sealed record Defaulted(IRNode Tree, Type Type) : Type;
         public sealed record Selector(IRNode Tree, Type Type, Reference Reference) : Type;
         public sealed record Callable(IRNode Tree, Type Type, Types Arguments) : Type;
-        public sealed record Constructor(IRNode Tree, Type Type, Arguments Arguments) : Type;
         public sealed record Sequence(IRNode Tree, Type Type) : Type;
         public sealed record Nullable(IRNode Tree, Type Type) : Type;
         public sealed record Array(IRNode Tree, Type Type) : Type;

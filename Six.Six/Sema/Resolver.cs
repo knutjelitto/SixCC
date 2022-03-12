@@ -23,6 +23,7 @@ namespace Six.Six.Sema
 
         private bool InFuncy => membies.Count > 0 && membies.Peek() is Decl.Funcy;
         private bool InClassy => membies.Count > 0 && membies.Peek() is Decl.Classy;
+        private bool InClass => membies.Count > 0 && membies.Peek() is Decl.Class;
         private bool InMemby => membies.Count > 0 && membies.Peek() is Decl.WithMembers;
     }
 }

@@ -18,6 +18,7 @@ namespace Six.Six.Sema
         }
 
         public Module Module => Parent.Module;
+        public Resolver Resolver => Module.Resolver;
 
         public string Name { get; }
         public Scope Parent { get; }

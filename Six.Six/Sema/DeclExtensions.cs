@@ -13,5 +13,13 @@ namespace Six.Six.Sema
         {
             return decl.ADecl.IsStatic();
         }
+        public static bool IsShared(this Decl decl)
+        {
+            return decl.ADecl.IsShared();
+        }
+        public static bool IsNative(this Decl decl)
+        {
+            return decl.ADecl.IsNative();
+        }
     }
 }

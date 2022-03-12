@@ -47,6 +47,12 @@ namespace Six.Six.Instructions
             WalkMembers(decl);
         }
 
+        private void Walk(Decl.Class decl)
+        {
+            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName} : {decl.Extends}");
+            WalkMembers(decl);
+        }
+
         private void Walk(Decl.Attribute decl)
         {
             wl($"attribute {decl.FullName}");

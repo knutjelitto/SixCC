@@ -14,5 +14,7 @@ namespace Six.Six.Builtins
         { }
 
         public override string AsWasm => $"i32";
+
+        public override string ToString() => Name;
     }
 }

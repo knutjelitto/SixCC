@@ -21,16 +21,6 @@ namespace Six.Six.Sema
             return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
         }
 
-        public static string FullName(this Decl.Constructor node)
-        {
-            return $"{node.Container.FullName}";
-        }
-
-        public static string FullName(this Decl.Attribute node)
-        {
-            return $"{node.Container.FullName}.{node.Name}";
-        }
-
         public static ILocation GetLocation(this Decl node)
         {
             return node.ADecl.GetLocation();
@@ -49,11 +39,6 @@ namespace Six.Six.Sema
             }
         }
 
-        public static string GetKindOne(this A.TreeNode node)
-        {
-            return node.GetKind().Substring(0, 1);
-        }
-
         public static string GetKind(this A.TreeNode node)
         {
             return node.GetType().Name;
@@ -70,20 +55,20 @@ namespace Six.Six.Sema
 
         public static bool IsShared(this A.TreeNode node)
         {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith("shared");
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Shared);
         }
 
         public static bool IsNative(this A.TreeNode node)
         {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith("native");
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Native);
         }
 
         public static bool IsStatic(this A.TreeNode node)
         {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith("static");
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Static);
         }
 
-        public static bool IsWith(this A.With.Prelude withPrelude, string attribute)
+        private static bool IsWith(this A.With.Prelude withPrelude, string attribute)
         {
             return withPrelude.Prelude.Attributes.Any(a => a.Name.Text == attribute);
         }

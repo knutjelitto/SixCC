@@ -36,7 +36,9 @@ namespace Six.Six.Sema
 
         public static class Attr
         {
-
+            public static readonly string Shared = "shared";
+            public static readonly string Native = "native";
+            public static readonly string Static = "static";
         }
     }
 }

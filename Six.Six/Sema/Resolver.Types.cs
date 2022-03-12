@@ -14,10 +14,11 @@ namespace Six.Six.Sema
     {
         public Type? ResolveExprType(Expr.Concrete? expr)
         {
-            return ResolveType(expr?.Type);
+            Debug.Assert(expr != null && expr.Type != null);
+            return ResolveType(expr.Type);
         }
 
-        public Type? ResolveDeclType(Decl decl)
+        public Type ResolveDeclType(Decl decl)
         {
             if (decl is Decl.Classy)
             {
@@ -41,33 +42,30 @@ namespace Six.Six.Sema
             return type;
         }
 
-        public Type? ResolveType(Type? type)
+        public Type ResolveType(Type type)
         {
-            if (type != null)
+            if (type is Type.Reference reference)
             {
-                if (type is Type.Reference reference)
+                if (reference.Decl.ADecl is A.Decl.Primitive primitive)
                 {
-                    if (reference.Decl.ADecl is A.Decl.Primitive primitive)
-                    {
-                        var name = primitive.Name.Text;
+                    var name = primitive.Name.Text;
 
-                        Assert(true);
+                    Assert(true);
 
-                        var builtin = Builtins.Resolve(name);
+                    var builtin = Builtins.Resolve(name);
 
-                        return builtin;
-                    }
-                    else if (reference.Decl.ADecl is A.Decl.Alias alias)
-                    {
-                        return ResolveType(reference.Decl.Container, alias.Type);
-                    }
-                    return ResolveDeclType(reference.Decl);
+                    return builtin;
                 }
+                else if (reference.Decl.ADecl is A.Decl.Alias alias)
+                {
+                    return ResolveType(reference.Decl.Container, alias.Type);
+                }
+                return ResolveDeclType(reference.Decl);
             }
             return type;
         }
 
-        private Type ResolveType(Scope scope, A.Type tree)
+        public Type ResolveType(Scope scope, A.Type tree)
         {
             return DoResolveType(scope, (dynamic)tree);
         }

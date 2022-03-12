@@ -54,7 +54,7 @@ namespace Six.Six.Sema
                         var function = CurrentFunction as Decl.Function;
                         if (function != null)
                         {
-                            var functionType = ResolveType(function.Result);
+                            var functionType = ResolveType(function.ResultType);
                             var returnType = EvalType(expr.Resolved.Type);
 
                             if (ReferenceEquals(functionType, returnType))

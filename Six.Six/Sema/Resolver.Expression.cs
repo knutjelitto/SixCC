@@ -36,7 +36,7 @@ namespace Six.Six.Sema
             return PrefixName(node.Name);
         }
 
-        private Expr.Delayed ResolveExpression(Scope scope, A.Expression node)
+        public Expr.Delayed ResolveExpression(Scope scope, A.Expression node)
         {
             return Expression(scope, (dynamic)node);
         }
@@ -238,8 +238,8 @@ namespace Six.Six.Sema
             {
                 if (left.Resolved != null && right.Resolved != null)
                 {
-                    left.Resolved.Type = ResolveType(left.Resolved.Type);
-                    right.Resolved.Type = ResolveType(right.Resolved.Type);
+                    left.Resolved.Type = ResolveType(left.Resolved.Type!);
+                    right.Resolved.Type = ResolveType(right.Resolved.Type!);
 
                     if (left.Resolved.Type is Type.Reference reference &&
                         reference.Decl is Decl.Classy classy &&
