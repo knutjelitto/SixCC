@@ -3,17 +3,19 @@ namespace six.core;
 //shared primitive i8{}
 //shared primitive i16{}
 
-shared primitive i32
+shared native class i32
 {
     shared static i32 zero = 0;
     shared static i32 one = 1;
  
-    shared prefix i32 - ();
-    shared infix i32 + (i32 other);
-    shared infix i32 - (i32 other);
-    shared infix i32 * (i32 other);
-    shared infix i32 / (i32 other);
-    shared infix i32 % (i32 other);
+    shared native prefix i32 - ();
+    shared native infix i32 + (i32 other);
+    shared native infix i32 - (i32 other);
+    shared native infix i32 * (i32 other);
+    shared native infix i32 / (i32 other);
+    shared native infix i32 % (i32 other);
+
+    shared native infix bool <= (i32 other);
 }
 
 //shared primitive i64{}
@@ -21,13 +23,13 @@ shared primitive i32
 //shared primitive u8{}
 //shared primitive u16{}
 
-shared primitive u32
+shared native class u32
 {
-    shared infix u32 + (u32 rhs);
-    shared infix u32 - (u32 rhs);
-    shared infix u32 * (u32 rhs);
-    shared infix u32 / (u32 rhs);
-    shared infix u32 % (u32 rhs);
+    shared native infix u32 + (u32 rhs);
+    shared native infix u32 - (u32 rhs);
+    shared native infix u32 * (u32 rhs);
+    shared native infix u32 / (u32 rhs);
+    shared native infix u32 % (u32 rhs);
 }
 
 //shared primitive u64{}

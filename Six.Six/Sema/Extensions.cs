@@ -16,7 +16,7 @@ namespace Six.Six.Sema
             return node.ClassyScope().Block.Find(reference, reference.Name.Text);
         }
 
-        public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
+        public static Decl ClassyFind(this Expression.ClassyReference node, A.Reference reference)
         {
             return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
         }

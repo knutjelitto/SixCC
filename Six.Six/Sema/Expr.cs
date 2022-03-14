@@ -4,37 +4,44 @@ using System;
 
 namespace Six.Six.Sema
 {
-    public interface Expr : Entity
+    public interface Expr : Expression
     {
-        public sealed record Delayed : Expr
+        Type Type { get; }
+    }
+
+    public sealed record LazyExpr : Expression
+    {
+        private Expr? expr = null;
+        private readonly Func<Expr> resolver;
+
+        public LazyExpr(Module module, Func<Expr> resolver)
         {
-            public Concrete? Resolved { get; set; } = null;
+            Module = module;
+            this.resolver = resolver;
         }
 
-        public interface Concrete : Expr
-        {
-            Type? Type { get; set; }
-        }
+        public Module Module { get; }
+        public Builtins.Builtins Builtins => Module.Builtins;
 
-        public abstract record ConcreteExpr : Concrete
+        public Expr Expr => expr ??= resolver();
+    }
+
+    public interface Expression : Entity
+    {
+        public abstract record ConcreteExpr : Expr
         {
-            public ConcreteExpr()
+            public ConcreteExpr(Type type)
             {
+                Type = type;
             }
 
-            public ConcreteExpr(Type? type)
-            {
-                Type = NominalType = type;
-            }
-
-            public virtual Type? NominalType { get; set; }
-
-            public virtual Type? Type { get; set; }
+            public virtual Type Type { get; set; }
         }
 
         public abstract record Primitive : ConcreteExpr
         {
-            public Primitive(Type Type) : base(Type)
+            public Primitive(Type Type)
+                : base(Type)
             {
             }
         }
@@ -46,10 +53,13 @@ namespace Six.Six.Sema
         public sealed record ConstI64(Builtin Builtin, long Value) : Const(Builtin, Insn.I64.Const(Value));
         public sealed record ConstU64(Builtin Builtin, ulong Value) : Const(Builtin, Insn.U64.Const(Value));
 
-        public sealed record Binop(Builtin Builtin, Insn Insn, Concrete Arg1, Concrete Arg2)
+        //TODO:
+        public sealed record AllocClass(Decl.Class Class) : Primitive(Class.Type);
+
+        public sealed record Binop(Builtin Builtin, Insn Insn, Expr Arg1, Expr Arg2)
             : Primitive(Builtin);
 
-        public sealed record Unop(Builtin Builtin, Insn Insn, Concrete Arg)
+        public sealed record Unop(Builtin Builtin, Insn Insn, Expr Arg)
             : Primitive(Builtin);
 
         public sealed record FunctionReference(Decl.Function FunctionDecl)
@@ -70,9 +80,6 @@ namespace Six.Six.Sema
         public abstract record ClassyReference(Decl.Classy ClassyDecl)
             : Reference(ClassyDecl);
 
-        public sealed record PrimitiveReference(Decl.Primitive PrimitiveDecl)
-            : ClassyReference(PrimitiveDecl);
-
         public sealed record ObjectReference(Decl.Object ObjectDecl)
             : ClassyReference(ObjectDecl);
 
@@ -82,33 +89,53 @@ namespace Six.Six.Sema
         public sealed record InterfaceReference(Decl.Interface InterfaceDecl)
             : ClassyReference(InterfaceDecl);
 
-        public abstract record Reference(Decl Decl)
-            : ConcreteExpr
+        public abstract record Reference(Decl Decl) : Expr
         {
-            public override Type? Type => Decl.Type;
+            public Type Type => Decl.Type;
         }
 
-        public sealed record CallFunction(FunctionReference Function, List<Concrete> Arguments)
+        public sealed record CallFunction(FunctionReference Function, List<Expr> Arguments)
             : Primitive(Function.Type!)
         {
-            public override Type? Type { get => Function.Type; set => Function.Type = value; }
+            public override Type Type => Function.FunctionDecl.ResultType;
         }
-            
-        public sealed record CallIndirect(Concrete Value, Type.Callable Callable, List<Concrete> Arguments)
+
+
+        public sealed record CallConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
+            : Primitive(Ctor.Type)
+        {
+            public override Type Type => Ctor.ResultType;
+        }
+        public sealed record CallIndirect(Expr Value, Type.Callable Callable, List<Expr> Arguments)
             : Primitive(Callable)
         {
+            public override Type Type => Callable.Result;
         }
 
-        public sealed record SelectAttribute(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
-            : Primitive(Type);
+        public sealed record SelectAttribute(Reference Reference, Decl.Attribute Attribute)
+            : Primitive(Attribute.Type);
 
-        public sealed record SelectParameter(ClassyReference Reference, Decl.Attribute Attribute, Type Type)
-            : Primitive(Type);
-
-        public sealed record CallMember(Type.Callable Callable, Expr Make, params Expr[] Arguments)
-            : ConcreteExpr
+        public sealed record CallMember(Type.Callable Callable, Expression Make, params Expression[] Arguments)
+            : Expr
         {
-            public override Type? Type => Callable.Result;
+            public Type Type => Callable.Result;
+        }
+
+        public sealed record AndThen(LazyExpr And, LazyExpr Then) : Expr
+        {
+            public Type Type => And.Builtins.Boolean;
+        }
+
+        public sealed record If(LazyExpr Condition, LazyExpr Then, LazyExpr Else) : Expr
+        {
+            public Type Type
+            {
+                get
+                {
+                    Assert(ReferenceEquals(Then.Expr.Type, Else.Expr.Type));
+                    return Then.Expr.Type;
+                }
+            }
         }
     }
 }

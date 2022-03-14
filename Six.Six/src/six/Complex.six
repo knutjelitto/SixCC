@@ -5,18 +5,14 @@ class Complex
     double re = -1;
     double im = -1;
 
-/*
-    new (double re = 0, double im = 0)
+    shared new (double re = 0, double im = 0)
     {
         self.re = re;
         self.im = im;
     }
-*/
 
-/*
     shared infix Complex + (Complex other)
     {
-        return Complex(self.re + other.re, self.im, other.im);
+        return Complex(self.re + other.re, self.im + other.im);
     }
-*/
 }

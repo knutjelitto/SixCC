@@ -1,6 +1,4 @@
 ﻿using Six.Six.Sema;
-using System;
-using static Six.Six.Ast.Using;
 
 namespace Six.Six.Instructions
 {

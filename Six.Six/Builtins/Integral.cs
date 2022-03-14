@@ -4,6 +4,6 @@ namespace Six.Six.Builtins
 {
     public abstract class Integral : Number
     {
-        public Integral(string name) : base(name) { }
+        public Integral(Builtins builtins, string name) : base(builtins, name) { }
     }
 }

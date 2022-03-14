@@ -31,7 +31,7 @@ namespace Six.Six.Compiler
             visitor = new SixVisitor();
         }
 
-        public bool Errors => Module.Errors;
+        public bool Errors => Module.HasErrors;
 
         private void Emit()
         {
@@ -100,22 +100,32 @@ namespace Six.Six.Compiler
 
             if (ok)
             {
-                foreach (var folder in module.Folders)
+                try
                 {
-                    ok = ok && BuildFolder(folder);
-
-                    if (!ok)
+                    foreach (var folder in module.Folders)
                     {
-                        break;
+                        ok = ok && BuildFolder(folder);
+
+                        if (!ok)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (ok)
+                    {
+                        Emit();
+
                     }
                 }
-
-                if (ok)
+                catch (DiagnosticException diagnostics)
                 {
-                    Module.Resolver.Resolve();
+                    foreach (var diagnostic in diagnostics.Diagnostics)
+                    {
+                        Module.Add(diagnostic);
+                    }
 
-                    Emit();
-
+                    ok = false;
                 }
 
                 Report();

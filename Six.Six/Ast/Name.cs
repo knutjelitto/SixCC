@@ -52,6 +52,8 @@ namespace Six.Six.Ast
 
             public IRNode Tree => throw new System.InvalidOperationException();
             public string Text { get; }
+
+            public override string ToString() => Text;
         }
     }
 

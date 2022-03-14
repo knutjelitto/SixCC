@@ -52,12 +52,12 @@ namespace Six.Six.Instructions
 
         private string Param(Decl.Local decl)
         {
-            return $"(param (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type!)})";
+            return $"(param (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
         }
 
         private string Local(Decl.Local decl)
         {
-            return $"(local (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type!)})";
+            return $"(local (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
         }
 
         private string WasmTypeFor(Type type)
@@ -68,6 +68,11 @@ namespace Six.Six.Instructions
                     return $"{builtin.AsWasm}";
                 case Type.Callable:
                     return $"{Builtins.TableIndex.AsWasm}";
+                case Type.Declared declared when declared.Decl.IsNative():
+                    {
+                        var builtin = Builtins.Resolve(declared.Decl);
+                        return $"{builtin.AsWasm}";
+                    }
                 default:
                     Assert(false);
                     return $"(;wasm-type:?????;)";
@@ -77,15 +82,18 @@ namespace Six.Six.Instructions
         private string? Result(Type type)
         {
             Assert(type != null);
+            if (type is Type.Declared)
+            {
+                Assert(true);
+            }
             switch (type)
             {
+                case Type.Declared declared when declared.Decl.Name.Text == Names.Core.Anything:
+                    return null;
                 case Builtin builtin when builtin.Name == Names.Core.Anything:
                     return null;
-                case Builtin builtin:
-                    return $"(result {builtin.AsWasm})";
                 default:
-                    Assert(false);
-                    return $"(result <!<?????>!>)";
+                    return $"(result {WasmTypeFor(type)})";
             }
         }
 

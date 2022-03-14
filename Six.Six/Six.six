@@ -147,7 +147,6 @@ top-declarations
     ;
 
 top-declaration
-    | primitive-declaration
     | universal-declaration
     ;
 
@@ -166,10 +165,6 @@ nested-declaration
     | var-declaration
     | operator-declaration
     | attribute-declaration
-    ;
-
-primitive-declaration
-    : prelude 'primitive' name case-types? block-body
     ;
 
 operator-declaration

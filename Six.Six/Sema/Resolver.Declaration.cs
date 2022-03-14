@@ -45,13 +45,6 @@ namespace Six.Six.Sema
 
         //**
 
-        private void Declare(Scope parent, A.Decl.Primitive node)
-        {
-            var decl = new Decl.Primitive(parent, node);
-
-            DeclareClassyBody(decl, node);
-        }
-
         private void Declare(Scope parent, A.Decl.Class node)
         {
             var decl = new Decl.Class(parent, node);
@@ -75,8 +68,14 @@ namespace Six.Six.Sema
 
         private void DeclareFunction(Decl.Function decl, A.Decl.Function node)
         {
+            var method = false;
+            Decl.Classy? klass = null;
+
             if (InMemby)
             {
+                method = InClassy;
+                klass = CurrentMemby as Decl.Classy;
+
                 CurrentMemby.Members.Add(decl);
             }
             else
@@ -85,6 +84,11 @@ namespace Six.Six.Sema
             }
             using (UseMemby(decl))
             {
+                if (method)
+                {
+                    Assert(klass != null);
+                    DeclareSelf(decl, klass);
+                }
                 WalkDeclarations(decl.Scope, node.Parameters);
                 WalkBody(decl.Scope.Block, node.Body);
             }
@@ -111,9 +115,9 @@ namespace Six.Six.Sema
             DeclareFunction(new Decl.Function(parent, node, null), node);
         }
 
-        private void DeclareSelf(Decl.Funcy funcy, A.Decl.Funcy aFuncy, Decl.Classy classy)
+        private void DeclareSelf(Decl.Funcy funcy, Decl.Classy classy)
         {
-            var self = new Decl.SelfParameter(funcy.Scope, aFuncy, new Type.Reference(classy), 0);
+            var self = new Decl.SelfParameter(funcy.Scope, new Type.Reference(classy), 0);
             funcy.Scope.Declare(self, Names.Core.SelfValue);
             funcy.Parameters.Add(self);
         }
@@ -132,7 +136,7 @@ namespace Six.Six.Sema
             using (UseMemby(decl))
             {
 
-                DeclareSelf(decl, decl.AFuncyDecl, classy);
+                DeclareSelf(decl, classy);
                 WalkDeclarations(decl.Scope, node.Parameters);
                 WalkBody(decl.Scope.Block, node.Body);
             }
@@ -192,19 +196,13 @@ namespace Six.Six.Sema
             var function = CurrentFunction;
             var scope = function.Scope;
 
-            var param = scope.Declare(new Decl.Parameter(scope, node, function.Parameters.Count));
+            var param = scope.Declare(
+                new Decl.Parameter(
+                    scope, 
+                    node, 
+                    function.Parameters.Count,
+                    node.Default == null ? null : ResolveExpression(scope, node.Default)));
             function.Parameters.Add(param);
-
-            if (node.Default != null)
-            {
-                var dfltValue = ResolveExpression(scope, node.Default);
-
-                ScheduleExpr(() =>
-                {
-                    Assert(dfltValue.Resolved != null);
-                    param.Default = dfltValue.Resolved;
-                });
-            }
         }
     }
 }

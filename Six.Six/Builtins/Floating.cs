@@ -4,6 +4,6 @@ namespace Six.Six.Builtins
 {
     public abstract class Floating : Number
     {
-        public Floating(string name) : base(name) { }
+        public Floating(Builtins builtins, string name) : base(builtins, name) { }
     }
 }

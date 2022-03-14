@@ -157,16 +157,6 @@ namespace Six.Six.Compiler
             element.Value = new Statelarations(element, WalkMany<StmtOrDecl>(element));
         }
 
-        protected override void Visit(CPrimitiveDeclaration element)
-        {
-            var prelude = Walk<Prelude>(element.Prelude);
-            var name = Walk<Name>(element.Name);
-            var cases = WalkOptional<Type.Types>(element.CaseTypes);
-            var body = Walk<Body>(element.BlockBody);
-
-            element.Value = new Decl.Primitive(element, prelude, name, cases, body);
-        }
-
         protected override void Visit(CInfixDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);

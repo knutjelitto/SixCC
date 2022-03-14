@@ -10,7 +10,7 @@ namespace Six.Six
     {
         public void Run(S.Module smodule)
         {
-            if (smodule.Errors)
+            if (smodule.HasErrors)
             {
                 return;
             }
@@ -29,6 +29,12 @@ namespace Six.Six
 
             result = GetFunction(store, instance, "six.core.function_reference").Invoke(store, 2, 3);
             Assert(result is int value2 && value2 == 5);
+
+            result = GetFunction(store, instance, "six.core.min").Invoke(store, 2, 3);
+            Assert(result is int value3 && value3 == 2);
+
+            result = GetFunction(store, instance, "six.core.min").Invoke(store, 3, 2);
+            Assert(result is int value4 && value4 == 2);
         }
 
         private Function GetFunction(Store store, Instance instance, string name)

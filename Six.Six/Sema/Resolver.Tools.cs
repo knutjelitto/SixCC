@@ -9,21 +9,21 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Expr.Concrete NaturalConst(A.Expression.NaturalNumber tree)
+        public Expr NaturalConst(A.Expression.NaturalNumber tree)
         {
             var value = ConvertNatural(tree.Text);
 
             if (value > long.MaxValue)
             {
-                return new Expr.ConstU64(Builtins.Resolve(Names.Core.UInt64), value);
+                return new Expression.ConstU64(Builtins.Resolve(Names.Core.UInt64), value);
             }
             else if (value > int.MaxValue)
             {
-                return new Expr.ConstI64(Builtins.Resolve(Names.Core.Int64), (long)value);
+                return new Expression.ConstI64(Builtins.Resolve(Names.Core.Int64), (long)value);
             }
             else
             {
-                return new Expr.ConstI32(Builtins.Resolve(Names.Core.Int32), (int)value);
+                return new Expression.ConstI32(Builtins.Resolve(Names.Core.Int32), (int)value);
             }
         }
 

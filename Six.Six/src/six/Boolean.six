@@ -1,8 +1,6 @@
 namespace six.core;
 
-shared alias bool => Boolean;
-
-shared primitive Boolean of true | false
+shared native class Boolean of true | false
 {
     shared native prefix Boolean !  ();
     shared native infix Boolean | (Boolean rhs);
@@ -12,13 +10,14 @@ shared primitive Boolean of true | false
 
 shared object true : Boolean
 {
-    int hash => 1234;
-    string string => "true";
+    shared int hash => 1234;
+    shared string string => "true";
 }
 
 shared object false : Boolean
 {
-    int hash => 4321;
-    string string => "false";
+    shared int hash => 4321;
+    shared string string => "false";
 }
 
+shared alias bool => Boolean;

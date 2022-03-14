@@ -19,6 +19,7 @@ namespace Six.Six.Sema
 
         public Module Module => Parent.Module;
         public Resolver Resolver => Module.Resolver;
+        public Errors Errors => Module.Errors;
 
         public string Name { get; }
         public Scope Parent { get; }
@@ -48,8 +49,7 @@ namespace Six.Six.Sema
                 return decl;
             }
 
-            throw new DiagnosticException(
-                new SemanticError(tree.GetLocation(), $"can't find ``{tree}´´"));
+            throw Errors.CantResolve(tree, name);
         }
 
         public Decl Resolve(A.TreeNode tree, string name)
@@ -60,8 +60,7 @@ namespace Six.Six.Sema
             }
             if (Parent is Module)
             {
-                throw new DiagnosticException(
-                    new SemanticError(tree.GetLocation(), $"can't find ``{tree}´´"));
+                throw Errors.CantResolve(tree, name);
             }
 
             return Parent.Resolve(tree, name);
@@ -72,14 +71,12 @@ namespace Six.Six.Sema
             if (member is Decl decl)
             {
                 name ??= decl.Name.Text;
-                if (declarations.ContainsKey(name))
+
+                if (declarations.TryGetValue(name, out var already))
                 {
-                    DupError(decl);
+                    throw Errors.DupError(decl, already);
                 }
-                else
-                {
-                    declarations[name] = decl;
-                }
+                declarations.Add(name, decl);
             }
             members.Add(member);
 
@@ -89,30 +86,16 @@ namespace Six.Six.Sema
         public T Declare<T>(T decl, string? name = null) where T : Decl
         {
             name ??= decl.Name.Text;
-            if (declarations.ContainsKey(name))
+
+            if (declarations.TryGetValue(name, out var already))
             {
-                DupError(decl);
+                throw Errors.DupError(decl, already);
             }
-            else
-            {
-                declarations[name] = decl;
-            }
+            declarations.Add(name, decl);
 
             members.Add(decl);
 
             return decl;
-        }
-
-        private void DupError(Decl named)
-        {
-            if (!declarations.TryGetValue(named.Name.Text, out var already))
-                throw new System.InvalidOperationException("--internal--");
-
-            var diagnostic1 = new SemanticError(named.ADecl.GetLocation(), $"identifier '{named.Name}' already introduced elsewhere");
-            var diagnostic2 = new SemanticError(already.ADecl.GetLocation(), $"identifier '{already.Name}' introduced here");
-
-            Module.Add(diagnostic1);
-            Module.Add(diagnostic2);
         }
     }
 }

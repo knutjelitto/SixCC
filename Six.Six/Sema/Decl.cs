@@ -25,6 +25,9 @@ namespace Six.Six.Sema
 
         public abstract class Classy : WithMembers
         {
+            private Type? extends;
+
+
             private Classy(ClassyScope scope, A.Decl.Classy aDecl)
                 : base(scope, aDecl)
             {
@@ -43,65 +46,52 @@ namespace Six.Six.Sema
             public override Type Type { get; }
 
             public override string FullName => Scope.FullName;
-        }
 
-        public class Primitive : Classy
-        {
-            public Primitive(Scope parent, A.Decl.Primitive aDecl)
-                : base(parent, aDecl)
+            public Type? Extends => HandleExtends(ref extends);
+
+            protected Type? HandleExtends(ref Type? extends)
             {
+                if (extends == null)
+                {
+                    if (ADecl is A.With.Extends ext && ext.Extends is A.Type extended)
+                    {
+                        extends = ResolveType(Scope, extended);
+                    }
+                    else if (!ADecl.IsNative())
+                    {
+                        var basicDecl = Module.CoreFind(ADecl, Names.Core.Basic);
+                        extends = new Type.Reference(basicDecl);
+                    }
+                }
+                return extends;
             }
         }
 
         public class Class : Classy
         {
-            private Type? extends;
-
             public Class(Scope parent, A.Decl.Class aDecl)
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
             }
 
-            public Layout Layout { get; } = new Layout(null);
-
-            public Type Extends
-            {
-                get
-                {
-                    if (extends == null)
-                    {
-                        if (((A.With.Extends)ADecl).Extends is A.Type extended)
-                        {
-                            extends = ResolveType(Scope, extended);
-                        }
-                        else
-                        {
-                            var basicDecl = Module.CoreFind(ADecl, Names.Core.Basic);
-                            extends = new Type.Reference(basicDecl);
-                        }
-                    }
-                    return extends;
-                }
-            }
-
-            public override string ToString()
-            {
-                return $"{Name}";
-            }
-        }
-
-        public class Interface : Classy
-        {
-            public Interface(Scope parent, A.Decl.Interface aDecl)
-                : base(parent, aDecl)
-            {
-            }
+            public override string ToString() => $"{Name}";
         }
 
         public class Object : Classy
         {
             public Object(Scope parent, A.Decl.Object aDecl)
+                : base(parent, aDecl)
+            {
+                Assert(aDecl is A.With.Extends);
+            }
+
+            public override string ToString() => $"{Name}";
+        }
+
+        public class Interface : Classy
+        {
+            public Interface(Scope parent, A.Decl.Interface aDecl)
                 : base(parent, aDecl)
             {
             }
@@ -188,13 +178,26 @@ namespace Six.Six.Sema
 
         public sealed class Parameter : Local
         {
-            public Parameter(FuncyScope Container, A.Decl.Parameter ADecl, int index)
+            private LazyExpr? @default;
+
+            public Parameter(FuncyScope Container, A.Decl.Parameter ADecl, int index, LazyExpr? @default)
                 : base(Container, ADecl, index)
             {
                 Assert(ADecl is A.With.Type);
+                this.@default = @default;
             }
 
-            public Expr.Concrete? Default { get; set; }
+            public Expr? Default
+            { 
+                get
+                {
+                    if (@default != null)
+                    {
+                        return @default.Expr;
+                    }
+                    return null;
+                }
+            }
 
             public override Type Type =>
                 type ??= ResolveType(Container, ((A.With.Type)ADecl).Type);
@@ -203,8 +206,8 @@ namespace Six.Six.Sema
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {SelfName}")]
         public sealed class SelfParameter : Local
         {
-            public SelfParameter(FuncyScope Container, A.Decl.Funcy ADecl, Type type, int index)
-                : base(Container, ADecl, index)
+            public SelfParameter(FuncyScope Container, Type type, int index)
+                : base(Container, new A.Decl.SelfValue(new A.Name.ArtificalId(Names.Core.SelfValue)), index)
             {
                 Type = type;
             }
@@ -216,7 +219,7 @@ namespace Six.Six.Sema
 
         public abstract class LetVar : Local
         {
-            private readonly Expr.Delayed value;
+            private readonly LazyExpr value;
 
             public LetVar(Scope Container, A.Decl ADecl, int index)
                 : base(Container, ADecl, index)
@@ -249,12 +252,12 @@ namespace Six.Six.Sema
                 }
             }
 
-            public Expr.Concrete Value
+            public Expr Value
             { 
                 get
                 {
-                    Assert(value.Resolved != null);
-                    return value.Resolved!;
+                    Assert(value.Expr != null);
+                    return value.Expr!;
                 }
             }
         }
@@ -339,6 +342,7 @@ namespace Six.Six.Sema
 
             public Scope Container { get; }
             public A.Decl ADecl { get; }
+            public A.TreeNode ANode => ADecl;
             public abstract Type Type { get; }
             public A.Name Name => ADecl.Name;
             public abstract string FullName { get; }
@@ -346,9 +350,10 @@ namespace Six.Six.Sema
             public Module Module => Container.Module;
             public Resolver Resolver => Module.Resolver;
 
+
             public Type ResolveType(Scope scope, A.Type tree) => Resolver.ResolveType(scope, tree);
             public Type ResolveType(Type type) => Resolver.ResolveType(type) ?? throw new InvalidOperationException();
-            public Expr.Delayed ResolveExpression(Scope scope, A.Expression node) => Resolver.ResolveExpression(scope, node);
+            public LazyExpr ResolveExpression(Scope scope, A.Expression node) => Resolver.ResolveExpression(scope, node);
         }
     }
 }

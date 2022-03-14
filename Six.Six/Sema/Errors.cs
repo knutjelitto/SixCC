@@ -1,0 +1,43 @@
+﻿using Six.Core.Errors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using A = Six.Six.Ast;
+
+namespace Six.Six.Sema
+{
+    public class Errors
+    {
+        public Errors(Module module)
+        {
+            Module = module;
+        }
+
+        public Module Module { get; }
+
+        public DiagnosticException DupError(Decl named, Decl already)
+        {
+            var diagnostic1 = new SemanticError(named.GetLocation(), $"identifier '{named.Name}' already introduced elsewhere");
+            var diagnostic2 = new SemanticError(already.GetLocation(), $"identifier '{already.Name}' introduced here");
+
+            throw new DiagnosticException(diagnostic1, diagnostic2);
+        }
+
+        public DiagnosticException CantResolve(A.TreeNode tree, string name)
+        {
+            var diagnostic = new SemanticError(tree.GetLocation(), $"can't find ``{name}´´");
+
+            throw new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException TypeMismatch(A.TreeNode tree, Type expected, Type actual)
+        {
+            var diagnostic = new SemanticError(tree.GetLocation(), $"expected type ``{expected}´´ but found ``{actual}´´");
+
+            throw new DiagnosticException(diagnostic);
+        }
+
+    }
+}

@@ -20,6 +20,16 @@ namespace Six.Six.Instructions
             });
         }
 
+        private void comment(Action action)
+        {
+            indent("(;", ";)", action);
+        }
+
+        private void WalkExpr(Expr expr)
+        {
+            Expr((dynamic)expr);
+        }
+
         private void Walker(Entity decl)
         {
             Walk((dynamic)decl);
@@ -41,15 +51,30 @@ namespace Six.Six.Instructions
             });
         }
 
+        private string Extends(Decl.Classy decl)
+        {
+            if (decl.Extends != null)
+            {
+                return $" : {decl.Extends}";
+            }
+            return "";
+        }
+
         private void Walk(Decl.Classy decl)
         {
-            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}");
+            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
             WalkMembers(decl);
         }
 
         private void Walk(Decl.Class decl)
         {
-            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName} : {decl.Extends}");
+            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
+            WalkMembers(decl);
+        }
+
+        private void Walk(Decl.Object decl)
+        {
+            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
             WalkMembers(decl);
         }
 
@@ -64,9 +89,66 @@ namespace Six.Six.Instructions
             WalkMembers(decl);
         }
 
-        private void comment(Action action)
+        private void Walk(Stmt.Assign stmt)
         {
-            indent("(;", ";)", action);
+            WalkExpr(stmt.Left);
+            w(" = ");
+            WalkExpr(stmt.Right);
+            wl(";");
         }
+
+
+        private void Walk(Stmt.Return stmt)
+        {
+            w("return");
+            if (stmt.Expr != null)
+            {
+                w(" ");
+                WalkExpr(stmt.Expr);
+            }
+            wl(";");
+        }
+
+        private void Expr(Expr expr)
+        {
+            Assert(false);
+            w(":::");
+        }
+
+        private void Expr(Expr.Reference expr)
+        {
+            w($"{expr.Decl.Name}");
+        }
+
+        private void Expr(Expr.SelectAttribute expr)
+        {
+            w($"{expr.Reference.Decl.Name}");
+            w(".");
+            w($"{expr.Attribute.Name}");
+        }
+
+        private void Expr(Expr.CallConstructor expr)
+        {
+            w($"{expr.Class.Name}.{expr.Ctor.Name}(");
+            var more = false;
+            foreach (var arg in expr.Arguments)
+            {
+                if (more)
+                {
+                    w(",");
+                }
+                WalkExpr(arg);
+            }
+            w(")");
+        }
+
+        private void Expr(Expr.Binop expr)
+        {
+            Assert(false);
+            w(":::");
+        }
+
+
+
     }
 }

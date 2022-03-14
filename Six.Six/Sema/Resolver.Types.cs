@@ -12,12 +12,6 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type? ResolveExprType(Expr.Concrete? expr)
-        {
-            Debug.Assert(expr != null && expr.Type != null);
-            return ResolveType(expr.Type);
-        }
-
         public Type ResolveDeclType(Decl decl)
         {
             if (decl is Decl.Classy)
@@ -27,42 +21,33 @@ namespace Six.Six.Sema
             return ResolveType(decl.Type);
         }
 
-        public Type? EvalType(Type? type)
-        {
-            if (type != null)
-            {
-                switch (type)
-                {
-                    case Type.Callable callable:
-                        return ResolveType(callable.Result);
-                    default:
-                        return ResolveType(type);
-                }
-            }
-            return type;
-        }
-
         public Type ResolveType(Type type)
         {
             if (type is Type.Reference reference)
             {
-                if (reference.Decl.ADecl is A.Decl.Primitive primitive)
-                {
-                    var name = primitive.Name.Text;
-
-                    Assert(true);
-
-                    var builtin = Builtins.Resolve(name);
-
-                    return builtin;
-                }
-                else if (reference.Decl.ADecl is A.Decl.Alias alias)
+                if (reference.Decl.ADecl is A.Decl.Alias alias)
                 {
                     return ResolveType(reference.Decl.Container, alias.Type);
                 }
                 return ResolveDeclType(reference.Decl);
             }
             return type;
+        }
+
+
+        public Type LowerType(Type type)
+        {
+            var resolved = ResolveType(type);
+
+            if (resolved is Type.Declared declared)
+            {
+                if (declared.Decl.IsNative())
+                {
+                    return Builtins.Resolve(declared.Decl);
+                }
+            }
+
+            return resolved;
         }
 
         public Type ResolveType(Scope scope, A.Type tree)
@@ -96,12 +81,6 @@ namespace Six.Six.Sema
             var resolved = scope.Resolve(tree, tree.Name.Text);
             var xxx = ResolveDeclType(resolved);
 
-            if (resolved.ADecl is A.Decl.Primitive primitive)
-            {
-                var builtin = Builtins.Resolve(primitive.Name.Text);
-
-                return builtin;
-            }
             if (xxx != null)
             {
                 return xxx;

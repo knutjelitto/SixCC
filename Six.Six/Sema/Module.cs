@@ -12,6 +12,7 @@ namespace Six.Six.Sema
     {
         public static readonly string Language = "six";
         public static readonly string LanguageCore = "core";
+        public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
         public static readonly string DefaultCtor = "@default.ctor";
 
         private readonly List<Diagnostic> Diagnostics = new();
@@ -22,14 +23,16 @@ namespace Six.Six.Sema
             Name = "six";
             Resolver = new Resolver(this);
             Builtins = new Builtins.Builtins(this);
+            Errors = new Errors(this);
         }
 
         public Namespace Root { get; }
         public string Name { get; }
         public Resolver Resolver { get; }
         public Builtins.Builtins Builtins { get; }
+        public Errors Errors { get; }
 
-        public bool Errors => Diagnostics.Count > 0;
+        public bool HasErrors => Diagnostics.Count > 0;
 
         public string Emit()
         {

@@ -14,7 +14,6 @@ namespace Six.Six.Instructions
             return
                 module.GetDeclarations().OfType<Decl.Class>().Cast<Decl.Classy>()
                 .Concat(module.GetDeclarations().OfType<Decl.Interface>())
-                .Concat(module.GetDeclarations().OfType<Decl.Primitive>())
                 .Concat(module.GetDeclarations().OfType<Decl.Object>())
                 .SelectMany(cls => cls.Members);
         }

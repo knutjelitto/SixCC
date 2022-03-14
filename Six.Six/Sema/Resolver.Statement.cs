@@ -18,77 +18,42 @@ namespace Six.Six.Sema
 
         private void Statement(BlockScope container, A.Stmt.Assign node)
         {
-            var stmt = container.AddMember(new Stmt.Assign(container, node));
+            var stmt = container.AddMember(
+                new Stmt.Assign(
+                    container, 
+                    node,
+                    ResolveExpression(container, node.Left),
+                    ResolveExpression(container, node.Right)));
             CurrentFunction.Members.Add(stmt);
-
-            var left = ResolveExpression(container, node.Left);
-            var right = ResolveExpression(container, node.Right);
-
-            ScheduleExpr(() =>
-            {
-                if (left.Resolved != null && right.Resolved != null)
-                {
-                    stmt.Left = left.Resolved;
-                    stmt.Right = right.Resolved;
-                }
-                else
-                {
-                    Assert(Module.Errors);
-                }
-            });
         }
 
         private void Statement(BlockScope container, A.Stmt.Return node)
         {
-            var stmt = container.AddMember(new Stmt.Return(container, node));
-            CurrentFunction.Members.Add(stmt);
-
-            if (node.Expression != null)
+            if (CurrentFunction is Decl.Function function)
             {
-                var expr = ResolveExpression(container, node.Expression);
-
-                ScheduleExpr(() =>
-                {
-                    if (expr.Resolved != null)
-                    {
-                        var function = CurrentFunction as Decl.Function;
-                        if (function != null)
-                        {
-                            var functionType = ResolveType(function.ResultType);
-                            var returnType = EvalType(expr.Resolved.Type);
-
-                            if (ReferenceEquals(functionType, returnType))
-                            {
-                                stmt.Expr = expr.Resolved;
-                            }
-                            else
-                            {
-                                Assert(Module.Errors);
-                            }
-                        }
-                        else
-                        {
-                            Assert(Module.Errors);
-                        }
-                    }
-                    else
-                    {
-                        Assert(Module.Errors);
-                    }
-                });
+                var stmt = container.AddMember(new Stmt.Return(
+                    container,
+                    node,
+                    function,
+                    node.Expression == null ? null : ResolveExpression(container, node.Expression)));
+                function.Members.Add(stmt);
+            }
+            else
+            {
+                Assert(false);
             }
         }
 
         private void Statement(BlockScope container, A.Stmt.Expr node)
         {
             Assert(false);
-            container.AddMember(new Statement(container, node));
+            throw new NotImplementedException();
         }
 
         private void Statement(BlockScope container, A.Stmt node)
         {
             Assert(false);
-            container.AddMember(new Statement(container, node));
+            throw new NotImplementedException();
         }
     }
 }

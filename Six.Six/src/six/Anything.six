@@ -1,6 +1,6 @@
 namespace six.core;
 
-shared abstract primitive Anything of Object | Null
+shared abstract native class Anything of Object | Null
 {
 }
 

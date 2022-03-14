@@ -9,8 +9,8 @@ namespace Six.Six.Builtins
 {
     public sealed class Anything : Builtin
     {
-        public Anything()
-            : base(Names.Core.Anything)
+        public Anything(Builtins builtins)
+            : base(builtins, Names.Core.Anything)
         { }
 
         public override string AsWasm => $"i32";

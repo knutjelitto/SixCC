@@ -6,7 +6,7 @@ namespace Six.Six.Builtins
 {
     public class F64 : Floating
     {
-        public F64() : base(Names.Core.Float64)
+        public F64(Builtins builtins) : base(builtins, Names.Core.Float64)
         {
             prefix.Add("-", Neg);
             infix.Add("+", Add);
@@ -17,43 +17,43 @@ namespace Six.Six.Builtins
 
         public override string AsWasm => "f64";
 
-        public Expr.Unop Neg(Expr.Concrete right)
+        public Expression.Unop Neg(Expr right)
         {
-            Assert(ReferenceEquals(right.Type, this));
+            IsThis(right);
 
-            return new Expr.Unop(this, Insn.F64.Neg, right);
+            return new Expression.Unop(this, Insn.F64.Neg, right);
         }
 
-        public Expr.Primitive Add(Expr.Concrete left, Expr.Concrete right)
+        public Expression.Primitive Add(Expr left, Expr right)
         {
-            Assert(ReferenceEquals(left.Type, this));
-            Assert(ReferenceEquals(right.Type, this));
+            IsThis(left);
+            IsThis(right);
 
-            return new Expr.Binop(this, Insn.F64.Add, left, right);
+            return new Expression.Binop(this, Insn.F64.Add, left, right);
         }
 
-        public Expr.Primitive Sub(Expr.Concrete left, Expr.Concrete right)
+        public Expression.Primitive Sub(Expr left, Expr right)
         {
-            Assert(ReferenceEquals(left.Type, this));
-            Assert(ReferenceEquals(right.Type, this));
+            IsThis(left);
+            IsThis(right);
 
-            return new Expr.Binop(this, Insn.F64.Sub, left, right);
+            return new Expression.Binop(this, Insn.F64.Sub, left, right);
         }
 
-        public Expr.Primitive Mul(Expr.Concrete left, Expr.Concrete right)
+        public Expression.Primitive Mul(Expr left, Expr right)
         {
-            Assert(ReferenceEquals(left.Type, this));
-            Assert(ReferenceEquals(right.Type, this));
+            IsThis(left);
+            IsThis(right);
 
-            return new Expr.Binop(this, Insn.F64.Mul, left, right);
+            return new Expression.Binop(this, Insn.F64.Mul, left, right);
         }
 
-        public Expr.Primitive Div(Expr.Concrete left, Expr.Concrete right)
+        public Expression.Primitive Div(Expr left, Expr right)
         {
-            Assert(ReferenceEquals(left.Type, this));
-            Assert(ReferenceEquals(right.Type, this));
+            IsThis(left);
+            IsThis(right);
 
-            return new Expr.Binop(this, Insn.F64.Div, left, right);
+            return new Expression.Binop(this, Insn.F64.Div, left, right);
         }
     }
 }

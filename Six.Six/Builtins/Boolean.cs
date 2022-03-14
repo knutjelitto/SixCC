@@ -9,8 +9,8 @@ namespace Six.Six.Builtins
 {
     public sealed class Boolean : Builtin
     {
-        public Boolean()
-            : base(Names.Core.Boolean)
+        public Boolean(Builtins builtins)
+            : base(builtins, Names.Core.Boolean)
         { }
 
         public override string AsWasm => $"i32";

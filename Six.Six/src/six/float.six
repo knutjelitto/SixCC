@@ -1,16 +1,16 @@
 namespace six.core;
 
-shared primitive f32
+shared native class f32
 {
 }
 
-shared primitive f64
+shared shared native class f64
 {
-    shared prefix f64 - ();
-    shared infix f64 + (f64 rhs);
-    shared infix f64 - (f64 rhs);
-    shared infix f64 * (f64 rhs);
-    shared infix f64 / (f64 rhs);
+    shared native prefix f64 - ();
+    shared native infix f64 + (f64 rhs);
+    shared native infix f64 - (f64 rhs);
+    shared native infix f64 * (f64 rhs);
+    shared native infix f64 / (f64 rhs);
 }
 
 shared alias float => f32;

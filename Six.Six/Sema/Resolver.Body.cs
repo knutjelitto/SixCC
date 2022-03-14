@@ -52,16 +52,7 @@ namespace Six.Six.Sema
         {
             var delayed = ResolveExpression(container, node.Expression);
 
-            return new Body.Value(() =>
-            {
-                if (delayed.Resolved != null)
-                {
-                    return delayed.Resolved;
-                }
-
-                throw new DiagnosticException(
-                    new SemanticError(node.GetLocation(), $"can't resolve expression ``{node}´´"));
-            });
+            return new Body.Value(() => delayed.Expr);
         }
 
         private Body Body(BlockScope container, A.Body.Calc node)

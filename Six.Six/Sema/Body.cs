@@ -8,10 +8,10 @@ namespace Six.Six.Sema
 {
     public interface Body
     {
-        public record Value(Func<Expr.Concrete> Resolver) : Body
+        public record Value(Func<Expr> Resolver) : Body
         {
-            private Expr.Concrete? concrete;
-            public Expr.Concrete Expr => concrete ??= Resolver();
+            private Expr? concrete;
+            public Expr Expr => concrete ??= Resolver();
         }
 
         public record Dummy() : Body

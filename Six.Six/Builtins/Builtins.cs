@@ -11,15 +11,17 @@ namespace Six.Six.Builtins
         {
             Module = module;
 
-            Add(new S32());
-            var u32 = Add(new U32());
-            Add(new F32());
-            Add(new F64());
-            Add(new Anything());
-            Add(new Boolean());
-
-            TableIndex = u32;
+            Add(new S32(this));
+            TableIndex = Add(new U32(this));
+            Add(new F32(this));
+            Add(new F64(this));
+            Add(new Anything(this));
+            Boolean = Add(new Boolean(this));
+            Bytes = Add(new Bytes(this));
         }
+        public Builtin TableIndex { get; }
+        public Builtin Boolean { get; }
+        public Builtin Bytes { get; }
 
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
@@ -30,7 +32,10 @@ namespace Six.Six.Builtins
             return builtin;
         }
 
-        public Builtin TableIndex { get; }
+        public Builtin Resolve(Decl named)
+        {
+            return Resolve(named.Name.Text);
+        }
 
         public Builtin Resolve(string name)
         {

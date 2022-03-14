@@ -39,6 +39,9 @@ namespace Six.Six.Instructions
         public static Insn ToDo(string text) => new ToDoInsn(text);
 
         public static Insn Return { get; } = new Simplest("return");
+        public static Insn If { get; } = new Simplest("if");
+        public static Insn Else { get; } = new Simplest("else");
+        public static Insn End { get; } = new Simplest("end");
 
         public static Insn Drop { get; } = new Simplest("drop");
 
@@ -59,6 +62,10 @@ namespace Six.Six.Instructions
             public static Insn Mul => Binop.Mul(ValueType.I32);
             public static Insn Div => Binop.DivS(ValueType.I32);
             public static Insn Rem => Binop.RemS(ValueType.I32);
+            public static Insn Lt => Binop.LtS(ValueType.I32);
+            public static Insn Le => Binop.LeS(ValueType.I32);
+            public static Insn Gt => Binop.GtS(ValueType.I32);
+            public static Insn Ge => Binop.GeS(ValueType.I32);
         }
 
         public static class U32
@@ -152,6 +159,14 @@ namespace Six.Six.Instructions
             public static Insn DivU(ValueType type) => new Binop(type, "div", OpSign.Unsigned);
             public static Insn RemS(ValueType type) => new Binop(type, "rem", OpSign.Signed);
             public static Insn RemU(ValueType type) => new Binop(type, "rem", OpSign.Unsigned);
+            public static Insn LtS(ValueType type) => new Binop(type, "lt", OpSign.Signed);
+            public static Insn LtU(ValueType type) => new Binop(type, "lt", OpSign.Unsigned);
+            public static Insn LeS(ValueType type) => new Binop(type, "le", OpSign.Signed);
+            public static Insn LeU(ValueType type) => new Binop(type, "le", OpSign.Unsigned);
+            public static Insn GtS(ValueType type) => new Binop(type, "gt", OpSign.Signed);
+            public static Insn GtU(ValueType type) => new Binop(type, "gt", OpSign.Unsigned);
+            public static Insn GeS(ValueType type) => new Binop(type, "ge", OpSign.Signed);
+            public static Insn GeU(ValueType type) => new Binop(type, "ge", OpSign.Unsigned);
         }
 
         public class Const : Insn

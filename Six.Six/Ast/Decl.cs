@@ -75,6 +75,11 @@ namespace Six.Six.Ast
         public interface Classy : Preluded, With.Body { }
         public interface Funcy : Preluded, With.Parameters, With.Body { }
 
+        public sealed record SelfValue(Name Name) : Decl, With.Name
+        {
+            public IRNode Tree => Name.Tree;
+        }
+
         public sealed record Let(
             IRNode Tree, 
             Prelude Prelude, 
@@ -159,10 +164,21 @@ namespace Six.Six.Ast
             Type.Types? Cases,
             Body Body)
             : Classy,
-              With.Extends,
               With.Generics,
+              With.Extends,
               With.Satisfies,
               With.Cases;
+
+        public sealed record Object(
+            IRNode Tree,
+            Prelude Prelude,
+            Name Name,
+            Type? Extends,
+            Type.Types? Satisfies,
+            Body Body)
+            : Classy,
+              With.Extends,
+              With.Satisfies;
 
         public sealed record Interface(
             IRNode Tree, 
@@ -177,21 +193,6 @@ namespace Six.Six.Ast
               With.Generics,
               With.Satisfies,
               With.Cases;
-
-        public sealed record Primitive(IRNode Tree, Prelude Prelude, Name Name, Type.Types? Cases, Body Body)
-            : Classy,
-              With.Cases;
-
-        public sealed record Object(
-            IRNode Tree,
-            Prelude Prelude,
-            Name Name,
-            Type? Extends,
-            Type.Types? Satisfies,
-            Body Body)
-            : Classy,
-              With.Extends,
-              With.Satisfies;
 
         public sealed record Alias(
             IRNode Tree,

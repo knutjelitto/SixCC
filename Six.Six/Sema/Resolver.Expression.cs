@@ -36,190 +36,250 @@ namespace Six.Six.Sema
             return PrefixName(node.Name);
         }
 
-        public Expr.Delayed ResolveExpression(Scope scope, A.Expression node)
+        public LazyExpr ResolveExpression(Scope scope, A.Expression node)
         {
             return Expression(scope, (dynamic)node);
         }
 
-        private Expr.Delayed Expression(Scope container, A.Expression node)
+        private LazyExpr Expression(Scope container, A.Expression node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
-        private Expr.Delayed Expression(Scope container, A.Expression.Select node)
+        private LazyExpr Expression(Scope container, A.Expression.If node)
         {
-            var delayed = new Expr.Delayed();
-
-            if (node.Expr is A.Reference reference && reference.Name.Text == Names.Core.SelfValue)
+            return new LazyExpr(Module, () =>
             {
-                Assert(true);
-            }
+                var condition = ExpressionConditions(container, node.Conditions);
+                var then = ResolveExpression(container, node.Then);
+                var @else = ResolveExpression(container, node.Else);
 
-            var primary = ResolveExpression(container, node.Expr);
+                return new Expression.If(condition, then, @else);
+            });
+        }
 
-            ScheduleExpr(() =>
+        private LazyExpr ExpressionConditions(Scope container, IEnumerable<A.Expression> nodes)
+        {
+            var conditions = nodes.ToList();
+            Assert(conditions.Count >= 1);
+
+            return new LazyExpr(Module, () =>
             {
-                if (primary.Resolved != null)
+                var first = ResolveExpression(container, conditions[0]);
+
+                if (conditions.Count == 1)
                 {
-                    if (primary.Resolved is Expr.ClassyReference classyRef)
-                    {
-                        var found = classyRef.ClassyFind(node.Reference);
-
-                        if (found is Decl.Attribute attribute)
-                        {
-                            Assert(attribute.IsStatic());
-                            Assert(attribute.Type != null);
-                            delayed.Resolved = new Expr.SelectAttribute(classyRef, attribute, attribute.Type);
-                        }
-                        else
-                        {
-                            Assert(false);
-                        }
-                    }
-                    else if (primary.Resolved is Expr.ConstructorReference constructorReference)
-                    {
-                        var found = ResolveType(constructorReference.ConstructorDecl.Type);
-
-                        if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                        {
-                            var referenced = classy.Scope.Block.Resolve(node.Reference, node.Reference.Name.Text);
-                            Assert(false);
-                        }
-                        else
-                        {
-                            Assert(Module.Errors);
-                        }
-                    }
-                    else if (primary.Resolved is Expr.ParameterReference parameterReference)
-                    {
-                        var found = ResolveType(parameterReference.ParameterDecl.Type);
-
-                        if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                        {
-                            var referenced = classy.ClassyFind(node.Reference);
-
-                            Assert(false);
-                        }
-                        else
-                        {
-                            Assert(Module.Errors);
-                        }
-                    }
-                    else
-                    {
-                        Assert(Module.Errors);
-                    }
+                    return first.Expr;
                 }
                 else
                 {
-                    Assert(Module.Errors);
+                    Assert(conditions.Count > 1);
+                    return new Expression.AndThen(first, ExpressionConditions(container, conditions.Skip(1)));
                 }
             });
 
-            return delayed;
         }
 
-        private Expr.Delayed Expression(Scope container, A.Expression.Call node)
+        private LazyExpr Expression(Scope container, A.Expression.Select node)
         {
-            var delayed = new Expr.Delayed();
-
-            var function = ResolveExpression(container, node.Expr);
-            var args = ResolveArguments(container, node.Arguments).ToList();
-
-            ScheduleExpr(() =>            
+            return new LazyExpr(Module, () =>
             {
-                if (function.Resolved != null && args.All(arg => arg.Resolved != null))
+                var primary = ResolveExpression(container, node.Expr);
+
+                if (primary.Expr is Expression.ClassyReference classyRef)
                 {
-                    if (function.Resolved is Expr.FunctionReference reference)
+                    var found = classyRef.ClassyFind(node.Reference);
+
+                    if (found is Decl.Attribute attribute)
                     {
-                        var callable = reference.FunctionDecl.Type as Type.Callable;
-                        Assert(callable != null);
-                        var prms = reference.FunctionDecl.Parameters;
-
-                        Assert(prms.Count >= args.Count);
-                        var arguments = new List<Expr.Concrete>();
-
-                        var index = 0;
-                        for (; index < Math.Min(prms.Count, args.Count); ++index)
-                        {
-                            var argType = ResolveExprType(args[index].Resolved);
-                            var prmType = ResolveDeclType(prms[index]);
-
-                            Assert(ReferenceEquals(argType, prmType));
-
-                            arguments.Add(args[index].Resolved!);
-                        }
-                        for (; index < prms.Count; ++index)
-                        {
-                            if (prms[index] is Decl.Parameter param)
-                            {
-                                Assert(param.Default != null);
-
-                                arguments.Add(param.Default!);
-                            }
-                            else
-                            {
-                                Assert(prms[index] is Decl.Parameter);
-                            }
-                        }
-
-                        Assert(arguments.Count == prms.Count);
-
-                        delayed.Resolved = new Expr.CallFunction(reference, arguments);
-                    }
-                    else if (function.Resolved is Expr.LocalReference local)
-                    {
-                        ResolveIndirect(local, local.LocalDecl.Type as Type.Callable);
-                    }
-                    else if (function.Resolved is Expr.ParameterReference parameter)
-                    {
-                        ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
+                        Assert(attribute.IsStatic());
+                        return new Expression.SelectAttribute(classyRef, attribute);
                     }
                     else
                     {
                         Assert(false);
                     }
+                }
+                else if (primary.Expr is Expression.ConstructorReference constructorReference)
+                {
+                    var found = ResolveType(constructorReference.ConstructorDecl.Type);
 
-                    void ResolveIndirect(Expr.Concrete value, Type.Callable? callable)
+                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        Assert(callable != null);
-                        var prms = callable.Parameters;
+                        var referenced = classy.Scope.Block.Resolve(node.Reference, node.Reference.Name.Text);
 
-                        Assert(prms.Count >= args.Count);
-                        var arguments = new List<Expr.Concrete>();
+                        Assert(false);
+                    }
+                    else
+                    {
+                        Assert(Module.HasErrors);
+                    }
+                }
+                else if (primary.Expr is Expression.ParameterReference parameterReference)
+                {
+                    var found = ResolveType(parameterReference.ParameterDecl.Type);
 
-                        var index = 0;
-                        for (; index < Math.Min(prms.Count, args.Count); ++index)
+                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                    {
+                        var referenced = classy.ClassyFind(node.Reference);
+
+                        if (referenced is Decl.Attribute attribute)
                         {
-                            var argType = ResolveExprType(args[index].Resolved);
-                            var prmType = ResolveType(prms[index]);
-
-                            Assert(ReferenceEquals(argType, prmType));
-
-                            arguments.Add(args[index].Resolved!);
+                            return new Expression.SelectAttribute(parameterReference, attribute);
                         }
-                        for (; index < prms.Count; ++index)
+                        else
                         {
                             Assert(false);
                         }
-
-                        Assert(arguments.Count == prms.Count);
-
-                        delayed.Resolved = new Expr.CallIndirect(value, callable, arguments);
+                    }
+                    else
+                    {
+                        Assert(Module.HasErrors);
                     }
                 }
                 else
                 {
-                    Assert(Module.Errors);
+                    Assert(Module.HasErrors);
                 }
 
+                Assert(false);
+                throw new NotImplementedException();
             });
-
-            return delayed;
         }
 
-        private IEnumerable<Expr.Delayed> ResolveArguments(Scope container, A.Arguments arguments)
+        private LazyExpr Expression(Scope container, A.Expression.Call node)
+        {
+            return new LazyExpr(Module, () =>
+            {
+                var func = ResolveExpression(container, node.Expr);
+                var args = ResolveArguments(container, node.Arguments).ToList();
+
+                if (func.Expr is Expression.FunctionReference function)
+                {
+                    var callable = function.FunctionDecl.Type as Type.Callable;
+                    Assert(callable != null);
+                    var prms = function.FunctionDecl.Parameters;
+
+                    Assert(prms.Count >= args.Count);
+                    var arguments = new List<Expr>();
+
+                    var index = 0;
+                    for (; index < Math.Min(prms.Count, args.Count); ++index)
+                    {
+                        var argType = ResolveType(args[index].Expr.Type);
+                        var prmType = ResolveType(prms[index].Type);
+
+                        Assert(ReferenceEquals(argType, prmType));
+
+                        arguments.Add(args[index].Expr!);
+                    }
+                    for (; index < prms.Count; ++index)
+                    {
+                        if (prms[index] is Decl.Parameter param)
+                        {
+                            Assert(param.Default != null);
+
+                            arguments.Add(param.Default!);
+                        }
+                        else
+                        {
+                            Assert(prms[index] is Decl.Parameter);
+                        }
+                    }
+
+                    Assert(arguments.Count == prms.Count);
+
+                    return new Expression.CallFunction(function, arguments);
+                }
+                else if (func.Expr is Expression.ClassReference klassReference)
+                {
+                    var klass = klassReference.ClassDecl;
+                    var defaultCtor = klass.ClassyScope().Block.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
+                    Assert(defaultCtor != null);
+                    var callable = defaultCtor.Type as Type.Callable;
+                    Assert(callable != null);
+                    var prms = defaultCtor.Parameters;
+
+                    Assert(prms.Count > args.Count);
+                    var arguments = new List<Expr>();
+
+                    var index = 0;
+                    for (; index < args.Count; ++index)
+                    {
+                        var argType = LowerType(args[index].Expr.Type);
+                        var prmType = LowerType(prms[index+1].Type);
+
+                        Assert(ReferenceEquals(argType, prmType));
+
+                        arguments.Add(args[index].Expr);
+                    }
+                    for (; ++index < prms.Count; )
+                    {
+                        if (prms[index] is Decl.Parameter param)
+                        {
+                            Assert(param.Default != null);
+
+                            arguments.Add(param.Default!);
+                        }
+                        else
+                        {
+                            Assert(prms[index] is Decl.Parameter);
+                        }
+                    }
+
+                    Assert(arguments.Count == prms.Count - 1);
+
+                    return new Expression.CallConstructor(klass, defaultCtor, arguments);
+
+                }
+                else if (func.Expr is Expression.LocalReference local)
+                {
+                    return ResolveIndirect(local, local.LocalDecl.Type as Type.Callable);
+                }
+                else if (func.Expr is Expression.ParameterReference parameter)
+                {
+                    return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
+                }
+                else
+                {
+                    Assert(Module.HasErrors);
+                }
+
+                Assert(false);
+                throw new NotImplementedException();
+
+                Expr ResolveIndirect(Expr value, Type.Callable? callable)
+                {
+                    Assert(callable != null);
+                    var prms = callable.Parameters;
+
+                    Assert(prms.Count >= args.Count);
+                    var arguments = new List<Expr>();
+
+                    var index = 0;
+                    for (; index < Math.Min(prms.Count, args.Count); ++index)
+                    {
+                        var argType = ResolveType(args[index].Expr.Type);
+                        var prmType = ResolveType(prms[index]);
+
+                        Assert(ReferenceEquals(argType, prmType));
+
+                        arguments.Add(args[index].Expr!);
+                    }
+                    for (; index < prms.Count; ++index)
+                    {
+                        Assert(false);
+                    }
+
+                    Assert(arguments.Count == prms.Count);
+
+                   return new Expression.CallIndirect(value, callable, arguments);
+                }
+            });
+        }
+
+        private IEnumerable<LazyExpr> ResolveArguments(Scope container, A.Arguments arguments)
         {
             foreach (var argument in arguments)
             {
@@ -227,171 +287,141 @@ namespace Six.Six.Sema
             }
         }
 
-        private Expr.Delayed Expression(Scope container, A.Expression.Infix node)
+        private LazyExpr Expression(Scope container, A.Expression.Infix node)
         {
-            var delayed = new Expr.Delayed();
-
-            var left = ResolveExpression(container, node.Left);
-            var right = ResolveExpression(container, node.Right);
-
-            ScheduleExpr(() =>
+            return new LazyExpr(Module, () =>
             {
-                if (left.Resolved != null && right.Resolved != null)
-                {
-                    left.Resolved.Type = ResolveType(left.Resolved.Type!);
-                    right.Resolved.Type = ResolveType(right.Resolved.Type!);
+                var left = ResolveExpression(container, node.Left);
+                var right = ResolveExpression(container, node.Right);
 
-                    if (left.Resolved.Type is Type.Reference reference &&
-                        reference.Decl is Decl.Classy classy &&
-                        classy.Container is ContentScope content &&
-                        classy.ADecl is A.Decl.Primitive)
+                if (left.Expr.Type is Type.Reference reference &&
+                    reference.Decl is Decl.Classy classy)
+                {
+                    var infix = classy.Scope.Block.Find(node.Op, InfixName(node));
+                 
+                    if (infix.IsNative())
                     {
-                        var infix = content.Block.Find(node.Op, InfixName(node));
-                        var result = ResolveDeclType(infix);
-                        if (result is Type.Callable callable)
-                        {
-                            delayed.Resolved = new Expr.CallMember(callable, left, right);
-                        }
-                        else
-                        {
-                            Assert(false);
-                        }
+                        return Builtins.Resolve(classy).Infix(node.Op, left.Expr, right.Expr);
                     }
-                    else if (left.Resolved.Type is Type.Builtin builtin)
+
+                    var result = ResolveDeclType(infix);
+                    if (result is Type.Callable callable)
                     {
-                        delayed.Resolved = builtin.Infix(node.Op, left, right);
+                        return new Expression.CallMember(callable, left, right);
                     }
                     else
                     {
                         Assert(false);
                     }
+                    Assert(false);
+                }
+                else if (left.Expr.Type is Type.Builtin builtin)
+                {
+                    return builtin.Infix(node.Op, left.Expr, right.Expr);
                 }
                 else
                 {
-                    Assert(Module.Errors);
+                    Assert(Module.HasErrors);
                 }
 
+                Assert(false);
+                throw new NotImplementedException();
             });
-
-            return delayed;
         }
 
 
-        private Expr.Delayed Expression(Scope container, A.Expression.Prefix node)
+        private LazyExpr Expression(Scope container, A.Expression.Prefix node)
         {
-            var delayed = new Expr.Delayed();
-
-            var right = ResolveExpression(container, node.Expr);
-
-            ScheduleExpr(() =>
+            return new LazyExpr(Module, () =>
             {
-                if (right.Resolved != null)
-                {
-                    right.Resolved.Type = ResolveExprType(right.Resolved);
+                var right = ResolveExpression(container, node.Expr);
 
-                    if (right.Resolved.Type is Type.Reference reference &&
-                        reference.Decl is Decl.Classy classy &&
-                        classy.Container is ContentScope content)
+                if (right.Expr.Type is Type.Reference reference &&
+                    reference.Decl is Decl.Classy classy &&
+                    classy.Container is ContentScope content)
+                {
+                    if (classy.ADecl is A.Decl.Classy)
                     {
-                        if (classy.ADecl is A.Decl.Primitive)
+                        var prefix = content.Block.Find(node.Op, PrefixName(node));
+
+                        if (prefix.IsNative())
                         {
-                            var prefix = content.Block.Find(node.Op, PrefixName(node));
-                            var result = ResolveDeclType(prefix);
-                            if (result is Type.Callable callable)
-                            {
-                                delayed.Resolved = new Expr.CallMember(callable, right);
-                            }
-                            else
-                            {
-                                Assert(false);
-                            }
+                            return Builtins.Resolve(classy).Prefix(node.Op, right.Expr);
+                        }
+
+                        var result = ResolveDeclType(prefix);
+                        if (result is Type.Callable callable)
+                        {
+                            return new Expression.CallMember(callable, right);
                         }
                         else
                         {
                             Assert(false);
                         }
-                    }
-                    else if (right.Resolved.Type is Type.Builtin builtin)
-                    {
-                        delayed.Resolved = builtin.Prefix(node.Op, right);
-                    }
-                    else
-                    {
+
                         Assert(false);
                     }
+                }
+                else if (right.Expr.Type is Type.Builtin builtin)
+                {
+                    return builtin.Prefix(node.Op, right.Expr);
                 }
                 else
                 {
                     Assert(false);
                 }
 
+                Assert(false);
+                throw new NotImplementedException();
             });
-
-            return delayed;
         }
 
-        private Expr.Delayed Expression(Scope container, A.Expression.NaturalNumber tree)
+        private LazyExpr Expression(Scope container, A.Expression.NaturalNumber tree)
         {
-            return new Expr.Delayed() { Resolved = NaturalConst(tree) };
+            return new LazyExpr(Module, () => NaturalConst(tree));
         }
 
-        private Expr.Delayed Expression(Scope container, A.Reference tree)
+        private LazyExpr Expression(Scope container, A.Reference tree)
         {
-            var delayed = new Expr.Delayed();
-
-            ScheduleExpr(() =>
+            return new LazyExpr(Module, () =>
             {
                 var decl = container.Resolve(tree, tree.Name.Text);
 
-                Expr.Reference reference;
+                Expression.Reference reference;
 
                 switch (decl)
                 {
                     case Decl.Parameter node:
-                        reference = new Expr.ParameterReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.ParameterReference(node);
                         break;
                     case Decl.SelfParameter node:
-                        reference = new Expr.ParameterReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.ParameterReference(node);
                         break;
                     case Decl.Let node:
-                        reference = new Expr.LocalReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.LocalReference(node);
                         break;
                     case Decl.Var node:
-                        reference = new Expr.LocalReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.LocalReference(node);
                         break;
                     case Decl.Attribute node:
-                        reference = new Expr.AttributeReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.AttributeReference(node);
                         break;
                     case Decl.Function node:
-                        reference = new Expr.FunctionReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.FunctionReference(node);
                         break;
                     case Decl.Constructor node:
-                        reference = new Expr.ConstructorReference(node);
-                        Assert(node.Type != null);
-                        break;
-                    case Decl.Primitive node:
-                        reference = new Expr.PrimitiveReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.ConstructorReference(node);
                         break;
                     case Decl.Class node:
-                        reference = new Expr.ClassReference(node);
-                        Assert(node.Type != null);
+                        reference = new Expression.ClassReference(node);
                         break;
                     default:
                         Assert(false);
                         throw new NotImplementedException();
                 }
 
-                delayed.Resolved = reference;
+                return reference;
             });
-
-            return delayed;
         }
     }
 }

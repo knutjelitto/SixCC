@@ -3,6 +3,9 @@ using Six.Runtime;
 using Six.Six.Sema;
 using System;
 
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
+
 namespace Six.Six.Instructions
 {
     public partial class Emitter : WithWriter
@@ -13,6 +16,8 @@ namespace Six.Six.Instructions
         private readonly List<Action> functions = new();
         private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionsTable = new();
         private readonly Dictionary<string, uint> functionTypes = new();
+
+        private readonly Stack<Block> insns = new();
 
         private readonly Dumper dumper;
 
@@ -54,8 +59,6 @@ namespace Six.Six.Instructions
 
         private void Handle(Decl.Function decl)
         {
-            //exports.Add($"(export \"{decl.Container.FullName}\" (func ${decl.Container.FullName}))");
-
             functions.Add(() =>
             {
                 wl($"(func ${decl.Container.FullName}");
@@ -106,82 +109,6 @@ namespace Six.Six.Instructions
             {
                 Assert(false);
             }
-        }
-
-        private void Handle(Stmt.Return stmt)
-        {
-            if (stmt.Expr != null)
-            {
-                Emit(stmt.Expr);
-            }
-            wl($"{Insn.Return}");
-        }
-
-        private void Handle(Expr.Binop expr)
-        {
-            Emit(expr.Arg1);
-            Emit(expr.Arg2);
-            wl($"{expr.Insn}");
-        }
-
-        private void Handle(Expr.Const expr)
-        {
-            wl($"{expr.Insn}");
-        }
-
-        private void Handle(Expr.LocalReference expr)
-        {
-            wl($"{Insn.Local.Get(expr.LocalDecl.Index)}");
-        }
-
-        private void Handle(Expr.ParameterReference expr)
-        {
-            wl($"{Insn.Local.Get(expr.ParameterDecl.Index)}");
-        }
-
-        private void Handle(Expr.FunctionReference expr)
-        {
-            var function = expr.FunctionDecl;
-            var name = function.FullName;
-
-            uint index = 0;
-            if (!globalFunctionsTable.TryGetValue(name, out var entry))
-            {
-                index = (uint)globalFunctionsTable.Count;
-                globalFunctionsTable.Add(name, (index, function));
-            }
-            else
-            {
-                index = entry.index;
-            }
-
-            wl($"{Insn.U32.Const(index)}");
-        }
-
-        private void Handle(Expr.SelectAttribute expr)
-        {
-            wl($"TODO: select attribute");
-        }
-
-        private void Handle(Expr.CallFunction expr)
-        {
-            foreach (var argument in expr.Arguments)
-            {
-                Emit(argument);
-            }
-            wl($"{Insn.Call(expr.Function.FunctionDecl.FullName)}");
-        }
-
-        private void Handle(Expr.CallIndirect expr)
-        {
-            foreach (var argument in expr.Arguments)
-            {
-                Emit(argument);
-            }
-            var callable = expr.Callable;
-
-            Emit(expr.Value);
-            wl($"{Insn.CallIndirect(globalFunctionsTableName)} (type {FindType(callable)})");
         }
     }
 }

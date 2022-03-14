@@ -5,6 +5,11 @@ shared int add(int a, int b)
     return a + b;
 }
 
+shared int min(int a, int b)
+{
+    return if (a <= b) then a else b;
+}
+
 shared int result_with_consts(int c = -4)
 {
     var a = -2;
