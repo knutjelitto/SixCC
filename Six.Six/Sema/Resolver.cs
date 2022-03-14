@@ -12,7 +12,8 @@ namespace Six.Six.Sema
     {
         private readonly Stack<Decl.WithMembers> membies = new();
 
-        private Decl.Funcy CurrentFunction => membies.Peek() as Decl.Funcy ?? throw new InvalidCastException();
+        private Decl.Funcy CurrentFuncy => membies.Peek() as Decl.Funcy ?? throw new InvalidCastException();
+        private Decl.Class CurrentClass => membies.Peek() as Decl.Class ?? throw new InvalidCastException();
         private Decl.WithMembers CurrentMemby => membies.Peek();
 
         private IDisposable UseMemby(Decl.WithMembers memby)

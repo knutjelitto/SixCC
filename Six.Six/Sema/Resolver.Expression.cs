@@ -1,4 +1,5 @@
-﻿using Six.Six.Builtins;
+﻿using Six.Core;
+using Six.Six.Builtins;
 using System;
 using A = Six.Six.Ast;
 
@@ -31,14 +32,27 @@ namespace Six.Six.Sema
         {
             return PrefixName(node.Op.Name);
         }
+
         private string PrefixName(A.Decl.Prefix node)
         {
             return PrefixName(node.Name);
         }
 
-        public LazyExpr ResolveExpression(Scope scope, A.Expression node)
+        private bool Assignable = false;
+
+        private IDisposable Assignability(bool assignable)
         {
-            return Expression(scope, (dynamic)node);
+            var saved = assignable;
+            this.Assignable = assignable;
+            return new Disposable(() => this.Assignable = saved);
+        }
+
+        public LazyExpr ResolveExpression(Scope scope, A.Expression node, bool assignable = false)
+        {
+            using (Assignability(assignable))
+            {
+                return Expression(scope, (dynamic)node);
+            }
         }
 
         private LazyExpr Expression(Scope container, A.Expression node)
@@ -83,6 +97,8 @@ namespace Six.Six.Sema
 
         private LazyExpr Expression(Scope container, A.Expression.Select node)
         {
+            var assign = Assignable;
+
             return new LazyExpr(Module, () =>
             {
                 var primary = ResolveExpression(container, node.Expr);
@@ -94,7 +110,7 @@ namespace Six.Six.Sema
                     if (found is Decl.Attribute attribute)
                     {
                         Assert(attribute.IsStatic());
-                        return new Expression.SelectAttribute(classyRef, attribute);
+                        return new Expression.SelectAttribute(classyRef, attribute, assign);
                     }
                     else
                     {
@@ -126,7 +142,7 @@ namespace Six.Six.Sema
 
                         if (referenced is Decl.Attribute attribute)
                         {
-                            return new Expression.SelectAttribute(parameterReference, attribute);
+                            return new Expression.SelectAttribute(parameterReference, attribute, assign);
                         }
                         else
                         {
@@ -379,6 +395,11 @@ namespace Six.Six.Sema
         private LazyExpr Expression(Scope container, A.Expression.NaturalNumber tree)
         {
             return new LazyExpr(Module, () => NaturalConst(tree));
+        }
+
+        private LazyExpr Expression(Scope container, A.Expression.String.Plain tree)
+        {
+            return new LazyExpr(Module, () => PlainString(tree));
         }
 
         private LazyExpr Expression(Scope container, A.Reference tree)

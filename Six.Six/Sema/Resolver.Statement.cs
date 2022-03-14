@@ -22,14 +22,14 @@ namespace Six.Six.Sema
                 new Stmt.Assign(
                     container, 
                     node,
-                    ResolveExpression(container, node.Left),
+                    ResolveExpression(container, node.Left, true),
                     ResolveExpression(container, node.Right)));
-            CurrentFunction.Members.Add(stmt);
+            CurrentFuncy.Members.Add(stmt);
         }
 
         private void Statement(BlockScope container, A.Stmt.Return node)
         {
-            if (CurrentFunction is Decl.Function function)
+            if (CurrentFuncy is Decl.Function function)
             {
                 var stmt = container.AddMember(new Stmt.Return(
                     container,

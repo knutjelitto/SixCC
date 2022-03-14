@@ -57,7 +57,9 @@ namespace Six.Six.Sema
 
         private Body Body(BlockScope container, A.Body.Calc node)
         {
-            return new Body.Dummy();
+            var delayed = ResolveExpression(container, node.Expression);
+
+            return new Body.Expression(() => delayed.Expr);
         }
     }
 }

@@ -52,6 +52,7 @@ namespace Six.Six.Sema
         public sealed record ConstU32(Builtin Builtin, uint Value) : Const(Builtin, Insn.U32.Const(Value));
         public sealed record ConstI64(Builtin Builtin, long Value) : Const(Builtin, Insn.I64.Const(Value));
         public sealed record ConstU64(Builtin Builtin, ulong Value) : Const(Builtin, Insn.U64.Const(Value));
+        public sealed record ConstString(Builtin Builtin, string Value) : Primitive(Builtin);
 
         //TODO:
         public sealed record AllocClass(Decl.Class Class) : Primitive(Class.Type);
@@ -112,7 +113,7 @@ namespace Six.Six.Sema
             public override Type Type => Callable.Result;
         }
 
-        public sealed record SelectAttribute(Reference Reference, Decl.Attribute Attribute)
+        public sealed record SelectAttribute(Reference Reference, Decl.Attribute Attribute, bool Assign)
             : Primitive(Attribute.Type);
 
         public sealed record CallMember(Type.Callable Callable, Expression Make, params Expression[] Arguments)

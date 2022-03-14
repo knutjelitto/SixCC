@@ -27,6 +27,13 @@ namespace Six.Six.Sema
             }
         }
 
+        public Expr PlainString(A.Expression.String.Plain tree)
+        {
+            var value = ConvertNatural(tree.Text);
+
+            return new Expression.ConstString(Builtins.String, tree.Text);
+        }
+
         public ulong ConvertNatural(string text)
         {
             if (text.StartsWith('#'))

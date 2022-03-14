@@ -37,22 +37,22 @@ namespace Six.Six.Instructions
         {
             Emit(expr.Arg1);
             Emit(expr.Arg2);
-            wl($"{expr.Insn}");
+            Emit(expr.Insn);
         }
 
         private void Handle(Expression.Const expr)
         {
-            wl($"{expr.Insn}");
+            Emit(expr.Insn);
         }
 
         private void Handle(Expression.LocalReference expr)
         {
-            wl($"{Insn.Local.Get(expr.LocalDecl.Index)}");
+            Emit(Insn.Local.Get(expr.LocalDecl.Index));
         }
 
         private void Handle(Expression.ParameterReference expr)
         {
-            wl($"{Insn.Local.Get(expr.ParameterDecl.Index)}");
+            Emit(Insn.Local.Get(expr.ParameterDecl.Index));
         }
 
         private void Handle(Expression.FunctionReference expr)
@@ -71,12 +71,21 @@ namespace Six.Six.Instructions
                 index = entry.index;
             }
 
-            wl($"{Insn.U32.Const(index)}");
+            Emit(Insn.U32.Const(index));
         }
 
         private void Handle(Expression.SelectAttribute expr)
         {
-            wl($"TODO: select attribute");
+            Emit(expr.Reference);
+            Emit(expr.Attribute);
+            if (expr.Assign)
+            {
+                Emit(Insn.ToDo("SET attribute"));
+            }
+            else
+            {
+                Emit(Insn.ToDo("GET attribute"));
+            }
         }
 
         private void Handle(Expression.CallFunction expr)
@@ -85,7 +94,7 @@ namespace Six.Six.Instructions
             {
                 Emit(argument);
             }
-            wl($"{Insn.Call(expr.Function.FunctionDecl.FullName)}");
+            Emit(Insn.Call(expr.Function.FunctionDecl.FullName));
         }
 
         private void Handle(Expression.CallIndirect expr)
@@ -97,7 +106,7 @@ namespace Six.Six.Instructions
             var callable = expr.Callable;
 
             Emit(expr.Value);
-            wl($"{Insn.CallIndirect(globalFunctionsTableName)} (type {FindType(callable)})");
+            Emit(Insn.CallIndirect(globalFunctionsTableName, TypeFor(callable)));
         }
     }
 }

@@ -240,6 +240,17 @@ constructor-declaration
     : prelude 'new' name? parameters extends? function-body
     ;
 
+class-body
+    : '{' usings class-body-members '}'
+    ;
+
+class-body-members
+    | universal-declaration
+    | constructor-declaration
+    | operator-declaration
+    | attribute-declaration
+    ;
+
 function-body
     | calc-body
     | block-body

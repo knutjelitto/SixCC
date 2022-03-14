@@ -150,15 +150,20 @@ namespace Six.Six.Sema
         private void Declare(BlockScope parent, A.Decl.Attribute node)
         {
             var decl = parent.Declare(new Decl.Attribute(parent, node));
-
             CurrentMemby.Members.Add(decl);
 
             var body = WalkBody(parent, node.Body);
+
+            if (InClass && CurrentClass is Decl.Class klass)
+            {
+
+            }
+
         }
 
         private void Declare(Scope parent, A.Decl.Var node)
         {
-            var function = CurrentFunction;
+            var function = CurrentFuncy;
             
             var decl = parent.Declare(new Decl.Var(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
@@ -167,7 +172,7 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.Let node)
         {
-            var function = CurrentFunction;
+            var function = CurrentFuncy;
 
             var decl = parent.Declare(new Decl.Let(parent, node, function.Parameters.Count + function.Locals.Count));
             function.Locals.Add(decl);
@@ -193,7 +198,7 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.ValueParameter node)
         {
-            var function = CurrentFunction;
+            var function = CurrentFuncy;
             var scope = function.Scope;
 
             var param = scope.Declare(

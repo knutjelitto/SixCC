@@ -24,6 +24,7 @@ namespace Six.Six.Sema
             public static readonly string Basic = "Basic";
             public static readonly string Boolean = "Boolean";
             public static readonly string Bytes = "Bytes";
+            public static readonly string String = "String";
             public static readonly string Null = "Null";
             public static readonly string Nothing = "Nothing";
             public static readonly string Anything = "Anything";

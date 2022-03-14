@@ -97,6 +97,11 @@ namespace Six.Six.Instructions
             }
         }
 
+        private string TypeFor(Type.Callable type)
+        {
+            return $"(type {FindType(type)})";
+        }
+
         private bool IsAnythingAkaVoid(Type type)
         {
             return Resolver.ResolveType(type) is Type.Reference reference && reference.Decl.Name.Text == Names.Core.Anything;
