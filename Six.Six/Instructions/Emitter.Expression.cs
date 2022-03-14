@@ -12,6 +12,16 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
+        private void Handle(Expression.CallConstructor expr)
+        {
+            Emit(Insn.ToDo("alloc 42"));
+            foreach (var arg in expr.Arguments)
+            {
+                Emit(arg);
+            }
+            Emit(Insn.ToDo("call-constructor"));
+        }
+
         private void Handle(Expression.If expr)
         {
             Emit(expr.Condition.Expr);

@@ -12,13 +12,20 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
+        private void Handle(Stmt.Assign stmt)
+        {
+            Emit(stmt.Left);
+            Emit(stmt.Right);
+            Emit(Insn.ToDo("assign"));
+        }
+
         private void Handle(Stmt.Return stmt)
         {
             if (stmt.Expr != null)
             {
                 Emit(stmt.Expr);
             }
-            wl($"{Insn.Return}");
+            Emit(Insn.Return);
         }
     }
 }

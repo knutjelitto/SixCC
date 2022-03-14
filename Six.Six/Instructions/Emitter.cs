@@ -25,7 +25,7 @@ namespace Six.Six.Instructions
             : base(writer)
         {
             Module = module;
-            dumper = new Dumper(writer);
+            dumper = new Dumper(this, writer);
         }
 
         private Module Module { get; }
@@ -35,6 +35,11 @@ namespace Six.Six.Instructions
         public void Emit(Entity entity)
         {
             Handle((dynamic)entity);
+        }
+
+        public void Emit(Insn insn)
+        {
+            wl($"{insn}");
         }
 
         private void Handle(Entity entity)

@@ -7,9 +7,12 @@ namespace Six.Six.Instructions
 {
     public class Dumper : WithWriter
     {
-        public Dumper(Writer writer)
+        public Emitter Emitter { get; }
+
+        public Dumper(Emitter emitter, Writer writer)
             : base(writer)
         {
+            Emitter = emitter;
         }
 
         public void Dump(Decl.Classy classy)
@@ -23,11 +26,6 @@ namespace Six.Six.Instructions
         private void comment(Action action)
         {
             indent("(;", ";)", action);
-        }
-
-        private void WalkExpr(Expr expr)
-        {
-            Expr((dynamic)expr);
         }
 
         private void Walker(Entity decl)
@@ -89,66 +87,10 @@ namespace Six.Six.Instructions
             WalkMembers(decl);
         }
 
-        private void Walk(Stmt.Assign stmt)
+        private void Walk(Stmt stmt)
         {
-            WalkExpr(stmt.Left);
-            w(" = ");
-            WalkExpr(stmt.Right);
-            wl(";");
+            Emitter.Emit(stmt);
         }
-
-
-        private void Walk(Stmt.Return stmt)
-        {
-            w("return");
-            if (stmt.Expr != null)
-            {
-                w(" ");
-                WalkExpr(stmt.Expr);
-            }
-            wl(";");
-        }
-
-        private void Expr(Expr expr)
-        {
-            Assert(false);
-            w(":::");
-        }
-
-        private void Expr(Expr.Reference expr)
-        {
-            w($"{expr.Decl.Name}");
-        }
-
-        private void Expr(Expr.SelectAttribute expr)
-        {
-            w($"{expr.Reference.Decl.Name}");
-            w(".");
-            w($"{expr.Attribute.Name}");
-        }
-
-        private void Expr(Expr.CallConstructor expr)
-        {
-            w($"{expr.Class.Name}.{expr.Ctor.Name}(");
-            var more = false;
-            foreach (var arg in expr.Arguments)
-            {
-                if (more)
-                {
-                    w(",");
-                }
-                WalkExpr(arg);
-            }
-            w(")");
-        }
-
-        private void Expr(Expr.Binop expr)
-        {
-            Assert(false);
-            w(":::");
-        }
-
-
 
     }
 }
