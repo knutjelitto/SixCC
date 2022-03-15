@@ -81,6 +81,11 @@ namespace Six.Six.Instructions
             wl($"attribute {decl.FullName}");
         }
 
+        private void Walk(Decl.Field decl)
+        {
+            wl($"field {decl.FullName}");
+        }
+
         private void Walk(Decl.Funcy decl)
         {
             wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}");

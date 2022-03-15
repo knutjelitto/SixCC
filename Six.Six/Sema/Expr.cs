@@ -116,6 +116,9 @@ namespace Six.Six.Sema
         public sealed record SelectAttribute(Reference Reference, Decl.Attribute Attribute, bool Assign)
             : Primitive(Attribute.Type);
 
+        public sealed record SelectField(Reference Reference, Decl.Field Field, bool Assign)
+            : Primitive(Field.Type);
+
         public sealed record CallMember(Type.Callable Callable, Expression Make, params Expression[] Arguments)
             : Expr
         {

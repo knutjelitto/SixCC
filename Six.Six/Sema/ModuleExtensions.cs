@@ -1,8 +1,8 @@
 ﻿using Six.Six.Sema;
 
-namespace Six.Six.Instructions
+namespace Six.Six.Sema
 {
-    public static class EmitterExtensions
+    public static class ModuleExtensions
     {
         public static IEnumerable<Decl.Function> GetFunctions(this Module module)
         {

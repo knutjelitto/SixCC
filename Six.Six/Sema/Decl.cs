@@ -23,10 +23,10 @@ namespace Six.Six.Sema
             public List<Member> Members { get; } = new();
         }
 
-        public abstract class Classy : WithMembers
+        public abstract class Classy : WithMembers, Typy
         {
             private Type? extends;
-
+            private Layout? layout;
 
             private Classy(ClassyScope scope, A.Decl.Classy aDecl)
                 : base(scope, aDecl)
@@ -48,6 +48,8 @@ namespace Six.Six.Sema
             public override string FullName => Scope.FullName;
 
             public Type? Extends => HandleExtends(ref extends);
+
+            public Layout Layout => layout ??= new Layout(this);
 
             protected Type? HandleExtends(ref Type? extends)
             {
@@ -74,6 +76,8 @@ namespace Six.Six.Sema
             {
                 Assert(aDecl is A.With.Extends);
             }
+
+            public List<Decl.Field> Fields { get; } = new List<Field>();
 
             public override string ToString() => $"{Name}";
         }
@@ -178,7 +182,7 @@ namespace Six.Six.Sema
 
         public sealed class Parameter : Local
         {
-            private LazyExpr? @default;
+            private readonly LazyExpr? @default;
 
             public Parameter(FuncyScope Container, A.Decl.Parameter ADecl, int index, LazyExpr? @default)
                 : base(Container, ADecl, index)
@@ -217,17 +221,20 @@ namespace Six.Six.Sema
             public override Type Type { get; }
         }
 
-        public abstract class LetVar : Local
+        public sealed class LetVar : Local
         {
             private readonly LazyExpr value;
 
-            public LetVar(Scope Container, A.Decl ADecl, int index)
+            public LetVar(Scope Container, A.Decl ADecl, bool writeable, int index)
                 : base(Container, ADecl, index)
             {
                 Assert(ADecl is A.With.OptionalType);
                 Assert(ADecl is A.With.Value);
                 value = ResolveExpression(Container, ((A.With.Value)ADecl).Value);
+                Writeable = writeable;
             }
+
+            public bool Writeable { get; }
 
             public override Type Type
             {
@@ -243,8 +250,7 @@ namespace Six.Six.Sema
                         }
                         else
                         {
-                            Assert(Value.Type != null);
-                            type = Value.Type!;
+                            type = Value.Type;
                         }
                     }
 
@@ -252,33 +258,52 @@ namespace Six.Six.Sema
                 }
             }
 
-            public Expr Value
-            { 
+            public Expr Value => value.Expr;
+        }
+
+        public sealed class Field : Declaration
+        {
+            private readonly LazyExpr value;
+
+            public Field(Scope container, A.Decl aDecl, bool writeable)
+                : base(container, aDecl)
+            {
+                Assert(aDecl is A.With.OptionalType);
+                Assert(aDecl is A.With.Value);
+                value = ResolveExpression(container, ((A.With.Value)aDecl).Value);
+                Writeable = writeable;
+            }
+
+            public bool Writeable { get; }
+
+            public override Type Type
+            {
                 get
                 {
-                    Assert(value.Expr != null);
-                    return value.Expr!;
+                    if (type == null)
+                    {
+                        //TODO: typecheck
+                        var aType = ((A.With.OptionalType)ADecl).Type;
+                        if (aType != null)
+                        {
+                            type = ResolveType(Container, aType);
+                        }
+                        else
+                        {
+                            type = Value.Type;
+                        }
+                    }
+
+                    return type;
                 }
             }
+
+            public Expr Value => value.Expr;
+
+            public override string FullName => ADecl.Name.Text;
         }
 
-        public sealed class Let : LetVar
-        {
-            public Let(Scope Container, A.Decl ADecl, int index)
-                : base(Container, ADecl, index)
-            {
-            }
-        }
-
-        public sealed class Var : LetVar
-        {
-            public Var(Scope Container, A.Decl ADecl, int index)
-                : base(Container, ADecl, index)
-            {
-            }
-        }
-
-        public sealed class Alias : Declaration
+        public sealed class Alias : Declaration, Typy
         {
             private Alias(DeclarationScope scope, A.Decl.Alias aDecl)
                 : base(scope, aDecl)
@@ -318,7 +343,7 @@ namespace Six.Six.Sema
         }
 
 #if false
-        public sealed class TypeParameter : Declaration
+        public sealed class TypeParameter : Declaration, Typy
         {
             public TypeParameter(Scope Container, A.Decl.TypeParameter ADecl)
                 : base(Container, ADecl)

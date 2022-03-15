@@ -222,7 +222,7 @@ namespace Six.Six.Compiler
             var satifies = WalkOptional<Type.Types>(element.Satisfies);
             var cases = WalkOptional<Type.Types>(element.CaseTypes);
             var constraints = WalkOptional<TypeConstraints>(element.Constraints);
-            var body = Walk<Body>(element.BlockBody);
+            var body = Walk<Body>(element.ClassBody);
 
             element.Value = new Decl.Class(element, prelude, name, generics, constraints, extends, satifies, cases, body);
         }
@@ -235,7 +235,7 @@ namespace Six.Six.Compiler
             var satifies = WalkOptional<Type.Types>(element.Satisfies);
             var cases = WalkOptional<Type.Types>(element.CaseTypes);
             var constraints = WalkOptional<TypeConstraints>(element.Constraints);
-            var body = Walk<Body>(element.BlockBody);
+            var body = Walk<Body>(element.InterfaceBody);
 
             element.Value = new Decl.Interface(element, prelude, name, generics, constraints, satifies, cases, body);
         }
@@ -246,7 +246,7 @@ namespace Six.Six.Compiler
             var name = Walk<Name>(element.Name);
             var extends = WalkOptional<Type>(element.Extends);
             var satifies = WalkOptional<Type.Types>(element.Satisfies);
-            var body = Walk<Body>(element.BlockBody);
+            var body = Walk<Body>(element.ClassBody);
 
             element.Value = new Decl.Object(element, prelude, name, extends, satifies, body);
         }
@@ -356,6 +356,22 @@ namespace Six.Six.Compiler
             var statelarations = Walk<Statelarations>(element.Statelarations);
 
             element.Value = new Body.Block(element, usings, statelarations);
+        }
+
+        protected override void Visit(CClassBody element)
+        {
+            var usings = Walk<Usings>(element.Usings);
+            var declarations = new Declarations(element, WalkMany<Decl>(element.ClassMember));
+
+            element.Value = new Body.Class(element, usings, declarations);
+        }
+
+        protected override void Visit(CInterfaceBody element)
+        {
+            var usings = Walk<Usings>(element.Usings);
+            var declarations = new Declarations(element, WalkMany<Decl>(element.InterfaceMember));
+
+            element.Value = new Body.Interface(element, usings, declarations);
         }
 
         protected override void Visit(CCalcBody element)

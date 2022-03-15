@@ -52,6 +52,11 @@ namespace Six.Six.Instructions
             Assert(true);
         }
 
+        private void Handle(Decl.Field decl)
+        {
+            Assert(true);
+        }
+
         private void Handle(Decl.Classy decl)
         {
             Assert(true);
@@ -62,7 +67,7 @@ namespace Six.Six.Instructions
             Assert(true);
         }
 
-        private void Handle(Decl.Function decl)
+        private void Handle(Decl.Funcy decl)
         {
             functions.Add(() =>
             {
@@ -74,7 +79,10 @@ namespace Six.Six.Instructions
 
                     Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
 
-                    wlif(Result(decl.ResultType!));
+                    if (decl is Decl.Function func)
+                    {
+                        wlif(Result(func.ResultType));
+                    }
 
                     Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
 
@@ -90,25 +98,12 @@ namespace Six.Six.Instructions
             });
         }
 
-        private void Handle(Decl.Let decl)
+        private void Handle(Decl.LetVar decl)
         {
             if (decl.Value != null)
             {
                 Emit(decl.Value);
-                wl($"{Insn.Local.Set(decl.Index)}");
-            }
-            else
-            {
-                Assert(false);
-            }
-        }
-
-        private void Handle(Decl.Var decl)
-        {
-            if (decl.Value != null)
-            {
-                Emit(decl.Value);
-                wl($"{Insn.Local.Set(decl.Index)}");
+                Emit(Insn.Local.Set(decl.Index));
             }
             else
             {

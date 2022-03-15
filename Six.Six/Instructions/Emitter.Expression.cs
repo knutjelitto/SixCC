@@ -88,6 +88,20 @@ namespace Six.Six.Instructions
             }
         }
 
+        private void Handle(Expression.SelectField expr)
+        {
+            Emit(expr.Reference);
+            Emit(expr.Field);
+            if (expr.Assign)
+            {
+                Emit(Insn.ToDo("SET field"));
+            }
+            else
+            {
+                Emit(Insn.ToDo("GET field"));
+            }
+        }
+
         private void Handle(Expression.CallFunction expr)
         {
             foreach (var argument in expr.Arguments)

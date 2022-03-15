@@ -202,7 +202,7 @@ namespace Six.Six.Sema
             wl($"[{decl.Index}] {TypeOf(decl.Type)} {Name(decl)}{DefaultOf(decl.Default)}");
         }
 
-        private void Visit(Decl.Let decl)
+        private void Visit(Decl.LetVar decl)
         {
             wl($"[{decl.Index}] {TypeOf(decl.Type)} {Name(decl)}{DefaultOf(decl.Value)}");
         }

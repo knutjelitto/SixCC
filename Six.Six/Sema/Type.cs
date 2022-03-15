@@ -1,6 +1,10 @@
 ﻿namespace Six.Six.Sema
 {
-    public interface Type : Entity
+    public interface Typy
+    {
+    }
+
+    public interface Type : Typy, Entity
     {
         public interface Declared : Type
         {

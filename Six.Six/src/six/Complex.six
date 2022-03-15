@@ -2,8 +2,8 @@ namespace six.core;
 
 class Complex
 {
-    double re = -1;
-    double im = -1;
+    var double re = -1;
+    var double im = -1;
 
     shared new (double re = 0, double im = 0)
     {

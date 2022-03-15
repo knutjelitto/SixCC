@@ -22,12 +22,9 @@ namespace Six.Six.Sema
             }
         }
 
-        private void WalkDeclaration(Scope scope, A.Decl? node)
+        private void WalkDeclaration(Scope scope, A.Decl node)
         {
-            if (node != null)
-            {
-                Declare((dynamic)scope, (dynamic)node);
-            }
+            Declare((dynamic)scope, (dynamic)node);
         }
 
         private void Declare(Scope container, A.Node node)
@@ -153,43 +150,56 @@ namespace Six.Six.Sema
             CurrentMemby.Members.Add(decl);
 
             var body = WalkBody(parent, node.Body);
-
-            if (InClass && CurrentClass is Decl.Class klass)
-            {
-
-            }
-
         }
 
         private void Declare(Scope parent, A.Decl.Var node)
         {
-            var function = CurrentFuncy;
-            
-            var decl = parent.Declare(new Decl.Var(parent, node, function.Parameters.Count + function.Locals.Count));
-            function.Locals.Add(decl);
-            function.Members.Add(decl);
+            if (InFuncy)
+            {
+                var function = CurrentFuncy;
+
+                var decl = parent.Declare(new Decl.LetVar(parent, node, true, function.Parameters.Count + function.Locals.Count));
+                function.Locals.Add(decl);
+                function.Members.Add(decl);
+            }
+            else
+            {
+                Assert(InClass);
+
+                var klass = CurrentClass;
+
+                var decl = parent.Declare(new Decl.Field(parent, node, true));
+                klass.Fields.Add(decl);
+                klass.Members.Add(decl);
+            }
         }
 
         private void Declare(Scope parent, A.Decl.Let node)
         {
-            var function = CurrentFuncy;
+            if (InFuncy)
+            {
+                var function = CurrentFuncy;
 
-            var decl = parent.Declare(new Decl.Let(parent, node, function.Parameters.Count + function.Locals.Count));
-            function.Locals.Add(decl);
-            function.Members.Add(decl);
+                var decl = parent.Declare(new Decl.LetVar(parent, node, false, function.Parameters.Count + function.Locals.Count));
+                function.Locals.Add(decl);
+                function.Members.Add(decl);
+            }
+            else
+            {
+                Assert(InClass);
+
+                var klass = CurrentClass;
+
+                var decl = parent.Declare(new Decl.Field(parent, node, false));
+                klass.Fields.Add(decl);
+                klass.Members.Add(decl);
+            }
         }
 
         private void Declare(Scope container, A.Decl.TypeParameters node)
         {
             WalkDeclarations(container, node);
         }
-
-#if false
-        private void Declare(Scope container, A.Decl.TypeParameter node)
-        {
-            var decl = container.Declare(new Decl.TypeParameter(container, node));
-        }
-#endif
 
         private void Declare(Scope container, A.Decl.Parameters node)
         {

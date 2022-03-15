@@ -144,6 +144,10 @@ namespace Six.Six.Sema
                         {
                             return new Expression.SelectAttribute(parameterReference, attribute, assign);
                         }
+                        else if (referenced is Decl.Field field)
+                        {
+                            return new Expression.SelectField(parameterReference, field, assign);
+                        }
                         else
                         {
                             Assert(false);
@@ -184,7 +188,7 @@ namespace Six.Six.Sema
                     for (; index < Math.Min(prms.Count, args.Count); ++index)
                     {
                         var argType = ResolveType(args[index].Expr.Type);
-                        var prmType = ResolveType(prms[index].Type);
+                        var prmType = ResolveType(prms[index].Type);    
 
                         Assert(ReferenceEquals(argType, prmType));
 
@@ -418,10 +422,7 @@ namespace Six.Six.Sema
                     case Decl.SelfParameter node:
                         reference = new Expression.ParameterReference(node);
                         break;
-                    case Decl.Let node:
-                        reference = new Expression.LocalReference(node);
-                        break;
-                    case Decl.Var node:
+                    case Decl.LetVar node:
                         reference = new Expression.LocalReference(node);
                         break;
                     case Decl.Attribute node:

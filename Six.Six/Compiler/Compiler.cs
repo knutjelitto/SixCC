@@ -33,6 +33,15 @@ namespace Six.Six.Compiler
 
         public bool Errors => Module.HasErrors;
 
+        private void Layout()
+        {
+            if (!Errors)
+            {
+                var layouter = new S.Layouter(Module);
+                layouter.Run();
+            }
+        }
+
         private void Emit()
         {
             using (var writer = $"{parser.__Name}.wat".Writer())
@@ -114,8 +123,8 @@ namespace Six.Six.Compiler
 
                     if (ok)
                     {
+                        Layout();
                         Emit();
-
                     }
                 }
                 catch (DiagnosticException diagnostics)

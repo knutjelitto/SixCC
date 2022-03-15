@@ -22,6 +22,26 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
+        private Body Body(BlockScope container, A.Body.Class node)
+        {
+            foreach (var decl in node.Declarations)
+            {
+                WalkDeclaration(container, decl);
+            }
+
+            return new Body.Dummy();
+        }
+
+        private Body Body(BlockScope container, A.Body.Interface node)
+        {
+            foreach (var decl in node.Declarations)
+            {
+                WalkDeclaration(container, decl);
+            }
+
+            return new Body.Dummy();
+        }
+
         private Body Body(BlockScope container, A.Body.Block node)
         {
             foreach (var member in node.Statelarations)

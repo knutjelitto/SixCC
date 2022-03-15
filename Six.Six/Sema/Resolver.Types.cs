@@ -79,13 +79,12 @@ namespace Six.Six.Sema
         private Type DoResolveType(Scope scope, A.Reference tree)
         {
             var resolved = scope.Resolve(tree, tree.Name.Text);
-            var xxx = ResolveDeclType(resolved);
-
-            if (xxx != null)
+            if (resolved is not Typy)
             {
-                return xxx;
+                return ResolveType(scope.Parent, tree);
             }
-            return new Type.Reference(resolved);
+
+            return ResolveDeclType(resolved);
         }
     }
 }

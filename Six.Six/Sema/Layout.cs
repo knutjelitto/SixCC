@@ -9,13 +9,29 @@ namespace Six.Six.Sema
     public class Layout
     {
         private readonly List<Field> fields = new();
+        private readonly List<Decl.Field> declaredFields = new();
 
-        public Layout(Layout? baseLayout)
+        public Layout(Decl.Classy classy)
         {
-            Base = baseLayout;
+            Classy = classy;
         }
 
-        public Layout? Base { get; }
+        public Decl.Classy Classy { get; }
+        public Module Module => Classy.Scope.Module;
+        public Resolver Resolver => Module.Resolver;
+
+        public void Add(Decl.Field declaredField)
+        {
+            declaredFields.Add(declaredField);
+        }
+
+        public void Finish()
+        {
+            foreach (var attribute in declaredFields)
+            {
+                var type = Resolver.LowerType(attribute.Type);
+            }
+        }
 
         public class Field
         {

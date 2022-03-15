@@ -221,15 +221,15 @@ let-declaration
     ;
 
 class-declaration
-    : prelude 'class' name generic-parameters? extends? satisfies? case-types? constraints? block-body
+    : prelude 'class' name generic-parameters? extends? satisfies? case-types? constraints? class-body
     ;
 
 interface-declaration
-    : prelude 'interface' name generic-parameters? satisfies? case-types? constraints? block-body
+    : prelude 'interface' name generic-parameters? satisfies? case-types? constraints? interface-body
     ;
 
 object-declaration
-    : prelude 'object' name extends? satisfies? block-body
+    : prelude 'object' name extends? satisfies? class-body
     ;
 
 alias-declaration
@@ -241,13 +241,25 @@ constructor-declaration
     ;
 
 class-body
-    : '{' usings class-body-members '}'
+    : '{' usings class-member* '}'
     ;
 
-class-body-members
+interface-body
+    : '{' usings interface-member* '}'
+    ;
+
+class-member
     | universal-declaration
     | constructor-declaration
     | operator-declaration
+    | attribute-declaration
+    | let-declaration
+    | var-declaration
+    ;
+
+interface-member
+    | universal-declaration
+    | constructor-declaration
     | attribute-declaration
     ;
 
