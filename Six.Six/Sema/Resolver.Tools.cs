@@ -15,15 +15,15 @@ namespace Six.Six.Sema
 
             if (value > long.MaxValue)
             {
-                return new Expression.ConstU64(Builtins.Resolve(Names.Core.UInt64), value);
+                return new Expr.ConstU64(Builtins.Resolve(Names.Core.UInt64), value);
             }
             else if (value > int.MaxValue)
             {
-                return new Expression.ConstI64(Builtins.Resolve(Names.Core.Int64), (long)value);
+                return new Expr.ConstI64(Builtins.Resolve(Names.Core.Int64), (long)value);
             }
             else
             {
-                return new Expression.ConstI32(Builtins.Resolve(Names.Core.Int32), (int)value);
+                return new Expr.ConstI32(Builtins.Resolve(Names.Core.Int32), (int)value);
             }
         }
 
@@ -31,7 +31,7 @@ namespace Six.Six.Sema
         {
             var value = ConvertNatural(tree.Text);
 
-            return new Expression.ConstString(Builtins.String, tree.Text);
+            return new Expr.ConstString(Builtins.String, tree.Text);
         }
 
         public ulong ConvertNatural(string text)

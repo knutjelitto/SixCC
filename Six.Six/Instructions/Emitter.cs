@@ -67,34 +67,38 @@ namespace Six.Six.Instructions
             Assert(true);
         }
 
+        public void EmitFuncy(Decl.Funcy decl)
+        {
+            wl($"(func ${decl.Container.FullName}");
+            indent(() =>
+            {
+                wl($"(export \"{decl.Container.FullName}\")");
+                wl("(;-----;)");
+
+                Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
+
+                if (decl is Decl.Function func)
+                {
+                    wlif(Result(func.ResultType));
+                }
+
+                Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
+
+                wl("(;-----;)");
+                foreach (var member in decl.Members)
+                {
+                    Emit(member);
+                }
+                wl("(;-----;)");
+            });
+            wl($")");
+        }
+
         private void Handle(Decl.Funcy decl)
         {
             functions.Add(() =>
             {
-                wl($"(func ${decl.Container.FullName}");
-                indent(() =>
-                {
-                    wl($"(export \"{decl.Container.FullName}\")");
-                    wl("(;-----;)");
-
-                    Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
-
-                    if (decl is Decl.Function func)
-                    {
-                        wlif(Result(func.ResultType));
-                    }
-
-                    Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
-
-                    wl("(;-----;)");
-                    foreach (var member in decl.Members)
-                    {
-                        Emit(member);
-                    }
-                    wl("(;-----;)");
-                });
-                wl($")");
-
+                EmitFuncy(decl);
             });
         }
 

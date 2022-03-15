@@ -1,12 +1,12 @@
 namespace six.core;
 
-//shared primitive i8{}
-//shared primitive i16{}
+shared native class i8{}
+shared native class i16{}
 
 shared native class i32
 {
-    shared static i32 zero = 0;
-    shared static i32 one = 1;
+    shared static let i32 zero = 0;
+    shared static let i32 one = 1;
  
     shared native prefix i32 - ();
     shared native infix i32 + (i32 other);
@@ -16,12 +16,15 @@ shared native class i32
     shared native infix i32 % (i32 other);
 
     shared native infix bool <= (i32 other);
+    shared native infix bool < (i32 other);
+    shared native infix bool >= (i32 other);
+    shared native infix bool > (i32 other);
 }
 
-//shared primitive i64{}
+shared native class i64{}
 
-//shared primitive u8{}
-//shared primitive u16{}
+shared native class u8{}
+shared native class u16{}
 
 shared native class u32
 {
@@ -32,18 +35,19 @@ shared native class u32
     shared native infix u32 % (u32 rhs);
 }
 
-//shared primitive u64{}
+shared native class u64{}
 
-//shared alias byte => u8;
+shared alias sbyte => i8;
+shared alias byte => u8;
 
-//shared alias short => i16;
-//shared alias ushort => u16;
+shared alias short => i16;
+shared alias ushort => u16;
 
 shared alias int => i32;
 shared alias uint => u32;
 
-//shared alias long => i64;
-//shared alias ulong => u64;
+shared alias long => i64;
+shared alias ulong => u64;
 
 shared alias Integer => int;
 

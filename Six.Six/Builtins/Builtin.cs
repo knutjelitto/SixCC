@@ -6,8 +6,8 @@ namespace Six.Six.Builtins
 {
     public abstract class Builtin : Type.Builtin
     {
-        protected readonly Dictionary<string, Func<Expr, Expression.Primitive>> prefix = new();
-        protected readonly Dictionary<string, Func<Expr, Expr, Expression.Primitive>> infix = new();
+        protected readonly Dictionary<string, Func<Expr, Expr.Primitive>> prefix = new();
+        protected readonly Dictionary<string, Func<Expr, Expr, Expr.Primitive>> infix = new();
 
         protected Builtin(Builtins builtins, string name)
         {
@@ -24,7 +24,7 @@ namespace Six.Six.Builtins
 
         public bool IsThis(Expr expr) => ReferenceEquals(LowerType(expr.Type), this);
 
-        public Func<Expr, Expression.Primitive> Prefix(string name)
+        public Func<Expr, Expr.Primitive> Prefix(string name)
         {
             if (prefix.TryGetValue(name, out var action))
             {
@@ -33,7 +33,7 @@ namespace Six.Six.Builtins
             throw new ArgumentOutOfRangeException(nameof(name), name);
         }
 
-        public Func<Expr, Expr, Expression.Primitive> Infix(string name)
+        public Func<Expr, Expr, Expr.Primitive> Infix(string name)
         {
             if (infix.TryGetValue(name, out var action))
             {

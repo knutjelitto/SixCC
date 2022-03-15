@@ -4,30 +4,10 @@ using System;
 
 namespace Six.Six.Sema
 {
-    public interface Expr : Expression
+    public interface Expr : Entity
     {
         Type Type { get; }
-    }
 
-    public sealed record LazyExpr : Expression
-    {
-        private Expr? expr = null;
-        private readonly Func<Expr> resolver;
-
-        public LazyExpr(Module module, Func<Expr> resolver)
-        {
-            Module = module;
-            this.resolver = resolver;
-        }
-
-        public Module Module { get; }
-        public Builtins.Builtins Builtins => Module.Builtins;
-
-        public Expr Expr => expr ??= resolver();
-    }
-
-    public interface Expression : Entity
-    {
         public abstract record ConcreteExpr : Expr
         {
             public ConcreteExpr(Type type)
@@ -119,7 +99,7 @@ namespace Six.Six.Sema
         public sealed record SelectField(Reference Reference, Decl.Field Field, bool Assign)
             : Primitive(Field.Type);
 
-        public sealed record CallMember(Type.Callable Callable, Expression Make, params Expression[] Arguments)
+        public sealed record CallMember(Type.Callable Callable, Expr Make, params Expr[] Arguments)
             : Expr
         {
             public Type Type => Callable.Result;
@@ -141,5 +121,22 @@ namespace Six.Six.Sema
                 }
             }
         }
+    }
+
+    public sealed record LazyExpr : Entity
+    {
+        private Expr? expr = null;
+        private readonly Func<Expr> resolver;
+
+        public LazyExpr(Module module, Func<Expr> resolver)
+        {
+            Module = module;
+            this.resolver = resolver;
+        }
+
+        public Module Module { get; }
+        public Builtins.Builtins Builtins => Module.Builtins;
+
+        public Expr Expr => expr ??= resolver();
     }
 }

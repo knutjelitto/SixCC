@@ -1,5 +1,4 @@
-﻿using Six.Six.Instructions;
-using System;
+﻿using System;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -32,7 +31,6 @@ namespace Six.Six.Sema
                 : base(scope, aDecl)
             {
                 Type = new Type.Reference(this);
-                Scope = scope;
             }
 
             public Classy(Scope parent, A.Decl.Classy aDecl)
@@ -41,7 +39,7 @@ namespace Six.Six.Sema
                 parent.Declare(this, aDecl.Name.Text);
             }
 
-            public ClassyScope Scope { get; }
+            public ClassyScope Scope => (ClassyScope)Container;
 
             public override Type Type { get; }
 

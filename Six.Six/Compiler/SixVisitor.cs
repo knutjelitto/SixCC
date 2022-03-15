@@ -293,20 +293,6 @@ namespace Six.Six.Compiler
             element.Value = new Decl.Var(element, prelude, name, type, value);
         }
 
-        protected override void Visit(CValueBody element)
-        {
-            var expr = Walk<Expression>(element.ValueSpecifier);
-
-            element.Value = new Body.Value(element, expr);
-        }
-
-        protected override void Visit(CValueSpecifier element)
-        {
-            var expr = Walk<Expression>(element.Expression);
-
-            element.Value = expr;
-        }
-
         protected override void Visit(CReference element)
         {
             var name = Walk<Name>(element.Name);

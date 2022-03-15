@@ -17,43 +17,43 @@ namespace Six.Six.Builtins
 
         public override string AsWasm => "f64";
 
-        public Expression.Unop Neg(Expr right)
+        public Expr.Unop Neg(Expr right)
         {
             IsThis(right);
 
-            return new Expression.Unop(this, Insn.F64.Neg, right);
+            return new Expr.Unop(this, Insn.F64.Neg, right);
         }
 
-        public Expression.Primitive Add(Expr left, Expr right)
+        public Expr.Primitive Add(Expr left, Expr right)
         {
             IsThis(left);
             IsThis(right);
 
-            return new Expression.Binop(this, Insn.F64.Add, left, right);
+            return new Expr.Binop(this, Insn.F64.Add, left, right);
         }
 
-        public Expression.Primitive Sub(Expr left, Expr right)
+        public Expr.Primitive Sub(Expr left, Expr right)
         {
             IsThis(left);
             IsThis(right);
 
-            return new Expression.Binop(this, Insn.F64.Sub, left, right);
+            return new Expr.Binop(this, Insn.F64.Sub, left, right);
         }
 
-        public Expression.Primitive Mul(Expr left, Expr right)
+        public Expr.Primitive Mul(Expr left, Expr right)
         {
             IsThis(left);
             IsThis(right);
 
-            return new Expression.Binop(this, Insn.F64.Mul, left, right);
+            return new Expr.Binop(this, Insn.F64.Mul, left, right);
         }
 
-        public Expression.Primitive Div(Expr left, Expr right)
+        public Expr.Primitive Div(Expr left, Expr right)
         {
             IsThis(left);
             IsThis(right);
 
-            return new Expression.Binop(this, Insn.F64.Div, left, right);
+            return new Expr.Binop(this, Insn.F64.Div, left, right);
         }
     }
 }

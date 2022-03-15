@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Six.Six.Sema
+﻿namespace Six.Six.Sema
 {
     public class Layout
     {
@@ -17,7 +11,7 @@ namespace Six.Six.Sema
         }
 
         public Decl.Classy Classy { get; }
-        public Module Module => Classy.Scope.Module;
+        public Module Module => Classy.Container.Module;
         public Resolver Resolver => Module.Resolver;
 
         public void Add(Decl.Field declaredField)

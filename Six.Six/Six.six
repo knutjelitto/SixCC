@@ -1,4 +1,4 @@
-﻿ grammar Six;
+﻿grammar Six;
 
 %start      = compilation-unit;
 %whitespace = skip;
@@ -271,7 +271,6 @@ function-body
 
 attribute-body
     | calc-body
-    | value-body
     | block-body
     | null-body
     ;

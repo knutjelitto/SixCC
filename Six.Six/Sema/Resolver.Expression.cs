@@ -43,7 +43,7 @@ namespace Six.Six.Sema
         private IDisposable Assignability(bool assignable)
         {
             var saved = assignable;
-            this.Assignable = assignable;
+            Assignable = assignable;
             return new Disposable(() => this.Assignable = saved);
         }
 
@@ -69,7 +69,7 @@ namespace Six.Six.Sema
                 var then = ResolveExpression(container, node.Then);
                 var @else = ResolveExpression(container, node.Else);
 
-                return new Expression.If(condition, then, @else);
+                return new Expr.If(condition, then, @else);
             });
         }
 
@@ -89,7 +89,7 @@ namespace Six.Six.Sema
                 else
                 {
                     Assert(conditions.Count > 1);
-                    return new Expression.AndThen(first, ExpressionConditions(container, conditions.Skip(1)));
+                    return new Expr.AndThen(first, ExpressionConditions(container, conditions.Skip(1)));
                 }
             });
 
@@ -103,21 +103,21 @@ namespace Six.Six.Sema
             {
                 var primary = ResolveExpression(container, node.Expr);
 
-                if (primary.Expr is Expression.ClassyReference classyRef)
+                if (primary.Expr is Expr.ClassyReference classyRef)
                 {
                     var found = classyRef.ClassyFind(node.Reference);
 
                     if (found is Decl.Attribute attribute)
                     {
                         Assert(attribute.IsStatic());
-                        return new Expression.SelectAttribute(classyRef, attribute, assign);
+                        return new Expr.SelectAttribute(classyRef, attribute, assign);
                     }
                     else
                     {
                         Assert(false);
                     }
                 }
-                else if (primary.Expr is Expression.ConstructorReference constructorReference)
+                else if (primary.Expr is Expr.ConstructorReference constructorReference)
                 {
                     var found = ResolveType(constructorReference.ConstructorDecl.Type);
 
@@ -132,7 +132,7 @@ namespace Six.Six.Sema
                         Assert(Module.HasErrors);
                     }
                 }
-                else if (primary.Expr is Expression.ParameterReference parameterReference)
+                else if (primary.Expr is Expr.ParameterReference parameterReference)
                 {
                     var found = ResolveType(parameterReference.ParameterDecl.Type);
 
@@ -142,11 +142,11 @@ namespace Six.Six.Sema
 
                         if (referenced is Decl.Attribute attribute)
                         {
-                            return new Expression.SelectAttribute(parameterReference, attribute, assign);
+                            return new Expr.SelectAttribute(parameterReference, attribute, assign);
                         }
                         else if (referenced is Decl.Field field)
                         {
-                            return new Expression.SelectField(parameterReference, field, assign);
+                            return new Expr.SelectField(parameterReference, field, assign);
                         }
                         else
                         {
@@ -175,7 +175,7 @@ namespace Six.Six.Sema
                 var func = ResolveExpression(container, node.Expr);
                 var args = ResolveArguments(container, node.Arguments).ToList();
 
-                if (func.Expr is Expression.FunctionReference function)
+                if (func.Expr is Expr.FunctionReference function)
                 {
                     var callable = function.FunctionDecl.Type as Type.Callable;
                     Assert(callable != null);
@@ -210,9 +210,9 @@ namespace Six.Six.Sema
 
                     Assert(arguments.Count == prms.Count);
 
-                    return new Expression.CallFunction(function, arguments);
+                    return new Expr.CallFunction(function, arguments);
                 }
-                else if (func.Expr is Expression.ClassReference klassReference)
+                else if (func.Expr is Expr.ClassReference klassReference)
                 {
                     var klass = klassReference.ClassDecl;
                     var defaultCtor = klass.ClassyScope().Block.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
@@ -250,14 +250,14 @@ namespace Six.Six.Sema
 
                     Assert(arguments.Count == prms.Count - 1);
 
-                    return new Expression.CallConstructor(klass, defaultCtor, arguments);
+                    return new Expr.CallConstructor(klass, defaultCtor, arguments);
 
                 }
-                else if (func.Expr is Expression.LocalReference local)
+                else if (func.Expr is Expr.LocalReference local)
                 {
                     return ResolveIndirect(local, local.LocalDecl.Type as Type.Callable);
                 }
-                else if (func.Expr is Expression.ParameterReference parameter)
+                else if (func.Expr is Expr.ParameterReference parameter)
                 {
                     return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
                 }
@@ -294,7 +294,7 @@ namespace Six.Six.Sema
 
                     Assert(arguments.Count == prms.Count);
 
-                   return new Expression.CallIndirect(value, callable, arguments);
+                   return new Expr.CallIndirect(value, callable, arguments);
                 }
             });
         }
@@ -327,7 +327,7 @@ namespace Six.Six.Sema
                     var result = ResolveDeclType(infix);
                     if (result is Type.Callable callable)
                     {
-                        return new Expression.CallMember(callable, left, right);
+                        return new Expr.CallMember(callable, left.Expr, right.Expr);
                     }
                     else
                     {
@@ -372,7 +372,7 @@ namespace Six.Six.Sema
                         var result = ResolveDeclType(prefix);
                         if (result is Type.Callable callable)
                         {
-                            return new Expression.CallMember(callable, right);
+                            return new Expr.CallMember(callable, right.Expr);
                         }
                         else
                         {
@@ -412,30 +412,30 @@ namespace Six.Six.Sema
             {
                 var decl = container.Resolve(tree, tree.Name.Text);
 
-                Expression.Reference reference;
+                Expr.Reference reference;
 
                 switch (decl)
                 {
                     case Decl.Parameter node:
-                        reference = new Expression.ParameterReference(node);
+                        reference = new Expr.ParameterReference(node);
                         break;
                     case Decl.SelfParameter node:
-                        reference = new Expression.ParameterReference(node);
+                        reference = new Expr.ParameterReference(node);
                         break;
                     case Decl.LetVar node:
-                        reference = new Expression.LocalReference(node);
+                        reference = new Expr.LocalReference(node);
                         break;
                     case Decl.Attribute node:
-                        reference = new Expression.AttributeReference(node);
+                        reference = new Expr.AttributeReference(node);
                         break;
                     case Decl.Function node:
-                        reference = new Expression.FunctionReference(node);
+                        reference = new Expr.FunctionReference(node);
                         break;
                     case Decl.Constructor node:
-                        reference = new Expression.ConstructorReference(node);
+                        reference = new Expr.ConstructorReference(node);
                         break;
                     case Decl.Class node:
-                        reference = new Expression.ClassReference(node);
+                        reference = new Expr.ClassReference(node);
                         break;
                     default:
                         Assert(false);

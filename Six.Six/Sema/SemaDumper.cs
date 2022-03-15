@@ -1,7 +1,5 @@
 ﻿using Six.Core;
 using Six.Runtime;
-using Six.Six.Builtins;
-using Six.Six.Instructions;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -92,17 +90,15 @@ namespace Six.Six.Sema
             }
         }
 
-        private string ExprOf(Expression? entity)
+        private string ExprOf(Expr? entity)
         {
             if (entity == null) return "";
 
             switch (entity)
             {
-                case LazyExpr expr:
-                    return ExprOf(expr.Expr);
-                case Expression.Const expr:
+                case Expr.Const expr:
                     return $"({expr.Insn})";
-                case Expression.Binop expr:
+                case Expr.Binop expr:
                     return $"({expr.Insn} {ExprOf(expr.Arg1)} {ExprOf(expr.Arg2)})";
                 default:
                     Assert(false);
@@ -110,7 +106,7 @@ namespace Six.Six.Sema
             }
         }
 
-        private string DefaultOf(Expression? entity)
+        private string DefaultOf(Expr? entity)
         {
             if (entity != null)
             {
@@ -255,49 +251,42 @@ namespace Six.Six.Sema
             });
         }
 
-        private void Visit(Expression expr)
+        private void Visit(Expr expr)
         {
             Assert(false);
         }
 
-        private void Visit(LazyExpr expr)
+        private void Visit(LazyExpr lazy)
         {
-            if (expr.Expr != null)
-            {
-                Walk(expr.Expr);
-            }
-            else
-            {
-                Assert(false);
-            }
+            Walk(lazy.Expr);
         }
 
-        private void Visit(Expression.ParameterReference expr)
+        private void Visit(Expr.ParameterReference expr)
         {
             w($"{Head("parameter")}"); Walk(expr.Decl);
         }
 
-        private void Visit(Expression.Reference expr)
+        private void Visit(Expr.Reference expr)
         {
             wl($"<<reference>>");
         }
 
-        private void Visit(Expression.ConstI32 expr)
+        private void Visit(Expr.ConstI32 expr)
         {
             wl($"{expr.Value}");
         }
 
-        private void Visit(Expression.ConstI64 expr)
+        private void Visit(Expr.ConstI64 expr)
         {
             wl($"{expr.Value}");
         }
 
-        private void Visit(Expression.ConstU64 expr)
+        private void Visit(Expr.ConstU64 expr)
         {
             wl($"{expr.Value}");
         }
 
-        private void Visit(Expression.CallMember expr)
+        private void Visit(Expr.CallMember expr)
         {
             wl($"{expr.GetType().Name}");
             indent(() =>

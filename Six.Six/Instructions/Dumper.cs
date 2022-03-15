@@ -3,6 +3,10 @@ using Six.Runtime;
 using Six.Six.Sema;
 using System;
 
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE1006 // Naming Styles
+
 namespace Six.Six.Instructions
 {
     public class Dumper : WithWriter
@@ -25,7 +29,7 @@ namespace Six.Six.Instructions
 
         private void comment(Action action)
         {
-            indent("(;", ";)", action);
+            indent("(; (; ;)", ";)", action);
         }
 
         private void Walker(Entity decl)
@@ -88,8 +92,7 @@ namespace Six.Six.Instructions
 
         private void Walk(Decl.Funcy decl)
         {
-            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}");
-            WalkMembers(decl);
+            Emitter.EmitFuncy(decl);
         }
 
         private void Walk(Stmt stmt)

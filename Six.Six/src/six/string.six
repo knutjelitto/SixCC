@@ -1,8 +1,8 @@
 namespace six.core;
 
-shared class String
+shared native class String
 {
-    shared Bytes bytes;
+    var Bytes bytes;
     
     shared native infix String + (String rhs);
 }

@@ -62,7 +62,7 @@ namespace Six.Six.Instructions
 
         private string WasmTypeFor(Type type)
         {
-            switch (type)
+            switch (Resolver.LowerType(type))
             {
                 case Builtin builtin:
                     return $"{builtin.AsWasm}";
@@ -74,8 +74,8 @@ namespace Six.Six.Instructions
                         return $"{builtin.AsWasm}";
                     }
                 default:
-                    Assert(false);
-                    return $"(;wasm-type:?????;)";
+                    //Assert(false);
+                    return $"(;wasm-type:?????{type};)";
             }
         }
 

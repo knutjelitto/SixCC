@@ -1,5 +1,4 @@
-﻿using Six.Core.Errors;
-using System;
+﻿using System;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -66,13 +65,6 @@ namespace Six.Six.Sema
         private Body Body(BlockScope container, A.Body.Deferred node)
         {
             return new Body.Dummy();
-        }
-
-        private Body Body(BlockScope container, A.Body.Value node)
-        {
-            var delayed = ResolveExpression(container, node.Expression);
-
-            return new Body.Value(() => delayed.Expr);
         }
 
         private Body Body(BlockScope container, A.Body.Calc node)

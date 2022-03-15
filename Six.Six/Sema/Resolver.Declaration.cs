@@ -154,33 +154,21 @@ namespace Six.Six.Sema
 
         private void Declare(Scope parent, A.Decl.Var node)
         {
-            if (InFuncy)
-            {
-                var function = CurrentFuncy;
-
-                var decl = parent.Declare(new Decl.LetVar(parent, node, true, function.Parameters.Count + function.Locals.Count));
-                function.Locals.Add(decl);
-                function.Members.Add(decl);
-            }
-            else
-            {
-                Assert(InClass);
-
-                var klass = CurrentClass;
-
-                var decl = parent.Declare(new Decl.Field(parent, node, true));
-                klass.Fields.Add(decl);
-                klass.Members.Add(decl);
-            }
+            DeclareLetVarField(parent, node, true);
         }
 
         private void Declare(Scope parent, A.Decl.Let node)
+        {
+            DeclareLetVarField(parent, node, false);
+        }
+
+        private void DeclareLetVarField(Scope parent, A.Decl node, bool writeable)
         {
             if (InFuncy)
             {
                 var function = CurrentFuncy;
 
-                var decl = parent.Declare(new Decl.LetVar(parent, node, false, function.Parameters.Count + function.Locals.Count));
+                var decl = parent.Declare(new Decl.LetVar(parent, node, writeable, function.Parameters.Count + function.Locals.Count));
                 function.Locals.Add(decl);
                 function.Members.Add(decl);
             }
@@ -190,7 +178,7 @@ namespace Six.Six.Sema
 
                 var klass = CurrentClass;
 
-                var decl = parent.Declare(new Decl.Field(parent, node, false));
+                var decl = parent.Declare(new Decl.Field(parent, node, writeable));
                 klass.Fields.Add(decl);
                 klass.Members.Add(decl);
             }
