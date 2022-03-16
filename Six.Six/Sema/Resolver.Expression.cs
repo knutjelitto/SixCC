@@ -38,21 +38,9 @@ namespace Six.Six.Sema
             return PrefixName(node.Name);
         }
 
-        private bool Assignable = false;
-
-        private IDisposable Assignability(bool assignable)
+        public LazyExpr ResolveExpression(Scope scope, A.Expression node)
         {
-            var saved = assignable;
-            Assignable = assignable;
-            return new Disposable(() => this.Assignable = saved);
-        }
-
-        public LazyExpr ResolveExpression(Scope scope, A.Expression node, bool assignable = false)
-        {
-            using (Assignability(assignable))
-            {
-                return Expression(scope, (dynamic)node);
-            }
+            return Expression(scope, (dynamic)node);
         }
 
         private LazyExpr Expression(Scope container, A.Expression node)
@@ -97,8 +85,6 @@ namespace Six.Six.Sema
 
         private LazyExpr Expression(Scope container, A.Expression.Select node)
         {
-            var assign = Assignable;
-
             return new LazyExpr(Module, () =>
             {
                 var primary = ResolveExpression(container, node.Expr);
@@ -110,7 +96,7 @@ namespace Six.Six.Sema
                     if (found is Decl.Attribute attribute)
                     {
                         Assert(attribute.IsStatic());
-                        return new Expr.SelectAttribute(classyRef, attribute, assign);
+                        return new Expr.SelectAttribute(classyRef, attribute);
                     }
                     else
                     {
@@ -142,11 +128,11 @@ namespace Six.Six.Sema
 
                         if (referenced is Decl.Attribute attribute)
                         {
-                            return new Expr.SelectAttribute(parameterReference, attribute, assign);
+                            return new Expr.SelectAttribute(parameterReference, attribute);
                         }
                         else if (referenced is Decl.Field field)
                         {
-                            return new Expr.SelectField(parameterReference, field, assign);
+                            return new Expr.SelectField(parameterReference, field);
                         }
                         else
                         {
@@ -318,21 +304,12 @@ namespace Six.Six.Sema
                     reference.Decl is Decl.Classy classy)
                 {
                     var infix = classy.Scope.Block.Find(node.Op, InfixName(node));
-                 
-                    if (infix.IsNative())
+
+                    if (infix is Decl.Function function)
                     {
-                        return Builtins.Resolve(classy).Infix(node.Op, left.Expr, right.Expr);
+                        return new Expr.CallInfixMember(classy, function, left.Expr, right.Expr);
                     }
 
-                    var result = ResolveDeclType(infix);
-                    if (result is Type.Callable callable)
-                    {
-                        return new Expr.CallMember(callable, left.Expr, right.Expr);
-                    }
-                    else
-                    {
-                        Assert(false);
-                    }
                     Assert(false);
                 }
                 else if (left.Expr.Type is Type.Builtin builtin)
@@ -357,26 +334,15 @@ namespace Six.Six.Sema
                 var right = ResolveExpression(container, node.Expr);
 
                 if (right.Expr.Type is Type.Reference reference &&
-                    reference.Decl is Decl.Classy classy &&
-                    classy.Container is ContentScope content)
+                    reference.Decl is Decl.Classy classy)
                 {
                     if (classy.ADecl is A.Decl.Classy)
                     {
-                        var prefix = content.Block.Find(node.Op, PrefixName(node));
+                        var prefix = classy.Scope.Block.Find(node.Op, PrefixName(node));
 
-                        if (prefix.IsNative())
+                        if (prefix is Decl.Function function)
                         {
-                            return Builtins.Resolve(classy).Prefix(node.Op, right.Expr);
-                        }
-
-                        var result = ResolveDeclType(prefix);
-                        if (result is Type.Callable callable)
-                        {
-                            return new Expr.CallMember(callable, right.Expr);
-                        }
-                        else
-                        {
-                            Assert(false);
+                            return new Expr.CallPrefixMember(classy, function, right.Expr);
                         }
 
                         Assert(false);

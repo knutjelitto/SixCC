@@ -1,13 +1,24 @@
-﻿using Six.Six.Sema;
+﻿using Six.Six.Instructions;
+using Six.Six.Sema;
 
 namespace Six.Six.Builtins
 {
     public sealed class String : Builtin
     {
         public String(Builtins builtins)
-            : base(builtins, Names.Core.String)
+            : base(builtins, Names.Core.String, WasmDef.Pointer)
         { }
 
-        public override string AsWasm => $"i32";
+        public override Insn Load(uint offset)
+        {
+            Assert(false);
+            throw new System.NotImplementedException();
+        }
+
+        public override Insn Store(uint offset)
+        {
+            Assert(false);
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -6,7 +6,8 @@ namespace Six.Six.Builtins
 {
     public class F64 : Floating
     {
-        public F64(Builtins builtins) : base(builtins, Names.Core.Float64)
+        public F64(Builtins builtins)
+            : base(builtins, Names.Core.Float64, WasmDef.F64)
         {
             prefix.Add("-", Neg);
             infix.Add("+", Add);
@@ -15,7 +16,15 @@ namespace Six.Six.Builtins
             infix.Add("/", Div);
         }
 
-        public override string AsWasm => "f64";
+        public override Insn Load(uint offset)
+        {
+            return Insn.F64.Load(offset);
+        }
+
+        public override Insn Store(uint offset)
+        {
+            return Insn.F64.Store(offset);
+        }
 
         public Expr.Unop Neg(Expr right)
         {

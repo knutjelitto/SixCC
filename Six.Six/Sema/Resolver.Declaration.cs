@@ -148,8 +148,6 @@ namespace Six.Six.Sema
         {
             var decl = parent.Declare(new Decl.Attribute(parent, node));
             CurrentMemby.Members.Add(decl);
-
-            var body = WalkBody(parent, node.Body);
         }
 
         private void Declare(Scope parent, A.Decl.Var node)

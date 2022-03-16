@@ -91,12 +91,6 @@ namespace Six.Six.Sema
                     Assert(!subst.Any(c => invalid.Contains(c)));
                     var decl = declaration.ADecl.GetType().Name.ToLowerInvariant();
 
-                    var dumpName = $"dump/{path}/{decl}/{subst}.txt";
-                    using (var writer = dumpName.Writer())
-                    {
-                        new SemaDumper(writer, Resolver).DumpDeclaration(declaration);
-                    }
-
                     var watName = $"wat/{path}/{decl}/{subst}.wat";
                     using (var writer = watName.Writer())
                     {
@@ -143,13 +137,15 @@ namespace Six.Six.Sema
             }
         }
 
-        public Decl CoreFind(A.TreeNode tree, string name)
+        public Type CoreFindClass(A.TreeNode tree, string name)
         {
             var language = Root.Get(Language);
             Assert(language != null);
             var core = language.Get(LanguageCore);
             Assert(core != null);
-            return core.Find(tree, name);
+            var decl = core.Find(tree, name);
+            Assert(decl is Decl.Classy);
+            return ((Decl.Classy)decl).Type;
         }
 
         Scope Scope.Parent => this;

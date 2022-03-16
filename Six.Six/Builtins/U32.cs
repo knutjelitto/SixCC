@@ -21,6 +21,16 @@ namespace Six.Six.Builtins
             infix.Add("%", Rem);
         }
 
+        public override Insn Load(uint offset)
+        {
+            return Insn.U32.Load(offset);
+        }
+
+        public override Insn Store(uint offset)
+        {
+            return Insn.U32.Store(offset);
+        }
+
         public Expr.Primitive Neg(Expr right)
         {
             Assert(IsThis(right));

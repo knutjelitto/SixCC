@@ -1,4 +1,5 @@
-﻿using Six.Six.Sema;
+﻿using Six.Six.Instructions;
+using Six.Six.Sema;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,20 @@ namespace Six.Six.Builtins
     public sealed class Anything : Builtin
     {
         public Anything(Builtins builtins)
-            : base(builtins, Names.Core.Anything)
+            : base(builtins, Names.Core.Anything, WasmDef.Pointer)
         { }
 
-        public override string AsWasm => $"i32";
+        public override Insn Load(uint offset)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
+        public override Insn Store(uint offset)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
 
         public override string ToString() => Name;
     }

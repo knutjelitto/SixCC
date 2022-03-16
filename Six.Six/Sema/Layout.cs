@@ -1,9 +1,10 @@
-﻿namespace Six.Six.Sema
+﻿using Six.Six.Builtins;
+
+namespace Six.Six.Sema
 {
     public class Layout
     {
-        private readonly List<Field> fields = new();
-        private readonly List<Decl.Field> declaredFields = new();
+        private readonly List<Decl.Field> fields = new();
 
         public Layout(Decl.Classy classy)
         {
@@ -14,29 +15,36 @@
         public Module Module => Classy.Container.Module;
         public Resolver Resolver => Module.Resolver;
 
+        public uint Size { get; private set; } = uint.MaxValue;
+
         public void Add(Decl.Field declaredField)
         {
-            declaredFields.Add(declaredField);
+            fields.Add(declaredField);
         }
 
         public void Finish()
         {
-            foreach (var attribute in declaredFields)
-            {
-                var type = Resolver.LowerType(attribute.Type);
-            }
-        }
+            uint offset = 0;
 
-        public class Field
-        {
-            public Field(Field? prevField, Decl.Attribute attribute)
+            foreach (var field in fields)
             {
-                Prev = prevField;
-                Attribute = attribute;
+                var type = Resolver.LowerType(field.Type);
+
+                if (type is Builtin builtin)
+                {
+                    offset = builtin.Wasm.Align(offset);
+
+                    field.Offset = offset;
+
+                    offset += builtin.Wasm.MemSize;
+                }
+                else
+                {
+                    Assert(false);
+                }
             }
 
-            public Field? Prev { get; }
-            public Decl.Attribute Attribute { get; }
+            Size = offset;
         }
     }
 }

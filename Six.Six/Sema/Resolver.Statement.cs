@@ -22,7 +22,7 @@ namespace Six.Six.Sema
                 new Stmt.Assign(
                     container, 
                     node,
-                    ResolveExpression(container, node.Left, true),
+                    ResolveExpression(container, node.Left),
                     ResolveExpression(container, node.Right)));
             CurrentFuncy.Members.Add(stmt);
         }

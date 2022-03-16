@@ -13,6 +13,20 @@ namespace Six.Six.Instructions
 {
     public partial class Emitter
     {
+        private Builtin Lower(Type type)
+        {
+            var lower = Resolver.LowerType(type);
+
+            switch (lower)
+            {
+                case Builtin builtin:
+                    return builtin;
+                default:
+                    Assert(false);
+                    throw new NotImplementedException();
+            }
+        }
+
         private string FindType(Type.Callable callable)
         {
             var funcType = FuncType(callable);
@@ -65,13 +79,13 @@ namespace Six.Six.Instructions
             switch (Resolver.LowerType(type))
             {
                 case Builtin builtin:
-                    return $"{builtin.AsWasm}";
+                    return $"{builtin.Wasm.Type}";
                 case Type.Callable:
-                    return $"{Builtins.TableIndex.AsWasm}";
+                    return $"{Builtins.TableIndex.Wasm.Type}";
                 case Type.Declared declared when declared.Decl.IsNative():
                     {
                         var builtin = Builtins.Resolve(declared.Decl);
-                        return $"{builtin.AsWasm}";
+                        return $"{builtin.Wasm.Type}";
                     }
                 default:
                     //Assert(false);

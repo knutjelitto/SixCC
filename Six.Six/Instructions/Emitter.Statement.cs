@@ -1,4 +1,5 @@
 ﻿using Six.Six.Sema;
+using System;
 
 #pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -14,9 +15,17 @@ namespace Six.Six.Instructions
 
         private void Handle(Stmt.Assign stmt)
         {
-            Emit(stmt.Left);
-            Emit(stmt.Right);
-            Emit(Insn.ToDo("assign"));
+            switch (stmt.Left)
+            {
+                case Expr.SelectField select:
+                    Emit(stmt.Right);
+                    Emit(select.Reference);
+                    Emit(Lower(select.Field.Type).Store(select.Field.Offset));
+                    return;
+                default:
+                    Assert(false);
+                    throw new NotImplementedException();
+            }
         }
 
         private void Handle(Stmt.Return stmt)

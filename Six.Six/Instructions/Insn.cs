@@ -32,7 +32,7 @@ namespace Six.Six.Instructions
 
             public override string ToString()
             {
-                return $"TODO: {Text}";
+                return $";; TODO: {Text}";
             }
         }
 
@@ -66,6 +66,9 @@ namespace Six.Six.Instructions
             public static Insn Le => Binop.LeS(ValueType.I32);
             public static Insn Gt => Binop.GtS(ValueType.I32);
             public static Insn Ge => Binop.GeS(ValueType.I32);
+
+            public static Insn Load(uint offset) => new Load(MemType.S32(), offset);
+            public static Insn Store(uint offset) => new Store(MemType.U32(), offset);
         }
 
         public static class U32
@@ -76,16 +79,21 @@ namespace Six.Six.Instructions
             public static Insn Mul => Binop.Mul(ValueType.I32);
             public static Insn Div => Binop.DivU(ValueType.I32);
             public static Insn Rem => Binop.RemU(ValueType.I32);
+            public static Insn Load(uint offset) => new Load(MemType.U32(), offset);
+            public static Insn Store(uint offset) => new Store(MemType.U32(), offset);
         }
 
         public static class I64
         {
             public static Const Const(long value) => new(new Value.ValueI64(value));
+            public static Insn Load(uint offset) => new Load(MemType.S64(), offset);
         }
 
         public static class U64
         {
             public static Const Const(ulong value) => new(new Value.ValueU64(value));
+            public static Insn Load(uint offset) => new Load(MemType.U64(), offset);
+            public static Insn Store(uint offset) => new Store(MemType.U64(), offset);
         }
 
         public static class F32
@@ -98,6 +106,8 @@ namespace Six.Six.Instructions
             public static Insn Sub => Binop.Sub(ValueType.F32);
             public static Insn Mul => Binop.Mul(ValueType.F32);
             public static Insn Div => Binop.Div(ValueType.F32);
+            public static Insn Load(uint offset) => new Load(MemType.F32, offset);
+            public static Insn Store(uint offset) => new Store(MemType.F32, offset);
         }
 
         public static class F64
@@ -110,6 +120,9 @@ namespace Six.Six.Instructions
             public static Insn Sub => Binop.Sub(ValueType.F64);
             public static Insn Mul => Binop.Mul(ValueType.F64);
             public static Insn Div => Binop.Div(ValueType.F64);
+
+            public static Insn Load(uint offset) => new Load(MemType.F64, offset);
+            public static Insn Store(uint offset) => new Store(MemType.F64, offset);
         }
 
         public class Unop : Insn
@@ -167,6 +180,40 @@ namespace Six.Six.Instructions
             public static Insn GtU(ValueType type) => new Binop(type, "gt", OpSign.Unsigned);
             public static Insn GeS(ValueType type) => new Binop(type, "ge", OpSign.Signed);
             public static Insn GeU(ValueType type) => new Binop(type, "ge", OpSign.Unsigned);
+        }
+
+        public class Load : Insn
+        {
+            public Load(MemType memType, uint offset)
+            {
+                MemType = memType;
+                Offset = offset;
+            }
+
+            public MemType MemType { get; }
+            public uint Offset { get; }
+
+            public override string ToString()
+            {
+                return MemType.Load(Offset);
+            }
+        }
+
+        public class Store : Insn
+        {
+            public Store(MemType memType, uint offset)
+            {
+                MemType = memType;
+                Offset = offset;
+            }
+
+            public MemType MemType { get; }
+            public uint Offset { get; }
+
+            public override string ToString()
+            {
+                return MemType.Store(Offset);
+            }
         }
 
         public class Const : Insn
@@ -311,21 +358,58 @@ namespace Six.Six.Instructions
 
     public class ValueType
     {
-        private ValueType(string name)
+        private ValueType(string name, int bytes)
         {
             Name = name;
+            Bytes = bytes;
         }
 
         public string Name { get; }
+        public int Bytes { get; }
 
         public override string ToString()
         {
             return Name.ToLowerInvariant();
         }
 
-        public static ValueType I32 { get; } = new ValueType("i32");
-        public static ValueType I64 { get; } = new ValueType("i64");
-        public static ValueType F32 { get; } = new ValueType("f32");
-        public static ValueType F64 { get; } = new ValueType("f64");
+        public static ValueType I32 { get; } = new ValueType("i32", 4);
+        public static ValueType I64 { get; } = new ValueType("i64", 8);
+        public static ValueType F32 { get; } = new ValueType("f32", 4);
+        public static ValueType F64 { get; } = new ValueType("f64", 8);
+    }
+
+    public class MemType
+    {
+        private MemType(ValueType valueType, int bytes, OpSign opSign)
+        {
+            ValueType = valueType;
+            Bytes = bytes;
+            OpSign = opSign;
+        }
+
+        public ValueType ValueType { get; }
+        public int Bytes { get; }
+        public OpSign OpSign { get; }
+
+        public string Load(uint offset)
+        {
+            return $"{ValueType}.load{Bits}{Sign} offset={offset}";
+        }
+
+        public string Store(uint offset)
+        {
+            return $"{ValueType}.store{Bits}{Sign} offset={offset}";
+        }
+
+        private string Bits => Bytes == ValueType.Bytes ? "" : $"{Bytes * 8}";
+        private string Sign => Bytes == ValueType.Bytes ? "" : $"{OpSign}";
+
+        public static MemType U32(int bytes = 4) => new MemType(ValueType.I32, bytes, OpSign.Unsigned);
+        public static MemType S32(int bytes = 4) => new MemType(ValueType.I32, bytes, OpSign.Signed);
+        public static MemType U64(int bytes = 8) => new MemType(ValueType.I64, bytes, OpSign.Unsigned);
+        public static MemType S64(int bytes = 8) => new MemType(ValueType.I64, bytes, OpSign.Signed);
+
+        public static MemType F32 { get; } = new MemType(ValueType.F32, ValueType.F32.Bytes, OpSign.Neutral);
+        public static MemType F64 { get; } = new MemType(ValueType.F64, ValueType.F64.Bytes, OpSign.Neutral);
     }
 }

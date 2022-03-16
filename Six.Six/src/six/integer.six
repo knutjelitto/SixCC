@@ -1,12 +1,17 @@
 namespace six.core;
 
-shared native class i8{}
-shared native class i16{}
+shared native class i8
+{
+}
+
+shared native class i16
+{
+}
 
 shared native class i32
 {
-    shared static let i32 zero = 0;
-    shared static let i32 one = 1;
+    shared native static let i32 zero = 0;
+    shared native static let i32 one = 1;
  
     shared native prefix i32 - ();
     shared native infix i32 + (i32 other);
@@ -21,10 +26,17 @@ shared native class i32
     shared native infix bool > (i32 other);
 }
 
-shared native class i64{}
+shared native class i64
+{
+}
 
-shared native class u8{}
-shared native class u16{}
+shared native class u8
+{
+}
+
+shared native class u16
+{
+}
 
 shared native class u32
 {
@@ -35,7 +47,9 @@ shared native class u32
     shared native infix u32 % (u32 rhs);
 }
 
-shared native class u64{}
+shared native class u64
+{
+}
 
 shared alias sbyte => i8;
 shared alias byte => u8;

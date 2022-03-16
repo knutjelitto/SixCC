@@ -9,8 +9,9 @@ namespace Six.Six.Builtins
 {
     public abstract class I32 : Integral
     {
-        protected I32(Builtins builtins, string name) : base(builtins, name) { }
-
-        public override string AsWasm => $"i32";
+        protected I32(Builtins builtins, string name)
+            : base(builtins, name, WasmDef.I32)
+        {
+        }
     }
 }

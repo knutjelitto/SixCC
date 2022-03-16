@@ -55,12 +55,11 @@ namespace Six.Six.Sema
                 {
                     if (ADecl is A.With.Extends ext && ext.Extends is A.Type extended)
                     {
-                        extends = ResolveType(Scope, extended);
+                        extends = Resolver.ResolveType(Scope, extended);
                     }
                     else if (!ADecl.IsNative())
                     {
-                        var basicDecl = Module.CoreFind(ADecl, Names.Core.Basic);
-                        extends = new Type.Reference(basicDecl);
+                        extends = Module.CoreFindClass(ADecl, Names.Core.Basic);
                     }
                 }
                 return extends;
@@ -143,7 +142,7 @@ namespace Six.Six.Sema
                 type ??= new Type.Callable(ResultType, ParamTypes);
 
             public Type ResultType =>
-                resultType ??= ResolveType(Scope, ((A.With.Type)ADecl).Type);
+                resultType ??= Resolver.ResolveType(Scope, ((A.With.Type)ADecl).Type);
         }
 
         public class Constructor : Funcy
@@ -162,7 +161,7 @@ namespace Six.Six.Sema
                 type ??= new Type.Callable(ResultType, ParamTypes);
 
             public Type ResultType =>
-                resultType ??= ResolveType(Class.Type);
+                resultType ??= Resolver.ResolveType(Class.Type);
         }
 
         public abstract class Local : Declaration
@@ -202,7 +201,7 @@ namespace Six.Six.Sema
             }
 
             public override Type Type =>
-                type ??= ResolveType(Container, ((A.With.Type)ADecl).Type);
+                type ??= Resolver.ResolveType(Container, ((A.With.Type)ADecl).Type);
         }
 
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {SelfName}")]
@@ -228,7 +227,7 @@ namespace Six.Six.Sema
             {
                 Assert(ADecl is A.With.OptionalType);
                 Assert(ADecl is A.With.Value);
-                value = ResolveExpression(Container, ((A.With.Value)ADecl).Value);
+                value = Resolver.ResolveExpression(Container, ((A.With.Value)ADecl).Value);
                 Writeable = writeable;
             }
 
@@ -244,7 +243,7 @@ namespace Six.Six.Sema
                         var aType = ((A.With.OptionalType)ADecl).Type;
                         if (aType != null)
                         {
-                            type = ResolveType(Container, aType);
+                            type = Resolver.ResolveType(Container, aType);
                         }
                         else
                         {
@@ -268,11 +267,12 @@ namespace Six.Six.Sema
             {
                 Assert(aDecl is A.With.OptionalType);
                 Assert(aDecl is A.With.Value);
-                value = ResolveExpression(container, ((A.With.Value)aDecl).Value);
+                value = Resolver.ResolveExpression(container, ((A.With.Value)aDecl).Value);
                 Writeable = writeable;
             }
 
             public bool Writeable { get; }
+            public uint Offset { get; set; } = uint.MaxValue;
 
             public override Type Type
             {
@@ -284,7 +284,7 @@ namespace Six.Six.Sema
                         var aType = ((A.With.OptionalType)ADecl).Type;
                         if (aType != null)
                         {
-                            type = ResolveType(Container, aType);
+                            type = Resolver.ResolveType(Container, aType);
                         }
                         else
                         {
@@ -322,14 +322,16 @@ namespace Six.Six.Sema
 
 
             public override Type Type =>
-                type ??= ResolveType(Scope, ((A.With.Type)ADecl).Type);
+                type ??= Resolver.ResolveType(Scope, ((A.With.Type)ADecl).Type);
 
         }
 
         public sealed class Attribute : Declaration
         {
-            public Attribute(Scope container, A.Decl aDecl)
-                : base(container, aDecl)
+            private Body? body;
+
+            public Attribute(Scope parent, A.Decl aDecl)
+                : base(parent, aDecl)
             {
                 Assert(ADecl is A.With.Type);
             }
@@ -337,7 +339,10 @@ namespace Six.Six.Sema
             public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
 
             public override Type Type =>
-                type ??= ResolveType(Container, ((A.With.Type)ADecl).Type);
+                type ??= Resolver.ResolveType(Container, ((A.With.Type)ADecl).Type);
+
+            public Body Body =>
+                body ??= Resolver.WalkBody(Container, ((A.With.Body)ADecl).Body);
         }
 
 #if false
@@ -371,12 +376,7 @@ namespace Six.Six.Sema
             public abstract string FullName { get; }
 
             public Module Module => Container.Module;
-            public Resolver Resolver => Module.Resolver;
-
-
-            public Type ResolveType(Scope scope, A.Type tree) => Resolver.ResolveType(scope, tree);
-            public Type ResolveType(Type type) => Resolver.ResolveType(type) ?? throw new InvalidOperationException();
-            public LazyExpr ResolveExpression(Scope scope, A.Expression node) => Resolver.ResolveExpression(scope, node);
+            public Resolver Resolver => Container.Module.Resolver;
         }
     }
 }

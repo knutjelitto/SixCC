@@ -18,6 +18,16 @@ namespace Six.Six.Builtins
             infix.Add("<=", LessThanOrEqual);
         }
 
+        public override Insn Load(uint offset)
+        {
+            return Insn.I32.Load(offset);
+        }
+
+        public override Insn Store(uint offset)
+        {
+            return Insn.I32.Store(offset);
+        }
+
         public Expr.Primitive Neg(Expr right)
         {
             Assert(IsThis(right));

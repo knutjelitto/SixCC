@@ -45,7 +45,7 @@ namespace Six.Six.Builtins
             return Resolve(named.Name.Text);
         }
 
-        public Builtin Resolve(string name)
+        private Builtin Resolve(string name)
         {
             if (buildins.TryGetValue(name, out var builtin))
             {

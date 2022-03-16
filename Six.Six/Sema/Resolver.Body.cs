@@ -10,7 +10,7 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private Body WalkBody(Scope scope, A.Body node)
+        public Body WalkBody(Scope scope, A.Body node)
         {
             return Body((dynamic)scope, (dynamic)node);
         }

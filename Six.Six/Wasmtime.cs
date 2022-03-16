@@ -17,7 +17,7 @@ namespace Six.Six
 
             var wat = smodule.Emit();
 
-            using var engine = new Engine();
+            using var engine = new Engine();            
             using var module = Module.FromText(engine, "six.core", wat);
             using var linker = new Linker(engine);
             using var store = new Store(engine);

@@ -15,21 +15,23 @@ namespace Six.Six.Sema
 
             if (value > long.MaxValue)
             {
-                return new Expr.ConstU64(Builtins.Resolve(Names.Core.UInt64), value);
+                return new Expr.ConstU64(Module.CoreFindClass(tree, Names.Core.UInt64), value);
             }
             else if (value > int.MaxValue)
             {
-                return new Expr.ConstI64(Builtins.Resolve(Names.Core.Int64), (long)value);
+                return new Expr.ConstI64(Module.CoreFindClass(tree, Names.Core.Int64), (long)value);
             }
             else
             {
-                return new Expr.ConstI32(Builtins.Resolve(Names.Core.Int32), (int)value);
+                return new Expr.ConstI32(Module.CoreFindClass(tree, Names.Core.Int32), (int)value);
             }
         }
 
         public Expr PlainString(A.Expression.String.Plain tree)
         {
             var value = ConvertNatural(tree.Text);
+
+            var type = Module.CoreFindClass(tree, Names.Core.String);
 
             return new Expr.ConstString(Builtins.String, tree.Text);
         }

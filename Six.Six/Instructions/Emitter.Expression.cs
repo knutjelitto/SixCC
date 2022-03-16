@@ -14,12 +14,55 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.CallConstructor expr)
         {
-            Emit(Insn.ToDo("alloc 42"));
+            Emit(Insn.ToDo($"alloc {expr.Class.Layout.Size}"));
             foreach (var arg in expr.Arguments)
             {
                 Emit(arg);
             }
             Emit(Insn.ToDo("call-constructor"));
+        }
+
+        private void Handle(Expr.CallMember expr)
+        {
+            Emit(expr.Make);
+            foreach (var arg in expr.Arguments)
+            {
+                Emit(arg);
+            }
+            Emit(Insn.ToDo("call-member"));
+        }
+
+        private void Handle(Expr.CallInfixMember expr)
+        {
+            if (expr.Classy.IsNative() && expr.Function.IsNative())
+            {
+                var b = Builtins.Resolve(expr.Classy);
+                var m = b.Infix(expr.Function.Name.Text)(expr.Arg1, expr.Arg2);
+
+                Emit(m);
+            }
+            else
+            {
+                Emit(expr.Arg1);
+                Emit(expr.Arg2);
+                Emit(Insn.ToDo("call-infix-member"));
+            }
+        }
+
+        private void Handle(Expr.CallPrefixMember expr)
+        {
+            if (expr.Classy.IsNative() && expr.Function.IsNative())
+            {
+                var b = Builtins.Resolve(expr.Classy);
+                var m = b.Prefix(expr.Function.Name.Text)(expr.Arg);
+
+                Emit(m);
+            }
+            else
+            {
+                Emit(expr.Arg);
+                Emit(Insn.ToDo("call-prefix-member"));
+            }
         }
 
         private void Handle(Expr.If expr)
@@ -78,28 +121,13 @@ namespace Six.Six.Instructions
         {
             Emit(expr.Reference);
             Emit(expr.Attribute);
-            if (expr.Assign)
-            {
-                Emit(Insn.ToDo("SET attribute"));
-            }
-            else
-            {
-                Emit(Insn.ToDo("GET attribute"));
-            }
+            Emit(Insn.ToDo("GET attribute"));
         }
 
         private void Handle(Expr.SelectField expr)
         {
             Emit(expr.Reference);
-            Emit(expr.Field);
-            if (expr.Assign)
-            {
-                Emit(Insn.ToDo("SET field"));
-            }
-            else
-            {
-                Emit(Insn.ToDo("GET field"));
-            }
+            Emit(Lower(expr.Field.Type).Load(expr.Field.Offset));
         }
 
         private void Handle(Expr.CallFunction expr)

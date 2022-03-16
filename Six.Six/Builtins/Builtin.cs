@@ -1,4 +1,5 @@
-﻿using Six.Six.Sema;
+﻿using Six.Six.Instructions;
+using Six.Six.Sema;
 using System;
 using Type = Six.Six.Sema.Type;
 
@@ -9,20 +10,22 @@ namespace Six.Six.Builtins
         protected readonly Dictionary<string, Func<Expr, Expr.Primitive>> prefix = new();
         protected readonly Dictionary<string, Func<Expr, Expr, Expr.Primitive>> infix = new();
 
-        protected Builtin(Builtins builtins, string name)
+        protected Builtin(Builtins builtins, string name, WasmDef wasm)
         {
             Builtins = builtins;
+            Wasm = wasm;
             Name = name;
         }
 
-        public abstract string AsWasm { get; }
         public Builtins Builtins { get; }
+        public WasmDef Wasm { get; }
         public string Name { get; }
         public Resolver Resolver => Builtins.Resolver;
+        
+        public bool IsThis(Expr expr) => ReferenceEquals(Resolver.LowerType(expr.Type), this);
 
-        public Type LowerType(Type type) => Resolver.LowerType(type);
-
-        public bool IsThis(Expr expr) => ReferenceEquals(LowerType(expr.Type), this);
+        public abstract Insn Load(uint offset);
+        public abstract Insn Store(uint offset);
 
         public Func<Expr, Expr.Primitive> Prefix(string name)
         {
