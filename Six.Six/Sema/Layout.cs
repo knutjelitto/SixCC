@@ -33,6 +33,7 @@ namespace Six.Six.Sema
                 if (type is Builtin builtin)
                 {
                     offset = builtin.Wasm.Align(offset);
+
                     field.Offset = offset;
 
                     offset += builtin.Wasm.MemSize;
