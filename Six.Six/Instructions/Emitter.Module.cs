@@ -7,6 +7,16 @@ namespace Six.Six.Instructions
         public void EmitModule()
         {
             wl($"(module");
+            foreach (var global in Module.GetGlobals())
+            {
+                indent(() =>
+                {
+                    wl($"(global{ IdFor(global)}{ ExportIff(global)} {TypeFor(global)}");
+                    indent(() => Emit(global.Value));
+                    wl($")");
+                });
+            }
+
             foreach (var function in Module.GetFunctions())
             {
                 indent(() =>
@@ -19,7 +29,10 @@ namespace Six.Six.Instructions
             {
                 foreach (var classy in Module.GetClassies())
                 {
-                    dumper.Dump(classy);
+                    if (!classy.IsNative())
+                    {
+                        dumper.Dump(classy);
+                    }
                 }
                 wl();
 

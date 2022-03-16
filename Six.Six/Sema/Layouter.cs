@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
 
 namespace Six.Six.Sema
 {
@@ -35,12 +32,7 @@ namespace Six.Six.Sema
 
         private void Layout(Decl.Class decl)
         {
-            foreach (var field in decl.Fields)
-            {
-                decl.Layout.Add(field);
-            }
-
-            decl.Layout.Finish();
+            decl.Layout.Run();
         }
     }
 }

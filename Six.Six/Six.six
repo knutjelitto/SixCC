@@ -156,13 +156,13 @@ universal-declaration
     | interface-declaration
     | object-declaration
     | alias-declaration
+    | let-declaration
+    | var-declaration
     ;
 
 nested-declaration
     | universal-declaration
     | constructor-declaration
-    | let-declaration
-    | var-declaration
     | operator-declaration
     | attribute-declaration
     ;

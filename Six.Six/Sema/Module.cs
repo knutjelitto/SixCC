@@ -1,6 +1,5 @@
 ﻿using Six.Core;
 using Six.Core.Errors;
-using Six.Runtime.Types;
 using Six.Six.Instructions;
 using System;
 using System.IO;
@@ -13,7 +12,7 @@ namespace Six.Six.Sema
         public static readonly string Language = "six";
         public static readonly string LanguageCore = "core";
         public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
-        public static readonly string DefaultCtor = "@default.ctor";
+        public static readonly string DefaultCtor = "ctor@default";
 
         private readonly List<Diagnostic> Diagnostics = new();
 
@@ -137,7 +136,7 @@ namespace Six.Six.Sema
             }
         }
 
-        public Type CoreFindClass(A.TreeNode tree, string name)
+        public Type CoreFindType(A.TreeNode tree, string name)
         {
             var language = Root.Get(Language);
             Assert(language != null);
@@ -145,13 +144,26 @@ namespace Six.Six.Sema
             Assert(core != null);
             var decl = core.Find(tree, name);
             Assert(decl is Decl.Classy);
-            return ((Decl.Classy)decl).Type;
+            var classy = decl as Decl.Classy;
+            Assert(classy != null);
+            var reference = classy.Type as Type.Reference;
+            Assert(reference != null);
+            return reference;
+        }
+
+        public Decl.Class CoreFindClass(A.TreeNode tree, string name)
+        {
+            var language = Root.Get(Language);
+            Assert(language != null);
+            var core = language.Get(LanguageCore);
+            Assert(core != null);
+            var decl = core.Find(tree, name);
+            Assert(decl is Decl.Class);
+            return (Decl.Class)decl;
         }
 
         Scope Scope.Parent => this;
         Module Scope.Module => this;
-        IReadOnlyList<Member> Scope.Members => Enumerable.Empty<Member>().ToList();
-        T Scope.AddMember<T>(T member, string? name) => throw new NotImplementedException();
         T Scope.Declare<T>(T decl, string? name) => throw new NotImplementedException();
         Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
         Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();

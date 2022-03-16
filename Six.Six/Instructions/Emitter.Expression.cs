@@ -93,6 +93,11 @@ namespace Six.Six.Instructions
             Emit(Insn.Local.Get(expr.LocalDecl.Index));
         }
 
+        private void Handle(Expr.GlobalReference expr)
+        {
+            Emit(Insn.Global.Get(expr.Decl.FullName));
+        }
+
         private void Handle(Expr.ParameterReference expr)
         {
             Emit(Insn.Local.Get(expr.ParameterDecl.Index));

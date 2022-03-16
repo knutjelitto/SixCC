@@ -22,6 +22,10 @@ namespace Six.Six.Instructions
                     Emit(select.Reference);
                     Emit(Lower(select.Field.Type).Store(select.Field.Offset));
                     return;
+                case Expr.GlobalReference globalReference:
+                    Emit(stmt.Right);
+                    Emit(Insn.Global.Set(globalReference.Decl.FullName));
+                    return;
                 default:
                     Assert(false);
                     throw new NotImplementedException();

@@ -58,6 +58,9 @@ namespace Six.Six.Sema
         public sealed record AttributeReference(Decl.Attribute AttributeDecl)
             : Reference(AttributeDecl);
 
+        public sealed record GlobalReference(Decl.Global GlobalDecl)
+            : Reference(GlobalDecl);
+
         public abstract record ClassyReference(Decl.Classy ClassyDecl)
             : Reference(ClassyDecl);
 

@@ -5,6 +5,7 @@ namespace Six.Six.Sema
     public class Layout
     {
         private readonly List<Decl.Field> fields = new();
+        private bool done = false;
 
         public Layout(Decl.Classy classy)
         {
@@ -22,9 +23,41 @@ namespace Six.Six.Sema
             fields.Add(declaredField);
         }
 
-        public void Finish()
+        public void Run()
         {
-            uint offset = 0;
+            if (done)
+            {
+                return;
+            }
+
+            uint fieldOffset = 0;
+
+
+            if (Classy.Extends != null)
+            {
+                Classy.Extends.Layout.Run();
+
+                fieldOffset = Classy.Extends.Layout.Size;
+            }
+
+            foreach (var member in Classy.Members)
+            {
+                switch (member)
+                {
+                    case Decl.Field field:
+                        fields.Add(field);
+                        break;
+                    case Decl.Attribute attribute:
+                        break;
+                    case Decl.Function function:
+                        break;
+                    case Decl.Constructor constructor:
+                        break;
+                    default:
+                        Assert(false);
+                        throw new System.NotImplementedException();
+                }
+            }
 
             foreach (var field in fields)
             {
@@ -32,11 +65,11 @@ namespace Six.Six.Sema
 
                 if (type is Builtin builtin)
                 {
-                    offset = builtin.Wasm.Align(offset);
+                    fieldOffset = builtin.Wasm.Align(fieldOffset);
 
-                    field.Offset = offset;
+                    field.Offset = fieldOffset;
 
-                    offset += builtin.Wasm.MemSize;
+                    fieldOffset += builtin.Wasm.MemSize;
                 }
                 else
                 {
@@ -44,7 +77,9 @@ namespace Six.Six.Sema
                 }
             }
 
-            Size = offset;
+            Size = fieldOffset;
+
+            done = true;
         }
     }
 }

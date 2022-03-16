@@ -1,0 +1,12 @@
+namespace six.core;
+
+shared var int __heap_start = 0;
+shared var int __heap_top = 0;
+
+shared int allocate(int size)
+{
+    let allocated = __heap_top;
+    __heap_top = __heap_top + size;
+    return allocated;
+}
+

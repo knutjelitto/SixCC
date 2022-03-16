@@ -17,6 +17,8 @@ namespace Six.Six.Instructions
         private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionsTable = new();
         private readonly Dictionary<string, uint> functionTypes = new();
 
+        private readonly List<Decl.Global> globals = new();
+
         private readonly Stack<Block> insns = new();
 
         private readonly Dumper dumper;
@@ -57,6 +59,11 @@ namespace Six.Six.Instructions
             Assert(true);
         }
 
+        private void Handle(Decl.Global decl)
+        {
+            Assert(true);
+        }
+
         private void Handle(Decl.Classy decl)
         {
             Assert(true);
@@ -72,10 +79,9 @@ namespace Six.Six.Instructions
             wl($"(func ${decl.Container.FullName}");
             indent(() =>
             {
-                wl($"(export \"{decl.Container.FullName}\")");
-                wl("(;-----;)");
+                wl(Export(decl));
 
-                Horizontal(decl.Parameters.Select(param => new Action(() => w($"{Param(param)}"))));
+                wl($"{Params(decl.Parameters)}");
 
                 if (decl is Decl.Function func)
                 {

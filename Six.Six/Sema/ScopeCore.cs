@@ -1,6 +1,4 @@
-﻿using Six.Core.Errors;
-using Six.Runtime.Types;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -8,7 +6,6 @@ namespace Six.Six.Sema
     public abstract class ScopeCore : Scope
     {
         private readonly Dictionary<string, Decl> declarations = new();
-        private readonly List<Member> members = new();
 
         [DebuggerStepThrough]
         public ScopeCore(Scope parent, string name)
@@ -36,7 +33,7 @@ namespace Six.Six.Sema
                 return $"{full}.{Name}";
             }
         }
-        public IReadOnlyList<Member> Members => members;
+
         public IEnumerable<Decl> GetDeclarations()
         {
             return declarations.Values;
@@ -66,23 +63,6 @@ namespace Six.Six.Sema
             return Parent.Resolve(tree, name);
         }
 
-        public T AddMember<T>(T member, string? name = null) where T : Member
-        {
-            if (member is Decl decl)
-            {
-                name ??= decl.Name.Text;
-
-                if (declarations.TryGetValue(name, out var already))
-                {
-                    throw Errors.DupError(decl, already);
-                }
-                declarations.Add(name, decl);
-            }
-            members.Add(member);
-
-            return member;
-        }
-
         public T Declare<T>(T decl, string? name = null) where T : Decl
         {
             name ??= decl.Name.Text;
@@ -92,8 +72,6 @@ namespace Six.Six.Sema
                 throw Errors.DupError(decl, already);
             }
             declarations.Add(name, decl);
-
-            members.Add(decl);
 
             return decl;
         }

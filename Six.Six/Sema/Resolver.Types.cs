@@ -1,5 +1,4 @@
 ﻿using System;
-using Six.Six.Builtins;
 
 using A = Six.Six.Ast;
 
@@ -12,8 +11,42 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Type ResolveDeclType(Decl decl)
+        public Decl.Class? ResolveExtends(Decl.Class klass)
         {
+            if (klass.ADecl is A.With.Extends ext)
+            {
+                if (ext.Extends is A.Type extended)
+                {
+                    var super = ResolveType(klass.ClassyScope, extended);
+
+                    if (super is Type.Reference reference && reference.Decl is Decl.Class superClass)
+                    {
+                        return superClass;
+                    }
+                    else
+                    {
+                        // super must be a class
+                        Assert(false);
+                        throw new InvalidOperationException();
+                    }
+                }
+                {
+                    return null;
+                }
+            }
+            else if (!klass.ADecl.IsNative())
+            {
+                return Module.CoreFindClass(klass.ADecl, Names.Core.Basic);
+            }
+            else
+            {
+                Assert(false);
+                throw new InvalidOperationException();
+            }
+        }
+
+        public Type ResolveDeclType(Decl decl)
+{
             if (decl is Decl.Classy)
             {
                 return decl.Type;

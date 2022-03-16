@@ -9,6 +9,11 @@ namespace Six.Six.Sema
             return module.GetDeclarations().OfType<Decl.Function>();
         }
 
+        public static IEnumerable<Decl.Global> GetGlobals(this Module module)
+        {
+            return module.GetDeclarations().OfType<Decl.Global>();
+        }
+
         public static IEnumerable<Member> GetMembers(this Module module)
         {
             return

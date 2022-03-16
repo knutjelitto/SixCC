@@ -36,7 +36,7 @@ namespace Six.Six.Sema
         {
             using (UseMemby(decl))
             {
-                WalkBody(decl.Scope.Block, node.Body);
+                WalkBody(decl.ClassyScope.Block, node.Body);
             }
         }
 
@@ -170,15 +170,20 @@ namespace Six.Six.Sema
                 function.Locals.Add(decl);
                 function.Members.Add(decl);
             }
-            else
+            else if (InClass)
             {
-                Assert(InClass);
-
                 var klass = CurrentClass;
 
                 var decl = parent.Declare(new Decl.Field(parent, node, writeable));
                 klass.Fields.Add(decl);
                 klass.Members.Add(decl);
+            }
+            else
+            {
+                Assert(InNamespace);
+                Assert(parent is Namespace);
+
+                var decl = parent.Declare(new Decl.Global(parent, node, writeable));
             }
         }
 

@@ -18,12 +18,12 @@ namespace Six.Six.Sema
 
         private void Statement(BlockScope container, A.Stmt.Assign node)
         {
-            var stmt = container.AddMember(
+            var stmt =
                 new Stmt.Assign(
-                    container, 
+                    container,
                     node,
                     ResolveExpression(container, node.Left),
-                    ResolveExpression(container, node.Right)));
+                    ResolveExpression(container, node.Right));
             CurrentFuncy.Members.Add(stmt);
         }
 
@@ -31,11 +31,12 @@ namespace Six.Six.Sema
         {
             if (CurrentFuncy is Decl.Function function)
             {
-                var stmt = container.AddMember(new Stmt.Return(
-                    container,
-                    node,
-                    function,
-                    node.Expression == null ? null : ResolveExpression(container, node.Expression)));
+                var stmt = 
+                    new Stmt.Return(
+                        container,
+                        node,
+                        function,
+                        node.Expression == null ? null : ResolveExpression(container, node.Expression));
                 function.Members.Add(stmt);
             }
             else

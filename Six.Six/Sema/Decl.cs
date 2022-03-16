@@ -1,5 +1,4 @@
-﻿using System;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -24,7 +23,7 @@ namespace Six.Six.Sema
 
         public abstract class Classy : WithMembers, Typy
         {
-            private Type? extends;
+            private Class? extends;
             private Layout? layout;
 
             private Classy(ClassyScope scope, A.Decl.Classy aDecl)
@@ -39,31 +38,15 @@ namespace Six.Six.Sema
                 parent.Declare(this, aDecl.Name.Text);
             }
 
-            public ClassyScope Scope => (ClassyScope)Container;
+            public ClassyScope ClassyScope => (ClassyScope)Container;
 
             public override Type Type { get; }
 
-            public override string FullName => Scope.FullName;
+            public override string FullName => ClassyScope.FullName;
 
-            public Type? Extends => HandleExtends(ref extends);
+            public Class? Extends => extends ??= this is Class klass ? Resolver.ResolveExtends(klass) : null;
 
             public Layout Layout => layout ??= new Layout(this);
-
-            protected Type? HandleExtends(ref Type? extends)
-            {
-                if (extends == null)
-                {
-                    if (ADecl is A.With.Extends ext && ext.Extends is A.Type extended)
-                    {
-                        extends = Resolver.ResolveType(Scope, extended);
-                    }
-                    else if (!ADecl.IsNative())
-                    {
-                        extends = Module.CoreFindClass(ADecl, Names.Core.Basic);
-                    }
-                }
-                return extends;
-            }
         }
 
         public class Class : Classy
@@ -74,7 +57,7 @@ namespace Six.Six.Sema
                 Assert(aDecl is A.With.Extends);
             }
 
-            public List<Decl.Field> Fields { get; } = new List<Field>();
+            public List<Field> Fields { get; } = new List<Field>();
 
             public override string ToString() => $"{Name}";
         }
@@ -299,6 +282,48 @@ namespace Six.Six.Sema
             public Expr Value => value.Expr;
 
             public override string FullName => ADecl.Name.Text;
+        }
+
+        public sealed class Global : Declaration
+        {
+            private readonly LazyExpr value;
+
+            public Global(Scope container, A.Decl aDecl, bool writeable)
+                : base(container, aDecl)
+            {
+                Assert(aDecl is A.With.OptionalType);
+                Assert(aDecl is A.With.Value);
+                value = Resolver.ResolveExpression(container, ((A.With.Value)aDecl).Value);
+                Writeable = writeable;
+            }
+
+            public bool Writeable { get; }
+
+            public override Type Type
+            {
+                get
+                {
+                    if (type == null)
+                    {
+                        //TODO: typecheck
+                        var aType = ((A.With.OptionalType)ADecl).Type;
+                        if (aType != null)
+                        {
+                            type = Resolver.ResolveType(Container, aType);
+                        }
+                        else
+                        {
+                            type = Value.Type;
+                        }
+                    }
+
+                    return type;
+                }
+            }
+
+            public Expr Value => value.Expr;
+
+            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
         }
 
         public sealed class Alias : Declaration, Typy

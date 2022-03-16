@@ -54,6 +54,12 @@ namespace Six.Six.Instructions
             public static LocalSet Set(int index) => new(index);
         }
 
+        public static class Global
+        {
+            public static Insn Get(string name) => new Simplest($"global.get ${name}");
+            public static Insn Set(string name) => new Simplest($"global.set ${name}");
+        }
+
         public static class I32
         {
             public static Const Const(int value) => new(new Value.ValueI32(value));

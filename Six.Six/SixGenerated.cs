@@ -1,4 +1,4 @@
-// <generated from="C:\\Dev\\Knut\\Six\\Six.Six\\Six.six" at="15.03.2022 08:24:45" />
+// <generated from="C:\\Dev\\Knut\\Six\\Six.Six\\Six.six" at="16.03.2022 12:49:31" />
 
 using Six.Runtime;
 using Six.Runtime.Dfa;
@@ -250,8 +250,8 @@ namespace Six.Six
                 /* 226 StringOp         */ __Matchers[226] = new Mx.Keyword(this, 226, "'out'", "out") { Creator = node => new RLiteral(node) };
                 /* 227 AltOp            */ __Matchers[227] = new Mx.Alt(this, 227, "alt('in'|'out')") { Builder = nodes => nodes[0] };
                 /* 228 StarOp           */ __Matchers[228] = new Mx.Star(this, 228, "*(>top-declaration)") { Builder = nodes => new CTopDeclarations(nodes) };
-                /* 229 AltOp            */ __Matchers[229] = new Mx.Alt(this, 229, "alt(>function-declaration|>class-declaration|>interface-declaration|>object-declaration|>alias-declaration)") { Builder = nodes => nodes[0] };
-                /* 230 AltOp            */ __Matchers[230] = new Mx.Alt(this, 230, "alt(>universal-declaration|>constructor-declaration|>let-declaration|>var-declaration|>operator-declaration|>attribute-declaration)") { Builder = nodes => nodes[0] };
+                /* 229 AltOp            */ __Matchers[229] = new Mx.Alt(this, 229, "alt(>function-declaration|>class-declaration|>interface-declaration|>object-declaration|>alias-declaration|>let-declaration|>var-declaration)") { Builder = nodes => nodes[0] };
+                /* 230 AltOp            */ __Matchers[230] = new Mx.Alt(this, 230, "alt(>universal-declaration|>constructor-declaration|>operator-declaration|>attribute-declaration)") { Builder = nodes => nodes[0] };
                 /* 231 AltOp            */ __Matchers[231] = new Mx.Alt(this, 231, "alt(>prefix-declaration|>infix-declaration)") { Builder = nodes => nodes[0] };
                 /* 232 StringOp         */ __Matchers[232] = new Mx.Keyword(this, 232, "'prefix'", "prefix") { Creator = node => new RLiteral(node) };
                 /* 233 StringOp         */ __Matchers[233] = new Mx.String(this, 233, "'('", "(") { Creator = node => new RLiteral(node) };
@@ -669,8 +669,8 @@ namespace Six.Six
                 /* 224 SeqOp            */ __Matchers[224].Set(__Matchers[200], _type);
                 /* 227 AltOp            */ __Matchers[227].Set(__Matchers[225], __Matchers[226]);
                 /* 228 StarOp           */ __Matchers[228].Set(_topDeclaration);
-                /* 229 AltOp            */ __Matchers[229].Set(_functionDeclaration, _classDeclaration, _interfaceDeclaration, _objectDeclaration, _aliasDeclaration);
-                /* 230 AltOp            */ __Matchers[230].Set(_universalDeclaration, _constructorDeclaration, _letDeclaration, _varDeclaration, _operatorDeclaration, _attributeDeclaration);
+                /* 229 AltOp            */ __Matchers[229].Set(_functionDeclaration, _classDeclaration, _interfaceDeclaration, _objectDeclaration, _aliasDeclaration, _letDeclaration, _varDeclaration);
+                /* 230 AltOp            */ __Matchers[230].Set(_universalDeclaration, _constructorDeclaration, _operatorDeclaration, _attributeDeclaration);
                 /* 231 AltOp            */ __Matchers[231].Set(_prefixDeclaration, _infixDeclaration);
                 /* 235 SeqOp            */ __Matchers[235].Set(_prelude, __Matchers[232], _type, _prefixOperator, __Matchers[233], __Matchers[234], _functionBody);
                 /* 238 AltOp            */ __Matchers[238].Set(__Matchers[236], __Matchers[237]);
@@ -1975,8 +1975,8 @@ namespace Six.Six
         public interface ICInfixOperator : IRNode {}
         public interface ICFunctionDeclaration : ICUniversalDeclaration {}
         public interface ICAttributeDeclaration : ICClassMember, ICInterfaceMember, ICNestedDeclaration {}
-        public interface ICVarDeclaration : ICClassMember, ICNestedDeclaration {}
-        public interface ICLetDeclaration : ICClassMember, ICNestedDeclaration {}
+        public interface ICVarDeclaration : ICClassMember, ICUniversalDeclaration {}
+        public interface ICLetDeclaration : ICClassMember, ICUniversalDeclaration {}
         public interface ICClassDeclaration : ICUniversalDeclaration {}
         public interface ICInterfaceDeclaration : ICUniversalDeclaration {}
         public interface ICObjectDeclaration : ICUniversalDeclaration {}

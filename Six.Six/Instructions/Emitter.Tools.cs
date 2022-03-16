@@ -64,6 +64,20 @@ namespace Six.Six.Instructions
             return builder.ToString();
         }
 
+        private string Params(IEnumerable<Decl.Local> locals)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append("(param");
+            foreach (var local in locals)
+            {
+                builder.Append($" (;{local.Index}/{local.Name};) {WasmTypeFor(local.Type)}");
+            }
+            builder.Append(")");
+
+            return builder.ToString();
+        }
+
         private string Param(Decl.Local decl)
         {
             return $"(param (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
@@ -72,6 +86,36 @@ namespace Six.Six.Instructions
         private string Local(Decl.Local decl)
         {
             return $"(local (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
+        }
+
+        private string ExportIff(Decl decl)
+        {
+            if (decl.IsShared())
+            {
+                return $" (export \"{decl.FullName}\")";
+            }
+            return "";
+        }
+
+        private string Export(Decl decl)
+        {
+            return $"(export \"{decl.FullName}\")";
+        }
+
+        private string IdFor(Decl decl)
+        {
+            return $" ${decl.FullName}";
+        }
+
+        private string TypeFor(Decl.Global global)
+        {
+            var lower = Lower(global.Type);
+
+            if (global.Writeable)
+            {
+                return $"(mut {lower.Wasm.Type})";
+            }
+            return $"{lower.Wasm.Type}";
         }
 
         private string WasmTypeFor(Type type)
@@ -86,6 +130,10 @@ namespace Six.Six.Instructions
                     {
                         var builtin = Builtins.Resolve(declared.Decl);
                         return $"{builtin.Wasm.Type}";
+                    }
+                case Type.Declared declared when declared.Decl is Decl.Classy:
+                    {
+                        return $"{Builtins.Anything.Wasm.Type}";
                     }
                 default:
                     //Assert(false);

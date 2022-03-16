@@ -18,7 +18,7 @@ namespace Six.Six.Sema
 
         public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
         {
-            return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
+            return node.ClassyDecl.ClassyScope.Block.Find(reference, reference.Name.Text);
         }
 
         public static ILocation GetLocation(this Decl node)

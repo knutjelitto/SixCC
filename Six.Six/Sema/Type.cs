@@ -34,6 +34,7 @@
         public sealed record Tuple(params Type[] Types) : TypeImpl;
 
         public sealed record Array(Type Type) : TypeImpl;
+     
         public abstract record TypeImpl : Type;
     }
 }
