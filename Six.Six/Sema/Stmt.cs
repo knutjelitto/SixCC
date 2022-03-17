@@ -7,36 +7,36 @@ namespace Six.Six.Sema
     public interface Stmt : Member
     {
         A.Stmt AStmt { get; }
-
         Errors Errors { get; }
 
         public sealed class Return : Statement
         {
+            private readonly LazyExpr? delayed;
+
             public Return(Scope container, A.Stmt.Return stmt, Decl.Function function, LazyExpr? delayed)
                 : base(container, stmt)
             {
                 Function = function;
-                Delayed = delayed;
                 Stmt = stmt;
+                this.delayed = delayed;
             }
 
             public Decl.Function Function { get; }
-            public LazyExpr? Delayed { get; }
             public A.Stmt.Return Stmt { get; }
 
             public Expr? Expr
             {
                 get
                 {
-                    if (Delayed != null)
+                    if (delayed != null)
                     {
-                        if (!ReferenceEquals(Resolver.LowerType(Delayed.Expr.Type), Resolver.LowerType(Function.ResultType)))
+                        if (!ReferenceEquals(Resolver.LowerType(delayed.Expr.Type), Resolver.LowerType(Function.ResultType)))
                         {
                             Assert(false);
-                            throw Errors.TypeMismatch(Stmt.Expression, Function.ResultType, Delayed.Expr.Type);
+                            throw Errors.TypeMismatch(Stmt.Expression, Function.ResultType, delayed.Expr.Type);
                         }
                     }
-                    return Delayed?.Expr;
+                    return delayed?.Expr;
                 }
             }
         }
