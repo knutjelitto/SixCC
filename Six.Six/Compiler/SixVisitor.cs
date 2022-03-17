@@ -672,6 +672,36 @@ namespace Six.Six.Compiler
             element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
+        protected override void Visit(CComplementExpression element)
+        {
+            var left = Walk<Expression>(element.LevelUnionExpression);
+            var right = Walk<Expression>(element.LevelExclusiveExpression);
+
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
+        }
+
+        protected override void Visit(CIntersectionExpression element)
+        {
+            var left = Walk<Expression>(element.LevelIntersectionExpression);
+            var right = Walk<Expression>(element.LevelNegateExpression);
+
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
+        }
+
+        protected override void Visit(CNegateExpression element)
+        {
+            var expr = Walk<Expression>(element.LevelNegateExpression);
+
+            element.Value = new Expression.Prefix(element, new Reference(element.Literal), expr);
+        }
+
+        protected override void Visit(CComplExpression element)
+        {
+            var expr = Walk<Expression>(element.LevelNegateExpression);
+
+            element.Value = new Expression.Prefix(element, new Reference(element.Literal), expr);
+        }
+
         protected override void Visit(CIdenticalExpression element)
         {
             var left = Walk<Expression>(element.LevelCompareExpression);
@@ -880,13 +910,6 @@ namespace Six.Six.Compiler
             var right = Walk<Expression>(element.LevelDisjunctionExpression);
 
             element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
-        }
-
-        protected override void Visit(CNegateExpression element)
-        {
-            var expr = Walk<Expression>(element.LevelNegateExpression);
-
-            element.Value = new Expression.Prefix(element, new Reference(element.Literal), expr);
         }
 
         protected override void Visit(CAssignStatement element)

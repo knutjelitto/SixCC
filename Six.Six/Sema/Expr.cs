@@ -78,10 +78,14 @@ namespace Six.Six.Sema
             public Type Type => Decl.Type;
         }
 
-        public sealed record CallFunction(FunctionReference Function, List<Expr> Arguments)
+        public sealed record CallFunction(Decl.Function Function, List<Expr> Arguments)
             : Primitive(Function.Type)
         {
-            public override Type Type => Function.FunctionDecl.ResultType;
+            public CallFunction(Decl.Function Function) : this(Function, new List<Expr>())
+            {
+            }
+
+            public override Type Type => Function.ResultType;
         }
 
 

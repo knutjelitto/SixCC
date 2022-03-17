@@ -122,18 +122,16 @@ namespace Six.Six.Sema
         private void Declare(Scope parent, A.Decl.Constructor node)
         {
             Assert(InClass);
+            var @class = CurrentClass;
 
-            var decl = new Decl.Constructor(parent, (Decl.Class)CurrentMemby, node);
+            var decl = new Decl.Constructor(parent, @class, node);
 
-            var classy = CurrentMemby as Decl.Class;
-            Assert(classy != null);
-
-            CurrentMemby.Members.Add(decl);
+            @class.Members.Add(decl);
 
             using (UseMemby(decl))
             {
 
-                DeclareSelf(decl, classy);
+                DeclareSelf(decl, @class);
                 WalkDeclarations(decl.Scope, node.Parameters);
                 WalkBody(decl.Scope.Block, node.Body);
             }

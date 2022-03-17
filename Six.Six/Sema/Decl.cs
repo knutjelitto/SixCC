@@ -12,6 +12,10 @@ namespace Six.Six.Sema
         Module Module { get; }
         Resolver Resolver { get; }
 
+        bool IsStatic { get; }
+        bool IsNative { get; }
+        bool IsShared { get; }
+
         public abstract class WithMembers : Declaration
         {
             public WithMembers(Scope container, A.Decl aDecl)
@@ -402,6 +406,10 @@ namespace Six.Six.Sema
 
             public Module Module => Container.Module;
             public Resolver Resolver => Container.Module.Resolver;
+
+            public bool IsStatic => ADecl.IsStatic();
+            public bool IsNative => ADecl.IsNative();
+            public bool IsShared => ADecl.IsShared();
         }
     }
 }

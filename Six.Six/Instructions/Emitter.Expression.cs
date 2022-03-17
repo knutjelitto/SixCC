@@ -14,12 +14,25 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.CallConstructor expr)
         {
-            Emit(Insn.ToDo($"alloc {expr.Class.Layout.Size}"));
-            foreach (var arg in expr.Arguments)
+            var alloc = Module.CoreFindFunction(Module.Allocator);
+            var call = new Expr.CallFunction(alloc, expr.Arguments);
+
+            Emit(Insn.U32.Const(expr.Class.Layout.Size));
+            Emit(new Expr.CallFunction(alloc));
+            foreach (var argument in expr.Arguments)
             {
-                Emit(arg);
+                Emit(argument);
             }
-            Emit(Insn.ToDo("call-constructor"));
+            Emit(Insn.Call(expr.Ctor.FullName));
+        }
+
+        private void Handle(Expr.CallFunction expr)
+        {
+            foreach (var argument in expr.Arguments)
+            {
+                Emit(argument);
+            }
+            Emit(Insn.Call(expr.Function.FullName));
         }
 
         private void Handle(Expr.CallMember expr)
@@ -34,7 +47,7 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.CallInfixMember expr)
         {
-            if (expr.Classy.IsNative() && expr.Function.IsNative())
+            if (expr.Classy.IsNative && expr.Function.IsNative)
             {
                 var b = Builtins.Resolve(expr.Classy);
                 var m = b.Infix(expr.Function.Name.Text)(expr.Arg1, expr.Arg2);
@@ -51,7 +64,7 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.CallPrefixMember expr)
         {
-            if (expr.Classy.IsNative() && expr.Function.IsNative())
+            if (expr.Classy.IsNative && expr.Function.IsNative)
             {
                 var b = Builtins.Resolve(expr.Classy);
                 var m = b.Prefix(expr.Function.Name.Text)(expr.Arg);
@@ -133,15 +146,6 @@ namespace Six.Six.Instructions
         {
             Emit(expr.Reference);
             Emit(Lower(expr.Field.Type).Load(expr.Field.Offset));
-        }
-
-        private void Handle(Expr.CallFunction expr)
-        {
-            foreach (var argument in expr.Arguments)
-            {
-                Emit(argument);
-            }
-            Emit(Insn.Call(expr.Function.FunctionDecl.FullName));
         }
 
         private void Handle(Expr.CallIndirect expr)

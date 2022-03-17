@@ -1,4 +1,5 @@
-﻿using A = Six.Six.Ast;
+﻿using System;
+using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1822 // Mark members as static
@@ -11,29 +12,42 @@ namespace Six.Six.Sema
     {
         public Expr NaturalConst(A.Expression.NaturalNumber tree)
         {
-            var value = ConvertNatural(tree.Text);
+            var text = ExtractSuffix(tree, out var suffix);
 
-            if (value > long.MaxValue)
+            var value = ConvertNatural(text);
+
+            switch (suffix)
             {
-                return new Expr.ConstU64(Module.CoreFindType(tree, Names.Core.UInt64), value);
+                case "i32":
+                    return new Expr.ConstI32(Module.CoreFindType(tree, Names.Core.Int32), (int)value);
+                case "i64":
+                    return new Expr.ConstI64(Module.CoreFindType(tree, Names.Core.Int64), (long)value);
+                case "u32":
+                    return new Expr.ConstU32(Module.CoreFindType(tree, Names.Core.UInt32), (uint)value);
+                case "u64":
+                    return new Expr.ConstU64(Module.CoreFindType(tree, Names.Core.UInt64), (ulong)value);
+                case "":
+                    if (value > long.MaxValue)
+                    {
+                        return new Expr.ConstU64(Module.CoreFindType(tree, Names.Core.UInt64), value);
+                    }
+                    else if (value > int.MaxValue)
+                    {
+                        if (value > uint.MaxValue)
+                        {
+                            return new Expr.ConstI64(Module.CoreFindType(tree, Names.Core.Int64), (long)value);
+                        }
+                        return new Expr.ConstU32(Module.CoreFindType(tree, Names.Core.UInt32), (uint)value);
+                    }
+                    else
+                    {
+                        return new Expr.ConstI32(Module.CoreFindType(tree, Names.Core.Int32), (int)value);
+                    }
+                default:
+                    Assert(false);
+                    throw new NotImplementedException();
             }
-            else if (value > int.MaxValue)
-            {
-                return new Expr.ConstI64(Module.CoreFindType(tree, Names.Core.Int64), (long)value);
-            }
-            else
-            {
-                return new Expr.ConstI32(Module.CoreFindType(tree, Names.Core.Int32), (int)value);
-            }
-        }
 
-        public Expr PlainString(A.Expression.String.Plain tree)
-        {
-            var value = ConvertNatural(tree.Text);
-
-            var type = Module.CoreFindType(tree, Names.Core.String);
-
-            return new Expr.ConstString(Builtins.String, tree.Text);
         }
 
         public ulong ConvertNatural(string text)
@@ -80,7 +94,7 @@ namespace Six.Six.Sema
 
             int hexValue(char c)
             {
-                Assert('0' <= c && c <= '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'A');
+                Assert('0' <= c && c <= '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F');
                 if ('0' <= c && c <= '9')
                 {
                     return c - '0';
@@ -91,6 +105,92 @@ namespace Six.Six.Sema
                 }
                 return 10 + c - 'A';
             }
+        }
+
+
+        private string ExtractSuffix(A.Expression.NaturalNumber tree, out string suffix)
+        {
+            var text = tree.Text;
+
+            var si = text.IndexOf('i');
+            if (si > 0)
+            {
+                suffix = text[si..];
+                return text[..si];
+            }
+            var su = text.IndexOf('u');
+            if (su > 0)
+            {
+                suffix = text[su..];
+                return text[..su];
+            }
+
+            suffix = "";
+            return text;
+        }
+
+        private string TypeSuffix(A.Expression.NaturalNumber tree, out Type? type)
+        {
+            var text = tree.Text;
+
+            var si = text.IndexOf('i');
+            if (si > 0)
+            {
+                switch (text[si + 1])
+                {
+                    case '8':
+                        type = Module.CoreFindType(tree, Names.Core.Int8);
+                        break;
+                    case '1':
+                        type = Module.CoreFindType(tree, Names.Core.Int16);
+                        break;
+                    case '3':
+                        type = Module.CoreFindType(tree, Names.Core.Int32);
+                        break;
+                    case '6':
+                        type = Module.CoreFindType(tree, Names.Core.Int64);
+                        break;
+                    default:
+                        Assert(false);
+                        throw new NotImplementedException();
+                }
+
+                return text.Substring(si);
+            }
+            var su = text.IndexOf('u');
+            if (su > 0)
+            {
+                switch (text[su + 1])
+                {
+                    case '8':
+                        type = Module.CoreFindType(tree, Names.Core.Int8);
+                        break;
+                    case '1':
+                        type = Module.CoreFindType(tree, Names.Core.Int16);
+                        break;
+                    case '3':
+                        type = Module.CoreFindType(tree, Names.Core.Int32);
+                        break;
+                    case '6':
+                        type = Module.CoreFindType(tree, Names.Core.Int64);
+                        break;
+                    default:
+                        Assert(false);
+                        throw new NotImplementedException();
+                }
+
+                return text.Substring(su);
+            }
+
+            type = null;
+            return text;
+        }
+
+        public Expr PlainString(A.Expression.String.Plain tree)
+        {
+            var type = Module.CoreFindType(tree, Names.Core.String);
+
+            return new Expr.ConstString(Builtins.String, tree.Text);
         }
     }
 }

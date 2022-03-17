@@ -74,7 +74,7 @@ namespace Six.Six.Sema
 
             if (resolved is Type.Declared declared)
             {
-                if (declared.Decl.IsNative())
+                if (declared.Decl.IsNative)
                 {
                     return Builtins.Resolve(declared.Decl);
                 }

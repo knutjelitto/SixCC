@@ -13,6 +13,8 @@ namespace Six.Six.Sema
         public static readonly string LanguageCore = "core";
         public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
         public static readonly string DefaultCtor = "ctor@default";
+        public static string DataAndHeap => $"{CoreNamespace}.Data&Heap";
+        public static string Allocator => $"allocate";
 
         private readonly List<Diagnostic> Diagnostics = new();
 
@@ -128,9 +130,9 @@ namespace Six.Six.Sema
                 count += 1;
 
                 var attrs = new StringBuilder();
-                attrs.Append(declaration.IsShared() ? "P" : " ");
-                attrs.Append(declaration.IsStatic() ? "S" : " ");
-                attrs.Append(declaration.IsNative() ? "N" : " ");
+                attrs.Append(declaration.IsShared ? "P" : " ");
+                attrs.Append(declaration.IsStatic ? "S" : " ");
+                attrs.Append(declaration.IsNative ? "N" : " ");
 
                 writer.WriteLine($"{count,3} {declaration.ADecl.GetKind(),-12} [{attrs}] {declaration.ADecl.GetName(),-30} {declaration.ADecl.GetLocation()}");
             }
@@ -138,10 +140,8 @@ namespace Six.Six.Sema
 
         public Type CoreFindType(A.TreeNode tree, string name)
         {
-            var language = Root.Get(Language);
-            Assert(language != null);
-            var core = language.Get(LanguageCore);
-            Assert(core != null);
+            var core = GetCoreNamespace();
+
             var decl = core.Find(tree, name);
             Assert(decl is Decl.Classy);
             var classy = decl as Decl.Classy;
@@ -153,13 +153,36 @@ namespace Six.Six.Sema
 
         public Decl.Class CoreFindClass(A.TreeNode tree, string name)
         {
+            var core = GetCoreNamespace();
+
+            var decl = core.Find(tree, name);
+            Assert(decl is Decl.Class);
+            return (Decl.Class)decl;
+        }
+
+        public Decl.Function CoreFindFunction(string name)
+        {
+            var core = GetCoreNamespace();
+
+            var decl = core.TryFind(name);
+            if (decl is Decl.Function function)
+            {
+                return function;
+            }
+
+            Assert(false);
+            throw Errors.CantResolveInCore("function", name);
+        }
+
+        public Namespace GetCoreNamespace()
+        {
             var language = Root.Get(Language);
             Assert(language != null);
             var core = language.Get(LanguageCore);
             Assert(core != null);
-            var decl = core.Find(tree, name);
-            Assert(decl is Decl.Class);
-            return (Decl.Class)decl;
+            Assert(core is Namespace);
+
+            return (Namespace)core;
         }
 
         Scope Scope.Parent => this;

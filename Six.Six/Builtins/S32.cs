@@ -9,12 +9,18 @@ namespace Six.Six.Builtins
         public S32(Builtins builtins) : base(builtins, Names.Core.Int32)
         {
             prefix.Add("-", Neg);
-            prefix.Add("!", Not);
+
             infix.Add("+", Add);
             infix.Add("-", Sub);
             infix.Add("*", Mul);
             infix.Add("/", Div);
             infix.Add("%", Rem);
+
+            prefix.Add("~", Complement);
+            infix.Add("&", And);
+            infix.Add("|", Or);
+            infix.Add("^", Xor);
+
             infix.Add("<=", LessThanOrEqual);
         }
 
@@ -34,13 +40,6 @@ namespace Six.Six.Builtins
 
             var zero = new Expr.ConstI32(this, 0);
             return Sub(zero, right);
-        }
-
-        public Expr.Primitive Not(Expr right)
-        {
-            Assert(IsThis(right));
-
-            throw new NotImplementedException();
         }
 
         public Expr.Primitive Add(Expr left, Expr right)
@@ -89,6 +88,38 @@ namespace Six.Six.Builtins
             Assert(IsThis(right));
 
             return new Expr.Binop(Builtins.Boolean, Insn.I32.Le, left, right);
+        }
+
+        public Expr.Primitive Complement(Expr arg)
+        {
+            Assert(IsThis(arg));
+
+            var ones = new Expr.ConstU32(this, uint.MaxValue);
+            return Xor(ones, arg);
+        }
+
+        public Expr.Primitive And(Expr arg1, Expr arg2)
+        {
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
+
+            return new Expr.Binop(this, Insn.I32.And, arg1, arg2);
+        }
+
+        public Expr.Primitive Or(Expr arg1, Expr arg2)
+        {
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
+
+            return new Expr.Binop(this, Insn.I32.Or, arg1, arg2);
+        }
+
+        public Expr.Primitive Xor(Expr arg1, Expr arg2)
+        {
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
+
+            return new Expr.Binop(this, Insn.I32.Xor, arg1, arg2);
         }
     }
 }

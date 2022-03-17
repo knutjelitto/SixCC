@@ -90,7 +90,7 @@ namespace Six.Six.Instructions
 
         private string ExportIff(Decl decl)
         {
-            if (decl.IsShared())
+            if (decl.IsShared)
             {
                 return $" (export \"{decl.FullName}\")";
             }
@@ -126,7 +126,7 @@ namespace Six.Six.Instructions
                     return $"{builtin.Wasm.Type}";
                 case Type.Callable:
                     return $"{Builtins.TableIndex.Wasm.Type}";
-                case Type.Declared declared when declared.Decl.IsNative():
+                case Type.Declared declared when declared.Decl.IsNative:
                     {
                         var builtin = Builtins.Resolve(declared.Decl);
                         return $"{builtin.Wasm.Type}";

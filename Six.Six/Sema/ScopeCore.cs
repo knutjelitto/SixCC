@@ -49,6 +49,16 @@ namespace Six.Six.Sema
             throw Errors.CantResolve(tree, name);
         }
 
+        public virtual Decl? TryFind(string name)
+        {
+            if (declarations.TryGetValue(name, out var decl))
+            {
+                return decl;
+            }
+
+            return null;
+        }
+
         public Decl Resolve(A.TreeNode tree, string name)
         {
             if (declarations.TryGetValue(name, out var decl))

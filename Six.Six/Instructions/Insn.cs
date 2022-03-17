@@ -68,6 +68,11 @@ namespace Six.Six.Instructions
             public static Insn Mul => Binop.Mul(ValueType.I32);
             public static Insn Div => Binop.DivS(ValueType.I32);
             public static Insn Rem => Binop.RemS(ValueType.I32);
+
+            public static Insn And => Binop.And(ValueType.I32);
+            public static Insn Or => Binop.Or(ValueType.I32);
+            public static Insn Xor => Binop.Xor(ValueType.I32);
+
             public static Insn Lt => Binop.LtS(ValueType.I32);
             public static Insn Le => Binop.LeS(ValueType.I32);
             public static Insn Gt => Binop.GtS(ValueType.I32);
@@ -80,11 +85,17 @@ namespace Six.Six.Instructions
         public static class U32
         {
             public static Const Const(uint value) => new(new Value.ValueU32(value));
+
             public static Insn Add => Binop.Add(ValueType.I32);
             public static Insn Sub => Binop.Sub(ValueType.I32);
             public static Insn Mul => Binop.Mul(ValueType.I32);
             public static Insn Div => Binop.DivU(ValueType.I32);
             public static Insn Rem => Binop.RemU(ValueType.I32);
+
+            public static Insn And => Binop.And(ValueType.I32);
+            public static Insn Or => Binop.Or(ValueType.I32);
+            public static Insn Xor => Binop.Xor(ValueType.I32);
+
             public static Insn Load(uint offset) => new Load(MemType.U32(), offset);
             public static Insn Store(uint offset) => new Store(MemType.U32(), offset);
         }
@@ -178,6 +189,11 @@ namespace Six.Six.Instructions
             public static Insn DivU(ValueType type) => new Binop(type, "div", OpSign.Unsigned);
             public static Insn RemS(ValueType type) => new Binop(type, "rem", OpSign.Signed);
             public static Insn RemU(ValueType type) => new Binop(type, "rem", OpSign.Unsigned);
+
+            public static Insn And(ValueType type) => new Binop(type, "and", OpSign.Neutral);
+            public static Insn Or(ValueType type) => new Binop(type, "or", OpSign.Neutral);
+            public static Insn Xor(ValueType type) => new Binop(type, "xor", OpSign.Neutral);
+
             public static Insn LtS(ValueType type) => new Binop(type, "lt", OpSign.Signed);
             public static Insn LtU(ValueType type) => new Binop(type, "lt", OpSign.Unsigned);
             public static Insn LeS(ValueType type) => new Binop(type, "le", OpSign.Signed);

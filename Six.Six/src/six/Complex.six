@@ -2,10 +2,10 @@ namespace six.core;
 
 class Complex
 {
-    var double re = -1;
-    var double im = -1;
+    var int re = -1;
+    var int im = -1;
 
-    shared new (double re = 0, double im = 0)
+    shared new (int re = 0, int im = 0)
     {
         self.re = re;
         self.im = im;

@@ -9,17 +9,5 @@ namespace Six.Six.Sema
 {
     public static class DeclExtensions
     {
-        public static bool IsStatic(this Decl decl)
-        {
-            return decl.ADecl.IsStatic();
-        }
-        public static bool IsShared(this Decl decl)
-        {
-            return decl.ADecl.IsShared();
-        }
-        public static bool IsNative(this Decl decl)
-        {
-            return decl.ADecl.IsNative();
-        }
     }
 }

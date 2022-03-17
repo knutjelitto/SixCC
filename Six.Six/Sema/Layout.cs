@@ -32,7 +32,6 @@ namespace Six.Six.Sema
 
             uint fieldOffset = 0;
 
-
             if (Classy.Extends != null)
             {
                 Classy.Extends.Layout.Run();

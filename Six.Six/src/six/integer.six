@@ -24,6 +24,8 @@ shared native class i32
     shared native infix bool < (i32 other);
     shared native infix bool >= (i32 other);
     shared native infix bool > (i32 other);
+
+    shared native prefix i32 ~ ();
 }
 
 shared native class i64
@@ -40,11 +42,24 @@ shared native class u16
 
 shared native class u32
 {
-    shared native infix u32 + (u32 rhs);
-    shared native infix u32 - (u32 rhs);
-    shared native infix u32 * (u32 rhs);
-    shared native infix u32 / (u32 rhs);
-    shared native infix u32 % (u32 rhs);
+    shared native static let u32 zero = 0;
+    shared native static let u32 one = 1;
+ 
+    shared native infix u32 + (u32 other);
+    shared native infix u32 - (u32 other);
+    shared native infix u32 * (u32 other);
+    shared native infix u32 / (u32 other);
+    shared native infix u32 % (u32 other);
+
+    shared native infix bool <= (i32 other);
+    shared native infix bool < (i32 other);
+    shared native infix bool >= (i32 other);
+    shared native infix bool > (i32 other);
+
+    shared native prefix u32 ~ ();
+    shared native infix u32 & (u32 other);
+    shared native infix u32 | (u32 other);
+    shared native infix u32 ^ (u32 other);
 }
 
 shared native class u64

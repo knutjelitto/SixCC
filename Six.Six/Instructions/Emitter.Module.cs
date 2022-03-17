@@ -7,29 +7,25 @@ namespace Six.Six.Instructions
         public void EmitModule()
         {
             wl($"(module");
-            foreach (var global in Module.GetGlobals())
+            indent(() =>
             {
-                indent(() =>
+                wl($"(memory ${Module.DataAndHeap} (export \"{Module.DataAndHeap}\") 16 16)");
+                wl();
+                foreach (var global in Module.GetGlobals())
                 {
                     wl($"(global{ IdFor(global)}{ ExportIff(global)} {TypeFor(global)}");
                     indent(() => Emit(global.Value));
                     wl($")");
-                });
-            }
+                }
 
-            foreach (var function in Module.GetFunctions())
-            {
-                indent(() =>
+                foreach (var function in Module.GetFunctions())
                 {
                     Emit(function);
-                });
-            }
+                }
 
-            indent(() =>
-            {
                 foreach (var classy in Module.GetClassies())
                 {
-                    if (!classy.IsNative())
+                    if (!classy.IsNative)
                     {
                         dumper.Dump(classy);
                     }
@@ -40,22 +36,15 @@ namespace Six.Six.Instructions
                 if (globalFunctionsTable.Count > 0)
                 {
                     wl();
-                    wl($"(table {globalFunctionsTableName} {globalFunctionsTable.Count} anyfunc)");
-                    wl($"(elem (table {globalFunctionsTableName}) ({Insn.U32.Const(0)})");
-                    var more = false;
+                    wl($"(table {globalFunctionsTableName} anyfunc (elem");
                     indent(() =>
                     {
                         foreach (var (name, element) in globalFunctionsTable.OrderBy(kv => kv.Value.index))
                         {
-                            if (more)
-                            {
-                                wl($",");
-                            }
-                            more = true;
-                            w($"${name}");
+                            wl($"${name}");
                         }
-                        wl(")");
                     });
+                    wl("))");
                 }
                 if (functionTypes.Count > 0)
                 {

@@ -14,7 +14,7 @@ namespace Six.Six.Sema
     {
         private string InfixName(A.Name node)
         {
-            return $"infix({node.Text})";
+            return $"infix.{node.Text}";
         }
         private string InfixName(A.Decl.Infix node)
         {
@@ -26,7 +26,7 @@ namespace Six.Six.Sema
         }
         private string PrefixName(A.Name node)
         {
-            return $"prefix({node.Text})";
+            return $"prefix.{node.Text}";
         }
         private string PrefixName(A.Expression.OpExpression node)
         {
@@ -95,7 +95,7 @@ namespace Six.Six.Sema
 
                     if (found is Decl.Attribute attribute)
                     {
-                        Assert(attribute.IsStatic());
+                        Assert(attribute.IsStatic);
                         return new Expr.SelectAttribute(classyRef, attribute);
                     }
                     else
@@ -196,7 +196,7 @@ namespace Six.Six.Sema
 
                     Assert(arguments.Count == prms.Count);
 
-                    return new Expr.CallFunction(function, arguments);
+                    return new Expr.CallFunction(function.FunctionDecl, arguments);
                 }
                 else if (func.Expr is Expr.ClassReference klassReference)
                 {

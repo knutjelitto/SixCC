@@ -179,6 +179,7 @@ prefix-declaration
 prefix-operator
     | '-'
     | '!'
+    | '~'
     ;
 
 infix-declaration
@@ -199,8 +200,8 @@ infix-operator
     | '!=' 
     | '==='
     | '!=='
-    | '|'
     | '&'
+    | '|'
     | '^'
     ;
 
@@ -752,11 +753,16 @@ intersection-expression
 
 level-negate-expression
     : negate-expression
+    | compl-expression
     | primary-expression
     ;
 
 negate-expression
     : '-' level-negate-expression
+    ;
+
+compl-expression
+    : '~' level-negate-expression
     ;
 
 primary-expression
@@ -869,7 +875,24 @@ literal-float
     ;
 
 natural-literal
-    | < decimal-digits | '#' hex-digits | '$' binary-digits >
+    | < natural-number natural-suffix? >
+    ;
+
+natural-number
+    | decimal-digits
+    | '#' hex-digits
+    | '$' binary-digits
+    ;
+
+natural-suffix
+    | 'i8'
+    | 'i16'
+    | 'i32'
+    | 'i64'
+    | 'u8'
+    | 'u16'
+    | 'u32'
+    | 'u64'
     ;
 
 literal-char

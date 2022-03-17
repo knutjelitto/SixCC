@@ -13,12 +13,17 @@ namespace Six.Six.Builtins
         public U32(Builtins builtins) : base(builtins, Names.Core.UInt32)
         {
             prefix.Add("-", Neg);
-            prefix.Add("!", Not);
+
             infix.Add("+", Add);
             infix.Add("-", Sub);
             infix.Add("*", Mul);
             infix.Add("/", Div);
             infix.Add("%", Rem);
+
+            prefix.Add("~", Complement);
+            infix.Add("&", And);
+            infix.Add("|", Or);
+            infix.Add("^", Xor);
         }
 
         public override Insn Load(uint offset)
@@ -37,13 +42,6 @@ namespace Six.Six.Builtins
 
             var zero = new Expr.ConstU32(this, 0);
             return Sub(zero, right);
-        }
-
-        public Expr.Primitive Not(Expr right)
-        {
-            Assert(IsThis(right));
-
-            throw new NotImplementedException();
         }
 
         public Expr.Primitive Add(Expr left, Expr right)
@@ -78,12 +76,45 @@ namespace Six.Six.Builtins
             return new Expr.Binop(this, Insn.U32.Div, left, right);
         }
 
-        public Expr.Primitive Rem(Expr left, Expr right)
+        public Expr.Primitive Rem(Expr arg1, Expr arg2)
         {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Insn.U32.Rem, left, right);
+            return new Expr.Binop(this, Insn.U32.Rem, arg1, arg2);
+        }
+
+
+        public Expr.Primitive Complement(Expr arg)
+        {
+            Assert(IsThis(arg));
+
+            var ones = new Expr.ConstU32(this, uint.MaxValue);
+            return Xor(ones, arg);
+        }
+
+        public Expr.Primitive And(Expr arg1, Expr arg2)
+        {
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
+
+            return new Expr.Binop(this, Insn.U32.And, arg1, arg2);
+        }
+
+        public Expr.Primitive Or(Expr arg1, Expr arg2)
+        {
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
+
+            return new Expr.Binop(this, Insn.U32.Or, arg1, arg2);
+        }
+
+        public Expr.Primitive Xor(Expr arg1, Expr arg2)
+        {
+            Assert(IsThis(arg1));
+            Assert(IsThis(arg2));
+
+            return new Expr.Binop(this, Insn.U32.Xor, arg1, arg2);
         }
     }
 }
