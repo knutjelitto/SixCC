@@ -114,7 +114,7 @@ namespace Six.Six.Sema
 
         private void DeclareSelf(Decl.Funcy funcy, Decl.Classy classy)
         {
-            var self = new Decl.SelfParameter(funcy.Scope, new Type.Reference(classy), 0);
+            var self = new Decl.SelfParameter(funcy.Scope, new Type.ClassyReference(classy), 0);
             funcy.Scope.Declare(self, Names.Core.SelfValue);
             funcy.Parameters.Add(self);
         }

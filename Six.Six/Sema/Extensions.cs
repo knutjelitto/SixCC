@@ -68,6 +68,11 @@ namespace Six.Six.Sema
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Static);
         }
 
+        public static bool IsAbstract(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Abstract);
+        }
+
         private static bool IsWith(this A.With.Prelude withPrelude, string attribute)
         {
             return withPrelude.Prelude.Attributes.Any(a => a.Name.Text == attribute);

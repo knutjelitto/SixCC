@@ -16,7 +16,15 @@
         }
 
         [DebuggerDisplay("reference <{Decl}>")]
-        public sealed record Reference(Decl Decl) : Declared
+        public record Reference(Decl Decl) : Declared
+        {
+            public override string ToString()
+            {
+                return $"{Decl}";
+            }
+        }
+
+        public record ClassyReference(Decl.Classy Classy) : Reference(Classy)
         {
             public override string ToString()
             {
