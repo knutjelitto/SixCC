@@ -43,6 +43,11 @@ namespace Six.Six.Sema
         public sealed record Unop(Builtin Builtin, Insn Insn, Expr Arg)
             : Primitive(Builtin);
 
+        public abstract record Reference(Decl Decl) : Expr
+        {
+            public Type Type => Decl.Type;
+        }
+
         public sealed record FunctionReference(Decl.Function FunctionDecl)
             : Reference(FunctionDecl);
 
@@ -72,11 +77,6 @@ namespace Six.Six.Sema
 
         public sealed record InterfaceReference(Decl.Interface InterfaceDecl)
             : ClassyReference(InterfaceDecl);
-
-        public abstract record Reference(Decl Decl) : Expr
-        {
-            public Type Type => Decl.Type;
-        }
 
         public sealed record CallFunction(Decl.Function Function, List<Expr> Arguments)
             : Primitive(Function.Type)
@@ -124,9 +124,8 @@ namespace Six.Six.Sema
             public Type Type => Function.ResultType;
         }
 
-        public sealed record AndThen(LazyExpr And, LazyExpr Then) : Expr
+        public sealed record AndThen(Type Type, LazyExpr And, LazyExpr Then) : Expr
         {
-            public Type Type => And.Builtins.Boolean;
         }
 
         public sealed record If(LazyExpr Condition, LazyExpr Then, LazyExpr Else) : Expr

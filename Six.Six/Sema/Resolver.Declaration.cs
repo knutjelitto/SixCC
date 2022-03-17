@@ -11,6 +11,25 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
+        private void WalkDeclarations(Block block, IEnumerable<A.Decl> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                WalkDeclaration(block, node);
+            }
+        }
+
+        private void WalkDeclaration(Block block, A.Decl node)
+        {
+            Declaration(block, (dynamic)node);
+        }
+
+        private void Declaration(Block block, A.Decl node)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
         private void WalkDeclarations(Scope scope, IEnumerable<A.Decl>? nodes)
         {
             if (nodes != null)

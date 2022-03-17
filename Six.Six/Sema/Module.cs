@@ -21,6 +21,7 @@ namespace Six.Six.Sema
         public Module()
         {
             Root = new Namespace("", this);
+            RootBlock = new NamespaceBlock("", this);
             Name = "six";
             Resolver = new Resolver(this);
             Builtins = new Builtins.Builtins(this);
@@ -28,6 +29,7 @@ namespace Six.Six.Sema
         }
 
         public Namespace Root { get; }
+        public NamespaceBlock RootBlock { get; }
         public string Name { get; }
         public Resolver Resolver { get; }
         public Builtins.Builtins Builtins { get; }
@@ -52,6 +54,21 @@ namespace Six.Six.Sema
             foreach (var name in @namespace.Names)
             {
                 current = current.Open(name.Text);
+            }
+            return current;
+        }
+
+        public NamespaceBlock OpenNamespace(A.NamespaceIntro @namespace)
+        {
+            var current = RootBlock;
+            foreach (var name in @namespace.Names.Select(n => n.Text))
+            {
+                if (!current.Children.TryGetValue(name, out var inner))
+                {
+                    inner = new NamespaceBlock(name, current.Scope);
+                    current.Children.Add(name, inner);
+                }
+                current = inner;
             }
             return current;
         }
@@ -138,17 +155,20 @@ namespace Six.Six.Sema
             }
         }
 
-        public Type.ClassyReference CoreFindType(A.TreeNode tree, string name)
+        public Type.ClassyReference CoreFindType(string name)
         {
             var core = GetCoreNamespace();
 
-            var decl = core.Find(tree, name);
-            Assert(decl is Decl.Classy);
-            var classy = decl as Decl.Classy;
-            Assert(classy != null);
-            var reference = classy.Type as Type.ClassyReference;
-            Assert(reference != null);
-            return reference;
+            var decl = core.TryFind(name);
+            if (decl is Decl.Classy classy)
+            {
+                var reference = classy.Type as Type.ClassyReference;
+                Assert(reference != null);
+                return reference;
+            }
+
+            Assert(false);
+            throw Errors.CantResolveInCore("class", name);
         }
 
         public Decl.Class CoreFindClass(A.TreeNode tree, string name)

@@ -16,16 +16,26 @@ namespace Six.Six.Sema
         bool IsNative { get; }
         bool IsShared { get; }
 
-        public abstract class WithMembers : Declaration
+        public interface WithMembers : Decl
         {
-            public WithMembers(Scope container, A.Decl aDecl)
+            List<Member> Members { get; }
+        }
+
+        public class Namespace : Declaration, WithMembers
+        {
+            public Namespace(Scope container, A.Decl aDecl)
                 : base(container, aDecl)
             {
             }
-            public List<Member> Members { get; } = new();
+
+            public List<Member> Members => throw new System.NotImplementedException();
+
+            public override Type Type => throw new System.NotImplementedException();
+
+            public override string FullName => throw new System.NotImplementedException();
         }
 
-        public abstract class Classy : WithMembers, Typy
+        public abstract class Classy : Declaration, WithMembers, Typy
         {
             private Class? extends;
             private Layout? layout;
@@ -34,6 +44,7 @@ namespace Six.Six.Sema
                 : base(scope, aDecl)
             {
                 Type = new Type.ClassyReference(this);
+                Block = new ClassBlock(this, scope);
             }
 
             public Classy(Scope parent, A.Decl.Classy aDecl)
@@ -42,7 +53,9 @@ namespace Six.Six.Sema
                 parent.Declare(this, aDecl.Name.Text);
             }
 
-            public ClassyScope Scope => (ClassyScope)Container;
+            public ClassBlock Block { get; }
+            public List<Member> Members => Block.Members;
+            public ClassyScope Scope => (ClassyScope)Block.Classy.Container;
 
             public override Type Type { get; }
 
@@ -87,26 +100,15 @@ namespace Six.Six.Sema
             }
         }
 
-        public abstract class WithContent : WithMembers
-        {
-            protected WithContent(ContentScope container, A.Decl aDecl)
-                : base(container, aDecl)
-            {
-            }
-
-            public ContentScope ContentScope => (ContentScope)Container;
-            public BlockScope BlockScope => ContentScope.Block;
-        }
-
-        public abstract class Funcy : WithContent
+        public abstract class Funcy : Declaration, WithMembers
         {
             private List<Type>? paramTypes = null;
 
             private Funcy(FuncyScope scope, A.Decl.Funcy aDecl)
                 : base(scope, aDecl)
             {
-                Scope = scope;
                 AFuncyDecl = aDecl;
+                Block = new CodeBlock(this, scope);
             }
 
             public Funcy(Scope parent, string name, A.Decl.Funcy aDecl)
@@ -115,8 +117,13 @@ namespace Six.Six.Sema
                 parent.Declare(this, name);
             }
 
-            public FuncyScope Scope { get; }
             public A.Decl.Funcy AFuncyDecl { get; }
+
+
+            public CodeBlock Block { get; }
+            public List<Member> Members => Block.Members;
+            public FuncyScope Scope => (FuncyScope)Block.Funcy.Container;
+
 
             public List<Local> Parameters { get; } = new();
             public List<Local> Locals { get; } = new();

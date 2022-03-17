@@ -7,10 +7,7 @@ namespace Six.Six.Sema
         protected ContentScope(Scope parent, string name)
             : base(parent, name)
         {
-            Block = new BlockScope("block", this);
         }
-
-        public BlockScope Block { get; }
     }
 
     public class ClassyScope : ContentScope
@@ -21,7 +18,7 @@ namespace Six.Six.Sema
         }
     }
 
-    public class FuncyScope : ContentScope
+    public class FuncyScope : DeclarationScope
     {
         public FuncyScope(Scope parent, string name)
             : base(parent, name)

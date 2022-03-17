@@ -11,14 +11,14 @@ namespace Six.Six.Sema
             return node.Container as ClassyScope ?? throw new InvalidCastException();
         }
 
-        public static Decl ClassyFind(this Decl node, A.Reference reference)
+        public static Decl ClassyFind(this Decl.Classy classy, A.Reference reference)
         {
-            return node.ClassyScope().Block.Find(reference, reference.Name.Text);
+            return classy.Block.Scope.Find(reference, reference.Name.Text);
         }
 
         public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
         {
-            return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
+            return node.ClassyDecl.Block.Scope.Find(reference, reference.Name.Text);
         }
 
         public static ILocation GetLocation(this Decl node)

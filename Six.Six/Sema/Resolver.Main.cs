@@ -28,7 +28,9 @@ namespace Six.Six.Sema
         private void CodeUnit(A.Unit.Code code)
         {
             var @namespace = Module.Open(code.Namespace);
+            var namespaceBlock = Module.OpenNamespace(code.Namespace);
 
+            //WalkDeclarations(namespaceBlock, code.Declarations);
             WalkDeclarations(@namespace, code.Declarations);
         }
     }

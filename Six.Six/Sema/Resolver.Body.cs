@@ -25,7 +25,7 @@ namespace Six.Six.Sema
         {
             foreach (var decl in node.Declarations)
             {
-                WalkDeclaration(classy.Scope.Block, decl);
+                WalkDeclaration(classy.Block.Scope, decl);
             }
 
             return new Body.Dummy();
@@ -42,7 +42,7 @@ namespace Six.Six.Sema
             {
                 if (member is A.Decl decl)
                 {
-                    WalkDeclaration(funcy.Scope.Block, decl);
+                    WalkDeclaration(funcy.Block.Scope, decl);
                 }
                 else if (member is A.Stmt stmt)
                 {
@@ -64,7 +64,7 @@ namespace Six.Six.Sema
 
         private Body FuncyBody(Decl.Funcy funcy, A.Body.Calc node)
         {
-            var delayed = ResolveExpression(funcy.Scope.Block, node.Expression);
+            var delayed = ResolveExpression(funcy.Block.Scope, node.Expression);
 
             return new Body.Expression(() => delayed.Expr);
         }

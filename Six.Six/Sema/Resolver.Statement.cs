@@ -21,9 +21,9 @@ namespace Six.Six.Sema
             var stmt =
                 new Stmt.Assign(
                     node,
-                    funcy.BlockScope,
-                    ResolveExpression(funcy.BlockScope, node.Left),
-                    ResolveExpression(funcy.BlockScope, node.Right));
+                    funcy.Block.Scope,
+                    ResolveExpression(funcy.Block.Scope, node.Left),
+                    ResolveExpression(funcy.Block.Scope, node.Right));
             CurrentFuncy.Members.Add(stmt);
         }
 
@@ -32,9 +32,9 @@ namespace Six.Six.Sema
             var stmt =
                 new Stmt.Return(
                     node.GetLocation(),
-                    funcy.BlockScope,
+                    funcy.Block.Scope,
                     (Decl.Function)funcy,
-                    node.Expression == null ? null : ResolveExpression(funcy.BlockScope, node.Expression));
+                    node.Expression == null ? null : ResolveExpression(funcy.Block.Scope, node.Expression));
             funcy.Members.Add(stmt);
         }
 

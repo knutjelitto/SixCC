@@ -69,6 +69,7 @@ namespace Six.Six.Sema
             return new LazyExpr(Module, () =>
             {
                 var first = ResolveExpression(container, conditions[0]);
+                var type = Module.CoreFindType(Names.Core.Boolean);
 
                 if (conditions.Count == 1)
                 {
@@ -77,7 +78,7 @@ namespace Six.Six.Sema
                 else
                 {
                     Assert(conditions.Count > 1);
-                    return new Expr.AndThen(first, ExpressionConditions(container, conditions.Skip(1)));
+                    return new Expr.AndThen(type, first, ExpressionConditions(container, conditions.Skip(1)));
                 }
             });
 
@@ -109,7 +110,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.Scope.Block.Resolve(node.Reference, node.Reference.Name.Text);
+                        var referenced = classy.Block.Scope.Resolve(node.Reference, node.Reference.Name.Text);
 
                         Assert(false);
                     }
@@ -201,7 +202,7 @@ namespace Six.Six.Sema
                 else if (func.Expr is Expr.ClassReference klassReference)
                 {
                     var klass = klassReference.ClassDecl;
-                    var defaultCtor = klass.ClassyScope().Block.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
+                    var defaultCtor = klass.Block.Scope.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
                     Assert(defaultCtor != null);
                     var callable = defaultCtor.Type as Type.Callable;
                     Assert(callable != null);
@@ -302,7 +303,7 @@ namespace Six.Six.Sema
 
                 if (left.Expr.Type is Type.ClassyReference reference)
                 {
-                    var infix = reference.Classy.Scope.Block.Find(node.Op, InfixName(node));
+                    var infix = reference.Classy.Block.Scope.Find(node.Op, InfixName(node));
 
                     if (infix is Decl.Function function)
                     {
@@ -336,7 +337,7 @@ namespace Six.Six.Sema
                 {
                     if (reference.Classy.ADecl is A.Decl.Classy)
                     {
-                        var prefix = reference.Classy.Scope.Block.Find(node.Op, PrefixName(node));
+                        var prefix = reference.Classy.Block.Scope.Find(node.Op, PrefixName(node));
 
                         if (prefix is Decl.Function function)
                         {
