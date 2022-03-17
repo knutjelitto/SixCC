@@ -138,7 +138,7 @@ namespace Six.Six.Sema
             }
         }
 
-        public Type CoreFindType(A.TreeNode tree, string name)
+        public Type.ClassyReference CoreFindType(A.TreeNode tree, string name)
         {
             var core = GetCoreNamespace();
 
@@ -146,7 +146,7 @@ namespace Six.Six.Sema
             Assert(decl is Decl.Classy);
             var classy = decl as Decl.Classy;
             Assert(classy != null);
-            var reference = classy.Type as Type.Reference;
+            var reference = classy.Type as Type.ClassyReference;
             Assert(reference != null);
             return reference;
         }

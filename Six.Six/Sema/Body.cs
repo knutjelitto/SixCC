@@ -4,13 +4,13 @@ namespace Six.Six.Sema
 {
     public interface Body
     {
-        public record Value(Func<Expr> Resolver) : Body
+        public record Expression(Func<Expr> Resolver) : Body
         {
             private Expr? concrete;
             public Expr Expr => concrete ??= Resolver();
         }
 
-        public record Expression(Func<Expr> Resolver) : Body
+        public record Block(Func<Expr> Resolver) : Body
         {
             private Expr? concrete;
             public Expr Expr => concrete ??= Resolver();

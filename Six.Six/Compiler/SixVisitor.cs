@@ -357,7 +357,7 @@ namespace Six.Six.Compiler
             var usings = Walk<Usings>(element.Usings);
             var declarations = new Declarations(element, WalkMany<Decl>(element.InterfaceMember));
 
-            element.Value = new Body.Interface(element, usings, declarations);
+            element.Value = new Body.Class(element, usings, declarations);
         }
 
         protected override void Visit(CCalcBody element)

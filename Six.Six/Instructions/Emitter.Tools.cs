@@ -166,7 +166,7 @@ namespace Six.Six.Instructions
 
         private bool IsAnythingAkaVoid(Type type)
         {
-            return Resolver.ResolveType(type) is Type.Reference reference && reference.Decl.Name.Text == Names.Core.Anything;
+            return Resolver.ResolveType(type) is Type.ClassyReference reference && reference.Decl.FullName == Names.Core.CoreAnything;
         }
 
         private void Horizontal(IEnumerable<Action> actions)

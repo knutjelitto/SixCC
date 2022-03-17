@@ -18,7 +18,7 @@ namespace Six.Six.Sema
 
         public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
         {
-            return node.ClassyDecl.ClassyScope.Block.Find(reference, reference.Name.Text);
+            return node.ClassyDecl.Scope.Block.Find(reference, reference.Name.Text);
         }
 
         public static ILocation GetLocation(this Decl node)
@@ -66,6 +66,11 @@ namespace Six.Six.Sema
         public static bool IsStatic(this A.TreeNode node)
         {
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Static);
+        }
+
+        public static bool IsAbstract(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Abstract);
         }
 
         private static bool IsWith(this A.With.Prelude withPrelude, string attribute)

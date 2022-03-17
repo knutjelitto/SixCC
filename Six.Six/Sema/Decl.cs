@@ -33,7 +33,7 @@ namespace Six.Six.Sema
             private Classy(ClassyScope scope, A.Decl.Classy aDecl)
                 : base(scope, aDecl)
             {
-                Type = new Type.Reference(this);
+                Type = new Type.ClassyReference(this);
             }
 
             public Classy(Scope parent, A.Decl.Classy aDecl)
@@ -42,13 +42,13 @@ namespace Six.Six.Sema
                 parent.Declare(this, aDecl.Name.Text);
             }
 
-            public ClassyScope ClassyScope => (ClassyScope)Container;
+            public ClassyScope Scope => (ClassyScope)Container;
 
             public override Type Type { get; }
 
-            public override string FullName => ClassyScope.FullName;
+            public override string FullName => Scope.FullName;
 
-            public Class? Extends => extends ??= this is Class klass ? Resolver.ResolveExtends(klass) : null;
+            public Class? Extends => extends ??= Resolver.ResolveExtends(this);
 
             public Layout Layout => layout ??= new Layout(this);
         }
@@ -73,6 +73,8 @@ namespace Six.Six.Sema
             {
                 Assert(aDecl is A.With.Extends);
             }
+
+            public List<Field> Fields { get; } = new List<Field>();
 
             public override string ToString() => $"{Name}";
         }
@@ -149,6 +151,25 @@ namespace Six.Six.Sema
 
             public Type ResultType =>
                 resultType ??= Resolver.ResolveType(Class.Type);
+        }
+        
+        public sealed class Attribute : Funcy
+        {
+            private Body? body;
+
+            public Attribute(Scope parent, A.Decl.Attribute aDecl)
+                : base(parent, aDecl.Name.Text, aDecl)
+            {
+                Assert(ADecl is A.With.Type);
+            }
+
+            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
+
+            public override Type Type =>
+                type ??= Resolver.ResolveType(Container, ((A.With.Type)ADecl).Type);
+
+            public Body Body =>
+                body ??= Resolver.WalkBody(this, ((A.With.Body)ADecl).Body);
         }
 
         public abstract class Local : Declaration
@@ -355,36 +376,6 @@ namespace Six.Six.Sema
 
         }
 
-        public sealed class Attribute : Declaration
-        {
-            private Body? body;
-
-            public Attribute(Scope parent, A.Decl aDecl)
-                : base(parent, aDecl)
-            {
-                Assert(ADecl is A.With.Type);
-            }
-
-            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
-
-            public override Type Type =>
-                type ??= Resolver.ResolveType(Container, ((A.With.Type)ADecl).Type);
-
-            public Body Body =>
-                body ??= Resolver.WalkBody(Container, ((A.With.Body)ADecl).Body);
-        }
-
-#if false
-        public sealed class TypeParameter : Declaration, Typy
-        {
-            public TypeParameter(Scope Container, A.Decl.TypeParameter ADecl)
-                : base(Container, ADecl)
-            {
-            }
-
-            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
-        }
-#endif
 
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {Name}")]
         public abstract class Declaration : Decl
@@ -410,6 +401,7 @@ namespace Six.Six.Sema
             public bool IsStatic => ADecl.IsStatic();
             public bool IsNative => ADecl.IsNative();
             public bool IsShared => ADecl.IsShared();
+            public bool IsAbstract => ADecl.IsAbstract();
         }
     }
 }

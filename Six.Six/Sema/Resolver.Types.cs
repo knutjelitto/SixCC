@@ -11,15 +11,15 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Decl.Class? ResolveExtends(Decl.Class klass)
+        public Decl.Class? ResolveExtends(Decl.Classy classy)
         {
-            if (klass.ADecl is A.With.Extends ext)
+            if (classy.ADecl is A.With.Extends ext)
             {
                 if (ext.Extends is A.Type extended)
                 {
-                    var super = ResolveType(klass.ClassyScope, extended);
+                    var super = ResolveType(classy.Scope, extended);
 
-                    if (super is Type.Reference reference && reference.Decl is Decl.Class superClass)
+                    if (super is Type.ClassyReference reference && reference.Classy is Decl.Class superClass)
                     {
                         return superClass;
                     }
@@ -34,9 +34,13 @@ namespace Six.Six.Sema
                     return null;
                 }
             }
-            else if (!klass.ADecl.IsNative())
+            else if (!classy.ADecl.IsNative())
             {
-                return Module.CoreFindClass(klass.ADecl, Names.Core.Basic);
+                return Module.CoreFindClass(classy.ADecl, Names.Core.Basic);
+            }
+            else if (classy is Decl.Interface)
+            {
+                return null;
             }
             else
             {

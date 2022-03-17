@@ -16,6 +16,11 @@ namespace Six.Six.Sema
         {
             return $"infix.{node.Text}";
         }
+        private string PrefixName(A.Name node)
+        {
+            return $"prefix.{node.Text}";
+        }
+
         private string InfixName(A.Decl.Infix node)
         {
             return InfixName(node.Name);
@@ -24,15 +29,10 @@ namespace Six.Six.Sema
         {
             return InfixName(node.Op.Name);
         }
-        private string PrefixName(A.Name node)
-        {
-            return $"prefix.{node.Text}";
-        }
         private string PrefixName(A.Expression.OpExpression node)
         {
             return PrefixName(node.Op.Name);
         }
-
         private string PrefixName(A.Decl.Prefix node)
         {
             return PrefixName(node.Name);
@@ -109,7 +109,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.ClassyScope.Block.Resolve(node.Reference, node.Reference.Name.Text);
+                        var referenced = classy.Scope.Block.Resolve(node.Reference, node.Reference.Name.Text);
 
                         Assert(false);
                     }
@@ -300,14 +300,13 @@ namespace Six.Six.Sema
                 var left = ResolveExpression(container, node.Left);
                 var right = ResolveExpression(container, node.Right);
 
-                if (left.Expr.Type is Type.Reference reference &&
-                    reference.Decl is Decl.Classy classy)
+                if (left.Expr.Type is Type.ClassyReference reference)
                 {
-                    var infix = classy.ClassyScope.Block.Find(node.Op, InfixName(node));
+                    var infix = reference.Classy.Scope.Block.Find(node.Op, InfixName(node));
 
                     if (infix is Decl.Function function)
                     {
-                        return new Expr.CallInfixMember(classy, function, left.Expr, right.Expr);
+                        return new Expr.CallInfixMember(reference.Classy, function, left.Expr, right.Expr);
                     }
 
                     Assert(false);
@@ -333,16 +332,15 @@ namespace Six.Six.Sema
             {
                 var right = ResolveExpression(container, node.Expr);
 
-                if (right.Expr.Type is Type.Reference reference &&
-                    reference.Decl is Decl.Classy classy)
+                if (right.Expr.Type is Type.ClassyReference reference)
                 {
-                    if (classy.ADecl is A.Decl.Classy)
+                    if (reference.Classy.ADecl is A.Decl.Classy)
                     {
-                        var prefix = classy.ClassyScope.Block.Find(node.Op, PrefixName(node));
+                        var prefix = reference.Classy.Scope.Block.Find(node.Op, PrefixName(node));
 
                         if (prefix is Decl.Function function)
                         {
-                            return new Expr.CallPrefixMember(classy, function, right.Expr);
+                            return new Expr.CallPrefixMember(reference.Classy, function, right.Expr);
                         }
 
                         Assert(false);

@@ -14,6 +14,7 @@ namespace Six.Six.Sema
 
         private Decl.Funcy CurrentFuncy => membies.Peek() as Decl.Funcy ?? throw new InvalidCastException();
         private Decl.Class CurrentClass => membies.Peek() as Decl.Class ?? throw new InvalidCastException();
+        private Decl.Classy CurrentClassy => membies.Peek() as Decl.Classy ?? throw new InvalidCastException();
         private Decl.WithMembers CurrentMemby => membies.Peek();
 
         private IDisposable UseMemby(Decl.WithMembers memby)

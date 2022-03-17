@@ -100,16 +100,6 @@ namespace Six.Six.Ast
               With.OptionalType,
               With.Value;
 
-        public sealed record Attribute(
-            IRNode Tree,
-            Prelude Prelude,
-            Name Name,
-            Type Type,
-            Body Body)
-            : Preluded,
-              With.Type,
-              With.Body;
-
         public sealed record Constructor(
             IRNode Tree,
             Prelude Prelude,
@@ -119,6 +109,19 @@ namespace Six.Six.Ast
             Body Body)
             : Funcy,
               With.Extends;
+
+        public sealed record Attribute(
+            IRNode Tree,
+            Prelude Prelude,
+            Name Name,
+            Type Type,
+            Body Body)
+            : Funcy,
+              With.Type,
+              With.Body
+        {
+            public Parameters Parameters { get; } = new Parameters(Tree);
+        }
 
         public record Function(
             IRNode Tree, 

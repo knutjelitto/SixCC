@@ -129,63 +129,6 @@ namespace Six.Six.Sema
             return text;
         }
 
-        private string TypeSuffix(A.Expression.NaturalNumber tree, out Type? type)
-        {
-            var text = tree.Text;
-
-            var si = text.IndexOf('i');
-            if (si > 0)
-            {
-                switch (text[si + 1])
-                {
-                    case '8':
-                        type = Module.CoreFindType(tree, Names.Core.Int8);
-                        break;
-                    case '1':
-                        type = Module.CoreFindType(tree, Names.Core.Int16);
-                        break;
-                    case '3':
-                        type = Module.CoreFindType(tree, Names.Core.Int32);
-                        break;
-                    case '6':
-                        type = Module.CoreFindType(tree, Names.Core.Int64);
-                        break;
-                    default:
-                        Assert(false);
-                        throw new NotImplementedException();
-                }
-
-                return text.Substring(si);
-            }
-            var su = text.IndexOf('u');
-            if (su > 0)
-            {
-                switch (text[su + 1])
-                {
-                    case '8':
-                        type = Module.CoreFindType(tree, Names.Core.Int8);
-                        break;
-                    case '1':
-                        type = Module.CoreFindType(tree, Names.Core.Int16);
-                        break;
-                    case '3':
-                        type = Module.CoreFindType(tree, Names.Core.Int32);
-                        break;
-                    case '6':
-                        type = Module.CoreFindType(tree, Names.Core.Int64);
-                        break;
-                    default:
-                        Assert(false);
-                        throw new NotImplementedException();
-                }
-
-                return text.Substring(su);
-            }
-
-            type = null;
-            return text;
-        }
-
         public Expr PlainString(A.Expression.String.Plain tree)
         {
             var type = Module.CoreFindType(tree, Names.Core.String);
