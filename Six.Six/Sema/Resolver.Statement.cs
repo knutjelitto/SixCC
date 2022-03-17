@@ -11,47 +11,40 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private void WalkStatement(Scope scope, A.Stmt node)
+        private void WalkStatement(Decl.Funcy funcy, A.Stmt node)
         {
-            Statement((dynamic)scope, (dynamic)node);
+            Statement(funcy, (dynamic)node);
         }
 
-        private void Statement(BlockScope container, A.Stmt.Assign node)
+        private void Statement(Decl.Funcy funcy, A.Stmt.Assign node)
         {
             var stmt =
                 new Stmt.Assign(
-                    container,
                     node,
-                    ResolveExpression(container, node.Left),
-                    ResolveExpression(container, node.Right));
+                    funcy.BlockScope,
+                    ResolveExpression(funcy.BlockScope, node.Left),
+                    ResolveExpression(funcy.BlockScope, node.Right));
             CurrentFuncy.Members.Add(stmt);
         }
 
-        private void Statement(BlockScope container, A.Stmt.Return node)
+        private void Statement(Decl.Funcy funcy, A.Stmt.Return node)
         {
-            if (CurrentFuncy is Decl.Function function)
-            {
-                var stmt = 
-                    new Stmt.Return(
-                        container,
-                        node,
-                        function,
-                        node.Expression == null ? null : ResolveExpression(container, node.Expression));
-                function.Members.Add(stmt);
-            }
-            else
-            {
-                Assert(false);
-            }
+            var stmt =
+                new Stmt.Return(
+                    node.GetLocation(),
+                    funcy.BlockScope,
+                    (Decl.Function)funcy,
+                    node.Expression == null ? null : ResolveExpression(funcy.BlockScope, node.Expression));
+            funcy.Members.Add(stmt);
         }
 
-        private void Statement(BlockScope container, A.Stmt.Expr node)
+        private void Statement(Decl.Funcy funcy, A.Stmt.Expr node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
-        private void Statement(BlockScope container, A.Stmt node)
+        private void Statement(Decl.Funcy funcy, A.Stmt node)
         {
             Assert(false);
             throw new NotImplementedException();

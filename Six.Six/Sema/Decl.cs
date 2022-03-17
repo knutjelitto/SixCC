@@ -87,7 +87,18 @@ namespace Six.Six.Sema
             }
         }
 
-        public abstract class Funcy : WithMembers
+        public abstract class WithContent : WithMembers
+        {
+            protected WithContent(ContentScope container, A.Decl aDecl)
+                : base(container, aDecl)
+            {
+            }
+
+            public ContentScope ContentScope => (ContentScope)Container;
+            public BlockScope BlockScope => ContentScope.Block;
+        }
+
+        public abstract class Funcy : WithContent
         {
             private List<Type>? paramTypes = null;
 
@@ -390,7 +401,6 @@ namespace Six.Six.Sema
 
             public Scope Container { get; }
             public A.Decl ADecl { get; }
-            public A.TreeNode ANode => ADecl;
             public abstract Type Type { get; }
             public A.Name Name => ADecl.Name;
             public abstract string FullName { get; }

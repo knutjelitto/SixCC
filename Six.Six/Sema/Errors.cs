@@ -1,4 +1,5 @@
-﻿using Six.Core.Errors;
+﻿using Six.Core;
+using Six.Core.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,12 @@ namespace Six.Six.Sema
 
         public DiagnosticException TypeMismatch(A.TreeNode tree, Type expected, Type actual)
         {
-            var diagnostic = new SemanticError(tree.GetLocation(), $"expected type ``{expected}´´ but found ``{actual}´´");
+            return TypeMismatch(tree.GetLocation(), expected, actual);
+        }
+
+        public DiagnosticException TypeMismatch(ILocation location, Type expected, Type actual)
+        {
+            var diagnostic = new SemanticError(location, $"expected type ``{expected}´´ but found ``{actual}´´");
 
             return new DiagnosticException(diagnostic);
         }

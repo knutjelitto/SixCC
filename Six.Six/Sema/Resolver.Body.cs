@@ -12,41 +12,41 @@ namespace Six.Six.Sema
     {
         public Body WalkBody(Decl.Classy classy, A.Body node)
         {
-            return Body((dynamic)classy.Scope.Block, (dynamic)node);
+            return ClassyBody(classy, (dynamic)node);
         }
 
-        public Body WalkBody(Decl.Funcy funcy, A.Body node)
-        {
-            return Body((dynamic)funcy.Scope.Block, (dynamic)node);
-        }
-
-        private Body Body(Scope container, A.Body node)
+        private Body ClassyBody(Decl.Classy classy, A.Body node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
-        private Body Body(BlockScope container, A.Body.Class node)
+        private Body ClassyBody(Decl.Classy classy, A.Body.Class node)
         {
             foreach (var decl in node.Declarations)
             {
-                WalkDeclaration(container, decl);
+                WalkDeclaration(classy.Scope.Block, decl);
             }
 
             return new Body.Dummy();
         }
 
-        private Body Body(BlockScope container, A.Body.Block node)
+        public Body WalkBody(Decl.Funcy funcy, A.Body node)
+        {
+            return FuncyBody(funcy, (dynamic)node);
+        }
+
+        private Body FuncyBody(Decl.Funcy funcy, A.Body.Block node)
         {
             foreach (var member in node.Statelarations)
             {
                 if (member is A.Decl decl)
                 {
-                    WalkDeclaration(container, decl);
+                    WalkDeclaration(funcy.Scope.Block, decl);
                 }
                 else if (member is A.Stmt stmt)
                 {
-                    WalkStatement(container, stmt);
+                    WalkStatement(funcy, stmt);
                 }
                 else
                 {
@@ -57,14 +57,14 @@ namespace Six.Six.Sema
             return new Body.Dummy();
         }
 
-        private Body Body(BlockScope container, A.Body.Deferred node)
+        private Body FuncyBody(Decl.Funcy funcy, A.Body.Deferred node)
         {
             return new Body.Dummy();
         }
 
-        private Body Body(BlockScope container, A.Body.Calc node)
+        private Body FuncyBody(Decl.Funcy funcy, A.Body.Calc node)
         {
-            var delayed = ResolveExpression(container, node.Expression);
+            var delayed = ResolveExpression(funcy.Scope.Block, node.Expression);
 
             return new Body.Expression(() => delayed.Expr);
         }

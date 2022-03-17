@@ -20,4 +20,17 @@ namespace Six.Six.Sema
         {
         }
     }
+
+    public class CodeBlock : Body
+    {
+        public CodeBlock(Decl.Funcy funcy, Scope parent)
+        {
+            Funcy = funcy;
+            Scope = new BlockScope(funcy.ADecl, parent);
+        }
+
+        public Decl.Funcy Funcy { get; }
+        public BlockScope Scope { get; }
+        public List<Member> Members { get; } = new();
+    }
 }

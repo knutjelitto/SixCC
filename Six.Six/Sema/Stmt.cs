@@ -6,23 +6,21 @@ namespace Six.Six.Sema
 {
     public interface Stmt : Member
     {
-        A.Stmt AStmt { get; }
+        ILocation Location { get; }
         Errors Errors { get; }
 
         public sealed class Return : Statement
         {
             private readonly LazyExpr? delayed;
 
-            public Return(Scope container, A.Stmt.Return stmt, Decl.Function function, LazyExpr? delayed)
-                : base(container, stmt)
+            public Return(ILocation location, Scope container, Decl.Function function, LazyExpr? delayed)
+                : base(location, container)
             {
                 Function = function;
-                Stmt = stmt;
                 this.delayed = delayed;
             }
 
             public Decl.Function Function { get; }
-            public A.Stmt.Return Stmt { get; }
 
             public Expr? Expr
             {
@@ -33,7 +31,7 @@ namespace Six.Six.Sema
                         if (!ReferenceEquals(Resolver.LowerType(delayed.Expr.Type), Resolver.LowerType(Function.ResultType)))
                         {
                             Assert(false);
-                            throw Errors.TypeMismatch(Stmt.Expression, Function.ResultType, delayed.Expr.Type);
+                            throw Errors.TypeMismatch(Location, Function.ResultType, delayed.Expr.Type);
                         }
                     }
                     return delayed?.Expr;
@@ -46,8 +44,8 @@ namespace Six.Six.Sema
             private readonly LazyExpr left;
             private readonly LazyExpr right;
 
-            public Assign(Scope container, A.Stmt.Assign stmt, LazyExpr left, LazyExpr right)
-                : base(container, stmt)
+            public Assign(A.Stmt.Assign stmt, Scope container, LazyExpr left, LazyExpr right)
+                : base(stmt.GetLocation(), container)
             {
                 this.left = left;
                 this.right = right;
@@ -60,15 +58,14 @@ namespace Six.Six.Sema
 
     public abstract class Statement : Stmt
     {
-        public Statement(Scope container, A.Stmt aStmt)
+        public Statement(ILocation location, Scope container)
         {
+            Location = location;
             Container = container;
-            AStmt = aStmt;
         }
 
+        public ILocation Location { get; }
         public Scope Container { get; }
-        public A.Stmt AStmt { get; }
-        public A.TreeNode ANode => AStmt;
 
         public Module Module => Container.Module;
         public Resolver Resolver => Module.Resolver;
