@@ -109,7 +109,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.ClassyScope.Block.Resolve(node.Reference, node.Reference.Name.Text);
+                        var referenced = classy.Scope.Block.Resolve(node.Reference, node.Reference.Name.Text);
 
                         Assert(false);
                     }
@@ -302,7 +302,7 @@ namespace Six.Six.Sema
 
                 if (left.Expr.Type is Type.ClassyReference reference)
                 {
-                    var infix = reference.Classy.ClassyScope.Block.Find(node.Op, InfixName(node));
+                    var infix = reference.Classy.Scope.Block.Find(node.Op, InfixName(node));
 
                     if (infix is Decl.Function function)
                     {
@@ -336,7 +336,7 @@ namespace Six.Six.Sema
                 {
                     if (reference.Classy.ADecl is A.Decl.Classy)
                     {
-                        var prefix = reference.Classy.ClassyScope.Block.Find(node.Op, PrefixName(node));
+                        var prefix = reference.Classy.Scope.Block.Find(node.Op, PrefixName(node));
 
                         if (prefix is Decl.Function function)
                         {

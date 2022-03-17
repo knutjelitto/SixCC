@@ -10,28 +10,23 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Body WalkBody(Scope scope, A.Body node)
+        public Body WalkBody(Decl.Classy classy, A.Body node)
         {
-            return Body((dynamic)scope, (dynamic)node);
+            return Body((dynamic)classy.Scope.Block, (dynamic)node);
         }
 
-        private Body Body(BlockScope container, A.Body node)
+        public Body WalkBody(Decl.Funcy funcy, A.Body node)
+        {
+            return Body((dynamic)funcy.Scope.Block, (dynamic)node);
+        }
+
+        private Body Body(Scope container, A.Body node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
         private Body Body(BlockScope container, A.Body.Class node)
-        {
-            foreach (var decl in node.Declarations)
-            {
-                WalkDeclaration(container, decl);
-            }
-
-            return new Body.Dummy();
-        }
-
-        private Body Body(BlockScope container, A.Body.Interface node)
         {
             foreach (var decl in node.Declarations)
             {
