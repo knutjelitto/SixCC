@@ -1,81 +1,85 @@
 namespace six.core;
 
-shared native class i8
+shared native class s8 : Object
 {
 }
 
-shared native class i16
+shared native class s16 : Object
 {
 }
 
-shared native class i32
+shared native class s32 : Object
 {
-    shared native static let i32 zero = 0;
-    shared native static let i32 one = 1;
+    shared native static string format(s32 value, s32 base);
  
-    shared native prefix i32 - ();
-    shared native infix i32 + (i32 other);
-    shared native infix i32 - (i32 other);
-    shared native infix i32 * (i32 other);
-    shared native infix i32 / (i32 other);
-    shared native infix i32 % (i32 other);
+    shared native prefix s32 - () => -self;
+    shared native infix s32 + (s32 other) => self + other;
+    shared native infix s32 - (s32 other) => self - other;
+    shared native infix s32 * (s32 other) => self * other;
+    shared native infix s32 / (s32 other) => self / other;
+    shared native infix s32 % (s32 other) => self % other;
 
-    shared native infix bool <= (i32 other);
-    shared native infix bool < (i32 other);
-    shared native infix bool >= (i32 other);
-    shared native infix bool > (i32 other);
+    shared native infix bool <= (s32 other) => self <= other;
+    shared native infix bool < (s32 other) => self < other;
+    shared native infix bool >= (s32 other) => self >= other;
+    shared native infix bool > (s32 other) => self > other;
 
-    shared native prefix i32 ~ ();
+    shared native prefix s32 ~ () => ~self;
+    shared native infix s32 & (s32 other) => self & other;
+    shared native infix s32 | (s32 other) => self | other;
+    shared native infix s32 ^ (s32 other) => self ^ other;
 }
 
-shared native class i64
+shared native class s64 : Object
 {
 }
 
-shared native class u8
+shared native class u8 : Object
 {
 }
 
-shared native class u16
+shared native class u16 : Object
 {
 }
 
-shared native class u32
+shared native class u32 : Object
 {
+/*
     shared native static let u32 zero = 0;
     shared native static let u32 one = 1;
+*/
  
-    shared native infix u32 + (u32 other);
-    shared native infix u32 - (u32 other);
-    shared native infix u32 * (u32 other);
-    shared native infix u32 / (u32 other);
-    shared native infix u32 % (u32 other);
+    shared native infix u32 + (u32 other) => self + other;
+    shared native infix u32 - (u32 other) => self - other;
+    shared native infix u32 * (u32 other) => self * other;
+    shared native infix u32 / (u32 other) => self / other;
+    shared native infix u32 % (u32 other) => self % other;
 
-    shared native infix bool <= (i32 other);
-    shared native infix bool < (i32 other);
-    shared native infix bool >= (i32 other);
-    shared native infix bool > (i32 other);
+    shared native infix bool <= (u32 other) => self <= other;
+    shared native infix bool < (u32 other) => self < other;
+    shared native infix bool >= (u32 other) => self >= other;
+    shared native infix bool > (u32 other) => self > other;
 
-    shared native prefix u32 ~ ();
-    shared native infix u32 & (u32 other);
-    shared native infix u32 | (u32 other);
-    shared native infix u32 ^ (u32 other);
+    shared native prefix u32 ~ () => ~self;
+    shared native infix u32 & (u32 other) => self & other;
+    shared native infix u32 | (u32 other) => self | other;
+    shared native infix u32 ^ (u32 other) => self ^ other;
 }
 
-shared native class u64
+shared native class u64 : Object
 {
 }
 
-shared alias sbyte => i8;
+shared alias sbyte => s8;
 shared alias byte => u8;
 
-shared alias short => i16;
+shared alias short => s16;
 shared alias ushort => u16;
 
-shared alias int => i32;
+shared alias int => s32;
 shared alias uint => u32;
 
-shared alias long => i64;
+shared alias long => s64;
 shared alias ulong => u64;
 
 shared alias Integer => int;

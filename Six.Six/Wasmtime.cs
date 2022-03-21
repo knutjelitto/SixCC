@@ -21,7 +21,7 @@ namespace Six.Six
                 .WithCompilerStrategy(CompilerStrategy.Cranelift);
 
             using var engine = new Engine(config);
-            using var module = Module.FromText(engine, "six.core", wat);
+            using var module = Module.FromText(engine, S.Module.CoreNamespace, wat);
             using var linker = new Linker(engine);
             using var store = new Store(engine);
 
@@ -61,6 +61,17 @@ namespace Six.Six
 
             result = (int)instance.GetGlobal(store, "six.core.__heap_next")!.GetValue(store)!;
             Assert(result == 16 + 32 + 32 + 32 + 16 + 7);
+
+            var complex1 = CallInt32Function(store, instance, "six.core.get_complex");
+            Assert(complex1 == 144);
+            var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
+            Assert(complex2 == 160);
+
+            var re = CallInt32Function(store, instance, "six.core.Complex.getRe", complex1);
+            Assert(re == 1);
+
+            var added = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
+            Assert(added == 176);
         }
 
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)

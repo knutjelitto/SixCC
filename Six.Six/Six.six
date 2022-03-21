@@ -376,6 +376,7 @@ attribute-name
     |   'sealed'
     |   'default'
     |   'serializable'
+    |   'prefinal'
     >;
 
 attribute-arguments

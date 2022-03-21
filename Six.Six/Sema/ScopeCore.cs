@@ -21,19 +21,6 @@ namespace Six.Six.Sema
         public string Name { get; }
         public Scope Parent { get; }
 
-        public virtual string FullName
-        {
-            get
-            {
-                var full = Parent.FullName;
-                if (full == "")
-                {
-                    return $"{Name}";
-                }
-                return $"{full}.{Name}";
-            }
-        }
-
         public IEnumerable<Decl> GetDeclarations()
         {
             return declarations.Values;

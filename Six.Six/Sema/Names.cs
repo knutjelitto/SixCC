@@ -4,19 +4,24 @@
     {
         public static class Core
         {
-            public static string SelfValue => "self";
-            public static string Float32 => "f32";
-            public static string Float64 => "f64";
-            public static string UInt64 => "u64";
-            public static string Int64 => "i64";
-            public static string UInt32 => "u32";
-            public static string Int32 => "i32";
-            public static string UInt16 => "u16";
-            public static string Int16 => "u16";
-            public static string UInt8 => "u8";
-            public static string Int8 => "i8";
-            public static string Basic => "Basic";
+            public static string S8 => "s8";
+            public static string S16 => "s16";
+            public static string S32 => "s32";
+            public static string S64 => "s64";
+
+            public static string U8 => "u8";
+            public static string U16 => "u16";
+            public static string U32 => "u32";
+            public static string U64 => "u64";
+
+            public static string F32 => "f32";
+            public static string F64 => "f64";
+
+            public static string Char => "char";
             public static string Boolean => "Boolean";
+
+            public static string SelfValue => "self";
+            public static string Basic => "Basic";
             public static string Bytes => "Bytes";
             public static string String => "String";
             public static string Null => "Null";
@@ -37,6 +42,7 @@
             public static readonly string Native = "native";
             public static readonly string Static = "static";
             public static readonly string Abstract = "abstract";
+            public static readonly string Prefinal = "prefinal";
         }
     }
 }

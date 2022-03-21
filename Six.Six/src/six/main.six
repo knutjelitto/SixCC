@@ -1,5 +1,10 @@
 namespace six.core;
 
+shared int two()
+{
+    return 1 + 1;
+}
+
 shared int add(int a, int b)
 {
     return a + b;
@@ -45,4 +50,16 @@ shared int function_reference(int a, int b)
     let fun = add;
 
     return fun(a, b);
+}
+
+
+shared Complex get_complex()
+{
+    return Complex(1, 2);
+}
+
+
+shared Complex add_complex(Complex x, Complex y)
+{
+    return x + y;
 }

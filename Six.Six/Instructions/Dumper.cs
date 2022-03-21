@@ -21,15 +21,20 @@ namespace Six.Six.Instructions
 
         public void Dump(Decl.Classy classy)
         {
-            comment(() =>
+            comment2(() =>
             {
                 Walker(classy);
             });
         }
 
-        private void comment(Action action)
+        private void comment2(Action action)
         {
             indent("(; (; ;)", ";)", action);
+        }
+
+        private void comment(string title, Action action)
+        {
+            indent($"(; {title}", ";)", action);
         }
 
         private void Walker(Entity decl)
@@ -42,11 +47,22 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
-        private void WalkMembers(Decl.WithMembers decl)
+        private void WalkMembers(Block block)
         {
             indent(() =>
             {
-                foreach (var member in decl.Members)
+                foreach (var member in block.Members)
+                {
+                    Walker(member);
+                }
+            });
+        }
+
+        private void WalkMethods(Block block)
+        {
+            indent(() =>
+            {
+                foreach (var member in block.Members.OfType<Decl.Funcy>())
                 {
                     Walker(member);
                 }
@@ -62,27 +78,49 @@ namespace Six.Six.Instructions
             return "";
         }
 
-        private void Walk(Decl.Classy decl)
+        private void WalkClassy(Decl.Classy decl)
         {
             wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
-            WalkMembers(decl);
+            indent(() => WriteLayout(decl));
+            WalkMethods(decl.Block);
+        }
+
+        private void WriteLayout(Decl.Classy decl)
+        {
+            var layout = decl.Layout;
+            Assert(layout.Done);
+
+            if (layout.Fields.Count > 0)
+            {
+                comment("fields", () =>
+                {
+                    foreach (var field in layout.Fields)
+                    {
+                        wl($"+{field.Offset,-3} field {field.Name} {Emitter.Lower(field.Type).Wasm.Type} = ...");
+                    }
+                });
+            }
         }
 
         private void Walk(Decl.Class decl)
         {
-            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
-            WalkMembers(decl);
+            WalkClassy(decl);
+        }
+
+        private void Walk(Decl.Interface decl)
+        {
+            WalkClassy(decl);
         }
 
         private void Walk(Decl.Object decl)
         {
-            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
-            WalkMembers(decl);
+            WalkClassy(decl);
         }
 
         private void Walk(Decl.Attribute decl)
         {
-            wl($"attribute {decl.FullName}");
+            wl($"(; attribute ;)");
+            Emitter.EmitFuncy(decl);
         }
 
         private void Walk(Decl.Field decl)
@@ -99,6 +137,5 @@ namespace Six.Six.Instructions
         {
             Emitter.Emit(stmt);
         }
-
     }
 }

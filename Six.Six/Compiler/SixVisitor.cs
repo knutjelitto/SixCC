@@ -265,7 +265,7 @@ namespace Six.Six.Compiler
         protected override void Visit(CConstructorDeclaration element)
         {
             var prelude = Walk<Prelude>(element.Prelude);
-            var name = WalkOptional<Name>(element.Name) ?? new Name.ArtificalId(S.Module.DefaultCtor);
+            var name = WalkOptional<Name>(element.Name) ?? new Name.ArtificalId(element.Literal, S.Module.DefaultCtor);
             var parameters = Walk<Decl.Parameters>(element.Parameters);
             var extends = WalkOptional<Type>(element.Extends);
             var body = Walk<Body>(element.FunctionBody);
@@ -688,6 +688,23 @@ namespace Six.Six.Compiler
             element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
         }
 
+        protected override void Visit(CUnionExpression element)
+        {
+            var left = Walk<Expression>(element.LevelUnionExpression);
+            var right = Walk<Expression>(element.LevelExclusiveExpression);
+
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
+        }
+
+        protected override void Visit(CExclusiveExpression element)
+        {
+            var left = Walk<Expression>(element.LevelExclusiveExpression);
+            var right = Walk<Expression>(element.LevelIntersectionExpression);
+
+            element.Value = new Expression.Infix(element, new Reference(element.Literal), left, right);
+        }
+
+
         protected override void Visit(CNegateExpression element)
         {
             var expr = Walk<Expression>(element.LevelNegateExpression);
@@ -814,7 +831,6 @@ namespace Six.Six.Compiler
 
             element.Value = new Expression.IsType(element, type, name);
         }
-
 
         protected override void Visit(CConjunctionExpression element)
         {

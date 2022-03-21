@@ -1,0 +1,6 @@
+namespace six.core;
+
+shared sealed native class Runtime : Object
+{
+    shared native static string ClassName(Object obj);
+}

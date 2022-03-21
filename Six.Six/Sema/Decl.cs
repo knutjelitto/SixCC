@@ -1,4 +1,5 @@
-﻿using A = Six.Six.Ast;
+﻿using Six.Six.Instructions;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -16,50 +17,23 @@ namespace Six.Six.Sema
         bool IsNative { get; }
         bool IsShared { get; }
 
-        public interface WithMembers : Decl
-        {
-            List<Member> Members { get; }
-        }
-
-        public class Namespace : Declaration, WithMembers
-        {
-            public Namespace(Scope container, A.Decl aDecl)
-                : base(container, aDecl)
-            {
-            }
-
-            public List<Member> Members => throw new System.NotImplementedException();
-
-            public override Type Type => throw new System.NotImplementedException();
-
-            public override string FullName => throw new System.NotImplementedException();
-        }
-
-        public abstract class Classy : Declaration, WithMembers, Typy
+        public abstract class Classy : Declaration, Typy
         {
             private Class? extends;
             private Layout? layout;
 
-            private Classy(ClassyScope scope, A.Decl.Classy aDecl)
-                : base(scope, aDecl)
+            public Classy(Block parent, A.Decl.Classy aDecl)
+                : base(parent, aDecl)
             {
-                Type = new Type.ClassyReference(this);
-                Block = new ClassBlock(this, scope);
-            }
-
-            public Classy(Scope parent, A.Decl.Classy aDecl)
-                : this(new ClassyScope(parent, aDecl.Name.Text), aDecl)
-            {
-                parent.Declare(this, aDecl.Name.Text);
+                Block = new ClassBlock(this, parent);
+                parent.Content.Declare(this, aDecl.Name.Text);
             }
 
             public ClassBlock Block { get; }
-            public List<Member> Members => Block.Members;
-            public ClassyScope Scope => (ClassyScope)Block.Classy.Container;
+            public List<Field> Fields { get; } = new List<Field>();
+            public Scope Scope => Block.Classy.Container;
 
-            public override Type Type { get; }
-
-            public override string FullName => Scope.FullName;
+            public override string FullName => Block.FullName();
 
             public Class? Extends => extends ??= Resolver.ResolveExtends(this);
 
@@ -68,77 +42,81 @@ namespace Six.Six.Sema
 
         public class Class : Classy
         {
-            public Class(Scope parent, A.Decl.Class aDecl)
+            public Class(Block parent, A.Decl.Class aDecl)
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
+
+                Type = new Type.ClassReference(this);
             }
 
-            public List<Field> Fields { get; } = new List<Field>();
+            public override Type Type { get; }
 
             public override string ToString() => $"{Name}";
         }
 
         public class Object : Classy
         {
-            public Object(Scope parent, A.Decl.Object aDecl)
+            public Object(Block parent, A.Decl.Object aDecl)
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
+
+                Type = new Type.ObjectReference(this);
             }
 
-            public List<Field> Fields { get; } = new List<Field>();
+            public override Type Type { get; }
 
             public override string ToString() => $"{Name}";
         }
 
         public class Interface : Classy
         {
-            public Interface(Scope parent, A.Decl.Interface aDecl)
+            public Interface(Block parent, A.Decl.Interface aDecl)
                 : base(parent, aDecl)
             {
+
+                Type = new Type.InterfaceReference(this);
             }
+
+            public override Type Type { get; }
         }
 
-        public abstract class Funcy : Declaration, WithMembers
+        public abstract class Funcy : Declaration
         {
             private List<Type>? paramTypes = null;
 
-            private Funcy(FuncyScope scope, A.Decl.Funcy aDecl)
-                : base(scope, aDecl)
+            public Funcy(Block parent, string name, A.Decl.Funcy aDecl)
+                : base(parent, aDecl)
             {
-                AFuncyDecl = aDecl;
-                Block = new CodeBlock(this, scope);
+                Block = new FuncBlock(this, parent, name);
+                parent.Content.Declare(this, name);
             }
 
-            public Funcy(Scope parent, string name, A.Decl.Funcy aDecl)
-                : this(new FuncyScope(parent, name), aDecl)
-            {
-                parent.Declare(this, name);
-            }
+            public FuncBlock Block { get; }
+            public Scope Scope => Block.Funcy.Container;
 
-            public A.Decl.Funcy AFuncyDecl { get; }
-
-
-            public CodeBlock Block { get; }
-            public List<Member> Members => Block.Members;
-            public FuncyScope Scope => (FuncyScope)Block.Funcy.Container;
-
-
-            public List<Local> Parameters { get; } = new();
+            public IReadOnlyList<Local> Parameters { get; } = new List<Local>();
             public List<Local> Locals { get; } = new();
 
+            public abstract Type ResultType { get; }
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();
 
-            public override string FullName => Scope.FullName;
+            public override string FullName => Block.FullName();
+
+            public void AddParameter(Local parameter)
+            {
+                ((List<Local>)Parameters).Add(parameter);
+                Block.Members.Add(parameter);
+            }
         }
 
         public class Function : Funcy
         {
             private Type? resultType = null;
 
-            public Function(Scope parent, A.Decl.Funcy aDecl, string? name)
+            public Function(Block parent, A.Decl.Funcy aDecl, string? name)
                 : base(parent, name ?? aDecl.Name.Text, aDecl)
             {
                 Assert(ADecl is A.With.Type);
@@ -148,7 +126,7 @@ namespace Six.Six.Sema
             public override Type Type =>
                 type ??= new Type.Callable(ResultType, ParamTypes);
 
-            public Type ResultType =>
+            public override Type ResultType =>
                 resultType ??= Resolver.ResolveType(Scope, ((A.With.Type)ADecl).Type);
         }
 
@@ -156,7 +134,7 @@ namespace Six.Six.Sema
         {
             private Type? resultType = null;
 
-            public Constructor(Scope parent, Class @class, A.Decl.Funcy aFuncyDecl)
+            public Constructor(Block parent, Class @class, A.Decl.Funcy aFuncyDecl)
                 : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)
             {
                 Class = @class;
@@ -167,33 +145,30 @@ namespace Six.Six.Sema
             public override Type Type =>
                 type ??= new Type.Callable(ResultType, ParamTypes);
 
-            public Type ResultType =>
+            public override Type ResultType =>
                 resultType ??= Resolver.ResolveType(Class.Type);
         }
         
         public sealed class Attribute : Funcy
         {
-            private Body? body;
-
-            public Attribute(Scope parent, A.Decl.Attribute aDecl)
+            public Attribute(Block parent, A.Decl.Attribute aDecl)
                 : base(parent, aDecl.Name.Text, aDecl)
             {
                 Assert(ADecl is A.With.Type);
             }
 
-            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
+            public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
 
             public override Type Type =>
                 type ??= Resolver.ResolveType(Container, ((A.With.Type)ADecl).Type);
 
-            public Body Body =>
-                body ??= Resolver.WalkBody(this, ((A.With.Body)ADecl).Body);
+            public override Type ResultType => Type;
         }
 
         public abstract class Local : Declaration
         {
-            public Local(Scope Container, A.Decl ADecl, int index)
-                : base(Container, ADecl)
+            public Local(Block parent, A.Decl ADecl, int index)
+                : base(parent, ADecl)
             {
                 Index = index;
             }
@@ -207,8 +182,8 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr? @default;
 
-            public Parameter(FuncyScope Container, A.Decl.Parameter ADecl, int index, LazyExpr? @default)
-                : base(Container, ADecl, index)
+            public Parameter(Block parent, A.Decl.Parameter ADecl, int index, LazyExpr? @default)
+                : base(parent, ADecl, index)
             {
                 Assert(ADecl is A.With.Type);
                 this.@default = @default;
@@ -233,8 +208,8 @@ namespace Six.Six.Sema
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {SelfName}")]
         public sealed class SelfParameter : Local
         {
-            public SelfParameter(FuncyScope Container, Type type, int index)
-                : base(Container, new A.Decl.SelfValue(new A.Name.ArtificalId(Names.Core.SelfValue)), index)
+            public SelfParameter(FuncBlock parent, Type type, int index)
+                : base(parent, new A.Decl.SelfValue(new A.Name.ArtificalId(parent.Funcy.Name.Tree, Names.Core.SelfValue)), index)
             {
                 Type = type;
             }
@@ -248,8 +223,8 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr value;
 
-            public LetVar(Scope Container, A.Decl ADecl, bool writeable, int index)
-                : base(Container, ADecl, index)
+            public LetVar(Block parent, A.Decl ADecl, bool writeable, int index)
+                : base(parent, ADecl, index)
             {
                 Assert(ADecl is A.With.OptionalType);
                 Assert(ADecl is A.With.Value);
@@ -288,12 +263,12 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr value;
 
-            public Field(Scope container, A.Decl aDecl, bool writeable)
-                : base(container, aDecl)
+            public Field(Block parent, A.Decl aDecl, bool writeable)
+                : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.OptionalType);
                 Assert(aDecl is A.With.Value);
-                value = Resolver.ResolveExpression(container, ((A.With.Value)aDecl).Value);
+                value = Resolver.ResolveExpression(parent.Content, ((A.With.Value)aDecl).Value);
                 Writeable = writeable;
             }
 
@@ -331,12 +306,12 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr value;
 
-            public Global(Scope container, A.Decl aDecl, bool writeable)
-                : base(container, aDecl)
+            public Global(Block parent, A.Decl aDecl, bool writeable)
+                : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.OptionalType);
                 Assert(aDecl is A.With.Value);
-                value = Resolver.ResolveExpression(container, ((A.With.Value)aDecl).Value);
+                value = Resolver.ResolveExpression(parent.Content, ((A.With.Value)aDecl).Value);
                 Writeable = writeable;
             }
 
@@ -366,31 +341,23 @@ namespace Six.Six.Sema
 
             public Expr Value => value.Expr;
 
-            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
+            public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
         }
 
         public sealed class Alias : Declaration, Typy
         {
-            private Alias(DeclarationScope scope, A.Decl.Alias aDecl)
-                : base(scope, aDecl)
+            public Alias(Block parent, A.Decl.Alias aDecl)
+                : base(parent, aDecl)
             {
-                Assert(aDecl is A.With.Type);
-
-                Scope = scope;
+                Assert(ADecl is A.With.Type);
+                parent.Content.Declare(this);
             }
 
-            public Alias(Scope parent, A.Decl.Alias aDecl)
-                : this(new DeclarationScope(parent, aDecl.Name.Text), aDecl)
-            {
-                parent.Declare(this);
-            }
-
-            public DeclarationScope Scope { get; }
-            public override string FullName => $"{Container.FullName}.{ADecl.Name.Text}";
+            public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
 
 
             public override Type Type =>
-                type ??= Resolver.ResolveType(Scope, ((A.With.Type)ADecl).Type);
+                type ??= Resolver.ResolveType(Parent.Content, ((A.With.Type)ADecl).Type);
 
         }
 
@@ -400,13 +367,14 @@ namespace Six.Six.Sema
         {
             protected Type? type = null;
 
-            public Declaration(Scope container, A.Decl aDecl)
+            public Declaration(Block parent, A.Decl aDecl)
             {
-                Container = container;
+                Parent = parent;
                 ADecl = aDecl;
             }
 
-            public Scope Container { get; }
+            public Block Parent { get; }
+            public Scope Container => Parent.Content;
             public A.Decl ADecl { get; }
             public abstract Type Type { get; }
             public A.Name Name => ADecl.Name;
@@ -419,6 +387,7 @@ namespace Six.Six.Sema
             public bool IsNative => ADecl.IsNative();
             public bool IsShared => ADecl.IsShared();
             public bool IsAbstract => ADecl.IsAbstract();
+            public bool IsPrefinal => ADecl.IsPrefinal();
         }
     }
 }

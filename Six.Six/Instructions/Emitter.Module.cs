@@ -1,4 +1,5 @@
 ﻿using Six.Six.Sema;
+using System;
 
 namespace Six.Six.Instructions
 {
@@ -6,56 +7,64 @@ namespace Six.Six.Instructions
     {
         public void EmitModule()
         {
+            Prepper.Prep();
+
             wl($"(module");
             indent(() =>
             {
                 wl($"(memory ${Module.DataAndHeap} (export \"{Module.DataAndHeap}\") 16 16)");
                 wl();
+                StringData.Emit(32);
+                wl();
+                ClassData.Emit(StringData.Next);
+                wl();
                 foreach (var global in Module.GetGlobals())
                 {
-                    wl($"(global{ IdFor(global)}{ ExportIff(global)} {TypeFor(global)}");
+                    wl($"(global{ IdFor(global)}{ExportIff(global)}{TypeFor(global)}");
                     indent(() => Emit(global.Value));
                     wl($")");
                 }
-
-                foreach (var function in Module.GetFunctions())
-                {
-                    Emit(function);
-                }
+                wl();
 
                 foreach (var classy in Module.GetClassies())
                 {
-                    if (!classy.IsNative)
+                    if (!classy.IsPrefinal)
                     {
                         dumper.Dump(classy);
                     }
                 }
                 wl();
 
-                VerticalSpaced(functions);
-                if (globalFunctionsTable.Count > 0)
+                foreach (var function in Module.GetFunctions())
                 {
+                    Emit(function);
                     wl();
-                    wl($"(table {globalFunctionsTableName} anyfunc (elem");
-                    indent(() =>
-                    {
-                        foreach (var (name, element) in globalFunctionsTable.OrderBy(kv => kv.Value.index))
-                        {
-                            wl($"${name}");
-                        }
-                    });
-                    wl("))");
                 }
-                if (functionTypes.Count > 0)
+
+                foreach (var classy in Module.GetClassies())
                 {
-                    wl();
-                    foreach (var (name, index) in functionTypes.OrderBy(kv => kv.Value))
+                    if (classy.IsPrefinal)
                     {
-                        wl($"(type $funcType{index} {name})");
+                        Emit(classy);
                     }
                 }
+                wl();
+
+                GlobalFunctions.Emit();
+                wl();
+                Types.Emit();
             });
             wl($")");
+        }
+
+        public Func<Ptr> AddString(string text)
+        {
+            return StringData.Add(text);
+        }
+
+        public Func<Ptr> AddClass(string fullName, uint size)
+        {
+            return ClassData.Add(fullName, size);
         }
     }
 }

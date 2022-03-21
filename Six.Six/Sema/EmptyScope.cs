@@ -7,14 +7,17 @@ namespace Six.Six.Sema
     public class EmptyScope : Scope
     {
         [DebuggerStepThrough]
-        public EmptyScope(Scope parent)
+        public EmptyScope(Module module)
         {
-            Parent = parent;
+            Module = module;
         }
-        public Scope Parent { get; }
-        public string FullName => $"{Parent.FullName}";
+        public Scope Parent => throw new NotImplementedException();
+        public Module Module { get; }
         public T Declare<T>(T decl, string? name = null) where T : Decl => throw new NotImplementedException();
-        public Decl Resolve(A.TreeNode tree, string name) => Parent.Resolve(tree, name);
         public Decl Find(A.TreeNode tree, string name) => throw new NotImplementedException();
+        public Decl Resolve(A.TreeNode tree, string name)
+        {
+            throw Module.Errors.CantResolve(tree, name);
+        }
     }
 }

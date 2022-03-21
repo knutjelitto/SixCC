@@ -9,11 +9,5 @@ namespace Six.Six.Sema
             : base(parent, name)
         {
         }
-
-        [DebuggerStepThrough]
-        public BlockScope(A.Decl decl, Scope parent)
-            : base(parent, decl.Name.Text)
-        {
-        }
     }
 }

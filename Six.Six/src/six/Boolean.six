@@ -3,21 +3,21 @@ namespace six.core;
 shared native class Boolean of true | false
 {
     shared native prefix Boolean !  ();
-    shared native infix Boolean | (Boolean rhs);
-    shared native infix Boolean & (Boolean rhs);
-    shared native infix Boolean ^ (Boolean rhs);
+    shared native infix Boolean | (Boolean other);
+    shared native infix Boolean & (Boolean other);
+    shared native infix Boolean ^ (Boolean other);
 }
 
-shared object true : Boolean
+shared native object true : Boolean
 {
-    shared int hash => 1234;
-    shared string string => "true";
+    shared actual int hash => 1234;
+    shared actual string string => "true";
 }
 
-shared object false : Boolean
+shared native object false : Boolean
 {
-    shared int hash => 4321;
-    shared string string => "false";
+    shared actual int hash => 4321;
+    shared actual string string => "false";
 }
 
 shared alias bool => Boolean;

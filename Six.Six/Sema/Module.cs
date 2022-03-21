@@ -20,52 +20,51 @@ namespace Six.Six.Sema
 
         public Module()
         {
-            Root = new Namespace("", this);
-            RootBlock = new NamespaceBlock("", this);
+            Root = new NamespaceBlock("", new ModuleBlock(this, ""));
             Name = "six";
             Resolver = new Resolver(this);
             Builtins = new Builtins.Builtins(this);
             Errors = new Errors(this);
+            Emitter = new Emitter(this, new Writer());
         }
 
-        public Namespace Root { get; }
-        public NamespaceBlock RootBlock { get; }
+        public NamespaceBlock Root { get; }
         public string Name { get; }
         public Resolver Resolver { get; }
         public Builtins.Builtins Builtins { get; }
         public Errors Errors { get; }
 
+        public Emitter Emitter { get; }
+
         public bool HasErrors => Diagnostics.Count > 0;
 
         public string Emit()
         {
-            using (var writer = new Writer())
-            {
-                var emitter = new Emitter(this, writer);
-                emitter.EmitModule();
+            Emitter.EmitModule();
 
-                return writer.ToString();
+            if (!HasErrors)
+            {
+                var wat = Emitter.Writer.ToString();
+
+                using (var dumper = $"six.core.wat".Writer())
+                {
+                    dumper.Write(wat);
+                }
+
+                return wat;
             }
+
+            return "";
         }
 
-        public Scope Open(A.NamespaceIntro @namespace)
+        public NamespaceBlock OpenNamespace(A.NamespaceIntro nsIntro)
         {
             var current = Root;
-            foreach (var name in @namespace.Names)
-            {
-                current = current.Open(name.Text);
-            }
-            return current;
-        }
-
-        public NamespaceBlock OpenNamespace(A.NamespaceIntro @namespace)
-        {
-            var current = RootBlock;
-            foreach (var name in @namespace.Names.Select(n => n.Text))
+            foreach (var name in nsIntro.Names.Select(n => n.Text))
             {
                 if (!current.Children.TryGetValue(name, out var inner))
                 {
-                    inner = new NamespaceBlock(name, current.Scope);
+                    inner = new NamespaceBlock(name, current);
                     current.Children.Add(name, inner);
                 }
                 current = inner;
@@ -86,38 +85,6 @@ namespace Six.Six.Sema
             }
         }
 
-        public void DumpEntities()
-        {
-            foreach (var ns in GetNamespaces())
-            {
-                var path = ns.GetPath().Replace(".", "/");
-                foreach (var declaration in ns.GetDeclarations())
-                {
-                    var subst = declaration.Name.Text
-                        .Replace("!", "@not@")
-                        .Replace("|", "@or@")
-                        .Replace("&", "@and@")
-                        .Replace("^", "@xor@")
-                        .Replace("+", "@add@")
-                        .Replace("-", "@sub@")
-                        .Replace("*", "@mul@")
-                        .Replace("/", "@div@")
-                        .Replace("%", "@rem@")
-                        ;
-
-                    var invalid = Path.GetInvalidFileNameChars();
-                    Assert(!subst.Any(c => invalid.Contains(c)));
-                    var decl = declaration.ADecl.GetType().Name.ToLowerInvariant();
-
-                    var watName = $"wat/{path}/{decl}/{subst}.wat";
-                    using (var writer = watName.Writer())
-                    {
-                        new Emitter(this, writer).Emit(declaration);
-                    }
-                }
-            }
-        }
-
         public void Dump(Writer writer)
         {
             if (Diagnostics.Count > 0)
@@ -134,7 +101,7 @@ namespace Six.Six.Sema
             DumpDeclarations(writer);
         }
 
-        public IEnumerable<Namespace> GetNamespaces()
+        public IEnumerable<NamespaceBlock> GetNamespaces()
         {
             return Root.GetNamespaces();
         }
@@ -159,7 +126,7 @@ namespace Six.Six.Sema
         {
             var core = GetCoreNamespace();
 
-            var decl = core.TryFind(name);
+            var decl = core.Content.TryFind(name);
             if (decl is Decl.Classy classy)
             {
                 var reference = classy.Type as Type.ClassyReference;
@@ -175,7 +142,7 @@ namespace Six.Six.Sema
         {
             var core = GetCoreNamespace();
 
-            var decl = core.Find(tree, name);
+            var decl = core.Content.Find(tree, name);
             Assert(decl is Decl.Class);
             return (Decl.Class)decl;
         }
@@ -184,7 +151,7 @@ namespace Six.Six.Sema
         {
             var core = GetCoreNamespace();
 
-            var decl = core.TryFind(name);
+            var decl = core.Content.TryFind(name);
             if (decl is Decl.Function function)
             {
                 return function;
@@ -194,15 +161,15 @@ namespace Six.Six.Sema
             throw Errors.CantResolveInCore("function", name);
         }
 
-        public Namespace GetCoreNamespace()
+        public NamespaceBlock GetCoreNamespace()
         {
             var language = Root.Get(Language);
             Assert(language != null);
             var core = language.Get(LanguageCore);
             Assert(core != null);
-            Assert(core is Namespace);
+            Assert(core is NamespaceBlock);
 
-            return (Namespace)core;
+            return (NamespaceBlock)core;
         }
 
         Scope Scope.Parent => this;
@@ -210,6 +177,5 @@ namespace Six.Six.Sema
         T Scope.Declare<T>(T decl, string? name) => throw new NotImplementedException();
         Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
         Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
-        string Scope.FullName => "";
     }
 }

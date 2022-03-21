@@ -13,33 +13,38 @@ namespace Six.Six.Instructions
         public const string globalFunctionsTableName = "$functionsTable";
 
         private readonly List<string> exports = new();
-        private readonly List<Action> functions = new();
-        private readonly Dictionary<string, (uint index, Decl.Function function)> globalFunctionsTable = new();
-        private readonly Dictionary<string, uint> functionTypes = new();
 
         private readonly List<Decl.Global> globals = new();
-
         private readonly Stack<Block> insns = new();
-
         private readonly Dumper dumper;
+        public readonly TypeTable Types;
+        public readonly StringData StringData;
+        public readonly ClassData ClassData;
+        public readonly FunctionTable GlobalFunctions;
+        public readonly Prepper Prepper;
 
         public Emitter(Module module, Writer writer)
             : base(writer)
         {
             Module = module;
             dumper = new Dumper(this, writer);
+            Types = new TypeTable(this);
+            StringData = new StringData(writer, Module.DataAndHeap);
+            ClassData = new ClassData(this, Module.DataAndHeap);
+            GlobalFunctions = new FunctionTable(writer, globalFunctionsTableName);
+            Prepper = new Prepper(this, writer);
         }
 
-        private Module Module { get; }
-        private Resolver Resolver => Module.Resolver;
-        private Builtins.Builtins Builtins => Module.Builtins;
+        public Module Module { get; }
+        public Resolver Resolver => Module.Resolver;
+        public Builtins.Builtins Builtins => Module.Builtins;
 
         public void Emit(Entity entity)
         {
             Handle((dynamic)entity);
         }
 
-        public void Emit(Insn insn)
+        private void Emit(Insn insn)
         {
             wl($"{insn}");
         }
@@ -66,7 +71,10 @@ namespace Six.Six.Instructions
 
         private void Handle(Decl.Classy decl)
         {
-            Assert(true);
+            foreach (var member in decl.Block.Members)
+            {
+                Emit(member);
+            }
         }
 
         private void Handle(Decl.Alias decl)
@@ -74,38 +82,53 @@ namespace Six.Six.Instructions
             Assert(true);
         }
 
-        public void EmitFuncy(Decl.Funcy decl)
+        private void Handle(Decl.SelfParameter decl)
         {
-            wl($"(func ${decl.Container.FullName}");
+            Assert(true);
+        }
+
+        private void Handle(Decl.Parameter decl)
+        {
+            Assert(true);
+        }
+
+        public void EmitFuncy(Decl.Funcy funcy, bool isCtor = false)
+        {
+            wl($"(func ${funcy.FullName}");
             indent(() =>
             {
-                wl(Export(decl));
+                if (funcy.IsShared) wl(Export(funcy));
 
-                wl($"{Params(decl.Parameters)}");
+                wl($"{Params(funcy.Parameters)}");
 
-                if (decl is Decl.Function func)
-                {
-                    wlif(Result(func.ResultType));
-                }
+                wlif(Result(funcy.ResultType));
 
-                Horizontal(decl.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
+                Horizontal(funcy.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
 
                 wl("(;-----;)");
-                foreach (var member in decl.Members)
+                foreach (var member in funcy.Block.Members)
                 {
                     Emit(member);
+                }
+                if (isCtor)
+                {
+                    Assert(funcy.Parameters.Count > 0);
+                    Emit(funcy.Parameters[0]);
+                    Emit(Insn.ToDo("return object"));
                 }
                 wl("(;-----;)");
             });
             wl($")");
         }
 
+        private void Handle(Decl.Constructor decl)
+        {
+            EmitFuncy(decl, true);
+        }
+
         private void Handle(Decl.Funcy decl)
         {
-            functions.Add(() =>
-            {
-                EmitFuncy(decl);
-            });
+            EmitFuncy(decl);
         }
 
         private void Handle(Decl.LetVar decl)

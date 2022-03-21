@@ -13,6 +13,10 @@ namespace Six.Six.Sema
     {
         public Decl.Class? ResolveExtends(Decl.Classy classy)
         {
+            if (classy is Decl.Interface)
+            {
+                return null;
+            }
             if (classy.ADecl is A.With.Extends ext)
             {
                 if (ext.Extends is A.Type extended)
@@ -30,17 +34,11 @@ namespace Six.Six.Sema
                         throw new InvalidOperationException();
                     }
                 }
-                {
-                    return null;
-                }
+                return null;
             }
             else if (!classy.ADecl.IsNative())
             {
                 return Module.CoreFindClass(classy.ADecl, Names.Core.Basic);
-            }
-            else if (classy is Decl.Interface)
-            {
-                return null;
             }
             else
             {
@@ -50,7 +48,11 @@ namespace Six.Six.Sema
         }
 
         public Type ResolveDeclType(Decl decl)
-{
+        {
+            if (decl is Decl.Object @object && @object.Extends is Decl.Class extends)
+            {
+                return ResolveDeclType(extends);
+            }
             if (decl is Decl.Classy)
             {
                 return decl.Type;

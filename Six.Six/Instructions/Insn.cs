@@ -60,86 +60,101 @@ namespace Six.Six.Instructions
             public static Insn Set(string name) => new Simplest($"global.set ${name}");
         }
 
-        public static class I32
+        public abstract class Xnn<TValue>
+            where TValue : struct
         {
-            public static Const Const(int value) => new(new Value.ValueI32(value));
-            public static Insn Add => Binop.Add(ValueType.I32);
-            public static Insn Sub => Binop.Sub(ValueType.I32);
-            public static Insn Mul => Binop.Mul(ValueType.I32);
-            public static Insn Div => Binop.DivS(ValueType.I32);
-            public static Insn Rem => Binop.RemS(ValueType.I32);
+            protected Value.ValueT<TValue> Value(TValue value) => new Value.ValueT<TValue>(ValueType, value);
+            protected abstract ValueType ValueType { get; }
+            protected abstract MemType MemType { get; }
+            protected abstract OpSign Signedness { get; }
 
-            public static Insn And => Binop.And(ValueType.I32);
-            public static Insn Or => Binop.Or(ValueType.I32);
-            public static Insn Xor => Binop.Xor(ValueType.I32);
+            public Const Const(TValue value) => new(Value(value));
+            public Insn Add => Binop.Add(ValueType);
+            public Insn Sub => Binop.Sub(ValueType);
+            public Insn Mul => Binop.Mul(ValueType);
+            public Insn Div => Binop.Div(ValueType, Signedness);
+            public Insn Rem => Binop.Rem(ValueType, Signedness);
 
-            public static Insn Lt => Binop.LtS(ValueType.I32);
-            public static Insn Le => Binop.LeS(ValueType.I32);
-            public static Insn Gt => Binop.GtS(ValueType.I32);
-            public static Insn Ge => Binop.GeS(ValueType.I32);
+            public Insn And => Binop.And(ValueType);
+            public Insn Or => Binop.Or(ValueType);
+            public Insn Xor => Binop.Xor(ValueType);
 
-            public static Insn Load(uint offset) => new Load(MemType.S32(), offset);
-            public static Insn Store(uint offset) => new Store(MemType.U32(), offset);
+            public Insn EQ => Binop.Eq(ValueType);
+            public Insn NE => Binop.Ne(ValueType);
+            public Insn LE => Binop.Le(ValueType, Signedness);
+            public Insn LT => Binop.Lt(ValueType, Signedness);
+            public Insn GT => Binop.Gt(ValueType, Signedness);
+            public Insn GE => Binop.Ge(ValueType, Signedness);
+
+            public Insn Load(uint offset) => new Load(MemType, offset);
+            public Insn Store(uint offset) => new Store(MemType, offset);
         }
 
-        public static class U32
+        public abstract class Inn<TValue> : Xnn<TValue>
+            where TValue : struct
         {
-            public static Const Const(uint value) => new(new Value.ValueU32(value));
-
-            public static Insn Add => Binop.Add(ValueType.I32);
-            public static Insn Sub => Binop.Sub(ValueType.I32);
-            public static Insn Mul => Binop.Mul(ValueType.I32);
-            public static Insn Div => Binop.DivU(ValueType.I32);
-            public static Insn Rem => Binop.RemU(ValueType.I32);
-
-            public static Insn And => Binop.And(ValueType.I32);
-            public static Insn Or => Binop.Or(ValueType.I32);
-            public static Insn Xor => Binop.Xor(ValueType.I32);
-
-            public static Insn Load(uint offset) => new Load(MemType.U32(), offset);
-            public static Insn Store(uint offset) => new Store(MemType.U32(), offset);
         }
 
-        public static class I64
+        public class S32Impl : Inn<int>
         {
-            public static Const Const(long value) => new(new Value.ValueI64(value));
-            public static Insn Load(uint offset) => new Load(MemType.S64(), offset);
+            protected override ValueType ValueType { get; } = ValueType.I32;
+            protected override MemType MemType { get; } = MemType.S32();
+            protected override OpSign Signedness => OpSign.Signed;
         }
 
-        public static class U64
+        public class U32Impl : Inn<uint>
         {
-            public static Const Const(ulong value) => new(new Value.ValueU64(value));
-            public static Insn Load(uint offset) => new Load(MemType.U64(), offset);
-            public static Insn Store(uint offset) => new Store(MemType.U64(), offset);
+            protected override ValueType ValueType { get; } = ValueType.I32;
+            protected override MemType MemType { get; } = MemType.U32();
+            protected override OpSign Signedness => OpSign.Unsigned;
         }
 
-        public static class F32
+        public class S64Impl : Inn<long>
         {
-            public static Const Const(float value) => new(new Value.ValueF32(value));
-
-            public static Insn Neg => Unop.Neg(ValueType.F32);
-
-            public static Insn Add => Binop.Add(ValueType.F32);
-            public static Insn Sub => Binop.Sub(ValueType.F32);
-            public static Insn Mul => Binop.Mul(ValueType.F32);
-            public static Insn Div => Binop.Div(ValueType.F32);
-            public static Insn Load(uint offset) => new Load(MemType.F32, offset);
-            public static Insn Store(uint offset) => new Store(MemType.F32, offset);
+            protected override ValueType ValueType { get; } = ValueType.I64;
+            protected override MemType MemType { get; } = MemType.S64();
+            protected override OpSign Signedness => OpSign.Signed;
         }
 
-        public static class F64
+        public class U64Impl : Inn<ulong>
         {
-            public static Const Const(double value) => new(new Value.ValueF64(value));
+            protected override ValueType ValueType { get; } = ValueType.I64;
+            protected override MemType MemType { get; } = MemType.U64();
+            protected override OpSign Signedness => OpSign.Unsigned;
+        }
 
-            public static Insn Neg => Unop.Neg(ValueType.F64);
+        public abstract class Fnn<TValue> : Xnn<TValue>
+            where TValue : struct
+        {
+            public Insn Neg => Unop.Neg(ValueType);
+        }
 
-            public static Insn Add => Binop.Add(ValueType.F64);
-            public static Insn Sub => Binop.Sub(ValueType.F64);
-            public static Insn Mul => Binop.Mul(ValueType.F64);
-            public static Insn Div => Binop.Div(ValueType.F64);
+        public class F32Impl : Fnn<float>
+        {
+            protected override ValueType ValueType { get; } = ValueType.F32;
+            protected override MemType MemType { get; } = MemType.F32;
+            protected override OpSign Signedness => OpSign.Neutral;
+        }
 
-            public static Insn Load(uint offset) => new Load(MemType.F64, offset);
-            public static Insn Store(uint offset) => new Store(MemType.F64, offset);
+        public class F64Impl : Fnn<double>
+        {
+            protected override ValueType ValueType { get; } = ValueType.F64;
+            protected override MemType MemType { get; } = MemType.F64;
+            protected override OpSign Signedness => OpSign.Neutral;
+        }
+
+        public static readonly S32Impl S32 = new S32Impl();
+        public static readonly U32Impl U32 = new U32Impl();
+        public static readonly S64Impl S64 = new S64Impl();
+        public static readonly U64Impl U64 = new U64Impl();
+
+        public static readonly F32Impl F32 = new F32Impl();
+        public static readonly F64Impl F64 = new F64Impl();
+
+        public static class Boolean
+        {
+            public static Insn False => U32.Const(0);
+            public static Insn True => U32.Const(1);
         }
 
         public class Unop : Insn
@@ -184,24 +199,19 @@ namespace Six.Six.Instructions
             public static Insn Add(ValueType type) => new Binop(type, "add", OpSign.Neutral);
             public static Insn Sub(ValueType type) => new Binop(type, "sub", OpSign.Neutral);
             public static Insn Mul(ValueType type) => new Binop(type, "mul", OpSign.Neutral);
-            public static Insn Div(ValueType type) => new Binop(type, "div", OpSign.Neutral);
-            public static Insn DivS(ValueType type) => new Binop(type, "div", OpSign.Signed);
-            public static Insn DivU(ValueType type) => new Binop(type, "div", OpSign.Unsigned);
-            public static Insn RemS(ValueType type) => new Binop(type, "rem", OpSign.Signed);
-            public static Insn RemU(ValueType type) => new Binop(type, "rem", OpSign.Unsigned);
+            public static Insn Div(ValueType type, OpSign signedness) => new Binop(type, "div", signedness);
+            public static Insn Rem(ValueType type, OpSign signedness) => new Binop(type, "rem", signedness);
 
             public static Insn And(ValueType type) => new Binop(type, "and", OpSign.Neutral);
             public static Insn Or(ValueType type) => new Binop(type, "or", OpSign.Neutral);
             public static Insn Xor(ValueType type) => new Binop(type, "xor", OpSign.Neutral);
 
-            public static Insn LtS(ValueType type) => new Binop(type, "lt", OpSign.Signed);
-            public static Insn LtU(ValueType type) => new Binop(type, "lt", OpSign.Unsigned);
-            public static Insn LeS(ValueType type) => new Binop(type, "le", OpSign.Signed);
-            public static Insn LeU(ValueType type) => new Binop(type, "le", OpSign.Unsigned);
-            public static Insn GtS(ValueType type) => new Binop(type, "gt", OpSign.Signed);
-            public static Insn GtU(ValueType type) => new Binop(type, "gt", OpSign.Unsigned);
-            public static Insn GeS(ValueType type) => new Binop(type, "ge", OpSign.Signed);
-            public static Insn GeU(ValueType type) => new Binop(type, "ge", OpSign.Unsigned);
+            public static Insn Eq(ValueType type) => new Binop(type, "eq", OpSign.Neutral);
+            public static Insn Ne(ValueType type) => new Binop(type, "ne", OpSign.Neutral);
+            public static Insn Lt(ValueType type, OpSign signedness) => new Binop(type, "lt", signedness);
+            public static Insn Le(ValueType type, OpSign signedness) => new Binop(type, "le", signedness);
+            public static Insn Gt(ValueType type, OpSign signedness) => new Binop(type, "gt", signedness);
+            public static Insn Ge(ValueType type, OpSign signedness) => new Binop(type, "ge", signedness);
         }
 
         public class Load : Insn

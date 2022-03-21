@@ -20,7 +20,7 @@ namespace Six.Six.Sema
                 module.GetDeclarations().OfType<Decl.Class>().Cast<Decl.Classy>()
                 .Concat(module.GetDeclarations().OfType<Decl.Interface>())
                 .Concat(module.GetDeclarations().OfType<Decl.Object>())
-                .SelectMany(cls => cls.Members);
+                .SelectMany(cls => cls.Block.Members);
         }
 
         public static IEnumerable<Decl.Classy> GetClassies(this Module module)

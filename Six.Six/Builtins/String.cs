@@ -7,7 +7,9 @@ namespace Six.Six.Builtins
     {
         public String(Builtins builtins)
             : base(builtins, Names.Core.String, WasmDef.Pointer)
-        { }
+        {
+            infix.Add("+", Add);
+        }
 
         public override Insn Load(uint offset)
         {
@@ -19,6 +21,14 @@ namespace Six.Six.Builtins
         {
             Assert(false);
             throw new System.NotImplementedException();
+        }
+
+        public Expr.Primitive Add(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Expr.ToDo(this, "string + string", left, right);
         }
     }
 }

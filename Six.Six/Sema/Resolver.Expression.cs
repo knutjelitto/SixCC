@@ -90,7 +90,32 @@ namespace Six.Six.Sema
             {
                 var primary = ResolveExpression(container, node.Expr);
 
-                if (primary.Expr is Expr.ClassyReference classyRef)
+                if (primary.Expr is Expr.AliasReference aliasRef)
+                {
+                    var resolved = ResolveType(aliasRef.Type);
+
+                    if (resolved is Type.Reference typeRef)
+                    {
+                        if (typeRef.Decl is Decl.Classy classy)
+                        {
+                            var found = classy.ClassyFind(node.Reference);
+
+                            if (found is Decl.Function function)
+                            {
+                                Assert(function.IsStatic);
+                                return new Expr.FunctionReference(function);
+                            }
+                            else if (found is Decl.Field field)
+                            {
+                                Assert(field.IsStatic);
+                                return new Expr.FieldReference(field);
+                            }
+                        }
+                    }
+                 
+                    Assert(Module.HasErrors);
+                }
+                else if (primary.Expr is Expr.ClassyReference classyRef)
                 {
                     var found = classyRef.ClassyFind(node.Reference);
 
@@ -99,10 +124,13 @@ namespace Six.Six.Sema
                         Assert(attribute.IsStatic);
                         return new Expr.SelectAttribute(classyRef, attribute);
                     }
-                    else
+                    else if (found is Decl.Function function)
                     {
-                        Assert(false);
+                        Assert(function.IsStatic);
+                        return new Expr.FunctionReference(function);
                     }
+
+                    Assert(false);
                 }
                 else if (primary.Expr is Expr.ConstructorReference constructorReference)
                 {
@@ -110,7 +138,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.Block.Scope.Resolve(node.Reference, node.Reference.Name.Text);
+                        var referenced = classy.Block.Content.Resolve(node.Reference, node.Reference.Name.Text);
 
                         Assert(false);
                     }
@@ -169,40 +197,25 @@ namespace Six.Six.Sema
                     var prms = function.FunctionDecl.Parameters;
 
                     Assert(prms.Count >= args.Count);
-                    var arguments = new List<Expr>();
-
-                    var index = 0;
-                    for (; index < Math.Min(prms.Count, args.Count); ++index)
-                    {
-                        var argType = ResolveType(args[index].Expr.Type);
-                        var prmType = ResolveType(prms[index].Type);    
-
-                        Assert(ReferenceEquals(argType, prmType));
-
-                        arguments.Add(args[index].Expr!);
-                    }
-                    for (; index < prms.Count; ++index)
-                    {
-                        if (prms[index] is Decl.Parameter param)
-                        {
-                            Assert(param.Default != null);
-
-                            arguments.Add(param.Default!);
-                        }
-                        else
-                        {
-                            Assert(prms[index] is Decl.Parameter);
-                        }
-                    }
-
-                    Assert(arguments.Count == prms.Count);
+                    var arguments = MakeArguments(prms, args);
 
                     return new Expr.CallFunction(function.FunctionDecl, arguments);
+                }
+                else if (func.Expr is Expr.SelectFunction selectFunction)
+                {
+                    if (selectFunction.Function.IsStatic)
+                    {
+                        Assert(false);
+                    }
+                    else
+                    {
+                        Assert(false);
+                    }
                 }
                 else if (func.Expr is Expr.ClassReference klassReference)
                 {
                     var klass = klassReference.ClassDecl;
-                    var defaultCtor = klass.Block.Scope.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
+                    var defaultCtor = klass.Block.Content.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
                     Assert(defaultCtor != null);
                     var callable = defaultCtor.Type as Type.Callable;
                     Assert(callable != null);
@@ -215,13 +228,13 @@ namespace Six.Six.Sema
                     for (; index < args.Count; ++index)
                     {
                         var argType = LowerType(args[index].Expr.Type);
-                        var prmType = LowerType(prms[index+1].Type);
+                        var prmType = LowerType(prms[index + 1].Type);
 
                         Assert(ReferenceEquals(argType, prmType));
 
                         arguments.Add(args[index].Expr);
                     }
-                    for (; ++index < prms.Count; )
+                    for (; ++index < prms.Count;)
                     {
                         if (prms[index] is Decl.Parameter param)
                         {
@@ -242,7 +255,7 @@ namespace Six.Six.Sema
                 }
                 else if (func.Expr is Expr.LocalReference local)
                 {
-                    return ResolveIndirect(local, local.LocalDecl.Type as Type.Callable);
+                    return ResolveIndirect(local, local.Decl.Type as Type.Callable);
                 }
                 else if (func.Expr is Expr.ParameterReference parameter)
                 {
@@ -255,6 +268,40 @@ namespace Six.Six.Sema
 
                 Assert(false);
                 throw new NotImplementedException();
+
+                List<Expr> MakeArguments(IReadOnlyList<Decl.Local> prms, List<LazyExpr> args)
+                {
+                    Assert(prms.Count >= args.Count);
+                    var arguments = new List<Expr>();
+
+                    var index = 0;
+                    for (; index < Math.Min(prms.Count, args.Count); ++index)
+                    {
+                        var argType = ResolveType(args[index].Expr.Type);
+                        var prmType = ResolveType(prms[index].Type);
+
+                        Assert(ReferenceEquals(argType, prmType));
+
+                        arguments.Add(args[index].Expr);
+                    }
+                    for (; index < prms.Count; ++index)
+                    {
+                        if (prms[index] is Decl.Parameter param)
+                        {
+                            Assert(param.Default != null);
+
+                            arguments.Add(param.Default!);
+                        }
+                        else
+                        {
+                            Assert(prms[index] is Decl.Parameter);
+                        }
+                    }
+
+                    Assert(arguments.Count == prms.Count);
+
+                    return arguments;
+                }
 
                 Expr ResolveIndirect(Expr value, Type.Callable? callable)
                 {
@@ -303,7 +350,7 @@ namespace Six.Six.Sema
 
                 if (left.Expr.Type is Type.ClassyReference reference)
                 {
-                    var infix = reference.Classy.Block.Scope.Find(node.Op, InfixName(node));
+                    var infix = reference.Classy.Block.Content.Find(node.Op, InfixName(node));
 
                     if (infix is Decl.Function function)
                     {
@@ -337,7 +384,7 @@ namespace Six.Six.Sema
                 {
                     if (reference.Classy.ADecl is A.Decl.Classy)
                     {
-                        var prefix = reference.Classy.Block.Scope.Find(node.Op, PrefixName(node));
+                        var prefix = reference.Classy.Block.Content.Find(node.Op, PrefixName(node));
 
                         if (prefix is Decl.Function function)
                         {
@@ -404,6 +451,12 @@ namespace Six.Six.Sema
                         break;
                     case Decl.Class node:
                         reference = new Expr.ClassReference(node);
+                        break;
+                    case Decl.Object node:
+                        reference = new Expr.ObjectReference(node);
+                        break;
+                    case Decl.Alias node:
+                        reference = new Expr.AliasReference(node);
                         break;
                     default:
                         Assert(false);

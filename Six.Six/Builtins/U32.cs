@@ -10,7 +10,7 @@ namespace Six.Six.Builtins
 {
     public sealed class U32 : I32
     {
-        public U32(Builtins builtins) : base(builtins, Names.Core.UInt32)
+        public U32(Builtins builtins) : base(builtins, Names.Core.U32)
         {
             prefix.Add("-", Neg);
 
@@ -24,6 +24,11 @@ namespace Six.Six.Builtins
             infix.Add("&", And);
             infix.Add("|", Or);
             infix.Add("^", Xor);
+
+            infix.Add("<=", LE);
+            infix.Add("<", LT);
+            infix.Add(">=", GE);
+            infix.Add(">", GT);
         }
 
         public override Insn Load(uint offset)
@@ -84,6 +89,38 @@ namespace Six.Six.Builtins
             return new Expr.Binop(this, Insn.U32.Rem, arg1, arg2);
         }
 
+
+        public Expr.Primitive LE(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Expr.Binop(Builtins.Boolean, Insn.U32.LE, left, right);
+        }
+
+        public Expr.Primitive LT(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Expr.Binop(Builtins.Boolean, Insn.U32.LT, left, right);
+        }
+
+        public Expr.Primitive GE(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Expr.Binop(Builtins.Boolean, Insn.U32.GE, left, right);
+        }
+
+        public Expr.Primitive GT(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Expr.Binop(Builtins.Boolean, Insn.U32.GT, left, right);
+        }
 
         public Expr.Primitive Complement(Expr arg)
         {

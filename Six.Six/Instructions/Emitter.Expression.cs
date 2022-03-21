@@ -12,10 +12,18 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
+        private void Handle(Expr.ToDo expr)
+        {
+            foreach (var ex in expr.Exprs)
+            {
+                Emit(ex);
+            }
+            Emit(Insn.ToDo(expr.Text));
+        }
+
         private void Handle(Expr.CallConstructor expr)
         {
             var alloc = Module.CoreFindFunction(Module.Allocator);
-            var call = new Expr.CallFunction(alloc, expr.Arguments);
 
             Emit(Insn.U32.Const(expr.Class.Layout.Size));
             Emit(new Expr.CallFunction(alloc));
@@ -43,6 +51,7 @@ namespace Six.Six.Instructions
                 Emit(arg);
             }
             Emit(Insn.ToDo("call-member"));
+            Emit(Insn.Call(expr.Function.FullName));
         }
 
         private void Handle(Expr.CallInfixMember expr)
@@ -56,9 +65,8 @@ namespace Six.Six.Instructions
             }
             else
             {
-                Emit(expr.Arg1);
-                Emit(expr.Arg2);
-                Emit(Insn.ToDo("call-infix-member"));
+                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg1, expr.Arg2);
+                Emit(callMember);
             }
         }
 
@@ -78,13 +86,25 @@ namespace Six.Six.Instructions
             }
         }
 
+        private void Handle(Expr.CallIndirect expr)
+        {
+            foreach (var argument in expr.Arguments)
+            {
+                Emit(argument);
+            }
+            var callable = expr.Callable;
+
+            Emit(expr.Value);
+            Emit(Insn.CallIndirect(globalFunctionsTableName, TypeFor(callable)));
+        }
+
         private void Handle(Expr.If expr)
         {
-            Emit(expr.Condition.Expr);
-            wl($"{Insn.If} {Result(expr.Then.Expr.Type)}");
-            indent(() => Emit(expr.Then.Expr));
+            Emit(expr.Condition);
+            wl($"{Insn.If} {Result(expr.Then.Type)}");
+            indent(() => Emit(expr.Then));
             wl($"{Insn.Else}");
-            indent(() => Emit(expr.Else.Expr));
+            indent(() => Emit(expr.Else));
             wl($"{Insn.End}");
         }
 
@@ -99,6 +119,11 @@ namespace Six.Six.Instructions
         private void Handle(Expr.Const expr)
         {
             Emit(expr.Insn);
+        }
+
+        private void Handle(Expr.ConstString expr)
+        {
+            Emit(expr.Resolve().Insn);
         }
 
         private void Handle(Expr.LocalReference expr)
@@ -121,43 +146,50 @@ namespace Six.Six.Instructions
             var function = expr.FunctionDecl;
             var name = function.FullName;
 
-            uint index;
-            if (!globalFunctionsTable.TryGetValue(name, out var entry))
+            var index = GlobalFunctions.Add(function, name);
+            Emit(Insn.U32.Const(index));
+        }
+
+        private void Handle(Expr.ObjectReference expr)
+        {
+            if (expr.Decl.IsNative)
             {
-                index = (uint)globalFunctionsTable.Count;
-                globalFunctionsTable.Add(name, (index, function));
-            }
-            else
-            {
-                index = entry.index;
+                if (expr.Decl.FullName == "six.core.true")
+                {
+                    Emit(Insn.Boolean.True);
+                    return;
+                }
+                if (expr.Decl.FullName == "six.core.false")
+                {
+                    Emit(Insn.Boolean.False);
+                    return;
+                }
             }
 
-            Emit(Insn.U32.Const(index));
+            Assert(false);
         }
 
         private void Handle(Expr.SelectAttribute expr)
         {
             Emit(expr.Reference);
             Emit(expr.Attribute);
-            Emit(Insn.ToDo("GET attribute"));
+            Emit(Insn.ToDo("GET attribute from classy"));
+        }
+
+        private void Handle(Expr.AttributeReference expr)
+        {
+            Emit(Insn.ToDo("GET attribute from reference"));
+        }
+
+        private void Handle(Expr.FieldReference expr)
+        {
+            Emit(Insn.ToDo("GET field from reference"));
         }
 
         private void Handle(Expr.SelectField expr)
         {
             Emit(expr.Reference);
             Emit(Lower(expr.Field.Type).Load(expr.Field.Offset));
-        }
-
-        private void Handle(Expr.CallIndirect expr)
-        {
-            foreach (var argument in expr.Arguments)
-            {
-                Emit(argument);
-            }
-            var callable = expr.Callable;
-
-            Emit(expr.Value);
-            Emit(Insn.CallIndirect(globalFunctionsTableName, TypeFor(callable)));
         }
     }
 }

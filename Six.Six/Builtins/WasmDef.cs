@@ -29,7 +29,12 @@ namespace Six.Six.Builtins
 
         public uint Align(uint offset)
         {
-            return (offset + (MemAlign - 1)) & ~(MemAlign - 1);
+            return Align(MemAlign, offset);
         }
+        public static uint Align(uint align, uint offset)
+        {
+            return (offset + (align - 1)) & ~(align - 1);
+        }
+
     }
 }

@@ -16,33 +16,108 @@
         }
 
         [DebuggerDisplay("reference <{Decl}>")]
-        public record Reference(Decl Decl) : Declared
+        public abstract class Reference : Declared
         {
+            public Reference(Decl decl)
+            {
+                Decl = decl;
+            }
+
+            public Decl Decl { get; }
+            
             public override string ToString()
             {
-                return $"{Decl}";
+                return $"{Decl.Name}";
             }
         }
 
-        public record ClassyReference(Decl.Classy Classy) : Reference(Classy)
+        public sealed class AliasReference : Reference
         {
-            public override string ToString()
+            public AliasReference(Decl.Alias alias) : base(alias)
             {
-                return $"{Decl}";
+
             }
         }
-
-        public sealed record Callable(Type Result, List<Type> Parameters) : Type
+        
+        public abstract class ClassyReference : Reference
         {
-            public Callable(Type Result, params Type[] Params)
-                : this(Result, Params.ToList())
-            { }
+            protected ClassyReference(Decl.Classy classy) : base(classy)
+            {
+                Classy = classy;
+            }
+
+            public Decl.Classy Classy { get; }
         }
 
-        public sealed record Tuple(params Type[] Types) : TypeImpl;
+        public sealed class ClassReference : ClassyReference
+        {
+            public ClassReference(Decl.Class @class) : base(@class)
+            {
+                Class = @class;
+            }
 
-        public sealed record Array(Type Type) : TypeImpl;
+            public Decl.Class Class { get; }
+        }
+
+        public sealed class InterfaceReference : ClassyReference
+        {
+            public InterfaceReference(Decl.Interface @interface) : base(@interface)
+            {
+                Interface = @interface;
+            }
+
+            public Decl.Interface Interface { get; }
+        }
+
+        public sealed class ObjectReference : ClassyReference
+        {
+            public ObjectReference(Decl.Object @object) : base(@object)
+            {
+                Object = @object;
+            }
+
+            public Decl.Object Object { get; }
+        }
+
+        public sealed class Callable : Type
+        {
+            public Callable(Type result, params Type[] parameters)
+                : this(result, parameters.ToList())
+            {
+            }
+
+            public Callable(Type result, List<Type> parameters)
+            {
+                Result = result;
+                Parameters = parameters;
+            }
+
+            public Type Result { get; }
+            public IReadOnlyList<Type> Parameters { get; }
+        }
+
+        public sealed class Tuple : TypeImpl
+        {
+            public Tuple(params Type[] types)
+            {
+                Types = types;
+            }
+
+            public Type[] Types { get; }
+        }
+
+        public sealed class Array : TypeImpl
+        {
+            public Array(Type type)
+            {
+                Type = type;
+            }
+
+            public Type Type { get; }
+        }
      
-        public abstract record TypeImpl : Type;
+        public abstract class TypeImpl : Type
+        {
+        }
     }
 }

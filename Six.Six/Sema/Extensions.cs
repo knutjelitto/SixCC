@@ -6,19 +6,14 @@ namespace Six.Six.Sema
 {
     public static class Extensions
     {
-        public static ClassyScope ClassyScope(this Decl node)
-        {
-            return node.Container as ClassyScope ?? throw new InvalidCastException();
-        }
-
         public static Decl ClassyFind(this Decl.Classy classy, A.Reference reference)
         {
-            return classy.Block.Scope.Find(reference, reference.Name.Text);
+            return classy.Block.Content.Find(reference, reference.Name.Text);
         }
 
         public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
         {
-            return node.ClassyDecl.Block.Scope.Find(reference, reference.Name.Text);
+            return node.ClassyDecl.ClassyFind(reference);
         }
 
         public static ILocation GetLocation(this Decl node)
@@ -71,6 +66,11 @@ namespace Six.Six.Sema
         public static bool IsAbstract(this A.TreeNode node)
         {
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Abstract);
+        }
+
+        public static bool IsPrefinal(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Prefinal);
         }
 
         private static bool IsWith(this A.With.Prelude withPrelude, string attribute)

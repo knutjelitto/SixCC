@@ -13,14 +13,14 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr? delayed;
 
-            public Return(ILocation location, Scope container, Decl.Function function, LazyExpr? delayed)
-                : base(location, container)
+            public Return(ILocation location, FuncBlock block, Decl.Funcy function, LazyExpr? delayed)
+                : base(location, block)
             {
                 Function = function;
                 this.delayed = delayed;
             }
 
-            public Decl.Function Function { get; }
+            public Decl.Funcy Function { get; }
 
             public Expr? Expr
             {
@@ -28,9 +28,14 @@ namespace Six.Six.Sema
                 {
                     if (delayed != null)
                     {
+                        var a = Resolver.LowerType(delayed.Expr.Type);
+                        var b = Resolver.LowerType(Function.ResultType);
+
                         if (!ReferenceEquals(Resolver.LowerType(delayed.Expr.Type), Resolver.LowerType(Function.ResultType)))
                         {
                             Assert(false);
+                            var x = Resolver.LowerType(delayed.Expr.Type);
+                            var y = Resolver.LowerType(Function.ResultType);
                             throw Errors.TypeMismatch(Location, Function.ResultType, delayed.Expr.Type);
                         }
                     }
@@ -44,8 +49,8 @@ namespace Six.Six.Sema
             private readonly LazyExpr left;
             private readonly LazyExpr right;
 
-            public Assign(A.Stmt.Assign stmt, Scope container, LazyExpr left, LazyExpr right)
-                : base(stmt.GetLocation(), container)
+            public Assign(A.Stmt.Assign stmt, FuncBlock block, LazyExpr left, LazyExpr right)
+                : base(stmt.GetLocation(), block)
             {
                 this.left = left;
                 this.right = right;
@@ -58,14 +63,15 @@ namespace Six.Six.Sema
 
     public abstract class Statement : Stmt
     {
-        public Statement(ILocation location, Scope container)
+        public Statement(ILocation location, FuncBlock block)
         {
             Location = location;
-            Container = container;
+            Block = block;
         }
 
         public ILocation Location { get; }
-        public Scope Container { get; }
+        public FuncBlock Block { get; }
+        public Scope Container => Block.Content;
 
         public Module Module => Container.Module;
         public Resolver Resolver => Module.Resolver;

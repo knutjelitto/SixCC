@@ -28,7 +28,7 @@ namespace Six.Six.Sema
 
         public DiagnosticException CantResolve(A.TreeNode tree, string name)
         {
-            var diagnostic = new SemanticError(tree.GetLocation(), $"can't find ``{name}´´");
+            var diagnostic = new SemanticError(tree.GetLocation(), $"the name '{name}' doesn't exist in the current context");
 
             return new DiagnosticException(diagnostic);
         }

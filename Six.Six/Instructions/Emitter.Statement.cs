@@ -18,8 +18,8 @@ namespace Six.Six.Instructions
             switch (stmt.Left)
             {
                 case Expr.SelectField select:
-                    Emit(stmt.Right);
                     Emit(select.Reference);
+                    Emit(stmt.Right);
                     Emit(Lower(select.Field.Type).Store(select.Field.Offset));
                     return;
                 case Expr.GlobalReference globalReference:

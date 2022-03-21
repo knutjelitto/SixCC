@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Six.Six.Instructions;
+using System;
 using static System.Formats.Asn1.AsnWriter;
 using A = Six.Six.Ast;
 
@@ -17,8 +18,8 @@ namespace Six.Six.Sema
         }
 
         public Module Module { get; }
-
         public Builtins.Builtins Builtins => Module.Builtins;
+        public Emitter Emitter => Module.Emitter;
 
         public void Walk(A.Unit.Code code)
         {
@@ -27,11 +28,9 @@ namespace Six.Six.Sema
 
         private void CodeUnit(A.Unit.Code code)
         {
-            var @namespace = Module.Open(code.Namespace);
             var namespaceBlock = Module.OpenNamespace(code.Namespace);
 
-            //WalkDeclarations(namespaceBlock, code.Declarations);
-            WalkDeclarations(@namespace, code.Declarations);
+            WalkDeclarations(namespaceBlock, code.Declarations);
         }
     }
 }

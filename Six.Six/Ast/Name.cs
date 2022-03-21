@@ -45,12 +45,13 @@ namespace Six.Six.Ast
 
         public sealed class ArtificalId : Name
         {
-            public ArtificalId(string text)
+            public ArtificalId(IRNode tree, string text)
             {
+                Tree = tree;
                 Text = text;
             }
 
-            public IRNode Tree => throw new System.InvalidOperationException();
+            public IRNode Tree { get; }
             public string Text { get; }
 
             public override string ToString() => Text;

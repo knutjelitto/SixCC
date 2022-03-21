@@ -9,5 +9,7 @@ shared interface Identifiable
             else false;
         */
     
-    shared default actual int hash => identityHash(this);
+    shared default actual int hash => identityHash(self);
+
+    shared static native int identityHash(Identifiable identifiable);
 }

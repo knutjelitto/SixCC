@@ -1,11 +1,12 @@
 ﻿using Six.Six.Builtins;
+using Six.Six.Sema;
 
-namespace Six.Six.Sema
+namespace Six.Six.Instructions
 {
     public class Layout
     {
-        private readonly List<Decl.Field> fields = new();
-        private bool done = false;
+        public readonly List<Decl.Field> Fields = new();
+        public readonly List<Decl.Funcy> Funcy = new();
 
         public Layout(Decl.Classy classy)
         {
@@ -15,22 +16,33 @@ namespace Six.Six.Sema
         public Decl.Classy Classy { get; }
         public Module Module => Classy.Container.Module;
         public Resolver Resolver => Module.Resolver;
+        public Emitter Emitter => Module.Emitter;
 
         public uint Size { get; private set; } = uint.MaxValue;
+        public bool Done { get; private set; }
 
         public void Add(Decl.Field declaredField)
         {
-            fields.Add(declaredField);
+            Fields.Add(declaredField);
         }
 
         public void Run()
         {
-            if (done)
+            if (Done)
             {
                 return;
             }
 
-            uint fieldOffset = 0;
+            MakeFields();
+
+            Emitter.AddClass(Classy.FullName, Size);
+
+            Done = true;
+        }
+
+        private void MakeFields()
+        {
+            var fieldOffset = WasmDef.Pointer.Size;
 
             if (Classy.Extends != null)
             {
@@ -39,12 +51,12 @@ namespace Six.Six.Sema
                 fieldOffset = Classy.Extends.Layout.Size;
             }
 
-            foreach (var member in Classy.Members)
+            foreach (var member in Classy.Block.Members)
             {
                 switch (member)
                 {
                     case Decl.Field field:
-                        fields.Add(field);
+                        Fields.Add(field);
                         break;
                     case Decl.Attribute attribute:
                         break;
@@ -58,7 +70,7 @@ namespace Six.Six.Sema
                 }
             }
 
-            foreach (var field in fields)
+            foreach (var field in Fields)
             {
                 var type = Resolver.LowerType(field.Type);
 
@@ -70,6 +82,10 @@ namespace Six.Six.Sema
 
                     fieldOffset += builtin.Wasm.MemSize;
                 }
+                else if (type is Type.ClassReference clazz)
+                {
+                    Assert(true);
+                }
                 else
                 {
                     Assert(false);
@@ -78,7 +94,6 @@ namespace Six.Six.Sema
 
             Size = fieldOffset;
 
-            done = true;
         }
     }
 }

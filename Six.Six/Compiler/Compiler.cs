@@ -33,27 +33,6 @@ namespace Six.Six.Compiler
 
         public bool Errors => Module.HasErrors;
 
-        private void Layout()
-        {
-            if (!Errors)
-            {
-                var layouter = new S.Layouter(Module);
-                layouter.Run();
-            }
-        }
-
-        private void Emit()
-        {
-            using (var writer = $"{parser.__Name}.wat".Writer())
-            {
-                if (!Errors)
-                {
-                    var emitter = new Emitter(Module, writer);
-                    emitter.EmitModule();
-                }
-            }
-        }
-
         private void Report()
         {
             if (ruleIndex != null)
@@ -68,9 +47,6 @@ namespace Six.Six.Compiler
             {
                 Module.Dump(writer);
             }
-
-            Module.DumpEntities();
-
 
             using (var writer = $"{parser.__Name}-Timing.txt".Writer())
             {
@@ -119,12 +95,6 @@ namespace Six.Six.Compiler
                         {
                             break;
                         }
-                    }
-
-                    if (ok)
-                    {
-                        Layout();
-                        Emit();
                     }
                 }
                 catch (DiagnosticException diagnostics)

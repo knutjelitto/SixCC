@@ -13,7 +13,7 @@ namespace Six.Six.Instructions
 {
     public partial class Emitter
     {
-        private Builtin Lower(Type type)
+        public Builtin Lower(Type type)
         {
             var lower = Resolver.LowerType(type);
 
@@ -27,43 +27,6 @@ namespace Six.Six.Instructions
             }
         }
 
-        private string FindType(Type.Callable callable)
-        {
-            var funcType = FuncType(callable);
-
-            if (!functionTypes.TryGetValue(funcType, out var index))
-            {
-                index = (uint)functionTypes.Count;
-
-                functionTypes.Add(funcType, index);
-            }
-
-            return $"$funcType{index}";
-        }
-
-        private string FuncType(Type.Callable callable)
-        {
-            return $"(func {Signature(callable)})";
-        }
-
-        private string Signature(Type.Callable callable)
-        {
-            var builder = new StringBuilder();
-            builder.Append("(param");
-            foreach (var param in callable.Parameters)
-            {
-                builder.Append($" {WasmTypeFor(param)}");
-            }
-            builder.Append($") (result");
-            if (!IsAnythingAkaVoid(callable.Result))
-            {
-                builder.Append($" {WasmTypeFor(callable.Result)}");
-            }
-            builder.Append(')');
-
-            return builder.ToString();
-        }
-
         private string Params(IEnumerable<Decl.Local> locals)
         {
             var builder = new StringBuilder();
@@ -71,7 +34,7 @@ namespace Six.Six.Instructions
             builder.Append("(param");
             foreach (var local in locals)
             {
-                builder.Append($" (;{local.Index}/{local.Name};) {WasmTypeFor(local.Type)}");
+                builder.Append($" (;{local.Index}/{local.Name}:{Resolver.ResolveType(local.Type)};) {WasmTypeFor(local.Type)}");
             }
             builder.Append(")");
 
@@ -88,13 +51,13 @@ namespace Six.Six.Instructions
             return $"(local (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
         }
 
-        private string ExportIff(Decl decl)
+        private string? ExportIff(Decl decl)
         {
             if (decl.IsShared)
             {
                 return $" (export \"{decl.FullName}\")";
             }
-            return "";
+            return null;
         }
 
         private string Export(Decl decl)
@@ -113,12 +76,12 @@ namespace Six.Six.Instructions
 
             if (global.Writeable)
             {
-                return $"(mut {lower.Wasm.Type})";
+                return $" (mut {lower.Wasm.Type})";
             }
-            return $"{lower.Wasm.Type}";
+            return $" {lower.Wasm.Type}";
         }
 
-        private string WasmTypeFor(Type type)
+        public string WasmTypeFor(Type type)
         {
             switch (Resolver.LowerType(type))
             {
@@ -136,7 +99,7 @@ namespace Six.Six.Instructions
                         return $"{Builtins.Anything.Wasm.Type}";
                     }
                 default:
-                    //Assert(false);
+                    Assert(false);
                     return $"(;wasm-type:?????{type};)";
             }
         }
@@ -161,10 +124,10 @@ namespace Six.Six.Instructions
 
         private string TypeFor(Type.Callable type)
         {
-            return $"(type {FindType(type)})";
+            return $"(type {Types.FindType(type)})";
         }
 
-        private bool IsAnythingAkaVoid(Type type)
+        public bool IsAnythingAkaVoid(Type type)
         {
             return Resolver.ResolveType(type) is Type.ClassyReference reference && reference.Decl.FullName == Names.Core.CoreAnything;
         }

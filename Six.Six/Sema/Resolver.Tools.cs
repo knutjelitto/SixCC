@@ -19,29 +19,29 @@ namespace Six.Six.Sema
             switch (suffix)
             {
                 case "i32":
-                    return new Expr.ConstI32(Module.CoreFindType(Names.Core.Int32), (int)value);
+                    return new Expr.ConstI32(Module.CoreFindType(Names.Core.S32), (int)value);
                 case "i64":
-                    return new Expr.ConstI64(Module.CoreFindType(Names.Core.Int64), (long)value);
+                    return new Expr.ConstI64(Module.CoreFindType(Names.Core.S64), (long)value);
                 case "u32":
-                    return new Expr.ConstU32(Module.CoreFindType(Names.Core.UInt32), (uint)value);
+                    return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
                 case "u64":
-                    return new Expr.ConstU64(Module.CoreFindType(Names.Core.UInt64), (ulong)value);
+                    return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), (ulong)value);
                 case "":
                     if (value > long.MaxValue)
                     {
-                        return new Expr.ConstU64(Module.CoreFindType(Names.Core.UInt64), value);
+                        return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), value);
                     }
                     else if (value > int.MaxValue)
                     {
                         if (value > uint.MaxValue)
                         {
-                            return new Expr.ConstI64(Module.CoreFindType(Names.Core.Int64), (long)value);
+                            return new Expr.ConstI64(Module.CoreFindType(Names.Core.S64), (long)value);
                         }
-                        return new Expr.ConstU32(Module.CoreFindType(Names.Core.UInt32), (uint)value);
+                        return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
                     }
                     else
                     {
-                        return new Expr.ConstI32(Module.CoreFindType(Names.Core.Int32), (int)value);
+                        return new Expr.ConstI32(Module.CoreFindType(Names.Core.S32), (int)value);
                     }
                 default:
                     Assert(false);
@@ -133,7 +133,7 @@ namespace Six.Six.Sema
         {
             var type = Module.CoreFindType(Names.Core.String);
 
-            return new Expr.ConstString(type, tree.Text);
+            return new Expr.ConstString(type, Emitter.AddString(tree.Text));
         }
     }
 }

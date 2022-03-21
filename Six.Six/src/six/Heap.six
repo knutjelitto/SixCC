@@ -1,8 +1,8 @@
 namespace six.core;
 
-shared var uint __data_start = 0;
-shared var uint __data_end = 0;
-shared var uint __heap_start = 0;
+shared let uint __data_start = 0;
+shared let uint __data_end = 0;
+shared let uint __heap_start = 0;
 shared var uint __heap_next = 0;
 
 shared uint allocate(uint size)
