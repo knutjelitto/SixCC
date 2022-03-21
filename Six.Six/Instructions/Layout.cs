@@ -6,7 +6,7 @@ namespace Six.Six.Instructions
     public class Layout
     {
         public readonly List<Decl.Field> Fields = new();
-        public readonly List<Decl.Funcy> Funcy = new();
+        public readonly List<CallSlot> Slots = new();
 
         public Layout(Decl.Classy classy)
         {
@@ -32,12 +32,33 @@ namespace Six.Six.Instructions
             {
                 return;
             }
+            Done = true;
 
             MakeFields();
+            MakeSlots();
 
             Emitter.AddClass(Classy.FullName, Size);
 
-            Done = true;
+        }
+
+        protected void Prefill(List<Decl.Field> subFields)
+        {
+            Run();
+
+            foreach (var field in Fields)
+            {
+                subFields.Add(field);
+            }
+        }
+
+        protected void Prefill(List<CallSlot> subSlots)
+        {
+            Run();
+
+            foreach (var slot in Slots)
+            {
+                subSlots.Add(slot);
+            }
         }
 
         private void MakeFields()
@@ -46,28 +67,14 @@ namespace Six.Six.Instructions
 
             if (Classy.Extends != null)
             {
-                Classy.Extends.Layout.Run();
+                Classy.Extends.Layout.Prefill(Fields);
 
                 fieldOffset = Classy.Extends.Layout.Size;
             }
 
-            foreach (var member in Classy.Block.Members)
+            foreach (var field in Classy.Fields)
             {
-                switch (member)
-                {
-                    case Decl.Field field:
-                        Fields.Add(field);
-                        break;
-                    case Decl.Attribute attribute:
-                        break;
-                    case Decl.Function function:
-                        break;
-                    case Decl.Constructor constructor:
-                        break;
-                    default:
-                        Assert(false);
-                        throw new System.NotImplementedException();
-                }
+                Fields.Add(field);
             }
 
             foreach (var field in Fields)
@@ -84,7 +91,7 @@ namespace Six.Six.Instructions
                 }
                 else if (type is Type.ClassReference clazz)
                 {
-                    Assert(true);
+                    Assert(false);
                 }
                 else
                 {
@@ -93,7 +100,47 @@ namespace Six.Six.Instructions
             }
 
             Size = fieldOffset;
+        }
 
+        private void MakeSlots()
+        {
+            if (Classy.Extends != null)
+            {
+                Classy.Extends.Layout.Prefill(Slots);
+            }
+
+            foreach (var member in Classy.Block.Members)
+            {
+                switch (member)
+                {
+                    case Decl.Field:
+                        break;
+                    case Decl.Attribute attribute:
+                        Slots.Add(new CallSlot(Slots.Count, attribute));
+                        break;
+                    case Decl.Function function:
+                        Slots.Add(new CallSlot(Slots.Count, function));
+                        break;
+                    case Decl.Constructor constructor:
+                        Slots.Add(new CallSlot(Slots.Count, constructor));
+                        break;
+                    default:
+                        Assert(false);
+                        throw new System.NotImplementedException();
+                }
+            }
+        }
+
+        public class CallSlot
+        {
+            public CallSlot(int index, Decl.Funcy funcy)
+            {
+                Index = index;
+                Funcy = funcy;
+            }
+
+            public int Index { get; }
+            public Decl.Funcy Funcy { get; }
         }
     }
 }

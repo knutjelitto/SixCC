@@ -366,15 +366,17 @@ attribute-name
     :<  'tagged'
     |   'see'
     |   'throws'
+    |   'doc'
+
     |   'shared'
     |   'native'
     |   'static'
+
     |   'abstract'
-    |   'actual'
-    |   'formal'
-    |   'final'
+    |   'override'
+    |   'virtual'
     |   'sealed'
-    |   'default'
+
     |   'serializable'
     |   'prefinal'
     >;

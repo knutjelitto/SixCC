@@ -31,8 +31,6 @@ namespace Six.Six.Sema
 
         private void DeclareClassyBody(Decl.Classy decl, A.Decl.Classy node)
         {
-            decl.Parent.Members.Add(decl);
-
             WalkBody(decl.Block, node.Body);
         }
 
@@ -40,6 +38,10 @@ namespace Six.Six.Sema
 
         private void Declare(Block parent, A.Decl.Class node)
         {
+            if (node.Satisfies != null)
+            {
+            }
+
             var decl = new Decl.Class(parent, node);
 
             DeclareClassyBody(decl, node);

@@ -10,14 +10,14 @@ shared native class Boolean of true | false
 
 shared native object true : Boolean
 {
-    shared actual int hash => 1234;
-    shared actual string string => "true";
+    shared override int hash => 1234;
+    shared override string string => "true";
 }
 
 shared native object false : Boolean
 {
-    shared actual int hash => 4321;
-    shared actual string string => "false";
+    shared override int hash => 4321;
+    shared override string string => "false";
 }
 
 shared alias bool => Boolean;

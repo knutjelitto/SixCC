@@ -21,7 +21,7 @@ namespace Six.Six.Sema
             {
                 if (ext.Extends is A.Type extended)
                 {
-                    var super = ResolveType(classy.Scope, extended);
+                    var super = ResolveType(classy.Block.Head, extended);
 
                     if (super is Type.ClassyReference reference && reference.Classy is Decl.Class superClass)
                     {

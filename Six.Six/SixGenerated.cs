@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Six\\Six.six" at="21.03.2022 07:10:07" />
+// <generated from="C:\\Dev\\Knut\\Six\\Six.Six\\Six.six" at="21.03.2022 09:08:41" />
 
 using Six.Runtime;
 using Six.Runtime.Dfa;
@@ -939,15 +939,17 @@ namespace Six.Six
                     new DfaState(53, false),
                     new DfaState(54, false),
                     new DfaState(55, false),
-                    new DfaState(56, false)
+                    new DfaState(56, false),
+                    new DfaState(57, false)
                 );
                 _attributeName_DFA.States[0].Set(
                     new DfaTrans(_attributeName_DFA.States[1], new DfaInterval(116, 116)),
                     new DfaTrans(_attributeName_DFA.States[11], new DfaInterval(115, 115)),
-                    new DfaTrans(_attributeName_DFA.States[29], new DfaInterval(110, 110)),
-                    new DfaTrans(_attributeName_DFA.States[33], new DfaInterval(97, 97)),
-                    new DfaTrans(_attributeName_DFA.States[44], new DfaInterval(102, 102)),
-                    new DfaTrans(_attributeName_DFA.States[48], new DfaInterval(100, 100)),
+                    new DfaTrans(_attributeName_DFA.States[29], new DfaInterval(100, 100)),
+                    new DfaTrans(_attributeName_DFA.States[30], new DfaInterval(110, 110)),
+                    new DfaTrans(_attributeName_DFA.States[34], new DfaInterval(97, 97)),
+                    new DfaTrans(_attributeName_DFA.States[41], new DfaInterval(111, 111)),
+                    new DfaTrans(_attributeName_DFA.States[47], new DfaInterval(118, 118)),
                     new DfaTrans(_attributeName_DFA.States[53], new DfaInterval(112, 112))
                 );
                 _attributeName_DFA.States[1].Set(
@@ -1039,78 +1041,76 @@ namespace Six.Six
                     new DfaTrans(_attributeName_DFA.States[6], new DfaInterval(99, 99))
                 );
                 _attributeName_DFA.States[29].Set(
-                    new DfaTrans(_attributeName_DFA.States[30], new DfaInterval(97, 97))
+                    new DfaTrans(_attributeName_DFA.States[28], new DfaInterval(111, 111))
                 );
                 _attributeName_DFA.States[30].Set(
-                    new DfaTrans(_attributeName_DFA.States[31], new DfaInterval(116, 116))
+                    new DfaTrans(_attributeName_DFA.States[31], new DfaInterval(97, 97))
                 );
                 _attributeName_DFA.States[31].Set(
-                    new DfaTrans(_attributeName_DFA.States[32], new DfaInterval(105, 105))
+                    new DfaTrans(_attributeName_DFA.States[32], new DfaInterval(116, 116))
                 );
                 _attributeName_DFA.States[32].Set(
-                    new DfaTrans(_attributeName_DFA.States[22], new DfaInterval(118, 118))
+                    new DfaTrans(_attributeName_DFA.States[33], new DfaInterval(105, 105))
                 );
                 _attributeName_DFA.States[33].Set(
-                    new DfaTrans(_attributeName_DFA.States[34], new DfaInterval(98, 98)),
-                    new DfaTrans(_attributeName_DFA.States[40], new DfaInterval(99, 99))
+                    new DfaTrans(_attributeName_DFA.States[22], new DfaInterval(118, 118))
                 );
                 _attributeName_DFA.States[34].Set(
-                    new DfaTrans(_attributeName_DFA.States[35], new DfaInterval(115, 115))
+                    new DfaTrans(_attributeName_DFA.States[35], new DfaInterval(98, 98))
                 );
                 _attributeName_DFA.States[35].Set(
-                    new DfaTrans(_attributeName_DFA.States[36], new DfaInterval(116, 116))
+                    new DfaTrans(_attributeName_DFA.States[36], new DfaInterval(115, 115))
                 );
                 _attributeName_DFA.States[36].Set(
-                    new DfaTrans(_attributeName_DFA.States[37], new DfaInterval(114, 114))
+                    new DfaTrans(_attributeName_DFA.States[37], new DfaInterval(116, 116))
                 );
                 _attributeName_DFA.States[37].Set(
-                    new DfaTrans(_attributeName_DFA.States[38], new DfaInterval(97, 97))
+                    new DfaTrans(_attributeName_DFA.States[38], new DfaInterval(114, 114))
                 );
                 _attributeName_DFA.States[38].Set(
-                    new DfaTrans(_attributeName_DFA.States[39], new DfaInterval(99, 99))
+                    new DfaTrans(_attributeName_DFA.States[39], new DfaInterval(97, 97))
                 );
                 _attributeName_DFA.States[39].Set(
-                    new DfaTrans(_attributeName_DFA.States[6], new DfaInterval(116, 116))
+                    new DfaTrans(_attributeName_DFA.States[40], new DfaInterval(99, 99))
                 );
                 _attributeName_DFA.States[40].Set(
-                    new DfaTrans(_attributeName_DFA.States[41], new DfaInterval(116, 116))
+                    new DfaTrans(_attributeName_DFA.States[6], new DfaInterval(116, 116))
                 );
                 _attributeName_DFA.States[41].Set(
-                    new DfaTrans(_attributeName_DFA.States[42], new DfaInterval(117, 117))
+                    new DfaTrans(_attributeName_DFA.States[42], new DfaInterval(118, 118))
                 );
                 _attributeName_DFA.States[42].Set(
-                    new DfaTrans(_attributeName_DFA.States[43], new DfaInterval(97, 97))
+                    new DfaTrans(_attributeName_DFA.States[43], new DfaInterval(101, 101))
                 );
                 _attributeName_DFA.States[43].Set(
-                    new DfaTrans(_attributeName_DFA.States[6], new DfaInterval(108, 108))
+                    new DfaTrans(_attributeName_DFA.States[44], new DfaInterval(114, 114))
                 );
                 _attributeName_DFA.States[44].Set(
-                    new DfaTrans(_attributeName_DFA.States[45], new DfaInterval(111, 111)),
-                    new DfaTrans(_attributeName_DFA.States[47], new DfaInterval(105, 105))
+                    new DfaTrans(_attributeName_DFA.States[45], new DfaInterval(114, 114))
                 );
                 _attributeName_DFA.States[45].Set(
-                    new DfaTrans(_attributeName_DFA.States[46], new DfaInterval(114, 114))
+                    new DfaTrans(_attributeName_DFA.States[46], new DfaInterval(105, 105))
                 );
                 _attributeName_DFA.States[46].Set(
-                    new DfaTrans(_attributeName_DFA.States[42], new DfaInterval(109, 109))
+                    new DfaTrans(_attributeName_DFA.States[22], new DfaInterval(100, 100))
                 );
                 _attributeName_DFA.States[47].Set(
-                    new DfaTrans(_attributeName_DFA.States[42], new DfaInterval(110, 110))
+                    new DfaTrans(_attributeName_DFA.States[48], new DfaInterval(105, 105))
                 );
                 _attributeName_DFA.States[48].Set(
-                    new DfaTrans(_attributeName_DFA.States[49], new DfaInterval(101, 101))
+                    new DfaTrans(_attributeName_DFA.States[49], new DfaInterval(114, 114))
                 );
                 _attributeName_DFA.States[49].Set(
-                    new DfaTrans(_attributeName_DFA.States[50], new DfaInterval(102, 102))
+                    new DfaTrans(_attributeName_DFA.States[50], new DfaInterval(116, 116))
                 );
                 _attributeName_DFA.States[50].Set(
-                    new DfaTrans(_attributeName_DFA.States[51], new DfaInterval(97, 97))
+                    new DfaTrans(_attributeName_DFA.States[51], new DfaInterval(117, 117))
                 );
                 _attributeName_DFA.States[51].Set(
-                    new DfaTrans(_attributeName_DFA.States[52], new DfaInterval(117, 117))
+                    new DfaTrans(_attributeName_DFA.States[52], new DfaInterval(97, 97))
                 );
                 _attributeName_DFA.States[52].Set(
-                    new DfaTrans(_attributeName_DFA.States[39], new DfaInterval(108, 108))
+                    new DfaTrans(_attributeName_DFA.States[6], new DfaInterval(108, 108))
                 );
                 _attributeName_DFA.States[53].Set(
                     new DfaTrans(_attributeName_DFA.States[54], new DfaInterval(114, 114))
@@ -1122,7 +1122,10 @@ namespace Six.Six
                     new DfaTrans(_attributeName_DFA.States[56], new DfaInterval(102, 102))
                 );
                 _attributeName_DFA.States[56].Set(
-                    new DfaTrans(_attributeName_DFA.States[47], new DfaInterval(105, 105))
+                    new DfaTrans(_attributeName_DFA.States[57], new DfaInterval(105, 105))
+                );
+                _attributeName_DFA.States[57].Set(
+                    new DfaTrans(_attributeName_DFA.States[51], new DfaInterval(110, 110))
                 );
                 _naturalLiteral_DFA.Set(
                     new DfaState(0, false),

@@ -50,7 +50,6 @@ namespace Six.Six.Instructions
             {
                 Emit(arg);
             }
-            Emit(Insn.ToDo("call-member"));
             Emit(Insn.Call(expr.Function.FullName));
         }
 

@@ -155,6 +155,7 @@ namespace Six.Six.Ast
             Body Body)
             : Function(Tree, Prelude, Name, null, null, Type, Parameters, Body);
 
+
         [DebuggerDisplay("class {Name}")]
         public sealed record Class(
             IRNode Tree, 

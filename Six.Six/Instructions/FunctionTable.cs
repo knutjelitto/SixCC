@@ -1,11 +1,6 @@
 ﻿using Six.Core;
 using Six.Runtime;
 using Six.Six.Sema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Six.Instructions
 {
@@ -41,12 +36,12 @@ namespace Six.Six.Instructions
         {
             if (table.Count > 0)
             {
-                wl($"(table {Name} anyfunc (elem");
+                wl($"(table {Name} funcref (elem");
                 indent(() =>
                 {
                     foreach (var (name, element) in table.OrderBy(kv => kv.Value.index))
                     {
-                        wl($"${name}");
+                        wl($"(ref.func ${name})");
                     }
                 });
                 wl("))");

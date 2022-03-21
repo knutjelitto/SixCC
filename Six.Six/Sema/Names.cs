@@ -42,6 +42,9 @@
             public static readonly string Native = "native";
             public static readonly string Static = "static";
             public static readonly string Abstract = "abstract";
+            public static readonly string Virtual = "virtual";
+            public static readonly string Override = "override";
+            public static readonly string Sealed = "sealed";
             public static readonly string Prefinal = "prefinal";
         }
     }

@@ -27,11 +27,11 @@ namespace Six.Six.Sema
             {
                 Block = new ClassBlock(this, parent);
                 parent.Content.Declare(this, aDecl.Name.Text);
+                parent.Members.Add(this);
             }
 
             public ClassBlock Block { get; }
             public List<Field> Fields { get; } = new List<Field>();
-            public Scope Scope => Block.Classy.Container;
 
             public override string FullName => Block.FullName();
 
