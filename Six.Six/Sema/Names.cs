@@ -47,5 +47,10 @@
             public static readonly string Sealed = "sealed";
             public static readonly string Prefinal = "prefinal";
         }
+
+        public static class Nomes
+        {
+            public static readonly string Interface = "interface";
+        }
     }
 }

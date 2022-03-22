@@ -21,7 +21,6 @@ namespace Six.Six.Instructions
         public string MemoryId { get; }
         public uint Offset { get; private set; }
         public uint BaseOffset { get; private set; }
-
         public uint Next => BaseOffset + Offset;
 
         public Func<Ptr> Add(string text)

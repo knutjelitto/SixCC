@@ -69,15 +69,11 @@ namespace Six.Six.Instructions
             protected abstract OpSign Signedness { get; }
 
             public Const Const(TValue value) => new(Value(value));
+
             public Insn Add => Binop.Add(ValueType);
             public Insn Sub => Binop.Sub(ValueType);
             public Insn Mul => Binop.Mul(ValueType);
             public Insn Div => Binop.Div(ValueType, Signedness);
-            public Insn Rem => Binop.Rem(ValueType, Signedness);
-
-            public Insn And => Binop.And(ValueType);
-            public Insn Or => Binop.Or(ValueType);
-            public Insn Xor => Binop.Xor(ValueType);
 
             public Insn EQ => Binop.Eq(ValueType);
             public Insn NE => Binop.Ne(ValueType);
@@ -93,6 +89,11 @@ namespace Six.Six.Instructions
         public abstract class Inn<TValue> : Xnn<TValue>
             where TValue : struct
         {
+            public Insn Rem => Binop.Rem(ValueType, Signedness);
+
+            public Insn And => Binop.And(ValueType);
+            public Insn Or => Binop.Or(ValueType);
+            public Insn Xor => Binop.Xor(ValueType);
         }
 
         public class S32Impl : Inn<int>

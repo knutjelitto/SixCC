@@ -39,11 +39,11 @@ namespace Six.Six.Sema
             public Expr[] Exprs { get; }
         }
 
-        public abstract record Const(Type Type, Insn Insn) : Primitive(Type);
+        public record Const(Type Type, Insn Insn) : Primitive(Type);
 
-        public sealed record ConstI32(Type Type, int Value) : Const(Type, Insn.S32.Const(Value));
+        public sealed record ConstS32(Type Type, int Value) : Const(Type, Insn.S32.Const(Value));
         public sealed record ConstU32(Type Type, uint Value) : Const(Type, Insn.U32.Const(Value));
-        public sealed record ConstI64(Type Type, long Value) : Const(Type, Insn.S64.Const(Value));
+        public sealed record ConstS64(Type Type, long Value) : Const(Type, Insn.S64.Const(Value));
         public sealed record ConstU64(Type Type, ulong Value) : Const(Type, Insn.U64.Const(Value));
         public sealed record ConstString(Type Type, Func<Ptr> Resolve) : Primitive(Type);
 

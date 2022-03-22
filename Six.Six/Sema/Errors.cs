@@ -52,5 +52,20 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
+        public DiagnosticException MustBeAnInterface(A.Type tree)
+        {
+            var diagnostic = new SemanticError(tree.GetLocation(), $"{Names.Nomes.Interface} type expected here");
+
+            return new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException TooBigInteger(A.TreeNode tree, string? what = null)
+        {
+            if (what != null)
+            {
+                return new DiagnosticException(new SemanticError(tree.GetLocation(), $"value is too big to fit any integer"));
+            }
+            return new DiagnosticException(new SemanticError(tree.GetLocation(), $"value is too big to fit '{what}'"));
+        }
     }
 }

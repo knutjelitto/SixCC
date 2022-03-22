@@ -13,38 +13,62 @@ namespace Six.Six.Sema
     {
         public Decl.Class? ResolveExtends(Decl.Classy classy)
         {
+            if (classy.Name == "Complex")
+            {
+                Assert(true);
+            }
             if (classy is Decl.Interface)
             {
                 return null;
             }
-            if (classy.ADecl is A.With.Extends ext)
+            if (classy.AClassy is A.With.Extends ext && ext.Extends is A.Type extended)
             {
-                if (ext.Extends is A.Type extended)
-                {
-                    var super = ResolveType(classy.Block.Head, extended);
+                var super = ResolveType(classy.Block.Head, extended);
 
-                    if (super is Type.ClassyReference reference && reference.Classy is Decl.Class superClass)
-                    {
-                        return superClass;
-                    }
-                    else
-                    {
-                        // super must be a class
-                        Assert(false);
-                        throw new InvalidOperationException();
-                    }
+                if (super is Type.ClassyReference reference && reference.Classy is Decl.Class superClass)
+                {
+                    return superClass;
                 }
-                return null;
+                else
+                {
+                    // super must be a class
+                    Assert(false);
+                    throw new InvalidOperationException();
+                }
             }
-            else if (!classy.ADecl.IsNative())
+            else if (classy.FullName == Names.Core.CoreAnything)
             {
-                return Module.CoreFindClass(classy.ADecl, Names.Core.Basic);
+                return null;
             }
             else
             {
-                Assert(false);
-                throw new InvalidOperationException();
+                return Module.CoreFindClass(classy.ADecl, Names.Core.Basic);
             }
+        }
+
+        public List<Decl.Interface> ResolveSatisfies(Decl.Classy classy)
+        {
+            var list = new List<Decl.Interface>();
+
+            if (classy.AClassy.Satisfies is A.Type.Types aTypes)
+            {
+                foreach (var aType in aTypes)
+                {
+                    var type = ResolveType(classy.Block.Head, aType);
+
+                    if (type is Type.Reference reference && reference.Decl is Decl.Interface iface)
+                    {
+                        list.Add(iface);
+                    }
+                    else
+                    {
+                        throw Errors.MustBeAnInterface(aType);
+                    }
+                }
+            }
+
+
+            return list;
         }
 
         public Type ResolveDeclType(Decl decl)

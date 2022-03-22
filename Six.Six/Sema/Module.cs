@@ -77,7 +77,15 @@ namespace Six.Six.Sema
             Diagnostics.Add(diagnostic);
         }
 
-        public void WhenDiagnostics()
+        public void Add(DiagnosticException error)
+        {
+            foreach (var diagnostic in error.Diagnostics)
+            {
+                Add(diagnostic);
+            }
+        }
+
+        private void WhenDiagnostics()
         {
             if (Diagnostics.Count > 0)
             {
@@ -85,11 +93,10 @@ namespace Six.Six.Sema
             }
         }
 
-        public void Dump(Writer writer)
+        public void WriteErrors()
         {
-            if (Diagnostics.Count > 0)
+            using (var writer = $"six.core.errors.txt".Writer())
             {
-                writer.WriteLine("========== ERROR");
                 foreach (var diagnostic in Diagnostics)
                 {
                     diagnostic.Report(writer);
@@ -97,7 +104,11 @@ namespace Six.Six.Sema
                 writer.WriteLine();
             }
 
-            writer.WriteLine("========== DEFINED");
+            WhenDiagnostics();
+        }
+
+        public void Dump(Writer writer)
+        {
             DumpDeclarations(writer);
         }
 

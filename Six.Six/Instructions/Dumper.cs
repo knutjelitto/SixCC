@@ -21,15 +21,10 @@ namespace Six.Six.Instructions
 
         public void Dump(Decl.Classy classy)
         {
-            comment2(() =>
+            comment($"(; {ClassyHead(classy)} ;)", () =>
             {
                 Walker(classy);
             });
-        }
-
-        private void comment2(Action action)
-        {
-            indent("(; (; ;)", ";)", action);
         }
 
         private void comment(string title, Action action)
@@ -49,24 +44,18 @@ namespace Six.Six.Instructions
 
         private void WalkMembers(Block block)
         {
-            indent(() =>
+            foreach (var member in block.Members)
             {
-                foreach (var member in block.Members)
-                {
-                    Walker(member);
-                }
-            });
+                Walker(member);
+            }
         }
 
         private void WalkMethods(Block block)
         {
-            indent(() =>
+            foreach (var member in block.Members.OfType<Decl.Funcy>())
             {
-                foreach (var member in block.Members.OfType<Decl.Funcy>())
-                {
-                    Walker(member);
-                }
-            });
+                Walker(member);
+            }
         }
 
         private string Extends(Decl.Classy decl)
@@ -80,12 +69,16 @@ namespace Six.Six.Instructions
 
         private void WalkClassy(Decl.Classy decl)
         {
-            wl($"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}");
-            indent(() => WriteLayout(decl));
+            WriteLayout(decl);
             WalkMethods(decl.Block);
         }
 
-        private void WriteLayout(Decl.Classy decl)
+        public string ClassyHead(Decl.Classy decl)
+        {
+            return $"{decl.GetType().Name.ToLowerInvariant()} {decl.FullName}{Extends(decl)}";
+        }
+
+        public void WriteLayout(Decl.Classy decl)
         {
             var layout = decl.Layout;
             Assert(layout.Done);
@@ -96,7 +89,17 @@ namespace Six.Six.Instructions
                 {
                     foreach (var field in layout.Fields)
                     {
-                        wl($"+{field.Offset,-3} field {field.Name} {Emitter.Lower(field.Type).Wasm.Type} = ...");
+                        wl($"+{field.Field.Offset,-3} field {field.Field.Name} {Emitter.Lower(field.Field.Type).Wasm.Type} = ...");
+                    }
+                });
+            }
+            if (layout.Slots.Count > 0)
+            {
+                comment("slots", () =>
+                {
+                    foreach (var slot in layout.Slots)
+                    {
+                        wl($"{slot.Index,-3} slot {slot.Funcy.FullName}");
                     }
                 });
             }

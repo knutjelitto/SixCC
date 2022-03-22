@@ -58,7 +58,7 @@ namespace Six.Six.Instructions
             if (expr.Classy.IsNative && expr.Function.IsNative)
             {
                 var b = Builtins.Resolve(expr.Classy);
-                var m = b.Infix(expr.Function.Name.Text)(expr.Arg1, expr.Arg2);
+                var m = b.Infix(expr.Function.Name)(expr.Arg1, expr.Arg2);
 
                 Emit(m);
             }
@@ -74,7 +74,7 @@ namespace Six.Six.Instructions
             if (expr.Classy.IsNative && expr.Function.IsNative)
             {
                 var b = Builtins.Resolve(expr.Classy);
-                var m = b.Prefix(expr.Function.Name.Text)(expr.Arg);
+                var m = b.Prefix(expr.Function.Name)(expr.Arg);
 
                 Emit(m);
             }
@@ -107,6 +107,11 @@ namespace Six.Six.Instructions
             wl($"{Insn.End}");
         }
 
+        private void Handle(Expr.Unop expr)
+        {
+            Emit(expr.Arg);
+            Emit(expr.Insn);
+        }
 
         private void Handle(Expr.Binop expr)
         {

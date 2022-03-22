@@ -43,7 +43,7 @@ namespace Six.Six.Builtins
 
         public Builtin Resolve(Decl named)
         {
-            return Resolve(named.Name.Text);
+            return Resolve(named.Name);
         }
 
         private Builtin Resolve(string name)

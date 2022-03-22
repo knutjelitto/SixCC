@@ -96,6 +96,20 @@
             public IReadOnlyList<Type> Parameters { get; }
         }
 
+        public sealed class Intersection : Type
+        {
+            private readonly List<Type> types = new();
+            
+            public Intersection()
+            {
+            }
+
+            public void Add(Type type)
+            {
+                types.Add(type);
+            }
+        }
+
         public sealed class Tuple : TypeImpl
         {
             public Tuple(params Type[] types)

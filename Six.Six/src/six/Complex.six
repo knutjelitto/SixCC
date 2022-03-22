@@ -5,8 +5,6 @@ shared prefinal class Complex
     var int re = -1;
     var int im = -1;
 
-    //var Null null = null;
-
     shared new (int re = 0, int im = 0)
     {
         self.re = re;

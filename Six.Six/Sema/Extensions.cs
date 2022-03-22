@@ -53,6 +53,11 @@ namespace Six.Six.Sema
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Shared);
         }
 
+        public static bool IsSealed(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Sealed);
+        }
+
         public static bool IsNative(this A.TreeNode node)
         {
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Native);
@@ -66,6 +71,16 @@ namespace Six.Six.Sema
         public static bool IsAbstract(this A.TreeNode node)
         {
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Abstract);
+        }
+
+        public static bool IsVirtual(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Virtual);
+        }
+
+        public static bool IsOverride(this A.TreeNode node)
+        {
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Override);
         }
 
         public static bool IsPrefinal(this A.TreeNode node)

@@ -1,5 +1,5 @@
 ﻿using Six.Six.Compiler;
-
+using System;
 using S = Six.Six.Sema;
 
 namespace Six.Six
@@ -25,7 +25,21 @@ namespace Six.Six
 
             if (module != null)
             {
-                new Wasmtime().Run(module);
+                try
+                {
+                    new Wasmtime().Run(module);
+
+                    if (module.HasErrors)
+                    {
+                        module.WriteErrors();
+                    }
+                }
+                catch (Exception exception)
+                {
+                    System.Console.WriteLine();
+                    System.Console.WriteLine(exception.Message);
+                    System.Console.WriteLine(exception.ToString());
+                }
             }
         }
 

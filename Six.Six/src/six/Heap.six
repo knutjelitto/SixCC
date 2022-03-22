@@ -1,14 +1,13 @@
 namespace six.core;
 
 shared let uint __data_start = 0;
-shared let uint __data_end = 0;
 shared let uint __heap_start = 0;
-shared var uint __heap_next = 0;
+shared var uint __heap_current = 0;
 
 shared uint allocate(uint size)
 {
-    let allocated = (__heap_next + 15u32) & #FFFFFFF0u32;
-    __heap_next = allocated + size;
+    let allocated = (__heap_current + 15u32) & #FFFFFFF0u32;
+    __heap_current = allocated + size;
     return allocated;
 }
 

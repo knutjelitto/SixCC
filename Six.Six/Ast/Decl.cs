@@ -72,7 +72,7 @@ namespace Six.Six.Ast
     public partial interface Decl : StmtOrDecl, With.Name
     {
         public interface Preluded : Decl, With.Prelude { }
-        public interface Classy : Preluded, With.Body { }
+        public interface Classy : Preluded, With.Satisfies, With.Body { }
         public interface Funcy : Preluded, With.Parameters, With.Body { }
 
         public sealed record SelfValue(Name Name) : Decl, With.Name

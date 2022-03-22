@@ -110,8 +110,6 @@ namespace Six.Six.Compiler
                 Report();
             }
 
-            Module.WhenDiagnostics();
-
             return ok;
         }
 

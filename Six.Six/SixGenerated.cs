@@ -1,4 +1,4 @@
-// <generated from="C:\\Dev\\Knut\\Six\\Six.Six\\Six.six" at="21.03.2022 09:08:41" />
+// <generated from="D:\\Six\\Six.Six\\Six.six" at="21.03.2022 21:43:42" />
 
 using Six.Runtime;
 using Six.Runtime.Dfa;
@@ -85,9 +85,9 @@ namespace Six.Six
                 /*  61 PlainRuleOp      */ __Matchers[61] = _extends = new Mx.PlainRule(this, 61, "extends") { Builder = nodes => nodes[0] };
                 /*  62 PlainRuleOp      */ __Matchers[62] = _extendedType = new Mx.PlainRule(this, 62, "extended-type") { Builder = nodes => nodes[0] };
                 /*  63 PlainRuleOp      */ __Matchers[63] = _satisfies = new Mx.PlainRule(this, 63, "satisfies") { Builder = nodes => nodes[0] };
-                /*  64 PlainRuleOp      */ __Matchers[64] = _constraints = new Mx.PlainRule(this, 64, "constraints") { Builder = nodes => nodes[0] };
-                /*  65 PlainRuleOp      */ __Matchers[65] = _constraint = new Mx.PlainRule(this, 65, "constraint") { Builder = nodes => nodes[0] };
-                /*  66 PlainRuleOp      */ __Matchers[66] = _unionTypeList = new Mx.PlainRule(this, 66, "union-type-list") { Builder = nodes => nodes[0] };
+                /*  64 PlainRuleOp      */ __Matchers[64] = _unionTypeList = new Mx.PlainRule(this, 64, "union-type-list") { Builder = nodes => nodes[0] };
+                /*  65 PlainRuleOp      */ __Matchers[65] = _constraints = new Mx.PlainRule(this, 65, "constraints") { Builder = nodes => nodes[0] };
+                /*  66 PlainRuleOp      */ __Matchers[66] = _constraint = new Mx.PlainRule(this, 66, "constraint") { Builder = nodes => nodes[0] };
                 /*  67 PlainRuleOp      */ __Matchers[67] = _caseTypes = new Mx.PlainRule(this, 67, "case-types") { Builder = nodes => nodes[0] };
                 /*  68 PlainRuleOp      */ __Matchers[68] = _caseTypeList = new Mx.PlainRule(this, 68, "case-type-list") { Builder = nodes => nodes[0] };
                 /*  69 PlainRuleOp      */ __Matchers[69] = _pattern = new Mx.PlainRule(this, 69, "pattern") { Builder = nodes => nodes[0] };
@@ -319,12 +319,12 @@ namespace Six.Six
                 /* 295 SeqOp            */ __Matchers[295] = new Mx.Seq(this, 295, "_295:(':',>extended-type)") { Builder = nodes => new CExtends(nodes) };
                 /* 296 StringOp         */ __Matchers[296] = new Mx.Keyword(this, 296, "'is'", "is") { Creator = node => new RLiteral(node) };
                 /* 297 SeqOp            */ __Matchers[297] = new Mx.Seq(this, 297, "_297:('is',>union-type-list)") { Builder = nodes => new CSatisfies(nodes) };
-                /* 298 PlusOp           */ __Matchers[298] = new Mx.Plus(this, 298, "+(>constraint)") { Builder = nodes => new CConstraints(nodes) };
-                /* 299 StringOp         */ __Matchers[299] = new Mx.Keyword(this, 299, "'where'", "where") { Creator = node => new RLiteral(node) };
-                /* 300 SeqOp            */ __Matchers[300] = new Mx.Seq(this, 300, "_300:('where',>name,?(>generic-parameters),?(>case-types),?(>satisfies))") { Builder = nodes => new CConstraint(nodes) };
-                /* 301 SeqOp            */ __Matchers[301] = new Mx.Seq(this, 301, "_301:(',',>type)") { Builder = nodes => new RSequence(nodes) };
-                /* 302 StarOp           */ __Matchers[302] = new Mx.Star(this, 302, "*(_301:(',',>type))") { Builder = nodes => new RStar<RSequence>(nodes) };
-                /* 303 SeqOp            */ __Matchers[303] = new Mx.Seq(this, 303, "_303:(>type,*(_301:(',',>type)))") { Builder = nodes => new CUnionTypeList(nodes) };
+                /* 298 SeqOp            */ __Matchers[298] = new Mx.Seq(this, 298, "_298:('&',>primary-type)") { Builder = nodes => new RSequence(nodes) };
+                /* 299 StarOp           */ __Matchers[299] = new Mx.Star(this, 299, "*(_298:('&',>primary-type))") { Builder = nodes => new RStar<RSequence>(nodes) };
+                /* 300 SeqOp            */ __Matchers[300] = new Mx.Seq(this, 300, "_300:(>primary-type,*(_298:('&',>primary-type)))") { Builder = nodes => new CUnionTypeList(nodes) };
+                /* 301 PlusOp           */ __Matchers[301] = new Mx.Plus(this, 301, "+(>constraint)") { Builder = nodes => new CConstraints(nodes) };
+                /* 302 StringOp         */ __Matchers[302] = new Mx.Keyword(this, 302, "'where'", "where") { Creator = node => new RLiteral(node) };
+                /* 303 SeqOp            */ __Matchers[303] = new Mx.Seq(this, 303, "_303:('where',>name,?(>generic-parameters),?(>case-types),?(>satisfies))") { Builder = nodes => new CConstraint(nodes) };
                 /* 304 StringOp         */ __Matchers[304] = new Mx.Keyword(this, 304, "'of'", "of") { Creator = node => new RLiteral(node) };
                 /* 305 SeqOp            */ __Matchers[305] = new Mx.Seq(this, 305, "_305:('of',>case-type-list)") { Builder = nodes => new CCaseTypes(nodes) };
                 /* 306 SeqOp            */ __Matchers[306] = new Mx.Seq(this, 306, "_306:('|',>type)") { Builder = nodes => new RSequence(nodes) };
@@ -522,9 +522,9 @@ namespace Six.Six
                 /*  61 PlainRuleOp      */ _extends.Set(__Matchers[295]);
                 /*  62 PlainRuleOp      */ _extendedType.Set(_type);
                 /*  63 PlainRuleOp      */ _satisfies.Set(__Matchers[297]);
-                /*  64 PlainRuleOp      */ _constraints.Set(__Matchers[298]);
-                /*  65 PlainRuleOp      */ _constraint.Set(__Matchers[300]);
-                /*  66 PlainRuleOp      */ _unionTypeList.Set(__Matchers[303]);
+                /*  64 PlainRuleOp      */ _unionTypeList.Set(__Matchers[300]);
+                /*  65 PlainRuleOp      */ _constraints.Set(__Matchers[301]);
+                /*  66 PlainRuleOp      */ _constraint.Set(__Matchers[303]);
                 /*  67 PlainRuleOp      */ _caseTypes.Set(__Matchers[305]);
                 /*  68 PlainRuleOp      */ _caseTypeList.Set(__Matchers[308]);
                 /*  69 PlainRuleOp      */ _pattern.Set(_namePattern);
@@ -710,11 +710,11 @@ namespace Six.Six
                 /* 293 SeqOp            */ __Matchers[293].Set(__Matchers[276], _expression);
                 /* 295 SeqOp            */ __Matchers[295].Set(__Matchers[294], _extendedType);
                 /* 297 SeqOp            */ __Matchers[297].Set(__Matchers[296], _unionTypeList);
-                /* 298 PlusOp           */ __Matchers[298].Set(_constraint);
-                /* 300 SeqOp            */ __Matchers[300].Set(__Matchers[299], _name, __Matchers[257], __Matchers[269], __Matchers[268]);
-                /* 301 SeqOp            */ __Matchers[301].Set(__Matchers[193], _type);
-                /* 302 StarOp           */ __Matchers[302].Set(__Matchers[301]);
-                /* 303 SeqOp            */ __Matchers[303].Set(_type, __Matchers[302]);
+                /* 298 SeqOp            */ __Matchers[298].Set(__Matchers[253], _primaryType);
+                /* 299 StarOp           */ __Matchers[299].Set(__Matchers[298]);
+                /* 300 SeqOp            */ __Matchers[300].Set(_primaryType, __Matchers[299]);
+                /* 301 PlusOp           */ __Matchers[301].Set(_constraint);
+                /* 303 SeqOp            */ __Matchers[303].Set(__Matchers[302], _name, __Matchers[257], __Matchers[269], __Matchers[268]);
                 /* 305 SeqOp            */ __Matchers[305].Set(__Matchers[304], _caseTypeList);
                 /* 306 SeqOp            */ __Matchers[306].Set(__Matchers[254], _type);
                 /* 307 StarOp           */ __Matchers[307].Set(__Matchers[306]);
@@ -1147,7 +1147,7 @@ namespace Six.Six
                 );
                 _naturalLiteral_DFA.States[1].Set(
                     new DfaTrans(_naturalLiteral_DFA.States[1], new DfaInterval(48, 57), new DfaInterval(95, 95)),
-                    new DfaTrans(_naturalLiteral_DFA.States[2], new DfaInterval(105, 105), new DfaInterval(117, 117))
+                    new DfaTrans(_naturalLiteral_DFA.States[2], new DfaInterval(115, 115), new DfaInterval(117, 117))
                 );
                 _naturalLiteral_DFA.States[2].Set(
                     new DfaTrans(_naturalLiteral_DFA.States[3], new DfaInterval(56, 56)),
@@ -1171,14 +1171,14 @@ namespace Six.Six
                 );
                 _naturalLiteral_DFA.States[8].Set(
                     new DfaTrans(_naturalLiteral_DFA.States[8], new DfaInterval(48, 57), new DfaInterval(65, 70), new DfaInterval(95, 95), new DfaInterval(97, 102)),
-                    new DfaTrans(_naturalLiteral_DFA.States[2], new DfaInterval(105, 105), new DfaInterval(117, 117))
+                    new DfaTrans(_naturalLiteral_DFA.States[2], new DfaInterval(115, 115), new DfaInterval(117, 117))
                 );
                 _naturalLiteral_DFA.States[9].Set(
                     new DfaTrans(_naturalLiteral_DFA.States[10], new DfaInterval(48, 49))
                 );
                 _naturalLiteral_DFA.States[10].Set(
                     new DfaTrans(_naturalLiteral_DFA.States[10], new DfaInterval(48, 49), new DfaInterval(95, 95)),
-                    new DfaTrans(_naturalLiteral_DFA.States[2], new DfaInterval(105, 105), new DfaInterval(117, 117))
+                    new DfaTrans(_naturalLiteral_DFA.States[2], new DfaInterval(115, 115), new DfaInterval(117, 117))
                 );
                 _stringStart_DFA.Set(
                     new DfaState(0, false),
@@ -1860,9 +1860,9 @@ namespace Six.Six
             private readonly Mx.PlainRule _extends;
             private readonly Mx.PlainRule _extendedType;
             private readonly Mx.PlainRule _satisfies;
+            private readonly Mx.PlainRule _unionTypeList;
             private readonly Mx.PlainRule _constraints;
             private readonly Mx.PlainRule _constraint;
-            private readonly Mx.PlainRule _unionTypeList;
             private readonly Mx.PlainRule _caseTypes;
             private readonly Mx.PlainRule _caseTypeList;
             private readonly Mx.PlainRule _pattern;
@@ -2047,9 +2047,9 @@ namespace Six.Six
         public interface ICExtends : IRNode {}
         public interface ICExtendedType : IRNode {}
         public interface ICSatisfies : IRNode {}
+        public interface ICUnionTypeList : IRNode {}
         public interface ICConstraints : IRNode {}
         public interface ICConstraint : IRNode {}
-        public interface ICUnionTypeList : IRNode {}
         public interface ICCaseTypes : IRNode {}
         public interface ICCaseTypeList : IRNode {}
         public interface ICPattern : IRNode {}
@@ -2623,6 +2623,12 @@ namespace Six.Six
             public CUnionTypeList UnionTypeList => Get<CUnionTypeList>(1);
         }
 
+        public partial class CUnionTypeList : RLoop<ICPrimaryType>, ICUnionTypeList
+        {
+            // sequence
+            public CUnionTypeList(params RNode[] children) : base(children) {}
+        }
+
         public partial class CConstraints : RPlus<CConstraint>, ICConstraints
         {
             // +plus+
@@ -2639,12 +2645,6 @@ namespace Six.Six
             public ROptional<CGenericParameters> GenericParameters => Get<ROptional<CGenericParameters>>(2);
             public ROptional<CCaseTypes> CaseTypes => Get<ROptional<CCaseTypes>>(3);
             public ROptional<CSatisfies> Satisfies => Get<ROptional<CSatisfies>>(4);
-        }
-
-        public partial class CUnionTypeList : RLoop<ICType>, ICUnionTypeList
-        {
-            // sequence
-            public CUnionTypeList(params RNode[] children) : base(children) {}
         }
 
         public partial class CCaseTypes : RSequence, ICCaseTypes
@@ -3599,17 +3599,17 @@ namespace Six.Six
                 DefaultImplementation(element);
             }
 
+            protected virtual void Visit(CUnionTypeList element)
+            {
+                DefaultImplementation(element);
+            }
+
             protected virtual void Visit(CConstraints element)
             {
                 DefaultImplementation(element);
             }
 
             protected virtual void Visit(CConstraint element)
-            {
-                DefaultImplementation(element);
-            }
-
-            protected virtual void Visit(CUnionTypeList element)
             {
                 DefaultImplementation(element);
             }

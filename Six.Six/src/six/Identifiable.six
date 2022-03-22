@@ -2,8 +2,8 @@ namespace six.core;
 
 shared interface Identifiable
 {
-    shared abstract bool equals(Object that)
-        ;/*TODO
+    shared abstract bool equals(Object other);
+        /*TODO
         =>  if (is Identifiable that)
             then this === that
             else false;

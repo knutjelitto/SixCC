@@ -38,10 +38,6 @@ namespace Six.Six.Sema
 
         private void Declare(Block parent, A.Decl.Class node)
         {
-            if (node.Satisfies != null)
-            {
-            }
-
             var decl = new Decl.Class(parent, node);
 
             DeclareClassyBody(decl, node);

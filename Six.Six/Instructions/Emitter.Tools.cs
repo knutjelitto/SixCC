@@ -113,7 +113,7 @@ namespace Six.Six.Instructions
             }
             switch (type)
             {
-                case Type.Declared declared when declared.Decl.Name.Text == Names.Core.Anything:
+                case Type.Declared declared when declared.Decl.FullName == Names.Core.CoreAnything:
                     return null;
                 case Builtin builtin when builtin.Name == Names.Core.Anything:
                     return null;

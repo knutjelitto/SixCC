@@ -20,6 +20,7 @@ namespace Six.Six.Sema
         public Module Module { get; }
         public Builtins.Builtins Builtins => Module.Builtins;
         public Emitter Emitter => Module.Emitter;
+        public Errors Errors => Module.Errors;
 
         public void Walk(A.Unit.Code code)
         {

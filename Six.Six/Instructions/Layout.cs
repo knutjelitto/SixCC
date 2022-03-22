@@ -1,12 +1,14 @@
 ﻿using Six.Six.Builtins;
 using Six.Six.Sema;
+using System.Collections;
 
 namespace Six.Six.Instructions
 {
     public class Layout
     {
-        public readonly List<Decl.Field> Fields = new();
-        public readonly List<CallSlot> Slots = new();
+        public readonly FieldList Fields = new();
+        public readonly SlotList Slots = new();
+        public readonly List<IFace> IFaces = new();
 
         public Layout(Decl.Classy classy)
         {
@@ -20,11 +22,6 @@ namespace Six.Six.Instructions
 
         public uint Size { get; private set; } = uint.MaxValue;
         public bool Done { get; private set; }
-
-        public void Add(Decl.Field declaredField)
-        {
-            Fields.Add(declaredField);
-        }
 
         public void Run()
         {
@@ -41,21 +38,11 @@ namespace Six.Six.Instructions
 
         }
 
-        protected void Prefill(List<Decl.Field> subFields)
+        protected void Prefill(SlotList subSlots)
         {
             Run();
 
-            foreach (var field in Fields)
-            {
-                subFields.Add(field);
-            }
-        }
-
-        protected void Prefill(List<CallSlot> subSlots)
-        {
-            Run();
-
-            foreach (var slot in Slots)
+            foreach (var slot in Slots.Slots)
             {
                 subSlots.Add(slot);
             }
@@ -67,8 +54,8 @@ namespace Six.Six.Instructions
 
             if (Classy.Extends != null)
             {
-                Classy.Extends.Layout.Prefill(Fields);
-
+                Classy.Extends.Layout.Run();
+                Fields.AddRange(Classy.Extends.Layout.Fields);
                 fieldOffset = Classy.Extends.Layout.Size;
             }
 
@@ -79,24 +66,13 @@ namespace Six.Six.Instructions
 
             foreach (var field in Fields)
             {
-                var type = Resolver.LowerType(field.Type);
+                var builtin = Emitter.Lower(field.Field.Type);
 
-                if (type is Builtin builtin)
-                {
-                    fieldOffset = builtin.Wasm.Align(fieldOffset);
+                fieldOffset = builtin.Wasm.Align(fieldOffset);
 
-                    field.Offset = fieldOffset;
+                field.Field.Offset = fieldOffset;
 
-                    fieldOffset += builtin.Wasm.MemSize;
-                }
-                else if (type is Type.ClassReference clazz)
-                {
-                    Assert(false);
-                }
-                else
-                {
-                    Assert(false);
-                }
+                fieldOffset += builtin.Wasm.MemSize;
             }
 
             Size = fieldOffset;
@@ -109,6 +85,11 @@ namespace Six.Six.Instructions
                 Classy.Extends.Layout.Prefill(Slots);
             }
 
+            foreach (var iface in Classy.Satisfies.Closure())
+            {
+                IFaces.Add(new IFace(Classy, iface));
+            }
+
             foreach (var member in Classy.Block.Members)
             {
                 switch (member)
@@ -116,24 +97,77 @@ namespace Six.Six.Instructions
                     case Decl.Field:
                         break;
                     case Decl.Attribute attribute:
-                        Slots.Add(new CallSlot(Slots.Count, attribute));
+                        Slots.AddOrUpdate(attribute);
                         break;
                     case Decl.Function function:
-                        Slots.Add(new CallSlot(Slots.Count, function));
+                        Slots.AddOrUpdate(function);
                         break;
                     case Decl.Constructor constructor:
-                        Slots.Add(new CallSlot(Slots.Count, constructor));
+                        Slots.AddOrUpdate(constructor);
                         break;
                     default:
                         Assert(false);
                         throw new System.NotImplementedException();
                 }
             }
+
         }
 
-        public class CallSlot
+        public class IFace
         {
-            public CallSlot(int index, Decl.Funcy funcy)
+            public readonly List<LSlot> Slots = new();
+
+            public IFace(Decl.Classy classy, Decl.Interface iface)
+            {
+                Classy = classy;
+                Interface = iface;
+            }
+
+            public Decl.Classy Classy { get; }
+            public Decl.Interface Interface { get; }
+            public string Name => Interface.Name;
+
+            public string FullName => $"{Classy.FullName}@{Interface.FullName}";
+        }
+
+        public class LField
+        {
+            public LField(Decl.Field field)
+            {
+                Field = field;
+            }
+
+            public Decl.Field Field { get; }
+        }
+
+        public class FieldList : IReadOnlyList<LField>
+        {
+            public readonly List<LField> Fields = new();
+
+            public void Add(Decl.Field field)
+            {
+                Fields.Add(new LField(field));
+            }
+
+            public void Add(LField field)
+            {
+                Fields.Add(field);
+            }
+
+            public void AddRange(IEnumerable<LField> fields)
+            {
+                Fields.AddRange(fields);
+            }
+
+            public LField this[int index] => Fields[index];
+            public int Count => Fields.Count;
+            public IEnumerator<LField> GetEnumerator() => Fields.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Fields).GetEnumerator();
+        }
+
+        public class LSlot
+        {
+            public LSlot(int index, Decl.Funcy funcy)
             {
                 Index = index;
                 Funcy = funcy;
@@ -141,6 +175,35 @@ namespace Six.Six.Instructions
 
             public int Index { get; }
             public Decl.Funcy Funcy { get; }
+        }
+
+        public class SlotList : IReadOnlyList<LSlot>
+        {
+            public readonly List<LSlot> Slots = new();
+
+
+            public void Add(LSlot slot)
+            {
+                Slots.Add(slot);
+            }
+
+            public void AddOrUpdate(Decl.Funcy funcy)
+            {
+                var already = Slots.Where(s => s.Funcy.Name == funcy.Name).FirstOrDefault();
+                if (already != null)
+                {
+                    Slots[already.Index] = new LSlot(already.Index, funcy);
+                }
+                else
+                {
+                    Slots.Add(new LSlot(Slots.Count, funcy));
+                }
+            }
+
+            public LSlot this[int index] => Slots[index];
+            public int Count => Slots.Count;
+            public IEnumerator<LSlot> GetEnumerator() => Slots.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Slots).GetEnumerator();
         }
     }
 }

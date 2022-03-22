@@ -62,7 +62,7 @@ namespace Six.Six.Sema
 
         public T Declare<T>(T decl, string? name = null) where T : Decl
         {
-            name ??= decl.Name.Text;
+            name ??= decl.Name;
 
             if (declarations.TryGetValue(name, out var already))
             {

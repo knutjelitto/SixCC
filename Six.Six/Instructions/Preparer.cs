@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using Six.Core.Errors;
 using Six.Six.Sema;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Instructions
 {
-    public class Prepper : EmitBase
+    public class Preparer : EmitBase
     {
-        public Prepper(Emitter emitter, Writer writer)
+        public Preparer(Module module, Writer writer)
             : base(writer)
         {
-            Emitter = emitter;
+            Module = module;
         }
 
-        public Emitter Emitter { get; }
+        public Module Module { get; }
+        public Emitter Emitter => Module.Emitter;
 
-        public void Prep()
+        public void Prepare()
         {
             foreach (var ns in Emitter.Module.GetNamespaces())
             {
@@ -28,7 +30,14 @@ namespace Six.Six.Instructions
 
         private void Walk(Entity entity)
         {
-            Prep((dynamic)entity);
+            try
+            {
+                Prep((dynamic)entity);
+            }
+            catch (DiagnosticException diagnostic)
+            {
+                Module.Add(diagnostic);
+            }
         }
 
         private void Walk(Expr? expr)
@@ -203,7 +212,7 @@ namespace Six.Six.Instructions
             //--
         }
 
-        private void Prep(Expr.ConstI32 expr)
+        private void Prep(Expr.ConstS32 expr)
         {
             //--
         }

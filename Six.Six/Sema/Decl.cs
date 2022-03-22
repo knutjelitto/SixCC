@@ -6,8 +6,8 @@ namespace Six.Six.Sema
     public interface Decl : Member
     {
         A.Decl ADecl { get; }
-        A.Name Name { get; }
         Type Type { get; }
+        string Name { get; }
         string FullName { get; }
 
         Module Module { get; }
@@ -16,28 +16,34 @@ namespace Six.Six.Sema
         bool IsStatic { get; }
         bool IsNative { get; }
         bool IsShared { get; }
+        bool IsSealed { get; }
 
         public abstract class Classy : Declaration, Typy
         {
-            private Class? extends;
             private Layout? layout;
+            private Class? extends;
+            private List<Interface>? satisfies;
 
             public Classy(Block parent, A.Decl.Classy aDecl)
                 : base(parent, aDecl)
             {
                 Block = new ClassBlock(this, parent);
+                AClassy = aDecl;
                 parent.Content.Declare(this, aDecl.Name.Text);
                 parent.Members.Add(this);
             }
 
             public ClassBlock Block { get; }
+            public A.Decl.Classy AClassy { get; }
+
             public List<Field> Fields { get; } = new List<Field>();
 
+            public Layout Layout => layout ??= new Layout(this);
             public override string FullName => Block.FullName();
 
             public Class? Extends => extends ??= Resolver.ResolveExtends(this);
+            public List<Interface> Satisfies => satisfies ??= Resolver.ResolveSatisfies(this);
 
-            public Layout Layout => layout ??= new Layout(this);
         }
 
         public class Class : Classy
@@ -90,10 +96,12 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 Block = new FuncBlock(this, parent, name);
+                AFuncy = aDecl;
                 parent.Content.Declare(this, name);
             }
 
             public FuncBlock Block { get; }
+            public A.Decl.Funcy AFuncy { get; }
             public Scope Scope => Block.Funcy.Container;
 
             public IReadOnlyList<Local> Parameters { get; } = new List<Local>();
@@ -209,7 +217,7 @@ namespace Six.Six.Sema
         public sealed class SelfParameter : Local
         {
             public SelfParameter(FuncBlock parent, Type type, int index)
-                : base(parent, new A.Decl.SelfValue(new A.Name.ArtificalId(parent.Funcy.Name.Tree, Names.Core.SelfValue)), index)
+                : base(parent, new A.Decl.SelfValue(new A.Name.ArtificalId(parent.Funcy.AFuncy.Name.Tree, Names.Core.SelfValue)), index)
             {
                 Type = type;
             }
@@ -377,16 +385,21 @@ namespace Six.Six.Sema
             public Scope Container => Parent.Content;
             public A.Decl ADecl { get; }
             public abstract Type Type { get; }
-            public A.Name Name => ADecl.Name;
+            public string Name => ADecl.Name.Text;
             public abstract string FullName { get; }
 
             public Module Module => Container.Module;
             public Resolver Resolver => Container.Module.Resolver;
 
-            public bool IsStatic => ADecl.IsStatic();
-            public bool IsNative => ADecl.IsNative();
             public bool IsShared => ADecl.IsShared();
+            public bool IsNative => ADecl.IsNative();
+            public bool IsStatic => ADecl.IsStatic();
+
             public bool IsAbstract => ADecl.IsAbstract();
+            public bool IsOverride => ADecl.IsOverride();
+            public bool IsVirtual => ADecl.IsVirtual();
+            public bool IsSealed => ADecl.IsSealed();
+
             public bool IsPrefinal => ADecl.IsPrefinal();
         }
     }

@@ -7,7 +7,12 @@ namespace Six.Six.Instructions
     {
         public void EmitModule()
         {
-            Prepper.Prep();
+            Preparer.Prepare();
+
+            if (Module.HasErrors)
+            {
+                return;
+            }
 
             wl($"(module");
             indent(() =>
@@ -20,7 +25,7 @@ namespace Six.Six.Instructions
                 wl();
                 foreach (var global in Module.GetGlobals())
                 {
-                    wl($"(global{ IdFor(global)}{ExportIff(global)}{TypeFor(global)}");
+                    wl($"(global{IdFor(global)}{ExportIff(global)}{TypeFor(global)}");
                     indent(() => Emit(global.Value));
                     wl($")");
                 }

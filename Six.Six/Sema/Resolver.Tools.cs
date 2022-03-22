@@ -14,17 +14,37 @@ namespace Six.Six.Sema
         {
             var text = ExtractSuffix(tree, out var suffix);
 
-            var value = ConvertNatural(text);
+            var value = ConvertNatural(tree, text);
 
             switch (suffix)
             {
-                case "i32":
-                    return new Expr.ConstI32(Module.CoreFindType(Names.Core.S32), (int)value);
-                case "i64":
-                    return new Expr.ConstI64(Module.CoreFindType(Names.Core.S64), (long)value);
+                case "s32":
+                    if (value > int.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), int.MaxValue);
+                    }
+                    return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                case "s64":
+                    if (value > long.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Expr.ConstS64(Module.CoreFindType(Names.Core.S64), long.MaxValue);
+                    }
+                    return new Expr.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
                 case "u32":
+                    if (value > uint.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), uint.MaxValue);
+                    }
                     return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
                 case "u64":
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), ulong.MaxValue);
+                    }
                     return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), (ulong)value);
                 case "":
                     if (value > long.MaxValue)
@@ -35,13 +55,13 @@ namespace Six.Six.Sema
                     {
                         if (value > uint.MaxValue)
                         {
-                            return new Expr.ConstI64(Module.CoreFindType(Names.Core.S64), (long)value);
+                            return new Expr.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
                         }
                         return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
                     }
                     else
                     {
-                        return new Expr.ConstI32(Module.CoreFindType(Names.Core.S32), (int)value);
+                        return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
                     }
                 default:
                     Assert(false);
@@ -50,34 +70,49 @@ namespace Six.Six.Sema
 
         }
 
-        public ulong ConvertNatural(string text)
+        public ulong ConvertNatural(A.Expression.NaturalNumber tree, string text)
         {
             if (text.StartsWith('#'))
             {
-                ulong value = 0;
+                decimal value = 0;
                 foreach (var c in text[1..])
                 {
                     value = value * 16 + (ulong)hexValue(c);
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree));
+                        return ulong.MaxValue;
+                    }
                 }
-                return value;
+                return (ulong)value;
             }
             else if (text.StartsWith('$'))
             {
-                ulong value = 0;
+                decimal value = 0;
                 foreach (var c in text[1..])
                 {
                     value = value * 2 + (ulong)binValue(c);
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree));
+                        return ulong.MaxValue;
+                    }
                 }
-                return value;
+                return (ulong)value;
             }
             else
             {
-                ulong value = 0;
+                decimal value = 0;
                 foreach (var c in text)
                 {
                     value = value * 10 + (ulong)decValue(c);
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree));
+                        return ulong.MaxValue;
+                    }
                 }
-                return value;
+                return (ulong)value;
             }
 
             int binValue(char c)

@@ -321,16 +321,16 @@ satisfies
     : 'is' union-type-list
     ;
 
+union-type-list
+    : primary-type ('&' primary-type)*
+    ;
+
 constraints
     : constraint+
     ;
 
 constraint
     : 'where' name generic-parameters? case-types? satisfies?
-    ;
-
-union-type-list
-    : type (',' type)*
     ;
 
 case-types
@@ -888,10 +888,10 @@ natural-number
     ;
 
 natural-suffix
-    | 'i8'
-    | 'i16'
-    | 'i32'
-    | 'i64'
+    | 's8'
+    | 's16'
+    | 's32'
+    | 's64'
     | 'u8'
     | 'u16'
     | 'u32'

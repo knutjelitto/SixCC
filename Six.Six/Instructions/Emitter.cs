@@ -21,7 +21,7 @@ namespace Six.Six.Instructions
         public readonly StringData StringData;
         public readonly ClassData ClassData;
         public readonly FunctionTable GlobalFunctions;
-        public readonly Prepper Prepper;
+        public readonly Preparer Preparer;
 
         public Emitter(Module module, Writer writer)
             : base(writer)
@@ -32,7 +32,7 @@ namespace Six.Six.Instructions
             StringData = new StringData(writer, Module.DataAndHeap);
             ClassData = new ClassData(this, Module.DataAndHeap);
             GlobalFunctions = new FunctionTable(writer, globalFunctionsTableName);
-            Prepper = new Prepper(this, writer);
+            Preparer = new Preparer(Module, writer);
         }
 
         public Module Module { get; }
@@ -54,10 +54,12 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
+#if false
         private void Handle(Decl.Attribute decl)
         {
             Assert(true);
         }
+#endif
 
         private void Handle(Decl.Field decl)
         {
@@ -71,10 +73,15 @@ namespace Six.Six.Instructions
 
         private void Handle(Decl.Classy decl)
         {
-            foreach (var member in decl.Block.Members)
+            wl($"(; {dumper.ClassyHead(decl)} ;)");
+            indent(() =>
             {
-                Emit(member);
-            }
+                dumper.WriteLayout(decl);
+                foreach (var member in decl.Block.Members)
+                {
+                    Emit(member);
+                }
+            });
         }
 
         private void Handle(Decl.Alias decl)
@@ -114,7 +121,6 @@ namespace Six.Six.Instructions
                 {
                     Assert(funcy.Parameters.Count > 0);
                     Emit(funcy.Parameters[0]);
-                    Emit(Insn.ToDo("return object"));
                 }
                 wl("(;-----;)");
             });

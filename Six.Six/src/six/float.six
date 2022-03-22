@@ -6,11 +6,17 @@ shared native class f32
 
 shared shared native class f64
 {
-    shared native prefix f64 - ();
-    shared native infix f64 + (f64 rhs);
-    shared native infix f64 - (f64 rhs);
-    shared native infix f64 * (f64 rhs);
-    shared native infix f64 / (f64 rhs);
+    shared native prefix f64 - () => -self;
+
+    shared native infix f64 + (f64 other) => self + other;
+    shared native infix f64 - (f64 other) => self - other;
+    shared native infix f64 * (f64 other) => self * other;
+    shared native infix f64 / (f64 other) => self / other;
+
+    shared native infix bool < (f64 other) => self < other;
+    shared native infix bool <= (f64 other) => self <= other;
+    shared native infix bool > (f64 other) => self > other;
+    shared native infix bool >= (f64 other) => self >= other;
 }
 
 shared alias float => f32;

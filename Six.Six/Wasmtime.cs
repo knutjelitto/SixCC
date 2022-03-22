@@ -17,6 +17,11 @@ namespace Six.Six
 
             var wat = smodule.Emit();
 
+            if (smodule.HasErrors)
+            {
+                return;
+            }
+
             var config = new Config()
                 .WithCompilerStrategy(CompilerStrategy.Cranelift);
 
@@ -59,7 +64,7 @@ namespace Six.Six
             result = CallInt32Function(store, instance, "six.core.allocate", 7);
             Assert(result == 16 + 32 + 32 + 32 + 16);
 
-            result = (int)instance.GetGlobal(store, "six.core.__heap_next")!.GetValue(store)!;
+            result = (int)instance.GetGlobal(store, "six.core.__heap_current")!.GetValue(store)!;
             Assert(result == 16 + 32 + 32 + 32 + 16 + 7);
 
             var complex1 = CallInt32Function(store, instance, "six.core.get_complex");
