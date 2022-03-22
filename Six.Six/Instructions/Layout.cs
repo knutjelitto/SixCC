@@ -8,7 +8,7 @@ namespace Six.Six.Instructions
     {
         public readonly FieldList Fields = new();
         public readonly SlotList Slots = new();
-        public readonly List<IFace> IFaces = new();
+        public readonly InterFaceList IFaces = new();
 
         public Layout(Decl.Classy classy)
         {
@@ -33,30 +33,21 @@ namespace Six.Six.Instructions
 
             MakeFields();
             MakeSlots();
+            MakeInterfaces();
 
             Emitter.AddClass(Classy.FullName, Size);
 
-        }
-
-        protected void Prefill(SlotList subSlots)
-        {
-            Run();
-
-            foreach (var slot in Slots.Slots)
-            {
-                subSlots.Add(slot);
-            }
         }
 
         private void MakeFields()
         {
             var fieldOffset = WasmDef.Pointer.Size;
 
-            if (Classy.Extends != null)
+            if (Classy.Extends is Decl.Class extended)
             {
-                Classy.Extends.Layout.Run();
-                Fields.AddRange(Classy.Extends.Layout.Fields);
-                fieldOffset = Classy.Extends.Layout.Size;
+                extended.Layout.Run();
+                Fields.AddRange(extended.Layout.Fields);
+                fieldOffset = extended.Layout.Size;
             }
 
             foreach (var field in Classy.Fields)
@@ -80,44 +71,36 @@ namespace Six.Six.Instructions
 
         private void MakeSlots()
         {
-            if (Classy.Extends != null)
+            if (Classy.Extends is Decl.Class extended)
             {
-                Classy.Extends.Layout.Prefill(Slots);
+                extended.Layout.Run();
+                Slots.AddRange(extended.Layout.Slots);
             }
 
-            foreach (var iface in Classy.Satisfies.Closure())
+            foreach (var funcy in Classy.Block.Members.OfType<Decl.Funcy>())
             {
-                IFaces.Add(new IFace(Classy, iface));
+                Slots.AddOrUpdate(funcy);
             }
-
-            foreach (var member in Classy.Block.Members)
-            {
-                switch (member)
-                {
-                    case Decl.Field:
-                        break;
-                    case Decl.Attribute attribute:
-                        Slots.AddOrUpdate(attribute);
-                        break;
-                    case Decl.Function function:
-                        Slots.AddOrUpdate(function);
-                        break;
-                    case Decl.Constructor constructor:
-                        Slots.AddOrUpdate(constructor);
-                        break;
-                    default:
-                        Assert(false);
-                        throw new System.NotImplementedException();
-                }
-            }
-
         }
 
-        public class IFace
+        private void MakeInterfaces()
         {
-            public readonly List<LSlot> Slots = new();
+            foreach (var iface in Classy.Closure())
+            {
+                IFaces.Add(Classy, iface);
+            }
 
-            public IFace(Decl.Classy classy, Decl.Interface iface)
+            foreach (var interFace in IFaces)
+            {
+                interFace.Slots.AddRange(interFace.Interface.Layout.Slots);
+            }
+        }
+
+        public class InterFace
+        {
+            public readonly SlotList Slots = new();
+
+            public InterFace(Decl.Classy classy, Decl.Interface iface)
             {
                 Classy = classy;
                 Interface = iface;
@@ -128,6 +111,21 @@ namespace Six.Six.Instructions
             public string Name => Interface.Name;
 
             public string FullName => $"{Classy.FullName}@{Interface.FullName}";
+        }
+
+        public class InterFaceList : IReadOnlyList<InterFace>
+        {
+            public List<InterFace> IFaces = new();
+
+            public void Add(Decl.Classy classy, Decl.Interface @interface)
+            {
+                IFaces.Add(new InterFace(classy, @interface));
+            }
+
+            public InterFace this[int index] => IFaces[index];
+            public int Count => IFaces.Count;
+            public IEnumerator<InterFace> GetEnumerator() => IFaces.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)IFaces).GetEnumerator();
         }
 
         public class LField
@@ -185,6 +183,11 @@ namespace Six.Six.Instructions
             public void Add(LSlot slot)
             {
                 Slots.Add(slot);
+            }
+
+            public void AddRange(IEnumerable<LSlot> slots)
+            {
+                Slots.AddRange(slots);
             }
 
             public void AddOrUpdate(Decl.Funcy funcy)

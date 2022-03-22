@@ -9,14 +9,19 @@ namespace Six.Six.Instructions
 {
     public static class LayoutExtensions
     {
-        public static IEnumerable<Decl.Interface> Closure(this IEnumerable<Decl.Interface> ifaces)
+        public static IEnumerable<Decl.Interface> Closure(this Decl.Classy? classy)
         {
             var todo = new Queue<Decl.Interface>();
             var set = new HashSet<Decl.Interface>();
 
-            foreach (var iface in ifaces)
+            while (classy != null)
             {
-                todo.Enqueue(iface);
+                foreach (var iface in classy.Satisfies)
+                {
+                    todo.Enqueue(iface);
+                }
+
+                classy = classy.Extends;
             }
 
             while (todo.Count > 0)

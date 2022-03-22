@@ -103,6 +103,19 @@ namespace Six.Six.Instructions
                     }
                 });
             }
+            if (layout.IFaces.Count > 0)
+            {
+                foreach (var iface in layout.IFaces)
+                {
+                    comment($"iface {iface.Interface.Name}", () =>
+                    {
+                        foreach (var slot in iface.Interface.Layout.Slots)
+                        {
+                            wl($"{slot.Index,-3} slot {slot.Funcy.FullName}");
+                        }
+                    });
+                }
+            }
         }
 
         private void Walk(Decl.Class decl)
