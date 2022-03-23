@@ -5,7 +5,7 @@ namespace Six.Six.Builtins
 {
     public class Builtins
     {
-        private readonly Dictionary<string, Builtin> buildins = new();
+        private readonly Dictionary<string, BuiltinCore> buildins = new();
 
         public Builtins(Module module)
         {
@@ -19,34 +19,36 @@ namespace Six.Six.Builtins
             Boolean = Add(new Boolean(this));
             Bytes = Add(new Bytes(this));
             String = Add(new String(this));
+            Builtin = Add(new Builtin(this));
         }
-        public Builtin TableIndex { get; }
-        public Builtin Boolean { get; }
-        public Builtin Bytes { get; }
-        public Builtin String { get; }
-        public Builtin Anything { get; }
+        public BuiltinCore TableIndex { get; }
+        public BuiltinCore Boolean { get; }
+        public BuiltinCore Bytes { get; }
+        public BuiltinCore String { get; }
+        public BuiltinCore Anything { get; }
+        public BuiltinCore Builtin { get; }
 
-        public Builtin U32 { get; }
-        public Builtin S32 { get; }
+        public BuiltinCore U32 { get; }
+        public BuiltinCore S32 { get; }
 
-        public Builtin F32 { get; }
-        public Builtin F64 { get; }
+        public BuiltinCore F32 { get; }
+        public BuiltinCore F64 { get; }
 
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
 
-        private Builtin Add(Builtin builtin)
+        private BuiltinCore Add(BuiltinCore builtin)
         {
             buildins.Add(builtin.Name, builtin);
             return builtin;
         }
 
-        public Builtin Resolve(Decl named)
+        public BuiltinCore Resolve(Decl named)
         {
             return Resolve(named.Name);
         }
 
-        private Builtin Resolve(string name)
+        private BuiltinCore Resolve(string name)
         {
             if (buildins.TryGetValue(name, out var builtin))
             {

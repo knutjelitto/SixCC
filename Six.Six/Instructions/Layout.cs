@@ -8,7 +8,7 @@ namespace Six.Six.Instructions
     {
         public readonly FieldList Fields = new();
         public readonly SlotList Slots = new();
-        public readonly InterFaceList IFaces = new();
+        public readonly InterFaceList InterFaces = new();
 
         public Layout(Decl.Classy classy)
         {
@@ -38,6 +38,7 @@ namespace Six.Six.Instructions
             MakeFields();
             MakeSlots();
             MakeInterfaces();
+            RetroSlots();
 
             Emitter.AddClass(Classy.FullName, Size);
 
@@ -92,20 +93,42 @@ namespace Six.Six.Instructions
             foreach (var iface in Classy.Closure())
             {
                 iface.Layout.Run();
-                IFaces.Add(Classy, iface);
+                InterFaces.Add(Classy, iface);
             }
 
-            foreach (var interFace in IFaces)
+            foreach (var interFace in InterFaces)
             {
                 interFace.Slots.AddRange(interFace.Interface.Layout.Slots);
 
                 foreach (var islot in interFace.Slots.ToList())
                 {
-                    var cslot = Slots.Where(s => s.Funcy.Name == islot.Funcy.Name).SingleOrDefault();
+                    var cslot = Slots
+                        .Where(s => s.Funcy.Name == islot.Funcy.Name)
+                        .Where(s => s.Funcy.IsConcrete)
+                        .SingleOrDefault();
 
                     if (cslot != null)
                     {
                         interFace.Slots.Set(islot.Index, cslot);
+                    }
+                }
+            }
+        }
+
+        private void RetroSlots()
+        {
+            foreach (var slot in Slots.ToList())
+            {
+                if (slot.Funcy.IsAbstract)
+                {
+                    var interFaceSlots = InterFaces
+                        .SelectMany(iface => iface.Slots)
+                        .Where(islot => islot.Funcy.IsConcrete && islot.Funcy.Name == slot.Funcy.Name)
+                        .ToList();
+
+                    if (interFaceSlots.Count == 1)
+                    {
+                        Slots.Set(slot.Index, interFaceSlots[0]);
                     }
                 }
             }

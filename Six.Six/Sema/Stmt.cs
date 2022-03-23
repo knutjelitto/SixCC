@@ -1,5 +1,4 @@
 ﻿using Six.Core;
-using Six.Six.Instructions;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -8,37 +7,38 @@ namespace Six.Six.Sema
     {
         ILocation Location { get; }
         Errors Errors { get; }
+        bool Validated { get; }
 
         public sealed class Return : Statement
         {
-            private readonly LazyExpr? delayed;
+            private readonly LazyExpr? lazyExpr;
 
             public Return(ILocation location, FuncBlock block, LazyExpr? delayed)
                 : base(location, block)
             {
                 Funcy = block.Funcy;
-                this.delayed = delayed;
+                lazyExpr = delayed;
             }
 
             public Decl.Funcy Funcy { get; }
 
-            public Expr? Expr => delayed?.Expr;
+            public Expr? Expr => lazyExpr?.Expr;
         }
 
         public sealed class Assign : Statement
         {
-            private readonly LazyExpr left;
-            private readonly LazyExpr right;
+            private readonly LazyExpr lazyLeft;
+            private readonly LazyExpr lazyRight;
 
             public Assign(A.Stmt.Assign stmt, FuncBlock block, LazyExpr left, LazyExpr right)
                 : base(stmt.GetLocation(), block)
             {
-                this.left = left;
-                this.right = right;
+                lazyLeft = left;
+                lazyRight = right;
             }
 
-            public Expr Left => left.Expr;
-            public Expr Right => right.Expr;
+            public Expr Left => lazyLeft.Expr;
+            public Expr Right => lazyRight.Expr;
         }
     }
 

@@ -80,15 +80,23 @@ namespace Six.Six.Ast
             public IRNode Tree => Name.Tree;
         }
 
+        public abstract record LetVar(
+            IRNode Tree,
+            Prelude Prelude,
+            Name Name,
+            Type? Type,
+            Expression Value)
+            : Preluded,
+              With.OptionalType,
+              With.Value;
+
         public sealed record Let(
             IRNode Tree, 
             Prelude Prelude, 
             Name Name, 
             Type? Type,
             Expression Value)
-            : Preluded,
-              With.OptionalType,
-              With.Value;
+            : LetVar(Tree, Prelude, Name, Type, Value);
 
         public sealed record Var(
             IRNode Tree, 
@@ -96,9 +104,7 @@ namespace Six.Six.Ast
             Name Name, 
             Type? Type, 
             Expression Value)
-            : Preluded,
-              With.OptionalType,
-              With.Value;
+            : LetVar(Tree, Prelude, Name, Type, Value);
 
         public sealed record Constructor(
             IRNode Tree,

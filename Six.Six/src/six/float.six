@@ -1,10 +1,10 @@
 namespace six.core;
 
-shared native class f32 : Object
+shared native class f32 : Builtin
 {
 }
 
-shared shared native class f64 : Object
+shared shared native class f64 : Builtin
 {
     shared native prefix f64 - () => -self;
 

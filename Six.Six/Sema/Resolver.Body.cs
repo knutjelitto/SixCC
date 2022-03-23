@@ -2,41 +2,39 @@
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable CA1822 // Mark members as static
 
 namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        public Body WalkBody(ClassBlock block, A.Body node)
+        public void WalkBody(ClassBlock block, A.Body node)
         {
-            return ClassyBody(block, (dynamic)node);
+            ClassyBody(block, (dynamic)node);
         }
 
-        private Body ClassyBody(ClassBlock block, A.Body node)
+        private void ClassyBody(ClassBlock block, A.Body node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
-        private Body ClassyBody(ClassBlock block, A.Body.Class node)
+        private void ClassyBody(ClassBlock block, A.Body.Class node)
         {
             foreach (var decl in node.Declarations)
             {
                 WalkDeclaration(block, decl);
             }
-
-            return new Body.Dummy();
         }
 
-        public Body WalkBody(FuncBlock block, A.Body node)
+        public void WalkBody(FuncBlock block, A.Body node)
         {
-            return FuncyBody(block, (dynamic)node);
+            FuncyBody(block, (dynamic)node);
         }
 
-        private Body FuncyBody(FuncBlock block, A.Body.Block node)
+        private void FuncyBody(FuncBlock block, A.Body.Block node)
         {
             foreach (var member in node.Statelarations)
             {
@@ -53,22 +51,17 @@ namespace Six.Six.Sema
                     Assert(false);
                 }
             }
-
-            return new Body.Dummy();
         }
 
-        private Body FuncyBody(FuncBlock block, A.Body.Deferred node)
+        private void FuncyBody(FuncBlock block, A.Body.Deferred node)
         {
-            return new Body.Dummy();
         }
 
-        private Body FuncyBody(FuncBlock block, A.Body.Calc node)
+        private void FuncyBody(FuncBlock block, A.Body.Expr node)
         {
             var delayed = ResolveExpression(block.Content, node.Expression);
 
-            block.Members.Add(new Stmt.Return(node.Expression.GetLocation(), block, delayed));
-
-            return new Body.Dummy();
+            _ = new Stmt.Return(node.Expression.GetLocation(), block, delayed);
         }
     }
 }

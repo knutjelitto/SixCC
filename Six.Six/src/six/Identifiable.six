@@ -2,7 +2,6 @@ namespace six.core;
 
 shared interface Identifiable
 {
-    shared bool equals(Object other);
+    shared bool equals(Object other) => Runtime.identical(self, other);
     shared int hash => Runtime.identityHash(self);
-
 }

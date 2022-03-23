@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
-    public sealed class Anything : Builtin
+    public sealed class Anything : BuiltinCore
     {
         public Anything(Builtins builtins)
             : base(builtins, Names.Core.Anything, WasmDef.Pointer)

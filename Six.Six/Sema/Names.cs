@@ -21,6 +21,7 @@
             public static string Boolean => "Boolean";
 
             public static string SelfValue => "self";
+            public static string Builtin => "Builtin";
             public static string Basic => "Basic";
             public static string Bytes => "Bytes";
             public static string String => "String";
@@ -48,7 +49,7 @@
             public static readonly string Prefinal = "prefinal";
         }
 
-        public static class Nomes
+        public static class Nouns
         {
             public static readonly string Function = "function";
             public static readonly string Method = "method";

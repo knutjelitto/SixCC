@@ -364,7 +364,7 @@ namespace Six.Six.Compiler
         {
             var expression = Walk<Expression>(element.FunctionSpecifier);
 
-            element.Value = new Body.Calc(element, expression);
+            element.Value = new Body.Expr(element, expression);
         }
 
         protected override void Visit(CReturnStatement element)

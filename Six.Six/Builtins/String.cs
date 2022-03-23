@@ -3,7 +3,7 @@ using Six.Six.Sema;
 
 namespace Six.Six.Builtins
 {
-    public sealed class String : Builtin
+    public sealed class String : BuiltinCore
     {
         public String(Builtins builtins)
             : base(builtins, Names.Core.String, WasmDef.Pointer)

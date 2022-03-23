@@ -1,14 +1,14 @@
 namespace six.core;
 
-shared native class s8 : Object
+shared native class s8 : Builtin
 {
 }
 
-shared native class s16 : Object
+shared native class s16 : Builtin
 {
 }
 
-shared native class s32 : Object
+shared native class s32 : Builtin
 {
     shared native static string format(s32 value, s32 base);
  
@@ -30,19 +30,19 @@ shared native class s32 : Object
     shared native infix s32 ^ (s32 other) => self ^ other;
 }
 
-shared native class s64 : Object
+shared native class s64 : Builtin
 {
 }
 
-shared native class u8 : Object
+shared native class u8 : Builtin
 {
 }
 
-shared native class u16 : Object
+shared native class u16 : Builtin
 {
 }
 
-shared native class u32 : Object
+shared native class u32 : Builtin
 {
 /*
     shared native static let u32 zero = 0;
@@ -66,7 +66,7 @@ shared native class u32 : Object
     shared native infix u32 ^ (u32 other) => self ^ other;
 }
 
-shared native class u64 : Object
+shared native class u64 : Builtin
 {
 }
 

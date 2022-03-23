@@ -1,53 +1,25 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using System;
-using Type = Six.Six.Sema.Type;
 
 namespace Six.Six.Builtins
 {
-    public abstract class Builtin : Type.Builtin
+    public sealed class Builtin : BuiltinCore
     {
-        protected readonly Dictionary<string, Func<Expr, Expr.Primitive>> prefix = new();
-        protected readonly Dictionary<string, Func<Expr, Expr, Expr.Primitive>> infix = new();
-
-        protected Builtin(Builtins builtins, string name, WasmDef wasm)
+        public Builtin(Builtins builtins)
+            : base(builtins, Names.Core.Builtin, WasmDef.Pointer)
         {
-            Builtins = builtins;
-            Wasm = wasm;
-            Name = name;
         }
 
-        public Builtins Builtins { get; }
-        public WasmDef Wasm { get; }
-        public string Name { get; }
-        public Resolver Resolver => Builtins.Resolver;
-        
-        public bool IsThis(Expr expr) => ReferenceEquals(Resolver.LowerType(expr.Type), this);
-
-        public abstract Insn Load(uint offset);
-        public abstract Insn Store(uint offset);
-
-        public Func<Expr, Expr.Primitive> Prefix(string name)
+        public override Insn Load(uint offset)
         {
-            if (prefix.TryGetValue(name, out var action))
-            {
-                return action;
-            }
-            throw new ArgumentOutOfRangeException(nameof(name), name);
+            Assert(false);
+            throw new System.NotImplementedException();
         }
 
-        public Func<Expr, Expr, Expr.Primitive> Infix(string name)
+        public override Insn Store(uint offset)
         {
-            if (infix.TryGetValue(name, out var action))
-            {
-                return action;
-            }
-            throw new ArgumentOutOfRangeException(nameof(name), name);
-        }
-
-        public override string ToString()
-        {
-            return $"<{GetType().Name.ToLowerInvariant()}>";
+            Assert(false);
+            throw new System.NotImplementedException();
         }
     }
 }
