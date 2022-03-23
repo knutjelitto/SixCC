@@ -16,7 +16,7 @@ namespace Six.Six.Instructions
         }
 
         public Decl.Classy Classy { get; }
-        public Module Module => Classy.Container.Module;
+        public Module Module => Classy.Block.Module;
         public Resolver Resolver => Module.Resolver;
         public Emitter Emitter => Module.Emitter;
 
@@ -25,6 +25,10 @@ namespace Six.Six.Instructions
 
         public void Run()
         {
+            if (Classy.Name == "Basic")
+            {
+                Assert(true);
+            }
             if (Done)
             {
                 return;
@@ -87,12 +91,23 @@ namespace Six.Six.Instructions
         {
             foreach (var iface in Classy.Closure())
             {
+                iface.Layout.Run();
                 IFaces.Add(Classy, iface);
             }
 
             foreach (var interFace in IFaces)
             {
                 interFace.Slots.AddRange(interFace.Interface.Layout.Slots);
+
+                foreach (var islot in interFace.Slots.ToList())
+                {
+                    var cslot = Slots.Where(s => s.Funcy.Name == islot.Funcy.Name).SingleOrDefault();
+
+                    if (cslot != null)
+                    {
+                        interFace.Slots.Set(islot.Index, cslot);
+                    }
+                }
             }
         }
 
@@ -111,6 +126,11 @@ namespace Six.Six.Instructions
             public string Name => Interface.Name;
 
             public string FullName => $"{Classy.FullName}@{Interface.FullName}";
+
+            public override string ToString()
+            {
+                return FullName;
+            }
         }
 
         public class InterFaceList : IReadOnlyList<InterFace>
@@ -173,12 +193,21 @@ namespace Six.Six.Instructions
 
             public int Index { get; }
             public Decl.Funcy Funcy { get; }
+
+            public override string ToString()
+            {
+                return Funcy.FullName;
+            }
         }
 
         public class SlotList : IReadOnlyList<LSlot>
         {
             public readonly List<LSlot> Slots = new();
 
+            public void Set(int index, LSlot slot)
+            {
+                Slots[index] = slot;
+            }
 
             public void Add(LSlot slot)
             {

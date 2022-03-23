@@ -46,37 +46,42 @@ namespace Six.Six
             result = CallInt32Function(store, instance, "six.core.min", 3, 2);
             Assert(result == 2);
 
+            result = CallInt32Function(store, instance, "six.core.add_mul", 1, 2, 3);
+            Assert(result == 7);
+
+            var heap_start = (int)instance.GetGlobal(store, "six.core.__heap_start")!.GetValue(store)!;
+
             result = CallInt32Function(store, instance, "six.core.allocate", 7)!;
-            Assert(result == 0);
+            Assert(result == heap_start);
 
             result = CallInt32Function(store, instance, "six.core.allocate", 17);
-            Assert(result == 16);
+            Assert(result == heap_start + 16);
 
             result = CallInt32Function(store, instance, "six.core.allocate", 17);
-            Assert(result == 16 + 32);
+            Assert(result == heap_start + 16 + 32);
 
             result = CallInt32Function(store, instance, "six.core.allocate", 17);
-            Assert(result == 16 + 32 + 32);
+            Assert(result == heap_start + 16 + 32 + 32);
 
             result = CallInt32Function(store, instance, "six.core.allocate", 7);
-            Assert(result == 16 + 32 + 32 + 32);
+            Assert(result == heap_start + 16 + 32 + 32 + 32);
 
             result = CallInt32Function(store, instance, "six.core.allocate", 7);
-            Assert(result == 16 + 32 + 32 + 32 + 16);
+            Assert(result == heap_start + 16 + 32 + 32 + 32 + 16);
 
-            result = (int)instance.GetGlobal(store, "six.core.__heap_current")!.GetValue(store)!;
-            Assert(result == 16 + 32 + 32 + 32 + 16 + 7);
+            var heap_current = (int)instance.GetGlobal(store, "six.core.__heap_current")!.GetValue(store)!;
+            Assert(heap_current == heap_start + 16 + 32 + 32 + 32 + 16 + 7);
 
             var complex1 = CallInt32Function(store, instance, "six.core.get_complex");
-            Assert(complex1 == 144);
+            Assert(complex1 == heap_start + 144);
             var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
-            Assert(complex2 == 160);
+            Assert(complex2 == heap_start + 160);
 
             var re = CallInt32Function(store, instance, "six.core.Complex.getRe", complex1);
             Assert(re == 1);
 
             var added = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
-            Assert(added == 176);
+            Assert(added == heap_start + 176);
         }
 
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)

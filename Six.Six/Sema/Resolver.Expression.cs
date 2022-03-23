@@ -227,10 +227,10 @@ namespace Six.Six.Sema
                     var index = 0;
                     for (; index < args.Count; ++index)
                     {
-                        var argType = LowerType(args[index].Expr.Type);
                         var prmType = LowerType(prms[index + 1].Type);
+                        var argType = LowerType(args[index].Expr.Type);
 
-                        Assert(ReferenceEquals(argType, prmType));
+                        Assert(Checker.CanAssign(prmType, argType));
 
                         arguments.Add(args[index].Expr);
                     }
@@ -280,7 +280,7 @@ namespace Six.Six.Sema
                         var argType = ResolveType(args[index].Expr.Type);
                         var prmType = ResolveType(prms[index].Type);
 
-                        Assert(ReferenceEquals(argType, prmType));
+                        Assert(Checker.CanAssign(prmType, argType));
 
                         arguments.Add(args[index].Expr);
                     }
@@ -317,7 +317,7 @@ namespace Six.Six.Sema
                         var argType = ResolveType(args[index].Expr.Type);
                         var prmType = ResolveType(prms[index]);
 
-                        Assert(ReferenceEquals(argType, prmType));
+                        Assert(Checker.CanAssign(prmType, argType));
 
                         arguments.Add(args[index].Expr!);
                     }

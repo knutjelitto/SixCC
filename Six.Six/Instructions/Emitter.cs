@@ -101,6 +101,11 @@ namespace Six.Six.Instructions
 
         public void EmitFuncy(Decl.Funcy funcy, bool isCtor = false)
         {
+            foreach (var inner in funcy.InnerFunctions())
+            {
+                EmitFuncy(inner);
+            }
+
             wl($"(func ${funcy.FullName}");
             indent(() =>
             {
@@ -115,6 +120,11 @@ namespace Six.Six.Instructions
                 wl("(;-----;)");
                 foreach (var member in funcy.Block.Members)
                 {
+                    if (member is Decl.Funcy)
+                    {
+                        continue;
+                    }
+
                     Emit(member);
                 }
                 if (isCtor)

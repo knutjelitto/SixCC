@@ -15,6 +15,8 @@ namespace Six.Six.Instructions
 
         private void Handle(Stmt.Assign stmt)
         {
+            Assert(stmt.Validated);
+
             switch (stmt.Left)
             {
                 case Expr.SelectField select:
@@ -34,6 +36,8 @@ namespace Six.Six.Instructions
 
         private void Handle(Stmt.Return stmt)
         {
+            Assert(stmt.Validated);
+
             if (stmt.Expr != null)
             {
                 Emit(stmt.Expr);

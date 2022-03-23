@@ -2,7 +2,7 @@ namespace six.core;
 
 shared abstract class Object : Anything
 {
-    shared virtual bool equals(Object that) => false;
+    shared abstract bool equals(Object that);
     shared abstract int hash;
     shared virtual string string => Runtime.ClassName(self) + "@" + int.format(hash, #10);
 }

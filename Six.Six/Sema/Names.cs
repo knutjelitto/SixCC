@@ -50,6 +50,8 @@
 
         public static class Nomes
         {
+            public static readonly string Function = "function";
+            public static readonly string Method = "method";
             public static readonly string Interface = "interface";
         }
     }

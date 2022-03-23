@@ -105,11 +105,11 @@ namespace Six.Six.Instructions
             }
             if (layout.IFaces.Count > 0)
             {
-                foreach (var iface in layout.IFaces)
+                foreach (var interFace in layout.IFaces)
                 {
-                    comment($"iface {iface.Interface.Name}", () =>
+                    comment($"interface {interFace.Interface.Name} slots", () =>
                     {
-                        foreach (var slot in iface.Interface.Layout.Slots)
+                        foreach (var slot in interFace.Slots)
                         {
                             wl($"{slot.Index,-3} slot {slot.Funcy.FullName}");
                         }

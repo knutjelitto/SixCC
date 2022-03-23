@@ -67,5 +67,12 @@ namespace Six.Six.Sema
             }
             return new DiagnosticException(new SemanticError(tree.GetLocation(), $"value is too big to fit '{what}'"));
         }
+
+        public DiagnosticException SubjectShouldntBeMarkedAs(Decl.Funcy funcy, string subject, string attribute)
+        {
+            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' shouldn't be marked as '{attribute}'");
+
+            return new DiagnosticException(diagnostic);
+        }
     }
 }

@@ -13,35 +13,16 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr? delayed;
 
-            public Return(ILocation location, FuncBlock block, Decl.Funcy function, LazyExpr? delayed)
+            public Return(ILocation location, FuncBlock block, LazyExpr? delayed)
                 : base(location, block)
             {
-                Function = function;
+                Funcy = block.Funcy;
                 this.delayed = delayed;
             }
 
-            public Decl.Funcy Function { get; }
+            public Decl.Funcy Funcy { get; }
 
-            public Expr? Expr
-            {
-                get
-                {
-                    if (delayed != null)
-                    {
-                        var a = Resolver.LowerType(delayed.Expr.Type);
-                        var b = Resolver.LowerType(Function.ResultType);
-
-                        if (!ReferenceEquals(Resolver.LowerType(delayed.Expr.Type), Resolver.LowerType(Function.ResultType)))
-                        {
-                            Assert(false);
-                            var x = Resolver.LowerType(delayed.Expr.Type);
-                            var y = Resolver.LowerType(Function.ResultType);
-                            throw Errors.TypeMismatch(Location, Function.ResultType, delayed.Expr.Type);
-                        }
-                    }
-                    return delayed?.Expr;
-                }
-            }
+            public Expr? Expr => delayed?.Expr;
         }
 
         public sealed class Assign : Statement
@@ -67,14 +48,17 @@ namespace Six.Six.Sema
         {
             Location = location;
             Block = block;
+            block.Members.Add(this);
         }
 
         public ILocation Location { get; }
         public FuncBlock Block { get; }
         public Scope Container => Block.Content;
 
-        public Module Module => Container.Module;
+        public Module Module => Block.Module;
         public Resolver Resolver => Module.Resolver;
         public Errors Errors => Module.Errors;
+
+        public bool Validated { get; set; }
     }
 }

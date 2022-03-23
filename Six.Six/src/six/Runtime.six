@@ -3,4 +3,6 @@ namespace six.core;
 shared sealed native class Runtime : Object
 {
     shared native static string ClassName(Object obj) => "class-name";
+    shared native static int identityHash(Identifiable identifiable) => 0;
+    shared native static bool identical(Identifiable this, Object that) => false;
 }

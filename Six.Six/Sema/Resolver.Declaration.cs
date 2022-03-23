@@ -61,7 +61,6 @@ namespace Six.Six.Sema
         {
             var isMethod = decl.Parent is ClassBlock;
             var classy = (decl.Parent as ClassBlock)?.Classy;
-            decl.Parent.Members.Add(decl);
 
             if (isMethod && !decl.IsStatic)
             {
@@ -88,18 +87,14 @@ namespace Six.Six.Sema
 
         private void Declare(Block parent, A.Decl.Function node)
         {
-            Assert(node.Parameters.Count >= 0);
-
             DeclareFunction(new Decl.Function(parent, node, null), node);
         }
 
         private void Declare(ClassBlock parent, A.Decl.Attribute node)
         {
-            var classy = parent.Classy;
-
             var decl = new Decl.Attribute(parent, node);
 
-            classy.Block.Members.Add(decl);
+            var classy = parent.Classy;
 
             DeclareSelf(decl.Block, classy);
             WalkBody(decl.Block, node.Body);
@@ -107,71 +102,56 @@ namespace Six.Six.Sema
 
         private void Declare(ClassBlock parent, A.Decl.Constructor node)
         {
+            var decl = new Decl.Constructor(parent, node);
+
             var klass = (Decl.Class)parent.Classy;
-
-            var decl = new Decl.Constructor(parent, klass, node);
-
-            klass.Block.Members.Add(decl);
 
             DeclareSelf(decl.Block, klass);
             WalkDeclarations(decl.Block, node.Parameters);
             WalkBody(decl.Block, node.Body);
 
             var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters[0]));
-            var ret = new Stmt.Return(node.GetLocation(), decl.Block, decl, lazy);
-            decl.Block.Members.Add(ret);
+            _ = new Stmt.Return(node.GetLocation(), decl.Block, lazy);
         }
 
         private void DeclareSelf(FuncBlock block, Decl.Classy classy)
         {
-            var self = new Decl.SelfParameter(block, classy.Type, 0);
-            block.Head.Declare(self, Names.Core.SelfValue);
-            block.Funcy.AddParameter(self);
+            _ = new Decl.SelfParameter(block, classy.Type);
         }
 
         private void Declare(Block parent, A.Decl.Alias node)
         {
-            var decl = new Decl.Alias(parent, node);
+            _ = new Decl.Alias(parent, node);
         }
 
-        private void Declare(Block parent, A.Decl.Var node)
+        private void Declare(FuncBlock parent, A.Decl.Let node)
         {
-            DeclareLetVarField(parent, node, true);
+            parent.Content.Declare(new Decl.LetVar(parent, node, false));
         }
 
-        private void Declare(Block parent, A.Decl.Let node)
+        private void Declare(ClassBlock parent, A.Decl.Let node)
         {
-            DeclareLetVarField(parent, node, false);
+            parent.Content.Declare(new Decl.Field(parent, node, false));
         }
 
-        private void DeclareLetVarField(Block parent, A.Decl node, bool writeable)
+        private void Declare(NamespaceBlock parent, A.Decl.Let node)
         {
-            if (parent is FuncBlock codeBlock)
-            {
-                var function = codeBlock.Funcy;
+            parent.Content.Declare(new Decl.Global(parent, node, false));
+        }
 
-                var decl = parent.Content.Declare(new Decl.LetVar(parent, node, writeable, function.Parameters.Count + function.Locals.Count));
-                function.Locals.Add(decl);
-                function.Block.Members.Add(decl);
-            }
-            else if (parent is ClassBlock classBock)
-            {
-                var classy = classBock.Classy;
+        private void Declare(FuncBlock parent, A.Decl.Var node)
+        {
+            parent.Content.Declare(new Decl.LetVar(parent, node, true));
+        }
 
-                var decl = parent.Content.Declare(new Decl.Field(parent, node, writeable));
-                classy.Fields.Add(decl);
-                classy.Block.Members.Add(decl);
-            }
-            else if (parent is NamespaceBlock namespaceBlock)
-            {
-                var decl = parent.Content.Declare(new Decl.Global(parent, node, writeable));
-                namespaceBlock.Members.Add(decl);
-            }
-            else
-            {
-                Assert(false);
-                throw new NotImplementedException();
-            }
+        private void Declare(ClassBlock parent, A.Decl.Var node)
+        {
+            parent.Content.Declare(new Decl.Field(parent, node, true));
+        }
+
+        private void Declare(NamespaceBlock parent, A.Decl.Var node)
+        {
+            parent.Content.Declare(new Decl.Global(parent, node, true));
         }
 
         private void Declare(Block block, A.Decl.TypeParameters node)
@@ -184,19 +164,13 @@ namespace Six.Six.Sema
             WalkDeclarations(block, node);
         }
 
-        private void Declare(Block parent, A.Decl.ValueParameter node)
+        private void Declare(FuncBlock parent, A.Decl.ValueParameter node)
         {
-            var funcy = (FuncBlock)parent;
-
-            var function = funcy.Funcy;
-
-            var param = funcy.Head.Declare(
+            _ = parent.Head.Declare(
                 new Decl.Parameter(
-                    funcy, 
+                    parent, 
                     node, 
-                    function.Parameters.Count,
-                    node.Default == null ? null : ResolveExpression(funcy.Head, node.Default)));
-            function.AddParameter(param);
+                    node.Default == null ? null : ResolveExpression(parent.Head, node.Default)));
         }
     }
 }

@@ -18,24 +18,19 @@ namespace Six.Six.Sema
 
         private void Statement(FuncBlock block, A.Stmt.Assign node)
         {
-            var stmt =
-                new Stmt.Assign(
+            _ = new Stmt.Assign(
                     node,
                     block,
                     ResolveExpression(block.Content, node.Left),
                     ResolveExpression(block.Content, node.Right));
-            block.Members.Add(stmt);
         }
 
         private void Statement(FuncBlock block, A.Stmt.Return node)
         {
-            var stmt =
-                new Stmt.Return(
+            _ = new Stmt.Return(
                     node.GetLocation(),
                     block,
-                    block.Funcy,
                     node.Expression == null ? null : ResolveExpression(block.Content, node.Expression));
-            block.Members.Add(stmt);
         }
 
         private void Statement(Decl.Funcy funcy, A.Stmt.Expr node)

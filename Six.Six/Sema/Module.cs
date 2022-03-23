@@ -14,6 +14,10 @@ namespace Six.Six.Sema
         public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
         public static readonly string DefaultCtor = "ctor@default";
         public static string DataAndHeap => $"{CoreNamespace}.Data&Heap";
+        public static string Data_Start => $"{CoreNamespace}.__data_start";
+        public static string Heap_Start => $"{CoreNamespace}.__heap_start";
+        public static string Heap_Current => $"{CoreNamespace}.__heap_current";
+
         public static string Allocator => $"allocate";
 
         private readonly List<Diagnostic> Diagnostics = new();
@@ -26,6 +30,8 @@ namespace Six.Six.Sema
             Builtins = new Builtins.Builtins(this);
             Errors = new Errors(this);
             Emitter = new Emitter(this, new Writer());
+            Validator = new Validator(this);
+            Checker = new TypeChecker(this);
         }
 
         public NamespaceBlock Root { get; }
@@ -33,13 +39,15 @@ namespace Six.Six.Sema
         public Resolver Resolver { get; }
         public Builtins.Builtins Builtins { get; }
         public Errors Errors { get; }
-
         public Emitter Emitter { get; }
+        public Validator Validator { get; }
+        public TypeChecker Checker { get; }
 
         public bool HasErrors => Diagnostics.Count > 0;
 
         public string Emit()
         {
+            Validator.Validate();
             Emitter.EmitModule();
 
             if (!HasErrors)

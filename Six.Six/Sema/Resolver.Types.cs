@@ -97,7 +97,6 @@ namespace Six.Six.Sema
             return type;
         }
 
-
         public Type LowerType(Type type)
         {
             var resolved = ResolveType(type);

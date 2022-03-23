@@ -63,3 +63,11 @@ shared Complex add_complex(Complex x, Complex y)
 {
     return x + y;
 }
+
+shared int add_mul(int x, int y, int z)
+{
+    int add(int x, int y) => x + y;
+    int mul(int x, int y) => x * y;
+
+    return add(x, mul(y, z));
+}

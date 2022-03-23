@@ -1,4 +1,5 @@
-﻿using Six.Six.Sema;
+﻿using Six.Six.Builtins;
+using Six.Six.Sema;
 using System;
 
 namespace Six.Six.Instructions
@@ -17,16 +18,36 @@ namespace Six.Six.Instructions
             wl($"(module");
             indent(() =>
             {
+                uint data_start = 32;
+
                 wl($"(memory ${Module.DataAndHeap} (export \"{Module.DataAndHeap}\") 16 16)");
                 wl();
-                StringData.Emit(32);
+                StringData.Emit(data_start);
                 wl();
                 ClassData.Emit(StringData.Next);
                 wl();
                 foreach (var global in Module.GetGlobals())
                 {
                     wl($"(global{IdFor(global)}{ExportIff(global)}{TypeFor(global)}");
-                    indent(() => Emit(global.Value));
+                    indent(() =>
+                    {
+                        if (global.FullName == Module.Data_Start)
+                        {
+                            Emit(Insn.U32.Const(data_start));
+                        }
+                        else if (global.FullName == Module.Heap_Start)
+                        {
+                            Emit(Insn.U32.Const(WasmDef.Align(16, ClassData.Next)));
+                        }
+                        else if (global.FullName == Module.Heap_Current)
+                        {
+                            Emit(Insn.U32.Const(WasmDef.Align(16, ClassData.Next)));
+                        }
+                        else
+                        {
+                            Emit(global.Value);
+                        }
+                    });
                     wl($")");
                 }
                 wl();

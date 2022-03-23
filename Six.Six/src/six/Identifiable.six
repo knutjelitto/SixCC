@@ -2,14 +2,7 @@ namespace six.core;
 
 shared interface Identifiable
 {
-    shared abstract bool equals(Object other);
-        /*TODO
-        =>  if (is Identifiable that)
-            then this === that
-            else false;
-        */
-    
-    shared virtual int hash => identityHash(self);
+    shared bool equals(Object other);
+    shared int hash => Runtime.identityHash(self);
 
-    shared static native int identityHash(Identifiable identifiable);
 }

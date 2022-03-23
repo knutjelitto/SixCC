@@ -21,6 +21,7 @@ namespace Six.Six.Sema
         public Builtins.Builtins Builtins => Module.Builtins;
         public Emitter Emitter => Module.Emitter;
         public Errors Errors => Module.Errors;
+        public TypeChecker Checker => Module.Checker;
 
         public void Walk(A.Unit.Code code)
         {

@@ -66,7 +66,7 @@ namespace Six.Six.Sema
         {
             var delayed = ResolveExpression(block.Content, node.Expression);
 
-            block.Members.Add(new Stmt.Return(node.Expression.GetLocation(), block, block.Funcy, delayed));
+            block.Members.Add(new Stmt.Return(node.Expression.GetLocation(), block, delayed));
 
             return new Body.Dummy();
         }

@@ -17,10 +17,11 @@ namespace Six.Six.Sema
         public abstract Block Parent { get; }
         public virtual BlockScope Content => content ??= new BlockScope(Name, Head);
         public virtual BlockScope Head => head ??= new BlockScope(Name, Parent.Content);
+        public Module Module => Head.Module;
         public List<Member> Members { get; } = new();
     }
 
-    public class ClassBlock : Block
+    public sealed class ClassBlock : Block
     {
         public ClassBlock(Decl.Classy classy, Block parent)
             : base(classy.ADecl.Name.Text)
@@ -34,7 +35,7 @@ namespace Six.Six.Sema
         public override Block Parent { get; }
     }
 
-    public class FuncBlock : Block
+    public sealed class FuncBlock : Block
     {
         public FuncBlock(Decl.Funcy funcy, Block parent, string? name = null)
             : base(name ?? funcy.ADecl.Name.Text)
@@ -48,7 +49,7 @@ namespace Six.Six.Sema
         public override Block Parent { get; }
     }
 
-    public class NamespaceBlock : Block
+    public sealed class NamespaceBlock : Block
     {
         public readonly Dictionary<string, NamespaceBlock> Children = new();
 
