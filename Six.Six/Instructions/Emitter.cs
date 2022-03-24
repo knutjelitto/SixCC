@@ -10,7 +10,7 @@ namespace Six.Six.Instructions
 {
     public partial class Emitter : WithWriter
     {
-        public const string globalFunctionsTableName = "$functionsTable";
+        public const string globalFunctionsTableName = "functionsTable";
 
         private readonly List<string> exports = new();
 
@@ -21,7 +21,6 @@ namespace Six.Six.Instructions
         public readonly StringData StringData;
         public readonly ClassData ClassData;
         public readonly FunctionTable GlobalFunctions;
-        public readonly Preparer Preparer;
 
         public Emitter(Module module, Writer writer)
             : base(writer)
@@ -31,8 +30,7 @@ namespace Six.Six.Instructions
             Types = new TypeTable(this);
             StringData = new StringData(writer, Module.DataAndHeap);
             ClassData = new ClassData(this, Module.DataAndHeap);
-            GlobalFunctions = new FunctionTable(writer, globalFunctionsTableName);
-            Preparer = new Preparer(Module, writer);
+            GlobalFunctions = new FunctionTable(writer, Module.ModuleFunctions);
         }
 
         public Module Module { get; }

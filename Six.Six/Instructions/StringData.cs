@@ -25,6 +25,7 @@ namespace Six.Six.Instructions
 
         public Func<Ptr> Add(string text)
         {
+            Console.WriteLine($"add '{text}'");
             if (!strings.TryGetValue(text, out var already))
             {
                 Assert(Offset == AlignCount(Offset));
@@ -54,6 +55,7 @@ namespace Six.Six.Instructions
 
         public void Emit(uint baseOffset)
         {
+            Console.WriteLine("EMIT");
             Assert(AlignCount(baseOffset) == baseOffset);
 
             BaseOffset = baseOffset;

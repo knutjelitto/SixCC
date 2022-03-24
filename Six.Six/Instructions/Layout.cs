@@ -25,10 +25,6 @@ namespace Six.Six.Instructions
 
         public void Run()
         {
-            if (Classy.Name == "Basic")
-            {
-                Assert(true);
-            }
             if (Done)
             {
                 return;
@@ -40,7 +36,6 @@ namespace Six.Six.Instructions
             MakeInterfaces();
 
             Emitter.AddClass(Classy.FullName, Size);
-
         }
 
         private void MakeFields()

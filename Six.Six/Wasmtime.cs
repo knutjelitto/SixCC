@@ -77,11 +77,14 @@ namespace Six.Six
             var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
             Assert(complex2 == heap_start + 160);
 
-            var re = CallInt32Function(store, instance, "six.core.Complex.getRe", complex1);
-            Assert(re == 1);
+            result = CallInt32Function(store, instance, "six.core.Complex.getRe", complex1);
+            Assert(result == 1);
 
-            var added = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
-            Assert(added == heap_start + 176);
+            result = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
+            Assert(result == heap_start + 176);
+
+            result = CallInt32Function(store, instance, "six.core.Complex.getRe", result);
+            Assert(result == 2);
         }
 
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)

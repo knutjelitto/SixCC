@@ -9,6 +9,8 @@ namespace Six.Six.Sema
         ILocation Location { get; }
         Errors Errors { get; }
 
+        bool Validated { get; set; }
+
         public sealed class Return : Statement
         {
             private readonly LazyExpr? delayed;

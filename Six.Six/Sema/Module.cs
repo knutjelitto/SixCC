@@ -13,6 +13,7 @@ namespace Six.Six.Sema
         public static readonly string LanguageCore = "core";
         public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
         public static readonly string DefaultCtor = "ctor@default";
+        public static string ModuleFunctions => $"{CoreNamespace}.functions";
         public static string DataAndHeap => $"{CoreNamespace}.Data&Heap";
         public static string Data_Start => $"{CoreNamespace}.__data_start";
         public static string Heap_Start => $"{CoreNamespace}.__heap_start";

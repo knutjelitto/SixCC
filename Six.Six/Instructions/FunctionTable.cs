@@ -36,7 +36,7 @@ namespace Six.Six.Instructions
         {
             if (table.Count > 0)
             {
-                wl($"(table {Name} funcref (elem");
+                wl($"(table ${Name} funcref (elem");
                 indent(() =>
                 {
                     foreach (var (name, element) in table.OrderBy(kv => kv.Value.index))

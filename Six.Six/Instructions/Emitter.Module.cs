@@ -8,8 +8,6 @@ namespace Six.Six.Instructions
     {
         public void EmitModule()
         {
-            Preparer.Prepare();
-
             if (Module.HasErrors)
             {
                 return;

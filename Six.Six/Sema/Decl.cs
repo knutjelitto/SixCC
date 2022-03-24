@@ -18,6 +18,8 @@ namespace Six.Six.Sema
         bool IsShared { get; }
         bool IsSealed { get; }
 
+        bool Validated { get; set; }
+
         public abstract class Classy : Declaration, Typy
         {
             private Layout? layout;
@@ -436,6 +438,8 @@ namespace Six.Six.Sema
             public bool IsSealed => ADecl.IsSealed();
 
             public bool IsPrefinal => ADecl.IsPrefinal();
+
+            public bool Validated { get; set; }
         }
     }
 }

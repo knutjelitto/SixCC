@@ -1,9 +1,9 @@
-﻿using Six.Core.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+
+using Six.Core.Errors;
+
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable CA1822 // Mark members as static
 
 namespace Six.Six.Sema
 {
@@ -67,68 +67,68 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
-        private void Validate(Decl.Class decl)
+        private void Validate(Decl decl)
         {
-            ValidateClassy(decl);
+            Decl((dynamic)decl);
+        }
+
+        private void Decl(Decl.Class decl)
+        {
+            ClassyDecl(decl);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.Interface decl)
+        private void Decl(Decl.Interface decl)
         {
-            ValidateClassy(decl);
+            ClassyDecl(decl);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.Object decl)
+        private void Decl(Decl.Object decl)
         {
-            ValidateClassy(decl);
+            ClassyDecl(decl);
 
             Assert(slip);
         }
 
-        private void ValidateClassy(Decl.Classy decl)
+        private void ClassyDecl(Decl.Classy decl)
         {
+            decl.Layout.Run();
+
             Walk(decl.Block);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.Attribute decl)
-        {
-            Walk(decl.Block);
-
-            Assert(slip);
-        }
-
-        private void Validate(Decl.Field decl)
+        private void Decl(Decl.Field decl)
         {
             Walk(decl.Value);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.Global decl)
+        private void Decl(Decl.Global decl)
         {
             Walk(decl.Value);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.LetVar decl)
+        private void Decl(Decl.LetVar decl)
         {
             Walk(decl.Value);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.SelfParameter decl)
+        private void Decl(Decl.SelfParameter decl)
         {
             Assert(slip);
         }
 
-        private void Validate(Decl.Parameter decl)
+        private void Decl(Decl.Parameter decl)
         {
             if (decl.Default != null)
             {
@@ -138,17 +138,29 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Validate(Decl.Constructor decl)
+        private void Decl(Decl.Funcy decl)
+        {
+            Walk(decl.Block);
+
+            FuncyDecl((dynamic)decl);
+        }
+
+        private void FuncyDecl(Decl.Constructor decl)
         {
             Walk(decl.Block);
 
             Assert(slip);
         }
 
-        private void Validate(Decl.Function decl)
+        private void FuncyDecl(Decl.Attribute decl)
         {
             Walk(decl.Block);
 
+            Assert(slip);
+        }
+
+        private void FuncyDecl(Decl.Function decl)
+        {
             if (decl.Parent is NamespaceBlock)
             {
                 if (decl.IsStatic) Add(Errors.SubjectShouldntBeMarkedAs(decl, $"global {Names.Nomes.Function}", Names.Attr.Static));
@@ -174,7 +186,16 @@ namespace Six.Six.Sema
             }
         }
 
-        private void Validate(Stmt.Return stmt)
+        private void Validate(Stmt stmt)
+        {
+            Stmt((dynamic)stmt);
+
+            stmt.Validated = true;
+
+            Assert(slip);
+        }
+
+        private void Stmt(Stmt.Return stmt)
         {
             if (stmt.Expr != null)
             {
@@ -182,44 +203,41 @@ namespace Six.Six.Sema
 
                 Assert(Checker.CanAssign(stmt.Funcy.ResultType, stmt.Expr.Type));
             }
-
-            stmt.Validated = true;
-
-            Assert(slip);
         }
 
-        private void Validate(Stmt.Assign stmt)
+        private void Stmt(Stmt.Assign stmt)
         {
             Walk(stmt.Left);
             Walk(stmt.Right);
 
             Assert(Checker.CanAssign(stmt.Left.Type, stmt.Right.Type));
-
-            stmt.Validated = true;
-
-            Assert(slip);
         }
 
-        private void Validate(Expr.SelectField expr)
+        private void Validate(Expr expr)
+        {
+            Expr((dynamic)expr);
+        }
+
+        private void Expr(Expr.SelectField expr)
         {
             Assert(slip);
         }
 
-        private void Validate(Expr.CallConstructor expr)
-        {
-            Walk(expr.Arguments);
-
-            Assert(slip);
-        }
-
-        private void Validate(Expr.CallFunction expr)
+        private void Expr(Expr.CallConstructor expr)
         {
             Walk(expr.Arguments);
 
             Assert(slip);
         }
 
-        private void Validate(Expr.CallIndirect expr)
+        private void Expr(Expr.CallFunction expr)
+        {
+            Walk(expr.Arguments);
+
+            Assert(slip);
+        }
+
+        private void Expr(Expr.CallIndirect expr)
         {
             Walk(expr.Value);
             Walk(expr.Arguments);
@@ -227,14 +245,14 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Validate(Expr.CallPrefixMember expr)
+        private void Expr(Expr.CallPrefixMember expr)
         {
             Walk(expr.Arg);
 
             Assert(slip);
         }
 
-        private void Validate(Expr.CallInfixMember expr)
+        private void Expr(Expr.CallInfixMember expr)
         {
             Walk(expr.Arg1);
             Walk(expr.Arg2);
@@ -242,7 +260,7 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Validate(Expr.If expr)
+        private void Expr(Expr.If expr)
         {
             Walk(expr.Condition);
             Walk(expr.Then);
@@ -251,22 +269,22 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Validate(Expr.Reference expr)
+        private void Expr(Expr.Reference expr)
         {
             Assert(slip);
         }
 
-        private void Validate(Expr.ConstS32 expr)
+        private void Expr(Expr.ConstS32 expr)
         {
             // -- bottom
         }
 
-        private void Validate(Expr.ConstU32 expr)
+        private void Expr(Expr.ConstU32 expr)
         {
             // -- bottom
         }
 
-        private void Validate(Expr.ConstString expr)
+        private void Expr(Expr.ConstString expr)
         {
             // -- bottom
         }

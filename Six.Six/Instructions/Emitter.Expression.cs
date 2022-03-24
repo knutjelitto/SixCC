@@ -94,7 +94,7 @@ namespace Six.Six.Instructions
             var callable = expr.Callable;
 
             Emit(expr.Value);
-            Emit(Insn.CallIndirect(globalFunctionsTableName, TypeFor(callable)));
+            Emit(Insn.CallIndirect(GlobalFunctions.Name, TypeFor(callable)));
         }
 
         private void Handle(Expr.If expr)
