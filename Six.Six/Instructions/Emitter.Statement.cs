@@ -10,13 +10,13 @@ namespace Six.Six.Instructions
     {
         private void Handle(Stmt stmt)
         {
-            Assert(false);
-        }
-
-        private void Handle(Stmt.Assign stmt)
-        {
             Assert(stmt.Validated);
 
+            HandleStmt((dynamic) stmt);
+        }
+
+        private void HandleStmt(Stmt.Assign stmt)
+        {
             switch (stmt.Left)
             {
                 case Expr.SelectField select:
@@ -34,10 +34,8 @@ namespace Six.Six.Instructions
             }
         }
 
-        private void Handle(Stmt.Return stmt)
+        private void HandleStmt(Stmt.Return stmt)
         {
-            Assert(stmt.Validated);
-
             if (stmt.Expr != null)
             {
                 Emit(stmt.Expr);

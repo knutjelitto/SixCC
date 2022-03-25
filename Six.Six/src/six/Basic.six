@@ -2,6 +2,4 @@ namespace six.core;
 
 shared abstract class Basic : Object is Identifiable
 {
-    shared override bool equals(Object other) => Runtime.identical(self, other);
-    shared override int hash => Runtime.identityHash(self);
 }

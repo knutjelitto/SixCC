@@ -124,34 +124,38 @@ namespace Six.Six.Sema
             _ = new Decl.Alias(parent, node);
         }
 
-        private void Declare(FuncBlock parent, A.Decl.Let node)
-        {
-            parent.Content.Declare(new Decl.LetVar(parent, node, false));
-        }
-
-        private void Declare(ClassBlock parent, A.Decl.Let node)
-        {
-            parent.Content.Declare(new Decl.Field(parent, node, false));
-        }
-
-        private void Declare(NamespaceBlock parent, A.Decl.Let node)
-        {
-            parent.Content.Declare(new Decl.Global(parent, node, false));
-        }
-
         private void Declare(FuncBlock parent, A.Decl.Var node)
         {
             parent.Content.Declare(new Decl.LetVar(parent, node, true));
         }
 
+        private void Declare(FuncBlock parent, A.Decl.Let node)
+        {
+            parent.Content.Declare(new Decl.LetVar(parent, node, false));
+        }
+
         private void Declare(ClassBlock parent, A.Decl.Var node)
         {
+            Assert(node.Type != null);
             parent.Content.Declare(new Decl.Field(parent, node, true));
         }
+        private void Declare(ClassBlock parent, A.Decl.Let node)
+        {
+            Assert(node.Type != null);
+            parent.Content.Declare(new Decl.Field(parent, node, false));
+        }
+
 
         private void Declare(NamespaceBlock parent, A.Decl.Var node)
         {
+            Assert(node.Type != null);
             parent.Content.Declare(new Decl.Global(parent, node, true));
+        }
+
+        private void Declare(NamespaceBlock parent, A.Decl.Let node)
+        {
+            Assert(node.Type != null);
+            parent.Content.Declare(new Decl.Global(parent, node, false));
         }
 
         private void Declare(Block block, A.Decl.TypeParameters node)

@@ -13,13 +13,13 @@ namespace Six.Six.Instructions
 {
     public partial class Emitter
     {
-        public Builtin Lower(Type type)
+        public BuiltinCore Lower(Type type)
         {
             var lower = Resolver.LowerType(type);
 
             switch (lower)
             {
-                case Builtin builtin:
+                case BuiltinCore builtin:
                     return builtin;
                 default:
                     Assert(false);
@@ -85,7 +85,7 @@ namespace Six.Six.Instructions
         {
             switch (Resolver.LowerType(type))
             {
-                case Builtin builtin:
+                case BuiltinCore builtin:
                     return $"{builtin.Wasm.Type}";
                 case Type.Callable:
                     return $"{Builtins.TableIndex.Wasm.Type}";
@@ -115,7 +115,7 @@ namespace Six.Six.Instructions
             {
                 case Type.Declared declared when declared.Decl.FullName == Names.Core.CoreAnything:
                     return null;
-                case Builtin builtin when builtin.Name == Names.Core.Anything:
+                case BuiltinCore builtin when builtin.Name == Names.Core.Anything:
                     return null;
                 default:
                     return $"(result {WasmTypeFor(type)})";

@@ -103,9 +103,9 @@ namespace Six.Six.Instructions
                     }
                 });
             }
-            if (layout.IFaces.Count > 0)
+            if (layout.InterFaces.Count > 0)
             {
-                foreach (var interFace in layout.IFaces)
+                foreach (var interFace in layout.InterFaces)
                 {
                     comment($"interface {interFace.Interface.Name} slots", () =>
                     {

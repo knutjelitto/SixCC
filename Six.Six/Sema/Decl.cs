@@ -3,7 +3,7 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public interface Decl : Member
+    public partial interface Decl : Member
     {
         A.Decl ADecl { get; }
         Type Type { get; }
@@ -348,14 +348,16 @@ namespace Six.Six.Sema
 
         public sealed class Global : Declaration
         {
-            private readonly LazyExpr value;
+            private readonly LazyExpr lazyValue;
+            public readonly A.Decl.LetVar ALetVar;
 
-            public Global(NamespaceBlock parent, A.Decl aDecl, bool writeable)
+            public Global(NamespaceBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
-                Assert(aDecl is A.With.OptionalType);
-                Assert(aDecl is A.With.Value);
-                value = Resolver.ResolveExpression(parent.Content, ((A.With.Value)aDecl).Value);
+                Assert(aDecl.Type != null);
+
+                ALetVar = aDecl;
+                lazyValue = Resolver.ResolveExpression(parent.Content, ALetVar.Value);
                 Writeable = writeable;
                 parent.Members.Add(this);
             }
@@ -369,10 +371,10 @@ namespace Six.Six.Sema
                     if (type == null)
                     {
                         //TODO: typecheck
-                        var aType = ((A.With.OptionalType)ADecl).Type;
+                        var aType = ALetVar.Type;
                         if (aType != null)
                         {
-                            type = Resolver.ResolveType(Container, aType);
+                            type = Resolver.ResolveType(Parent.Content, aType);
                         }
                         else
                         {
@@ -384,7 +386,7 @@ namespace Six.Six.Sema
                 }
             }
 
-            public Expr Value => value.Expr;
+            public Expr Value => lazyValue.Expr;
 
             public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
         }

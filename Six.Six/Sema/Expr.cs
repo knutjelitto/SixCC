@@ -50,10 +50,10 @@ namespace Six.Six.Sema
         //TODO:
         public sealed record AllocClass(Decl.Class Class) : Primitive(Class.Type);
 
-        public sealed record Binop(Builtin Builtin, Insn Insn, Expr Arg1, Expr Arg2)
+        public sealed record Binop(BuiltinCore Builtin, Insn Insn, Expr Arg1, Expr Arg2)
             : Primitive(Builtin);
 
-        public sealed record Unop(Builtin Builtin, Insn Insn, Expr Arg)
+        public sealed record Unop(BuiltinCore Builtin, Insn Insn, Expr Arg)
             : Primitive(Builtin);
 
         public abstract record Reference(Decl Decl) : Expr

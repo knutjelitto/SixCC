@@ -8,7 +8,7 @@ using Six.Six.Instructions;
 
 namespace Six.Six.Builtins
 {
-    public abstract class Xnn<TInsn,TValue> : Builtin
+    public abstract class Xnn<TInsn,TValue> : BuiltinCore
         where TInsn : Insn.Xnn<TValue>
         where TValue : struct
     {

@@ -2,6 +2,11 @@
 
 using Six.Core.Errors;
 
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
+
+using Six.Core.Errors;
+
 #pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable CA1822 // Mark members as static
 
@@ -90,6 +95,21 @@ namespace Six.Six.Sema
         {
             ClassyDecl(decl);
 
+            if (!decl.IsAbstract)
+            {
+                foreach (var slot in decl.Layout.Slots)
+                {
+                    if (!slot.Funcy.IsAbstract)
+                    {
+                        continue;
+                    }
+
+                    var subject = $"the {Names.Attr.Abstract} member";
+
+                    Add(Errors.AbstractNotImplemented(decl, slot.Funcy, subject));
+                }
+            }
+
             Assert(slip);
         }
 
@@ -112,6 +132,11 @@ namespace Six.Six.Sema
         private void Decl(Decl.Global decl)
         {
             Walk(decl.Value);
+
+            if (!Checker.CanAssign(decl.Type, decl.Value.Type))
+            {
+                Add(Errors.TypeMismatch(decl.ALetVar.Value, decl.Type, decl.Value.Type));
+            }
 
             Assert(slip);
         }
@@ -163,11 +188,14 @@ namespace Six.Six.Sema
         {
             if (decl.Parent is NamespaceBlock)
             {
-                if (decl.IsStatic) Add(Errors.SubjectShouldntBeMarkedAs(decl, $"global {Names.Nomes.Function}", Names.Attr.Static));
-                if (decl.IsAbstract) Add(Errors.SubjectShouldntBeMarkedAs(decl, $"global {Names.Nomes.Function}", Names.Attr.Abstract));
-                if (decl.IsOverride) Add(Errors.SubjectShouldntBeMarkedAs(decl, $"global {Names.Nomes.Function}", Names.Attr.Override));
-                if (decl.IsVirtual) Add(Errors.SubjectShouldntBeMarkedAs(decl, $"global {Names.Nomes.Function}", Names.Attr.Virtual));
-                if (decl.IsSealed) Add(Errors.SubjectShouldntBeMarkedAs(decl, $"global {Names.Nomes.Function}", Names.Attr.Sealed));
+                var subject = $"global {Names.Nouns.Function}";
+
+                if (decl.IsStatic) Add(Errors.SubjectShouldntBeMarkedAs(decl, subject, Names.Attr.Static));
+                if (decl.IsAbstract) Add(Errors.SubjectShouldntBeMarkedAs(decl, subject, Names.Attr.Abstract));
+                if (decl.IsOverride) Add(Errors.SubjectShouldntBeMarkedAs(decl, subject, Names.Attr.Override));
+                if (decl.IsVirtual) Add(Errors.SubjectShouldntBeMarkedAs(decl, subject, Names.Attr.Virtual));
+                if (decl.IsSealed) Add(Errors.SubjectShouldntBeMarkedAs(decl, subject, Names.Attr.Sealed));
+                if (!decl.HasBody) Add(Errors.SubjectShouldBeImplemented(decl, subject));
 
                 Assert(slip);
             }

@@ -54,7 +54,7 @@ namespace Six.Six.Sema
 
         public DiagnosticException MustBeAnInterface(A.Type tree)
         {
-            var diagnostic = new SemanticError(tree.GetLocation(), $"{Names.Nomes.Interface} type expected here");
+            var diagnostic = new SemanticError(tree.GetLocation(), $"{Names.Nouns.Interface} type expected here");
 
             return new DiagnosticException(diagnostic);
         }
@@ -71,6 +71,20 @@ namespace Six.Six.Sema
         public DiagnosticException SubjectShouldntBeMarkedAs(Decl.Funcy funcy, string subject, string attribute)
         {
             var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' shouldn't be marked as '{attribute}'");
+
+            return new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException SubjectShouldBeImplemented(Decl.Funcy funcy, string subject)
+        {
+            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' misses an implementation");
+
+            return new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException AbstractNotImplemented(Decl.Classy classy, Decl.Funcy funcy, string subject)
+        {
+            var diagnostic = new SemanticError(classy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' is not implemented");
 
             return new DiagnosticException(diagnostic);
         }

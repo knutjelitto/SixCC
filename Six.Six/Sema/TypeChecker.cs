@@ -35,7 +35,7 @@ namespace Six.Six.Sema
                 {
                     if (fromRef.Decl is Decl.Class clazz)
                     {
-                        foreach (var x in clazz.Layout.IFaces)
+                        foreach (var x in clazz.Layout.InterFaces)
                         {
                             if (ReferenceEquals(iface, x.Interface))
                             {

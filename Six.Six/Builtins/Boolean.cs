@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
-    public sealed class Boolean : Builtin
+    public sealed class Boolean : BuiltinCore
     {
         public Boolean(Builtins builtins)
             : base(builtins, Names.Core.Boolean, WasmDef.Boolean)
