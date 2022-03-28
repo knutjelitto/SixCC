@@ -1,10 +1,5 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Six.Builtins
 {
@@ -57,14 +52,12 @@ namespace Six.Six.Builtins
 
         public override Insn Load(uint offset)
         {
-            Assert(false);
-            throw new NotImplementedException();
+            return Insn.U32.Load(offset);
         }
 
         public override Insn Store(uint offset)
         {
-            Assert(false);
-            throw new NotImplementedException();
+            return Insn.U32.Store(offset);
         }
     }
 }

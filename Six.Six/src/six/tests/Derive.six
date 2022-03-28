@@ -1,0 +1,58 @@
+namespace six.core.tests;
+
+shared class Point
+{
+    var int x = 0;
+    var int y = 0;
+
+    shared new (int x = 0, int y = 0)
+    {
+        self.x = x;
+        self.y = y;
+    }
+}
+
+shared class Size
+{
+    var int width = 0;
+    var int height = 0;
+
+    shared new (int width = 0, int height = 0)
+    {
+        self.width = width;
+        self.height = height;
+    }
+
+}
+
+shared class Rect
+{
+    var Point position = Point();
+    var Size size = Size();
+
+    shared new (Point position, Size size)
+    {
+        self.position = position;
+        self.size = size;
+    }
+}
+
+shared abstract class Shape
+{
+    //shared abstract void Draw();
+    //shared abstract int Area;
+}
+
+shared class Square : Shape
+{
+    let int length = 0;
+
+    shared new (Point point, int length)
+    {
+        self.length = length;
+    }
+
+    shared int Area => length * length;
+
+    shared void Draw() { }
+}

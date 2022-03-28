@@ -18,13 +18,14 @@ namespace Six.Six.Sema
         public virtual BlockScope Content => content ??= new BlockScope(Name, Head);
         public virtual BlockScope Head => head ??= new BlockScope(Name, Parent.Content);
         public Module Module => Head.Module;
+        public Resolver Resolver => Module.Resolver;
         public List<Member> Members { get; } = new();
     }
 
     public sealed class ClassBlock : Block
     {
         public ClassBlock(Decl.Classy classy, Block parent)
-            : base(classy.ADecl.Name.Text)
+            : base(classy.Name)
         {
             Classy = classy;
             Parent = parent;
@@ -38,7 +39,7 @@ namespace Six.Six.Sema
     public sealed class FuncBlock : Block
     {
         public FuncBlock(Decl.Funcy funcy, Block parent, string? name = null)
-            : base(name ?? funcy.ADecl.Name.Text)
+            : base(name ?? funcy.Name)
         {
             Funcy = funcy;
             Parent = parent;

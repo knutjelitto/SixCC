@@ -1,4 +1,5 @@
-﻿using A = Six.Six.Ast;
+﻿using Six.Core;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -26,14 +27,14 @@ namespace Six.Six.Sema
             return declarations.Values;
         }
 
-        public virtual Decl Find(A.TreeNode tree, string name)
+        public virtual Decl Find(ILocation location, string name)
         {
             if (declarations.TryGetValue(name, out var decl))
             {
                 return decl;
             }
 
-            throw Errors.CantResolveMember(tree, name);
+            throw Errors.CantResolveMember(location, name);
         }
 
         public virtual Decl? TryFind(string name)

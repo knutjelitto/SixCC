@@ -8,10 +8,10 @@ namespace Six.Six.Sema
     {
         public static Decl FindMember(this Decl.Classy classy, A.Reference reference, string? name = null)
         {
-            return classy.FindMember((A.TreeNode)reference, name ?? reference.Name.Text);
+            return classy.FindMember(reference.GetLocation(), name ?? reference.Name.Text);
         }
 
-        public static Decl FindMember(this Decl.Classy classy, A.TreeNode tree, string name)
+        public static Decl FindMember(this Decl.Classy classy, ILocation location, string name)
         {
             var found = classy.Block.Content.TryFind(name);
 
@@ -21,13 +21,13 @@ namespace Six.Six.Sema
             }
             if (classy.Extends != null)
             {
-                return classy.Extends.FindMember(tree, name);
+                return classy.Extends.FindMember(location, name);
             }
 
-            throw classy.Module.Errors.CantResolveMember(tree, name);
+            throw classy.Module.Errors.CantResolveMember(location, name);
         }
 
-        public static T FindMember<T>(this Decl.Classy classy, A.TreeNode tree, string name)
+        public static T FindMember<T>(this Decl.Classy classy, ILocation location, string name)
             where T : Decl
         {
             var found = classy.Block.Content.TryFind(name);
@@ -38,15 +38,15 @@ namespace Six.Six.Sema
             }
             if (classy.Extends != null)
             {
-                return classy.Extends.FindMember<T>(tree, name);
+                return classy.Extends.FindMember<T>(location, name);
             }
 
-            throw classy.Module.Errors.CantResolveMember(tree, name);
+            throw classy.Module.Errors.CantResolveMember(location, name);
         }
 
-        public static ILocation GetLocation(this Decl node)
+        public static string GetKind(this Decl decl)
         {
-            return node.ADecl.GetLocation();
+            return decl.GetType().Name;
         }
 
         public static ILocation GetLocation(this A.TreeNode node)
@@ -76,12 +76,7 @@ namespace Six.Six.Sema
             return "--no-name--";
         }
 
-        public static bool IsWith(this Decl decl, string attribute)
-        {
-            return decl.ADecl.IsWith(attribute);
-        }
-
-        private static bool IsWith(this A.TreeNode node, string attribute)
+        public static bool IsWith(this A.TreeNode node, string attribute)
         {
             return node is A.With.Prelude withPrelude && withPrelude.IsWith(attribute);
         }

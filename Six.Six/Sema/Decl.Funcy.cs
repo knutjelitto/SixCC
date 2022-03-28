@@ -1,4 +1,5 @@
 ﻿using Six.Six.Instructions;
+using System;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -9,6 +10,8 @@ namespace Six.Six.Sema
         {
             private FuncLayout? layout;
             private List<Type>? paramTypes = null;
+            private Type? resultType = null;
+
 
             public Funcy(Block parent, string name, A.Decl.Funcy aDecl)
                 : base(parent, aDecl)
@@ -27,7 +30,6 @@ namespace Six.Six.Sema
 
             public IReadOnlyList<Local> Parameters => Layout.TypedParameters;
 
-            public abstract Type ResultType { get; }
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();
 
@@ -40,6 +42,9 @@ namespace Six.Six.Sema
 
             public override Type Type =>
                 type ??= new Type.Callable(Module, ResultType, ParamTypes);
+
+            public Func<Type> ResultTypeResolver { get; init; } = () => throw new NotImplementedException();
+            public Type ResultType => resultType ??= ResultTypeResolver();
 
             public Type.Callable CallableType => (Type.Callable)Type;
 
@@ -58,48 +63,35 @@ namespace Six.Six.Sema
 
         public class Function : Funcy
         {
-            private Type? resultType = null;
-
             public Function(Block parent, A.Decl.Funcy aDecl, string? name)
                 : base(parent, name ?? aDecl.Name.Text, aDecl)
             {
-                Assert(ADecl is A.With.Type);
-                Assert(ADecl is A.With.Parameters);
+                ResultTypeResolver = () => LazyTypeResolver(parent, ((A.With.Type)aDecl).Type);
             }
 
-            public override Type ResultType =>
-                resultType ??= Resolver.ResolveType(Scope, ((A.With.Type)ADecl).Type);
         }
 
         public class Constructor : Funcy
         {
-            private Type? resultType = null;
-
             public Constructor(ClassBlock parent, A.Decl.Funcy aFuncyDecl)
                 : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)
             {
+                ResultTypeResolver = () => Resolver.ResolveType(parent.Classy.Type);
             }
 
             public override bool IsStatic => true;
-
-            public override Type ResultType =>
-                resultType ??= Resolver.ResolveType(((ClassBlock)Parent).Classy.Type);
         }
 
         public sealed class Attribute : Funcy
         {
-            private Type? resultType = null;
-
             public Attribute(Block parent, A.Decl.Attribute aDecl)
                 : base(parent, aDecl.Name.Text, aDecl)
             {
-                Assert(ADecl is A.With.Type);
+                ResultTypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
+                FullName = $"{parent.FullName()}.{Name}";
             }
 
-            public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
-
-            public override Type ResultType =>
-                resultType ??= Resolver.ResolveType(Parent.Content, ((A.With.Type)ADecl).Type);
+            public override string FullName { get; }
         }
     }
 }

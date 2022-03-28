@@ -115,7 +115,6 @@ namespace Six.Six.Sema
                 {
                     diagnostic.Report(writer);
                 }
-                writer.WriteLine();
             }
 
             WhenDiagnostics();
@@ -134,16 +133,16 @@ namespace Six.Six.Sema
         private void DumpDeclarations(Writer writer)
         {
             var count = 0;
-            foreach (var declaration in GetNamespaces().SelectMany(ns => ns.GetDeclarations()).OrderBy(e => e.Name))
+            foreach (var decl in GetNamespaces().SelectMany(ns => ns.GetDeclarations()).OrderBy(decl => decl.Name))
             {
                 count += 1;
 
                 var attrs = new StringBuilder();
-                attrs.Append(declaration.IsShared ? "P" : " ");
-                attrs.Append(declaration.IsStatic ? "S" : " ");
-                attrs.Append(declaration.IsNative ? "N" : " ");
+                attrs.Append(decl.IsShared ? "P" : " ");
+                attrs.Append(decl.IsStatic ? "S" : " ");
+                attrs.Append(decl.IsNative ? "N" : " ");
 
-                writer.WriteLine($"{count,3} {declaration.ADecl.GetKind(),-12} [{attrs}] {declaration.ADecl.GetName(),-30} {declaration.ADecl.GetLocation()}");
+                writer.WriteLine($"{count,3} {decl.GetKind(),-12} [{attrs}] {decl.Name,-30} {decl.Location}");
             }
         }
 
@@ -163,11 +162,11 @@ namespace Six.Six.Sema
             throw Errors.CantResolveInCore("class", name);
         }
 
-        public Decl.Class CoreFindClass(A.TreeNode tree, string name)
+        public Decl.Class CoreFindClass(ILocation location, string name)
         {
             var core = GetCoreNamespace();
 
-            var decl = core.Content.Find(tree, name);
+            var decl = core.Content.Find(location, name);
             Assert(decl is Decl.Class);
             return (Decl.Class)decl;
         }

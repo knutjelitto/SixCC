@@ -40,7 +40,7 @@ namespace Six.Six.Instructions
 
         private void MakeFields()
         {
-            var fieldOffset = WasmDef.Pointer.Size;
+            var fieldOffset = WasmDef.Pointer.Size + WasmDef.I32.Size;
 
             if (Classy.Extends is Decl.Class extended)
             {

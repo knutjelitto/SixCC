@@ -18,8 +18,8 @@ namespace Six.Six.Sema
 
         public DiagnosticException DupError(Decl named, Decl already)
         {
-            var diagnostic1 = new SemanticError(named.GetLocation(), $"identifier '{named.Name}' already introduced elsewhere");
-            var diagnostic2 = new SemanticError(already.GetLocation(), $"identifier '{already.Name}' introduced here");
+            var diagnostic1 = new SemanticError(named.Location, $"identifier '{named.Name}' already introduced elsewhere");
+            var diagnostic2 = new SemanticError(already.Location, $"identifier '{already.Name}' introduced here");
 
             return new DiagnosticException(diagnostic1, diagnostic2);
         }
@@ -31,9 +31,9 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
-        public DiagnosticException CantResolveMember(A.TreeNode tree, string name)
+        public DiagnosticException CantResolveMember(ILocation location, string name)
         {
-            var diagnostic = new SemanticError(tree.GetLocation(), $"member '{name}' not found");
+            var diagnostic = new SemanticError(location, $"member '{name}' not found");
 
             return new DiagnosticException(diagnostic);
         }
@@ -70,28 +70,35 @@ namespace Six.Six.Sema
 
         public DiagnosticException SubjectShouldNotBeMarkedAs(Decl.Funcy funcy, string subject, string attribute)
         {
-            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' shouldn't be marked as '{attribute}'");
+            var diagnostic = new SemanticError(funcy.Location, $"{subject} '{funcy.Name}' shouldn't be marked as '{attribute}'");
 
             return new DiagnosticException(diagnostic);
         }
 
         public DiagnosticException SubjectMustBeImplemented(Decl.Funcy funcy, string subject)
         {
-            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' must have an implementation");
+            var diagnostic = new SemanticError(funcy.Location, $"{subject} '{funcy.Name}' must have an implementation");
 
             return new DiagnosticException(diagnostic);
         }
 
         public DiagnosticException SubjectShouldNotBeImplemented(Decl.Funcy funcy, string subject)
         {
-            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' can't be implemented here");
+            var diagnostic = new SemanticError(funcy.Location, $"{subject} '{funcy.Name}' can't be implemented here");
 
             return new DiagnosticException(diagnostic);
         }
 
         public DiagnosticException AbstractNotImplemented(Decl.Classy classy, Decl.Funcy funcy, string subject)
         {
-            var diagnostic = new SemanticError(classy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' is not implemented");
+            var diagnostic = new SemanticError(classy.Location, $"{subject} '{funcy.Name}' is not implemented");
+
+            return new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException CanNotCreateInstance(Decl.Classy classy, string subject)
+        {
+            var diagnostic = new SemanticError(classy.Location, $"can not create instance of {Names.Attr.Abstract} {subject} '{classy.Name}'");
 
             return new DiagnosticException(diagnostic);
         }

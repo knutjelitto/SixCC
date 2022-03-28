@@ -41,7 +41,7 @@ namespace Six.Six.Sema
             {
                 foreach (var slot in decl.Layout.Slots)
                 {
-                    if (!slot.Funcy.IsAbstract)
+                    if (slot.Funcy.IsConcrete)
                     {
                         continue;
                     }
@@ -62,6 +62,21 @@ namespace Six.Six.Sema
 
             Walk(decl.Block);
 
+            if (!decl.IsAbstract)
+            {
+                foreach (var slot in decl.Layout.Slots)
+                {
+                    if (slot.Funcy.IsConcrete)
+                    {
+                        continue;
+                    }
+
+                    var subject = $"the {Names.Attr.Abstract} member";
+
+                    Add(Errors.AbstractNotImplemented(decl, slot.Funcy, subject));
+                }
+            }
+
             Assert(slip);
         }
 
@@ -78,7 +93,7 @@ namespace Six.Six.Sema
 
             if (!Checker.CanAssign(decl.Type, decl.Value.Type))
             {
-                Add(Errors.TypeMismatch(decl.GetLocation(), decl.Type, decl.Value.Type));
+                Add(Errors.TypeMismatch(decl.Location, decl.Type, decl.Value.Type));
             }
 
             Assert(slip);

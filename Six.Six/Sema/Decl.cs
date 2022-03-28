@@ -1,10 +1,12 @@
-﻿using A = Six.Six.Ast;
+﻿using Six.Core;
+using System;
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
     public partial interface Decl : Member
     {
-        A.Decl ADecl { get; }
+        ILocation Location { get; }
         Type Type { get; }
         string Name { get; }
         string FullName { get; }
@@ -29,25 +31,26 @@ namespace Six.Six.Sema
 
             public int Index { get; set; }
 
-            public override string FullName => ADecl.Name.Text;
+            public override string FullName => Name;
         }
 
         public sealed class Parameter : Local
         {
             private readonly LazyExpr? lazyDefault;
 
-            public Parameter(FuncBlock parent, A.Decl.Parameter ADecl, LazyExpr? lazyDefault)
-                : base(parent, ADecl)
+            public Parameter(FuncBlock parent, A.Decl.Parameter aDecl, LazyExpr? lazyDefault)
+                : base(parent, aDecl)
             {
-                Assert(ADecl is A.With.Type);
                 parent.Funcy.AddParameter(this);
                 this.lazyDefault = lazyDefault;
+                TypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
             }
 
             public Expr? Default => lazyDefault?.Expr;
 
-            public override Type Type =>
-                type ??= Resolver.ResolveType(Parent.Content, ((A.With.Type)ADecl).Type);
+            public Func<Type> TypeResolver { get; init; }
+
+            public override Type Type => type ??= TypeResolver();
         }
 
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {SelfName}")]
@@ -68,55 +71,35 @@ namespace Six.Six.Sema
 
         public sealed class LetVar : Local
         {
-            private readonly LazyExpr value;
+            private readonly LazyExpr lazyValue;
 
-            public LetVar(FuncBlock parent, A.Decl ADecl, bool writeable)
-                : base(parent, ADecl)
+            public LetVar(FuncBlock parent, A.Decl.LetVar aDecl, bool writeable)
+                : base(parent, aDecl)
             {
-                Assert(ADecl is A.With.OptionalType);
-                Assert(ADecl is A.With.Value);
-                value = Resolver.ResolveExpression(Parent, ((A.With.Value)ADecl).Value);
+                lazyValue = Resolver.ResolveExpression(Parent, aDecl.Value);
+                TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
                 parent.Funcy.AddLocal(this);
             }
 
             public bool Writeable { get; }
 
-            public override Type Type
-            {
-                get
-                {
-                    if (type == null)
-                    {
-                        //TODO: typecheck
-                        var aType = ((A.With.OptionalType)ADecl).Type;
-                        if (aType != null)
-                        {
-                            type = Resolver.ResolveType(Parent.Content, aType);
-                        }
-                        else
-                        {
-                            type = Value.Type;
-                        }
-                    }
+            public Func<Type> TypeResolver { get; init; }
 
-                    return type;
-                }
-            }
+            public override Type Type => type ??= TypeResolver();
 
-            public Expr Value => value.Expr;
+            public Expr Value => lazyValue.Expr;
         }
 
         public sealed class Field : Declaration
         {
-            private readonly LazyExpr value;
+            private readonly LazyExpr lazyValue;
 
-            public Field(ClassBlock parent, A.Decl aDecl, bool writeable)
+            public Field(ClassBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
-                Assert(aDecl is A.With.OptionalType);
-                Assert(aDecl is A.With.Value);
-                value = Resolver.ResolveExpression(parent, ((A.With.Value)aDecl).Value);
+                lazyValue = Resolver.ResolveExpression(parent, aDecl.Value);
+                TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
                 parent.Classy.AddField(this);
             }
@@ -124,31 +107,13 @@ namespace Six.Six.Sema
             public bool Writeable { get; }
             public uint Offset { get; set; } = uint.MaxValue;
 
-            public override Type Type
-            {
-                get
-                {
-                    if (type == null)
-                    {
-                        //TODO: typecheck
-                        var aType = ((A.With.OptionalType)ADecl).Type;
-                        if (aType != null)
-                        {
-                            type = Resolver.ResolveType(Parent.Content, aType);
-                        }
-                        else
-                        {
-                            type = Value.Type;
-                        }
-                    }
+            public Func<Type> TypeResolver { get; init; }
 
-                    return type;
-                }
-            }
+            public override Type Type => type ??= TypeResolver();
 
-            public Expr Value => value.Expr;
+            public Expr Value => lazyValue.Expr;
 
-            public override string FullName => ADecl.Name.Text;
+            public override string FullName => Name;
         }
 
         public sealed class Global : Declaration
@@ -163,37 +128,21 @@ namespace Six.Six.Sema
 
                 ALetVar = aDecl;
                 lazyValue = Resolver.ResolveExpression(parent, ALetVar.Value);
+                TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
                 parent.Members.Add(this);
+                FullName = $"{Parent.FullName()}.{Name}";
             }
 
             public bool Writeable { get; }
 
-            public override Type Type
-            {
-                get
-                {
-                    if (type == null)
-                    {
-                        //TODO: typecheck
-                        var aType = ALetVar.Type;
-                        if (aType != null)
-                        {
-                            type = Resolver.ResolveType(Parent.Content, aType);
-                        }
-                        else
-                        {
-                            type = Value.Type;
-                        }
-                    }
+            public Func<Type> TypeResolver { get; init; }
 
-                    return type;
-                }
-            }
+            public override Type Type => type ??= TypeResolver();
 
             public Expr Value => lazyValue.Expr;
 
-            public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
+            public override string FullName { get; }
         }
 
         public sealed class Alias : Declaration, Typy
@@ -201,15 +150,15 @@ namespace Six.Six.Sema
             public Alias(Block parent, A.Decl.Alias aDecl)
                 : base(parent, aDecl)
             {
-                Assert(ADecl is A.With.Type);
+                TypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
                 parent.Content.Declare(this);
             }
 
-            public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
+            public override string FullName => $"{Parent.FullName()}.{Name}";
 
+            public Func<Type> TypeResolver { get; init; }
 
-            public override Type Type =>
-                type ??= Resolver.ResolveType(Parent.Content, ((A.With.Type)ADecl).Type);
+            public override Type Type => type ??= TypeResolver();
 
         }
 
@@ -220,17 +169,22 @@ namespace Six.Six.Sema
             protected Type? type = null;
             private DeclAttr? attr;
 
-            public Declaration(Block parent, A.Decl aDecl)
+            protected Declaration(Block parent, A.Decl aDecl)
             {
                 Parent = parent;
-                ADecl = aDecl;
+                Name = aDecl.Name.Text;
+                Location = aDecl.GetLocation();
+                LazyAttr = () => MakeAttr(aDecl);
             }
 
             public Block Parent { get; }
-            public A.Decl ADecl { get; }
             public abstract Type Type { get; }
-            public string Name => ADecl.Name.Text;
+            public string Name { get; }
             public abstract string FullName { get; }
+            public ILocation Location { get; }
+
+
+            public Func<DeclAttr> LazyAttr { get; init; }
 
             public Module Module => Parent.Content.Module;
             public Resolver Resolver => Parent.Content.Module.Resolver;
@@ -245,24 +199,40 @@ namespace Six.Six.Sema
 
             public bool Validated { get; set; }
 
-            public DeclAttr Attr
+            public DeclAttr Attr => attr ??= LazyAttr();
+
+            private static DeclAttr MakeAttr(A.Decl aDecl)
             {
-                get
+                var attr = DeclAttr.None;
+                if (aDecl.IsWith(Names.Attr.Native)) attr |= DeclAttr.Native;
+                if (aDecl.IsWith(Names.Attr.Shared)) attr |= DeclAttr.Shared;
+                if (aDecl.IsWith(Names.Attr.Static)) attr |= DeclAttr.Static;
+                if (aDecl.IsWith(Names.Attr.Abstract)) attr |= DeclAttr.Abstract;
+                if (aDecl.IsWith(Names.Attr.Virtual)) attr |= DeclAttr.Virtual;
+                if (aDecl.IsWith(Names.Attr.Override)) attr |= DeclAttr.Override;
+                if (aDecl.IsWith(Names.Attr.Sealed)) attr |= DeclAttr.Sealed;
+
+                return attr;
+            }
+
+
+            public static Type LazyTypeResolver(Block parent, A.Type aType)
+            {
+                return parent.Resolver.ResolveType(parent.Content, aType);
+            }
+
+            public static Type LazyTypeResolver(Block parent, LazyExpr value, A.Type? aType)
+            {
+                if (aType != null)
                 {
-                    if (!attr.HasValue)
-                    {
-                        attr = DeclAttr.None;
-                        if (this.IsWith(Names.Attr.Native)) attr |= DeclAttr.Native;
-                        if (this.IsWith(Names.Attr.Shared)) attr |= DeclAttr.Shared;
-                        if (this.IsWith(Names.Attr.Static)) attr |= DeclAttr.Static;
-                        if (this.IsWith(Names.Attr.Abstract)) attr |= DeclAttr.Abstract;
-                        if (this.IsWith(Names.Attr.Virtual)) attr |= DeclAttr.Virtual;
-                        if (this.IsWith(Names.Attr.Override)) attr |= DeclAttr.Override;
-                        if (this.IsWith(Names.Attr.Sealed)) attr |= DeclAttr.Sealed;
-                    }
-                    return attr.Value;
+                    return parent.Resolver.ResolveType(parent.Content, aType);
+                }
+                else
+                {
+                    return value.Expr.Type;
                 }
             }
+
         }
     }
 }

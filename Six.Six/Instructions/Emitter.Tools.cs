@@ -21,6 +21,10 @@ namespace Six.Six.Instructions
             {
                 case BuiltinCore builtin:
                     return builtin;
+                case Type.ClassReference classReference:
+                    return Builtins.Pointer;
+                    //Assert(false);
+                    //throw new NotImplementedException();
                 default:
                     Assert(false);
                     throw new NotImplementedException();

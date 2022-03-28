@@ -41,6 +41,13 @@ namespace Six.Six.Sema
             var decl = new Decl.Class(parent, node);
 
             DeclareClassyBody(decl, node);
+
+            var hasConstructor = decl.Block.Members.OfType<Decl.Constructor>().Any();
+
+            if (!hasConstructor)
+            {
+                Assert(true);
+            }
         }
 
         private void Declare(Block parent, A.Decl.Interface node)
@@ -106,10 +113,6 @@ namespace Six.Six.Sema
 
                 WalkDeclarations(decl.Block, node.Parameters);
                 WalkBody(decl.Block, node.Body);
-#if false
-                var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters.First()));
-                _ = new Stmt.Return(node.GetLocation(), decl.Block, lazy);
-#endif
             }
             else
             {

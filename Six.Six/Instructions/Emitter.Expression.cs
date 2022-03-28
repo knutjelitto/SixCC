@@ -254,7 +254,10 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.FieldReference expr)
         {
-            Emit(Insn.ToDo("GET field from reference"));
+            // TODO: must be in method ??
+            Assert(!expr.FieldDecl.IsStatic);
+            Emit(Insn.Local.Get(0));
+            Emit(Lower(expr.FieldDecl.Type).Load(expr.FieldDecl.Offset));
         }
 
         private void Handle(Expr.SelectField expr)

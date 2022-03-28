@@ -216,7 +216,13 @@ namespace Six.Six.Sema
                 else if (func.Expr is Expr.ClassReference classReference)
                 {
                     var clazz = classReference.ClassDecl;
-                    var defaultCtor = clazz.FindMember<Decl.Constructor>(clazz.ADecl, Module.DefaultCtor);
+
+                    if (clazz.IsAbstract)
+                    {
+                        throw Errors.CanNotCreateInstance(clazz, Names.Nouns.Class);
+                    }
+
+                    var defaultCtor = clazz.FindMember<Decl.Constructor>(node.Expr.GetLocation(), Module.DefaultCtor);
 
                     var prms = defaultCtor.Parameters;
 
@@ -431,17 +437,14 @@ namespace Six.Six.Sema
 
                 if (right.Expr.Type is Type.ClassyReference reference)
                 {
-                    if (reference.Classy.ADecl is A.Decl.Classy)
+                    var prefix = reference.Classy.FindMember(node.Op, node.PrefixName());
+
+                    if (prefix is Decl.Function function)
                     {
-                        var prefix = reference.Classy.FindMember(node.Op, node.PrefixName());
-
-                        if (prefix is Decl.Function function)
-                        {
-                            return new Expr.CallPrefixMember(reference.Classy, function, right.Expr);
-                        }
-
-                        Assert(false);
+                        return new Expr.CallPrefixMember(reference.Classy, function, right.Expr);
                     }
+
+                    Assert(false);
                 }
                 else if (right.Expr.Type is Type.Builtin builtin)
                 {
@@ -506,6 +509,9 @@ namespace Six.Six.Sema
                         break;
                     case Decl.Alias node:
                         reference = new Expr.AliasReference(node);
+                        break;
+                    case Decl.Field node:
+                        reference = new Expr.FieldReference(node);
                         break;
                     default:
                         Assert(false);

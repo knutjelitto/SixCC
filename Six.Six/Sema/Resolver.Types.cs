@@ -42,7 +42,7 @@ namespace Six.Six.Sema
             }
             else
             {
-                return Module.CoreFindClass(classy.ADecl, Names.Core.Basic);
+                return Module.CoreFindClass(classy.Location, Names.Core.Basic);
             }
         }
 
@@ -88,9 +88,9 @@ namespace Six.Six.Sema
         {
             if (type is Type.Reference reference)
             {
-                if (reference.Decl.ADecl is A.Decl.Alias alias)
+                if (reference.Decl is Decl.Alias alias)
                 {
-                    return ResolveType(reference.Decl.Parent.Content, alias.Type);
+                    return ResolveType(alias.Type);
                 }
                 return ResolveDeclType(reference.Decl);
             }

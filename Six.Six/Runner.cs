@@ -38,19 +38,20 @@ namespace Six.Six
                 }
                 catch (DiagnosticException diagnostics)
                 {
-                    System.Console.WriteLine();
-                    foreach (var diagnostic in diagnostics.Diagnostics)
+                    Console.WriteLine();
+                    using (var writer = new Writer(Console.Out))
                     {
-                        var writer = new Writer();
-                        diagnostic.Report(writer);
-                        Console.WriteLine(writer.ToString());
+                        foreach (var diagnostic in diagnostics.Diagnostics)
+                        {
+                            diagnostic.Report(writer);
+                        }
                     }
                 }
                 catch (Exception exception)
                 {
-                    System.Console.WriteLine();
-                    System.Console.WriteLine(exception.Message);
-                    System.Console.WriteLine(exception.ToString());
+                    Console.WriteLine();
+                    Console.WriteLine(exception.Message);
+                    Console.WriteLine(exception.ToString());
                 }
             }
         }
