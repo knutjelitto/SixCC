@@ -36,5 +36,10 @@ namespace Six.Six.Builtins
             return (offset + (align - 1)) & ~(align - 1);
         }
 
+        public override string ToString()
+        {
+            return Type;
+        }
+
     }
 }

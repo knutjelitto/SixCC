@@ -12,12 +12,14 @@ namespace Six.Six.Instructions
     {
         private readonly Dictionary<string, (int order, Action emit, Func<Ptr> access)> strings = new();
 
-        public StringData(Writer writer, string memoryId)
-            : base(writer)
+        public StringData(Emitter emitter, string memoryId)
+            : base(emitter.Writer)
         {
+            Emitter = emitter;
             MemoryId = memoryId;
         }
 
+        public Emitter Emitter { get; }
         public string MemoryId { get; }
         public uint Offset { get; private set; }
         public uint BaseOffset { get; private set; }
@@ -25,7 +27,6 @@ namespace Six.Six.Instructions
 
         public Func<Ptr> Add(string text)
         {
-            Console.WriteLine($"add '{text}'");
             if (!strings.TryGetValue(text, out var already))
             {
                 Assert(Offset == AlignCount(Offset));
@@ -55,7 +56,6 @@ namespace Six.Six.Instructions
 
         public void Emit(uint baseOffset)
         {
-            Console.WriteLine("EMIT");
             Assert(AlignCount(baseOffset) == baseOffset);
 
             BaseOffset = baseOffset;

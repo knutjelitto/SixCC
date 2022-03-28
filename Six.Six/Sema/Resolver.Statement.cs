@@ -16,13 +16,27 @@ namespace Six.Six.Sema
             Statement(block, (dynamic)node);
         }
 
+        private void Statement(FuncBlock block, A.Stmt node)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
+        private void Statement(FuncBlock block, A.Stmt.Expr node)
+        {
+            _ = new Stmt.Expression(
+                    node.GetLocation(),
+                    block,
+                    ResolveExpression(block, node.Expression));
+        }
+
         private void Statement(FuncBlock block, A.Stmt.Assign node)
         {
             _ = new Stmt.Assign(
-                    node,
+                    node.GetLocation(),
                     block,
-                    ResolveExpression(block.Content, node.Left),
-                    ResolveExpression(block.Content, node.Right));
+                    ResolveExpression(block, node.Left),
+                    ResolveExpression(block, node.Right));
         }
 
         private void Statement(FuncBlock block, A.Stmt.Return node)
@@ -30,19 +44,7 @@ namespace Six.Six.Sema
             _ = new Stmt.Return(
                     node.GetLocation(),
                     block,
-                    node.Expression == null ? null : ResolveExpression(block.Content, node.Expression));
-        }
-
-        private void Statement(Decl.Funcy funcy, A.Stmt.Expr node)
-        {
-            Assert(false);
-            throw new NotImplementedException();
-        }
-
-        private void Statement(Decl.Funcy funcy, A.Stmt node)
-        {
-            Assert(false);
-            throw new NotImplementedException();
+                    node.Expression == null ? null : ResolveExpression(block, node.Expression));
         }
     }
 }

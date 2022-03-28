@@ -7,7 +7,7 @@ namespace Six.Six.Sema
     {
         public abstract class Classy : Declaration, Typy
         {
-            private Layout? layout;
+            private ClassLayout? layout;
             private Class? extends;
             private List<Interface>? satisfies;
 
@@ -22,21 +22,10 @@ namespace Six.Six.Sema
 
             public ClassBlock Block { get; }
             public A.Decl.Classy AClassy { get; }
+            public ClassLayout Layout => layout ??= new ClassLayout(this);
 
             public IReadOnlyList<Field> Fields { get; } = new List<Field>();
 
-            public Layout Layout
-            {
-                get
-                {
-                    if (layout == null)
-                    {
-                        layout = new Layout(this);
-                        layout.Run();
-                    }
-                    return layout;
-                }
-            }
 
             public override string FullName => Block.FullName();
 
@@ -58,7 +47,7 @@ namespace Six.Six.Sema
             {
                 Assert(aDecl is A.With.Extends);
 
-                Type = new Type.ClassReference(this);
+                Type = new Type.ClassReference(Module, this);
             }
 
             public override Type Type { get; }
@@ -73,7 +62,7 @@ namespace Six.Six.Sema
             {
                 Assert(aDecl is A.With.Extends);
 
-                Type = new Type.ObjectReference(this);
+                Type = new Type.ObjectReference(Module, this);
             }
 
             public override Type Type { get; }
@@ -87,7 +76,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
 
-                Type = new Type.InterfaceReference(this);
+                Type = new Type.InterfaceReference(Module, this);
             }
 
             public override Type Type { get; }

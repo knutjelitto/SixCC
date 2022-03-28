@@ -19,6 +19,7 @@
 
             public static string Char => "char";
             public static string Boolean => "Boolean";
+            public static string Pointer => "Pointer";
 
             public static string SelfValue => "self";
             public static string Builtin => "Builtin";
@@ -46,7 +47,6 @@
             public static readonly string Virtual = "virtual";
             public static readonly string Override = "override";
             public static readonly string Sealed = "sealed";
-            public static readonly string Prefinal = "prefinal";
         }
 
         public static class Nouns
@@ -54,6 +54,7 @@
             public static readonly string Function = "function";
             public static readonly string Method = "method";
             public static readonly string Interface = "interface";
+            public static readonly string Member = "member";
         }
     }
 }

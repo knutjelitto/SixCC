@@ -45,15 +45,22 @@ namespace Six.Six.Sema
         public sealed record ConstU32(Type Type, uint Value) : Const(Type, Insn.U32.Const(Value));
         public sealed record ConstS64(Type Type, long Value) : Const(Type, Insn.S64.Const(Value));
         public sealed record ConstU64(Type Type, ulong Value) : Const(Type, Insn.U64.Const(Value));
+        public sealed record ConstNatural(Type Type, ulong Value) : Primitive(Type);
         public sealed record ConstString(Type Type, Func<Ptr> Resolve) : Primitive(Type);
 
         //TODO:
         public sealed record AllocClass(Decl.Class Class) : Primitive(Class.Type);
 
+        public sealed record Arged(BuiltinCore Builtin, Expr Arg)
+            : Primitive(Builtin);
+
         public sealed record Binop(BuiltinCore Builtin, Insn Insn, Expr Arg1, Expr Arg2)
             : Primitive(Builtin);
 
         public sealed record Unop(BuiltinCore Builtin, Insn Insn, Expr Arg)
+            : Primitive(Builtin);
+
+        public sealed record Instructions(BuiltinCore Builtin, params Insn[] Insns)
             : Primitive(Builtin);
 
         public abstract record Reference(Decl Decl) : Expr
@@ -107,30 +114,40 @@ namespace Six.Six.Sema
             public override Type Type => Function.ResultType;
         }
 
-
         public sealed record CallConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
             : Primitive(Ctor.Type)
         {
             public override Type Type => Ctor.ResultType;
         }
+
+        public sealed record CallNativeConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
+            : Primitive(Ctor.Type)
+        {
+            public override Type Type => Ctor.ResultType;
+        }
+
         public sealed record CallIndirect(Expr Value, Type.Callable Callable, List<Expr> Arguments)
             : Primitive(Callable)
         {
             public override Type Type => Callable.Result;
         }
 
-        public sealed record SelectFunction(Reference Reference, Decl.Function Function)
+        public sealed record SelectFunction(Reference Reference, Decl.Classy Classy, Decl.Function Function)
             : Primitive(Function.ResultType);
 
-        public sealed record SelectAttribute(Reference Reference, Decl.Attribute Attribute)
+        public sealed record SelectAttribute(Reference Reference, Decl.Classy Classy, Decl.Attribute Attribute, int ScratchLocal = -1)
             : Primitive(Attribute.ResultType);
 
-        public sealed record SelectField(Reference Reference, Decl.Field Field)
+        public sealed record SelectField(Reference Reference, Decl.Classy Classy, Decl.Field Field)
             : Primitive(Field.Type);
 
-        public sealed record CallMember(Decl.Classy Classy, Decl.Function Function, Expr Make, params Expr[] Arguments)
+        public sealed record CallMember(Decl.Classy Classy, Decl.Function Function, Expr Make, List<Expr> Arguments)
             : Expr
         {
+            public CallMember(Decl.Classy classy, Decl.Function function, Expr make, params Expr[] arguments)
+                : this(classy, function, make, arguments.ToList())
+            {
+            }
             public Type Type => Function.ResultType;
         }
 

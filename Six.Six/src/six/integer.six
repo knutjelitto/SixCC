@@ -10,7 +10,7 @@ shared native class s16 : Builtin
 
 shared native class s32 : Builtin
 {
-    shared native static string format(s32 value, s32 base);
+    shared native static string format(s32 value, s32 base) => Fakes.empty();
  
     shared native prefix s32 - () => -self;
     shared native infix s32 + (s32 other) => self + other;

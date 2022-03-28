@@ -55,11 +55,14 @@ namespace Six.Six.Sema
 
         private void FuncyBody(FuncBlock block, A.Body.Deferred node)
         {
+            Assert(block.Funcy.IsAbstract || block.Funcy is Decl.Constructor ctor && ctor.IsNative);
+
+            _ = new Stmt.Unreachable(node.GetLocation(), block);
         }
 
         private void FuncyBody(FuncBlock block, A.Body.Expr node)
         {
-            var delayed = ResolveExpression(block.Content, node.Expression);
+            var delayed = ResolveExpression(block, node.Expression);
 
             _ = new Stmt.Return(node.Expression.GetLocation(), block, delayed);
         }

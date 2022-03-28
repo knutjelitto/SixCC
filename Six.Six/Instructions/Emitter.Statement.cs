@@ -15,6 +15,22 @@ namespace Six.Six.Instructions
             HandleStmt((dynamic) stmt);
         }
 
+        private void HandleStmt(Stmt stmt)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
+        private void HandleStmt(Stmt.Unreachable stmt)
+        {
+            Emit(Insn.Unreachable);
+        }
+
+        private void HandleStmt(Stmt.Expression stmt)
+        {
+            Emit(stmt.Expr);
+        }
+
         private void HandleStmt(Stmt.Assign stmt)
         {
             switch (stmt.Left)

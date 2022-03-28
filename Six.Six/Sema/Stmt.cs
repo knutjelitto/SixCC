@@ -1,4 +1,5 @@
 ﻿using Six.Core;
+using System;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -7,9 +8,18 @@ namespace Six.Six.Sema
     {
         ILocation Location { get; }
         Errors Errors { get; }
-        bool Validated { get; }
-
         bool Validated { get; set; }
+
+        public sealed class Unreachable : Statement
+        {
+            public Unreachable(ILocation location, FuncBlock block)
+                : base(location, block)
+            {
+                Funcy = block.Funcy;
+            }
+
+            public Decl.Funcy Funcy { get; }
+        }
 
         public sealed class Return : Statement
         {
@@ -32,8 +42,8 @@ namespace Six.Six.Sema
             private readonly LazyExpr lazyLeft;
             private readonly LazyExpr lazyRight;
 
-            public Assign(A.Stmt.Assign stmt, FuncBlock block, LazyExpr left, LazyExpr right)
-                : base(stmt.GetLocation(), block)
+            public Assign(ILocation location, FuncBlock block, LazyExpr left, LazyExpr right)
+                : base(location, block)
             {
                 lazyLeft = left;
                 lazyRight = right;
@@ -41,6 +51,19 @@ namespace Six.Six.Sema
 
             public Expr Left => lazyLeft.Expr;
             public Expr Right => lazyRight.Expr;
+        }
+
+        public sealed class Expression : Statement
+        {
+            private readonly LazyExpr lazyExpr;
+
+            public Expression(ILocation location, FuncBlock block, LazyExpr expr)
+                : base(location, block)
+            {
+                lazyExpr = expr;
+            }
+
+            public Expr Expr => lazyExpr.Expr;
         }
     }
 
@@ -55,7 +78,6 @@ namespace Six.Six.Sema
 
         public ILocation Location { get; }
         public FuncBlock Block { get; }
-        public Scope Container => Block.Content;
 
         public Module Module => Block.Module;
         public Resolver Resolver => Module.Resolver;

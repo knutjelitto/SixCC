@@ -51,22 +51,22 @@ namespace Six.Six
 
             var heap_start = (int)instance.GetGlobal(store, "six.core.__heap_start")!.GetValue(store)!;
 
-            result = CallInt32Function(store, instance, "six.core.allocate", 7)!;
+            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 7)!;
             Assert(result == heap_start);
 
-            result = CallInt32Function(store, instance, "six.core.allocate", 17);
+            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 17);
             Assert(result == heap_start + 16);
 
-            result = CallInt32Function(store, instance, "six.core.allocate", 17);
+            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 17);
             Assert(result == heap_start + 16 + 32);
 
-            result = CallInt32Function(store, instance, "six.core.allocate", 17);
+            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 17);
             Assert(result == heap_start + 16 + 32 + 32);
 
-            result = CallInt32Function(store, instance, "six.core.allocate", 7);
+            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 7);
             Assert(result == heap_start + 16 + 32 + 32 + 32);
 
-            result = CallInt32Function(store, instance, "six.core.allocate", 7);
+            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 7);
             Assert(result == heap_start + 16 + 32 + 32 + 32 + 16);
 
             var heap_current = (int)instance.GetGlobal(store, "six.core.__heap_current")!.GetValue(store)!;
@@ -77,14 +77,26 @@ namespace Six.Six
             var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
             Assert(complex2 == heap_start + 160);
 
-            result = CallInt32Function(store, instance, "six.core.Complex.getRe", complex1);
+            result = CallInt32Function(store, instance, "six.core.Complex.Re", complex1);
             Assert(result == 1);
-
-            result = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
-            Assert(result == heap_start + 176);
-
-            result = CallInt32Function(store, instance, "six.core.Complex.getRe", result);
+            result = CallInt32Function(store, instance, "six.core.Complex.Im", complex1);
             Assert(result == 2);
+
+            result = CallInt32Function(store, instance, "six.core.Complex.Re", complex2);
+            Assert(result == 1);
+            result = CallInt32Function(store, instance, "six.core.Complex.Im", complex2);
+            Assert(result == 2);
+
+            var sum = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
+            Assert(sum == heap_start + 176);
+
+            result = CallInt32Function(store, instance, "six.core.Complex.Re", sum);
+            Assert(result == 2);
+            result = CallInt32Function(store, instance, "six.core.Complex.Im", sum);
+            Assert(result == 4);
+
+            result = CallInt32Function(store, instance, "six.core.complex_string");
+            Assert(true);
         }
 
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)
@@ -98,7 +110,7 @@ namespace Six.Six
 
             if (function == null)
             {
-                throw new InvalidOperationException("error: function export ``{name}´´ is missing");
+                throw new InvalidOperationException($"error: function export ``{name}´´ is missing");
             }
             return function;
         }

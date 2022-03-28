@@ -57,47 +57,41 @@ namespace Six.Six.Sema
             DeclareClassyBody(decl, node);
         }
 
-        private void DeclareFunction(Decl.Function decl, A.Decl.Function node)
+        private void DeclareFunction(Decl.Funcy decl, A.Decl.Funcy node)
         {
-            var isMethod = decl.Parent is ClassBlock;
-            var classy = (decl.Parent as ClassBlock)?.Classy;
-
-            if (isMethod && !decl.IsStatic)
+            if (decl.Parent is ClassBlock classBlock && !decl.IsStatic)
             {
-                Assert(classy != null);
-                DeclareSelf(decl.Block, classy);
+                DeclareSelf(decl.Block, classBlock.Classy);
             }
-            WalkDeclarations(decl.Block, node.Parameters);
+
+            WalkDeclarations(decl.Block, ((A.With.Parameters)node).Parameters);
             WalkBody(decl.Block, node.Body);
+        }
+
+        private void Declare(Block parent, A.Decl.Attribute node)
+        {
+            Assert(node.Parameters.Count == 0);
+
+            DeclareFunction(new Decl.Attribute(parent, node), node);
         }
 
         private void Declare(Block parent, A.Decl.Infix node)
         {
             Assert(node.Parameters.Count == 1);
 
-            DeclareFunction(new Decl.Function(parent, node, InfixName(node)), node);
+            DeclareFunction(new Decl.Function(parent, node, node.InfixName()), node);
         }
 
         private void Declare(Block parent, A.Decl.Prefix node)
         {
             Assert(node.Parameters.Count == 0);
 
-            DeclareFunction(new Decl.Function(parent, node, PrefixName(node)), node);
+            DeclareFunction(new Decl.Function(parent, node, node.PrefixName()), node);
         }
 
         private void Declare(Block parent, A.Decl.Function node)
         {
             DeclareFunction(new Decl.Function(parent, node, null), node);
-        }
-
-        private void Declare(ClassBlock parent, A.Decl.Attribute node)
-        {
-            var decl = new Decl.Attribute(parent, node);
-
-            var classy = parent.Classy;
-
-            DeclareSelf(decl.Block, classy);
-            WalkBody(decl.Block, node.Body);
         }
 
         private void Declare(ClassBlock parent, A.Decl.Constructor node)
@@ -106,12 +100,27 @@ namespace Six.Six.Sema
 
             var klass = (Decl.Class)parent.Classy;
 
-            DeclareSelf(decl.Block, klass);
-            WalkDeclarations(decl.Block, node.Parameters);
-            WalkBody(decl.Block, node.Body);
+            if (decl.IsNative)
+            {
+                Assert(true);
 
-            var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters[0]));
-            _ = new Stmt.Return(node.GetLocation(), decl.Block, lazy);
+                WalkDeclarations(decl.Block, node.Parameters);
+                WalkBody(decl.Block, node.Body);
+#if false
+                var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters.First()));
+                _ = new Stmt.Return(node.GetLocation(), decl.Block, lazy);
+#endif
+            }
+            else
+            {
+
+                DeclareSelf(decl.Block, klass);
+                WalkDeclarations(decl.Block, node.Parameters);
+                WalkBody(decl.Block, node.Body);
+
+                var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters.First()));
+                _ = new Stmt.Return(node.GetLocation(), decl.Block, lazy);
+            }
         }
 
         private void DeclareSelf(FuncBlock block, Decl.Classy classy)
@@ -174,7 +183,7 @@ namespace Six.Six.Sema
                 new Decl.Parameter(
                     parent, 
                     node, 
-                    node.Default == null ? null : ResolveExpression(parent.Head, node.Default)));
+                    node.Default == null ? null : ResolveExpression(parent, node.Default)));
         }
     }
 }

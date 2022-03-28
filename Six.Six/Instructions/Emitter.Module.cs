@@ -50,13 +50,7 @@ namespace Six.Six.Instructions
                 }
                 wl();
 
-                foreach (var classy in Module.GetClassies())
-                {
-                    if (!classy.IsPrefinal)
-                    {
-                        dumper.Dump(classy);
-                    }
-                }
+                EmitAlloc();
                 wl();
 
                 foreach (var function in Module.GetFunctions())
@@ -67,14 +61,13 @@ namespace Six.Six.Instructions
 
                 foreach (var classy in Module.GetClassies())
                 {
-                    if (classy.IsPrefinal)
-                    {
-                        Emit(classy);
-                    }
+                    Emit(classy);
                 }
                 wl();
 
-                GlobalFunctions.Emit();
+                GlobalFunctions.EmitTable();
+                wl();
+                DispatchTable.EmitTable();
                 wl();
                 Types.Emit();
             });
@@ -86,9 +79,34 @@ namespace Six.Six.Instructions
             return StringData.Add(text);
         }
 
-        public Func<Ptr> AddClass(string fullName, uint size)
+        public Func<Ptr> AddClass(ClassLayout layout)
         {
-            return ClassData.Add(fullName, size);
+            return ClassData.Add(layout);
+        }
+
+        private void EmitAlloc()
+        {
+            wl($"(func ${Module.CoreClassAlloc}");
+            indent(() =>
+            {
+                wl($"(export \"{Module.CoreClassAlloc}\")");
+                wl($"(param {WasmDef.Pointer})");
+                wl($"(result {WasmDef.Pointer})");
+                wl($"(local {WasmDef.Pointer})");
+                wl("(;-----;)");
+                Emit(Insn.Local.Get(0));
+                Emit(Insn.U32.Load(4));
+                Emit(Insn.Call(Module.CoreAlloc));
+                Emit(Insn.Local.Tee(1));
+                Emit(Insn.Local.Get(0));
+                Emit(Insn.U32.Const(16));
+                Emit(Insn.U32.Add);
+                Emit(Insn.U32.Store(0));
+                Emit(Insn.Local.Get(1));
+                Emit(Insn.Return);
+                wl("(;-----;)");
+            });
+            wl($")");
         }
     }
 }

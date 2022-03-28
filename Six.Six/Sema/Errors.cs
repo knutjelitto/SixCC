@@ -1,11 +1,9 @@
 ﻿using Six.Core;
 using Six.Core.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using A = Six.Six.Ast;
+
+#pragma warning disable CA1822 // Mark members as static
 
 namespace Six.Six.Sema
 {
@@ -33,6 +31,13 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
+        public DiagnosticException CantResolveMember(A.TreeNode tree, string name)
+        {
+            var diagnostic = new SemanticError(tree.GetLocation(), $"member '{name}' not found");
+
+            return new DiagnosticException(diagnostic);
+        }
+
         public DiagnosticException CantResolveInCore(string what, string name)
         {
             var diagnostic = new InternalError($"can't resolve {what} ``{name}´´ in ``{Module.CoreNamespace}´´");
@@ -40,14 +45,9 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
-        public DiagnosticException TypeMismatch(A.TreeNode tree, Type expected, Type actual)
-        {
-            return TypeMismatch(tree.GetLocation(), expected, actual);
-        }
-
         public DiagnosticException TypeMismatch(ILocation location, Type expected, Type actual)
         {
-            var diagnostic = new SemanticError(location, $"expected type ``{expected}´´ but found ``{actual}´´");
+            var diagnostic = new SemanticError(location, $"expected type '{expected}' but found '{actual}'");
 
             return new DiagnosticException(diagnostic);
         }
@@ -68,16 +68,23 @@ namespace Six.Six.Sema
             return new DiagnosticException(new SemanticError(tree.GetLocation(), $"value is too big to fit '{what}'"));
         }
 
-        public DiagnosticException SubjectShouldntBeMarkedAs(Decl.Funcy funcy, string subject, string attribute)
+        public DiagnosticException SubjectShouldNotBeMarkedAs(Decl.Funcy funcy, string subject, string attribute)
         {
             var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' shouldn't be marked as '{attribute}'");
 
             return new DiagnosticException(diagnostic);
         }
 
-        public DiagnosticException SubjectShouldBeImplemented(Decl.Funcy funcy, string subject)
+        public DiagnosticException SubjectMustBeImplemented(Decl.Funcy funcy, string subject)
         {
-            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' misses an implementation");
+            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' must have an implementation");
+
+            return new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException SubjectShouldNotBeImplemented(Decl.Funcy funcy, string subject)
+        {
+            var diagnostic = new SemanticError(funcy.ADecl.GetLocation(), $"{subject} '{funcy.Name}' can't be implemented here");
 
             return new DiagnosticException(diagnostic);
         }

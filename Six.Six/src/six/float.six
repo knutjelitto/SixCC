@@ -4,7 +4,7 @@ shared native class f32 : Builtin
 {
 }
 
-shared shared native class f64 : Builtin
+shared native class f64 : Builtin
 {
     shared native prefix f64 - () => -self;
 

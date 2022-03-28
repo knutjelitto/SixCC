@@ -1,4 +1,7 @@
-﻿using Six.Six.Sema;
+﻿using Six.Six.Builtins;
+using Six.Six.Sema;
+using System;
+using Type = Six.Six.Sema.Type;
 
 #pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -21,12 +24,35 @@ namespace Six.Six.Instructions
             Emit(Insn.ToDo(expr.Text));
         }
 
+        private void Handle(Expr.Instructions insns)
+        {
+            foreach (var insn in insns.Insns)
+            {
+                Emit(insn);
+            }
+        }
+
+
+        private void Handle(Expr.Arged arged)
+        {
+            Emit(arged.Arg);
+        }
+
+        private void Handle(Expr.CallNativeConstructor expr)
+        {
+            Assert(expr.Ctor.IsNative);
+
+            var builtin = Builtins.Resolve(expr.Class);
+            var method = builtin.Method(expr.Ctor.Name, expr.Arguments.Count);
+            var emit = method(expr.Arguments);
+            Emit(emit);
+        }
+
         private void Handle(Expr.CallConstructor expr)
         {
-            var alloc = Module.CoreFindFunction(Module.Allocator);
+            Emit(Insn.Ptr.Push(expr.Class.Layout.MetaPtr()));
+            Emit(Insn.Call(Module.CoreClassAlloc));
 
-            Emit(Insn.U32.Const(expr.Class.Layout.Size));
-            Emit(new Expr.CallFunction(alloc));
             foreach (var argument in expr.Arguments)
             {
                 Emit(argument);
@@ -45,12 +71,23 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.CallMember expr)
         {
-            Emit(expr.Make);
-            foreach (var arg in expr.Arguments)
+            if (expr.Classy.IsNative && expr.Function.IsNative)
             {
-                Emit(arg);
+                var builtin = Builtins.Resolve(expr.Classy);
+                var method = builtin.Method(expr.Function.Name, expr.Arguments.Count);
+                var emit = method(expr.Arguments);
+                Emit(expr.Make);
+                Emit(emit);
             }
-            Emit(Insn.Call(expr.Function.FullName));
+            else
+            {
+                Emit(expr.Make);
+                foreach (var arg in expr.Arguments)
+                {
+                    Emit(arg);
+                }
+                Emit(Insn.Call(expr.Function.FullName));
+            }
         }
 
         private void Handle(Expr.CallInfixMember expr)
@@ -80,8 +117,8 @@ namespace Six.Six.Instructions
             }
             else
             {
-                Emit(expr.Arg);
-                Emit(Insn.ToDo("call-prefix-member"));
+                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg);
+                Emit(callMember);
             }
         }
 
@@ -147,11 +184,20 @@ namespace Six.Six.Instructions
 
         private void Handle(Expr.FunctionReference expr)
         {
+            Assert(expr.Decl.Validated);
+
             var function = expr.FunctionDecl;
             var name = function.FullName;
 
             var index = GlobalFunctions.Add(function, name);
             Emit(Insn.U32.Const(index));
+        }
+
+        private void Handle(Expr.ClassReference expr)
+        {
+            Assert(expr.ClassDecl.Validated);
+
+            Assert(false);
         }
 
         private void Handle(Expr.ObjectReference expr)
@@ -176,8 +222,29 @@ namespace Six.Six.Instructions
         private void Handle(Expr.SelectAttribute expr)
         {
             Emit(expr.Reference);
-            Emit(expr.Attribute);
-            Emit(Insn.ToDo("GET attribute from classy"));
+
+            if (expr.Attribute.IsDynamic)
+            {
+                Assert(expr.ScratchLocal >= 0);
+                Emit(Insn.Local.Tee(expr.ScratchLocal));
+                var slot = expr.Classy.Layout.Slots.Where(s => s.Funcy.Name == expr.Attribute.Name).SingleOrDefault();
+                if (slot != null)
+                {
+                    Emit(Insn.Local.Get(expr.ScratchLocal));
+                    Emit(Insn.U32.Load(0));
+                    Emit(Insn.U32.Load((uint)slot.Index * WasmDef.I32.Size));
+                    Emit(Insn.CallIndirect(Module.ModuleFunctions, TypeFor((Type.Callable)expr.Attribute.Type)));
+                }
+                else
+                {
+                    Assert(false);
+                    throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                Emit(Insn.Call(expr.Attribute.FullName));
+            }
         }
 
         private void Handle(Expr.AttributeReference expr)

@@ -90,7 +90,7 @@ namespace Six.Six.Sema
             {
                 if (reference.Decl.ADecl is A.Decl.Alias alias)
                 {
-                    return ResolveType(reference.Decl.Container, alias.Type);
+                    return ResolveType(reference.Decl.Parent.Content, alias.Type);
                 }
                 return ResolveDeclType(reference.Decl);
             }
@@ -121,7 +121,7 @@ namespace Six.Six.Sema
         {
             var type = ResolveType(scope, tree.Type);
 
-            return new Type.Array(type);
+            return new Type.Array(Module, type);
         }
 
         private Type DoResolveType(Scope scope, A.Type tree)
@@ -135,7 +135,7 @@ namespace Six.Six.Sema
             var result = ResolveType(scope, tree.Type);
             var parameters = tree.Arguments.Select(type => ResolveType(scope, type));
 
-            return new Type.Callable(result, parameters.ToList());
+            return new Type.Callable(Module, result, parameters.ToList());
         }
 
         private Type DoResolveType(Scope scope, A.Reference tree)

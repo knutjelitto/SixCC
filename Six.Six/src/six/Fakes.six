@@ -1,0 +1,10 @@
+namespace six.core;
+
+shared abstract sealed class Fakes
+{
+    shared static string empty() => "fake-empty";
+    shared static string empty2 => "fake-empty-2";
+    shared static bool equals(Object obj1, Object obj2) => false;
+    shared static string stringConcat(string str1, string str2) => "fake-concat";
+    shared static string toString(Object obj) => "fake-to-string";
+}

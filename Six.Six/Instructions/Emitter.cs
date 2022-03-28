@@ -21,16 +21,18 @@ namespace Six.Six.Instructions
         public readonly StringData StringData;
         public readonly ClassData ClassData;
         public readonly FunctionTable GlobalFunctions;
+        public readonly DispatchTable DispatchTable;
 
         public Emitter(Module module, Writer writer)
             : base(writer)
         {
             Module = module;
-            dumper = new Dumper(this, writer);
+            dumper = new Dumper(this);
             Types = new TypeTable(this);
-            StringData = new StringData(writer, Module.DataAndHeap);
+            StringData = new StringData(this, Module.DataAndHeap);
             ClassData = new ClassData(this, Module.DataAndHeap);
-            GlobalFunctions = new FunctionTable(writer, Module.ModuleFunctions);
+            GlobalFunctions = new FunctionTable(this, Module.ModuleFunctions);
+            DispatchTable = new DispatchTable(this, Module.VTableFunctions);
         }
 
         public Module Module { get; }
@@ -52,13 +54,6 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
-#if false
-        private void Handle(Decl.Attribute decl)
-        {
-            Assert(true);
-        }
-#endif
-
         private void Handle(Decl.Field decl)
         {
             Assert(true);
@@ -75,6 +70,12 @@ namespace Six.Six.Instructions
             indent(() =>
             {
                 dumper.WriteLayout(decl);
+
+                if (decl is Decl.Class clazz)
+                {
+                    EmitInitCtor(clazz);
+                }
+                
                 foreach (var member in decl.Block.Members)
                 {
                     Emit(member);
@@ -82,9 +83,37 @@ namespace Six.Six.Instructions
             });
         }
 
+        public void EmitInitCtor(Decl.Class clazz)
+        {
+            if (clazz.IsNative)
+            {
+                // nothing to emit
+                return;
+            }
+
+            wl($"(func ${clazz.FullName}.{Module.InitCtor}");
+            indent(() =>
+            {
+                wl($"(param (;0/self:{clazz.Name};) i32)");
+
+                wl("(;-----;)");
+                var get = Insn.Local.Get(0);
+                foreach (var field in clazz.Layout.Fields.Select(f => f.Field))
+                {
+                    Emit(get);
+                    Emit(field.Value);
+                    Emit(Lower(field.Type).Store(field.Offset));
+                }
+                Emit(Insn.Return);
+                wl("(;-----;)");
+            });
+            wl($")");
+        }
+
+
         private void Handle(Decl.Alias decl)
         {
-            Assert(true);
+            Assert(false);
         }
 
         private void Handle(Decl.SelfParameter decl)
@@ -97,8 +126,14 @@ namespace Six.Six.Instructions
             Assert(true);
         }
 
-        public void EmitFuncy(Decl.Funcy funcy, bool isCtor = false)
+        public void EmitFuncy(Decl.Funcy funcy)
         {
+            if (funcy is Decl.Constructor ctor && ctor.IsNative)
+            {
+                // nothing to emit
+                return;
+            }
+
             foreach (var inner in funcy.InnerFunctions())
             {
                 EmitFuncy(inner);
@@ -109,13 +144,15 @@ namespace Six.Six.Instructions
             {
                 if (funcy.IsShared) wl(Export(funcy));
 
-                wl($"{Params(funcy.Parameters)}");
-
-                wlif(Result(funcy.ResultType));
-
-                Horizontal(funcy.Locals.Select(local => new Action(() => w($"{Local(local)}"))));
+                funcy.Layout.EmitDeclarations();
 
                 wl("(;-----;)");
+                if (funcy is Decl.Constructor ctor && ctor.Parent is ClassBlock classBlock && classBlock.Classy is Decl.Class clazz)
+                {
+                    Emit(Insn.Local.Get(0));
+                    Emit(Insn.Call($"{clazz.FullName}.{Module.InitCtor}"));
+                }
+
                 foreach (var member in funcy.Block.Members)
                 {
                     if (member is Decl.Funcy)
@@ -125,19 +162,9 @@ namespace Six.Six.Instructions
 
                     Emit(member);
                 }
-                if (isCtor)
-                {
-                    Assert(funcy.Parameters.Count > 0);
-                    Emit(funcy.Parameters[0]);
-                }
                 wl("(;-----;)");
             });
             wl($")");
-        }
-
-        private void Handle(Decl.Constructor decl)
-        {
-            EmitFuncy(decl, true);
         }
 
         private void Handle(Decl.Funcy decl)

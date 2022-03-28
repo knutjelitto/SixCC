@@ -13,8 +13,8 @@ namespace Six.Six.Instructions
     {
         public Emitter Emitter { get; }
 
-        public Dumper(Emitter emitter, Writer writer)
-            : base(writer)
+        public Dumper(Emitter emitter)
+            : base(emitter.Writer)
         {
             Emitter = emitter;
         }
@@ -81,7 +81,6 @@ namespace Six.Six.Instructions
         public void WriteLayout(Decl.Classy decl)
         {
             var layout = decl.Layout;
-            Assert(layout.Done);
 
             if (layout.Fields.Count > 0)
             {

@@ -12,63 +12,38 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private string InfixName(A.Name node)
+
+        public LazyExpr ResolveExpression(Block block, A.Expression node)
         {
-            return $"infix.{node.Text}";
-        }
-        private string PrefixName(A.Name node)
-        {
-            return $"prefix.{node.Text}";
+            return Expression(block, (dynamic)node);
         }
 
-        private string InfixName(A.Decl.Infix node)
-        {
-            return InfixName(node.Name);
-        }
-        private string InfixName(A.Expression.OpExpression node)
-        {
-            return InfixName(node.Op.Name);
-        }
-        private string PrefixName(A.Expression.OpExpression node)
-        {
-            return PrefixName(node.Op.Name);
-        }
-        private string PrefixName(A.Decl.Prefix node)
-        {
-            return PrefixName(node.Name);
-        }
-
-        public LazyExpr ResolveExpression(Scope scope, A.Expression node)
-        {
-            return Expression(scope, (dynamic)node);
-        }
-
-        private LazyExpr Expression(Scope container, A.Expression node)
+        private LazyExpr Expression(Block block, A.Expression node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
-        private LazyExpr Expression(Scope container, A.Expression.If node)
+        private LazyExpr Expression(Block block, A.Expression.If node)
         {
             return new LazyExpr(Module, () =>
             {
-                var condition = ExpressionConditions(container, node.Conditions);
-                var then = ResolveExpression(container, node.Then);
-                var @else = ResolveExpression(container, node.Else);
+                var condition = ExpressionConditions(block, node.Conditions);
+                var then = ResolveExpression(block, node.Then);
+                var @else = ResolveExpression(block, node.Else);
 
                 return new Expr.If(condition, then, @else);
             });
         }
 
-        private LazyExpr ExpressionConditions(Scope container, IEnumerable<A.Expression> nodes)
+        private LazyExpr ExpressionConditions(Block block, IEnumerable<A.Expression> nodes)
         {
             var conditions = nodes.ToList();
             Assert(conditions.Count >= 1);
 
             return new LazyExpr(Module, () =>
             {
-                var first = ResolveExpression(container, conditions[0]);
+                var first = ResolveExpression(block, conditions[0]);
                 var type = Module.CoreFindType(Names.Core.Boolean);
 
                 if (conditions.Count == 1)
@@ -78,17 +53,17 @@ namespace Six.Six.Sema
                 else
                 {
                     Assert(conditions.Count > 1);
-                    return new Expr.AndThen(type, first, ExpressionConditions(container, conditions.Skip(1)));
+                    return new Expr.AndThen(type, first, ExpressionConditions(block, conditions.Skip(1)));
                 }
             });
 
         }
 
-        private LazyExpr Expression(Scope container, A.Expression.Select node)
+        private LazyExpr Expression(Block block, A.Expression.Select node)
         {
             return new LazyExpr(Module, () =>
             {
-                var primary = ResolveExpression(container, node.Expr);
+                var primary = ResolveExpression(block, node.Expr);
 
                 if (primary.Expr is Expr.AliasReference aliasRef)
                 {
@@ -98,7 +73,7 @@ namespace Six.Six.Sema
                     {
                         if (typeRef.Decl is Decl.Classy classy)
                         {
-                            var found = classy.ClassyFind(node.Reference);
+                            var found = classy.FindMember(node.Reference);
 
                             if (found is Decl.Function function)
                             {
@@ -117,12 +92,12 @@ namespace Six.Six.Sema
                 }
                 else if (primary.Expr is Expr.ClassyReference classyRef)
                 {
-                    var found = classyRef.ClassyFind(node.Reference);
+                    var found = classyRef.ClassyDecl.FindMember(node.Reference);
 
                     if (found is Decl.Attribute attribute)
                     {
                         Assert(attribute.IsStatic);
-                        return new Expr.SelectAttribute(classyRef, attribute);
+                        return new Expr.SelectAttribute(classyRef, classyRef.ClassyDecl, attribute);
                     }
                     else if (found is Decl.Function function)
                     {
@@ -153,15 +128,54 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.ClassyFind(node.Reference);
+                        var referenced = classy.FindMember(node.Reference);
 
                         if (referenced is Decl.Attribute attribute)
                         {
-                            return new Expr.SelectAttribute(parameterReference, attribute);
+                            return new Expr.SelectAttribute(parameterReference, classy, attribute);
                         }
                         else if (referenced is Decl.Field field)
                         {
-                            return new Expr.SelectField(parameterReference, field);
+                            return new Expr.SelectField(parameterReference, classy, field);
+                        }
+                        else if (referenced is Decl.Function function)
+                        {
+                            return new Expr.SelectFunction(parameterReference, classy, function);
+                        }
+                        else
+                        {
+                            Assert(false);
+                        }
+                    }
+                    else
+                    {
+                        Assert(Module.HasErrors);
+                    }
+                }
+                else if (primary.Expr is Expr.LocalReference localReference)
+                {
+                    var found = ResolveType(localReference.Type);
+
+                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                    {
+                        var referenced = classy.FindMember(node.Reference);
+
+                        if (referenced is Decl.Attribute attribute)
+                        {
+                            Assert(block is FuncBlock);
+
+                            var funcBlock = (FuncBlock)block;
+
+                            var scratch = funcBlock.Funcy.Layout.AddLocal(classy);
+                            return new Expr.SelectAttribute(localReference, classy, attribute, scratch);
+                        }
+                        else if (referenced is Decl.Field field)
+                        {
+                            return new Expr.SelectField(localReference, classy, field);
+                        }
+                        else if (referenced is Decl.Function function)
+                        {
+                            return new Expr.SelectFunction(localReference, classy, function);
                         }
                         else
                         {
@@ -183,27 +197,77 @@ namespace Six.Six.Sema
             });
         }
 
-        private LazyExpr Expression(Scope container, A.Expression.Call node)
+        private LazyExpr Expression(Block block, A.Expression.Call node)
         {
             return new LazyExpr(Module, () =>
             {
-                var func = ResolveExpression(container, node.Expr);
-                var args = ResolveArguments(container, node.Arguments).ToList();
+                var func = ResolveExpression(block, node.Expr);
+                var args = ResolveArguments(block, node.Arguments).ToList();
 
-                if (func.Expr is Expr.FunctionReference function)
+                if (func.Expr is Expr.FunctionReference functionReference)
                 {
-                    var callable = function.FunctionDecl.Type as Type.Callable;
-                    Assert(callable != null);
-                    var prms = function.FunctionDecl.Parameters;
+                    var function = functionReference.FunctionDecl;
 
-                    Assert(prms.Count >= args.Count);
-                    var arguments = MakeArguments(prms, args);
+                    var prms = function.Parameters;
+                    var arguments = function.IsObjectMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
 
-                    return new Expr.CallFunction(function.FunctionDecl, arguments);
+                    return new Expr.CallFunction(functionReference.FunctionDecl, arguments);
+                }
+                else if (func.Expr is Expr.ClassReference classReference)
+                {
+                    var clazz = classReference.ClassDecl;
+                    var defaultCtor = clazz.FindMember<Decl.Constructor>(clazz.ADecl, Module.DefaultCtor);
+
+                    var prms = defaultCtor.Parameters;
+
+                    if (defaultCtor.IsNative)
+                    {
+                        Assert(true);
+
+                        var arguments = MakeArguments(prms, args);
+
+                        return new Expr.CallNativeConstructor(clazz, defaultCtor, arguments);
+                    }
+                    else
+                    {
+                        var arguments = MakeMemberArguments(prms, args);
+
+                        return new Expr.CallConstructor(clazz, defaultCtor, arguments);
+                    }
+
+                }
+                else if (func.Expr is Expr.LocalReference local)
+                {
+                    return ResolveIndirect(local, local.Decl.Type as Type.Callable);
+                }
+                else if (func.Expr is Expr.ParameterReference parameter)
+                {
+                    return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
                 }
                 else if (func.Expr is Expr.SelectFunction selectFunction)
                 {
+                    var function = selectFunction.Function;
+
                     if (selectFunction.Function.IsStatic)
+                    {
+                        Assert(false);
+                    }
+                    else
+                    {
+                        var prms = function.Parameters;
+                        var arguments = function.IsObjectMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
+                        return new Expr.CallMember(
+                            selectFunction.Classy,
+                            function,
+                            selectFunction.Reference,
+                            arguments);
+                    }
+                }
+                else if (func.Expr is Expr.SelectAttribute selectAttribute)
+                {
+                    Assert(args.Count == 0);
+
+                    if (selectAttribute.Attribute.IsStatic)
                     {
                         Assert(false);
                     }
@@ -212,15 +276,16 @@ namespace Six.Six.Sema
                         Assert(false);
                     }
                 }
-                else if (func.Expr is Expr.ClassReference klassReference)
+                else
                 {
-                    var klass = klassReference.ClassDecl;
-                    var defaultCtor = klass.Block.Content.Find(klass.ADecl, Module.DefaultCtor) as Decl.Constructor;
-                    Assert(defaultCtor != null);
-                    var callable = defaultCtor.Type as Type.Callable;
-                    Assert(callable != null);
-                    var prms = defaultCtor.Parameters;
+                    Assert(Module.HasErrors);
+                }
 
+                Assert(false);
+                throw new NotImplementedException();
+
+                List<Expr> MakeMemberArguments(IReadOnlyList<Decl.Local> prms, List<LazyExpr> args)
+                {
                     Assert(prms.Count > args.Count);
                     var arguments = new List<Expr>();
 
@@ -250,24 +315,8 @@ namespace Six.Six.Sema
 
                     Assert(arguments.Count == prms.Count - 1);
 
-                    return new Expr.CallConstructor(klass, defaultCtor, arguments);
-
+                    return arguments;
                 }
-                else if (func.Expr is Expr.LocalReference local)
-                {
-                    return ResolveIndirect(local, local.Decl.Type as Type.Callable);
-                }
-                else if (func.Expr is Expr.ParameterReference parameter)
-                {
-                    return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
-                }
-                else
-                {
-                    Assert(Module.HasErrors);
-                }
-
-                Assert(false);
-                throw new NotImplementedException();
 
                 List<Expr> MakeArguments(IReadOnlyList<Decl.Local> prms, List<LazyExpr> args)
                 {
@@ -328,29 +377,29 @@ namespace Six.Six.Sema
 
                     Assert(arguments.Count == prms.Count);
 
-                   return new Expr.CallIndirect(value, callable, arguments);
+                    return new Expr.CallIndirect(value, callable, arguments);
                 }
             });
         }
 
-        private IEnumerable<LazyExpr> ResolveArguments(Scope container, A.Arguments arguments)
+        private IEnumerable<LazyExpr> ResolveArguments(Block block, A.Arguments arguments)
         {
             foreach (var argument in arguments)
             {
-                yield return ResolveExpression(container, argument);
+                yield return ResolveExpression(block, argument);
             }
         }
 
-        private LazyExpr Expression(Scope container, A.Expression.Infix node)
+        private LazyExpr Expression(Block block, A.Expression.Infix node)
         {
             return new LazyExpr(Module, () =>
             {
-                var left = ResolveExpression(container, node.Left);
-                var right = ResolveExpression(container, node.Right);
+                var left = ResolveExpression(block, node.Left);
+                var right = ResolveExpression(block, node.Right);
 
                 if (left.Expr.Type is Type.ClassyReference reference)
                 {
-                    var infix = reference.Classy.Block.Content.Find(node.Op, InfixName(node));
+                    var infix = reference.Classy.FindMember(node.Op, node.InfixName());
 
                     if (infix is Decl.Function function)
                     {
@@ -374,17 +423,17 @@ namespace Six.Six.Sema
         }
 
 
-        private LazyExpr Expression(Scope container, A.Expression.Prefix node)
+        private LazyExpr Expression(Block block, A.Expression.Prefix node)
         {
             return new LazyExpr(Module, () =>
             {
-                var right = ResolveExpression(container, node.Expr);
+                var right = ResolveExpression(block, node.Expr);
 
                 if (right.Expr.Type is Type.ClassyReference reference)
                 {
                     if (reference.Classy.ADecl is A.Decl.Classy)
                     {
-                        var prefix = reference.Classy.Block.Content.Find(node.Op, PrefixName(node));
+                        var prefix = reference.Classy.FindMember(node.Op, node.PrefixName());
 
                         if (prefix is Decl.Function function)
                         {
@@ -408,21 +457,21 @@ namespace Six.Six.Sema
             });
         }
 
-        private LazyExpr Expression(Scope container, A.Expression.NaturalNumber tree)
+        private LazyExpr Expression(Block block, A.Expression.NaturalNumber tree)
         {
             return new LazyExpr(Module, () => NaturalConst(tree));
         }
 
-        private LazyExpr Expression(Scope container, A.Expression.String.Plain tree)
+        private LazyExpr Expression(Block block, A.Expression.String.Plain tree)
         {
             return new LazyExpr(Module, () => PlainString(tree));
         }
 
-        private LazyExpr Expression(Scope container, A.Reference tree)
+        private LazyExpr Expression(Block block, A.Reference tree)
         {
             return new LazyExpr(Module, () =>
             {
-                var decl = container.Resolve(tree, tree.Name.Text);
+                var decl = block.Content.Resolve(tree, tree.Name.Text);
 
                 Expr.Reference reference;
 

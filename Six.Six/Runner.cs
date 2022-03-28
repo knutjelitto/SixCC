@@ -1,4 +1,6 @@
-﻿using Six.Six.Compiler;
+﻿using Six.Core;
+using Six.Core.Errors;
+using Six.Six.Compiler;
 using System;
 using S = Six.Six.Sema;
 
@@ -32,6 +34,16 @@ namespace Six.Six
                     if (module.HasErrors)
                     {
                         module.WriteErrors();
+                    }
+                }
+                catch (DiagnosticException diagnostics)
+                {
+                    System.Console.WriteLine();
+                    foreach (var diagnostic in diagnostics.Diagnostics)
+                    {
+                        var writer = new Writer();
+                        diagnostic.Report(writer);
+                        Console.WriteLine(writer.ToString());
                     }
                 }
                 catch (Exception exception)

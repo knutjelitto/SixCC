@@ -41,11 +41,6 @@ namespace Six.Six.Instructions
             return builder.ToString();
         }
 
-        private string Param(Decl.Local decl)
-        {
-            return $"(param (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
-        }
-
         private string Local(Decl.Local decl)
         {
             return $"(local (;{decl.Index}/{decl.Name};) {WasmTypeFor(decl.Type)})";
@@ -81,27 +76,27 @@ namespace Six.Six.Instructions
             return $" {lower.Wasm.Type}";
         }
 
-        public string WasmTypeFor(Type type)
+        public BuiltinCore BuiltinFor(Type type)
         {
             switch (Resolver.LowerType(type))
             {
                 case BuiltinCore builtin:
-                    return $"{builtin.Wasm.Type}";
+                    return builtin;
                 case Type.Callable:
-                    return $"{Builtins.TableIndex.Wasm.Type}";
+                    return Builtins.TableIndex;
                 case Type.Declared declared when declared.Decl.IsNative:
-                    {
-                        var builtin = Builtins.Resolve(declared.Decl);
-                        return $"{builtin.Wasm.Type}";
-                    }
+                    return Builtins.Resolve(declared.Decl);
                 case Type.Declared declared when declared.Decl is Decl.Classy:
-                    {
-                        return $"{Builtins.Anything.Wasm.Type}";
-                    }
+                    return Builtins.Pointer;
                 default:
                     Assert(false);
-                    return $"(;wasm-type:?????{type};)";
+                    throw new NotImplementedException();
             }
+        }
+
+        public string WasmTypeFor(Type type)
+        {
+            return BuiltinFor(type).Wasm.Type;
         }
 
         private string? Result(Type type)
@@ -122,7 +117,7 @@ namespace Six.Six.Instructions
             }
         }
 
-        private string TypeFor(Type.Callable type)
+        public string TypeFor(Type.Callable type)
         {
             return $"(type {Types.FindType(type)})";
         }

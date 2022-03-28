@@ -5,9 +5,9 @@ namespace Six.Six.Sema
 {
     public partial interface Decl
     {
-
         public abstract class Funcy : Declaration
         {
+            private FuncLayout? layout;
             private List<Type>? paramTypes = null;
 
             public Funcy(Block parent, string name, A.Decl.Funcy aDecl)
@@ -21,11 +21,11 @@ namespace Six.Six.Sema
 
             public FuncBlock Block { get; }
             public A.Decl.Funcy AFuncy { get; }
-            public Scope Scope => Block.Funcy.Container;
+            public FuncLayout Layout => layout ??= new FuncLayout(this);
+            public Scope Scope => Block.Funcy.Parent.Content;
+            public uint TableIndex { get; set; } = uint.MaxValue;
 
-            public IReadOnlyList<Local> Parameters { get; } = new List<Local>();
-            public IReadOnlyList<Local> Locals { get; } = new List<Local>();
-            public int NextLocalSlot => Parameters.Count + Locals.Count;
+            public IReadOnlyList<Local> Parameters => Layout.TypedParameters;
 
             public abstract Type ResultType { get; }
             public List<Type> ParamTypes =>
@@ -33,18 +33,25 @@ namespace Six.Six.Sema
 
             public bool HasBody => AFuncy.Body is not A.Body.Deferred;
             public bool IsConcrete => HasBody && !IsAbstract;
+            public bool IsDynamic => !IsStatic && (IsVirtual || IsOverride);
+            public bool IsObjectMember => !IsStatic && Parent is ClassBlock;
 
             public override string FullName => Block.FullName();
 
+            public override Type Type =>
+                type ??= new Type.Callable(Module, ResultType, ParamTypes);
+
+            public Type.Callable CallableType => (Type.Callable)Type;
+
             public void AddParameter(Local parameter)
             {
-                ((List<Local>)Parameters).Add(parameter);
+                Layout.AddParameter(parameter);
                 Block.Members.Add(parameter);
             }
 
             public void AddLocal(Local local)
             {
-                ((List<Local>)Locals).Add(local);
+                Layout.AddLocal(local);
                 Block.Members.Add(local);
             }
         }
@@ -60,9 +67,6 @@ namespace Six.Six.Sema
                 Assert(ADecl is A.With.Parameters);
             }
 
-            public override Type Type =>
-                type ??= new Type.Callable(ResultType, ParamTypes);
-
             public override Type ResultType =>
                 resultType ??= Resolver.ResolveType(Scope, ((A.With.Type)ADecl).Type);
         }
@@ -76,8 +80,7 @@ namespace Six.Six.Sema
             {
             }
 
-            public override Type Type =>
-                type ??= new Type.Callable(ResultType, ParamTypes);
+            public override bool IsStatic => true;
 
             public override Type ResultType =>
                 resultType ??= Resolver.ResolveType(((ClassBlock)Parent).Classy.Type);
@@ -85,6 +88,8 @@ namespace Six.Six.Sema
 
         public sealed class Attribute : Funcy
         {
+            private Type? resultType = null;
+
             public Attribute(Block parent, A.Decl.Attribute aDecl)
                 : base(parent, aDecl.Name.Text, aDecl)
             {
@@ -93,10 +98,8 @@ namespace Six.Six.Sema
 
             public override string FullName => $"{Parent.FullName()}.{ADecl.Name}";
 
-            public override Type Type =>
-                type ??= Resolver.ResolveType(Container, ((A.With.Type)ADecl).Type);
-
-            public override Type ResultType => Type;
+            public override Type ResultType =>
+                resultType ??= Resolver.ResolveType(Parent.Content, ((A.With.Type)ADecl).Type);
         }
     }
 }

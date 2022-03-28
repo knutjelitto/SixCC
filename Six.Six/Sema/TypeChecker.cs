@@ -15,6 +15,11 @@ namespace Six.Six.Sema
 
         public Module Module { get; }
 
+        public bool Distinct(Type type1, Type type2)
+        {
+            return !CanAssign(type1, type2) && !CanAssign(type2, type1);
+        }
+
         public bool CanAssign(Type toType, Type fromType)
         {
             if (ReferenceEquals(toType, fromType))
@@ -22,43 +27,54 @@ namespace Six.Six.Sema
                 return true;
             }
 
-            if (toType is Type.Reference toRef && fromType is Type.Reference fromRef)
+            if (toType is Type.Reference toRef)
             {
-                Assert(toRef.Decl is Typy && fromRef.Decl is Typy);
-
-                if (ReferenceEquals(toRef.Decl, fromRef.Decl))
+                if (fromType is Type.Reference fromRef)
                 {
-                    return true;
-                }
+                    Assert(toRef.Decl is Typy && fromRef.Decl is Typy);
 
-                if (toRef.Decl is Decl.Interface iface)
-                {
-                    if (fromRef.Decl is Decl.Class clazz)
+                    if (ReferenceEquals(toRef.Decl, fromRef.Decl))
                     {
-                        foreach (var x in clazz.Layout.InterFaces)
+                        return true;
+                    }
+
+                    if (toRef.Decl is Decl.Interface iface)
+                    {
+                        if (fromRef.Decl is Decl.Class clazz)
                         {
-                            if (ReferenceEquals(iface, x.Interface))
+                            foreach (var x in clazz.Layout.InterFaces)
                             {
-                                return true;
+                                if (ReferenceEquals(iface, x.Interface))
+                                {
+                                    return true;
+                                }
                             }
+                            return false;
                         }
-                        Assert(false);
+                        else
+                        {
+                            Assert(false);
+                        }
+                    }
+                    else if (toRef.Decl is Decl.Classy toClass)
+                    {
+                        if (fromRef.Decl is Decl.Classy fromClass)
+                        {
+                            return CanAssign(toClass, fromClass);
+                        }
+                        else
+                        {
+                            Assert(false);
+                        }
                     }
                     else
                     {
                         Assert(false);
                     }
                 }
-                else if (toRef.Decl is Decl.Classy toClass)
+                if (fromType is Type.Intersection isection)
                 {
-                    if (fromRef.Decl is Decl.Classy fromClass)
-                    {
-                        return CanAssign(toClass, fromClass);
-                    }
-                    else
-                    {
-                        Assert(false);
-                    }
+                    return isection.Any(from => CanAssign(toType, from));
                 }
                 else
                 {

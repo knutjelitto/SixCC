@@ -2,6 +2,6 @@ namespace six.core;
 
 shared native abstract class Builtin : Object
 {
-    shared override bool equals(Object other) => false;
+    shared override bool equals(Object other) => Fakes.equals(self, other);
     shared override int hash => 0;
 }

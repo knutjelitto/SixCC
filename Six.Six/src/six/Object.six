@@ -4,6 +4,7 @@ shared abstract class Object : Anything
 {
     shared abstract bool equals(Object that);
     shared abstract int hash;
-    shared virtual string string => Runtime.ClassName(self) + "@" + int.format(hash, #10);
+    //shared virtual string string => Runtime.ClassName(self) + "@" + int.format(hash, #10);
+    shared virtual string string => Fakes.toString(self);
 }
 

@@ -1,18 +1,21 @@
 ﻿using Six.Six.Builtins;
 using Six.Six.Sema;
+using System;
 using System.Collections;
 
 namespace Six.Six.Instructions
 {
-    public class Layout
+    public class ClassLayout
     {
         public readonly FieldList Fields = new();
         public readonly SlotList Slots = new();
         public readonly InterFaceList InterFaces = new();
 
-        public Layout(Decl.Classy classy)
+        public ClassLayout(Decl.Classy classy)
         {
             Classy = classy;
+
+            Run();
         }
 
         public Decl.Classy Classy { get; }
@@ -20,23 +23,19 @@ namespace Six.Six.Instructions
         public Resolver Resolver => Module.Resolver;
         public Emitter Emitter => Module.Emitter;
 
-        public uint Size { get; private set; } = uint.MaxValue;
-        public bool Done { get; private set; }
+        public uint MetaSize { get; private set; } = uint.MaxValue;
+        public uint DispatchSize { get; private set; } = uint.MaxValue;
+        public Func<Ptr> MetaPtr { get; private set; } = () => new Ptr();
+        public Func<Ptr> DispatchPtr { get; private set; } = () => new Ptr();
 
-        public void Run()
+        private void Run()
         {
-            if (Done)
-            {
-                return;
-            }
-            Done = true;
-
             MakeFields();
             MakeSlots();
             MakeInterfaces();
-            RetroSlots();
+            RetrofitSlots();
 
-            Emitter.AddClass(Classy.FullName, Size);
+            MetaPtr = Emitter.ClassData.Add(this);
         }
 
         private void MakeFields()
@@ -45,9 +44,8 @@ namespace Six.Six.Instructions
 
             if (Classy.Extends is Decl.Class extended)
             {
-                extended.Layout.Run();
                 Fields.AddRange(extended.Layout.Fields);
-                fieldOffset = extended.Layout.Size;
+                fieldOffset = extended.Layout.MetaSize;
             }
 
             foreach (var field in Classy.Fields)
@@ -66,18 +64,17 @@ namespace Six.Six.Instructions
                 fieldOffset += builtin.Wasm.MemSize;
             }
 
-            Size = fieldOffset;
+            MetaSize = fieldOffset;
         }
 
         private void MakeSlots()
         {
             if (Classy.Extends is Decl.Class extended)
             {
-                extended.Layout.Run();
                 Slots.AddRange(extended.Layout.Slots);
             }
 
-            foreach (var funcy in Classy.Block.Members.OfType<Decl.Funcy>())
+            foreach (var funcy in Classy.Block.Members.OfType<Decl.Funcy>().Where(f => !f.IsStatic))
             {
                 Slots.AddOrUpdate(funcy);
             }
@@ -87,7 +84,6 @@ namespace Six.Six.Instructions
         {
             foreach (var iface in Classy.Closure())
             {
-                iface.Layout.Run();
                 InterFaces.Add(Classy, iface);
             }
 
@@ -110,7 +106,7 @@ namespace Six.Six.Instructions
             }
         }
 
-        private void RetroSlots()
+        private void RetrofitSlots()
         {
             foreach (var slot in Slots.ToList())
             {

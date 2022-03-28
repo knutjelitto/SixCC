@@ -62,6 +62,13 @@ namespace Six.Six.Instructions
             return EmitBytes(bytes);
         }
 
+        public string EmitInt32(int value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            Assert(bytes.Length == 4);
+            return EmitBytes(bytes);
+        }
+
         public string EmitUtf8(byte[] bytes)
         {
             var builder = new StringBuilder();

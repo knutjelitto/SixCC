@@ -33,7 +33,7 @@ namespace Six.Six.Sema
                 return decl;
             }
 
-            throw Errors.CantResolve(tree, name);
+            throw Errors.CantResolveMember(tree, name);
         }
 
         public virtual Decl? TryFind(string name)

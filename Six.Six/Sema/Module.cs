@@ -13,13 +13,18 @@ namespace Six.Six.Sema
         public static readonly string LanguageCore = "core";
         public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
         public static readonly string DefaultCtor = "ctor@default";
+        public static readonly string InitCtor = "ctor@initialize";
         public static string ModuleFunctions => $"{CoreNamespace}.functions";
+        public static string VTableFunctions => $"{CoreNamespace}.dispatch";
         public static string DataAndHeap => $"{CoreNamespace}.Data&Heap";
         public static string Data_Start => $"{CoreNamespace}.__data_start";
         public static string Heap_Start => $"{CoreNamespace}.__heap_start";
         public static string Heap_Current => $"{CoreNamespace}.__heap_current";
 
-        public static string Allocator => $"allocate";
+        public static readonly string Allocator = "alloc";
+        public static readonly string ClassAlloc = "classAlloc";
+        public static string CoreClassAlloc => $"{CoreNamespace}.{ClassAlloc}";
+        public static string CoreAlloc => $"{CoreNamespace}.{Allocator}";
 
         private readonly List<Diagnostic> Diagnostics = new();
 
@@ -196,6 +201,7 @@ namespace Six.Six.Sema
         Module Scope.Module => this;
         T Scope.Declare<T>(T decl, string? name) => throw new NotImplementedException();
         Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
-        Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
+        
+        //Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
     }
 }

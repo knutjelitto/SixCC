@@ -74,22 +74,16 @@ namespace Six.Six.Instructions
         private void Prep(Decl.Class decl)
         {
             Walk(decl.Block);
-
-            decl.Layout.Run();
         }
 
         private void Prep(Decl.Object decl)
         {
             Walk(decl.Block);
-
-            decl.Layout.Run();
         }
 
         private void Prep(Decl.Interface decl)
         {
             Walk(decl.Block);
-
-            decl.Layout.Run();
         }
 
         private void Prep(Decl.Function decl)

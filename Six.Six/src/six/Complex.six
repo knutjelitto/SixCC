@@ -1,9 +1,9 @@
 namespace six.core;
 
-shared prefinal class Complex
+shared sealed class Complex
 {
-    var int re = -1;
-    var int im = -1;
+    var int re = 0;
+    var int im = 0;
 
     shared new (int re = 0, int im = 0)
     {
@@ -11,13 +11,11 @@ shared prefinal class Complex
         self.im = im;
     }
 
+    shared int Re => self.re;
+    shared int Im => self.im;
+
     shared infix Complex + (Complex other)
     {
         return Complex(self.re + other.re, self.im + other.im);
-    }
-
-    shared int getRe()
-    {
-        return self.re;
     }
 }

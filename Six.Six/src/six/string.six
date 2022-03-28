@@ -2,7 +2,7 @@ namespace six.core;
 
 shared native class String
 {
-    shared native infix String + (String rhs);
+    shared native infix String + (String other) => Fakes.stringConcat(self, other);
 }
 
 shared alias string => String;

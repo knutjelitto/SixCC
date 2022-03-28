@@ -39,11 +39,11 @@ namespace Six.Six.Instructions
         public static Insn ToDo(string text) => new ToDoInsn(text);
 
         public static Insn Return { get; } = new Simplest("return");
+        public static Insn Unreachable { get; } = new Simplest("unreachable");
+        public static Insn Drop { get; } = new Simplest("drop");
         public static Insn If { get; } = new Simplest("if");
         public static Insn Else { get; } = new Simplest("else");
         public static Insn End { get; } = new Simplest("end");
-
-        public static Insn Drop { get; } = new Simplest("drop");
 
         public static Insn Call(string functionName) => new Simplest($"call ${functionName}");
         public static Insn CallIndirect(string tableName, string type) => new Simplest($"call_indirect (table ${tableName}) {type}");
@@ -52,6 +52,7 @@ namespace Six.Six.Instructions
         {
             public static LocalGet Get(int index) => new(index);
             public static LocalSet Set(int index) => new(index);
+            public static LocalTee Tee(int index) => new(index);
         }
 
         public static class Global
@@ -144,18 +145,31 @@ namespace Six.Six.Instructions
             protected override OpSign Signedness => OpSign.Neutral;
         }
 
-        public static readonly S32Impl S32 = new S32Impl();
-        public static readonly U32Impl U32 = new U32Impl();
-        public static readonly S64Impl S64 = new S64Impl();
-        public static readonly U64Impl U64 = new U64Impl();
+        public static readonly S32Impl S32 = new();
+        public static readonly U32Impl U32 = new();
+        public static readonly S64Impl S64 = new();
+        public static readonly U64Impl U64 = new();
 
-        public static readonly F32Impl F32 = new F32Impl();
-        public static readonly F64Impl F64 = new F64Impl();
+        public static readonly F32Impl F32 = new();
+        public static readonly F64Impl F64 = new();
+
+        public static readonly Pointer Ptr = new();
+
+        public class Pointer
+        {
+            public Insn Push(Ptr ptr) => ptr.Insn;
+            public Insn Add => U32.Add;
+            public Insn Load(uint offset) => new Load(MemType.U32(), offset);
+            public Insn Store(uint offset) => new Store(MemType.U32(), offset);
+        }
 
         public static class Boolean
         {
-            public static Insn False => U32.Const(0);
-            public static Insn True => U32.Const(1);
+            public static Insn False => S32.Const(0);
+            public static Insn True => S32.Const(1);
+            public static Insn And => S32.And;
+            public static Insn Or => S32.Or;
+            public static Insn Xor => S32.Xor;
         }
 
         public class Unop : Insn
@@ -299,6 +313,19 @@ namespace Six.Six.Instructions
                 return $"local.set {Index}";
             }
         }
+
+        public class LocalTee : IndexRef
+        {
+            public LocalTee(int index)
+                : base(index)
+            {
+            }
+
+            public override string ToString()
+            {
+                return $"local.tee {Index}";
+            }
+        }
     }
 
     public abstract class Value
@@ -437,10 +464,10 @@ namespace Six.Six.Instructions
         private string Bits => Bytes == ValueType.Bytes ? "" : $"{Bytes * 8}";
         private string Sign => Bytes == ValueType.Bytes ? "" : $"{OpSign}";
 
-        public static MemType U32(int bytes = 4) => new MemType(ValueType.I32, bytes, OpSign.Unsigned);
-        public static MemType S32(int bytes = 4) => new MemType(ValueType.I32, bytes, OpSign.Signed);
-        public static MemType U64(int bytes = 8) => new MemType(ValueType.I64, bytes, OpSign.Unsigned);
-        public static MemType S64(int bytes = 8) => new MemType(ValueType.I64, bytes, OpSign.Signed);
+        public static MemType U32(int bytes = 4) => new(ValueType.I32, bytes, OpSign.Unsigned);
+        public static MemType S32(int bytes = 4) => new(ValueType.I32, bytes, OpSign.Signed);
+        public static MemType U64(int bytes = 8) => new(ValueType.I64, bytes, OpSign.Unsigned);
+        public static MemType S64(int bytes = 8) => new(ValueType.I64, bytes, OpSign.Signed);
 
         public static MemType F32 { get; } = new MemType(ValueType.F32, ValueType.F32.Bytes, OpSign.Neutral);
         public static MemType F64 { get; } = new MemType(ValueType.F64, ValueType.F64.Bytes, OpSign.Neutral);

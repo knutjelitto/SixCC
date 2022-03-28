@@ -44,7 +44,7 @@ namespace Six.Runtime
                 var expected = "'" + string.Join("' | '", terminals) + "'";
                 var location = new RuntimeLocation(first.Start.Source, first.Core.Offset, 0);
 
-                var error = new SyntaxError(location, expected);
+                var error = new SyntaxError(location, $"expected: {expected}");
                 throw new DiagnosticException(error);
             }
 

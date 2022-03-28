@@ -19,6 +19,7 @@ namespace Six.Six.Builtins
             Boolean = Add(new Boolean(this));
             Bytes = Add(new Bytes(this));
             String = Add(new String(this));
+            Pointer = Add(new Pointer(this));
             Builtin = Add(new Builtin(this));
         }
         public BuiltinCore TableIndex { get; }
@@ -26,6 +27,7 @@ namespace Six.Six.Builtins
         public BuiltinCore Bytes { get; }
         public BuiltinCore String { get; }
         public BuiltinCore Anything { get; }
+        public BuiltinCore Pointer { get; }
         public BuiltinCore Builtin { get; }
 
         public BuiltinCore U32 { get; }

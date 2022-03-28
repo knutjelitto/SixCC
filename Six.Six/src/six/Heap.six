@@ -5,10 +5,15 @@ shared let uint __heap_start = 0u32;
 shared var uint __heap_current = 0u32;
 shared var uint __next_object_id = 42u32;
 
-shared uint allocate(uint size)
+shared Pointer classAlloc2(Pointer clazz)
+{
+    return Pointer(0u32);
+}
+
+shared Pointer alloc(uint size)
 {
     let allocated = (__heap_current + 15u32) & #FFFFFFF0u32;
     __heap_current = allocated + size;
-    return allocated;
+    return Pointer(allocated);
 }
 

@@ -25,8 +25,12 @@ namespace Six.Six.Instructions
         public uint BaseOffset { get; private set; }
         public uint Next => BaseOffset + Offset;
 
-        public Func<Ptr> Add(string text, uint size)
+        public Func<Ptr> Add(ClassLayout layout)
         {
+            var start = Dispatch(layout);
+
+            var text = layout.Classy.FullName;
+
             if (!metas.TryGetValue(text, out var already))
             {
                 Assert(Offset == AlignCount(Offset));
@@ -37,7 +41,18 @@ namespace Six.Six.Instructions
 
                 void emit()
                 {
-                    wl($"(; +{BaseOffset + offset:D4} - {text,-25} ;) {EmitUInt32(size)} {EmitPtr(stringPtr())}");
+                    wl($"(; +{BaseOffset + offset:D4} - {text,-25} ;)");
+                    indent(() =>
+                    {
+                        wl($"(; vtable   ;) {EmitUInt32(0)}");
+                        wl($"(; size     ;) {EmitUInt32(layout.MetaSize)}");
+                        wl($"(; name     ;) {EmitPtr(stringPtr())}");
+                        wl($"(; dispatch ;) {EmitUInt32(start)}");
+                        foreach (var slot in layout.Slots)
+                        {
+                            wl($"{EmitUInt32(slot.Funcy.TableIndex)} (; {slot.Funcy.FullName} ;)");
+                        }
+                    });
                 }
 
                 Ptr access()
@@ -47,12 +62,24 @@ namespace Six.Six.Instructions
 
                 metas.Add(text, (metas.Count, emit, access));
 
-                Offset = AlignCount(Offset + WasmDef.I32.Size + WasmDef.Pointer.Size);
+                Offset = AlignCount((uint)(Offset + WasmDef.I32.Size + WasmDef.I32.Size + WasmDef.Pointer.Size + WasmDef.I32.Size + layout.Slots.Count * WasmDef.I32.Size));
 
                 return access;
             }
 
             return already.access;
+        }
+
+        private uint Dispatch(ClassLayout layout)
+        {
+            var start = Emitter.DispatchTable.Current;
+
+            foreach (var slot in layout.Slots)
+            {
+                Emitter.DispatchTable.Add(slot.Funcy);
+            }
+
+            return start;
         }
 
         public void Emit(uint baseOffset)

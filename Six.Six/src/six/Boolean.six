@@ -1,11 +1,11 @@
 namespace six.core;
 
-shared native class Boolean of true | false
+shared native class Boolean : Builtin of true | false
 {
-    shared native prefix Boolean !  ();
-    shared native infix Boolean | (Boolean other);
-    shared native infix Boolean & (Boolean other);
-    shared native infix Boolean ^ (Boolean other);
+    shared native prefix Boolean ! () => !self;
+    shared native infix Boolean | (Boolean other) => self | other;
+    shared native infix Boolean & (Boolean other) => self & other;
+    shared native infix Boolean ^ (Boolean other) => self ^ other;
 }
 
 shared native object true : Boolean

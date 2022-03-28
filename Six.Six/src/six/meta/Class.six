@@ -1,0 +1,9 @@
+namespace six.core.meta;
+
+shared native class Class : Builtin
+{
+    shared let uint size = 0;
+    shared let string name = 0;
+    shared let uint vtable = 0;
+}
+

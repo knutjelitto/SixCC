@@ -6,21 +6,32 @@ namespace Six.Six.Instructions
 {
     public class FunctionTable : WithWriter
     {
-        private readonly Dictionary<string, (uint index, Decl.Function function)> table = new();
+        private readonly Dictionary<string, (uint index, Decl.Funcy function)> table = new();
 
-        public FunctionTable(Writer writer, string name)
-            : base(writer)
+        public FunctionTable(Emitter emitter, string name)
+            : base(emitter.Writer)
         {
+            Emitter = emitter;
             Name = name;
         }
 
+        public Emitter Emitter { get; }
         public string Name { get; }
 
-        public uint Add(Decl.Function function, string name)
+        public uint Add(Decl.Funcy function)
         {
+            Assert(function is Decl.Function or Decl.Attribute);
+            return Add(function, function.FullName);
+        }
+
+        public uint Add(Decl.Funcy function, string name)
+        {
+            Assert(function is Decl.Function or Decl.Attribute);
+
             uint index;
             if (!table.TryGetValue(name, out var entry))
             {
+                _ = Emitter.TypeFor((Type.Callable)function.Type);
                 index = (uint)table.Count;
                 table.Add(name, (index, function));
             }
@@ -32,7 +43,7 @@ namespace Six.Six.Instructions
             return index;
         }
 
-        public void Emit()
+        public void EmitTable()
         {
             if (table.Count > 0)
             {

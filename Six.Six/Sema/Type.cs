@@ -1,4 +1,6 @@
-﻿namespace Six.Six.Sema
+﻿using System.Collections;
+
+namespace Six.Six.Sema
 {
     public interface Typy
     {
@@ -16,9 +18,10 @@
         }
 
         [DebuggerDisplay("reference <{Decl}>")]
-        public abstract class Reference : Declared
+        public abstract class Reference : TypeImpl, Declared
         {
-            public Reference(Decl decl)
+            public Reference(Module module, Decl decl)
+                : base(module)
             {
                 Decl = decl;
             }
@@ -33,15 +36,16 @@
 
         public sealed class AliasReference : Reference
         {
-            public AliasReference(Decl.Alias alias) : base(alias)
+            public AliasReference(Module module, Decl.Alias alias)
+                : base(module, alias)
             {
-
             }
         }
         
         public abstract class ClassyReference : Reference
         {
-            protected ClassyReference(Decl.Classy classy) : base(classy)
+            protected ClassyReference(Module module, Decl.Classy classy)
+                : base(module, classy)
             {
                 Classy = classy;
             }
@@ -51,9 +55,10 @@
 
         public sealed class ClassReference : ClassyReference
         {
-            public ClassReference(Decl.Class @class) : base(@class)
+            public ClassReference(Module module, Decl.Class clazz)
+                : base(module, clazz)
             {
-                Class = @class;
+                Class = clazz;
             }
 
             public Decl.Class Class { get; }
@@ -61,9 +66,10 @@
 
         public sealed class InterfaceReference : ClassyReference
         {
-            public InterfaceReference(Decl.Interface @interface) : base(@interface)
+            public InterfaceReference(Module module, Decl.Interface interFace)
+                : base(module, interFace)
             {
-                Interface = @interface;
+                Interface = interFace;
             }
 
             public Decl.Interface Interface { get; }
@@ -71,22 +77,24 @@
 
         public sealed class ObjectReference : ClassyReference
         {
-            public ObjectReference(Decl.Object @object) : base(@object)
+            public ObjectReference(Module module, Decl.Object obJect)
+                : base(module, obJect)
             {
-                Object = @object;
+                Object = obJect;
             }
 
             public Decl.Object Object { get; }
         }
 
-        public sealed class Callable : Type
+        public sealed class Callable : TypeImpl
         {
-            public Callable(Type result, params Type[] parameters)
-                : this(result, parameters.ToList())
+            public Callable(Module module, Type result, params Type[] parameters)
+                : this(module, result, parameters.ToList())
             {
             }
 
-            public Callable(Type result, List<Type> parameters)
+            public Callable(Module module, Type result, List<Type> parameters)
+                : base(module)
             {
                 Result = result;
                 Parameters = parameters;
@@ -96,23 +104,47 @@
             public IReadOnlyList<Type> Parameters { get; }
         }
 
-        public sealed class Intersection : Type
+        public sealed class Intersection : TypeImpl, IReadOnlyList<Type>
         {
             private readonly List<Type> types = new();
             
-            public Intersection()
+            public Intersection(Module module)
+                : base(module)
             {
             }
 
-            public void Add(Type type)
+            public void Add(Type distinctType)
             {
-                types.Add(type);
+                foreach (var type in types)
+                {
+                    Assert(Checker.Distinct(type, distinctType));
+                }
+                types.Add(distinctType);
             }
+
+            public void AddRange(IEnumerable<Type> distinctTypes)
+            {
+                foreach (var distinctType in distinctTypes)
+                {
+                    Add(distinctType);
+                }
+            }
+            
+            public override string ToString()
+            {
+                return string.Join("&", types);
+            }
+
+            public Type this[int index] => types[index];
+            public int Count => types.Count;
+            public IEnumerator<Type> GetEnumerator() => types.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)types).GetEnumerator();
         }
 
         public sealed class Tuple : TypeImpl
         {
-            public Tuple(params Type[] types)
+            public Tuple(Module module, params Type[] types)
+                : base(module)
             {
                 Types = types;
             }
@@ -122,7 +154,8 @@
 
         public sealed class Array : TypeImpl
         {
-            public Array(Type type)
+            public Array(Module module, Type type)
+                : base(module)
             {
                 Type = type;
             }
@@ -132,6 +165,13 @@
      
         public abstract class TypeImpl : Type
         {
+            protected TypeImpl(Module module)
+            {
+                Module = module;
+            }
+
+            protected Module Module { get; }
+            protected TypeChecker Checker => Module.Checker;
         }
     }
 }

@@ -47,6 +47,58 @@ namespace Six.Six.Sema
                     }
                     return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), (ulong)value);
                 case "":
+                    Assert(value <= ulong.MaxValue);
+
+                    var types = new List<Type>();
+                    if (value <= (ulong)sbyte.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S8));
+                    }
+                    if (value <= byte.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U8));
+                    }
+                    if (value <= (ulong)short.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S16));
+                    }
+                    if (value <= ushort.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U16));
+                    }
+                    if (value <= int.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S32));
+                    }
+                    if (value <= uint.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U32));
+                    }
+                    if (value <= long.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S64));
+                    }
+                    if (value <= ulong.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U64));
+                    }
+                    var max_float_int = ((ulong)1) << 24;
+                    var max_double_int = ((ulong)1) << 53;
+
+                    if (value <= max_float_int)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.F32));
+                    }
+                    if (value <= max_double_int)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.F64));
+                    }
+#if false
+                    var type = new Type.Intersection(Module);
+                    type.AddRange(types);
+                    return new Expr.ConstNatural(type, value);
+#else
+
                     if (value > long.MaxValue)
                     {
                         return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), value);
@@ -63,6 +115,7 @@ namespace Six.Six.Sema
                     {
                         return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
                     }
+#endif
                 default:
                     Assert(false);
                     throw new NotImplementedException();

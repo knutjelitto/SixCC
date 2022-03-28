@@ -1,4 +1,4 @@
-// <generated from="D:\\Six\\Six.Six\\Six.six" at="21.03.2022 21:43:42" />
+// <generated from="D:\\Six\\Six.Six\\Six.six" at="25.03.2022 04:31:18" />
 
 using Six.Runtime;
 using Six.Runtime.Dfa;
@@ -935,12 +935,7 @@ namespace Six.Six
                     new DfaState(49, false),
                     new DfaState(50, false),
                     new DfaState(51, false),
-                    new DfaState(52, false),
-                    new DfaState(53, false),
-                    new DfaState(54, false),
-                    new DfaState(55, false),
-                    new DfaState(56, false),
-                    new DfaState(57, false)
+                    new DfaState(52, false)
                 );
                 _attributeName_DFA.States[0].Set(
                     new DfaTrans(_attributeName_DFA.States[1], new DfaInterval(116, 116)),
@@ -949,8 +944,7 @@ namespace Six.Six
                     new DfaTrans(_attributeName_DFA.States[30], new DfaInterval(110, 110)),
                     new DfaTrans(_attributeName_DFA.States[34], new DfaInterval(97, 97)),
                     new DfaTrans(_attributeName_DFA.States[41], new DfaInterval(111, 111)),
-                    new DfaTrans(_attributeName_DFA.States[47], new DfaInterval(118, 118)),
-                    new DfaTrans(_attributeName_DFA.States[53], new DfaInterval(112, 112))
+                    new DfaTrans(_attributeName_DFA.States[47], new DfaInterval(118, 118))
                 );
                 _attributeName_DFA.States[1].Set(
                     new DfaTrans(_attributeName_DFA.States[2], new DfaInterval(97, 97)),
@@ -1111,21 +1105,6 @@ namespace Six.Six
                 );
                 _attributeName_DFA.States[52].Set(
                     new DfaTrans(_attributeName_DFA.States[6], new DfaInterval(108, 108))
-                );
-                _attributeName_DFA.States[53].Set(
-                    new DfaTrans(_attributeName_DFA.States[54], new DfaInterval(114, 114))
-                );
-                _attributeName_DFA.States[54].Set(
-                    new DfaTrans(_attributeName_DFA.States[55], new DfaInterval(101, 101))
-                );
-                _attributeName_DFA.States[55].Set(
-                    new DfaTrans(_attributeName_DFA.States[56], new DfaInterval(102, 102))
-                );
-                _attributeName_DFA.States[56].Set(
-                    new DfaTrans(_attributeName_DFA.States[57], new DfaInterval(105, 105))
-                );
-                _attributeName_DFA.States[57].Set(
-                    new DfaTrans(_attributeName_DFA.States[51], new DfaInterval(110, 110))
                 );
                 _naturalLiteral_DFA.Set(
                     new DfaState(0, false),

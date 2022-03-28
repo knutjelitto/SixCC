@@ -6,14 +6,42 @@ namespace Six.Six.Sema
 {
     public static class Extensions
     {
-        public static Decl ClassyFind(this Decl.Classy classy, A.Reference reference)
+        public static Decl FindMember(this Decl.Classy classy, A.Reference reference, string? name = null)
         {
-            return classy.Block.Content.Find(reference, reference.Name.Text);
+            return classy.FindMember((A.TreeNode)reference, name ?? reference.Name.Text);
         }
 
-        public static Decl ClassyFind(this Expr.ClassyReference node, A.Reference reference)
+        public static Decl FindMember(this Decl.Classy classy, A.TreeNode tree, string name)
         {
-            return node.ClassyDecl.ClassyFind(reference);
+            var found = classy.Block.Content.TryFind(name);
+
+            if (found != null)
+            {
+                return found;
+            }
+            if (classy.Extends != null)
+            {
+                return classy.Extends.FindMember(tree, name);
+            }
+
+            throw classy.Module.Errors.CantResolveMember(tree, name);
+        }
+
+        public static T FindMember<T>(this Decl.Classy classy, A.TreeNode tree, string name)
+            where T : Decl
+        {
+            var found = classy.Block.Content.TryFind(name);
+
+            if (found is T foundAsT)
+            {
+                return foundAsT;
+            }
+            if (classy.Extends != null)
+            {
+                return classy.Extends.FindMember<T>(tree, name);
+            }
+
+            throw classy.Module.Errors.CantResolveMember(tree, name);
         }
 
         public static ILocation GetLocation(this Decl node)
@@ -48,44 +76,14 @@ namespace Six.Six.Sema
             return "--no-name--";
         }
 
-        public static bool IsShared(this A.TreeNode node)
+        public static bool IsWith(this Decl decl, string attribute)
         {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Shared);
+            return decl.ADecl.IsWith(attribute);
         }
 
-        public static bool IsSealed(this A.TreeNode node)
+        private static bool IsWith(this A.TreeNode node, string attribute)
         {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Sealed);
-        }
-
-        public static bool IsNative(this A.TreeNode node)
-        {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Native);
-        }
-
-        public static bool IsStatic(this A.TreeNode node)
-        {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Static);
-        }
-
-        public static bool IsAbstract(this A.TreeNode node)
-        {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Abstract);
-        }
-
-        public static bool IsVirtual(this A.TreeNode node)
-        {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Virtual);
-        }
-
-        public static bool IsOverride(this A.TreeNode node)
-        {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Override);
-        }
-
-        public static bool IsPrefinal(this A.TreeNode node)
-        {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(Names.Attr.Prefinal);
+            return node is A.With.Prelude withPrelude && withPrelude.IsWith(attribute);
         }
 
         private static bool IsWith(this A.With.Prelude withPrelude, string attribute)

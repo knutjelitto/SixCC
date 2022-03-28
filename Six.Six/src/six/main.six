@@ -71,3 +71,10 @@ shared int add_mul(int x, int y, int z)
 
     return add(x, mul(y, z));
 }
+
+shared string complex_string()
+{
+    let complex = Complex(12,11);
+
+    return complex.string;
+}
