@@ -16,30 +16,30 @@ namespace Six.Six.Builtins
             infix.Add("^", Xor);
         }
 
-        public abstract Expr.Primitive Not(Expr arg);
+        public abstract Primitive Not(Expr arg);
 
-        public Expr.Primitive And(Expr arg1, Expr arg2)
+        public Primitive And(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Impl.And, arg1, arg2);
+            return new Primitive.Binop(this, Impl.And, arg1, arg2);
         }
 
-        public Expr.Primitive Or(Expr arg1, Expr arg2)
+        public Primitive Or(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Impl.Or, arg1, arg2);
+            return new Primitive.Binop(this, Impl.Or, arg1, arg2);
         }
 
-        public Expr.Primitive Xor(Expr arg1, Expr arg2)
+        public Primitive Xor(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Impl.Xor, arg1, arg2);
+            return new Primitive.Binop(this, Impl.Xor, arg1, arg2);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Six.Six.Instructions
                 }
                 wl();
 
-                EmitAlloc();
+                EmitClassAlloc();
                 wl();
 
                 foreach (var function in Module.GetFunctions())
@@ -67,7 +67,9 @@ namespace Six.Six.Instructions
 
                 GlobalFunctions.EmitTable();
                 wl();
-                DispatchTable.EmitTable();
+                DispatchTable.Emit();
+                wl();
+                DispatchTables.Emit();
                 wl();
                 Types.Emit();
             });
@@ -84,7 +86,7 @@ namespace Six.Six.Instructions
             return ClassData.Add(layout);
         }
 
-        private void EmitAlloc()
+        private void EmitClassAlloc()
         {
             wl($"(func ${Module.CoreClassAlloc}");
             indent(() =>
@@ -102,6 +104,12 @@ namespace Six.Six.Instructions
                 Emit(Insn.U32.Const(16));
                 Emit(Insn.U32.Add);
                 Emit(Insn.U32.Store(0));
+
+                Emit(Insn.Local.Get(1));
+                Emit(Insn.Local.Get(0));
+                Emit(Insn.U32.Load(12));
+                Emit(Insn.U32.Store(4));
+
                 Emit(Insn.Local.Get(1));
                 Emit(Insn.Return);
                 wl("(;-----;)");

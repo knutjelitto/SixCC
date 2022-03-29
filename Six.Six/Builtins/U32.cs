@@ -17,11 +17,11 @@ namespace Six.Six.Builtins
         {
         }
 
-        public override Expr.Primitive Not(Expr arg)
+        public override Primitive Not(Expr arg)
         {
             Assert(IsThis(arg));
 
-            var ones = new Expr.ConstU32(this, uint.MaxValue);
+            var ones = new Primitive.ConstU32(this, uint.MaxValue);
             return Xor(ones, arg);
         }
     }

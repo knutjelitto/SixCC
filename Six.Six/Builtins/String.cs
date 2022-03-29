@@ -23,12 +23,12 @@ namespace Six.Six.Builtins
             throw new System.NotImplementedException();
         }
 
-        public Expr.Primitive Add(Expr left, Expr right)
+        public Primitive Add(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.ToDo(this, "string + string", left, right);
+            return new Primitive.ToDo(this, "string + string", left, right);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Six.Six.Sema
 
             public bool HasBody => AFuncy.Body is not A.Body.Deferred;
             public bool IsConcrete => HasBody && !IsAbstract;
-            public bool IsDynamic => !IsStatic && (IsVirtual || IsOverride);
+            public bool IsDynamic => !IsStatic && (IsAbstract || IsVirtual || IsOverride);
             public bool IsObjectMember => !IsStatic && Parent is ClassBlock;
             public bool IsLocalFunction => Parent is FuncBlock;
             public bool IsGlobalFunction => Parent is NamespaceBlock;

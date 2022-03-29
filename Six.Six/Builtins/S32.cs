@@ -13,19 +13,19 @@ namespace Six.Six.Builtins
             prefix.Add("-", Neg);
         }
 
-        public Expr.Primitive Neg(Expr right)
+        public Primitive Neg(Expr right)
         {
             Assert(IsThis(right));
 
-            var zero = new Expr.ConstS32(this, 0);
+            var zero = new Primitive.ConstS32(this, 0);
             return Sub(zero, right);
         }
 
-        public override Expr.Primitive Not(Expr arg)
+        public override Primitive Not(Expr arg)
         {
             Assert(IsThis(arg));
 
-            var ones = new Expr.ConstS32(this, -1);
+            var ones = new Primitive.ConstS32(this, -1);
             return Xor(ones, arg);
         }
 

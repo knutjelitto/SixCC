@@ -1,5 +1,4 @@
-﻿using Six.Core;
-using Six.Runtime;
+﻿using Six.Runtime;
 using Six.Six.Sema;
 
 namespace Six.Six.Instructions
@@ -31,16 +30,17 @@ namespace Six.Six.Instructions
             table.Add(function);
         }
 
-        public void EmitTable()
+        public void Emit()
         {
             if (table.Count > 0)
             {
                 wl($"(table ${Name} funcref (elem");
                 indent(() =>
                 {
-                    foreach (var funcy in table)
+                    for (var i = 0; i < table.Count; i++)
                     {
-                        wl($"(ref.func ${funcy.FullName})");
+                        var funcy = table[i];
+                        wl($"(; {i:X4} ;) (ref.func ${funcy.FullName})");
                     }
                 });
                 wl("))");

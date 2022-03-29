@@ -97,6 +97,18 @@ namespace Six.Six
 
             result = CallInt32Function(store, instance, "six.core.complex_string");
             Assert(true);
+
+            result = CallInt32Function(store, instance, "six.core.tests.ShapeTest");
+            Assert(result == 4);
+
+            var address = CallInt32Function(store, instance, "six.core.tests.ShapeTest2");
+        
+            Assert(true);
+
+            var mem = instance.GetMemory(store, "six.core.Data&Heap")!;
+
+            var vtable = $"{mem.ReadInt32(store, address + 0):X4}";
+            var dispatch = $"{mem.ReadInt32(store, address + 4):X4}";
         }
 
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)

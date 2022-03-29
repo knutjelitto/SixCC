@@ -22,45 +22,69 @@ namespace Six.Six.Sema
         public List<Member> Members { get; } = new();
     }
 
-    public sealed class ClassBlock : Block
+    public abstract class LinkedBlock : Block
     {
-        public ClassBlock(Decl.Classy classy, Block parent)
-            : base(classy.Name)
-        {
-            Classy = classy;
-            Parent = parent;
-        }
-
-        public Decl.Classy Classy { get; }
-
-        public override Block Parent { get; }
-    }
-
-    public sealed class FuncBlock : Block
-    {
-        public FuncBlock(Decl.Funcy funcy, Block parent, string? name = null)
-            : base(name ?? funcy.Name)
-        {
-            Funcy = funcy;
-            Parent = parent;
-        }
-
-        public Decl.Funcy Funcy { get; }
-
-        public override Block Parent { get; }
-    }
-
-    public sealed class NamespaceBlock : Block
-    {
-        public readonly Dictionary<string, NamespaceBlock> Children = new();
-
-        public NamespaceBlock(string name, Block parent)
+        protected LinkedBlock(string name, Block parent)
             : base(name)
         {
             Parent = parent;
         }
 
         public override Block Parent { get; }
+    }
+
+    public sealed class ContentBlock : LinkedBlock
+    {
+        public ContentBlock(string name, Block parent) : base(name, parent)
+        {
+        }
+    }
+
+    public sealed class HeadBlock : LinkedBlock
+    {
+        public HeadBlock(string name, Block parent) : base(name, parent)
+        {
+        }
+    }
+
+    public sealed class ClassBlock : LinkedBlock
+    {
+        public ClassBlock(Decl.Classy classy, Block parent)
+            : base(classy.Name, parent)
+        {
+            Classy = classy;
+        }
+
+        public Decl.Classy Classy { get; }
+    }
+
+    public sealed class FuncBlock : LinkedBlock
+    {
+        public FuncBlock(Decl.Funcy funcy, Block parent, string? name = null)
+            : base(name ?? funcy.Name, parent)
+        {
+            Funcy = funcy;
+        }
+
+        public Decl.Funcy Funcy { get; }
+    }
+
+    public sealed class FileBlock : LinkedBlock
+    {
+        public FileBlock(Block parent, string name)
+            : base(name, parent)
+        {
+        }
+    }
+
+    public sealed class NamespaceBlock : LinkedBlock
+    {
+        public readonly Dictionary<string, NamespaceBlock> Children = new();
+
+        public NamespaceBlock(string name, Block parent)
+            : base(name, parent)
+        {
+        }
 
         public NamespaceBlock? Get(string name)
         {

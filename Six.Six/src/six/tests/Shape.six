@@ -63,3 +63,17 @@ shared class Square : Shape
         let x = Area;
     }
 }
+
+
+shared int ShapeTest()
+{
+    let square = Square(Point(1,1), 2);
+
+    return square.Area;
+}
+
+shared Square ShapeTest2()
+{
+    return Square(Point(1,1), 2);
+}
+

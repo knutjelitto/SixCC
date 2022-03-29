@@ -31,36 +31,36 @@ namespace Six.Six.Builtins
             throw new NotImplementedException();
         }
 
-        public Expr.Primitive Not(Expr arg)
+        public Primitive Not(Expr arg)
         {
             Assert(IsThis(arg));
 
-            var ones = new Expr.ConstS32(this, -1);
+            var ones = new Primitive.ConstS32(this, -1);
             return Xor(ones, arg);
         }
 
-        public Expr.Primitive And(Expr arg1, Expr arg2)
+        public Primitive And(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Insn.Boolean.And, arg1, arg2);
+            return new Primitive.Binop(this, Insn.Boolean.And, arg1, arg2);
         }
 
-        public Expr.Primitive Or(Expr arg1, Expr arg2)
+        public Primitive Or(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Insn.Boolean.Or, arg1, arg2);
+            return new Primitive.Binop(this, Insn.Boolean.Or, arg1, arg2);
         }
 
-        public Expr.Primitive Xor(Expr arg1, Expr arg2)
+        public Primitive Xor(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Insn.Boolean.Xor, arg1, arg2);
+            return new Primitive.Binop(this, Insn.Boolean.Xor, arg1, arg2);
         }
     }
 }

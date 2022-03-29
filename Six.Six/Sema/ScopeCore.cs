@@ -53,7 +53,7 @@ namespace Six.Six.Sema
             {
                 return decl;
             }
-            if (Parent is Module)
+            if (Parent is Module module)
             {
                 throw Errors.CantResolve(tree, name);
             }

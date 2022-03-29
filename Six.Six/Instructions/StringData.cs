@@ -36,7 +36,7 @@ namespace Six.Six.Instructions
 
                 void emit()
                 {
-                    wl($"(; +{BaseOffset + offset:D4} ;) {EmitUInt32(count)} {EmitUtf8(bytes)}");
+                    wl($"(; +{BaseOffset + offset:X4} ;) {EmitUInt32(count)} {EmitUtf8(bytes)}");
                 }
 
                 Ptr access()

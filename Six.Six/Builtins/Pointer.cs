@@ -1,6 +1,8 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
 
+#pragma warning disable IDE1006 // Naming Styles
+
 namespace Six.Six.Builtins
 {
     public sealed class Pointer : BuiltinCore
@@ -15,7 +17,7 @@ namespace Six.Six.Builtins
             AddMethod("setVTable", 1, setVTable);
         }
 
-        public Expr.Primitive defaultCtor(List<Expr> args)
+        public Primitive defaultCtor(List<Expr> args)
         {
             Assert(args.Count == 1);
 
@@ -23,31 +25,31 @@ namespace Six.Six.Builtins
 
             Assert(Builtins.U32.IsThis(arg));
 
-            return new Expr.Arged(this, arg);
+            return new Primitive.Arged(this, arg);
         }
 
-        public Expr.Primitive getPointer(List<Expr> args)
+        public Primitive getPointer(List<Expr> args)
         {
             Assert(args.Count == 0);
 
-            return new Expr.Instructions(this, Insn.Ptr.Load(0));
+            return new Primitive.Instructions(this, Insn.Ptr.Load(0));
         }
 
-        public Expr.Primitive getU32(List<Expr> args)
+        public Primitive getU32(List<Expr> args)
         {
             Assert(args.Count == 0);
 
-            return new Expr.Instructions(this, Insn.U32.Load(0));
+            return new Primitive.Instructions(this, Insn.U32.Load(0));
         }
 
-        public Expr.Primitive setVTable(List<Expr> args)
+        public Primitive setVTable(List<Expr> args)
         {
             Assert(args.Count == 1);
 
             var arg = args[0];
             Assert(IsThis(arg));
 
-            return new Expr.Instructions(this, Insn.U32.Load(0));
+            return new Primitive.Instructions(this, Insn.U32.Load(0));
         }
 
         public override Insn Load(uint offset)

@@ -1,6 +1,6 @@
-﻿using Six.Core;
+﻿using System;
+
 using Six.Six.Builtins;
-using System;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -489,6 +489,11 @@ namespace Six.Six.Sema
         {
             return new LazyExpr(Module, () =>
             {
+                if (tree.Name.Text == "tests")
+                {
+                    Assert(false);
+                }
+
                 var decl = block.Content.Resolve(tree, tree.Name.Text);
 
                 switch (decl)

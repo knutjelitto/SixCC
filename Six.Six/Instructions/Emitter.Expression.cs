@@ -15,7 +15,7 @@ namespace Six.Six.Instructions
             Assert(false);
         }
 
-        private void Handle(Expr.ToDo expr)
+        private void Handle(Primitive.ToDo expr)
         {
             foreach (var ex in expr.Exprs)
             {
@@ -24,7 +24,7 @@ namespace Six.Six.Instructions
             Emit(Insn.ToDo(expr.Text));
         }
 
-        private void Handle(Expr.Instructions insns)
+        private void Handle(Primitive.Instructions insns)
         {
             foreach (var insn in insns.Insns)
             {
@@ -33,7 +33,7 @@ namespace Six.Six.Instructions
         }
 
 
-        private void Handle(Expr.Arged arged)
+        private void Handle(Primitive.Arged arged)
         {
             Emit(arged.Arg);
         }
@@ -73,7 +73,7 @@ namespace Six.Six.Instructions
         {
             Emit(Insn.ToDo("dynamic function call"));
 
-            Emit(Insn.Local.Get(0)); // TODO: get self??
+            Emit(Insn.Local.Get(0));
             foreach (var argument in expr.Arguments)
             {
                 Emit(argument);
@@ -82,11 +82,11 @@ namespace Six.Six.Instructions
             if (slot != null)
             {
                 Emit(Insn.Local.Get(0)); // TODO: get self??
-                Emit(Insn.U32.Load(0));
-                Emit(Insn.U32.Load((uint)slot.Index * WasmDef.I32.Size));
+                Emit(Insn.U32.Load(4));
+                Emit(Insn.U32.Const((uint)slot.Index));
+                Emit(Insn.U32.Add);
                 Emit(Insn.Comment($"call {expr.Funcy.Name}"));
-                Emit(Insn.CallIndirect(Module.ModuleFunctions, TypeFor((Type.Callable)expr.Funcy.Type)));
-
+                Emit(Insn.CallIndirect(Module.DispatchFunctions, TypeFor((Type.Callable)expr.Funcy.Type)));
             }
             else
             {
@@ -180,25 +180,25 @@ namespace Six.Six.Instructions
             wl($"{Insn.End}");
         }
 
-        private void Handle(Expr.Unop expr)
+        private void Handle(Primitive.Unop expr)
         {
             Emit(expr.Arg);
             Emit(expr.Insn);
         }
 
-        private void Handle(Expr.Binop expr)
+        private void Handle(Primitive.Binop expr)
         {
             Emit(expr.Arg1);
             Emit(expr.Arg2);
             Emit(expr.Insn);
         }
 
-        private void Handle(Expr.Const expr)
+        private void Handle(Primitive.Const expr)
         {
             Emit(expr.Insn);
         }
 
-        private void Handle(Expr.ConstString expr)
+        private void Handle(Primitive.ConstString expr)
         {
             Emit(expr.Resolve().Insn);
         }
@@ -259,17 +259,32 @@ namespace Six.Six.Instructions
         {
             Emit(expr.Reference);
 
-            if (expr.Attribute.IsDynamic)
+            var funcy = expr.Attribute;
+
+            if (funcy.IsStatic || funcy.IsLocalFunction || funcy.IsGlobalFunction)
             {
-                Assert(expr.ScratchLocal >= 0);
-                Emit(Insn.Local.Tee(expr.ScratchLocal));
-                var slot = expr.Classy.Slot(expr.Attribute);
-                if (slot != null)
+                Emit(Insn.Call(expr.Attribute.FullName));
+            }
+            else if (funcy.IsObjectMember)
+            {
+                if (expr.Attribute.IsDynamic)
                 {
-                    Emit(Insn.Local.Get(expr.ScratchLocal));
-                    Emit(Insn.U32.Load(0));
-                    Emit(Insn.U32.Load((uint)slot.Index * WasmDef.I32.Size));
-                    Emit(Insn.CallIndirect(Module.ModuleFunctions, TypeFor((Type.Callable)expr.Attribute.Type)));
+                    Assert(expr.ScratchLocal >= 0);
+                    Emit(Insn.Local.Tee(expr.ScratchLocal));
+                    var slot = expr.Classy.Slot(expr.Attribute);
+                    if (slot != null)
+                    {
+                        Emit(Insn.Local.Get(expr.ScratchLocal));
+                        Emit(Insn.U32.Load(4));
+                        Emit(Insn.U32.Const((uint)slot.Index));
+                        Emit(Insn.U32.Add);
+                        Emit(Insn.CallIndirect(Module.DispatchFunctions, TypeFor((Type.Callable)expr.Attribute.Type)));
+                    }
+                    else
+                    {
+                        Assert(false);
+                        throw new NotImplementedException();
+                    }
                 }
                 else
                 {
@@ -279,7 +294,8 @@ namespace Six.Six.Instructions
             }
             else
             {
-                Emit(Insn.Call(expr.Attribute.FullName));
+                Assert(false);
+                throw new NotImplementedException();
             }
         }
 

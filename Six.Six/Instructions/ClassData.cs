@@ -41,7 +41,7 @@ namespace Six.Six.Instructions
 
                 void emit()
                 {
-                    wl($"(; +{BaseOffset + offset:D4} - {text,-25} ;)");
+                    wl($"(; +{BaseOffset + offset:X4} - {text} ;)");
                     indent(() =>
                     {
                         wl($"(; vtable   ;) {EmitUInt32(0)}");

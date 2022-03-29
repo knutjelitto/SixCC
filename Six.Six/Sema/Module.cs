@@ -1,30 +1,33 @@
-﻿using Six.Core;
+﻿using System;
+
+using Six.Core;
 using Six.Core.Errors;
 using Six.Six.Instructions;
-using System;
-using System.IO;
+
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
     public class Module : Scope
     {
-        public static readonly string Language = "six";
-        public static readonly string LanguageCore = "core";
-        public static readonly string CoreNamespace = $"{Language}.{LanguageCore}";
-        public static readonly string DefaultCtor = "ctor@default";
-        public static readonly string InitCtor = "ctor@initialize";
+        public static string Language => "six";
+        public static string LanguageCore => "core";
+        public static string CoreNamespace => $"{Language}.{LanguageCore}";
+        public static string DefaultCtor => "ctor@default";
+        public static string InitCtor => "ctor@initialize";
         public static string ModuleFunctions => $"{CoreNamespace}.functions";
-        public static string VTableFunctions => $"{CoreNamespace}.dispatch";
+        public static string DispatchFunctions => $"{CoreNamespace}.dispatch";
         public static string DataAndHeap => $"{CoreNamespace}.Data&Heap";
         public static string Data_Start => $"{CoreNamespace}.__data_start";
         public static string Heap_Start => $"{CoreNamespace}.__heap_start";
         public static string Heap_Current => $"{CoreNamespace}.__heap_current";
 
-        public static readonly string Allocator = "alloc";
-        public static readonly string ClassAlloc = "classAlloc";
+        public static string Allocator => "alloc";
+        public static string ClassAlloc => "classAlloc";
         public static string CoreClassAlloc => $"{CoreNamespace}.{ClassAlloc}";
         public static string CoreAlloc => $"{CoreNamespace}.{Allocator}";
+
+        public static string DispatchName(Decl.Classy classy) => $"{classy.FullName}%vtable";
 
         private readonly List<Diagnostic> Diagnostics = new();
 
@@ -191,9 +194,8 @@ namespace Six.Six.Sema
             Assert(language != null);
             var core = language.Get(LanguageCore);
             Assert(core != null);
-            Assert(core is NamespaceBlock);
 
-            return (NamespaceBlock)core;
+            return core;
         }
 
         Scope Scope.Parent => this;

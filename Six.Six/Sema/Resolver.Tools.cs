@@ -22,30 +22,30 @@ namespace Six.Six.Sema
                     if (value > int.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), int.MaxValue);
+                        return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), int.MaxValue);
                     }
-                    return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                    return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
                 case "s64":
                     if (value > long.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Expr.ConstS64(Module.CoreFindType(Names.Core.S64), long.MaxValue);
+                        return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), long.MaxValue);
                     }
-                    return new Expr.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
+                    return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
                 case "u32":
                     if (value > uint.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), uint.MaxValue);
+                        return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), uint.MaxValue);
                     }
-                    return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
+                    return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
                 case "u64":
                     if (value > ulong.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), ulong.MaxValue);
+                        return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), ulong.MaxValue);
                     }
-                    return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), (ulong)value);
+                    return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), value);
                 case "":
                     Assert(value <= ulong.MaxValue);
 
@@ -101,19 +101,19 @@ namespace Six.Six.Sema
 
                     if (value > long.MaxValue)
                     {
-                        return new Expr.ConstU64(Module.CoreFindType(Names.Core.U64), value);
+                        return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), value);
                     }
                     else if (value > int.MaxValue)
                     {
                         if (value > uint.MaxValue)
                         {
-                            return new Expr.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
+                            return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
                         }
-                        return new Expr.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
+                        return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
                     }
                     else
                     {
-                        return new Expr.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                        return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
                     }
 #endif
                 default:
@@ -221,7 +221,7 @@ namespace Six.Six.Sema
         {
             var type = Module.CoreFindType(Names.Core.String);
 
-            return new Expr.ConstString(type, Emitter.AddString(tree.Text));
+            return new Primitive.ConstString(type, Emitter.AddString(tree.Text));
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Six.Six.Instructions
                 {
                     foreach (var (name, element) in table.OrderBy(kv => kv.Value.index))
                     {
-                        wl($"(ref.func ${name})");
+                        wl($"(; {element.index:X4} ;) (ref.func ${name})");
                     }
                 });
                 wl("))");

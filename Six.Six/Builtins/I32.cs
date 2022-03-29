@@ -18,12 +18,12 @@ namespace Six.Six.Builtins
             infix.Add("%", Rem);
         }
 
-        public Expr.Primitive Rem(Expr arg1, Expr arg2)
+        public Primitive Rem(Expr arg1, Expr arg2)
         {
             Assert(IsThis(arg1));
             Assert(IsThis(arg2));
 
-            return new Expr.Binop(this, Impl.Rem, arg1, arg2);
+            return new Primitive.Binop(this, Impl.Rem, arg1, arg2);
         }
     }
 }

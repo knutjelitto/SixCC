@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
+
 namespace Six.Six.Sema
 {
     public partial class Validator
@@ -111,22 +114,22 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Expr(Expr.ConstS32 expr)
+        private void Expr(Primitive.ConstS32 expr)
         {
             // -- bottom
         }
 
-        private void Expr(Expr.ConstU32 expr)
+        private void Expr(Primitive.ConstU32 expr)
         {
             // -- bottom
         }
 
-        private void Expr(Expr.ConstString expr)
+        private void Expr(Primitive.ConstString expr)
         {
             // -- bottom
         }
 
-        private void Expr(Expr.ConstNatural expr)
+        private void Expr(Primitive.ConstNatural expr)
         {
             // -- bottom
         }

@@ -13,11 +13,11 @@ namespace Six.Six.Builtins
             prefix.Add("-", Neg);
         }
 
-        public Expr.Unop Neg(Expr right)
+        public Primitive.Unop Neg(Expr right)
         {
             IsThis(right);
 
-            return new Expr.Unop(this, Impl.Neg, right);
+            return new Primitive.Unop(this, Impl.Neg, right);
         }
     }
 }

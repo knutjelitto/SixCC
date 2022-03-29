@@ -33,23 +33,23 @@ namespace Six.Six.Builtins
             return Impl.Store(offset);
         }
 
-        public Expr.Primitive Add(Expr left, Expr right)
+        public Primitive Add(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(this, Impl.Add, left, right);
+            return new Primitive.Binop(this, Impl.Add, left, right);
         }
 
-        public Expr.Primitive Sub(Expr left, Expr right)
+        public Primitive Sub(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(this, Impl.Sub, left, right);
+            return new Primitive.Binop(this, Impl.Sub, left, right);
         }
 
-        public Expr.Primitive Mul(Expr left, Expr right)
+        public Primitive Mul(Expr left, Expr right)
         {
             if (!IsThis(left))
             {
@@ -58,47 +58,47 @@ namespace Six.Six.Builtins
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(this, Impl.Mul, left, right);
+            return new Primitive.Binop(this, Impl.Mul, left, right);
         }
 
-        public Expr.Primitive Div(Expr left, Expr right)
+        public Primitive Div(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(this, Impl.Div, left, right);
+            return new Primitive.Binop(this, Impl.Div, left, right);
         }
 
-        public Expr.Primitive LE(Expr left, Expr right)
+        public Primitive LE(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(Builtins.Boolean, Impl.LE, left, right);
+            return new Primitive.Binop(Builtins.Boolean, Impl.LE, left, right);
         }
 
-        public Expr.Primitive LT(Expr left, Expr right)
+        public Primitive LT(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(Builtins.Boolean, Impl.LT, left, right);
+            return new Primitive.Binop(Builtins.Boolean, Impl.LT, left, right);
         }
 
-        public Expr.Primitive GE(Expr left, Expr right)
+        public Primitive GE(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(Builtins.Boolean, Impl.GE, left, right);
+            return new Primitive.Binop(Builtins.Boolean, Impl.GE, left, right);
         }
 
-        public Expr.Primitive GT(Expr left, Expr right)
+        public Primitive GT(Expr left, Expr right)
         {
             Assert(IsThis(left));
             Assert(IsThis(right));
 
-            return new Expr.Binop(Builtins.Boolean, Impl.GT, left, right);
+            return new Primitive.Binop(Builtins.Boolean, Impl.GT, left, right);
         }
     }
 }
