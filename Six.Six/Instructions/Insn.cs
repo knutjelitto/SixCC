@@ -37,6 +37,7 @@ namespace Six.Six.Instructions
         }
 
         public static Insn ToDo(string text) => new ToDoInsn(text);
+        public static Insn Comment(string text) => new Simplest($";; {text}");
 
         public static Insn Return { get; } = new Simplest("return");
         public static Insn Unreachable { get; } = new Simplest("unreachable");

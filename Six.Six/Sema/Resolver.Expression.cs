@@ -15,7 +15,7 @@ namespace Six.Six.Sema
 
         public LazyExpr ResolveExpression(Block block, A.Expression node)
         {
-            return Expression(block, (dynamic)node);
+            return Expression((dynamic)block, (dynamic)node);
         }
 
         private LazyExpr Expression(Block block, A.Expression node)
@@ -211,7 +211,7 @@ namespace Six.Six.Sema
                     var prms = function.Parameters;
                     var arguments = function.IsObjectMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
 
-                    return new Expr.CallFunction(functionReference.FunctionDecl, arguments);
+                    return Expr.CallFunction.From(functionReference.FunctionDecl, arguments);
                 }
                 else if (func.Expr is Expr.ClassReference classReference)
                 {
@@ -219,7 +219,7 @@ namespace Six.Six.Sema
 
                     if (clazz.IsAbstract)
                     {
-                        throw Errors.CanNotCreateInstance(clazz, Names.Nouns.Class);
+                        throw Errors.CanNotCreateInstanceOfAbstractClass(clazz, Names.Nouns.Class);
                     }
 
                     var defaultCtor = clazz.FindMember<Decl.Constructor>(node.Expr.GetLocation(), Module.DefaultCtor);
@@ -418,6 +418,21 @@ namespace Six.Six.Sema
                 {
                     return builtin.Infix(node.Op, left.Expr, right.Expr);
                 }
+                else if (left.Expr.Type is Type.Callable callable)
+                {
+                    Assert(false);
+
+                    if (callable.Result is Type.ClassyReference classyReference)
+                    {
+                        var infix = classyReference.Classy.FindMember(node.Op, node.InfixName());
+
+                        if (infix is Decl.Function function)
+                        {
+                            return new Expr.CallInfixMember(classyReference.Classy, function, left.Expr, right.Expr);
+                        }
+
+                    }
+                }
                 else
                 {
                     Assert(Module.HasErrors);
@@ -476,49 +491,34 @@ namespace Six.Six.Sema
             {
                 var decl = block.Content.Resolve(tree, tree.Name.Text);
 
-                Expr.Reference reference;
-
                 switch (decl)
                 {
                     case Decl.Parameter node:
-                        reference = new Expr.ParameterReference(node);
-                        break;
+                        return new Expr.ParameterReference(node);
                     case Decl.SelfParameter node:
-                        reference = new Expr.ParameterReference(node);
-                        break;
+                        return new Expr.ParameterReference(node);
                     case Decl.LetVar node:
-                        reference = new Expr.LocalReference(node);
-                        break;
-                    case Decl.Attribute node:
-                        reference = new Expr.AttributeReference(node);
-                        break;
+                        return new Expr.LocalReference(node);
                     case Decl.Global node:
-                        reference = new Expr.GlobalReference(node);
-                        break;
+                        return new Expr.GlobalReference(node);
                     case Decl.Function node:
-                        reference = new Expr.FunctionReference(node);
-                        break;
+                        return new Expr.FunctionReference(node);
                     case Decl.Constructor node:
-                        reference = new Expr.ConstructorReference(node);
-                        break;
+                        return new Expr.ConstructorReference(node);
                     case Decl.Class node:
-                        reference = new Expr.ClassReference(node);
-                        break;
+                        return new Expr.ClassReference(node);
                     case Decl.Object node:
-                        reference = new Expr.ObjectReference(node);
-                        break;
+                        return new Expr.ObjectReference(node);
                     case Decl.Alias node:
-                        reference = new Expr.AliasReference(node);
-                        break;
+                        return new Expr.AliasReference(node);
                     case Decl.Field node:
-                        reference = new Expr.FieldReference(node);
-                        break;
+                        return new Expr.FieldReference(node);
+                    case Decl.Attribute node:
+                        return Expr.CallFunction.From(node);
                     default:
                         Assert(false);
                         throw new NotImplementedException();
                 }
-
-                return reference;
             });
         }
     }

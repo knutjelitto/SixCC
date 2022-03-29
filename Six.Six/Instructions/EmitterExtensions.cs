@@ -21,5 +21,10 @@ namespace Six.Six.Instructions
                 yield return funcy;
             }
         }
+
+        public static ClassLayout.LSlot? Slot(this Decl.Classy classy, Decl.Funcy funcy)
+        {
+            return classy.Layout.Slots.Where(s => s.Funcy.Name == funcy.Name).SingleOrDefault();
+        }
     }
 }

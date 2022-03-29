@@ -81,6 +81,15 @@ namespace Six.Six.Sema
                     Assert(false);
                 }
             }
+            else if (toType is Type.Builtin toBuiltin)
+            {
+                if (fromType is Type.Reference fromRef)
+                {
+                    return CanAssign(toType, fromRef.Decl.Type);
+                }
+
+                Assert(false);
+            }
             else
             {
                 Assert(false);

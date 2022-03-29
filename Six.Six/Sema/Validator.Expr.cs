@@ -51,6 +51,21 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
+        private void Expr(Expr.CallMemberFunction expr)
+        {
+            Walk(expr.Arguments);
+
+            Assert(slip);
+        }
+
+        private void Expr(Expr.CallStaticFunction expr)
+        {
+            Walk(expr.Arguments);
+
+            Assert(slip);
+        }
+
+
         private void Expr(Expr.CallIndirect expr)
         {
             Walk(expr.Value);

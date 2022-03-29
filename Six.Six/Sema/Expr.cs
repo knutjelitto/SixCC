@@ -104,15 +104,61 @@ namespace Six.Six.Sema
         public sealed record InterfaceReference(Decl.Interface InterfaceDecl)
             : ClassyReference(InterfaceDecl);
 
-        public sealed record CallFunction(Decl.Function Function, List<Expr> Arguments)
-            : Primitive(Function.Type)
+        public abstract record CallFunction(Decl.Funcy Funcy, List<Expr> Arguments)
+            : Primitive(Funcy.Type)
         {
-            public CallFunction(Decl.Function Function) : this(Function, new List<Expr>())
+            public CallFunction(Decl.Funcy Funcy) : this(Funcy, new List<Expr>())
             {
             }
 
-            public override Type Type => Function.ResultType;
+            public override Type Type => Funcy.ResultType;
+
+            public static CallFunction From(Decl.Funcy funcy, params Expr[] arguments)
+            {
+                return From(funcy, arguments.ToList());
+            }
+
+            public static CallFunction From(Decl.Funcy funcy, List<Expr> arguments)
+            {
+                if (funcy.IsStatic || funcy.IsLocalFunction || funcy.IsGlobalFunction)
+                {
+                    return new CallStaticFunction(funcy, arguments);
+                }
+                else if (funcy.IsObjectMember)
+                {
+                    if (funcy.Parent is ClassBlock classBlock)
+                    {
+                        if (funcy.IsDynamic)
+                        {
+                            return new CallDynamicFunction(classBlock.Classy, funcy, arguments);
+                        }
+                        else
+                        {
+                            return new CallMemberFunction(classBlock.Classy, funcy, arguments);
+                        }
+                    }
+                    else
+                    {
+                        Assert(false);
+                        throw new NotImplementedException();
+                    }
+                }
+                else
+                {
+                    Assert(false);
+                    throw new NotImplementedException();
+                }
+            }
         }
+
+        public sealed record CallStaticFunction(Decl.Funcy Funcy, List<Expr> Arguments)
+            : CallFunction(Funcy, Arguments);
+
+        public sealed record CallMemberFunction(Decl.Classy Classy, Decl.Funcy Funcy, List<Expr> Arguments)
+            : CallFunction(Funcy, Arguments);
+
+        public sealed record CallDynamicFunction(Decl.Classy Classy, Decl.Funcy Funcy, List<Expr> Arguments)
+            : CallFunction(Funcy, Arguments);
 
         public sealed record CallConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
             : Primitive(Ctor.Type)

@@ -7,4 +7,3 @@ shared abstract class Object : Anything
     //shared virtual string string => Runtime.ClassName(self) + "@" + int.format(hash, #10);
     shared virtual string string => Fakes.toString(self);
 }
-

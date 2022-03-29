@@ -96,7 +96,7 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
-        public DiagnosticException CanNotCreateInstance(Decl.Classy classy, string subject)
+        public DiagnosticException CanNotCreateInstanceOfAbstractClass(Decl.Classy classy, string subject)
         {
             var diagnostic = new SemanticError(classy.Location, $"can not create instance of {Names.Attr.Abstract} {subject} '{classy.Name}'");
 

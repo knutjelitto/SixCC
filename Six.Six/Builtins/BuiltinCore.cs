@@ -21,9 +21,12 @@ namespace Six.Six.Builtins
         public Builtins Builtins { get; }
         public WasmDef Wasm { get; }
         public string Name { get; }
-        public Resolver Resolver => Builtins.Resolver;
+
+        public Module Module => Builtins.Module;
+        public Resolver Resolver => Module.Resolver;
+        public TypeChecker Checker => Module.Checker;
         
-        public bool IsThis(Expr expr) => ReferenceEquals(Resolver.LowerType(expr.Type), this);
+        public bool IsThis(Expr expr) => Checker.CanAssign(this, Resolver.LowerType(expr.Type));
 
         public abstract Insn Load(uint offset);
         public abstract Insn Store(uint offset);

@@ -60,13 +60,49 @@ namespace Six.Six.Instructions
             Emit(Insn.Call(expr.Ctor.FullName));
         }
 
-        private void Handle(Expr.CallFunction expr)
+        private void Handle(Expr.CallStaticFunction expr)
         {
             foreach (var argument in expr.Arguments)
             {
                 Emit(argument);
             }
-            Emit(Insn.Call(expr.Function.FullName));
+            Emit(Insn.Call(expr.Funcy.FullName));
+        }
+
+        private void Handle(Expr.CallDynamicFunction expr)
+        {
+            Emit(Insn.ToDo("dynamic function call"));
+
+            Emit(Insn.Local.Get(0)); // TODO: get self??
+            foreach (var argument in expr.Arguments)
+            {
+                Emit(argument);
+            }
+            var slot = expr.Classy.Slot(expr.Funcy);
+            if (slot != null)
+            {
+                Emit(Insn.Local.Get(0)); // TODO: get self??
+                Emit(Insn.U32.Load(0));
+                Emit(Insn.U32.Load((uint)slot.Index * WasmDef.I32.Size));
+                Emit(Insn.Comment($"call {expr.Funcy.Name}"));
+                Emit(Insn.CallIndirect(Module.ModuleFunctions, TypeFor((Type.Callable)expr.Funcy.Type)));
+
+            }
+            else
+            {
+                Assert(false);
+                throw new NotImplementedException();
+            }
+        }
+
+        private void Handle(Expr.CallMemberFunction expr)
+        {
+            Emit(Insn.Local.Get(0)); // TODO: get self??
+            foreach (var argument in expr.Arguments)
+            {
+                Emit(argument);
+            }
+            Emit(Insn.Call(expr.Funcy.FullName));
         }
 
         private void Handle(Expr.CallMember expr)
@@ -227,7 +263,7 @@ namespace Six.Six.Instructions
             {
                 Assert(expr.ScratchLocal >= 0);
                 Emit(Insn.Local.Tee(expr.ScratchLocal));
-                var slot = expr.Classy.Layout.Slots.Where(s => s.Funcy.Name == expr.Attribute.Name).SingleOrDefault();
+                var slot = expr.Classy.Slot(expr.Attribute);
                 if (slot != null)
                 {
                     Emit(Insn.Local.Get(expr.ScratchLocal));

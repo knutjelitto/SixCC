@@ -37,6 +37,8 @@ namespace Six.Six.Sema
             public bool IsConcrete => HasBody && !IsAbstract;
             public bool IsDynamic => !IsStatic && (IsVirtual || IsOverride);
             public bool IsObjectMember => !IsStatic && Parent is ClassBlock;
+            public bool IsLocalFunction => Parent is FuncBlock;
+            public bool IsGlobalFunction => Parent is NamespaceBlock;
 
             public override string FullName => Block.FullName();
 
@@ -68,7 +70,6 @@ namespace Six.Six.Sema
             {
                 ResultTypeResolver = () => LazyTypeResolver(parent, ((A.With.Type)aDecl).Type);
             }
-
         }
 
         public class Constructor : Funcy

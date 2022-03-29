@@ -39,20 +39,27 @@ shared class Rect
 
 shared abstract class Shape
 {
-    //shared abstract void Draw();
-    //shared abstract int Area;
+    shared abstract void Draw();
+    shared abstract int Area;
 }
 
 shared class Square : Shape
 {
     let int length = 0;
+    let Point point = Point();
 
     shared new (Point point, int length)
     {
+        self.point = point;
         self.length = length;
     }
 
-    shared int Area => length * length;
+    shared virtual int Length => length;
 
-    shared void Draw() { }
+    shared override int Area => Length * Length;
+
+    shared override void Draw()
+    {
+        let x = Area;
+    }
 }

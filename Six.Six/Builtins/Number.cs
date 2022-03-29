@@ -51,6 +51,10 @@ namespace Six.Six.Builtins
 
         public Expr.Primitive Mul(Expr left, Expr right)
         {
+            if (!IsThis(left))
+            {
+                Assert(false);
+            }
             Assert(IsThis(left));
             Assert(IsThis(right));
 
