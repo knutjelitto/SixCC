@@ -14,7 +14,7 @@ namespace Six.Six.Sema
             public Classy(Block parent, A.Decl.Classy aDecl)
                 : base(parent, aDecl)
             {
-                Block = new ClassBlock(this, parent);
+                Block = new ClassBlock(parent, this);
                 AClassy = aDecl;
                 parent.Content.Declare(this, aDecl.Name.Text);
                 parent.Members.Add(this);

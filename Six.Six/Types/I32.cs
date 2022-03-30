@@ -1,19 +1,16 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Six.Six.Builtins
+using W = Six.Six.Wasms;
+
+namespace Six.Six.Types
 {
     public abstract class I32<TInsn, TValue> : Integral<TInsn, TValue>
         where TInsn : Insn.Inn<TValue>
         where TValue : struct
     {
         protected I32(Builtins builtins, string name)
-            : base(builtins, name, WasmDef.I32)
+            : base(builtins, name, W.WasmType.I32)
         {
             infix.Add("%", Rem);
         }

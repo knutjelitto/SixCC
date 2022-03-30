@@ -2,7 +2,7 @@
 using Six.Six.Sema;
 using System;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public class S32 : I32<Insn.S32Impl, int>
     {

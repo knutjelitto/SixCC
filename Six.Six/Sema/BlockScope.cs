@@ -5,8 +5,8 @@ namespace Six.Six.Sema
     public class BlockScope : ScopeCore
     {
         [DebuggerStepThrough]
-        public BlockScope(string name, Scope parent)
-            : base(parent, name)
+        public BlockScope(Module module, string name, Scope parent)
+            : base(module, parent, name)
         {
         }
     }

@@ -1,5 +1,4 @@
-﻿using Six.Six.Builtins;
-using Six.Six.Instructions;
+﻿using Six.Six.Types;
 using System;
 
 namespace Six.Six.Sema
@@ -197,7 +196,7 @@ namespace Six.Six.Sema
         }
 
         public Module Module { get; }
-        public Builtins.Builtins Builtins => Module.Builtins;
+        public Builtins Builtins => Module.Builtins;
 
         public Expr Expr => expr ??= resolver();
     }

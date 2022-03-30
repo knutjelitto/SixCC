@@ -1,5 +1,5 @@
 ﻿using Six.Core;
-using System;
+
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -62,28 +62,9 @@ namespace Six.Six.Sema
             }
         }
 
-        public static string GetKind(this A.TreeNode node)
-        {
-            return node.GetType().Name;
-        }
-
-        public static string GetName(this A.TreeNode node)
-        {
-            if (node is A.With.Name named)
-            {
-                return named.Name.Text;
-            }
-            return "--no-name--";
-        }
-
         public static bool IsWith(this A.TreeNode node, string attribute)
         {
-            return node is A.With.Prelude withPrelude && withPrelude.IsWith(attribute);
-        }
-
-        private static bool IsWith(this A.With.Prelude withPrelude, string attribute)
-        {
-            return withPrelude.Prelude.Attributes.Any(a => a.Name.Text == attribute);
+            return node is A.With.Prelude withPrelude && withPrelude.Prelude.Attributes.Any(a => a.Name.Text == attribute);
         }
     }
 }

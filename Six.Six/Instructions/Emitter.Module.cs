@@ -1,6 +1,7 @@
-﻿using Six.Six.Builtins;
+﻿using System;
+
 using Six.Six.Sema;
-using System;
+using W = Six.Six.Wasms;
 
 namespace Six.Six.Instructions
 {
@@ -12,6 +13,8 @@ namespace Six.Six.Instructions
             {
                 return;
             }
+
+            var wmodule = new W.Module();
 
             wl($"(module");
             indent(() =>
@@ -35,11 +38,11 @@ namespace Six.Six.Instructions
                         }
                         else if (global.FullName == Module.Heap_Start)
                         {
-                            Emit(Insn.U32.Const(WasmDef.Align(16, ClassData.Next)));
+                            Emit(Insn.U32.Const(W.WasmType.Align(16, ClassData.Next)));
                         }
                         else if (global.FullName == Module.Heap_Current)
                         {
-                            Emit(Insn.U32.Const(WasmDef.Align(16, ClassData.Next)));
+                            Emit(Insn.U32.Const(W.WasmType.Align(16, ClassData.Next)));
                         }
                         else
                         {
@@ -55,6 +58,8 @@ namespace Six.Six.Instructions
 
                 foreach (var function in Module.GetFunctions())
                 {
+                    wmodule.Add(wmodule.ToFunction(function));
+
                     Emit(function);
                     wl();
                 }
@@ -72,6 +77,10 @@ namespace Six.Six.Instructions
                 Types.Emit();
             });
             wl($")");
+
+            wl();
+            wmodule.Emit();
+            w(wmodule.Writer.ToString());
         }
 
         public Func<Ptr> AddString(string text)
@@ -90,9 +99,9 @@ namespace Six.Six.Instructions
             indent(() =>
             {
                 wl($"(export \"{Module.CoreClassAlloc}\")");
-                wl($"(param {WasmDef.Pointer})");
-                wl($"(result {WasmDef.Pointer})");
-                wl($"(local {WasmDef.Pointer})");
+                wl($"(param {W.WasmType.Ptr})");
+                wl($"(result {W.WasmType.Ptr})");
+                wl($"(local {W.WasmType.Ptr})");
                 wl("(;-----;)");
                 Emit(Insn.Local.Get(0));            // [clazz]
                 Emit(Insn.U32.Load(8));             // [clazz.size]

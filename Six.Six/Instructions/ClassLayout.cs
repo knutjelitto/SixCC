@@ -1,5 +1,5 @@
-﻿using Six.Six.Builtins;
-using Six.Six.Sema;
+﻿using Six.Six.Sema;
+using W = Six.Six.Wasms;
 using System;
 using System.Collections;
 
@@ -40,7 +40,7 @@ namespace Six.Six.Instructions
 
         private void MakeFields()
         {
-            var fieldOffset = WasmDef.Pointer.Size + WasmDef.I32.Size;
+            var fieldOffset = W.WasmType.Ptr.Size + W.WasmType.I32.Size;
 
             if (Classy.Extends is Decl.Class extended)
             {

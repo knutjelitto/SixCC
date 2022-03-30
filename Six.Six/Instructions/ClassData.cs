@@ -1,10 +1,6 @@
-﻿using Six.Core;
-using Six.Six.Builtins;
+﻿using Six.Six.Types;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using W = Six.Six.Wasms;
 
 namespace Six.Six.Instructions
 {
@@ -59,7 +55,7 @@ namespace Six.Six.Instructions
 
                 metas.Add(text, (metas.Count, emit, access));
 
-                Offset = AlignCount((uint)(Offset + WasmDef.Pointer.Size + WasmDef.I32.Size + WasmDef.I32.Size + WasmDef.Pointer.Size + WasmDef.I32.Size));
+                Offset = AlignCount((uint)(Offset + W.WasmType.Ptr.Size + W.WasmType.I32.Size + W.WasmType.I32.Size + W.WasmType.Ptr.Size + W.WasmType.I32.Size));
 
                 return access;
             }

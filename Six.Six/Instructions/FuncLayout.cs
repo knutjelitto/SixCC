@@ -1,5 +1,5 @@
 ﻿using Six.Runtime;
-using Six.Six.Builtins;
+using Six.Six.Types;
 using Six.Six.Sema;
 using System;
 using Type = Six.Six.Sema.Type;
@@ -23,7 +23,7 @@ namespace Six.Six.Instructions
         public Module Module => Funcy.Block.Module;
         public Resolver Resolver => Module.Resolver;
         public Emitter Emitter => Module.Emitter;
-        public Builtins.Builtins Builtins => Module.Builtins;
+        public Types.Builtins Builtins => Module.Builtins;
 
         public int AddParameter(Decl.Local parameter)
         {

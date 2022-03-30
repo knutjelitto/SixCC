@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Six.Six.Sema;
 using A = Six.Six.Ast;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public static class Extensions
     {

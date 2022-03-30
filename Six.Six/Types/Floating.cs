@@ -1,13 +1,14 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
+using W = Six.Six.Wasms;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public abstract class Floating<TInsn, TValue> : Number<TInsn, TValue>
         where TInsn : Insn.Fnn<TValue>
         where TValue : struct
     {
-        public Floating(Builtins builtins, string name, WasmDef wasm)
+        public Floating(Builtins builtins, string name, W.WasmType wasm)
             : base(builtins, name, wasm)
         {
             prefix.Add("-", Neg);

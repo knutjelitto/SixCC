@@ -2,8 +2,9 @@
 using Six.Six.Sema;
 using System;
 using Type = Six.Six.Sema.Type;
+using W = Six.Six.Wasms;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public abstract class BuiltinCore : Type.Builtin
     {
@@ -11,7 +12,7 @@ namespace Six.Six.Builtins
         protected readonly Dictionary<string, Func<Expr, Expr, Primitive>> infix = new();
         protected readonly List<Dictionary<string, Func<List<Expr>, Primitive>>> methods = new();
 
-        protected BuiltinCore(Builtins builtins, string name, WasmDef wasm)
+        protected BuiltinCore(Builtins builtins, string name, W.WasmType wasm)
         {
             Builtins = builtins;
             Wasm = wasm;
@@ -19,7 +20,7 @@ namespace Six.Six.Builtins
         }
 
         public Builtins Builtins { get; }
-        public WasmDef Wasm { get; }
+        public W.WasmType Wasm { get; }
         public string Name { get; }
 
         public Module Module => Builtins.Module;

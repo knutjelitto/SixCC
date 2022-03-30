@@ -1,5 +1,5 @@
 ﻿using Six.Six.Instructions;
-
+using Six.Six.Types;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -17,7 +17,7 @@ namespace Six.Six.Sema
         }
 
         public Module Module { get; }
-        public Builtins.Builtins Builtins => Module.Builtins;
+        public Builtins Builtins => Module.Builtins;
         public Emitter Emitter => Module.Emitter;
         public Errors Errors => Module.Errors;
         public TypeChecker Checker => Module.Checker;

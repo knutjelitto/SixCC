@@ -1,13 +1,9 @@
-﻿using Six.Core;
-using Six.Runtime;
-using Six.Six.Builtins;
-using Six.Six.Sema;
+﻿using Six.Six.Sema;
+using Six.Six.Types;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Type = Six.Six.Sema.Type;
+
+#pragma warning disable CA1822 // Mark members as static
 
 namespace Six.Six.Instructions
 {
@@ -21,7 +17,7 @@ namespace Six.Six.Instructions
             {
                 case BuiltinCore builtin:
                     return builtin;
-                case Type.ClassReference classReference:
+                case Type.ClassReference:
                     return Builtins.Pointer;
                     //Assert(false);
                     //throw new NotImplementedException();
@@ -40,7 +36,7 @@ namespace Six.Six.Instructions
             {
                 builder.Append($" (;{local.Index}/{local.Name}:{Resolver.ResolveType(local.Type)};) {WasmTypeFor(local.Type)}");
             }
-            builder.Append(")");
+            builder.Append(')');
 
             return builder.ToString();
         }

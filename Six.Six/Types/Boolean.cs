@@ -1,17 +1,14 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using W = Six.Six.Wasms;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public sealed class Boolean : BuiltinCore
     {
         public Boolean(Builtins builtins)
-            : base(builtins, Names.Core.Boolean, WasmDef.Boolean)
+            : base(builtins, Names.Core.Boolean, W.WasmType.Bool)
         {
             prefix.Add("!", Not);
             infix.Add("&", And);

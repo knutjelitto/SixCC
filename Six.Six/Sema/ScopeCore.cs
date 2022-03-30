@@ -9,13 +9,14 @@ namespace Six.Six.Sema
         private readonly Dictionary<string, Decl> declarations = new();
 
         [DebuggerStepThrough]
-        public ScopeCore(Scope parent, string name)
+        public ScopeCore(Module module, Scope parent, string name)
         {
             Name = name;
+            Module = module;
             Parent = parent;
         }
 
-        public Module Module => Parent.Module;
+        public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
         public Errors Errors => Module.Errors;
 

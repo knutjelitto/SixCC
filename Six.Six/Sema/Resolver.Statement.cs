@@ -1,5 +1,5 @@
-﻿using Six.Six.Instructions;
-using System;
+﻿using System;
+
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression

@@ -1,14 +1,15 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
+using W = Six.Six.Wasms;
 
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public sealed class Pointer : BuiltinCore
     {
         public Pointer(Builtins builtins)
-            : base(builtins, Names.Core.Pointer, WasmDef.Pointer)
+            : base(builtins, Names.Core.Pointer, W.WasmType.Ptr)
         {
             AddMethod(Module.DefaultCtor, 1, defaultCtor);
 

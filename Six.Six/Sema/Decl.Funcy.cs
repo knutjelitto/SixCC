@@ -17,7 +17,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 parent.Members.Add(this);
-                Block = new FuncBlock(this, parent, name);
+                Block = new FuncBlock(parent, this, name);
                 AFuncy = aDecl;
                 parent.Content.Declare(this, name);
             }

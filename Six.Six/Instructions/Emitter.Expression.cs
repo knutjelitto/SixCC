@@ -1,7 +1,5 @@
-﻿using Six.Six.Builtins;
-using Six.Six.Sema;
+﻿using Six.Six.Sema;
 using System;
-using Type = Six.Six.Sema.Type;
 
 #pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE0060 // Remove unused parameter

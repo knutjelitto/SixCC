@@ -1,17 +1,15 @@
-﻿using Six.Six.Instructions;
-using Six.Six.Sema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace Six.Six.Builtins
+using Six.Six.Instructions;
+using Six.Six.Sema;
+using W = Six.Six.Wasms;
+
+namespace Six.Six.Types
 {
     public sealed class Anything : BuiltinCore
     {
         public Anything(Builtins builtins)
-            : base(builtins, Names.Core.Anything, WasmDef.Pointer)
+            : base(builtins, Names.Core.Anything, W.WasmType.Ptr)
         { }
 
         public override Insn Load(uint offset)

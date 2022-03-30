@@ -1,12 +1,13 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
+using W = Six.Six.Wasms;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public sealed class String : BuiltinCore
     {
         public String(Builtins builtins)
-            : base(builtins, Names.Core.String, WasmDef.Pointer)
+            : base(builtins, Names.Core.String, W.WasmType.Ptr)
         {
             infix.Add("+", Add);
         }

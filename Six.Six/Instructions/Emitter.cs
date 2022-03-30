@@ -1,6 +1,7 @@
 ﻿using Six.Core;
 using Six.Runtime;
 using Six.Six.Sema;
+using Six.Six.Types;
 using System;
 
 #pragma warning disable CA1822 // Mark members as static
@@ -23,8 +24,8 @@ namespace Six.Six.Instructions
         public readonly FunctionTable GlobalFunctions;
         public readonly DispatchTable DispatchTable;
 
-        public Emitter(Module module, Writer writer)
-            : base(writer)
+        public Emitter(Module module)
+            : base(new Writer())
         {
             Module = module;
             dumper = new Dumper(this);
@@ -37,7 +38,7 @@ namespace Six.Six.Instructions
 
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
-        public Builtins.Builtins Builtins => Module.Builtins;
+        public Builtins Builtins => Module.Builtins;
 
         public void Emit(Entity entity)
         {

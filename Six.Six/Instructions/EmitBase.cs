@@ -1,11 +1,7 @@
 ﻿using Six.Core;
 using Six.Runtime;
-using Six.Six.Builtins;
+using W = Six.Six.Wasms;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 #pragma warning disable CA1822 // Mark members as static
 
@@ -20,17 +16,17 @@ namespace Six.Six.Instructions
 
         public uint Align(uint align, uint offset)
         {
-            return WasmDef.Align(align, offset);
+            return W.WasmType.Align(align, offset);
         }
 
         public uint AlignPointer(uint offset)
         {
-            return WasmDef.Pointer.Align(offset);
+            return W.WasmType.Ptr.Align(offset);
         }
 
         public uint AlignCount(uint offset)
         {
-            return WasmDef.I32.Align(offset);
+            return W.WasmType.I32.Align(offset);
         }
 
         public string CvtByte(byte value)

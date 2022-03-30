@@ -79,6 +79,14 @@
             return "-content-lost-in-outer-space-";
         }
 
+        public void Clear()
+        {
+            if (sink is StringWriter stringWriter)
+            {
+                stringWriter.GetStringBuilder().Clear();
+            }
+        }
+
         public void Dispose()
         {
             if (owns && sink != null)

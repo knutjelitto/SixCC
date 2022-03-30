@@ -1,10 +1,5 @@
-﻿using Six.Core;
-using Six.Six.Builtins;
+﻿using W = Six.Six.Wasms;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Six.Six.Instructions
 {
@@ -46,7 +41,7 @@ namespace Six.Six.Instructions
 
                 strings.Add(text, (strings.Count, emit, access));
 
-                Offset = AlignCount(Offset + WasmDef.I32.Size + count);
+                Offset = AlignCount(Offset + W.WasmType.I32.Size + count);
 
                 return access;
             }

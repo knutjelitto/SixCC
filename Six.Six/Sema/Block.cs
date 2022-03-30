@@ -8,24 +8,25 @@ namespace Six.Six.Sema
         private BlockScope? content;
         private BlockScope? head;
 
-        protected Block(string name)
+        protected Block(Module module, string name)
         {
+            Module = module;
             Name = name;
         }
 
+        public Module Module { get; }
         public string Name { get; }
         public abstract Block Parent { get; }
-        public virtual BlockScope Content => content ??= new BlockScope(Name, Head);
-        public virtual BlockScope Head => head ??= new BlockScope(Name, Parent.Content);
-        public Module Module => Head.Module;
+        public virtual BlockScope Content => content ??= new BlockScope(Module, Name, Head);
+        public virtual BlockScope Head => head ??= new BlockScope(Module, Name, Parent.Content);
         public Resolver Resolver => Module.Resolver;
         public List<Member> Members { get; } = new();
     }
 
     public abstract class LinkedBlock : Block
     {
-        protected LinkedBlock(string name, Block parent)
-            : base(name)
+        protected LinkedBlock(Block parent, string name)
+            : base(parent.Module, name)
         {
             Parent = parent;
         }
@@ -35,22 +36,22 @@ namespace Six.Six.Sema
 
     public sealed class ContentBlock : LinkedBlock
     {
-        public ContentBlock(string name, Block parent) : base(name, parent)
+        public ContentBlock(Block parent, string name) : base(parent, name)
         {
         }
     }
 
     public sealed class HeadBlock : LinkedBlock
     {
-        public HeadBlock(string name, Block parent) : base(name, parent)
+        public HeadBlock(Block parent, string name) : base(parent, name)
         {
         }
     }
 
     public sealed class ClassBlock : LinkedBlock
     {
-        public ClassBlock(Decl.Classy classy, Block parent)
-            : base(classy.Name, parent)
+        public ClassBlock(Block parent, Decl.Classy classy)
+            : base(parent, classy.Name)
         {
             Classy = classy;
         }
@@ -60,8 +61,8 @@ namespace Six.Six.Sema
 
     public sealed class FuncBlock : LinkedBlock
     {
-        public FuncBlock(Decl.Funcy funcy, Block parent, string? name = null)
-            : base(name ?? funcy.Name, parent)
+        public FuncBlock(Block parent, Decl.Funcy funcy, string? name = null)
+            : base(parent, name ?? funcy.Name)
         {
             Funcy = funcy;
         }
@@ -72,7 +73,7 @@ namespace Six.Six.Sema
     public sealed class FileBlock : LinkedBlock
     {
         public FileBlock(Block parent, string name)
-            : base(name, parent)
+            : base(parent, name)
         {
         }
     }
@@ -81,8 +82,8 @@ namespace Six.Six.Sema
     {
         public readonly Dictionary<string, NamespaceBlock> Children = new();
 
-        public NamespaceBlock(string name, Block parent)
-            : base(name, parent)
+        public NamespaceBlock(Block parent, string name)
+            : base(parent, name)
         {
         }
 
@@ -125,10 +126,10 @@ namespace Six.Six.Sema
         public readonly Dictionary<string, NamespaceBlock> Children = new();
 
         public ModuleBlock(Module module, string name)
-            : base(name)
+            : base(module, name)
         {
-            Head = new BlockScope(name, new EmptyScope(module));
-            Content = new BlockScope(name, Head);
+            Head = new BlockScope(module, name, new EmptyScope(module));
+            Content = new BlockScope(module, name, Head);
         }
 
         public override BlockScope Head { get; }

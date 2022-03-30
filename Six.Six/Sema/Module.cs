@@ -1,14 +1,12 @@
-﻿using System;
-
-using Six.Core;
+﻿using Six.Core;
 using Six.Core.Errors;
 using Six.Six.Instructions;
-
+using Six.Six.Types;
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public class Module : Scope
+    public class Module
     {
         public static string Language => "six";
         public static string LanguageCore => "core";
@@ -27,18 +25,16 @@ namespace Six.Six.Sema
         public static string CoreClassAlloc => $"{CoreNamespace}.{ClassAlloc}";
         public static string CoreAlloc => $"{CoreNamespace}.{Allocator}";
 
-        public static string DispatchName(Decl.Classy classy) => $"{classy.FullName}%vtable";
-
         private readonly List<Diagnostic> Diagnostics = new();
 
         public Module()
         {
-            Root = new NamespaceBlock("", new ModuleBlock(this, ""));
-            Name = "six";
+            Root = new NamespaceBlock(new ModuleBlock(this, ""), "");
+            Name = CoreNamespace;
             Resolver = new Resolver(this);
-            Builtins = new Builtins.Builtins(this);
+            Builtins = new Builtins(this);
             Errors = new Errors(this);
-            Emitter = new Emitter(this, new Writer());
+            Emitter = new Emitter(this);
             Validator = new Validator(this);
             Checker = new TypeChecker(this);
         }
@@ -46,7 +42,7 @@ namespace Six.Six.Sema
         public NamespaceBlock Root { get; }
         public string Name { get; }
         public Resolver Resolver { get; }
-        public Builtins.Builtins Builtins { get; }
+        public Builtins Builtins { get; }
         public Errors Errors { get; }
         public Emitter Emitter { get; }
         public Validator Validator { get; }
@@ -81,7 +77,7 @@ namespace Six.Six.Sema
             {
                 if (!current.Children.TryGetValue(name, out var inner))
                 {
-                    inner = new NamespaceBlock(name, current);
+                    inner = new NamespaceBlock(current, name);
                     current.Children.Add(name, inner);
                 }
                 current = inner;
@@ -197,12 +193,5 @@ namespace Six.Six.Sema
 
             return core;
         }
-
-        Scope Scope.Parent => this;
-        Module Scope.Module => this;
-        T Scope.Declare<T>(T decl, string? name) => throw new NotImplementedException();
-        Decl Scope.Resolve(A.TreeNode tree, string name) => throw new NotImplementedException();
-        
-        //Decl Scope.Find(A.TreeNode tree, string name) => throw new NotImplementedException();
     }
 }

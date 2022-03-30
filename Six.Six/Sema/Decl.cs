@@ -162,7 +162,6 @@ namespace Six.Six.Sema
 
         }
 
-
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {FullName}")]
         public abstract class Declaration : Decl
         {
@@ -188,6 +187,8 @@ namespace Six.Six.Sema
 
             public Module Module => Parent.Content.Module;
             public Resolver Resolver => Parent.Content.Module.Resolver;
+            public bool Validated { get; set; }
+
 
             public bool IsNative => (Attr & DeclAttr.Native) != 0;
             public bool IsShared => (Attr & DeclAttr.Shared) != 0;
@@ -196,8 +197,6 @@ namespace Six.Six.Sema
             public bool IsAbstract => (Attr & DeclAttr.Abstract) != 0;
             public bool IsOverride => (Attr & DeclAttr.Override) != 0;
             public bool IsSealed => (Attr & DeclAttr.Sealed) != 0;
-
-            public bool Validated { get; set; }
 
             public DeclAttr Attr => attr ??= LazyAttr();
 
@@ -215,7 +214,6 @@ namespace Six.Six.Sema
                 return attr;
             }
 
-
             public static Type LazyTypeResolver(Block parent, A.Type aType)
             {
                 return parent.Resolver.ResolveType(parent.Content, aType);
@@ -232,7 +230,6 @@ namespace Six.Six.Sema
                     return value.Expr.Type;
                 }
             }
-
         }
     }
 }

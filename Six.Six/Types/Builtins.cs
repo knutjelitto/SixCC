@@ -1,7 +1,7 @@
 ﻿using Six.Six.Sema;
 using System;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public class Builtins
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Six.Six.Builtins
+namespace Six.Six.Types
 {
     public sealed class U32 : I32<Insn.U32Impl, uint>
     {

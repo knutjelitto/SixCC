@@ -1,6 +1,5 @@
-﻿using System;
-
-using Six.Six.Builtins;
+﻿using Six.Six.Types;
+using System;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -154,7 +153,7 @@ namespace Six.Six.Sema
                 }
                 else if (primary.Expr is Expr.LocalReference localReference)
                 {
-                    var found = ResolveType(localReference.Type);
+                    var found = ResolveType(localReference.LocalDecl.Type);
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
