@@ -44,14 +44,11 @@ namespace Six.Six.Instructions
                     wl($"(; +{BaseOffset + offset:X4} - {text} ;)");
                     indent(() =>
                     {
-                        wl($"(; vtable   ;) {EmitUInt32(0)}");
-                        wl($"(; size     ;) {EmitUInt32(layout.MetaSize)}");
-                        wl($"(; name     ;) {EmitPtr(stringPtr())}");
-                        wl($"(; dispatch ;) {EmitUInt32(start)}");
-                        foreach (var slot in layout.Slots)
-                        {
-                            wl($"{EmitUInt32(slot.Funcy.TableIndex)} (; {slot.Funcy.FullName} ;)");
-                        }
+                        wl($"(; clazz          ;) {EmitUInt32(0)}");
+                        wl($"(; clazz-dispatch ;) {EmitUInt32(0)}");
+                        wl($"(; size           ;) {EmitUInt32(layout.MetaSize)}");
+                        wl($"(; name           ;) {EmitPtr(stringPtr())}");
+                        wl($"(; dispatch       ;) {EmitUInt32(start)}");
                     });
                 }
 
@@ -62,7 +59,7 @@ namespace Six.Six.Instructions
 
                 metas.Add(text, (metas.Count, emit, access));
 
-                Offset = AlignCount((uint)(Offset + WasmDef.I32.Size + WasmDef.I32.Size + WasmDef.Pointer.Size + WasmDef.I32.Size + layout.Slots.Count * WasmDef.I32.Size));
+                Offset = AlignCount((uint)(Offset + WasmDef.Pointer.Size + WasmDef.I32.Size + WasmDef.I32.Size + WasmDef.Pointer.Size + WasmDef.I32.Size));
 
                 return access;
             }

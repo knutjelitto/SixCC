@@ -22,7 +22,6 @@ namespace Six.Six.Instructions
         public readonly ClassData ClassData;
         public readonly FunctionTable GlobalFunctions;
         public readonly DispatchTable DispatchTable;
-        public readonly DispatchTables DispatchTables;
 
         public Emitter(Module module, Writer writer)
             : base(writer)
@@ -34,7 +33,6 @@ namespace Six.Six.Instructions
             ClassData = new ClassData(this, Module.DataAndHeap);
             GlobalFunctions = new FunctionTable(this, Module.ModuleFunctions);
             DispatchTable = new DispatchTable(this, Module.DispatchFunctions);
-            DispatchTables = new DispatchTables(this);
         }
 
         public Module Module { get; }
@@ -68,8 +66,6 @@ namespace Six.Six.Instructions
 
         private void Handle(Decl.Classy decl)
         {
-            DispatchTables.Add(decl);
-
             wl($"(; {dumper.ClassyHead(decl)} ;)");
             indent(() =>
             {

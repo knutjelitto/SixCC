@@ -121,6 +121,11 @@ namespace Six.Six.Instructions
             }
         }
 
+        public string TypeFor(Decl.Funcy funcy)
+        {
+            return TypeFor((Type.Callable)funcy.Type);
+        }
+
         public string TypeFor(Type.Callable type)
         {
             return $"(type {Types.FindType(type)})";

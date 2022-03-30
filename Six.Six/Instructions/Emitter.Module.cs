@@ -69,8 +69,6 @@ namespace Six.Six.Instructions
                 wl();
                 DispatchTable.Emit();
                 wl();
-                DispatchTables.Emit();
-                wl();
                 Types.Emit();
             });
             wl($")");
@@ -96,21 +94,19 @@ namespace Six.Six.Instructions
                 wl($"(result {WasmDef.Pointer})");
                 wl($"(local {WasmDef.Pointer})");
                 wl("(;-----;)");
-                Emit(Insn.Local.Get(0));
-                Emit(Insn.U32.Load(4));
-                Emit(Insn.Call(Module.CoreAlloc));
-                Emit(Insn.Local.Tee(1));
-                Emit(Insn.Local.Get(0));
-                Emit(Insn.U32.Const(16));
-                Emit(Insn.U32.Add);
-                Emit(Insn.U32.Store(0));
+                Emit(Insn.Local.Get(0));            // [clazz]
+                Emit(Insn.U32.Load(8));             // [clazz.size]
+                Emit(Insn.Call(Module.CoreAlloc));  // [object]
+                Emit(Insn.Local.Tee(1));            // [object]
+                Emit(Insn.Local.Get(0));            // [object clazz]
+                Emit(Insn.U32.Store(0));            // [] object.clazz = clazz
 
-                Emit(Insn.Local.Get(1));
-                Emit(Insn.Local.Get(0));
-                Emit(Insn.U32.Load(12));
-                Emit(Insn.U32.Store(4));
+                Emit(Insn.Local.Get(1));            // [object]
+                Emit(Insn.Local.Get(0));            // [object clazz]
+                Emit(Insn.U32.Load(16));            // [object clazz.dispatch]
+                Emit(Insn.U32.Store(4));            // [] object.dispatch = clazz.dispatch
 
-                Emit(Insn.Local.Get(1));
+                Emit(Insn.Local.Get(1));            // [object]
                 Emit(Insn.Return);
                 wl("(;-----;)");
             });

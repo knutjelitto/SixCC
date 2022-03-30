@@ -31,7 +31,7 @@ namespace Six.Six.Instructions
             uint index;
             if (!table.TryGetValue(name, out var entry))
             {
-                _ = Emitter.TypeFor((Type.Callable)function.Type);
+                _ = Emitter.TypeFor(function);
                 index = (uint)table.Count;
                 table.Add(name, (index, function));
             }

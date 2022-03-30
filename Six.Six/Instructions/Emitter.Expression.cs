@@ -79,6 +79,7 @@ namespace Six.Six.Instructions
                 Emit(argument);
             }
             var slot = expr.Classy.Slot(expr.Funcy);
+
             if (slot != null)
             {
                 Emit(Insn.Local.Get(0)); // TODO: get self??
@@ -86,7 +87,7 @@ namespace Six.Six.Instructions
                 Emit(Insn.U32.Const((uint)slot.Index));
                 Emit(Insn.U32.Add);
                 Emit(Insn.Comment($"call {expr.Funcy.Name}"));
-                Emit(Insn.CallIndirect(Module.DispatchFunctions, TypeFor((Type.Callable)expr.Funcy.Type)));
+                Emit(Insn.CallIndirect(Module.DispatchFunctions, TypeFor(expr.Funcy)));
             }
             else
             {
@@ -278,7 +279,7 @@ namespace Six.Six.Instructions
                         Emit(Insn.U32.Load(4));
                         Emit(Insn.U32.Const((uint)slot.Index));
                         Emit(Insn.U32.Add);
-                        Emit(Insn.CallIndirect(Module.DispatchFunctions, TypeFor((Type.Callable)expr.Attribute.Type)));
+                        Emit(Insn.CallIndirect(Module.DispatchFunctions, TypeFor(expr.Attribute)));
                     }
                     else
                     {

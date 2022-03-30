@@ -74,7 +74,13 @@ namespace Six.Six.Instructions
                 Slots.AddRange(extended.Layout.Slots);
             }
 
-            foreach (var funcy in Classy.Block.Members.OfType<Decl.Funcy>().Where(f => !f.IsStatic))
+            bool SlotMember(Decl.Funcy f)
+            {
+                return f.IsDynamic
+                    || Classy is Decl.Interface && !f.IsStatic;
+            }
+
+            foreach (var funcy in Classy.Block.Members.OfType<Decl.Funcy>().Where(f => SlotMember(f)))
             {
                 Slots.AddOrUpdate(funcy);
             }
