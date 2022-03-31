@@ -11,7 +11,6 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-
         public LazyExpr ResolveExpression(Block block, A.Expression node)
         {
             return Expression((dynamic)block, (dynamic)node);

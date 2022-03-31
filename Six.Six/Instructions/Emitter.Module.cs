@@ -14,8 +14,6 @@ namespace Six.Six.Instructions
                 return;
             }
 
-            var wmodule = new W.Module();
-
             wl($"(module");
             indent(() =>
             {
@@ -58,7 +56,7 @@ namespace Six.Six.Instructions
 
                 foreach (var function in Module.GetFunctions())
                 {
-                    wmodule.Add(wmodule.ToFunction(function));
+                    WaWalker.Add(function);
 
                     Emit(function);
                     wl();
@@ -66,6 +64,8 @@ namespace Six.Six.Instructions
 
                 foreach (var classy in Module.GetClassies())
                 {
+                    WaWalker.Add(classy);
+
                     Emit(classy);
                 }
                 wl();
@@ -79,8 +79,7 @@ namespace Six.Six.Instructions
             wl($")");
 
             wl();
-            wmodule.Emit();
-            w(wmodule.Writer.ToString());
+            WaModule.Emit();
         }
 
         public Func<Ptr> AddString(string text)

@@ -162,7 +162,14 @@ namespace Six.Six.Sema
 
             public Type Type { get; }
         }
-     
+
+        public sealed class Void : TypeImpl
+        {
+            public Void(Module module) : base(module)
+            {
+            }
+        }
+
         public abstract class TypeImpl : Type
         {
             protected TypeImpl(Module module)

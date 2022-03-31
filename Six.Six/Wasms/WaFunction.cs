@@ -2,29 +2,45 @@
 
 namespace Six.Six.Wasms
 {
-    public class Function : WithWriter
+    public class WaFunction : WithWriter
     {
         private string? signature;
 
-        private readonly ParameterList Parameters = new();
-        private readonly ResultList Results = new();
-        private readonly LocalList Locals = new();
-        private readonly InstructionList Instructions = new();
+        private readonly WaParameterList Parameters;
+        private readonly WaResultList Results;
+        private readonly WaLocalList Locals;
+        private readonly WaInstructionList Instructions = new();
 
-        public Function(Module module, string name)
+        public WaFunction(WaModule module, string name)
             : base(module.Writer)
         {
             Module = module;
             Name = name;
+            Parameters = new(this);
+            Results = new(this);
+            Locals = new(this);
         }
 
-        public Module Module { get; }
+        public WaModule Module { get; }
         public string Name { get; }
-        public string FunctionType { get; private set; } = "";
+        public WaFunctionType? Type { get; private set; } = null;
 
-        public void Add(Parameter parameter)
+        public void Add(WaParameter parameter)
         {
+            Assert(Locals.Count == 0);
+            parameter.Index = Parameters.Count;
             Parameters.Add(parameter);
+        }
+
+        public void Add(WaResult result)
+        {
+            Results.Add(result);
+        }
+
+        public void Add(WaLocal local)
+        {
+            local.Index = Parameters.Count + Locals.Count;
+            Locals.Add(local);
         }
 
         public string Signature
@@ -103,6 +119,8 @@ namespace Six.Six.Wasms
 
         public void Emit()
         {
+            Type = Type ?? throw new System.NullReferenceException();
+
             wl($"(func ${Name}");
             indent(() =>
             {
@@ -118,7 +136,7 @@ namespace Six.Six.Wasms
 
         public void Prepare()
         {
-            FunctionType = Module.FunctionTypes.FindType(this);
+            Type = Module.FunctionTypes.Add(this);
 
             foreach (var instruction in Instructions)
             {
@@ -128,10 +146,12 @@ namespace Six.Six.Wasms
             var index = 0;
             foreach (var parameter in Parameters)
             {
+                Assert(parameter.Index == index);
                 parameter.Index = index++;
             }
             foreach (var local in Locals)
             {
+                Assert(local.Index == index);
                 local.Index = index++;
             }
         }

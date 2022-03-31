@@ -2,9 +2,9 @@
 
 namespace Six.Six.Wasms
 {
-    public class Local
+    public class WaLocal
     {
-        public Local(int index, string name, WasmType type)
+        public WaLocal(int index, string name, WasmType type)
         {
             Index = index;
             Name = name;

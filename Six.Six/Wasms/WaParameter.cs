@@ -2,9 +2,9 @@
 
 namespace Six.Six.Wasms
 {
-    public class Parameter
+    public class WaParameter
     {
-        public Parameter(Function function, string name, WasmType type)
+        public WaParameter(WaFunction function, string name, WasmType type)
         {
             Function = function;
             Name = name;
@@ -12,7 +12,7 @@ namespace Six.Six.Wasms
         }
 
         public int Index { get; set; }
-        public Function Function { get; }
+        public WaFunction Function { get; }
         public string Name { get; }
         public WasmType Type { get; }
     }

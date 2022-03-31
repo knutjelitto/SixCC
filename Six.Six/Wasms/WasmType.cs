@@ -22,6 +22,11 @@
         public uint MemAlign { get; }
         public uint Size { get; }
 
+        public int Align(int offset)
+        {
+            return (int)Align(MemAlign, (uint)offset);
+        }
+
         public uint Align(uint offset)
         {
             return Align(MemAlign, offset);

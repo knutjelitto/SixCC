@@ -71,13 +71,13 @@ namespace Six.Six.Instructions
                 wl($"(param {string.Join(" ", parameters)})");
             }
 
-            var result = Emitter.BuiltinFor(Funcy.ResultType);
-            if (result == Builtins.Anything)
+            if (Funcy.ResultType is Type.Void)
             {
                 //wl("(result)");
             }
             else
             {
+                var result = Emitter.BuiltinFor(Funcy.ResultType);
                 wl($"(result (; {Emitter.Resolver.ResolveType(Funcy.ResultType)} ;) {result.Wasm.Type})");
             }
 

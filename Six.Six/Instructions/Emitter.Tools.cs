@@ -19,8 +19,8 @@ namespace Six.Six.Instructions
                     return builtin;
                 case Type.ClassReference:
                     return Builtins.Pointer;
-                    //Assert(false);
-                    //throw new NotImplementedException();
+                case Type.InterfaceReference:
+                    return Builtins.Pointer;
                 default:
                     Assert(false);
                     throw new NotImplementedException();
@@ -129,7 +129,10 @@ namespace Six.Six.Instructions
 
         public bool IsAnythingAkaVoid(Type type)
         {
-            return Resolver.ResolveType(type) is Type.ClassyReference reference && reference.Decl.FullName == Names.Core.CoreAnything;
+            var resolved = Resolver.ResolveType(type);
+
+            return (resolved is Type.ClassyReference reference && reference.Decl.FullName == Names.Core.CoreAnything)
+                || (resolved is Type.Void);
         }
 
         private void Horizontal(IEnumerable<Action> actions)

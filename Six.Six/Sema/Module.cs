@@ -50,7 +50,7 @@ namespace Six.Six.Sema
 
         public bool HasErrors => Diagnostics.Count > 0;
 
-        public string Emit()
+        public (string wat, string wat2) Emit()
         {
             Validator.Validate();
             Emitter.EmitModule();
@@ -64,10 +64,17 @@ namespace Six.Six.Sema
                     dumper.Write(wat);
                 }
 
-                return wat;
+                var wat2 = Emitter.WaModule.Writer.ToString();
+
+                using (var dumper = $"six.core.2.wat".Writer())
+                {
+                    dumper.Write(wat2);
+                }
+
+                return (wat, wat2);
             }
 
-            return "";
+            return ("","");
         }
 
         public NamespaceBlock OpenNamespace(A.NamespaceIntro nsIntro)

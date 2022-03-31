@@ -12,7 +12,6 @@ namespace Six.Six.Sema
             private List<Type>? paramTypes = null;
             private Type? resultType = null;
 
-
             public Funcy(Block parent, string name, A.Decl.Funcy aDecl)
                 : base(parent, aDecl)
             {
@@ -68,7 +67,17 @@ namespace Six.Six.Sema
             public Function(Block parent, A.Decl.Funcy aDecl, string? name)
                 : base(parent, name ?? aDecl.Name.Text, aDecl)
             {
-                ResultTypeResolver = () => LazyTypeResolver(parent, ((A.With.Type)aDecl).Type);
+                ResultTypeResolver = () =>
+                {
+                    var type = ((A.With.Type)aDecl).Type;
+
+                    if (type is A.Reference reference && reference.Name.Text == "void")
+                    {
+                        return new Type.Void(Module);
+                    }
+
+                    return LazyTypeResolver(parent, ((A.With.Type)aDecl).Type);
+                };
             }
         }
 

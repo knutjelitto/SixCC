@@ -2,7 +2,7 @@
 
 namespace Six.Six.Wasms
 {
-    public class ListOf<T> : IReadOnlyList<T>
+    public class WaListOf<T> : IReadOnlyList<T>
     {
         private readonly List<T> items = new();
 
@@ -13,6 +13,7 @@ namespace Six.Six.Wasms
 
         public T this[int index] => items[index];
         public int Count => items.Count;
+
         public IEnumerator<T> GetEnumerator() => items.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)items).GetEnumerator();
     }

@@ -15,7 +15,7 @@ namespace Six.Six
                 return;
             }
 
-            var wat = smodule.Emit();
+            var (wat, wat2) = smodule.Emit();
 
             if (smodule.HasErrors)
             {
@@ -26,6 +26,7 @@ namespace Six.Six
                 .WithCompilerStrategy(CompilerStrategy.Cranelift);
 
             using var engine = new Engine(config);
+
             using var module = Module.FromText(engine, S.Module.CoreNamespace, wat);
             using var linker = new Linker(engine);
             using var store = new Store(engine);

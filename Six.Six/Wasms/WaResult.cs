@@ -1,8 +1,8 @@
 ﻿namespace Six.Six.Wasms
 {
-    public class Result
+    public class WaResult
     {
-        public Result(WasmType type)
+        public WaResult(WasmType type)
         {
             Type = type;
         }

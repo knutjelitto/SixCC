@@ -1,8 +1,11 @@
-﻿using Six.Core;
+﻿using System;
+
+using Six.Core;
 using Six.Runtime;
 using Six.Six.Sema;
 using Six.Six.Types;
-using System;
+using Six.Six.Wasms;
+using W = Six.Six.Wasms;
 
 #pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -23,6 +26,8 @@ namespace Six.Six.Instructions
         public readonly ClassData ClassData;
         public readonly FunctionTable GlobalFunctions;
         public readonly DispatchTable DispatchTable;
+        public readonly WaModule WaModule;
+        public readonly WaWalker WaWalker;
 
         public Emitter(Module module)
             : base(new Writer())
@@ -34,6 +39,8 @@ namespace Six.Six.Instructions
             ClassData = new ClassData(this, Module.DataAndHeap);
             GlobalFunctions = new FunctionTable(this, Module.ModuleFunctions);
             DispatchTable = new DispatchTable(this, Module.DispatchFunctions);
+            WaModule = new W.WaModule();
+            WaWalker = new WaWalker(WaModule, this);
         }
 
         public Module Module { get; }
