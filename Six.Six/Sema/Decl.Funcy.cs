@@ -28,6 +28,7 @@ namespace Six.Six.Sema
             public uint TableIndex { get; set; } = uint.MaxValue;
 
             public IReadOnlyList<Local> Parameters => Layout.TypedParameters;
+            public IReadOnlyList<Local> Locals => Layout.TypedLocals;
 
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();

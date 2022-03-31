@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Six.Six.Wasms
+﻿namespace Six.Six.Wasms
 {
     public class WaFunctionType
     {
-        public WaFunctionType(WAFunctionTypeList types, string signature, uint index)
+        public WaFunctionType(WaFunctionTypeList types, WaFuncSignature signature, uint index)
         {
             Types = types;
             Signature = signature;
@@ -16,8 +10,8 @@ namespace Six.Six.Wasms
             Name = $"funcType{Index}";
         }
 
-        public WAFunctionTypeList Types { get; }
-        public string Signature { get; }
+        public WaFunctionTypeList Types { get; }
+        public WaFuncSignature Signature { get; }
         public uint Index { get; }
         public string Name { get; }
 

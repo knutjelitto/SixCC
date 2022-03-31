@@ -2,17 +2,22 @@
 
 namespace Six.Six.Wasms
 {
-    public class WAFunctionTypeList : WithWriter
+    public class WaFunctionTypeList : WithWriter, Wamber
     {
-        private readonly Dictionary<string, WaFunctionType> functionTypes = new();
+        private readonly Dictionary<WaFuncSignature, WaFunctionType> functionTypes = new();
 
-        public WAFunctionTypeList(WaModule module)
+        public WaFunctionTypeList(WaModule module)
             : base(module.Writer)
         {
             Module = module;
         }
 
         public WaModule Module { get; }
+
+
+        public void Prepare()
+        {
+        }
 
         public void Emit()
         {
@@ -26,20 +31,23 @@ namespace Six.Six.Wasms
             }
         }
 
-        public WaFunctionType Add(WaFunction function)
+        public WaFunctionType Get(WaFuncSignature signature)
         {
-            var typeSignature = $"(func {function.Signature})";
-
-            if (!functionTypes.TryGetValue(typeSignature, out var functionType))
+            if (!functionTypes.TryGetValue(signature, out var functionType))
             {
                 var index = (uint)functionTypes.Count;
 
-                functionType = new WaFunctionType(this, typeSignature, index);
+                functionType = new WaFunctionType(this, signature, index);
 
-                functionTypes.Add(typeSignature, functionType);
+                functionTypes.Add(signature, functionType);
             }
 
             return functionType;
+        }
+
+        public WaFunctionType Add(WaFunction function)
+        {
+            return Get(function.Signature);
         }
     }
 }

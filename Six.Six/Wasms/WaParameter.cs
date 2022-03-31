@@ -1,8 +1,6 @@
-﻿using Six.Six.Sema;
-
-namespace Six.Six.Wasms
+﻿namespace Six.Six.Wasms
 {
-    public class WaParameter
+    public class WaParameter : Wamber
     {
         public WaParameter(WaFunction function, string name, WasmType type)
         {
@@ -15,5 +13,13 @@ namespace Six.Six.Wasms
         public WaFunction Function { get; }
         public string Name { get; }
         public WasmType Type { get; }
+
+        public void Emit()
+        {
+        }
+
+        public void Prepare()
+        {
+        }
     }
 }

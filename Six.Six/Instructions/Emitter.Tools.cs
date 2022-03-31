@@ -21,6 +21,8 @@ namespace Six.Six.Instructions
                     return Builtins.Pointer;
                 case Type.InterfaceReference:
                     return Builtins.Pointer;
+                case Type.Callable:
+                    return Builtins.TableIndex;
                 default:
                     Assert(false);
                     throw new NotImplementedException();

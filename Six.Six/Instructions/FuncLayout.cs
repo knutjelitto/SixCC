@@ -9,8 +9,8 @@ namespace Six.Six.Instructions
     public class FuncLayout : WithWriter
     {
         public readonly List<Decl.Local> TypedParameters = new();
+        public readonly List<Decl.Local> TypedLocals = new();
         private readonly List<LocalCore> parameters = new();
-        private readonly List<Decl.Local> typedLocals = new();
         private readonly List<LocalCore> locals = new();
 
         public FuncLayout(Decl.Funcy funcy)
@@ -41,7 +41,7 @@ namespace Six.Six.Instructions
 
         public int AddLocal(Decl.Local local)
         {
-            typedLocals.Add(local);
+            TypedLocals.Add(local);
 
             var index = parameters.Count + locals.Count;
             local.Index = index;

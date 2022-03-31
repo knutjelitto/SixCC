@@ -2,16 +2,18 @@
 
 namespace Six.Six.Wasms
 {
-    public class WaFunction : WithWriter
+    public sealed class WaFunction : WithWriter, Wamber
     {
-        private string? signature;
+        private WaFuncSignature? signature;
 
-        private readonly WaParameterList Parameters;
-        private readonly WaResultList Results;
+        public readonly WaParameterList Parameters;
+        public readonly WaResultList Results;
         private readonly WaLocalList Locals;
-        private readonly WaInstructionList Instructions = new();
+        public readonly WaInstructionList Instructions = new();
 
-        public WaFunction(WaModule module, string name)
+        public readonly WaFunctionList InnerFunctions = new();
+
+        private WaFunction(WaModule module, string name)
             : base(module.Writer)
         {
             Module = module;
@@ -19,6 +21,17 @@ namespace Six.Six.Wasms
             Parameters = new(this);
             Results = new(this);
             Locals = new(this);
+        }
+
+        public static WaFunction From(WaModule module, string name)
+        {
+            if (!module.FunctionIndex.TryGetValue(name, out var function))
+            {
+                function = new WaFunction(module, name);
+                module.FunctionIndex.Add(name, function);
+            }
+
+            return function;
         }
 
         public WaModule Module { get; }
@@ -43,30 +56,52 @@ namespace Six.Six.Wasms
             Locals.Add(local);
         }
 
-        public string Signature
+        public void Add(WaInstruction instruction)
         {
-            get
-            {
-                if (signature == null)
-                {
-                    var builder = new StringBuilder();
-                    builder.Append("(param");
-                    foreach (var param in Parameters)
-                    {
-                        builder.Append($" {param.Type}");
-                    }
-                    builder.Append($") (result");
-                    foreach (var result in Results)
-                    {
-                        builder.Append($" {result.Type}");
-                    }
-                    builder.Append(')');
-
-                    signature = builder.ToString();
-                }
-                return signature;
-            }
+            Instructions.Add(instruction);
         }
+
+        public void Add(WaFunction innerFunction)
+        {
+            InnerFunctions.Add(innerFunction);
+        }
+
+        public WaLocal GetLocal(int index)
+        {
+            return Locals[index - Parameters.Count];
+        }
+
+        public static string GetSignature(WaFunction function)
+        {
+            return GetSignature(function.Parameters.Select(p => p.Type), function.Results.Select(r => r.Type));
+        }
+
+        public static string GetSignature(IEnumerable<WasmType> parameters, WasmType result)
+        {
+            return GetSignature(parameters, Enumerable.Repeat(result, 1));
+        }
+
+        public static string GetSignature(IEnumerable<WasmType> parameters, IEnumerable<WasmType> results)
+        {
+            var builder = new StringBuilder();
+            builder.Append("(param");
+            foreach (var param in parameters)
+            {
+                builder.Append($" {param.Type}");
+            }
+            builder.Append($") (result");
+            foreach (var result in results)
+            {
+                builder.Append($" {result.Type}");
+            }
+            builder.Append(')');
+
+            var signature = builder.ToString();
+
+            return $"(func {signature})";
+        }
+
+        public WaFuncSignature Signature => signature ??= WaFuncSignature.From(this);
 
         private void EmitParameters()
         {
@@ -121,6 +156,12 @@ namespace Six.Six.Wasms
         {
             Type = Type ?? throw new System.NullReferenceException();
 
+            foreach (var inner in InnerFunctions)
+            {
+                inner.Emit();
+                wl();
+            }
+
             wl($"(func ${Name}");
             indent(() =>
             {
@@ -137,6 +178,11 @@ namespace Six.Six.Wasms
         public void Prepare()
         {
             Type = Module.FunctionTypes.Add(this);
+
+            foreach (var inner in InnerFunctions)
+            {
+                inner.Prepare();
+            }
 
             foreach (var instruction in Instructions)
             {

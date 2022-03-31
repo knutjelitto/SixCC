@@ -4,14 +4,14 @@ namespace Six.Six.Wasms
 {
     public class WaFieldList : WaListOf<WaField>
     {
-        public WaFieldList(WaClassy classy)
+        public WaFieldList(WaClass clazz)
         {
-            Classy = classy;
+            Clazz = clazz;
         }
 
-        public WaClassy Classy { get; }
+        public WaClass Clazz { get; }
 
-        public void Prepare()
+        public override void Prepare()
         {
             uint offset = 0;
 

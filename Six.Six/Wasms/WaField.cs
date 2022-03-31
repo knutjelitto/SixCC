@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Six.Six.Wasms
+﻿namespace Six.Six.Wasms
 {
-    public class WaField
+    public class WaField : Wamber
     {
         public WaField(string name, WasmType type)
         {
             Name = name;
             Type = type;
+        }
+
+        public void Prepare()
+        {
+        }
+
+        public void Emit()
+        {
         }
 
         public string Name { get; }

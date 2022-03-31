@@ -30,7 +30,6 @@ namespace Six.Six.Instructions
             }
         }
 
-
         private void Handle(Primitive.Arged arged)
         {
             Emit(arged.Arg);

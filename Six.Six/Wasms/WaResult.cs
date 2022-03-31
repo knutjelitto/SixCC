@@ -1,6 +1,6 @@
 ﻿namespace Six.Six.Wasms
 {
-    public class WaResult
+    public class WaResult : Wamber
     {
         public WaResult(WasmType type)
         {
@@ -8,5 +8,13 @@
         }
 
         public WasmType Type { get; }
+
+        public void Prepare()
+        {
+        }
+
+        public void Emit()
+        {
+        }
     }
 }

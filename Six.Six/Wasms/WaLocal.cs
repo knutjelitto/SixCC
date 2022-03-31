@@ -1,18 +1,25 @@
-﻿using Six.Six.Sema;
-
-namespace Six.Six.Wasms
+﻿namespace Six.Six.Wasms
 {
-    public class WaLocal
+    public class WaLocal : Wamber
     {
-        public WaLocal(int index, string name, WasmType type)
+        public WaLocal(WaFunction function, string name, WasmType type)
         {
-            Index = index;
+            Function = function;
             Name = name;
             Type = type;
         }
 
-        public int Index { get; set; }
+        public WaFunction Function { get; }
         public string Name { get; }
         public WasmType Type { get; }
+        public int Index { get; set; } = -1;
+
+        public void Emit()
+        {
+        }
+
+        public void Prepare()
+        {
+        }
     }
 }

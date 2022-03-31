@@ -1,8 +1,11 @@
-﻿namespace Six.Six.Wasms
+﻿using Six.Runtime;
+
+namespace Six.Six.Wasms
 {
-    public abstract class WaInstruction
+    public abstract class WaInstruction : WithWriter, Wamber
     {
         public WaInstruction(WaFunction function)
+            : base(function.Writer)
         {
             Function = function;
         }

@@ -4,4 +4,3 @@ shared abstract native class Anything of Object | Null
 {
 }
 
-shared alias void => Anything;

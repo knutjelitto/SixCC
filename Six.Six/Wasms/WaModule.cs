@@ -1,20 +1,35 @@
 ﻿using Six.Core;
 using Six.Runtime;
+using Six.Six.Sema;
 
 namespace Six.Six.Wasms
 {
     public class WaModule : WithWriter
     {
-        private readonly WaFunctionList Functions;
-        private readonly WaClassyList Classies;
-        public readonly WAFunctionTypeList FunctionTypes;
+        public static string GlobalFunctionsTableName => Module.ModuleFunctions;
 
-        public WaModule() : base(new Writer())
+        private readonly WaFunctionList Functions;
+        private readonly WaClassList Classes;
+
+        public readonly WaFunctionTable GlobalFunctions;
+        public readonly WaFunctionTypeList FunctionTypes;
+
+        public readonly Dictionary<string, WaFunction> FunctionIndex;
+        public readonly Dictionary<string, WaClass> ClassIndex;
+
+        public WaModule(Module semaModule) : base(new Writer())
         {
             Functions = new();
-            Classies = new(this);
+            Classes = new(this);
+            GlobalFunctions = new WaFunctionTable(this, GlobalFunctionsTableName);
             FunctionTypes = new(this);
+            FunctionIndex = new();
+            ClassIndex = new();
+            SemaModule = semaModule;
         }
+
+        public Module SemaModule { get; }
+
 
         public WaFunction Add(WaFunction function)
         {
@@ -23,11 +38,11 @@ namespace Six.Six.Wasms
             return function;
         }
 
-        public WaClassy Add(WaClassy classy)
+        public WaClass Add(WaClass clazz)
         {
-            Classies.Add(classy);
+            Classes.Add(clazz);
 
-            return classy;
+            return clazz;
         }
 
         private void Prepare()
@@ -37,30 +52,37 @@ namespace Six.Six.Wasms
                 function.Prepare();
             }
 
-            foreach (var classy in Classies)
+            foreach (var classy in Classes)
             {
                 classy.Prepare();
             }
+
+            GlobalFunctions.Prepare();
+            FunctionTypes.Prepare();
         }
 
         public void Emit()
         {
             Prepare();
 
-            w("(module");
+            wl("(module");
             indent(() =>
             {
                 for (var i = 0; i < Functions.Count; i++)
                 {
-                    wl();
+                    if (i > 0) wl();
                     Functions[i].Emit();
                 }
+                wl();
 
-                for (var i = 0; i < Classies.Count; i++)
+                for (var i = 0; i < Classes.Count; i++)
                 {
-                    Classies[i].Emit();
+                    if (i > 0) wl();
+                    Classes[i].Emit();
                 }
-
+                wl();
+                GlobalFunctions.Emit();
+                wl();
                 FunctionTypes.Emit();
             });
             wl(")");

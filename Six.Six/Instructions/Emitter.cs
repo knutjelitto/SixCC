@@ -39,7 +39,7 @@ namespace Six.Six.Instructions
             ClassData = new ClassData(this, Module.DataAndHeap);
             GlobalFunctions = new FunctionTable(this, Module.ModuleFunctions);
             DispatchTable = new DispatchTable(this, Module.DispatchFunctions);
-            WaModule = new W.WaModule();
+            WaModule = new WaModule(module);
             WaWalker = new WaWalker(WaModule, this);
         }
 
@@ -182,15 +182,8 @@ namespace Six.Six.Instructions
 
         private void Handle(Decl.LetVar decl)
         {
-            if (decl.Value != null)
-            {
-                Emit(decl.Value);
-                Emit(Insn.Local.Set(decl.Index));
-            }
-            else
-            {
-                Assert(false);
-            }
+            Emit(decl.Value);
+            Emit(Insn.Local.Set(decl.Index));
         }
     }
 }
