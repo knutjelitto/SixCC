@@ -1,0 +1,46 @@
+namespace six.core.tests;
+
+shared class Base
+{
+    shared static let int ccc = 12;
+    shared static int one => 1;
+}
+
+shared abstract class Abstract : Base
+{
+    shared int a => one;
+    shared static int b => one;
+    shared abstract int c;
+}
+
+shared class Derived : Abstract
+{
+    let Derived x = Derived();
+
+    shared new ()
+    {
+        var y = 0;
+
+        y = 2;
+
+        y = Abstract.one;
+
+        y = int.minValue;
+
+        y = ccc;
+
+        y = int.min(ccc, one);
+
+        var f = int.min;
+    }
+
+    shared override int c => a;
+    shared int d => c;
+    shared int e => x.d;
+    shared int f => Derived().d;
+}
+
+shared int NestingTest()
+{
+    return 1;
+}

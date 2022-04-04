@@ -12,26 +12,57 @@ namespace Six.Six.Instructions
         {
             Module = module;
             Emitter = emitter;
+            Instructeur = new WaInstructeur(Module);
         }
 
         public WaModule Module { get; }
         public Emitter Emitter { get; }
+        public WaInstructeur Instructeur { get; }
 
-        public void Add(Decl.Funcy funcy)
+        public void AddGlobal(Decl.Global glob)
+        {
+            var global = CreateGlobal(glob);
+
+            Module.AddGlobal(global);
+        }
+
+        public void AddFunction(Decl.Funcy funcy)
         {
             var function = CreateFunction(funcy);
 
-            Module.Add(function);
+            Module.AddFunction(function);
         }
 
-        public void Add(Decl.Classy classy)
+        public void AddClass(Decl.Classy classy)
         {
             var clazz = CreateClass(classy);
 
-            Module.Add(clazz);
+            Module.AddClass(clazz);
         }
 
-        public WaFunction CreateFunction(Decl.Funcy funcy)
+        public void AddModuleInitializer()
+        {
+            var name = $"{Sema.Module.CoreNamespace}.{Sema.Module.ModuleCtor}";
+
+            var function = WaFunction.From(Module, name);
+
+            Instructeur.CreateModuleCtor(function);
+
+            Module.AddInitializer(function);
+        }
+
+        private WaGlobal CreateGlobal(Decl.Global decl)
+        {
+            var type = Instructeur.Lower(decl.Type).Wasm;
+            var instructions = new WaInstructionList(Module);
+            Instructeur.Walk(instructions, decl.Value);
+
+            var global = new WaGlobal(Module, decl.Writeable, decl.FullName, type, instructions);
+            
+            return global;
+        }
+
+        private WaFunction CreateFunction(Decl.Funcy funcy)
         {
             var function = WaFunction.From(Module, funcy.FullName);
 
@@ -39,40 +70,69 @@ namespace Six.Six.Instructions
             {
                 var innerFunction = CreateFunction(inner);
 
-                function.Add(innerFunction);
+                function.AddLocal(innerFunction);
             }
 
-            foreach (var param in funcy.Parameters.Cast<Decl.Local>())
+            foreach (var param in funcy.Parameters)
             {
-                var type = Emitter.Lower(param.Type).Wasm;
+                var type = Instructeur.Lower(param.Type).Wasm;
 
-                function.Add(new WaParameter(function, param.Name, type));
+                function.AddParameter(new WaParameter(function, param.Name, type));
             }
 
             foreach (var local in funcy.Locals)
             {
-                var type = Emitter.Lower(local.Type).Wasm;
+                var type = Instructeur.Lower(local.Type).Wasm;
 
-                function.Add(new WaLocal(function, local.Name, type));
+                function.AddLocal(new WaLocal(function, local.Name, type));
             }
 
             if (funcy.Resolver.ResolveType(funcy.ResultType) is not Type.Void)
             {
-                var type = Emitter.Lower(funcy.ResultType).Wasm;
+                var type = Instructeur.Lower(funcy.ResultType).Wasm;
 
-                function.Add(new WaResult(type));
+                function.AddResult(new WaResult(type));
             }
 
             if (!funcy.HasBody)
             {
-                function.Add(new WiInsn(function, Insn.Unreachable));
+                function.AddInstruction(new WiInsn(function, Insn.Unreachable));
             }
             else
             {
-                var instructeur = new WaInstructeur(Module, funcy, function);
-
-                instructeur.Walk();
+                Instructeur.Walk(function, funcy);
             }
+
+            return function;
+        }
+
+        private WaFunction CreateInitCtor(Decl.Classy decl)
+        {
+            var name = $"{decl.FullName}.{Sema.Module.InitCtor}";
+
+            var function = WaFunction.From(Module, name);
+
+            var type = Instructeur.Lower(decl.Type).Wasm;
+
+            function.AddParameter(new WaParameter(function, Names.Core.SelfValue, type));
+
+            Instructeur.CreateInitCtor(function, decl);
+
+            return function;
+        }
+
+        private WaFunction CreateDefaultCtor(Decl.Classy decl)
+        {
+            var name = $"{decl.FullName}.{Sema.Module.DefaultCtor}";
+
+            var function = WaFunction.From(Module, name);
+
+            var type = Instructeur.Lower(decl.Type).Wasm;
+
+            function.AddParameter(new WaParameter(function, Names.Core.SelfValue, type));
+            function.AddResult(new WaResult(type));
+
+            Instructeur.CreateDefaultCtor(function, decl);
 
             return function;
         }
@@ -81,27 +141,79 @@ namespace Six.Six.Instructions
         {
             var clazz = WaClass.From(Module, decl.FullName);
 
+            if (decl.Extends != null)
+            {
+                clazz.AddBaseClass(WaClass.From(Module, decl.Extends.FullName));
+            }
+
             var count = 0;
+
+            foreach (var innerClass in decl.Block.Members.OfType<Decl.Classy>())
+            {
+                var inner = CreateClass(innerClass);
+
+                clazz.AddClass(inner);
+
+                count++;
+            }
 
             foreach (var field in decl.Block.Members.OfType<Decl.Field>())
             {
-                clazz.Add(new WaField(field.Name, Emitter.Lower(field.Type).Wasm));
+                if (field.IsStatic)
+                {
+                    var staticField = clazz.AddStaticField(new WaStaticField(clazz, field.StaticName, Instructeur.Lower(field.Type).Wasm));
+                    Instructeur.Walk(staticField.Instructions, field.Value);
+                }
+                else
+                {
+                    clazz.AddMemberField(new WaMemberField(clazz, field.Name, Instructeur.Lower(field.Type).Wasm));
+                }
 
-                count += 1;
+                count++;
             }
 
-            foreach (var x in decl.Block.Members.OfType<Decl.Funcy>())
+            if (decl is Decl.Class klass)
             {
-                var function = CreateFunction(x);
+                if (!klass.IsNative)
+                {
+                    var function = CreateInitCtor(klass);
 
-                clazz.Add(function);
+                    clazz.AddFunction(function);
+                }
+#if false
+                var needDefaultCtor = decl.Block.Members.OfType<Decl.Funcy>().All(f => f.Name != Sema.Module.DefaultCtor);
 
-                count += 1;
+                if (needDefaultCtor)
+                {
+                    var function = CreateDefaultCtor(klass);
+
+                    clazz.Add(function);
+                }
+#endif
+            }
+
+            foreach (var funcy in decl.Block.Members.OfType<Decl.Funcy>())
+            {
+                var function = CreateFunction(funcy);
+
+                clazz.AddFunction(function);
+
+                count++;
             }
 
             Assert(count == decl.Block.Members.Count);
 
+            CreateClassDispatch(clazz, decl);
+
             return clazz;
+        }
+
+        private void CreateClassDispatch(WaClass clazz, Decl.Classy decl)
+        {
+            foreach (var slot in decl.Layout.Slots)
+            {
+                clazz.Dispatches.Add(new WaDispatch(clazz, slot.Funcy.FullName));
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using W = Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class Pointer : BuiltinCore
+    public sealed class Pointer : Builtin
     {
         public Pointer(Builtins builtins)
             : base(builtins, Names.Core.Pointer, W.WasmType.Ptr)

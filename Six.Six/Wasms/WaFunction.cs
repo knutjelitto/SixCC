@@ -9,9 +9,9 @@ namespace Six.Six.Wasms
         public readonly WaParameterList Parameters;
         public readonly WaResultList Results;
         private readonly WaLocalList Locals;
-        public readonly WaInstructionList Instructions = new();
+        public readonly WaInstructionList Instructions;
 
-        public readonly WaFunctionList InnerFunctions = new();
+        public readonly WaFunctionList InnerFunctions;
 
         private WaFunction(WaModule module, string name)
             : base(module.Writer)
@@ -21,47 +21,44 @@ namespace Six.Six.Wasms
             Parameters = new(this);
             Results = new(this);
             Locals = new(this);
-        }
-
-        public static WaFunction From(WaModule module, string name)
-        {
-            if (!module.FunctionIndex.TryGetValue(name, out var function))
-            {
-                function = new WaFunction(module, name);
-                module.FunctionIndex.Add(name, function);
-            }
-
-            return function;
+            Instructions = new(this);
+            InnerFunctions = new(this);
         }
 
         public WaModule Module { get; }
         public string Name { get; }
+        public bool Export { get; set; } = true;
         public WaFunctionType? Type { get; private set; } = null;
 
-        public void Add(WaParameter parameter)
+        public static WaFunction From(WaModule module, string name)
+        {
+            return module.NewFunction(name, () => new WaFunction(module, name));
+        }
+
+        public void AddParameter(WaParameter parameter)
         {
             Assert(Locals.Count == 0);
             parameter.Index = Parameters.Count;
             Parameters.Add(parameter);
         }
 
-        public void Add(WaResult result)
+        public void AddResult(WaResult result)
         {
             Results.Add(result);
         }
 
-        public void Add(WaLocal local)
+        public void AddLocal(WaLocal local)
         {
             local.Index = Parameters.Count + Locals.Count;
             Locals.Add(local);
         }
 
-        public void Add(WaInstruction instruction)
+        public void AddInstruction(WaInstruction instruction)
         {
             Instructions.Add(instruction);
         }
 
-        public void Add(WaFunction innerFunction)
+        public void AddLocal(WaFunction innerFunction)
         {
             InnerFunctions.Add(innerFunction);
         }
@@ -103,6 +100,14 @@ namespace Six.Six.Wasms
 
         public WaFuncSignature Signature => signature ??= WaFuncSignature.From(this);
 
+        private void EmitExport()
+        {
+            if (Export)
+            {
+                wl($"(export \"{Name}\")");
+            }
+        }
+
         private void EmitParameters()
         {
             if (Parameters.Count > 0)
@@ -121,7 +126,7 @@ namespace Six.Six.Wasms
         {
             if (Locals.Count > 0)
             {
-                w("(param");
+                w("(local");
                 foreach (var local in Locals)
                 {
                     w($" (; {local.Index}/{local.Name} ;) {local.Type}");
@@ -165,6 +170,7 @@ namespace Six.Six.Wasms
             wl($"(func ${Name}");
             indent(() =>
             {
+                EmitExport();
                 EmitParameters();
                 EmitResults();
                 EmitLocals();

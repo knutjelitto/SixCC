@@ -3,6 +3,7 @@
     public class WaClassList : WaListOf<WaClass>
     {
         public WaClassList(WaModule module)
+            : base(module)
         {
             Module = module;
         }

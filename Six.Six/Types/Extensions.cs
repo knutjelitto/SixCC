@@ -12,7 +12,7 @@ namespace Six.Six.Types
     {
         public static Expr Infix(this Six.Sema.Type.Builtin builtin, A.Reference named, Expr left, Expr right)
         {
-            var concrete = builtin as BuiltinCore ?? throw new InvalidCastException();
+            var concrete = builtin as Builtin ?? throw new InvalidCastException();
             var builder = concrete.Infix(named.Name.Text);
             var primitive = builder(left, right);
             return primitive;
@@ -20,7 +20,7 @@ namespace Six.Six.Types
 
         public static Expr Prefix(this Six.Sema.Type.Builtin builtin, A.Reference named, Expr right)
         {
-            var concrete = builtin as BuiltinCore ?? throw new InvalidCastException();
+            var concrete = builtin as Builtin ?? throw new InvalidCastException();
             var builder = concrete.Prefix(named.Name.Text);
             var primitive = builder(right);
             return primitive;

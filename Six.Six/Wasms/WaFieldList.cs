@@ -1,15 +1,17 @@
 ﻿using Six.Runtime;
 
+using static Six.Six.Wasms.WasmData;
+
 namespace Six.Six.Wasms
 {
-    public class WaFieldList : WaListOf<WaField>
+    public class WaMemberFieldList : WaListOf<WaMemberField>
     {
-        public WaFieldList(WaClass clazz)
+        public WaMemberFieldList(IWithWriter withWriter)
+            : base(withWriter)
         {
-            Clazz = clazz;
         }
 
-        public WaClass Clazz { get; }
+        public uint Size { get; set; } = uint.MaxValue;
 
         public override void Prepare()
         {
@@ -21,6 +23,16 @@ namespace Six.Six.Wasms
                 field.Offset = offset;
                 offset += field.Type.MemSize;
             }
+
+            Size = offset;
+        }
+    }
+
+    public class WaStaticFieldList : WaListOf<WaStaticField>
+    {
+        public WaStaticFieldList(IWithWriter withWriter)
+            : base(withWriter)
+        {
         }
     }
 }

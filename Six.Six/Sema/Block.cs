@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Six.Core;
+using System;
+
+using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -21,6 +24,31 @@ namespace Six.Six.Sema
         public virtual BlockScope Head => head ??= new BlockScope(Module, Name, Parent.Content);
         public Resolver Resolver => Module.Resolver;
         public List<Member> Members { get; } = new();
+
+
+        public virtual Decl? TryFind(string name)
+        {
+            var found = Content.TryFind(name);
+            if (found == null)
+            {
+                found = Head.TryFind(name);
+            }
+            return found;
+        }
+
+        public virtual Decl Resolve(ILocation location, string name)
+        {
+            var found = TryFind(name);
+            if (found == null)
+            {
+                if (Parent is ModuleBlock)
+                {
+                    throw Module.Errors.CantResolveMember(location, name);
+                }
+                return Parent.Resolve(location, name);
+            }
+            return found;
+        }
     }
 
     public abstract class LinkedBlock : Block
@@ -57,6 +85,16 @@ namespace Six.Six.Sema
         }
 
         public Decl.Classy Classy { get; }
+
+        public override Decl? TryFind(string name)
+        {
+            var found = base.TryFind(name);
+            if (found == null && Classy.Extends != null)
+            {
+                found = Classy.Extends.Block.TryFind(name);
+            }
+            return found;
+        }
     }
 
     public sealed class FuncBlock : LinkedBlock
@@ -68,6 +106,11 @@ namespace Six.Six.Sema
         }
 
         public Decl.Funcy Funcy { get; }
+
+        public override Decl Resolve(ILocation location, string name)
+        {
+            return base.Resolve(location, name);
+        }
     }
 
     public sealed class FileBlock : LinkedBlock

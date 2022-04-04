@@ -4,13 +4,10 @@ namespace Six.Six.Wasms
 {
     public abstract class WaInstruction : WithWriter, Wamber
     {
-        public WaInstruction(WaFunction function)
-            : base(function.Writer)
+        public WaInstruction(IWithWriter withWriter)
+            : base(withWriter.Writer)
         {
-            Function = function;
         }
-
-        public WaFunction Function { get; }
 
         public virtual void Prepare()
         {

@@ -31,21 +31,21 @@ namespace Six.Six.Sema
         public sealed record ConstS64(Type Type, long Value) : Const(Type, Insn.S64.Const(Value));
         public sealed record ConstU64(Type Type, ulong Value) : Const(Type, Insn.U64.Const(Value));
         public sealed record ConstNatural(Type Type, ulong Value) : Primitive(Type);
-        public sealed record ConstString(Type Type, Func<Ptr> Resolve) : Primitive(Type);
+        public sealed record ConstString(Type Type, string Value) : Primitive(Type);
 
         //TODO:
         public sealed record AllocClass(Decl.Class Class) : Primitive(Class.Type);
 
-        public sealed record Arged(BuiltinCore Builtin, Expr Arg)
+        public sealed record Arged(Builtin Builtin, Expr Arg)
             : Primitive(Builtin);
 
-        public sealed record Binop(BuiltinCore Builtin, Insn Insn, Expr Arg1, Expr Arg2)
+        public sealed record Binop(Builtin Builtin, Insn Insn, Expr Arg1, Expr Arg2)
             : Primitive(Builtin);
 
-        public sealed record Unop(BuiltinCore Builtin, Insn Insn, Expr Arg)
+        public sealed record Unop(Builtin Builtin, Insn Insn, Expr Arg)
             : Primitive(Builtin);
 
-        public sealed record Instructions(BuiltinCore Builtin, params Insn[] Insns)
+        public sealed record Instructions(Builtin Builtin, params Insn[] Insns)
             : Primitive(Builtin);
 
     }

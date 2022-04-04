@@ -41,6 +41,8 @@ shared abstract class Shape
 {
     shared abstract void Draw();
     shared abstract int Area;
+
+    shared int zero => 0;
 }
 
 shared class Square : Shape
@@ -62,8 +64,9 @@ shared class Square : Shape
     {
         let x = Area;
     }
-}
 
+    shared int Zero => zero;
+}
 
 shared int ShapeTest()
 {

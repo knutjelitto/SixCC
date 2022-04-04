@@ -3,6 +3,7 @@
     public class WaParameterList : WaListOf<WaParameter>
     {
         public WaParameterList(WaFunction function)
+            : base(function)
         {
             Function = function;
         }

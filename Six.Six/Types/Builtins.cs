@@ -5,7 +5,7 @@ namespace Six.Six.Types
 {
     public class Builtins
     {
-        private readonly Dictionary<string, BuiltinCore> buildins = new();
+        private readonly Dictionary<string, Builtin> buildins = new();
 
         public Builtins(Module module)
         {
@@ -20,37 +20,37 @@ namespace Six.Six.Types
             Bytes = Add(new Bytes(this));
             String = Add(new String(this));
             Pointer = Add(new Pointer(this));
-            Builtin = Add(new Builtin(this));
+            Builtin = Add(new BuiltinGeneric(this));
         }
-        public BuiltinCore TableIndex { get; }
-        public BuiltinCore Boolean { get; }
-        public BuiltinCore Bytes { get; }
-        public BuiltinCore String { get; }
-        public BuiltinCore Anything { get; }
-        public BuiltinCore Pointer { get; }
-        public BuiltinCore Builtin { get; }
+        public Builtin TableIndex { get; }
+        public Builtin Boolean { get; }
+        public Builtin Bytes { get; }
+        public Builtin String { get; }
+        public Builtin Anything { get; }
+        public Builtin Pointer { get; }
+        public Builtin Builtin { get; }
 
-        public BuiltinCore U32 { get; }
-        public BuiltinCore S32 { get; }
+        public Builtin U32 { get; }
+        public Builtin S32 { get; }
 
-        public BuiltinCore F32 { get; }
-        public BuiltinCore F64 { get; }
+        public Builtin F32 { get; }
+        public Builtin F64 { get; }
 
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
 
-        private BuiltinCore Add(BuiltinCore builtin)
+        private Builtin Add(Builtin builtin)
         {
             buildins.Add(builtin.Name, builtin);
             return builtin;
         }
 
-        public BuiltinCore Resolve(Decl named)
+        public Builtin Resolve(Decl named)
         {
             return Resolve(named.Name);
         }
 
-        private BuiltinCore Resolve(string name)
+        private Builtin Resolve(string name)
         {
             if (buildins.TryGetValue(name, out var builtin))
             {

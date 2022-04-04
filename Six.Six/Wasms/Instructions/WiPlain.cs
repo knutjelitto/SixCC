@@ -1,11 +1,12 @@
-﻿using Six.Six.Instructions;
+﻿using Six.Runtime;
+using Six.Six.Instructions;
 
 namespace Six.Six.Wasms.Instructions
 {
     public abstract class WiPlain : WaInstruction
     {
-        protected WiPlain(WaFunction function)
-            : base(function)
+        protected WiPlain(IWithWriter withWriter)
+            : base(withWriter)
         {
         }
 
@@ -17,8 +18,8 @@ namespace Six.Six.Wasms.Instructions
 
     public class WiInsn : WiPlain
     {
-        public WiInsn(WaFunction function, Insn insn)
-            : base(function)
+        public WiInsn(IWithWriter withWriter, Insn insn)
+            : base(withWriter)
         {
             Insn = insn;
         }

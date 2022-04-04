@@ -1,19 +1,20 @@
-﻿using Six.Six.Instructions;
+﻿using Six.Runtime;
+using Six.Six.Instructions;
 
 namespace Six.Six.Wasms.Instructions
 {
     public abstract class WiBlock : WaInstruction
     {
-        protected WiBlock(WaFunction function)
-            : base(function)
+        protected WiBlock(IWithWriter withWriter)
+            : base(withWriter)
         {
         }
     }
 
     public sealed class WiIfBlock : WiBlock
     {
-        public WiIfBlock(WaFunction function, WasmType type, WaInstructionList condition, WaInstructionList then, WaInstructionList @else)
-            : base(function)
+        public WiIfBlock(IWithWriter withWriter, WasmType type, WaInstructionList condition, WaInstructionList then, WaInstructionList @else)
+            : base(withWriter)
         {
             Type = type;
             Condition = condition;

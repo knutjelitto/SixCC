@@ -114,6 +114,8 @@ namespace Six.Six.Sema
             public Expr Value => lazyValue.Expr;
 
             public override string FullName => Name;
+
+            public string StaticName => $"{Parent.FullName()}.{Name}";
         }
 
         public sealed class Global : Declaration

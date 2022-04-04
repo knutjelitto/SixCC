@@ -8,27 +8,25 @@ namespace Six.Six.Sema
     {
         public abstract class Funcy : Declaration
         {
-            private FuncLayout? layout;
             private List<Type>? paramTypes = null;
             private Type? resultType = null;
 
-            public Funcy(Block parent, string name, A.Decl.Funcy aDecl)
+            protected Funcy(Block parent, string name, A.Decl.Funcy aDecl)
                 : base(parent, aDecl)
             {
                 parent.Members.Add(this);
                 Block = new FuncBlock(parent, this, name);
                 AFuncy = aDecl;
+                Layout = new FuncLayout();
                 parent.Content.Declare(this, name);
             }
 
             public FuncBlock Block { get; }
             public A.Decl.Funcy AFuncy { get; }
-            public FuncLayout Layout => layout ??= new FuncLayout(this);
-            public Scope Scope => Block.Funcy.Parent.Content;
-            public uint TableIndex { get; set; } = uint.MaxValue;
+            public FuncLayout Layout { get; }
 
-            public IReadOnlyList<Local> Parameters => Layout.TypedParameters;
-            public IReadOnlyList<Local> Locals => Layout.TypedLocals;
+            public IReadOnlyList<Local> Parameters => Layout.Parameters;
+            public IReadOnlyList<Local> Locals => Layout.Locals;
 
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();
@@ -36,7 +34,7 @@ namespace Six.Six.Sema
             public bool HasBody => AFuncy.Body is not A.Body.Deferred;
             public bool IsConcrete => HasBody && !IsAbstract;
             public bool IsDynamic => !IsStatic && (IsAbstract || IsVirtual || IsOverride);
-            public bool IsObjectMember => !IsStatic && Parent is ClassBlock;
+            public bool IsMember => !IsStatic && Parent is ClassBlock;
             public bool IsLocalFunction => Parent is FuncBlock;
             public bool IsGlobalFunction => Parent is NamespaceBlock;
 
@@ -63,7 +61,7 @@ namespace Six.Six.Sema
             }
         }
 
-        public class Function : Funcy
+        public sealed class Function : Funcy
         {
             public Function(Block parent, A.Decl.Funcy aDecl, string? name)
                 : base(parent, name ?? aDecl.Name.Text, aDecl)
@@ -82,7 +80,7 @@ namespace Six.Six.Sema
             }
         }
 
-        public class Constructor : Funcy
+        public sealed class Constructor : Funcy
         {
             public Constructor(ClassBlock parent, A.Decl.Funcy aFuncyDecl)
                 : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)

@@ -10,12 +10,17 @@ namespace Six.Six.Sema
     {
         public static string Language => "six";
         public static string LanguageCore => "core";
+        public static string LanguageMeta => "meta";
         public static string CoreNamespace => $"{Language}.{LanguageCore}";
+        public static string MetaNamespace => $"{CoreNamespace}.{LanguageMeta}";
+        public static string ModuleCtor => "module@initialize";
         public static string DefaultCtor => "ctor@default";
         public static string InitCtor => "ctor@initialize";
-        public static string ModuleFunctions => $"{CoreNamespace}.functions";
-        public static string DispatchFunctions => $"{CoreNamespace}.dispatch";
-        public static string DataAndHeap => $"{CoreNamespace}.Data&Heap";
+        public static string MetaClassName => $"{MetaNamespace}.Class";
+        public static string StringClassName => $"{CoreNamespace}.String";
+        public static string ModuleFunctionsTableName => $"{CoreNamespace}.functions";
+        public static string DispatchTableName => $"{CoreNamespace}.dispatch";
+        public static string DataAndHeapMemory => $"{CoreNamespace}.Data&Heap";
         public static string Data_Start => $"{CoreNamespace}.__data_start";
         public static string Heap_Start => $"{CoreNamespace}.__heap_start";
         public static string Heap_Current => $"{CoreNamespace}.__heap_current";
@@ -50,31 +55,26 @@ namespace Six.Six.Sema
 
         public bool HasErrors => Diagnostics.Count > 0;
 
-        public (string wat, string wat2) Emit()
+        public string Emit()
         {
             Validator.Validate();
-            Emitter.EmitModule();
+
+            var emitter = new WaEmitter(this);
+            emitter.EmitModule();
 
             if (!HasErrors)
             {
-                var wat = Emitter.Writer.ToString();
+                var wat = emitter.WaModule.Writer.ToString();
 
                 using (var dumper = $"six.core.wat".Writer())
                 {
                     dumper.Write(wat);
                 }
 
-                var wat2 = Emitter.WaModule.Writer.ToString();
-
-                using (var dumper = $"six.core.2.wat".Writer())
-                {
-                    dumper.Write(wat2);
-                }
-
-                return (wat, wat2);
+                return wat;
             }
 
-            return ("","");
+            return "";
         }
 
         public NamespaceBlock OpenNamespace(A.NamespaceIntro nsIntro)

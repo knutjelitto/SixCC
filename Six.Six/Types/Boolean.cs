@@ -5,7 +5,7 @@ using W = Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class Boolean : BuiltinCore
+    public sealed class Boolean : Builtin
     {
         public Boolean(Builtins builtins)
             : base(builtins, Names.Core.Boolean, W.WasmType.Bool)

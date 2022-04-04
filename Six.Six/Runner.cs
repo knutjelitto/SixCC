@@ -12,7 +12,7 @@ namespace Six.Six
         public const string SixRoot = "six";
         //public const string SixRoot = "test";
 
-        public static void Run()
+        public static bool Run()
         {
             Generator.Run();
             var module = LoadModule(
@@ -35,6 +35,10 @@ namespace Six.Six
                     {
                         module.WriteErrors();
                     }
+                    else
+                    {
+                        return true;
+                    }
                 }
                 catch (DiagnosticException diagnostics)
                 {
@@ -54,6 +58,8 @@ namespace Six.Six
                     Console.WriteLine(exception.ToString());
                 }
             }
+
+            return false;
         }
 
         private static S.Module? LoadModule(string fromRoot, CompilerConfiguration configuration)

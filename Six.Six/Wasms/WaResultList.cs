@@ -3,6 +3,7 @@
     public class WaResultList : WaListOf<WaResult>
     {
         public WaResultList(WaFunction function)
+            : base(function)
         {
             Function = function;
         }

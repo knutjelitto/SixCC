@@ -1,51 +1,154 @@
 ﻿using Six.Core;
 using Six.Runtime;
+using Six.Six.Instructions;
 using Six.Six.Sema;
+using System;
 
 namespace Six.Six.Wasms
 {
     public class WaModule : WithWriter
     {
-        public static string GlobalFunctionsTableName => Module.ModuleFunctions;
+        public static string GlobalFunctionsTableName => Module.ModuleFunctionsTableName;
 
+        private readonly WaFunctionList Initializers;
         private readonly WaFunctionList Functions;
         private readonly WaClassList Classes;
 
-        public readonly WaFunctionTable GlobalFunctions;
+        private readonly WaGlobalList Globals;
+        private readonly WaStringData StringData;
+        public readonly WaStaticData StaticData;
+        private readonly WaRuntimeData RuntimeData;
+        public readonly WaFunctionTable GlobalFunctionTable;
+        public readonly WaDispatchTable DispatchTable;
         public readonly WaFunctionTypeList FunctionTypes;
 
-        public readonly Dictionary<string, WaFunction> FunctionIndex;
-        public readonly Dictionary<string, WaClass> ClassIndex;
+        private readonly Dictionary<string, WaFunction> FunctionIndex;
+        private readonly Dictionary<string, WaClass> ClassIndex;
 
-        public WaModule(Module semaModule) : base(new Writer())
+        public WaModule(Module semaModule, string metaClassName, string stringClassName) : base(new Writer())
         {
-            Functions = new();
+            SemaModule = semaModule;
+
+            Initializers = new(this);
+            Functions = new(this);
             Classes = new(this);
-            GlobalFunctions = new WaFunctionTable(this, GlobalFunctionsTableName);
+
+            Globals = new WaGlobalList(this);
+            StringData = new(this, Sema.Module.DataAndHeapMemory);
+            StaticData = new(this, Sema.Module.DataAndHeapMemory);
+            RuntimeData = new WaRuntimeData(this, Sema.Module.DataAndHeapMemory);
+            GlobalFunctionTable = new WaFunctionTable(this, GlobalFunctionsTableName);
+            DispatchTable = new WaDispatchTable(this, Sema.Module.DispatchTableName);
             FunctionTypes = new(this);
+            
             FunctionIndex = new();
             ClassIndex = new();
-            SemaModule = semaModule;
+
+            MetaClass = WaClass.From(this, metaClassName);
+            StringClass = WaClass.From(this, stringClassName);
         }
 
         public Module SemaModule { get; }
+        public WaClass MetaClass { get; }
+        public WaClass StringClass { get; }
 
+        public uint DataStart => 0;
+        public uint HeapStart => 
+            DataStart +     
+            StringData.Size +
+            StaticData.Size +
+            RuntimeData.Size;
 
-        public WaFunction Add(WaFunction function)
+        public WaClass NewClass(string name, Func<WaClass> create)
+        {
+            if (!ClassIndex.TryGetValue(name, out var clazz))
+            {
+                clazz = create();
+                ClassIndex.Add(name, clazz);
+            }
+            return clazz;
+        }
+
+        public WaFunction NewFunction(string name, Func<WaFunction> create)
+        {
+            if (!FunctionIndex.TryGetValue(name, out var function))
+            {
+                function = create();
+                FunctionIndex.Add(name, function);
+            }
+            return function;
+        }
+
+        public WaFunction FindFunction(string name)
+        {
+            return FunctionIndex[name];
+        }
+
+        public WaFunction AddFunction(WaFunction function)
         {
             Functions.Add(function);
 
             return function;
         }
 
-        public WaClass Add(WaClass clazz)
+        public WaFunction AddInitializer(WaFunction function)
+        {
+            Initializers.Add(function);
+
+            return function;
+        }
+
+        public WaClass AddClass(WaClass clazz)
         {
             Classes.Add(clazz);
 
             return clazz;
         }
 
-        private void Prepare()
+        public WaClass FindClass(string name)
+        {
+            return ClassIndex[name];
+        }
+
+        public WaRuntime AddType(WaRuntime type)
+        {
+            RuntimeData.Add(type);
+
+            return type;
+        }
+
+        public WaDispatches AddDispatches(WaDispatches type)
+        {
+            DispatchTable.Add(type);
+
+            return type;
+        }
+
+        public WaGlobal AddGlobal(WaGlobal global)
+        {
+            Globals.Add(global);
+
+            return global;
+        }
+
+        public WaConstString AddString(string text)
+        {
+            return StringData.Add(text);
+        }
+
+        public WaStaticField AddStaticField(WaStaticField field)
+        {
+            StaticData.Add(field);
+
+            return field;
+        }
+
+        public WaStaticField FindStaticField(string name)
+        {
+            return StaticData.Where(f => f.Name == name).First();
+        }
+
+        public void Prepare()
         {
             foreach (var function in Functions)
             {
@@ -57,17 +160,43 @@ namespace Six.Six.Wasms
                 classy.Prepare();
             }
 
-            GlobalFunctions.Prepare();
+            Globals.Prepare();
+            Initializers.Prepare();
+            StringData.BaseOffset = DataStart;
+            StringData.Prepare();
+            StaticData.BaseOffset = DataStart + StringData.Size;
+            StaticData.Prepare();
+            RuntimeData.BaseOffset = DataStart + StringData.Size + StaticData.Size;
+            RuntimeData.Prepare();
+            GlobalFunctionTable.Prepare();
+            DispatchTable.Prepare();
             FunctionTypes.Prepare();
         }
 
         public void Emit()
         {
-            Prepare();
-
             wl("(module");
             indent(() =>
             {
+                Assert(Initializers.Count == 1);
+                var initializer = Initializers.Single();
+
+                wl($"(start ${initializer.Name})");
+                wl();
+                wl($"(memory ${Module.DataAndHeapMemory} (export \"{Sema.Module.DataAndHeapMemory}\") 16 16)");
+                wl();
+                StringData.Emit();
+                wl();
+                StaticData.Emit();
+                wl();
+                RuntimeData.Emit();
+                wl();
+                Globals.Emit();
+                wl();
+                initializer.Emit();
+                wl();
+                EmitClassAlloc();
+                wl();
                 for (var i = 0; i < Functions.Count; i++)
                 {
                     if (i > 0) wl();
@@ -81,11 +210,48 @@ namespace Six.Six.Wasms
                     Classes[i].Emit();
                 }
                 wl();
-                GlobalFunctions.Emit();
+                GlobalFunctionTable.Emit();
+                wl();
+                DispatchTable.Emit();
                 wl();
                 FunctionTypes.Emit();
             });
             wl(")");
         }
+
+        private void EmitClassAlloc()
+        {
+            wl($"(func ${Module.CoreClassAlloc}");
+            indent(() =>
+            {
+                wl($"(export \"{Module.CoreClassAlloc}\")");
+                wl($"(param {WasmType.Ptr})");
+                wl($"(result {WasmType.Ptr})");
+                wl($"(local {WasmType.Ptr})");
+                wl("(;-----;)");
+                emit(Insn.Local.Get(0));            // [clazz]
+                emit(Insn.U32.Load(8));             // [clazz.size]
+                emit(Insn.Call(Module.CoreAlloc));  // [object]
+                emit(Insn.Local.Tee(1));            // [object]
+                emit(Insn.Local.Get(0));            // [object clazz]
+                emit(Insn.U32.Store(0));            // [] object.clazz = clazz
+
+                emit(Insn.Local.Get(1));            // [object]
+                emit(Insn.Local.Get(0));            // [object clazz]
+                emit(Insn.U32.Load(16));            // [object clazz.dispatch]
+                emit(Insn.U32.Store(4));            // [] object.dispatch = clazz.dispatch
+
+                emit(Insn.Local.Get(1));            // [object]
+                emit(Insn.Return);
+                wl("(;-----;)");
+            });
+            wl($")");
+
+            void emit(Insn insn)
+            {
+                wl($"{insn}");
+            }
+        }
+
     }
 }

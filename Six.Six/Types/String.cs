@@ -4,7 +4,7 @@ using W = Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class String : BuiltinCore
+    public sealed class String : Builtin
     {
         public String(Builtins builtins)
             : base(builtins, Names.Core.String, W.WasmType.Ptr)

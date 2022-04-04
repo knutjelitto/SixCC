@@ -24,9 +24,6 @@ namespace Six.Six.Instructions
         public Emitter Emitter => Module.Emitter;
 
         public uint MetaSize { get; private set; } = uint.MaxValue;
-        public uint DispatchSize { get; private set; } = uint.MaxValue;
-        public Func<Ptr> MetaPtr { get; private set; } = () => new Ptr();
-        public Func<Ptr> DispatchPtr { get; private set; } = () => new Ptr();
 
         private void Run()
         {
@@ -34,8 +31,6 @@ namespace Six.Six.Instructions
             MakeSlots();
             MakeInterfaces();
             RetrofitSlots();
-
-            MetaPtr = Emitter.ClassData.Add(this);
         }
 
         private void MakeFields()
@@ -203,9 +198,9 @@ namespace Six.Six.Instructions
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Fields).GetEnumerator();
         }
 
-        public class LSlot
+        public class DispatchSlot
         {
-            public LSlot(int index, Decl.Funcy funcy)
+            public DispatchSlot(int index, Decl.Funcy funcy)
             {
                 Index = index;
                 Funcy = funcy;
@@ -220,21 +215,21 @@ namespace Six.Six.Instructions
             }
         }
 
-        public class SlotList : IReadOnlyList<LSlot>
+        public class SlotList : IReadOnlyList<DispatchSlot>
         {
-            public readonly List<LSlot> Slots = new();
+            public readonly List<DispatchSlot> Slots = new();
 
-            public void Set(int index, LSlot slot)
+            public void Set(int index, DispatchSlot slot)
             {
                 Slots[index] = slot;
             }
 
-            public void Add(LSlot slot)
+            public void Add(DispatchSlot slot)
             {
                 Slots.Add(slot);
             }
 
-            public void AddRange(IEnumerable<LSlot> slots)
+            public void AddRange(IEnumerable<DispatchSlot> slots)
             {
                 Slots.AddRange(slots);
             }
@@ -244,17 +239,17 @@ namespace Six.Six.Instructions
                 var already = Slots.Where(s => s.Funcy.Name == funcy.Name).FirstOrDefault();
                 if (already != null)
                 {
-                    Slots[already.Index] = new LSlot(already.Index, funcy);
+                    Slots[already.Index] = new DispatchSlot(already.Index, funcy);
                 }
                 else
                 {
-                    Slots.Add(new LSlot(Slots.Count, funcy));
+                    Slots.Add(new DispatchSlot(Slots.Count, funcy));
                 }
             }
 
-            public LSlot this[int index] => Slots[index];
+            public DispatchSlot this[int index] => Slots[index];
             public int Count => Slots.Count;
-            public IEnumerator<LSlot> GetEnumerator() => Slots.GetEnumerator();
+            public IEnumerator<DispatchSlot> GetEnumerator() => Slots.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Slots).GetEnumerator();
         }
     }

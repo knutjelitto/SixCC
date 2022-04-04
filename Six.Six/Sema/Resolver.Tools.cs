@@ -221,7 +221,7 @@ namespace Six.Six.Sema
         {
             var type = Module.CoreFindType(Names.Core.String);
 
-            return new Primitive.ConstString(type, Emitter.AddString(tree.Text));
+            return new Primitive.ConstString(type, tree.Text);
         }
     }
 }

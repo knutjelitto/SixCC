@@ -1,23 +1,20 @@
-﻿namespace Six.Six.Wasms
+﻿using Six.Runtime;
+
+namespace Six.Six.Wasms
 {
-    public class WaField : Wamber
+    public abstract class WaField : WithWriter, Wamber
     {
-        public WaField(string name, WasmType type)
+        public WaField(IWithWriter withWriter, string name, WasmType type)
+            : base(withWriter.Writer)
         {
             Name = name;
             Type = type;
         }
 
-        public void Prepare()
-        {
-        }
-
-        public void Emit()
-        {
-        }
+        public abstract void Prepare();
+        public abstract void Emit();
 
         public string Name { get; }
         public WasmType Type { get; }
-        public uint Offset { get; set; }
     }
 }

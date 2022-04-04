@@ -1,11 +1,18 @@
-﻿using System.Collections;
+﻿using Six.Core;
+using Six.Runtime;
+using System.Collections;
 
 namespace Six.Six.Wasms
 {
-    public class WaListOf<T> : Wamber, IReadOnlyList<T>
+    public class WaListOf<T> : WithWriter, Wamber, IReadOnlyList<T>
         where T : Wamber
     {
         private readonly List<T> items = new();
+
+        public WaListOf(IWithWriter withWriter)
+            : base(withWriter.Writer)
+        {
+        }
 
         public void Add(T item)
         {

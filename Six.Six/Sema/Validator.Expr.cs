@@ -24,12 +24,8 @@ namespace Six.Six.Sema
 
         private void Expr(Expr.SelectField expr)
         {
-            Assert(slip);
-        }
+            Walk(expr.Reference);
 
-        private void Expr(Expr.SelectAttribute expr)
-        {
-            Assert(expr.Reference.Decl.Type is Type.Declared declared && declared.Decl is Decl.Classy classy && ReferenceEquals(classy, expr.Classy));
             Assert(slip);
         }
 
@@ -47,20 +43,6 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Expr(Expr.CallFunction expr)
-        {
-            Walk(expr.Arguments);
-
-            Assert(slip);
-        }
-
-        private void Expr(Expr.CallMemberFunction expr)
-        {
-            Walk(expr.Arguments);
-
-            Assert(slip);
-        }
-
         private void Expr(Expr.CallStaticFunction expr)
         {
             Walk(expr.Arguments);
@@ -68,6 +50,21 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
+        private void Expr(Expr.CallDynamicFunction expr)
+        {
+            Walk(expr.Reference);
+            Walk(expr.Arguments);
+
+            Assert(slip);
+        }
+
+        private void Expr(Expr.CallMemberFunction expr)
+        {
+            Walk(expr.Reference);
+            Walk(expr.Arguments);
+
+            Assert(slip);
+        }
 
         private void Expr(Expr.CallIndirect expr)
         {

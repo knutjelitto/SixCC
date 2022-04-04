@@ -1,9 +1,12 @@
 ﻿using System;
 using Six.Six;
 
-Runner.Run();
+var ok = Runner.Run();
 
-Wait();
+if (!ok)
+{
+    Wait();
+}
 
 void Wait()
 {

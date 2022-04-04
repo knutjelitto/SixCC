@@ -1,4 +1,5 @@
-﻿using Six.Six.Types;
+﻿using Six.Six.Instructions;
+using Six.Six.Types;
 using System;
 
 namespace Six.Six.Sema
@@ -34,14 +35,14 @@ namespace Six.Six.Sema
         public sealed record LocalReference(Decl.Local LocalDecl)
             : Reference(LocalDecl);
 
+        public sealed record SelfReference(Decl.Classy ClassyDecl)
+            : Reference(ClassyDecl);
+
         public sealed record AliasReference(Decl.Alias AliasDecl)
             : Reference(AliasDecl);
 
         public sealed record FieldReference(Decl.Field FieldDecl)
             : Reference(FieldDecl);
-
-        public sealed record AttributeReference(Decl.Attribute AttributeDecl)
-            : Reference(AttributeDecl);
 
         public sealed record GlobalReference(Decl.Global GlobalDecl)
             : Reference(GlobalDecl);
@@ -69,7 +70,57 @@ namespace Six.Six.Sema
 
             public static CallFunction From(Decl.Funcy funcy, params Expr[] arguments)
             {
+                Assert(arguments.Length == 0);
                 return From(funcy, arguments.ToList());
+            }
+
+            public static CallFunction From(Decl.Classy classy, Decl.Funcy funcy, List<Expr> arguments)
+            {
+                var reference = new SelfReference(classy);
+
+                return From(funcy, arguments);
+            }
+
+            public static CallFunction From(Expr reference, Decl.Funcy funcy, List<Expr> arguments)
+            {
+                if (funcy.IsStatic || funcy.IsLocalFunction || funcy.IsGlobalFunction)
+                {
+                    return new CallStaticFunction(funcy, arguments);
+                }
+                else if (funcy.IsMember)
+                {
+                    if (funcy.Parent is ClassBlock classBlock)
+                    {
+                        var classy = classBlock.Classy;
+
+                        if (funcy.IsDynamic)
+                        {
+                            var slot = classy.Slot(funcy);
+
+                            if (slot == null)
+                            {
+                                Assert(false);
+                                throw new InvalidOperationException();
+                            }
+
+                            return new CallDynamicFunction(classy, funcy, reference, (uint)slot.Index, arguments);
+                        }
+                        else
+                        {
+                            return new CallMemberFunction(classy, funcy, reference, arguments);
+                        }
+                    }
+                    else
+                    {
+                        Assert(false);
+                        throw new NotImplementedException();
+                    }
+                }
+                else
+                {
+                    Assert(false);
+                    throw new NotImplementedException();
+                }
             }
 
             public static CallFunction From(Decl.Funcy funcy, List<Expr> arguments)
@@ -78,17 +129,29 @@ namespace Six.Six.Sema
                 {
                     return new CallStaticFunction(funcy, arguments);
                 }
-                else if (funcy.IsObjectMember)
+                else if (funcy.IsMember)
                 {
                     if (funcy.Parent is ClassBlock classBlock)
                     {
+                        var classy = classBlock.Classy;
+
+                        var reference = new SelfReference(classy);
+
                         if (funcy.IsDynamic)
                         {
-                            return new CallDynamicFunction(classBlock.Classy, funcy, arguments);
+                            var slot = classy.Slot(funcy);
+
+                            if (slot == null)
+                            {
+                                Assert(false);
+                                throw new InvalidOperationException();
+                            }
+
+                            return new CallDynamicFunction(classy, funcy, reference, (uint)slot.Index, arguments);
                         }
                         else
                         {
-                            return new CallMemberFunction(classBlock.Classy, funcy, arguments);
+                            return new CallMemberFunction(classy, funcy, reference, arguments);
                         }
                     }
                     else
@@ -108,10 +171,10 @@ namespace Six.Six.Sema
         public sealed record CallStaticFunction(Decl.Funcy Funcy, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallMemberFunction(Decl.Classy Classy, Decl.Funcy Funcy, List<Expr> Arguments)
+        public sealed record CallMemberFunction(Decl.Classy Classy, Decl.Funcy Funcy, Expr Reference, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallDynamicFunction(Decl.Classy Classy, Decl.Funcy Funcy, List<Expr> Arguments)
+        public sealed record CallDynamicFunction(Decl.Classy Classy, Decl.Funcy Funcy, Expr Reference, uint SlotNo, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
         public sealed record CallConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
@@ -132,13 +195,10 @@ namespace Six.Six.Sema
             public override Type Type => Callable.Result;
         }
 
-        public sealed record SelectFunction(Reference Reference, Decl.Classy Classy, Decl.Function Function)
+        public sealed record SelectFunction(Expr Reference, Decl.Classy Classy, Decl.Function Function)
             : Primitive(Function.ResultType);
 
-        public sealed record SelectAttribute(Reference Reference, Decl.Classy Classy, Decl.Attribute Attribute, int ScratchLocal = -1)
-            : Primitive(Attribute.ResultType);
-
-        public sealed record SelectField(Reference Reference, Decl.Classy Classy, Decl.Field Field)
+        public sealed record SelectField(Expr Reference, Decl.Classy Classy, Decl.Field Field)
             : Primitive(Field.Type);
 
         public sealed record CallMember(Decl.Classy Classy, Decl.Function Function, Expr Make, List<Expr> Arguments)

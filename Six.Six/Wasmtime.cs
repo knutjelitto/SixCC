@@ -4,6 +4,8 @@ using Wasmtime;
 
 using S = Six.Six.Sema;
 
+#pragma warning disable CA1822 // Mark members as static
+
 namespace Six.Six
 {
     public class Wasmtime
@@ -15,13 +17,18 @@ namespace Six.Six
                 return;
             }
 
-            var (wat, wat2) = smodule.Emit();
+            var wat = smodule.Emit();
 
             if (smodule.HasErrors)
             {
                 return;
             }
 
+            Run(wat);
+        }
+        
+        public void Run(string wat)
+        {
             var config = new Config()
                 .WithCompilerStrategy(CompilerStrategy.Cranelift);
 

@@ -6,7 +6,7 @@ using W = Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class Anything : BuiltinCore
+    public sealed class Anything : Builtin
     {
         public Anything(Builtins builtins)
             : base(builtins, Names.Core.Anything, W.WasmType.Ptr)

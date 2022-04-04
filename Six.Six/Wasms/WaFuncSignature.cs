@@ -19,6 +19,11 @@
             return Signature.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return Signature;
+        }
+
         public static WaFuncSignature From(WaFunction function)
         {
             return From(function.Parameters.Select(p => p.Type), function.Results.Select(r => r.Type));

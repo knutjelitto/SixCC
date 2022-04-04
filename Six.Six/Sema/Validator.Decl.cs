@@ -58,9 +58,14 @@ namespace Six.Six.Sema
         private void ClassyDecl(Decl.Classy decl)
         {
             // force layout
-            _ = decl.Layout;
+            //_ = decl.Layout;
 
             Walk(decl.Block);
+
+            if (decl.IsStatic)
+            {
+
+            }
 
             if (!decl.IsAbstract)
             {
@@ -168,7 +173,6 @@ namespace Six.Six.Sema
                 if (decl.IsSealed) Add(Errors.SubjectShouldNotBeMarkedAs(decl, subject, Names.Attr.Sealed));
                 if (!decl.HasBody) Add(Errors.SubjectMustBeImplemented(decl, subject));
 
-                decl.TableIndex = Emitter.GlobalFunctions.Add(decl);
                 decl.Validated = true;
 
                 Assert(slip);
@@ -223,10 +227,6 @@ namespace Six.Six.Sema
                     Assert(slip);
                 }
 
-                if (!decl.IsAbstract)
-                {
-                    decl.TableIndex = Emitter.GlobalFunctions.Add(decl);
-                }
                 decl.Validated = true;
 
                 Assert(slip);
