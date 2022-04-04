@@ -19,7 +19,8 @@
 
             public static string Char => "char";
             public static string Boolean => "Boolean";
-            public static string Pointer => "Pointer";
+            public static string Address => "Address";
+            public static string Runtime => "Runtime";
 
             public static string SelfValue => "self";
             public static string Builtin => "Builtin";

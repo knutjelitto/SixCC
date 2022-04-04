@@ -13,15 +13,15 @@ namespace Six.Six.Sema
     {
         public Decl.Class? ResolveExtends(Decl.Classy classy)
         {
-            if (classy.Name == "Complex")
-            {
-                Assert(true);
-            }
             if (classy is Decl.Interface)
             {
                 return null;
             }
-            if (classy.AClassy is A.With.Extends ext && ext.Extends is A.Type extended)
+            else if (classy.FullName == Names.Core.CoreAnything)
+            {
+                return null;
+            }
+            else if (classy.AClassy is A.With.Extends ext && ext.Extends is A.Type extended)
             {
                 var super = ResolveType(classy.Block.Head, extended);
 
@@ -117,17 +117,17 @@ namespace Six.Six.Sema
             return DoResolveType(scope, (dynamic)tree);
         }
 
+        private Type DoResolveType(Scope scope, A.Type tree)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
         private Type DoResolveType(Scope scope, A.Type.Array tree)
         {
             var type = ResolveType(scope, tree.Type);
 
             return new Type.Array(Module, type);
-        }
-
-        private Type DoResolveType(Scope scope, A.Type tree)
-        {
-            Assert(false);
-            throw new NotImplementedException();
         }
 
         private Type DoResolveType(Scope scope, A.Type.Callable tree)
@@ -144,6 +144,10 @@ namespace Six.Six.Sema
             if (resolved is not Typy)
             {
                 return ResolveType(scope.Parent, tree);
+            }
+            else if (resolved.Type is Type.AliasReference)
+            {
+
             }
 
             return ResolveDeclType(resolved);

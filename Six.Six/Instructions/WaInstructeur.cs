@@ -203,6 +203,11 @@ namespace Six.Six.Instructions
             }
         }
 
+        private void Build(Stmt.Expression stmt)
+        {
+            Walk(stmt.Expr);
+        }
+
         private void Build(Expr.If expr)
         {
             var condition = Nested(expr.Condition);
@@ -252,7 +257,8 @@ namespace Six.Six.Instructions
 
         private void Build(Expr.ClassReference expr)
         {
-            Add(Insn.ToDo("XXXXX"));
+            Assert(false);
+            throw new NotImplementedException();
         }
 
 
@@ -306,41 +312,9 @@ namespace Six.Six.Instructions
             Walk(Resolve(expr.Class).Method(expr.Ctor.Name, expr.Arguments.Count)(expr.Arguments));
         }
 
-        private void Build(Expr.CallInfixMember expr)
-        {
-            if (expr.Classy.IsNative && expr.Function.IsNative)
-            {
-                var b = Resolve(expr.Classy);
-                var m = b.Infix(expr.Function.Name)(expr.Arg1, expr.Arg2);
-
-                Walk(m);
-            }
-            else
-            {
-                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg1, expr.Arg2);
-                Walk(callMember);
-            }
-        }
-
-        private void Build(Expr.CallPrefixMember expr)
-        {
-            if (expr.Classy.IsNative && expr.Function.IsNative)
-            {
-                var b = Resolve(expr.Classy);
-                var m = b.Prefix(expr.Function.Name)(expr.Arg);
-
-                Walk(m);
-            }
-            else
-            {
-                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg);
-                Walk(callMember);
-            }
-        }
-
         private void Build(Expr.CallMember expr)
         {
-            if (expr.Classy.IsNative && expr.Function.IsNative)
+            if (expr.Function.IsNative)
             {
                 Walk(expr.Make);
 
@@ -383,18 +357,69 @@ namespace Six.Six.Instructions
         }
 
 
+        private void Build(Expr.CallInfixMember expr)
+        {
+            if (expr.Function.IsNative)
+            {
+                Walk(Resolve(expr.Classy).Infix(expr.Function.Name)(expr.Arg1, expr.Arg2));
+            }
+            else
+            {
+                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg1, expr.Arg2);
+                Walk(callMember);
+            }
+        }
+
+        private void Build(Expr.CallPrefixMember expr)
+        {
+            if (expr.Function.IsNative)
+            {
+                Walk(Resolve(expr.Classy).Prefix(expr.Function.Name)(expr.Arg));
+            }
+            else
+            {
+                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg);
+                Walk(callMember);
+            }
+        }
+
         private void Build(Expr.CallStaticFunction expr)
         {
-            foreach (var argument in expr.Arguments)
-            {
-                Walk(argument);
-            }
+            var funcy = expr.Funcy;
 
-            Add(Insn.Call(expr.Funcy.FullName));
+            if (funcy.IsNative)
+            {
+                if (funcy.Parent is ClassBlock classBlock)
+                {
+                    var classy = classBlock.Classy;
+
+                    Walk(Resolve(classy).Method(funcy.Name, expr.Arguments.Count)(expr.Arguments));
+                }
+                else
+                {
+                    Assert(false);
+                    throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                foreach (var argument in expr.Arguments)
+                {
+                    Walk(argument);
+                }
+
+                Add(Insn.Call(funcy.FullName));
+            }
         }
 
         private void Build(Expr.CallMemberFunction expr)
         {
+            if (expr.Funcy.IsNative)
+            {
+                Assert(false);
+                throw new NotImplementedException();
+            }
+
             Walk(expr.Reference);
 
             foreach (var argument in expr.Arguments)

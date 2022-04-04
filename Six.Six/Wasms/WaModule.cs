@@ -4,6 +4,8 @@ using Six.Six.Instructions;
 using Six.Six.Sema;
 using System;
 
+#pragma warning disable CA1822 // Mark members as static
+
 namespace Six.Six.Wasms
 {
     public class WaModule : WithWriter
@@ -34,11 +36,11 @@ namespace Six.Six.Wasms
             Classes = new(this);
 
             Globals = new WaGlobalList(this);
-            StringData = new(this, Sema.Module.DataAndHeapMemory);
-            StaticData = new(this, Sema.Module.DataAndHeapMemory);
-            RuntimeData = new WaRuntimeData(this, Sema.Module.DataAndHeapMemory);
+            StringData = new(this, Module.DataAndHeapMemory);
+            StaticData = new(this, Module.DataAndHeapMemory);
+            RuntimeData = new WaRuntimeData(this, Module.DataAndHeapMemory);
             GlobalFunctionTable = new WaFunctionTable(this, GlobalFunctionsTableName);
-            DispatchTable = new WaDispatchTable(this, Sema.Module.DispatchTableName);
+            DispatchTable = new WaDispatchTable(this, Module.DispatchTableName);
             FunctionTypes = new(this);
             
             FunctionIndex = new();
@@ -183,7 +185,9 @@ namespace Six.Six.Wasms
 
                 wl($"(start ${initializer.Name})");
                 wl();
-                wl($"(memory ${Module.DataAndHeapMemory} (export \"{Sema.Module.DataAndHeapMemory}\") 16 16)");
+                EmitImports();
+                wl();
+                wl($"(memory ${Module.DataAndHeapMemory} (export \"{Module.DataAndHeapMemory}\") 16 16)");
                 wl();
                 StringData.Emit();
                 wl();
@@ -219,15 +223,20 @@ namespace Six.Six.Wasms
             wl(")");
         }
 
+        private void EmitImports()
+        {
+            wl($"(import \"six.core.RT\" \"Print\" (func $six.core.RT.Print (param i32) (result)))");
+        }
+
         private void EmitClassAlloc()
         {
             wl($"(func ${Module.CoreClassAlloc}");
             indent(() =>
             {
                 wl($"(export \"{Module.CoreClassAlloc}\")");
-                wl($"(param {WasmType.Ptr})");
-                wl($"(result {WasmType.Ptr})");
-                wl($"(local {WasmType.Ptr})");
+                wl($"(param {WasmType.Addr})");
+                wl($"(result {WasmType.Addr})");
+                wl($"(local {WasmType.Addr})");
                 wl("(;-----;)");
                 emit(Insn.Local.Get(0));            // [clazz]
                 emit(Insn.U32.Load(8));             // [clazz.size]

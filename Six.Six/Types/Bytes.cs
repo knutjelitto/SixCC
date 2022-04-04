@@ -8,7 +8,7 @@ namespace Six.Six.Types
     public sealed class Bytes : Builtin
     {
         public Bytes(Builtins builtins)
-            : base(builtins, Names.Core.Bytes, W.WasmType.Ptr)
+            : base(builtins, Names.Core.Bytes, W.WasmType.Addr)
         {
         }
 

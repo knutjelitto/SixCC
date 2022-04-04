@@ -1,15 +1,12 @@
 ﻿using Six.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Six.Six.Wasms.WasmData;
 
 namespace Six.Six.Wasms
 {
     public class WaRuntime : WithWriter, Wamber
     {
+        public static uint PayloadOffset = 8;
+
         public WaRuntime(WaClass clazz)
             : base(clazz.Writer)
         {
@@ -21,6 +18,7 @@ namespace Six.Six.Wasms
         public WaModule Module { get; }
 
         public uint Address { get; set; } = uint.MaxValue;
+        public uint Payload => Address + PayloadOffset;
         public uint Size { get; private set; } = 0;
 
         public void Prepare()

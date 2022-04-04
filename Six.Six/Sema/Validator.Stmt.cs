@@ -30,7 +30,7 @@ namespace Six.Six.Sema
 
         private void Stmt(Stmt.Unreachable stmt)
         {
-            Assert(stmt.Funcy.IsAbstract || stmt.Funcy is Decl.Constructor ctor && ctor.IsNative);
+            Assert(stmt.Funcy.IsAbstract || stmt.Funcy.IsNative);
         }
 
         private void Stmt(Stmt.Return stmt)

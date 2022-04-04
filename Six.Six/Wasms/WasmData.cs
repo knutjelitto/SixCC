@@ -20,7 +20,7 @@ namespace Six.Six.Wasms
 
         public static uint AlignPointer(uint offset)
         {
-            return WasmType.Ptr.Align(offset);
+            return WasmType.Addr.Align(offset);
         }
 
         public static uint AlignCount(uint offset)

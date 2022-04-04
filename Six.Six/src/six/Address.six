@@ -1,0 +1,7 @@
+namespace six.core;
+
+shared native class Address : Builtin
+{
+    shared native new (uint raw);
+}
+

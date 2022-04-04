@@ -38,9 +38,17 @@ namespace Six.Six
             using var linker = new Linker(engine);
             using var store = new Store(engine);
 
+            Memory? memory = null;
+
+            linker.DefineFunction<int>("six.core.RT", "Print", (ptr) =>
+            {
+            });
+
             linker.DefineWasi();
 
             var instance = linker.Instantiate(store, module);
+
+            memory = instance.GetMemory(store, "six.core.Data&Heap")!;
 
             var result = CallInt32Function(store, instance, "six.core.result_with_consts", 42);
             Assert(result == 48);

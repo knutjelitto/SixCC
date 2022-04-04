@@ -55,7 +55,10 @@ namespace Six.Six.Sema
 
         private void FuncyBody(FuncBlock block, A.Body.Deferred node)
         {
-            Assert(block.Funcy.IsAbstract || block.Funcy is Decl.Constructor ctor && ctor.IsNative);
+            Assert(
+                block.Funcy.IsAbstract ||
+                block.Funcy.IsNative ||
+                block.Funcy is Decl.Constructor ctor && ctor.IsNative);
 
             _ = new Stmt.Unreachable(node.GetLocation(), block);
         }

@@ -183,7 +183,16 @@ namespace Six.Six.Sema
 
                 var subject = Names.Nouns.Method;
 
-                if (decl.IsStatic)
+                if (decl.IsNative)
+                {
+                    subject = $"{Names.Attr.Native} {Names.Nouns.Member} {Names.Nouns.Function}";
+                    if (decl.IsAbstract) Add(Errors.SubjectShouldNotBeMarkedAs(decl, subject, Names.Attr.Abstract));
+                    if (decl.IsOverride) Add(Errors.SubjectShouldNotBeMarkedAs(decl, subject, Names.Attr.Override));
+                    if (decl.IsVirtual) Add(Errors.SubjectShouldNotBeMarkedAs(decl, subject, Names.Attr.Virtual));
+                    if (decl.IsSealed) Add(Errors.SubjectShouldNotBeMarkedAs(decl, subject, Names.Attr.Sealed));
+                    //if (!decl.HasBody) Add(Errors.SubjectMustBeImplemented(decl, subject));
+                }
+                else if (decl.IsStatic)
                 {
                     subject = $"{Names.Attr.Static} {Names.Nouns.Member} {Names.Nouns.Function}";
                     if (decl.IsAbstract) Add(Errors.SubjectShouldNotBeMarkedAs(decl, subject, Names.Attr.Abstract));

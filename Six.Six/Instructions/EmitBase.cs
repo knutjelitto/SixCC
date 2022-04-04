@@ -21,7 +21,7 @@ namespace Six.Six.Instructions
 
         public uint AlignPointer(uint offset)
         {
-            return W.WasmType.Ptr.Align(offset);
+            return W.WasmType.Addr.Align(offset);
         }
 
         public uint AlignCount(uint offset)

@@ -7,7 +7,7 @@ namespace Six.Six.Types
     public sealed class String : Builtin
     {
         public String(Builtins builtins)
-            : base(builtins, Names.Core.String, W.WasmType.Ptr)
+            : base(builtins, Names.Core.String, W.WasmType.Addr)
         {
             infix.Add("+", Add);
         }

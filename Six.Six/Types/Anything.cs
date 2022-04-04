@@ -9,7 +9,7 @@ namespace Six.Six.Types
     public sealed class Anything : Builtin
     {
         public Anything(Builtins builtins)
-            : base(builtins, Names.Core.Anything, W.WasmType.Ptr)
+            : base(builtins, Names.Core.Anything, W.WasmType.Addr)
         { }
 
         public override Insn Load(uint offset)

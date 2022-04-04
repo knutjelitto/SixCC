@@ -21,10 +21,11 @@ namespace Six.Six.Wasms
         public string Text { get; }
         public byte[] Bytes { get; }
         public uint Count => (uint)Bytes.Length;
-        public uint Size => WasmType.Ptr.MemSize + WasmType.I32.MemSize + WasmType.I32.MemSize + Count;
+        public uint Size => WasmType.Addr.MemSize + WasmType.I32.MemSize + WasmType.I32.MemSize + Count;
 
         public uint Address { get; set; } = uint.MaxValue;
         public uint NextAddress { get; set; } = uint.MaxValue;
+        public uint Payload => Address + WaRuntime.PayloadOffset;
 
         public void Prepare()
         {

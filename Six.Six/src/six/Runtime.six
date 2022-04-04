@@ -1,8 +1,10 @@
 namespace six.core;
 
-shared sealed class Runtime
+shared sealed static class Runtime
 {
+    shared native static void Print(Anything anything);
+
     shared native static string ClassName(Object obj) => "class-name";
-    shared native static int identityHash(Identifiable identifiable) => 0;
-    shared native static bool identical(Identifiable this, Object that) => false;
+    shared native static int IdentityHash(Identifiable identifiable) => 0;
+    shared native static bool Identical(Identifiable self, Object other);
 }

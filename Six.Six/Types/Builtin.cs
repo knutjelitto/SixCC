@@ -21,7 +21,7 @@ namespace Six.Six.Types
         }
 
         protected Builtin(Builtins builtins)
-            : this(builtins, Names.Core.Builtin, WasmType.Ptr)
+            : this(builtins, Names.Core.Builtin, WasmType.Addr)
         {
         }
 

@@ -7,7 +7,7 @@ namespace Six.Six.Types
     public sealed class BuiltinGeneric : Builtin
     {
         public BuiltinGeneric(Builtins builtins)
-            : base(builtins, Names.Core.Builtin, W.WasmType.Ptr)
+            : base(builtins, Names.Core.Builtin, W.WasmType.Addr)
         {
         }
 

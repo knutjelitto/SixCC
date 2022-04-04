@@ -61,9 +61,9 @@ namespace Six.Six.Sema
         {
             return new LazyExpr(Module, () =>
             {
-                var primary = ResolveExpression(block, node.Expr);
+                var primary = ResolveExpression(block, node.Expr).Expr;
 
-                if (primary.Expr is Expr.AliasReference aliasRef)
+                if (primary is Expr.AliasReference aliasRef)
                 {
                     var resolved = ResolveType(aliasRef.Decl.Type);
 
@@ -97,7 +97,7 @@ namespace Six.Six.Sema
                  
                     Assert(Module.HasErrors);
                 }
-                else if (primary.Expr is Expr.ClassyReference classyReference)
+                else if (primary is Expr.ClassyReference classyReference)
                 {
                     var classy = classyReference.ClassyDecl;
 
@@ -116,7 +116,7 @@ namespace Six.Six.Sema
 
                     Assert(false);
                 }
-                else if (primary.Expr is Expr.ConstructorReference constructorReference)
+                else if (primary is Expr.ConstructorReference constructorReference)
                 {
                     var found = ResolveType(constructorReference.Decl.Type);
 
@@ -124,14 +124,14 @@ namespace Six.Six.Sema
                     {
                         var referenced = classy.FindMember(node.Reference);
 
-                        return select(primary.Expr, classy, referenced);
+                        return select(primary, classy, referenced);
                     }
                     else
                     {
                         Assert(Module.HasErrors);
                     }
                 }
-                else if (primary.Expr is Expr.ParameterReference parameterReference)
+                else if (primary is Expr.ParameterReference parameterReference)
                 {
                     var found = ResolveType(parameterReference.Decl.Type);
 
@@ -139,14 +139,14 @@ namespace Six.Six.Sema
                     {
                         var referenced = classy.FindMember(node.Reference);
 
-                        return select(primary.Expr, classy, referenced);
+                        return select(primary, classy, referenced);
                     }
                     else
                     {
                         Assert(Module.HasErrors);
                     }
                 }
-                else if (primary.Expr is Expr.LocalReference localReference)
+                else if (primary is Expr.LocalReference localReference)
                 {
                     var found = ResolveType(localReference.Decl.Type);
 
@@ -154,14 +154,14 @@ namespace Six.Six.Sema
                     {
                         var referenced = classy.FindMember(node.Reference);
 
-                        return select(primary.Expr, classy, referenced);
+                        return select(primary, classy, referenced);
                     }
                     else
                     {
                         Assert(Module.HasErrors);
                     }
                 }
-                else if (primary.Expr is Expr.FieldReference fieldReference)
+                else if (primary is Expr.FieldReference fieldReference)
                 {
                     var found = ResolveType(fieldReference.Decl.Type);
 
@@ -169,14 +169,14 @@ namespace Six.Six.Sema
                     {
                         var referenced = classy.FindMember(node.Reference);
                         
-                        return select(primary.Expr, classy, referenced);
+                        return select(primary, classy, referenced);
                     }
                     else
                     {
                         Assert(Module.HasErrors);
                     }
                 }
-                else if (primary.Expr is Expr.CallConstructor callConstructor)
+                else if (primary is Expr.CallConstructor callConstructor)
                 {
                     var found = ResolveType(callConstructor.Class.Type);
 
@@ -184,7 +184,7 @@ namespace Six.Six.Sema
                     {
                         var referenced = classy.FindMember(node.Reference);
 
-                        return select(primary.Expr, classy, referenced);
+                        return select(primary, classy, referenced);
                     }
                     else
                     {
@@ -199,19 +199,19 @@ namespace Six.Six.Sema
                 Assert(false);
                 throw new NotImplementedException();
 
-                static Expr select(Expr primary, Decl.Classy classy, Decl referenced)
+                static Expr select(Expr reference, Decl.Classy classy, Decl referenced)
                 {
                     if (referenced is Decl.Attribute attribute)
                     {
-                        return Expr.CallFunction.From(primary, attribute, new List<Expr>());
+                        return Expr.CallFunction.From(reference, attribute, new List<Expr>());
                     }
                     else if (referenced is Decl.Function function)
                     {
-                        return new Expr.SelectFunction(primary, classy, function);
+                        return new Expr.SelectFunction(reference, classy, function);
                     }
                     else if (referenced is Decl.Field field)
                     {
-                        return new Expr.SelectField(primary, classy, field);
+                        return new Expr.SelectField(reference, classy, field);
                     }
                     else
                     {
@@ -269,10 +269,14 @@ namespace Six.Six.Sema
                 }
                 else if (func.Expr is Expr.LocalReference local)
                 {
+                    Assert(local.Decl.Type is Type.Callable);
+
                     return ResolveIndirect(local, local.Decl.Type as Type.Callable);
                 }
                 else if (func.Expr is Expr.ParameterReference parameter)
                 {
+                    Assert(parameter.Decl.Type is Type.Callable);
+
                     return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
                 }
                 else if (func.Expr is Expr.SelectFunction selectFunction)

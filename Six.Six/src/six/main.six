@@ -10,9 +10,9 @@ shared int add(int a, int b)
     return a + b;
 }
 
-shared int min(int a, int b)
+shared int min(int x, int y)
 {
-    return if (a <= b) then a else b;
+    return if (x <= y) then x else y;
 }
 
 shared int result_with_consts(int c = -4)
@@ -77,4 +77,9 @@ shared string complex_string()
     let complex = Complex(12,11);
 
     return complex.string;
+}
+
+shared void DoPrint()
+{
+    Runtime.Print("Hello!");
 }

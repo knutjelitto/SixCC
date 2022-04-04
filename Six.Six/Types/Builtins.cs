@@ -19,16 +19,18 @@ namespace Six.Six.Types
             Boolean = Add(new Boolean(this));
             Bytes = Add(new Bytes(this));
             String = Add(new String(this));
-            Pointer = Add(new Pointer(this));
+            Address = Add(new Address(this));
             Builtin = Add(new BuiltinGeneric(this));
+            Runtime = Add(new Runtime(this));
         }
         public Builtin TableIndex { get; }
         public Builtin Boolean { get; }
         public Builtin Bytes { get; }
         public Builtin String { get; }
         public Builtin Anything { get; }
-        public Builtin Pointer { get; }
+        public Builtin Address { get; }
         public Builtin Builtin { get; }
+        public Builtin Runtime { get; }
 
         public Builtin U32 { get; }
         public Builtin S32 { get; }

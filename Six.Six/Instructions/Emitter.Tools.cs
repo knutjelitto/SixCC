@@ -18,9 +18,9 @@ namespace Six.Six.Instructions
                 case Builtin builtin:
                     return builtin;
                 case Type.ClassReference:
-                    return Builtins.Pointer;
+                    return Builtins.Address;
                 case Type.InterfaceReference:
-                    return Builtins.Pointer;
+                    return Builtins.Address;
                 case Type.Callable:
                     return Builtins.TableIndex;
                 default:
@@ -40,7 +40,7 @@ namespace Six.Six.Instructions
                 case Type.Declared declared when declared.Decl.IsNative:
                     return Builtins.Resolve(declared.Decl);
                 case Type.Declared declared when declared.Decl is Decl.Classy:
-                    return Builtins.Pointer;
+                    return Builtins.Address;
                 default:
                     Assert(false);
                     throw new NotImplementedException();

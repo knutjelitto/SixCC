@@ -1,5 +1,4 @@
-﻿using System;
-using Six.Six.Instructions;
+﻿using Six.Six.Instructions;
 using Six.Six.Types;
 
 namespace Six.Six.Sema
