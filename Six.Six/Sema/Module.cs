@@ -148,7 +148,7 @@ namespace Six.Six.Sema
                 attrs.Append(decl.IsStatic ? "S" : " ");
                 attrs.Append(decl.IsNative ? "N" : " ");
 
-                writer.WriteLine($"{count,3} {decl.GetKind(),-12} [{attrs}] {decl.Name,-30} {decl.Location}");
+                writer.WriteLine($"{count,3} {decl.GetType().Name,-12} [{attrs}] {decl.Name,-30} {decl.Location}");
             }
         }
 
@@ -156,7 +156,7 @@ namespace Six.Six.Sema
         {
             var core = GetCoreNamespace();
 
-            var decl = core.Content.TryFind(name);
+            var decl = core.TryFind(name);
             if (decl is Decl.Classy classy)
             {
                 var reference = classy.Type as Type.ClassyReference;

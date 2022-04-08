@@ -60,7 +60,7 @@ namespace Six.Six.Sema
                 : base(parent, new A.Decl.SelfValue(new A.Name.ArtificalId(parent.Funcy.AFuncy.Name.Tree, Names.Core.SelfValue)))
             {
                 parent.Funcy.AddParameter(this);
-                parent.Head.Declare(this, Names.Core.SelfValue);
+                parent.DeclareHead(this, Names.Core.SelfValue);
                 Type = type;
             }
 
@@ -73,8 +73,8 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr lazyValue;
 
-            public LetVar(FuncBlock parent, A.Decl.LetVar aDecl, bool writeable)
-                : base(parent, aDecl)
+            public LetVar(CodeBlock parent, A.Decl.LetVar aDecl, bool writeable)
+                : base(parent.FuncBlock, aDecl)
             {
                 lazyValue = Resolver.ResolveExpression(Parent, aDecl.Value);
                 TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
@@ -153,7 +153,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 TypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
-                parent.Content.Declare(this);
+                parent.DeclareContent(this);
             }
 
             public override string FullName => $"{Parent.FullName()}.{Name}";
@@ -187,8 +187,8 @@ namespace Six.Six.Sema
 
             public Func<DeclAttr> LazyAttr { get; init; }
 
-            public Module Module => Parent.Content.Module;
-            public Resolver Resolver => Parent.Content.Module.Resolver;
+            public Module Module => Parent.Module;
+            public Resolver Resolver => Parent.Module.Resolver;
             public bool Validated { get; set; }
 
 

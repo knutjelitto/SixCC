@@ -157,7 +157,7 @@ namespace Six.Six.Instructions
                 count++;
             }
 
-            foreach (var field in decl.Block.Members.OfType<Decl.Field>())
+            foreach (var field in decl.Fields)
             {
                 if (field.IsStatic)
                 {
@@ -168,8 +168,6 @@ namespace Six.Six.Instructions
                 {
                     clazz.AddMemberField(new WaMemberField(clazz, field.Name, Instructeur.Lower(field.Type).Wasm));
                 }
-
-                count++;
             }
 
             if (decl is Decl.Class klass)

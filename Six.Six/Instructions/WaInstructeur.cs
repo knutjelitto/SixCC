@@ -152,8 +152,11 @@ namespace Six.Six.Instructions
 
         private void Build(Decl.LetVar decl)
         {
+            Assert(false);
+#if false
             Walk(decl.Value);
             Add(Insn.Local.Set(decl.Index));
+#endif
         }
 
         private void Build(Decl.Funcy decl)

@@ -558,11 +558,16 @@ expression-statement
     ;
 
 if-statement
-    : 'if' conditions block-body else-if* else-block?
+    : 'if' conditions block-body else-part?
+    ;
+
+else-part
+    | else-block
+    | else-if
     ;
 
 else-if
-    : 'else' 'if' conditions block-body
+    : 'else' if-statement
     ;
 
 else-block

@@ -31,11 +31,24 @@ namespace Six.Six.Sema
 
         public void WalkBody(FuncBlock block, A.Body node)
         {
+            WalkBody(block.CodeBlock, (dynamic)node);
+        }
+
+        public void WalkBody(CodeBlock block, A.Body node)
+        {
             FuncyBody(block, (dynamic)node);
         }
 
-        private void FuncyBody(FuncBlock block, A.Body.Block node)
+        public void FuncyBody(CodeBlock block, A.Body node)
         {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
+        private void FuncyBody(CodeBlock block, A.Body.Block node)
+        {
+            var stmts = new List<Stmt>();
+
             foreach (var member in node.Statelarations)
             {
                 if (member is A.Decl decl)
@@ -44,30 +57,32 @@ namespace Six.Six.Sema
                 }
                 else if (member is A.Stmt stmt)
                 {
-                    WalkStatement(block, stmt);
+                    stmts.Add(WalkStatement(block, stmt));
                 }
                 else
                 {
                     Assert(false);
                 }
             }
+
+            block.Add(new Stmt.Block(node.GetLocation(), block, stmts));
         }
 
-        private void FuncyBody(FuncBlock block, A.Body.Deferred node)
+        private void FuncyBody(CodeBlock block, A.Body.Deferred node)
         {
             Assert(
                 block.Funcy.IsAbstract ||
                 block.Funcy.IsNative ||
                 block.Funcy is Decl.Constructor ctor && ctor.IsNative);
 
-            _ = new Stmt.Unreachable(node.GetLocation(), block);
+            block.Add(new Stmt.Unreachable(node.GetLocation(), block));
         }
 
-        private void FuncyBody(FuncBlock block, A.Body.Expr node)
+        private void FuncyBody(CodeBlock block, A.Body.Expr node)
         {
             var delayed = ResolveExpression(block, node.Expression);
 
-            _ = new Stmt.Return(node.Expression.GetLocation(), block, delayed);
+            block.Add(new Stmt.Return(node.Expression.GetLocation(), block, delayed));
         }
     }
 }

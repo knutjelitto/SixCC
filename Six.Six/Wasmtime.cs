@@ -42,6 +42,15 @@ namespace Six.Six
 
             linker.DefineFunction<int>("six.core.RT", "Print", (ptr) =>
             {
+                Assert(true);
+
+                if (memory != null)
+                {
+                    var length = memory.ReadInt32(store, ptr + 8);
+                    var message = memory.ReadString(store, ptr + 12, length);
+
+                    Console.Write(message);
+                }
             });
 
             linker.DefineWasi();
@@ -114,11 +123,12 @@ namespace Six.Six
             result = CallInt32Function(store, instance, "six.core.complex_string");
             Assert(true);
 
+            CallVoidFunction(store, instance, "six.core.PrintHello");
+
             result = CallInt32Function(store, instance, "six.core.tests.ShapeTest");
             Assert(result == 4);
 
-            var address = CallInt32Function(store, instance, "six.core.tests.ShapeTest2");
-        
+            var address = CallInt32Function(store, instance, "six.core.tests.ShapeTest2");        
             Assert(true);
 
             var mem = instance.GetMemory(store, "six.core.Data&Heap")!;
@@ -130,6 +140,11 @@ namespace Six.Six
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)
         {
             return (int)GetFunction(store, instance, name).Invoke(store, parameters)!;
+        }
+
+        private void CallVoidFunction(Store store, Instance instance, string name, params object[] parameters)
+        {
+            _ = GetFunction(store, instance, name).Invoke(store, parameters)!;
         }
 
         private Function GetFunction(Store store, Instance instance, string name)

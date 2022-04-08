@@ -10,29 +10,47 @@ namespace Six.Six.Sema
         Errors Errors { get; }
         bool Validated { get; set; }
 
-        public sealed class Unreachable : Statement
+        public sealed class Block : Statement
         {
-            public Unreachable(ILocation location, FuncBlock block)
+            public Block(ILocation location, CodeBlock block, List<Stmt> stmts)
                 : base(location, block)
             {
-                Funcy = block.Funcy;
+                Stmts = stmts;
             }
 
-            public Decl.Funcy Funcy { get; }
+            public List<Stmt> Stmts { get; }
+        }
+
+        public sealed class Unreachable : Statement
+        {
+            public Unreachable(ILocation location, CodeBlock block)
+                : base(location, block)
+            {
+            }
+
+            public Decl.Funcy Funcy => Block.Funcy;
+        }
+
+        public sealed class If : Statement
+        {
+            public If(ILocation location, CodeBlock block)
+                : base(location, block)
+            {
+
+            }
         }
 
         public sealed class Return : Statement
         {
             private readonly LazyExpr? lazyExpr;
 
-            public Return(ILocation location, FuncBlock block, LazyExpr? delayed)
+            public Return(ILocation location, CodeBlock block, LazyExpr? delayed)
                 : base(location, block)
             {
-                Funcy = block.Funcy;
                 lazyExpr = delayed;
             }
 
-            public Decl.Funcy Funcy { get; }
+            public Decl.Funcy Funcy => Block.Funcy;
 
             public Expr? Expr => lazyExpr?.Expr;
         }
@@ -42,7 +60,7 @@ namespace Six.Six.Sema
             private readonly LazyExpr lazyLeft;
             private readonly LazyExpr lazyRight;
 
-            public Assign(ILocation location, FuncBlock block, LazyExpr left, LazyExpr right)
+            public Assign(ILocation location, CodeBlock block, LazyExpr left, LazyExpr right)
                 : base(location, block)
             {
                 lazyLeft = left;
@@ -57,7 +75,7 @@ namespace Six.Six.Sema
         {
             private readonly LazyExpr lazyExpr;
 
-            public Expression(ILocation location, FuncBlock block, LazyExpr expr)
+            public Expression(ILocation location, CodeBlock block, LazyExpr expr)
                 : base(location, block)
             {
                 lazyExpr = expr;
@@ -69,7 +87,7 @@ namespace Six.Six.Sema
 
     public abstract class Statement : Stmt
     {
-        public Statement(ILocation location, FuncBlock block)
+        public Statement(ILocation location, CodeBlock block)
         {
             Location = location;
             Block = block;
@@ -77,7 +95,7 @@ namespace Six.Six.Sema
         }
 
         public ILocation Location { get; }
-        public FuncBlock Block { get; }
+        public CodeBlock Block { get; }
 
         public Module Module => Block.Module;
         public Resolver Resolver => Module.Resolver;

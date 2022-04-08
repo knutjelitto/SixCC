@@ -11,37 +11,53 @@ namespace Six.Six.Sema
 {
     public partial class Resolver
     {
-        private void WalkStatement(FuncBlock block, A.Stmt node)
+        private Stmt WalkStatement(CodeBlock block, A.Stmt node)
         {
-            Statement(block, (dynamic)node);
+            return Statement(block, (dynamic)node);
         }
 
-        private void Statement(FuncBlock block, A.Stmt node)
+        private Stmt Statement(CodeBlock block, A.Stmt node)
         {
             Assert(false);
             throw new NotImplementedException();
         }
 
-        private void Statement(FuncBlock block, A.Stmt.Expr node)
+        private Stmt Statement(CodeBlock block, A.Stmt.If node)
         {
-            _ = new Stmt.Expression(
+            var ifBlock = block.NewNested();
+
+            var condition = ExpressionConditions(ifBlock, node.Conditions);
+            WalkBody(block, node.Then);
+
+            if (node.Else != null)
+            {
+                WalkBody(block, node.Else);
+            }
+
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
+        private Stmt Statement(CodeBlock block, A.Stmt.Expr node)
+        {
+            return new Stmt.Expression(
                     node.GetLocation(),
                     block,
                     ResolveExpression(block, node.Expression));
         }
 
-        private void Statement(FuncBlock block, A.Stmt.Assign node)
+        private Stmt Statement(CodeBlock block, A.Stmt.Assign node)
         {
-            _ = new Stmt.Assign(
+            return new Stmt.Assign(
                     node.GetLocation(),
                     block,
                     ResolveExpression(block, node.Left),
                     ResolveExpression(block, node.Right));
         }
 
-        private void Statement(FuncBlock block, A.Stmt.Return node)
+        private Stmt Statement(CodeBlock block, A.Stmt.Return node)
         {
-            _ = new Stmt.Return(
+            return new Stmt.Return(
                     node.GetLocation(),
                     block,
                     node.Expression == null ? null : ResolveExpression(block, node.Expression));

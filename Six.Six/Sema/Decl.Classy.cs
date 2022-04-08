@@ -16,7 +16,7 @@ namespace Six.Six.Sema
             {
                 Block = new ClassBlock(parent, this);
                 AClassy = aDecl;
-                parent.Content.Declare(this, aDecl.Name.Text);
+                parent.DeclareContent(this, aDecl.Name.Text);
                 parent.Members.Add(this);
             }
 
@@ -24,7 +24,7 @@ namespace Six.Six.Sema
             public A.Decl.Classy AClassy { get; }
             public ClassLayout Layout => layout ??= new ClassLayout(this);
 
-            public IReadOnlyList<Field> Fields { get; } = new List<Field>();
+            public List<Field> Fields { get; } = new List<Field>();
 
 
             public override string FullName => Block.FullName();
@@ -34,10 +34,8 @@ namespace Six.Six.Sema
 
             public void AddField(Field field)
             {
-                ((List<Field>)Fields).Add(field);
-                Block.Members.Add(field);
+                Fields.Add(field);
             }
-
         }
 
         public class Class : Classy

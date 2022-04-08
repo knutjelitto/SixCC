@@ -18,7 +18,7 @@ namespace Six.Six.Sema
                 Block = new FuncBlock(parent, this, name);
                 AFuncy = aDecl;
                 Layout = new FuncLayout();
-                parent.Content.Declare(this, name);
+                parent.DeclareContent(this, name);
             }
 
             public FuncBlock Block { get; }
@@ -57,7 +57,7 @@ namespace Six.Six.Sema
             public void AddLocal(Local local)
             {
                 Layout.AddLocal(local);
-                Block.Members.Add(local);
+                //Block.Members.Add(local);
             }
         }
 

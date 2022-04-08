@@ -25,6 +25,16 @@ namespace Six.Six.Sema
         public Resolver Resolver => Module.Resolver;
         public List<Member> Members { get; } = new();
 
+        public T DeclareContent<T>(T decl, string? name = null)
+            where T : Decl
+        {
+            return Content.Declare<T>(decl, name);
+        }
+
+        public void DeclareHead(Decl decl, string? name = null)
+        {
+            Head.Declare(decl, name);
+        }
 
         public virtual Decl? TryFind(string name)
         {
@@ -49,6 +59,11 @@ namespace Six.Six.Sema
             }
             return found;
         }
+
+        public virtual Decl Resolve(A.Reference reference, string? name = null)
+        {
+            return Resolve(reference.GetLocation(), name ?? reference.Name.Text);
+        }
     }
 
     public abstract class LinkedBlock : Block
@@ -60,20 +75,6 @@ namespace Six.Six.Sema
         }
 
         public override Block Parent { get; }
-    }
-
-    public sealed class ContentBlock : LinkedBlock
-    {
-        public ContentBlock(Block parent, string name) : base(parent, name)
-        {
-        }
-    }
-
-    public sealed class HeadBlock : LinkedBlock
-    {
-        public HeadBlock(Block parent, string name) : base(parent, name)
-        {
-        }
     }
 
     public sealed class ClassBlock : LinkedBlock
@@ -103,13 +104,35 @@ namespace Six.Six.Sema
             : base(parent, name ?? funcy.Name)
         {
             Funcy = funcy;
+            CodeBlock = new CodeBlock(this, this, Name);
         }
 
         public Decl.Funcy Funcy { get; }
 
-        public override Decl Resolve(ILocation location, string name)
+        public CodeBlock CodeBlock { get; }
+    }
+
+    public sealed class CodeBlock : LinkedBlock
+    {
+        public CodeBlock(Block parent, FuncBlock funcBlock, string name)
+            : base(parent, funcBlock.Name)
         {
-            return base.Resolve(location, name);
+            FuncBlock = funcBlock;
+        }
+
+        public FuncBlock FuncBlock { get; }
+        public List<Stmt> Stmts { get; } = new();
+
+        public Decl.Funcy Funcy => FuncBlock.Funcy;
+
+        public void Add(Stmt stmt)
+        {
+            Stmts.Add(stmt);
+        }
+
+        public CodeBlock NewNested()
+        {
+            return new CodeBlock(this, FuncBlock, Name);
         }
     }
 

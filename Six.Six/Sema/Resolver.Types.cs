@@ -21,7 +21,7 @@ namespace Six.Six.Sema
             {
                 return null;
             }
-            else if (classy.AClassy is A.With.Extends ext && ext.Extends is A.Type extended)
+            else if (classy.AClassy is A.With.Extends extends && extends.Extends is A.Type extended)
             {
                 var super = ResolveType(classy.Block.Head, extended);
 

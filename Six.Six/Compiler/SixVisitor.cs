@@ -387,24 +387,16 @@ namespace Six.Six.Compiler
             var conditions = Walk<Expression.Conditions>(element.Conditions);
             var block = Walk<Body.Block>(element.BlockBody);
 
-            var items = new List<Stmt.Guarded>
-            {
-                new Stmt.Guarded(element, conditions, block)
-            };
-            items.AddRange(WalkMany<Stmt.Guarded>(element.ElseIf));
-            var guardeds = new Stmt.Guardeds(element.ElseIf, items);
+            var elsePart = WalkOptional<Body>(element.ElsePart);
 
-            var elseBlock = WalkOptional<Body.Block>(element.ElseBlock);
-
-            element.Value = new Stmt.If(element, guardeds, elseBlock);
+            element.Value = new Stmt.If(element, conditions, block, elsePart);
         }
 
         protected override void Visit(CElseIf element)
         {
-            var conditions = Walk<Expression.Conditions>(element.Conditions);
-            var block = Walk<Body.Block>(element.BlockBody);
+            var ifstmt = Walk<Stmt.If>(element.IfStatement);
 
-            element.Value = new Stmt.Guarded(element, conditions, block);
+            element.Value = ifstmt;
         }
 
 

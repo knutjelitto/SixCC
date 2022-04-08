@@ -79,7 +79,7 @@ shared string complex_string()
     return complex.string;
 }
 
-shared void DoPrint()
+shared void PrintHello()
 {
-    Runtime.Print("Hello!");
+    Runtime.Print("Hello");
 }

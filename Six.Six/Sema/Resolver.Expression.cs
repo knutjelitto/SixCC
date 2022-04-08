@@ -71,7 +71,7 @@ namespace Six.Six.Sema
                     {
                         if (typeRef.Decl is Decl.Classy classy)
                         {
-                            var found = classy.FindMember(node.Reference);
+                            var found = classy.Block.Resolve(node.Reference);
 
                             Assert(found.IsStatic);
 
@@ -101,7 +101,7 @@ namespace Six.Six.Sema
                 {
                     var classy = classyReference.ClassyDecl;
 
-                    var found = classy.FindMember(node.Reference);
+                    var found = classy.Block.Resolve(node.Reference);
 
                     Assert(found.IsStatic);
 
@@ -122,7 +122,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.FindMember(node.Reference);
+                        var referenced = classy.Block.Resolve(node.Reference);
 
                         return select(primary, classy, referenced);
                     }
@@ -137,7 +137,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.FindMember(node.Reference);
+                        var referenced = classy.Block.Resolve(node.Reference);
 
                         return select(primary, classy, referenced);
                     }
@@ -152,7 +152,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.FindMember(node.Reference);
+                        var referenced = classy.Block.Resolve(node.Reference);
 
                         return select(primary, classy, referenced);
                     }
@@ -167,7 +167,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.FindMember(node.Reference);
+                        var referenced = classy.Block.Resolve(node.Reference);
                         
                         return select(primary, classy, referenced);
                     }
@@ -182,7 +182,7 @@ namespace Six.Six.Sema
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
-                        var referenced = classy.FindMember(node.Reference);
+                        var referenced = classy.Block.Resolve(node.Reference);
 
                         return select(primary, classy, referenced);
                     }
@@ -421,7 +421,7 @@ namespace Six.Six.Sema
 
                 if (left.Expr.Type is Type.ClassyReference reference)
                 {
-                    var infix = reference.Classy.FindMember(node.Op, node.InfixName());
+                    var infix = reference.Classy.Block.Resolve(node.Op, node.InfixName());
 
                     if (infix is Decl.Function function)
                     {
@@ -440,7 +440,7 @@ namespace Six.Six.Sema
 
                     if (callable.Result is Type.ClassyReference classyReference)
                     {
-                        var infix = classyReference.Classy.FindMember(node.Op, node.InfixName());
+                        var infix = classyReference.Classy.Block.Resolve(node.Op, node.InfixName());
 
                         if (infix is Decl.Function function)
                         {
@@ -468,7 +468,7 @@ namespace Six.Six.Sema
 
                 if (right.Expr.Type is Type.ClassyReference reference)
                 {
-                    var prefix = reference.Classy.FindMember(node.Op, node.PrefixName());
+                    var prefix = reference.Classy.Block.Resolve(node.Op, node.PrefixName());
 
                     if (prefix is Decl.Function function)
                     {

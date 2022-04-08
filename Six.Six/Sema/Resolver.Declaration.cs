@@ -122,8 +122,8 @@ namespace Six.Six.Sema
                 WalkDeclarations(decl.Block, node.Parameters);
                 WalkBody(decl.Block, node.Body);
 
-                var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters.First()));
-                _ = new Stmt.Return(node.GetLocation(), decl.Block, lazy);
+                var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters[0]));
+                _ = new Stmt.Return(node.GetLocation(), decl.Block.CodeBlock, lazy);
             }
         }
 
@@ -137,38 +137,50 @@ namespace Six.Six.Sema
             _ = new Decl.Alias(parent, node);
         }
 
-        private void Declare(FuncBlock parent, A.Decl.Var node)
+        private void Declare(CodeBlock parent, A.Decl.Var node)
         {
-            parent.Content.Declare(new Decl.LetVar(parent, node, true));
+            var letvar = parent.DeclareContent(new Decl.LetVar(parent, node, true));
+            var x = new Stmt.Assign(
+                node.GetLocation(), 
+                parent, 
+                new LazyExpr(Module, () => new Expr.LocalReference(letvar)),
+                ResolveExpression(parent, node.Value));
         }
 
-        private void Declare(FuncBlock parent, A.Decl.Let node)
+        private void Declare(CodeBlock parent, A.Decl.Let node)
         {
-            parent.Content.Declare(new Decl.LetVar(parent, node, false));
+            var letvar = parent.DeclareContent(new Decl.LetVar(parent, node, false));
+            parent.Add(
+                new Stmt.Assign(
+                    node.GetLocation(),
+                    parent,
+                    new LazyExpr(Module, () => new Expr.LocalReference(letvar)),
+                    ResolveExpression(parent, node.Value)));
         }
 
         private void Declare(ClassBlock parent, A.Decl.Var node)
         {
             Assert(node.Type != null);
-            parent.Content.Declare(new Decl.Field(parent, node, true));
+            parent.DeclareContent(new Decl.Field(parent, node, true));
         }
+
         private void Declare(ClassBlock parent, A.Decl.Let node)
         {
             Assert(node.Type != null);
-            parent.Content.Declare(new Decl.Field(parent, node, false));
+            parent.DeclareContent(new Decl.Field(parent, node, false));
         }
 
 
         private void Declare(NamespaceBlock parent, A.Decl.Var node)
         {
             Assert(node.Type != null);
-            parent.Content.Declare(new Decl.Global(parent, node, true));
+            parent.DeclareContent(new Decl.Global(parent, node, true));
         }
 
         private void Declare(NamespaceBlock parent, A.Decl.Let node)
         {
             Assert(node.Type != null);
-            parent.Content.Declare(new Decl.Global(parent, node, false));
+            parent.DeclareContent(new Decl.Global(parent, node, false));
         }
 
         private void Declare(Block block, A.Decl.TypeParameters node)
@@ -183,7 +195,7 @@ namespace Six.Six.Sema
 
         private void Declare(FuncBlock parent, A.Decl.ValueParameter node)
         {
-            _ = parent.Head.Declare(
+            parent.DeclareHead(
                 new Decl.Parameter(
                     parent, 
                     node, 

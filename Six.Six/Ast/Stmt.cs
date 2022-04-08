@@ -4,7 +4,7 @@ namespace Six.Six.Ast
 {
     public interface Stmt : StmtOrDecl
     {
-        public sealed record If(IRNode Tree, Guardeds Guardeds, Body.Block? Else) : Stmt;
+        public sealed record If(IRNode Tree, Expression.Conditions Conditions, Body Then, Body? Else) : Stmt, Body;
         public sealed record For(IRNode Tree, Pattern Pattern, Expression Expression, Body.Block Block, Body.Block? Else) : Stmt;
         public sealed record While(IRNode Tree, Guarded Guarded) : Stmt;
         public sealed record Return(IRNode Tree, Expression? Expression) : Stmt;

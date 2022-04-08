@@ -31,6 +31,8 @@ shared class Derived : Abstract
 
         y = int.min(ccc, one);
 
+        y = s32.min(ccc, one);
+
         var f = int.min;
     }
 
