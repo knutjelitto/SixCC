@@ -87,7 +87,7 @@ namespace Six.Six.Instructions
                 function.AddLocal(new WaLocal(function, local.Name, type));
             }
 
-            if (funcy.Resolver.ResolveType(funcy.ResultType) is not Type.Void)
+            if (funcy.Resolver.T.ResolveType(funcy.ResultType) is not Type.Void)
             {
                 var type = Instructeur.Lower(funcy.ResultType).Wasm;
 

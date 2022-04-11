@@ -17,6 +17,8 @@ namespace Six.Six.Types
             F64 = Add(new F64(this));
             Anything = Add(new Anything(this));
             Boolean = Add(new Boolean(this));
+            True = Add(new Boolean.True(this));
+            False = Add(new Boolean.False(this));
             Bytes = Add(new Bytes(this));
             String = Add(new String(this));
             Address = Add(new Address(this));
@@ -25,6 +27,8 @@ namespace Six.Six.Types
         }
         public Builtin TableIndex { get; }
         public Builtin Boolean { get; }
+        public Builtin True { get; }
+        public Builtin False { get; }
         public Builtin Bytes { get; }
         public Builtin String { get; }
         public Builtin Anything { get; }
@@ -54,6 +58,11 @@ namespace Six.Six.Types
 
         private Builtin Resolve(string name)
         {
+            if (name == "true")
+            {
+                Assert(false);
+            }
+
             if (buildins.TryGetValue(name, out var builtin))
             {
                 return builtin;

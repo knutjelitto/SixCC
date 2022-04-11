@@ -3,14 +3,19 @@
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CA1822 // Mark members as static
-#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable  CA1822 // Mark members as static
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0060 // Remove unused parameter
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class TypeResolver : ResolverCore
     {
+        public TypeResolver(Module module, Resolver resolver)
+            : base(module, resolver)
+        {
+        }
+
         public Decl.Class? ResolveExtends(Decl.Classy classy)
         {
             if (classy is Decl.Interface)
@@ -25,7 +30,7 @@ namespace Six.Six.Sema
             {
                 var super = ResolveType(classy.Block.Head, extended);
 
-                if (super is Type.ClassyReference reference && reference.Classy is Decl.Class superClass)
+                if (super is Decl.Class superClass)
                 {
                     return superClass;
                 }
@@ -56,7 +61,7 @@ namespace Six.Six.Sema
                 {
                     var type = ResolveType(classy.Block.Head, aType);
 
-                    if (type is Type.Reference reference && reference.Decl is Decl.Interface iface)
+                    if (type is Decl.Interface iface)
                     {
                         list.Add(iface);
                     }
@@ -86,14 +91,16 @@ namespace Six.Six.Sema
 
         public Type ResolveType(Type type)
         {
-            if (type is Type.Reference reference)
+            if (type is Type.AliasReference alias)
             {
-                if (reference.Decl is Decl.Alias alias)
-                {
-                    return ResolveType(alias.Type);
-                }
-                return ResolveDeclType(reference.Decl);
+                return ResolveType(alias.Alias.Type);
+
             }
+            if (type is Decl.Classy classy)
+            {
+                return ResolveDeclType(classy);
+            }
+
             return type;
         }
 
@@ -141,13 +148,13 @@ namespace Six.Six.Sema
         private Type DoResolveType(Scope scope, A.Reference tree)
         {
             var resolved = scope.Resolve(tree, tree.Name.Text);
-            if (resolved is not Typy)
+            if (resolved is not Type)
             {
                 return ResolveType(scope.Parent, tree);
             }
             else if (resolved.Type is Type.AliasReference)
             {
-
+                Assert(false);
             }
 
             return ResolveDeclType(resolved);

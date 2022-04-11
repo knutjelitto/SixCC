@@ -25,15 +25,16 @@ namespace Six.Six.Sema
         public Resolver Resolver => Module.Resolver;
         public List<Member> Members { get; } = new();
 
-        public T DeclareContent<T>(T decl, string? name = null)
+        public virtual T DeclareContent<T>(T decl, string? name = null)
             where T : Decl
         {
             return Content.Declare<T>(decl, name);
         }
 
-        public void DeclareHead(Decl decl, string? name = null)
+        public virtual T DeclareHead<T>(T decl, string? name = null)
+            where T : Decl
         {
-            Head.Declare(decl, name);
+            return Head.Declare<T>(decl, name);
         }
 
         public virtual Decl? TryFind(string name)
@@ -108,7 +109,6 @@ namespace Six.Six.Sema
         }
 
         public Decl.Funcy Funcy { get; }
-
         public CodeBlock CodeBlock { get; }
     }
 
@@ -122,8 +122,17 @@ namespace Six.Six.Sema
 
         public FuncBlock FuncBlock { get; }
         public List<Stmt> Stmts { get; } = new();
-
         public Decl.Funcy Funcy => FuncBlock.Funcy;
+
+        public override T DeclareContent<T>(T decl, string? name = null)
+        {
+            if (decl is Decl.Function function)
+            {
+                Funcy.AddFunction(function);
+            }
+
+            return base.DeclareContent(decl, name);
+        }
 
         public void Add(Stmt stmt)
         {

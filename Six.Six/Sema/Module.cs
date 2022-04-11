@@ -152,16 +152,14 @@ namespace Six.Six.Sema
             }
         }
 
-        public Type.ClassyReference CoreFindType(string name)
+        public Decl.Classy CoreFindType(string name)
         {
             var core = GetCoreNamespace();
 
             var decl = core.TryFind(name);
             if (decl is Decl.Classy classy)
             {
-                var reference = classy.Type as Type.ClassyReference;
-                Assert(reference != null);
-                return reference;
+                return classy;
             }
 
             Assert(false);

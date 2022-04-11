@@ -28,6 +28,10 @@ namespace Six.Six.Sema
             {
                 return namespaceBlock.GetPath();
             }
+            else if (block is CodeBlock codeBlock)
+            {
+                return $"{block.Parent.FullName()}";
+            }
             else
             {
                 return $"{block.Parent.FullName()}.{block.Name}";

@@ -54,6 +54,21 @@ namespace Six.Six.Instructions
             return instructions;
         }
 
+        private WaInstructionList Nested(CodeBlock block)
+        {
+            var instructions = new WaInstructionList(Module);
+
+            using (Into(instructions))
+            {
+                foreach (var stmt in block.Stmts)
+                {
+                    Walk(stmt);
+                }
+            }
+
+            return instructions;
+        }
+
         private string TypeFor(Sema.Type.Callable callable)
         {
             var signature = WaFuncSignature.From(
@@ -67,66 +82,79 @@ namespace Six.Six.Instructions
 
         public void Walk(WaFunction function, Decl.Funcy funcy)
         {
-            Function = function;
-            instructionsStack.Push(function.Instructions);
-
-            if (funcy is Decl.Constructor ctor && ctor.Parent is ClassBlock classBlock && classBlock.Classy is Decl.Class clazz && !clazz.IsNative)
+            using (Into(function.Instructions))
             {
-                Add(Insn.Local.Get(0));
-                Add(Insn.Call($"{clazz.FullName}.{Sema.Module.InitCtor}"));
-            }
+                Function = function;
 
-            foreach (var member in funcy.Block.Members)
-            {
-                Walk(member);
+                if (funcy is Decl.Constructor ctor && ctor.Parent is ClassBlock classBlock && classBlock.Classy is Decl.Class clazz && !clazz.IsNative)
+                {
+                    Add(Insn.Local.Get(0));
+                    Add(Insn.Call($"{clazz.FullName}.{Sema.Module.InitCtor}"));
+                }
+
+                Assert(funcy.Block.Members.Count == 0);
+
+                foreach (var stmt in funcy.Block.CodeBlock.Stmts)
+                {
+                    Walk(stmt);
+                }
+
+                foreach (var member in funcy.Block.Members)
+                {
+                    Walk(member);
+                }
+
+                Function = null;
             }
-            instructionsStack.Pop();
-            Function = null;
 
         }
 
         public void Walk(WaInstructionList instructions, Expr expr)
         {
-            instructionsStack.Push(instructions);
-            Walk(expr);
-            instructionsStack.Pop();
+            using (Into(instructions))
+            {
+                Walk(expr);
+            }
         }
 
         public void CreateInitCtor(WaFunction function, Decl.Classy clazz)
         {
             // move all field initializations into init@ctor
 
-            instructionsStack.Push(function.Instructions);
-            var get = Insn.Local.Get(0);
-            foreach (var field in clazz.Layout.Fields.Select(f => f.Field))
+            using (Into(function.Instructions))
             {
-                Add(get);
-                Walk(field.Value);
-                Add(Lower(field.Type).Store(field.Offset));
+                var get = Insn.Local.Get(0);
+                foreach (var field in clazz.Layout.Fields.Select(f => f.Field))
+                {
+                    Add(get);
+                    Walk(field.Value);
+                    Add(Lower(field.Type).Store(field.Offset));
+                }
+                Add(Insn.Return);
             }
-            Add(Insn.Return);
-            instructionsStack.Pop();
         }
 
         public void CreateDefaultCtor(WaFunction function, Decl.Classy clazz)
         {
-            instructionsStack.Push(function.Instructions);
-            Add(Insn.Local.Get(0));
-            Add(Insn.Return);
-            instructionsStack.Pop();
+            using (Into(function.Instructions))
+            {
+                Add(Insn.Local.Get(0));
+                Add(Insn.Return);
+            }
         }
 
         public void CreateModuleCtor(WaFunction function)
         {
             // initialize all static fields
 
-            instructionsStack.Push(function.Instructions);
-            foreach (var field in Module.StaticData)
+            using (Into(function.Instructions))
             {
-                Add(new WiInitStaticField(field));
+                foreach (var field in Module.StaticData)
+                {
+                    Add(new WiInitStaticField(field));
+                }
+                Add(Insn.Return);
             }
-            Add(Insn.Return);
-            instructionsStack.Pop();
         }
 
         private void Walk(Entity entity)
@@ -147,7 +175,7 @@ namespace Six.Six.Instructions
         private void Build(Entity entity)
         {
             Assert(false);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void Build(Decl.LetVar decl)
@@ -161,17 +189,43 @@ namespace Six.Six.Instructions
 
         private void Build(Decl.Funcy decl)
         {
+            Assert(false);
             // NOP - handled elsewhere
         }
 
         private void Build(Decl.Parameter decl)
         {
+            Assert(false);
             // NOP
         }
 
         private void Build(Decl.SelfParameter decl)
         {
+            Assert(false);
             // NOP
+        }
+
+        private void Build(Stmt.Block block)
+        {
+            foreach (var stmt in block.Stmts)
+            {
+                Walk(stmt);
+            }
+        }
+
+        private void Build(Stmt.If block)
+        {
+            var condition = Nested(block.Condition);
+            var thenBlock = Nested(block.IfBlock);
+            if (block.ElseBlock != null)
+            {
+                var elseBlock = Nested(block.ElseBlock);
+                Add(new WiIfBlock(Module, WasmType.I32, condition, thenBlock, elseBlock));
+            }
+            else
+            {
+                Add(new WiIfBlock(Module, WasmType.I32, condition, thenBlock, null));
+            }
         }
 
         private void Build(Stmt.Return stmt)

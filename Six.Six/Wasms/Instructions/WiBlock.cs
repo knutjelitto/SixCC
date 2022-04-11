@@ -13,7 +13,7 @@ namespace Six.Six.Wasms.Instructions
 
     public sealed class WiIfBlock : WiBlock
     {
-        public WiIfBlock(IWithWriter withWriter, WasmType type, WaInstructionList condition, WaInstructionList then, WaInstructionList? @else)
+        public WiIfBlock(IWithWriter withWriter, WasmType? type, WaInstructionList condition, WaInstructionList then, WaInstructionList? @else)
             : base(withWriter)
         {
             Type = type;
@@ -22,7 +22,7 @@ namespace Six.Six.Wasms.Instructions
             Else = @else;
         }
 
-        public WasmType Type { get; }
+        public WasmType? Type { get; }
         public WaInstructionList Condition { get; }
         public WaInstructionList Then { get; }
         public WaInstructionList? Else { get; }
@@ -30,7 +30,8 @@ namespace Six.Six.Wasms.Instructions
         public override void Emit()
         {
             Condition.Emit();
-            wl($"{Insn.If} (result {Type})");
+            var result = Type == null ? "(result)" : $"(result {Type})";
+            wl($"{Insn.If} {result}");
             indent(() => Then.Emit());
             if (Else != null)
             {

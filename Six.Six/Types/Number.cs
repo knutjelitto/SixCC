@@ -16,6 +16,9 @@ namespace Six.Six.Types
             infix.Add("*", Mul);
             infix.Add("/", Div);
 
+            infix.Add("==", EQ);
+            infix.Add("!=", NE);
+
             infix.Add("<=", LE);
             infix.Add("<", LT);
             infix.Add(">=", GE);
@@ -68,6 +71,22 @@ namespace Six.Six.Types
             Assert(IsThis(right));
 
             return new Primitive.Binop(this, Impl.Div, left, right);
+        }
+
+        public Primitive EQ(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Primitive.Binop(Builtins.Boolean, Impl.EQ, left, right);
+        }
+
+        public Primitive NE(Expr left, Expr right)
+        {
+            Assert(IsThis(left));
+            Assert(IsThis(right));
+
+            return new Primitive.Binop(Builtins.Boolean, Impl.NE, left, right);
         }
 
         public Primitive LE(Expr left, Expr right)

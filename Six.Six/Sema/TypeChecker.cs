@@ -21,20 +21,13 @@
                 return true;
             }
 
-            if (toType is Type.Reference toRef)
+            if (toType is Decl.Classy toClassy)
             {
-                if (fromType is Type.Reference fromRef)
+                if (fromType is Decl.Classy fromClassy)
                 {
-                    Assert(toRef.Decl is Typy && fromRef.Decl is Typy);
-
-                    if (ReferenceEquals(toRef.Decl, fromRef.Decl))
+                    if (toClassy is Decl.Interface iface)
                     {
-                        return true;
-                    }
-
-                    if (toRef.Decl is Decl.Interface iface)
-                    {
-                        if (fromRef.Decl is Decl.Class clazz)
+                        if (fromClassy is Decl.Class clazz)
                         {
                             foreach (var x in clazz.Layout.InterFaces)
                             {
@@ -50,20 +43,9 @@
                             Assert(false);
                         }
                     }
-                    else if (toRef.Decl is Decl.Classy toClass)
-                    {
-                        if (fromRef.Decl is Decl.Classy fromClass)
-                        {
-                            return CanAssign(toClass, fromClass);
-                        }
-                        else
-                        {
-                            Assert(false);
-                        }
-                    }
                     else
                     {
-                        Assert(false);
+                        return CanAssign(toClassy, fromClassy);
                     }
                 }
                 if (fromType is Type.Intersection isection)
@@ -77,7 +59,7 @@
             }
             else if (toType is Type.Builtin toBuiltin)
             {
-                if (fromType is Type.Reference fromRef)
+                if (fromType is Decl.Classy fromRef)
                 {
                     return CanAssign(toType, fromRef.Decl.Type);
                 }

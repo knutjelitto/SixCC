@@ -2,18 +2,22 @@ namespace six.core;
 
 shared native class String
 {
+    shared int Length => 1;
+
     shared static String Concat(String s1, String s2)
     {
         if (s1.Length == 0)
         {
             return s2;
         }
-        if (s2.Length == 0)
+        else if (s2.Length == 0)
         {
             return s1;
         }
-        
-        return "";
+        else
+        {
+            return "s1-concat-s2";
+        }
     }
 }
 

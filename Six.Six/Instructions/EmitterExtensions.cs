@@ -9,16 +9,18 @@ namespace Six.Six.Instructions
 {
     public static class EmitterExtensions
     {
-        public static IEnumerable<Decl.Funcy> InnerFunctions(this Decl.Funcy function)
+        public static IEnumerable<Decl.Funcy> InnerFunctions(this Decl.Funcy funcy)
         {
-            foreach (var funcy in function.Block.Members.OfType<Decl.Funcy>())
+            Assert(funcy.Block.Members.Count == 0);
+
+            foreach (var function in funcy.Functions)
             {
-                foreach (var inner in funcy.InnerFunctions())
+                foreach (var inner in function.InnerFunctions())
                 {
                     yield return inner;
                 }
 
-                yield return funcy;
+                yield return function;
             }
         }
 

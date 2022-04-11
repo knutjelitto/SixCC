@@ -9,19 +9,24 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class DeclarationResolver : ResolverCore
     {
+        public DeclarationResolver(Module module, Resolver resolver)
+            : base(module, resolver)
+        {
+        }
+
+        public void WalkDeclaration(Block block, A.Decl node)
+        {
+            Declare((dynamic)block, (dynamic)node);
+        }
+
         private void WalkDeclarations(Block block, IEnumerable<A.Decl> nodes)
         {
             foreach (var node in nodes)
             {
                 WalkDeclaration(block, node);
             }
-        }
-
-        private void WalkDeclaration(Block block, A.Decl node)
-        {
-            Declare((dynamic)block, (dynamic)node);
         }
 
         private void Declare(Block block, A.Decl node)
@@ -32,7 +37,7 @@ namespace Six.Six.Sema
 
         private void DeclareClassyBody(Decl.Classy decl, A.Decl.Classy node)
         {
-            WalkBody(decl.Block, node.Body);
+            B.WalkBody(decl.Block, node.Body);
         }
 
         //**
@@ -73,7 +78,7 @@ namespace Six.Six.Sema
             }
 
             WalkDeclarations(decl.Block, ((A.With.Parameters)node).Parameters);
-            WalkBody(decl.Block, node.Body);
+            B.WalkBody(decl.Block, node.Body);
         }
 
         private void Declare(Block parent, A.Decl.Attribute node)
@@ -113,23 +118,18 @@ namespace Six.Six.Sema
                 Assert(true);
 
                 WalkDeclarations(decl.Block, node.Parameters);
-                WalkBody(decl.Block, node.Body);
+                B.WalkBody(decl.Block, node.Body);
             }
             else
             {
 
                 DeclareSelf(decl.Block, klass);
                 WalkDeclarations(decl.Block, node.Parameters);
-                WalkBody(decl.Block, node.Body);
+                B.WalkBody(decl.Block, node.Body);
 
                 var lazy = new LazyExpr(Module, () => new Expr.ParameterReference(decl.Parameters[0]));
-                _ = new Stmt.Return(node.GetLocation(), decl.Block.CodeBlock, lazy);
+                decl.Block.CodeBlock.Add(new Stmt.Return(node.GetLocation(), decl.Block.CodeBlock, lazy));
             }
-        }
-
-        private void DeclareSelf(FuncBlock block, Decl.Classy classy)
-        {
-            _ = new Decl.SelfParameter(block, classy.Type);
         }
 
         private void Declare(Block parent, A.Decl.Alias node)
@@ -140,22 +140,28 @@ namespace Six.Six.Sema
         private void Declare(CodeBlock parent, A.Decl.Var node)
         {
             var letvar = parent.DeclareContent(new Decl.LetVar(parent, node, true));
-            var x = new Stmt.Assign(
-                node.GetLocation(), 
-                parent, 
+
+            parent.Funcy.AddLocal(letvar);
+
+            parent.Add(new Stmt.Assign(
+                node.GetLocation(),
+                parent,
                 new LazyExpr(Module, () => new Expr.LocalReference(letvar)),
-                ResolveExpression(parent, node.Value));
+                E.ResolveExpression(parent, node.Value)));
         }
 
         private void Declare(CodeBlock parent, A.Decl.Let node)
         {
             var letvar = parent.DeclareContent(new Decl.LetVar(parent, node, false));
+
+            parent.Funcy.AddLocal(letvar);
+
             parent.Add(
                 new Stmt.Assign(
                     node.GetLocation(),
                     parent,
                     new LazyExpr(Module, () => new Expr.LocalReference(letvar)),
-                    ResolveExpression(parent, node.Value)));
+                    E.ResolveExpression(parent, node.Value)));
         }
 
         private void Declare(ClassBlock parent, A.Decl.Var node)
@@ -193,13 +199,23 @@ namespace Six.Six.Sema
             WalkDeclarations(block, node);
         }
 
+        private void DeclareSelf(FuncBlock parent, Decl.Classy classy)
+        {
+            var parameter = parent.DeclareHead(
+                new Decl.SelfParameter(parent, classy.Type));
+
+            parent.Funcy.AddParameter(parameter);
+        }
+
         private void Declare(FuncBlock parent, A.Decl.ValueParameter node)
         {
-            parent.DeclareHead(
+            var parameter = parent.DeclareHead(
                 new Decl.Parameter(
-                    parent, 
-                    node, 
-                    node.Default == null ? null : ResolveExpression(parent, node.Default)));
+                    parent,
+                    node,
+                    node.Default == null ? null : E.ResolveExpression(parent, node.Default)));
+
+            parent.Funcy.AddParameter(parameter);
         }
     }
 }

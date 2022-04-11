@@ -11,15 +11,13 @@ namespace Six.Six.Instructions
     {
         public Builtin Lower(Type type)
         {
-            var lower = Resolver.LowerType(type);
+            var lower = Resolver.T.LowerType(type);
 
             switch (lower)
             {
                 case Builtin builtin:
                     return builtin;
-                case Type.ClassReference:
-                    return Builtins.Address;
-                case Type.InterfaceReference:
+                case Decl.Classy:
                     return Builtins.Address;
                 case Type.Callable:
                     return Builtins.TableIndex;
@@ -31,7 +29,7 @@ namespace Six.Six.Instructions
 
         public Builtin BuiltinFor(Type type)
         {
-            switch (Resolver.LowerType(type))
+            switch (Resolver.T.LowerType(type))
             {
                 case Builtin builtin:
                     return builtin;

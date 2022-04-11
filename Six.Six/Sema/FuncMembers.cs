@@ -1,15 +1,17 @@
-﻿using Six.Runtime;
+﻿using System;
+
+using Six.Runtime;
 using Six.Six.Types;
 using Six.Six.Sema;
-using System;
 using Type = Six.Six.Sema.Type;
 
-namespace Six.Six.Instructions
+namespace Six.Six.Sema
 {
-    public class FuncLayout
+    public class FuncMembers
     {
         public readonly List<Decl.Local> Parameters = new();
         public readonly List<Decl.Local> Locals = new();
+        public readonly List<Decl.Function> Functions = new();
 
         public int AddParameter(Decl.Local parameter)
         {
@@ -31,14 +33,9 @@ namespace Six.Six.Instructions
             return local.Index;
         }
 
-        private class LocalCore
+        public void AddFunction(Decl.Function function)
         {
-            protected LocalCore(int index)
-            {
-                Index = index;
-            }
-
-            public int Index { get; }
+            Functions.Add(function);
         }
     }
 }

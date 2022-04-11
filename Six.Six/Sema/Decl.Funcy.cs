@@ -6,10 +6,19 @@ namespace Six.Six.Sema
 {
     public partial interface Decl
     {
+        public enum FuncyKind
+        {
+            Unknown,
+            Global,
+            Local,
+            Member,
+        }
+
         public abstract class Funcy : Declaration
         {
             private List<Type>? paramTypes = null;
             private Type? resultType = null;
+            private readonly FuncMembers Members;
 
             protected Funcy(Block parent, string name, A.Decl.Funcy aDecl)
                 : base(parent, aDecl)
@@ -17,16 +26,16 @@ namespace Six.Six.Sema
                 parent.Members.Add(this);
                 Block = new FuncBlock(parent, this, name);
                 AFuncy = aDecl;
-                Layout = new FuncLayout();
+                Members = new FuncMembers();
                 parent.DeclareContent(this, name);
             }
 
             public FuncBlock Block { get; }
             public A.Decl.Funcy AFuncy { get; }
-            public FuncLayout Layout { get; }
 
-            public IReadOnlyList<Local> Parameters => Layout.Parameters;
-            public IReadOnlyList<Local> Locals => Layout.Locals;
+            public IReadOnlyList<Local> Parameters => Members.Parameters;
+            public IReadOnlyList<Local> Locals => Members.Locals;
+            public IReadOnlyList<Function> Functions => Members.Functions;
 
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();
@@ -34,8 +43,8 @@ namespace Six.Six.Sema
             public bool HasBody => AFuncy.Body is not A.Body.Deferred;
             public bool IsConcrete => HasBody && !IsAbstract;
             public bool IsDynamic => !IsStatic && (IsAbstract || IsVirtual || IsOverride);
-            public bool IsMember => !IsStatic && Parent is ClassBlock;
-            public bool IsLocalFunction => Parent is FuncBlock;
+            public bool IsClassMember => !IsStatic && Parent is ClassBlock;
+            public bool IsLocalFunction => Parent is CodeBlock;
             public bool IsGlobalFunction => Parent is NamespaceBlock;
 
             public override string FullName => Block.FullName();
@@ -50,14 +59,17 @@ namespace Six.Six.Sema
 
             public void AddParameter(Local parameter)
             {
-                Layout.AddParameter(parameter);
-                Block.Members.Add(parameter);
+                Members.AddParameter(parameter);
             }
 
             public void AddLocal(Local local)
             {
-                Layout.AddLocal(local);
-                //Block.Members.Add(local);
+                Members.AddLocal(local);
+            }
+
+            public void AddFunction(Function function)
+            {
+                Members.AddFunction(function);
             }
         }
 
@@ -85,7 +97,7 @@ namespace Six.Six.Sema
             public Constructor(ClassBlock parent, A.Decl.Funcy aFuncyDecl)
                 : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)
             {
-                ResultTypeResolver = () => Resolver.ResolveType(parent.Classy.Type);
+                ResultTypeResolver = () => Resolver.T.ResolveType(parent.Classy.Type);
             }
 
             public override bool IsStatic => true;

@@ -1,7 +1,8 @@
-﻿using Six.Six.Sema;
-using W = Six.Six.Wasms;
-using System;
+﻿using System;
 using System.Collections;
+
+using Six.Six.Sema;
+using Six.Six.Wasms;
 
 namespace Six.Six.Instructions
 {
@@ -35,7 +36,7 @@ namespace Six.Six.Instructions
 
         private void MakeFields()
         {
-            var fieldOffset = W.WasmType.Addr.Size + W.WasmType.I32.Size;
+            var fieldOffset = WasmType.Addr.Size + WasmType.I32.Size;
 
             if (Classy.Extends is Decl.Class extended)
             {

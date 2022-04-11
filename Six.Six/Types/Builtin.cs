@@ -33,7 +33,7 @@ namespace Six.Six.Types
         public Resolver Resolver => Module.Resolver;
         public TypeChecker Checker => Module.Checker;
         
-        public bool IsThis(Expr expr) => Checker.CanAssign(this, Resolver.LowerType(expr.Type));
+        public bool IsThis(Expr expr) => Checker.CanAssign(this, Resolver.T.LowerType(expr.Type));
 
         public abstract Insn Load(uint offset);
         public abstract Insn Store(uint offset);

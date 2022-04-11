@@ -33,11 +33,18 @@ namespace Six.Six.Sema
 
         public sealed class If : Statement
         {
-            public If(ILocation location, CodeBlock block)
+            private readonly LazyExpr lazyCondition;
+            public If(ILocation location, CodeBlock block, LazyExpr lazyCondition, CodeBlock ifBlock, CodeBlock? elseBlock)
                 : base(location, block)
             {
-
+                this.lazyCondition = lazyCondition;
+                IfBlock = ifBlock;
+                ElseBlock = elseBlock;
             }
+
+            public Expr Condition => lazyCondition.Expr;
+            public CodeBlock IfBlock { get; }
+            public CodeBlock? ElseBlock { get; }
         }
 
         public sealed class Return : Statement

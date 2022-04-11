@@ -19,6 +19,8 @@
 
             public static string Char => "char";
             public static string Boolean => "Boolean";
+            public static string True => "true";
+            public static string False => "false";
             public static string Address => "Address";
             public static string Runtime => "Runtime";
 

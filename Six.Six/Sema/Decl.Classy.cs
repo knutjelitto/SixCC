@@ -5,7 +5,7 @@ namespace Six.Six.Sema
 {
     public partial interface Decl
     {
-        public abstract class Classy : Declaration, Typy
+        public abstract class Classy : Declaration, Type.Declared
         {
             private ClassLayout? layout;
             private Class? extends;
@@ -28,9 +28,12 @@ namespace Six.Six.Sema
 
 
             public override string FullName => Block.FullName();
+            public sealed override Type Type => this;
 
-            public Class? Extends => extends ??= Resolver.ResolveExtends(this);
-            public List<Interface> Satisfies => satisfies ??= Resolver.ResolveSatisfies(this);
+            public Class? Extends => extends ??= Resolver.T.ResolveExtends(this);
+            public List<Interface> Satisfies => satisfies ??= Resolver.T.ResolveSatisfies(this);
+
+            public Decl Decl => this;
 
             public void AddField(Field field)
             {
@@ -44,11 +47,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
-
-                Type = new Type.ClassReference(Module, this);
             }
-
-            public override Type Type { get; }
 
             public override string ToString() => $"{Name}";
         }
@@ -59,11 +58,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
-
-                Type = new Type.ObjectReference(Module, this);
             }
-
-            public override Type Type { get; }
 
             public override string ToString() => $"{Name}";
         }
@@ -73,11 +68,7 @@ namespace Six.Six.Sema
             public Interface(Block parent, A.Decl.Interface aDecl)
                 : base(parent, aDecl)
             {
-
-                Type = new Type.InterfaceReference(Module, this);
             }
-
-            public override Type Type { get; }
         }
     }
 }

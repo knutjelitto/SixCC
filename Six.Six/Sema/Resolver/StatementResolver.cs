@@ -9,9 +9,14 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class StatementResolver : ResolverCore
     {
-        private Stmt WalkStatement(CodeBlock block, A.Stmt node)
+        public StatementResolver(Module module, Resolver resolver)
+            : base(module, resolver)
+        {
+        }
+
+        public Stmt WalkStatement(CodeBlock block, A.Stmt node)
         {
             return Statement(block, (dynamic)node);
         }
@@ -26,16 +31,24 @@ namespace Six.Six.Sema
         {
             var ifBlock = block.NewNested();
 
-            var condition = ExpressionConditions(ifBlock, node.Conditions);
-            WalkBody(block, node.Then);
+            var condition = E.ExpressionConditions(ifBlock, node.Conditions);
+            B.WalkBody(ifBlock, node.Then);
 
+            CodeBlock? elseBlock = null;
             if (node.Else != null)
             {
-                WalkBody(block, node.Else);
+                elseBlock = block.NewNested();
+                if (node.Else is A.Stmt.If elseIf)
+                {
+                    elseBlock.Add(WalkStatement(elseBlock, elseIf));
+                }
+                else
+                {
+                    B.WalkBody(elseBlock, node.Else);
+                }
             }
 
-            Assert(false);
-            throw new NotImplementedException();
+            return new Stmt.If(node.GetLocation(), block, condition, ifBlock, elseBlock);
         }
 
         private Stmt Statement(CodeBlock block, A.Stmt.Expr node)
@@ -43,7 +56,7 @@ namespace Six.Six.Sema
             return new Stmt.Expression(
                     node.GetLocation(),
                     block,
-                    ResolveExpression(block, node.Expression));
+                    E.ResolveExpression(block, node.Expression));
         }
 
         private Stmt Statement(CodeBlock block, A.Stmt.Assign node)
@@ -51,8 +64,8 @@ namespace Six.Six.Sema
             return new Stmt.Assign(
                     node.GetLocation(),
                     block,
-                    ResolveExpression(block, node.Left),
-                    ResolveExpression(block, node.Right));
+                    E.ResolveExpression(block, node.Left),
+                    E.ResolveExpression(block, node.Right));
         }
 
         private Stmt Statement(CodeBlock block, A.Stmt.Return node)
@@ -60,7 +73,7 @@ namespace Six.Six.Sema
             return new Stmt.Return(
                     node.GetLocation(),
                     block,
-                    node.Expression == null ? null : ResolveExpression(block, node.Expression));
+                    node.Expression == null ? null : E.ResolveExpression(block, node.Expression));
         }
     }
 }

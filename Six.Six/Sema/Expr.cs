@@ -87,7 +87,7 @@ namespace Six.Six.Sema
                 {
                     return new CallStaticFunction(funcy, arguments);
                 }
-                else if (funcy.IsMember)
+                else if (funcy.IsClassMember)
                 {
                     if (funcy.Parent is ClassBlock classBlock)
                     {
@@ -129,7 +129,7 @@ namespace Six.Six.Sema
                 {
                     return new CallStaticFunction(funcy, arguments);
                 }
-                else if (funcy.IsMember)
+                else if (funcy.IsClassMember)
                 {
                     if (funcy.Parent is ClassBlock classBlock)
                     {

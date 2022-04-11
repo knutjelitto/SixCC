@@ -5,10 +5,10 @@ using W = Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class Boolean : Builtin
+    public class Boolean : Builtin
     {
-        public Boolean(Builtins builtins)
-            : base(builtins, Names.Core.Boolean, W.WasmType.Bool)
+        public Boolean(Builtins builtins, string? name = null)
+            : base(builtins, name ?? Names.Core.Boolean, W.WasmType.Bool)
         {
             prefix.Add("!", Not);
             infix.Add("&", And);
@@ -58,6 +58,22 @@ namespace Six.Six.Types
             Assert(IsThis(arg2));
 
             return new Primitive.Binop(this, Insn.Boolean.Xor, arg1, arg2);
+        }
+
+        public class True : Boolean
+        {
+            public True(Builtins builtins)
+                : base(builtins, Names.Core.True)
+            {
+            }
+        }
+
+        public class False : Boolean
+        {
+            public False(Builtins builtins)
+                : base(builtins, Names.Core.False)
+            {
+            }
         }
     }
 }

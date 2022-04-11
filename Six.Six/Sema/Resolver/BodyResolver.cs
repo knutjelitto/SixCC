@@ -8,8 +8,13 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class BodyResolver : ResolverCore
     {
+        public BodyResolver(Module module, Resolver resolver)
+            : base(module, resolver)
+        {
+        }
+
         public void WalkBody(ClassBlock block, A.Body node)
         {
             ClassyBody(block, (dynamic)node);
@@ -25,7 +30,7 @@ namespace Six.Six.Sema
         {
             foreach (var decl in node.Declarations)
             {
-                WalkDeclaration(block, decl);
+                D.WalkDeclaration(block, decl);
             }
         }
 
@@ -47,25 +52,21 @@ namespace Six.Six.Sema
 
         private void FuncyBody(CodeBlock block, A.Body.Block node)
         {
-            var stmts = new List<Stmt>();
-
             foreach (var member in node.Statelarations)
             {
                 if (member is A.Decl decl)
                 {
-                    WalkDeclaration(block, decl);
+                    D.WalkDeclaration(block, decl);
                 }
                 else if (member is A.Stmt stmt)
                 {
-                    stmts.Add(WalkStatement(block, stmt));
+                    block.Add(S.WalkStatement(block, stmt));
                 }
                 else
                 {
                     Assert(false);
                 }
             }
-
-            block.Add(new Stmt.Block(node.GetLocation(), block, stmts));
         }
 
         private void FuncyBody(CodeBlock block, A.Body.Deferred node)
@@ -80,7 +81,7 @@ namespace Six.Six.Sema
 
         private void FuncyBody(CodeBlock block, A.Body.Expr node)
         {
-            var delayed = ResolveExpression(block, node.Expression);
+            var delayed = E.ResolveExpression(block, node.Expression);
 
             block.Add(new Stmt.Return(node.Expression.GetLocation(), block, delayed));
         }

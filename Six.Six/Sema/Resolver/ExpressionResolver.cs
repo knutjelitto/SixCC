@@ -1,5 +1,5 @@
-﻿using Six.Six.Types;
-using System;
+﻿using System;
+using Six.Six.Types;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -9,8 +9,13 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class ExpressionResolver : ResolverCore
     {
+        public ExpressionResolver(Module module, Resolver resolver)
+            : base(module, resolver)
+        {
+        }
+
         public LazyExpr ResolveExpression(Block block, A.Expression node)
         {
             return Expression((dynamic)block, (dynamic)node);
@@ -34,7 +39,7 @@ namespace Six.Six.Sema
             });
         }
 
-        private LazyExpr ExpressionConditions(Block block, IEnumerable<A.Expression> nodes)
+        public LazyExpr ExpressionConditions(Block block, IEnumerable<A.Expression> nodes)
         {
             var conditions = nodes.ToList();
             Assert(conditions.Count >= 1);
@@ -65,28 +70,25 @@ namespace Six.Six.Sema
 
                 if (primary is Expr.AliasReference aliasRef)
                 {
-                    var resolved = ResolveType(aliasRef.Decl.Type);
+                    var resolved = T.ResolveType(aliasRef.Decl.Type);
 
-                    if (resolved is Type.Reference typeRef)
+                    if (resolved is Decl.Classy classy)
                     {
-                        if (typeRef.Decl is Decl.Classy classy)
+                        var found = classy.Block.Resolve(node.Reference);
+
+                        Assert(found.IsStatic);
+
+                        if (found is Decl.Attribute attribute)
                         {
-                            var found = classy.Block.Resolve(node.Reference);
-
-                            Assert(found.IsStatic);
-
-                            if (found is Decl.Attribute attribute)
-                            {
-                                return Expr.CallFunction.From(attribute);
-                            }
-                            else if (found is Decl.Function function)
-                            {
-                                return new Expr.FunctionReference(function);
-                            }
-                            else if (found is Decl.Field field)
-                            {
-                                return new Expr.FieldReference(field);
-                            }
+                            return Expr.CallFunction.From(attribute);
+                        }
+                        else if (found is Decl.Function function)
+                        {
+                            return new Expr.FunctionReference(function);
+                        }
+                        else if (found is Decl.Field field)
+                        {
+                            return new Expr.FieldReference(field);
                         }
                     }
                     else
@@ -94,7 +96,7 @@ namespace Six.Six.Sema
                         Assert(false);
                         throw new NotImplementedException();
                     }
-                 
+
                     Assert(Module.HasErrors);
                 }
                 else if (primary is Expr.ClassyReference classyReference)
@@ -118,7 +120,7 @@ namespace Six.Six.Sema
                 }
                 else if (primary is Expr.ConstructorReference constructorReference)
                 {
-                    var found = ResolveType(constructorReference.Decl.Type);
+                    var found = T.ResolveType(constructorReference.Decl.Type);
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
@@ -133,7 +135,7 @@ namespace Six.Six.Sema
                 }
                 else if (primary is Expr.ParameterReference parameterReference)
                 {
-                    var found = ResolveType(parameterReference.Decl.Type);
+                    var found = T.ResolveType(parameterReference.Decl.Type);
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
@@ -148,7 +150,7 @@ namespace Six.Six.Sema
                 }
                 else if (primary is Expr.LocalReference localReference)
                 {
-                    var found = ResolveType(localReference.Decl.Type);
+                    var found = T.ResolveType(localReference.Decl.Type);
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
@@ -163,12 +165,12 @@ namespace Six.Six.Sema
                 }
                 else if (primary is Expr.FieldReference fieldReference)
                 {
-                    var found = ResolveType(fieldReference.Decl.Type);
+                    var found = T.ResolveType(fieldReference.Decl.Type);
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
                         var referenced = classy.Block.Resolve(node.Reference);
-                        
+
                         return select(primary, classy, referenced);
                     }
                     else
@@ -178,7 +180,7 @@ namespace Six.Six.Sema
                 }
                 else if (primary is Expr.CallConstructor callConstructor)
                 {
-                    var found = ResolveType(callConstructor.Class.Type);
+                    var found = T.ResolveType(callConstructor.Class.Type);
 
                     if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
                     {
@@ -234,9 +236,9 @@ namespace Six.Six.Sema
                     var function = functionReference.FunctionDecl;
 
                     var prms = function.Parameters;
-                    var arguments = function.IsMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
+                    var arguments = function.IsClassMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
 
-                     return Expr.CallFunction.From(functionReference.FunctionDecl, arguments);
+                    return Expr.CallFunction.From(functionReference.FunctionDecl, arguments);
                 }
                 else if (func.Expr is Expr.ClassReference classReference)
                 {
@@ -290,7 +292,7 @@ namespace Six.Six.Sema
                     else
                     {
                         var prms = function.Parameters;
-                        var arguments = function.IsMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
+                        var arguments = function.IsClassMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
                         return new Expr.CallMember(
                             selectFunction.Classy,
                             function,
@@ -314,8 +316,8 @@ namespace Six.Six.Sema
                     var index = 0;
                     for (; index < args.Count; ++index)
                     {
-                        var prmType = LowerType(prms[index + 1].Type);
-                        var argType = LowerType(args[index].Expr.Type);
+                        var prmType = T.LowerType(prms[index + 1].Type);
+                        var argType = T.LowerType(args[index].Expr.Type);
 
                         Assert(Checker.CanAssign(prmType, argType));
 
@@ -348,8 +350,8 @@ namespace Six.Six.Sema
                     var index = 0;
                     for (; index < Math.Min(prms.Count, args.Count); ++index)
                     {
-                        var argType = ResolveType(args[index].Expr.Type);
-                        var prmType = ResolveType(prms[index].Type);
+                        var argType = T.ResolveType(args[index].Expr.Type);
+                        var prmType = T.ResolveType(prms[index].Type);
 
                         Assert(Checker.CanAssign(prmType, argType));
 
@@ -385,8 +387,8 @@ namespace Six.Six.Sema
                     var index = 0;
                     for (; index < Math.Min(prms.Count, args.Count); ++index)
                     {
-                        var argType = ResolveType(args[index].Expr.Type);
-                        var prmType = ResolveType(prms[index]);
+                        var argType = T.ResolveType(args[index].Expr.Type);
+                        var prmType = T.ResolveType(prms[index]);
 
                         Assert(Checker.CanAssign(prmType, argType));
 
@@ -419,13 +421,13 @@ namespace Six.Six.Sema
                 var left = ResolveExpression(block, node.Left);
                 var right = ResolveExpression(block, node.Right);
 
-                if (left.Expr.Type is Type.ClassyReference reference)
+                if (left.Expr.Type is Decl.Classy classy)
                 {
-                    var infix = reference.Classy.Block.Resolve(node.Op, node.InfixName());
+                    var infix = classy.Block.Resolve(node.Op, node.InfixName());
 
                     if (infix is Decl.Function function)
                     {
-                        return new Expr.CallInfixMember(reference.Classy, function, left.Expr, right.Expr);
+                        return new Expr.CallInfixMember(classy, function, left.Expr, right.Expr);
                     }
 
                     Assert(false);
@@ -438,13 +440,13 @@ namespace Six.Six.Sema
                 {
                     Assert(false);
 
-                    if (callable.Result is Type.ClassyReference classyReference)
+                    if (callable.Result is Decl.Classy classy2)
                     {
-                        var infix = classyReference.Classy.Block.Resolve(node.Op, node.InfixName());
+                        var infix = classy2.Block.Resolve(node.Op, node.InfixName());
 
                         if (infix is Decl.Function function)
                         {
-                            return new Expr.CallInfixMember(classyReference.Classy, function, left.Expr, right.Expr);
+                            return new Expr.CallInfixMember(classy2, function, left.Expr, right.Expr);
                         }
 
                     }
@@ -466,13 +468,13 @@ namespace Six.Six.Sema
             {
                 var right = ResolveExpression(block, node.Expr);
 
-                if (right.Expr.Type is Type.ClassyReference reference)
+                if (right.Expr.Type is Decl.Classy classy)
                 {
-                    var prefix = reference.Classy.Block.Resolve(node.Op, node.PrefixName());
+                    var prefix = classy.Block.Resolve(node.Op, node.PrefixName());
 
                     if (prefix is Decl.Function function)
                     {
-                        return new Expr.CallPrefixMember(reference.Classy, function, right.Expr);
+                        return new Expr.CallPrefixMember(classy, function, right.Expr);
                     }
 
                     Assert(false);
@@ -536,6 +538,218 @@ namespace Six.Six.Sema
                         throw new NotImplementedException();
                 }
             });
+        }
+        public Expr NaturalConst(A.Expression.NaturalNumber tree)
+        {
+            var text = ExtractSuffix(tree, out var suffix);
+
+            var value = ConvertNatural(tree, text);
+
+            switch (suffix)
+            {
+                case "s32":
+                    if (value > int.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), int.MaxValue);
+                    }
+                    return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                case "s64":
+                    if (value > long.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), long.MaxValue);
+                    }
+                    return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
+                case "u32":
+                    if (value > uint.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), uint.MaxValue);
+                    }
+                    return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
+                case "u64":
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
+                        return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), ulong.MaxValue);
+                    }
+                    return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), value);
+                case "":
+                    Assert(value <= ulong.MaxValue);
+
+                    var types = new List<Type>();
+                    if (value <= (ulong)sbyte.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S8));
+                    }
+                    if (value <= byte.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U8));
+                    }
+                    if (value <= (ulong)short.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S16));
+                    }
+                    if (value <= ushort.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U16));
+                    }
+                    if (value <= int.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S32));
+                    }
+                    if (value <= uint.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U32));
+                    }
+                    if (value <= long.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.S64));
+                    }
+                    if (value <= ulong.MaxValue)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.U64));
+                    }
+                    var max_float_int = ((ulong)1) << 24;
+                    var max_double_int = ((ulong)1) << 53;
+
+                    if (value <= max_float_int)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.F32));
+                    }
+                    if (value <= max_double_int)
+                    {
+                        types.Add(Module.CoreFindType(Names.Core.F64));
+                    }
+#if false
+                    var type = new Type.Intersection(Module);
+                    type.AddRange(types);
+                    return new Expr.ConstNatural(type, value);
+#else
+
+                    if (value > long.MaxValue)
+                    {
+                        return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), value);
+                    }
+                    else if (value > int.MaxValue)
+                    {
+                        if (value > uint.MaxValue)
+                        {
+                            return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
+                        }
+                        return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
+                    }
+                    else
+                    {
+                        return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                    }
+#endif
+                default:
+                    Assert(false);
+                    throw new NotImplementedException();
+            }
+
+        }
+
+        public ulong ConvertNatural(A.Expression.NaturalNumber tree, string text)
+        {
+            if (text.StartsWith('#'))
+            {
+                decimal value = 0;
+                foreach (var c in text[1..])
+                {
+                    value = value * 16 + (ulong)hexValue(c);
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree));
+                        return ulong.MaxValue;
+                    }
+                }
+                return (ulong)value;
+            }
+            else if (text.StartsWith('$'))
+            {
+                decimal value = 0;
+                foreach (var c in text[1..])
+                {
+                    value = value * 2 + (ulong)binValue(c);
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree));
+                        return ulong.MaxValue;
+                    }
+                }
+                return (ulong)value;
+            }
+            else
+            {
+                decimal value = 0;
+                foreach (var c in text)
+                {
+                    value = value * 10 + (ulong)decValue(c);
+                    if (value > ulong.MaxValue)
+                    {
+                        Module.Add(Errors.TooBigInteger(tree));
+                        return ulong.MaxValue;
+                    }
+                }
+                return (ulong)value;
+            }
+
+            int binValue(char c)
+            {
+                Assert('0' <= c && c <= '1');
+                return c - '0';
+            }
+
+            int decValue(char c)
+            {
+                Assert('0' <= c && c <= '9');
+                return c - '0';
+            }
+
+            int hexValue(char c)
+            {
+                Assert('0' <= c && c <= '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F');
+                if ('0' <= c && c <= '9')
+                {
+                    return c - '0';
+                }
+                if ('a' <= c && c <= 'f')
+                {
+                    return 10 + c - 'a';
+                }
+                return 10 + c - 'A';
+            }
+        }
+
+        private string ExtractSuffix(A.Expression.NaturalNumber tree, out string suffix)
+        {
+            var text = tree.Text;
+
+            var si = text.IndexOf('i');
+            if (si > 0)
+            {
+                suffix = text[si..];
+                return text[..si];
+            }
+            var su = text.IndexOf('u');
+            if (su > 0)
+            {
+                suffix = text[su..];
+                return text[..su];
+            }
+
+            suffix = "";
+            return text;
+        }
+
+        public Expr PlainString(A.Expression.String.Plain tree)
+        {
+            var type = Module.CoreFindType(Names.Core.String);
+
+            return new Primitive.ConstString(type, tree.Text);
         }
     }
 }

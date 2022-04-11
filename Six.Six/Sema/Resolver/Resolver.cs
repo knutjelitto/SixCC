@@ -9,11 +9,16 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class Resolver
     {
-        public Resolver(Module global)
+        public Resolver(Module module)
         {
-            Module = global;
+            Module = module;
+            D = new DeclarationResolver(module, this);
+            E = new ExpressionResolver(module, this);
+            S = new StatementResolver(module, this);
+            T = new TypeResolver(module, this);
+            B = new BodyResolver(module, this);
         }
 
         public Module Module { get; }
@@ -21,6 +26,12 @@ namespace Six.Six.Sema
         public Emitter Emitter => Module.Emitter;
         public Errors Errors => Module.Errors;
         public TypeChecker Checker => Module.Checker;
+
+        public DeclarationResolver D { get; }
+        public ExpressionResolver E { get; }
+        public StatementResolver S { get; }
+        public TypeResolver T { get; }
+        public BodyResolver B { get; }
 
         public void Walk(A.Unit.Code code)
         {
@@ -31,7 +42,10 @@ namespace Six.Six.Sema
         {
             var namespaceBlock = Module.OpenNamespace(code.Namespace);
 
-            WalkDeclarations(namespaceBlock, code.Declarations);
+            foreach (var declaration in code.Declarations)
+            {
+                D.WalkDeclaration(namespaceBlock, declaration);
+            }
         }
     }
 }
