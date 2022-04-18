@@ -8,14 +8,9 @@ namespace Six.Six.Sema
 {
     public static class BlockExtensions
     {
-        public static IEnumerable<Decl> GetDeclarations(this Block block)
+        public static IEnumerable<Decl> GetDeclarations(this NamespaceBlock block)
         {
             return block.Members.OfType<Decl>();
-        }
-
-        public static IEnumerable<Member> GetMembers(this Block block)
-        {
-            return block.Members.OfType<Member>();
         }
 
         public static string FullName(this Block block)

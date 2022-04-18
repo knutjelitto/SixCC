@@ -1,5 +1,4 @@
-﻿using Six.Six.Instructions;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -11,20 +10,21 @@ namespace Six.Six.Sema
             private Class? extends;
             private List<Interface>? satisfies;
 
-            public Classy(Block parent, A.Decl.Classy aDecl)
+            protected Classy(Block parent, A.Decl.Classy aDecl)
                 : base(parent, aDecl)
             {
                 Block = new ClassBlock(parent, this);
                 AClassy = aDecl;
                 parent.DeclareContent(this, aDecl.Name.Text);
-                parent.Members.Add(this);
             }
 
             public ClassBlock Block { get; }
             public A.Decl.Classy AClassy { get; }
             public ClassLayout Layout => layout ??= new ClassLayout(this);
 
-            public List<Field> Fields { get; } = new List<Field>();
+            public ClassMembers Members { get; } = new();
+
+            public IReadOnlyList<Field> Fields => Members.Fields;
 
 
             public override string FullName => Block.FullName();
@@ -34,11 +34,6 @@ namespace Six.Six.Sema
             public List<Interface> Satisfies => satisfies ??= Resolver.T.ResolveSatisfies(this);
 
             public Decl Decl => this;
-
-            public void AddField(Field field)
-            {
-                Fields.Add(field);
-            }
         }
 
         public class Class : Classy

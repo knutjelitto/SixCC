@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Six.Core;
+using Six.Six.Types;
+using System;
 
 using A = Six.Six.Ast;
+using Type = Six.Six.Sema.Type;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable  CA1822 // Mark members as static
@@ -11,9 +14,57 @@ namespace Six.Six.Sema
 {
     public class TypeResolver : ResolverCore
     {
+        private Stack<InnerResolver> inner = new();
+        private InnerResolver Inner => inner.Peek();
+
         public TypeResolver(Module module, Resolver resolver)
             : base(module, resolver)
         {
+        }
+
+        public LazyType ResolveTypeLazy(Block parent, A.Type aType)
+        {
+            return new LazyType(() => ResolveType(parent.Content, aType));
+        }
+
+        public LazyType ResolveTypeLazy(Block parent, LazyExpr value, A.Type? aType)
+        {
+            if (aType == null)
+            {
+                return new LazyType(() => value.Value.Type);
+            }
+            return new LazyType(() => ResolveType(parent.Content, aType));
+        }
+
+        public Type LowerType(Type type)
+        {
+            if (type is Type.Declared declared)
+            {
+                if (declared.Decl.IsNative)
+                {
+                    return Builtins.Resolve(declared.Decl);
+                }
+            }
+
+            return type;
+        }
+
+        public Builtin Lower(Type type)
+        {
+            var lower = LowerType(type);
+
+            switch (lower)
+            {
+                case Builtin builtin:
+                    return builtin;
+                case Decl.Classy:
+                    return Builtins.Address;
+                case Type.Callable:
+                    return Builtins.TableIndex;
+                default:
+                    Assert(false);
+                    throw new NotImplementedException();
+            }
         }
 
         public Decl.Class? ResolveExtends(Decl.Classy classy)
@@ -76,88 +127,83 @@ namespace Six.Six.Sema
             return list;
         }
 
-        public Type ResolveDeclType(Decl decl)
+        private IDisposable UseInner()
         {
-            if (decl is Decl.Object @object && @object.Extends is Decl.Class extends)
+            if (inner.Count == 0)
             {
-                return ResolveDeclType(extends);
-            }
-            if (decl is Decl.Classy)
-            {
-                return decl.Type;
-            }
-            return ResolveType(decl.Type);
-        }
+                inner.Push(new InnerResolver(this));
 
-        public Type ResolveType(Type type)
-        {
-            if (type is Type.AliasReference alias)
-            {
-                return ResolveType(alias.Alias.Type);
-
-            }
-            if (type is Decl.Classy classy)
-            {
-                return ResolveDeclType(classy);
+                return new Disposable(() => inner.Pop());
             }
 
-            return type;
-        }
-
-        public Type LowerType(Type type)
-        {
-            var resolved = ResolveType(type);
-
-            if (resolved is Type.Declared declared)
-            {
-                if (declared.Decl.IsNative)
-                {
-                    return Builtins.Resolve(declared.Decl);
-                }
-            }
-
-            return resolved;
+            return new Disposable(() => { });
         }
 
         public Type ResolveType(Scope scope, A.Type tree)
         {
-            return DoResolveType(scope, (dynamic)tree);
-        }
-
-        private Type DoResolveType(Scope scope, A.Type tree)
-        {
-            Assert(false);
-            throw new NotImplementedException();
-        }
-
-        private Type DoResolveType(Scope scope, A.Type.Array tree)
-        {
-            var type = ResolveType(scope, tree.Type);
-
-            return new Type.Array(Module, type);
-        }
-
-        private Type DoResolveType(Scope scope, A.Type.Callable tree)
-        {
-            var result = ResolveType(scope, tree.Type);
-            var parameters = tree.Arguments.Select(type => ResolveType(scope, type));
-
-            return new Type.Callable(Module, result, parameters.ToList());
-        }
-
-        private Type DoResolveType(Scope scope, A.Reference tree)
-        {
-            var resolved = scope.Resolve(tree, tree.Name.Text);
-            if (resolved is not Type)
+            using (UseInner())
             {
-                return ResolveType(scope.Parent, tree);
+                return Inner.ResolveType(scope, tree);
             }
-            else if (resolved.Type is Type.AliasReference)
+        }
+
+        private class InnerResolver
+        {
+            private HashSet<string> already = new();
+
+            public InnerResolver(TypeResolver outer)
+            {
+                Outer = outer;
+            }
+
+            public TypeResolver Outer { get; }
+
+            public Type ResolveType(Scope scope, A.Type tree)
+            {
+                return TypeOf(scope, (dynamic)tree);
+            }
+
+            private Type TypeOf(Scope scope, A.Type tree)
             {
                 Assert(false);
+                throw new NotImplementedException();
             }
 
-            return ResolveDeclType(resolved);
+            private Type TypeOf(Scope scope, A.Type.Array tree)
+            {
+                var type = ResolveType(scope, tree.Type);
+
+                return new Type.Array(Outer.Module, type);
+            }
+
+            private Type TypeOf(Scope scope, A.Type.Callable tree)
+            {
+                var result = ResolveType(scope, tree.Type);
+                var parameters = tree.Arguments.Select(type => ResolveType(scope, type));
+
+                return new Type.Callable(Outer.Module, result, parameters.ToList());
+            }
+
+            private Type TypeOf(Scope scope, A.Reference tree)
+            {
+                var name = tree.Name.Text;
+
+                var resolved = scope.Resolve(tree, name);
+
+                if (already.Contains(resolved.FullName))
+                {
+                    throw Outer.Module.Errors.TypeRecursionDetected(tree.GetLocation(), name);
+                }
+
+                already.Add(resolved.FullName);
+
+                if (resolved is not Type)
+                {
+                    return ResolveType(scope.Parent, tree);
+                }
+
+                return resolved.Type;
+            }
         }
     }
 }

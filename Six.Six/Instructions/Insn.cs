@@ -17,31 +17,37 @@
             }
         }
 
-        public class ToDoInsn : Simplest
-        {
-            public ToDoInsn(string text)
-                : base(text)
-            {
-            }
-
-            public override string ToString()
-            {
-                return $";; TODO: {Text}";
-            }
-        }
-
-        public static Insn ToDo(string text) => new ToDoInsn(text);
+        public static Insn ToDo(string text) => new Simplest($";; TODO: {text}");
         public static Insn Comment(string text) => new Simplest($";; {text}");
 
-        public static Insn Return { get; } = new Simplest("return");
-        public static Insn Unreachable { get; } = new Simplest("unreachable");
-        public static Insn Drop { get; } = new Simplest("drop");
-        public static Insn If { get; } = new Simplest("if");
-        public static Insn Else { get; } = new Simplest("else");
-        public static Insn End { get; } = new Simplest("end");
+        public static Insn Return { get; } = new Simple.Return();
+        public static Insn Nop { get; } = new Simple.Nop();
+        public static Insn Unreachable { get; } = new Simple.Unreachable();
+        public static Insn Drop { get; } = new Simple.Drop();
+        public static Insn If { get; } = new Simple.If();
+        public static Insn Else { get; } = new Simple.Else();
+        public static Insn End { get; } = new Simple.End();
+        public static Insn Block { get; } = new Simple.Block();
+        public static Insn Loop { get; } = new Simple.Loop();
 
         public static Insn Call(string functionName) => new Simplest($"call ${functionName}");
         public static Insn CallIndirect(string tableName, string type) => new Simplest($"call_indirect ${tableName} {type}");
+
+        public static Insn BrIf(string label) => new Simplest($"br_if ${label}");
+        public static Insn Br(string label) => new Simplest($"br ${label}");
+
+        public static class Simple
+        {
+            public class Return : Simplest { public Return() : base("return") { } }
+            public class Nop : Simplest { public Nop() : base("nop") { } }
+            public class Unreachable : Simplest { public Unreachable() : base("unreachable") { } }
+            public class Drop : Simplest { public Drop() : base("dtop") { } }
+            public class If : Simplest { public If() : base("if") { } }
+            public class Else : Simplest { public Else() : base("else") { } }
+            public class End : Simplest { public End() : base("end") { } }
+            public class Block : Simplest { public Block() : base("block") { } }
+            public class Loop : Simplest { public Loop() : base("loop") { } }
+        }
 
         public static class Local
         {
@@ -56,106 +62,145 @@
             public static Insn Set(string name) => new Simplest($"global.set ${name}");
         }
 
-        public abstract class Xnn<TValue>
-            where TValue : struct
+
+        public static class Num
         {
-            protected Value.ValueT<TValue> Value(TValue value) => new Value.ValueT<TValue>(ValueType, value);
-            protected abstract ValueType ValueType { get; }
-            protected abstract MemType MemType { get; }
-            protected abstract OpSign Signedness { get; }
+            public abstract class Xnn<TValue>
+                where TValue : struct
+            {
+                protected Value.ValueT<TValue> Value(TValue value) => new Value.ValueT<TValue>(ValueType, value);
+                protected abstract ValueType ValueType { get; }
+                protected abstract MemType MemType { get; }
+                protected abstract OpSign Signedness { get; }
 
-            public Const Const(TValue value) => new(Value(value));
+                public Const Const(TValue value) => new(Value(value));
 
-            public Insn Add => Binop.Add(ValueType);
-            public Insn Sub => Binop.Sub(ValueType);
-            public Insn Mul => Binop.Mul(ValueType);
-            public Insn Div => Binop.Div(ValueType, Signedness);
+                public Insn Add => Binop.Add(ValueType);
+                public Insn Sub => Binop.Sub(ValueType);
+                public Insn Mul => Binop.Mul(ValueType);
+                public Insn Div => Binop.Div(ValueType, Signedness);
 
-            public Insn EQ => Binop.Eq(ValueType);
-            public Insn NE => Binop.Ne(ValueType);
-            public Insn LE => Binop.Le(ValueType, Signedness);
-            public Insn LT => Binop.Lt(ValueType, Signedness);
-            public Insn GT => Binop.Gt(ValueType, Signedness);
-            public Insn GE => Binop.Ge(ValueType, Signedness);
+                public Insn EQZ => Binop.EqZ(ValueType);
+                public Insn EQ => Binop.Eq(ValueType);
+                public Insn NE => Binop.Ne(ValueType);
+                public Insn LE => Binop.Le(ValueType, Signedness);
+                public Insn LT => Binop.Lt(ValueType, Signedness);
+                public Insn GT => Binop.Gt(ValueType, Signedness);
+                public Insn GE => Binop.Ge(ValueType, Signedness);
 
-            public Insn Load(uint offset) => new Load(MemType, offset);
-            public Insn Store(uint offset) => new Store(MemType, offset);
+                public Insn Nop => Insn.Nop;
+
+                public Insn Load(uint offset) => new Load(MemType, offset);
+                public Insn Store(uint offset) => new Store(MemType, offset);
+            }
+
+            public abstract class Inn<TValue> : Xnn<TValue>
+                where TValue : struct
+            {
+                public Insn Rem => Binop.Rem(ValueType, Signedness);
+                public Insn Shl => Binop.Shl(ValueType);
+                public Insn Shr => Binop.Shr(ValueType, Signedness);
+
+                public Insn And => Binop.And(ValueType);
+                public Insn Or => Binop.Or(ValueType);
+                public Insn Xor => Binop.Xor(ValueType);
+            }
+
+            public class S8Impl : Inn<sbyte>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I32;
+                protected override MemType MemType { get; } = MemType.S8;
+                protected override OpSign Signedness => OpSign.Signed;
+            }
+
+            public class S16Impl : Inn<short>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I32;
+                protected override MemType MemType { get; } = MemType.S16;
+                protected override OpSign Signedness => OpSign.Signed;
+            }
+
+            public class S32Impl : Inn<int>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I32;
+                protected override MemType MemType { get; } = MemType.S32;
+                protected override OpSign Signedness => OpSign.Signed;
+            }
+
+            public class S64Impl : Inn<long>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I64;
+                protected override MemType MemType { get; } = MemType.S64;
+                protected override OpSign Signedness => OpSign.Signed;
+            }
+
+            public class U8Impl : Inn<byte>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I32;
+                protected override MemType MemType { get; } = MemType.U8;
+                protected override OpSign Signedness => OpSign.Unsigned;
+            }
+
+            public class U16Impl : Inn<ushort>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I32;
+                protected override MemType MemType { get; } = MemType.U16;
+                protected override OpSign Signedness => OpSign.Unsigned;
+            }
+
+            public class U32Impl : Inn<uint>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I32;
+                protected override MemType MemType { get; } = MemType.U32;
+                protected override OpSign Signedness => OpSign.Unsigned;
+            }
+
+            public class U64Impl : Inn<ulong>
+            {
+                protected override ValueType ValueType { get; } = ValueType.I64;
+                protected override MemType MemType { get; } = MemType.U64;
+                protected override OpSign Signedness => OpSign.Unsigned;
+            }
+
+            public abstract class Fnn<TValue> : Xnn<TValue>
+                where TValue : struct
+            {
+                public Insn Neg => Unop.Neg(ValueType);
+            }
+
+            public class F32Impl : Fnn<float>
+            {
+                protected override ValueType ValueType { get; } = ValueType.F32;
+                protected override MemType MemType { get; } = MemType.F32;
+                protected override OpSign Signedness => OpSign.Neutral;
+            }
+
+            public class F64Impl : Fnn<double>
+            {
+                protected override ValueType ValueType { get; } = ValueType.F64;
+                protected override MemType MemType { get; } = MemType.F64;
+                protected override OpSign Signedness => OpSign.Neutral;
+            }
         }
 
-        public abstract class Inn<TValue> : Xnn<TValue>
-            where TValue : struct
-        {
-            public Insn Rem => Binop.Rem(ValueType, Signedness);
+        public static readonly Num.S8Impl S8 = new();
+        public static readonly Num.S16Impl S16 = new();
+        public static readonly Num.S32Impl S32 = new();
+        public static readonly Num.S64Impl S64 = new();
+        public static readonly Num.U8Impl U8 = new();
+        public static readonly Num.U16Impl U16 = new();
+        public static readonly Num.U32Impl U32 = new();
+        public static readonly Num.U64Impl U64 = new();
 
-            public Insn And => Binop.And(ValueType);
-            public Insn Or => Binop.Or(ValueType);
-            public Insn Xor => Binop.Xor(ValueType);
-        }
-
-        public class S32Impl : Inn<int>
-        {
-            protected override ValueType ValueType { get; } = ValueType.I32;
-            protected override MemType MemType { get; } = MemType.S32();
-            protected override OpSign Signedness => OpSign.Signed;
-        }
-
-        public class U32Impl : Inn<uint>
-        {
-            protected override ValueType ValueType { get; } = ValueType.I32;
-            protected override MemType MemType { get; } = MemType.U32();
-            protected override OpSign Signedness => OpSign.Unsigned;
-        }
-
-        public class S64Impl : Inn<long>
-        {
-            protected override ValueType ValueType { get; } = ValueType.I64;
-            protected override MemType MemType { get; } = MemType.S64();
-            protected override OpSign Signedness => OpSign.Signed;
-        }
-
-        public class U64Impl : Inn<ulong>
-        {
-            protected override ValueType ValueType { get; } = ValueType.I64;
-            protected override MemType MemType { get; } = MemType.U64();
-            protected override OpSign Signedness => OpSign.Unsigned;
-        }
-
-        public abstract class Fnn<TValue> : Xnn<TValue>
-            where TValue : struct
-        {
-            public Insn Neg => Unop.Neg(ValueType);
-        }
-
-        public class F32Impl : Fnn<float>
-        {
-            protected override ValueType ValueType { get; } = ValueType.F32;
-            protected override MemType MemType { get; } = MemType.F32;
-            protected override OpSign Signedness => OpSign.Neutral;
-        }
-
-        public class F64Impl : Fnn<double>
-        {
-            protected override ValueType ValueType { get; } = ValueType.F64;
-            protected override MemType MemType { get; } = MemType.F64;
-            protected override OpSign Signedness => OpSign.Neutral;
-        }
-
-        public static readonly S32Impl S32 = new();
-        public static readonly U32Impl U32 = new();
-        public static readonly S64Impl S64 = new();
-        public static readonly U64Impl U64 = new();
-
-        public static readonly F32Impl F32 = new();
-        public static readonly F64Impl F64 = new();
+        public static readonly Num.F32Impl F32 = new();
+        public static readonly Num.F64Impl F64 = new();
 
         public static readonly Pointer Ptr = new();
 
         public class Pointer
         {
-            public Insn Push(Ptr ptr) => ptr.Insn;
-            public Insn Add => U32.Add;
-            public Insn Load(uint offset) => new Load(MemType.U32(), offset);
-            public Insn Store(uint offset) => new Store(MemType.U32(), offset);
+            public Insn Load(uint offset) => new Load(MemType.U32, offset);
+            public Insn Store(uint offset) => new Store(MemType.U32, offset);
         }
 
         public static class Boolean
@@ -216,6 +261,10 @@
             public static Insn Or(ValueType type) => new Binop(type, "or", OpSign.Neutral);
             public static Insn Xor(ValueType type) => new Binop(type, "xor", OpSign.Neutral);
 
+            public static Insn Shl(ValueType type) => new Binop(type, "shl", OpSign.Neutral);
+            public static Insn Shr(ValueType type, OpSign signedness) => new Binop(type, "shr", signedness);
+
+            public static Insn EqZ(ValueType type) => new Binop(type, "eqz", OpSign.Neutral);
             public static Insn Eq(ValueType type) => new Binop(type, "eq", OpSign.Neutral);
             public static Insn Ne(ValueType type) => new Binop(type, "ne", OpSign.Neutral);
             public static Insn Lt(ValueType type, OpSign signedness) => new Binop(type, "lt", signedness);
@@ -290,36 +339,25 @@
             {
             }
 
-            public override string ToString()
-            {
-                return $"local.get {Index}";
-            }
+            public override string ToString() => $"local.get {Index}";
         }
 
         public class LocalSet : IndexRef
         {
-            public LocalSet(int index)
-                : base(index)
+            public LocalSet(int index) : base(index)
             {
             }
 
-            public override string ToString()
-            {
-                return $"local.set {Index}";
-            }
+            public override string ToString() => $"local.set {Index}";
         }
 
         public class LocalTee : IndexRef
         {
-            public LocalTee(int index)
-                : base(index)
+            public LocalTee(int index) : base(index)
             {
             }
 
-            public override string ToString()
-            {
-                return $"local.tee {Index}";
-            }
+            public override string ToString() => $"local.tee {Index}";
         }
     }
 
@@ -459,10 +497,14 @@
         private string Bits => Bytes == ValueType.Bytes ? "" : $"{Bytes * 8}";
         private string Sign => Bytes == ValueType.Bytes ? "" : $"{OpSign}";
 
-        public static MemType U32(int bytes = 4) => new(ValueType.I32, bytes, OpSign.Unsigned);
-        public static MemType S32(int bytes = 4) => new(ValueType.I32, bytes, OpSign.Signed);
-        public static MemType U64(int bytes = 8) => new(ValueType.I64, bytes, OpSign.Unsigned);
-        public static MemType S64(int bytes = 8) => new(ValueType.I64, bytes, OpSign.Signed);
+        public static MemType S8 { get; } = new(ValueType.I32, 1, OpSign.Signed);
+        public static MemType S16 { get; } = new(ValueType.I32, 2, OpSign.Signed);
+        public static MemType S32 { get; } = new(ValueType.I32, 4, OpSign.Signed);
+        public static MemType S64 { get; } = new(ValueType.I64, 8, OpSign.Signed);
+        public static MemType U8 { get; } = new(ValueType.I32, 1, OpSign.Unsigned);
+        public static MemType U16 { get; } = new(ValueType.I32, 2, OpSign.Unsigned);
+        public static MemType U32 { get; } = new(ValueType.I32, 4, OpSign.Unsigned);
+        public static MemType U64 { get; } = new(ValueType.I64, 8, OpSign.Unsigned);
 
         public static MemType F32 { get; } = new MemType(ValueType.F32, ValueType.F32.Bytes, OpSign.Neutral);
         public static MemType F64 { get; } = new MemType(ValueType.F64, ValueType.F64.Bytes, OpSign.Neutral);

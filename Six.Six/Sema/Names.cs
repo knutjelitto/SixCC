@@ -55,9 +55,10 @@
         public static class Nouns
         {
             public static readonly string Class = "class";
+            public static readonly string Interface = "interface";
+            public static readonly string Object = "object";
             public static readonly string Function = "function";
             public static readonly string Method = "method";
-            public static readonly string Interface = "interface";
             public static readonly string Member = "member";
         }
     }

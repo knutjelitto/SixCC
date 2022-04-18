@@ -7,21 +7,10 @@ namespace Six.Six.Sema
     public interface Stmt : Member
     {
         ILocation Location { get; }
-        Errors Errors { get; }
         bool Validated { get; set; }
+        Type Type { get; }
 
-        public sealed class Block : Statement
-        {
-            public Block(ILocation location, CodeBlock block, List<Stmt> stmts)
-                : base(location, block)
-            {
-                Stmts = stmts;
-            }
-
-            public List<Stmt> Stmts { get; }
-        }
-
-        public sealed class Unreachable : Statement
+        public sealed class Unreachable : StmtImpl
         {
             public Unreachable(ILocation location, CodeBlock block)
                 : base(location, block)
@@ -31,7 +20,7 @@ namespace Six.Six.Sema
             public Decl.Funcy Funcy => Block.Funcy;
         }
 
-        public sealed class If : Statement
+        public sealed class If : StmtImpl
         {
             private readonly LazyExpr lazyCondition;
             public If(ILocation location, CodeBlock block, LazyExpr lazyCondition, CodeBlock ifBlock, CodeBlock? elseBlock)
@@ -42,12 +31,45 @@ namespace Six.Six.Sema
                 ElseBlock = elseBlock;
             }
 
-            public Expr Condition => lazyCondition.Expr;
+            public Expr Condition => lazyCondition.Value;
             public CodeBlock IfBlock { get; }
             public CodeBlock? ElseBlock { get; }
+
+            public override Type Type
+            {
+                get
+                {
+                    if (ElseBlock == null)
+                    {
+                        return IfBlock.StmtsType;
+                    }
+                    var t1 = IfBlock.StmtsType;
+                    var t2 = IfBlock.StmtsType;
+
+                    Assert(ReferenceEquals(Module.Resolver.T.Lower(t1), Module.Resolver.T.Lower(t2)));
+
+                    return t1;
+                }
+            }
         }
 
-        public sealed class Return : Statement
+        public sealed class While : StmtImpl
+        {
+            private readonly LazyExpr lazyCondition;
+            public While(ILocation location, CodeBlock block, LazyExpr lazyCondition, CodeBlock whileBlock)
+                : base(location, block)
+            {
+                this.lazyCondition = lazyCondition;
+                WhileBlock = whileBlock;
+            }
+
+            public Expr Condition => lazyCondition.Value;
+            public CodeBlock WhileBlock { get; }
+
+            public override Type Type => WhileBlock.StmtsType;
+        }
+
+        public sealed class Return : StmtImpl
         {
             private readonly LazyExpr? lazyExpr;
 
@@ -59,10 +81,12 @@ namespace Six.Six.Sema
 
             public Decl.Funcy Funcy => Block.Funcy;
 
-            public Expr? Expr => lazyExpr?.Expr;
+            public Expr? Expr => lazyExpr?.Value;
+
+            public override Type Type => Expr != null ? Expr.Type : base.Type;
         }
 
-        public sealed class Assign : Statement
+        public sealed class Assign : StmtImpl
         {
             private readonly LazyExpr lazyLeft;
             private readonly LazyExpr lazyRight;
@@ -74,11 +98,11 @@ namespace Six.Six.Sema
                 lazyRight = right;
             }
 
-            public Expr Left => lazyLeft.Expr;
-            public Expr Right => lazyRight.Expr;
+            public Expr Left => lazyLeft.Value;
+            public Expr Right => lazyRight.Value;
         }
 
-        public sealed class Expression : Statement
+        public sealed class Expression : StmtImpl
         {
             private readonly LazyExpr lazyExpr;
 
@@ -88,26 +112,25 @@ namespace Six.Six.Sema
                 lazyExpr = expr;
             }
 
-            public Expr Expr => lazyExpr.Expr;
+            public Expr Expr => lazyExpr.Value;
         }
     }
 
-    public abstract class Statement : Stmt
+    public abstract class StmtImpl : Stmt
     {
-        public Statement(ILocation location, CodeBlock block)
+        protected StmtImpl(ILocation location, CodeBlock block)
         {
             Location = location;
             Block = block;
-            block.Members.Add(this);
         }
 
         public ILocation Location { get; }
         public CodeBlock Block { get; }
 
         public Module Module => Block.Module;
-        public Resolver Resolver => Module.Resolver;
-        public Errors Errors => Module.Errors;
 
         public bool Validated { get; set; }
+
+        public virtual Type Type => new Type.Void(Module);
     }
 }

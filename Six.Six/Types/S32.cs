@@ -4,9 +4,9 @@ using System;
 
 namespace Six.Six.Types
 {
-    public class S32 : I32<Insn.S32Impl, int>
+    public class S32 : I32<Insn.Num.S32Impl, int>
     {
-        protected override Insn.S32Impl Impl => Insn.S32;
+        protected override Insn.Num.S32Impl Impl => Insn.S32;
 
         public S32(Builtins builtins) : base(builtins, Names.Core.S32)
         {

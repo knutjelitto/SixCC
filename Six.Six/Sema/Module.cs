@@ -39,7 +39,6 @@ namespace Six.Six.Sema
             Resolver = new Resolver(this);
             Builtins = new Builtins(this);
             Errors = new Errors(this);
-            Emitter = new Emitter(this);
             Validator = new Validator(this);
             Checker = new TypeChecker(this);
         }
@@ -49,7 +48,6 @@ namespace Six.Six.Sema
         public Resolver Resolver { get; }
         public Builtins Builtins { get; }
         public Errors Errors { get; }
-        public Emitter Emitter { get; }
         public Validator Validator { get; }
         public TypeChecker Checker { get; }
 
@@ -59,19 +57,22 @@ namespace Six.Six.Sema
         {
             Validator.Validate();
 
-            var emitter = new WaEmitter(this);
-            emitter.EmitModule();
-
             if (!HasErrors)
             {
-                var wat = emitter.WaModule.Writer.ToString();
+                var emitter = new WaEmitter(this);
+                emitter.EmitModule();
 
-                using (var dumper = $"six.core.wat".Writer())
+                if (!HasErrors)
                 {
-                    dumper.Write(wat);
-                }
+                    var wat = emitter.WaModule.Writer.ToString();
 
-                return wat;
+                    using (var dumper = $"six.core.wat".Writer())
+                    {
+                        dumper.Write(wat);
+                    }
+
+                    return wat;
+                }
             }
 
             return "";
@@ -126,30 +127,9 @@ namespace Six.Six.Sema
             WhenDiagnostics();
         }
 
-        public void Dump(Writer writer)
-        {
-            DumpDeclarations(writer);
-        }
-
         public IEnumerable<NamespaceBlock> GetNamespaces()
         {
             return Root.GetNamespaces();
-        }
-
-        private void DumpDeclarations(Writer writer)
-        {
-            var count = 0;
-            foreach (var decl in GetNamespaces().SelectMany(ns => ns.GetDeclarations()).OrderBy(decl => decl.Name))
-            {
-                count += 1;
-
-                var attrs = new StringBuilder();
-                attrs.Append(decl.IsShared ? "P" : " ");
-                attrs.Append(decl.IsStatic ? "S" : " ");
-                attrs.Append(decl.IsNative ? "N" : " ");
-
-                writer.WriteLine($"{count,3} {decl.GetType().Name,-12} [{attrs}] {decl.Name,-30} {decl.Location}");
-            }
         }
 
         public Decl.Classy CoreFindType(string name)
@@ -163,30 +143,28 @@ namespace Six.Six.Sema
             }
 
             Assert(false);
-            throw Errors.CantResolveInCore("class", name);
+            throw Errors.CanNotResolveInCore("class", name);
         }
 
         public Decl.Class CoreFindClass(ILocation location, string name)
         {
             var core = GetCoreNamespace();
 
-            var decl = core.Content.Find(location, name);
-            Assert(decl is Decl.Class);
-            return (Decl.Class)decl;
+            return core.Find<Decl.Class>(location, name);
         }
 
         public Decl.Function CoreFindFunction(string name)
         {
             var core = GetCoreNamespace();
 
-            var decl = core.Content.TryFind(name);
+            var decl = core.TryFind(name);
             if (decl is Decl.Function function)
             {
                 return function;
             }
 
             Assert(false);
-            throw Errors.CantResolveInCore("function", name);
+            throw Errors.CanNotResolveInCore("function", name);
         }
 
         public NamespaceBlock GetCoreNamespace()

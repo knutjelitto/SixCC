@@ -12,6 +12,7 @@ namespace Six.Six.Types
             Module = module;
 
             S32 = Add(new S32(this));
+            U8 = Add(new U8(this));
             U32 = TableIndex = Add(new U32(this));
             F32 = Add(new F32(this));
             F64 = Add(new F64(this));
@@ -36,6 +37,7 @@ namespace Six.Six.Types
         public Builtin Builtin { get; }
         public Builtin Runtime { get; }
 
+        public Builtin U8 { get; }
         public Builtin U32 { get; }
         public Builtin S32 { get; }
 
@@ -58,11 +60,6 @@ namespace Six.Six.Types
 
         private Builtin Resolve(string name)
         {
-            if (name == "true")
-            {
-                Assert(false);
-            }
-
             if (buildins.TryGetValue(name, out var builtin))
             {
                 return builtin;

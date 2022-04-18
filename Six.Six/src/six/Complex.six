@@ -2,20 +2,20 @@ namespace six.core;
 
 shared sealed class Complex
 {
-    var int re = 0;
-    var int im = 0;
+    var int real = 0;
+    var int imag = 0;
 
-    shared new (int re = 0, int im = 0)
+    shared new (int real = 0, int imag = 0)
     {
-        self.re = re;
-        self.im = im;
+        self.real = real;
+        self.imag = imag;
     }
 
-    shared int Re => self.re;
-    shared int Im => self.im;
+    shared int Real => self.real;
+    shared int Imag => self.imag;
 
     shared infix Complex + (Complex other)
     {
-        return Complex(self.re + other.re, self.im + other.im);
+        return Complex(self.real + other.real, self.imag + other.imag);
     }
 }

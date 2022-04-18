@@ -27,30 +27,6 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
-        private Stmt Statement(CodeBlock block, A.Stmt.If node)
-        {
-            var ifBlock = block.NewNested();
-
-            var condition = E.ExpressionConditions(ifBlock, node.Conditions);
-            B.WalkBody(ifBlock, node.Then);
-
-            CodeBlock? elseBlock = null;
-            if (node.Else != null)
-            {
-                elseBlock = block.NewNested();
-                if (node.Else is A.Stmt.If elseIf)
-                {
-                    elseBlock.Add(WalkStatement(elseBlock, elseIf));
-                }
-                else
-                {
-                    B.WalkBody(elseBlock, node.Else);
-                }
-            }
-
-            return new Stmt.If(node.GetLocation(), block, condition, ifBlock, elseBlock);
-        }
-
         private Stmt Statement(CodeBlock block, A.Stmt.Expr node)
         {
             return new Stmt.Expression(
@@ -75,5 +51,42 @@ namespace Six.Six.Sema
                     block,
                     node.Expression == null ? null : E.ResolveExpression(block, node.Expression));
         }
+
+        private Stmt Statement(CodeBlock block, A.Stmt.If node)
+        {
+            var ifBlock = block.NewNested();
+
+            var condition = E.ExpressionConditions(ifBlock, node.Conditions);
+            
+            B.WalkBody(ifBlock, node.Then);
+
+            CodeBlock? elseBlock = null;
+            if (node.Else != null)
+            {
+                elseBlock = block.NewNested();
+                if (node.Else is A.Stmt.If elseIf)
+                {
+                    elseBlock.Add(WalkStatement(elseBlock, elseIf));
+                }
+                else
+                {
+                    B.WalkBody(elseBlock, node.Else);
+                }
+            }
+
+            return new Stmt.If(node.GetLocation(), block, condition, ifBlock, elseBlock);
+        }
+
+        private Stmt Statement(CodeBlock block, A.Stmt.While node)
+        {
+            var whileBlock = block.NewNested();
+
+            var condition = E.ExpressionConditions(whileBlock, node.Conditions);
+
+            B.WalkBody(whileBlock, node.Block);
+
+            return new Stmt.While(node.GetLocation(), block, condition, whileBlock);
+        }
+
     }
 }

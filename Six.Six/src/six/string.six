@@ -8,6 +8,7 @@ shared native class String
     {
         if (s1.Length == 0)
         {
+            1;
             return s2;
         }
         else if (s2.Length == 0)

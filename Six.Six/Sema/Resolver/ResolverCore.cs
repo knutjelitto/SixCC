@@ -28,5 +28,6 @@ namespace Six.Six.Sema
         public TypeResolver T => Resolver.T;
         public DeclarationResolver D => Resolver.D;
         public BodyResolver B => Resolver.B;
+        public Members M => Resolver.M;
     }
 }

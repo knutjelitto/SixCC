@@ -14,20 +14,6 @@ namespace Six.Six.Sema
         {
         }
 
-        [DebuggerDisplay("alias <{Alias}>")]
-        public sealed class AliasReference : TypeImpl, Declared
-        {
-            public AliasReference(Module module, Decl.Alias alias)
-                : base(module)
-            {
-                Alias = alias;
-            }
-
-            public Decl.Alias Alias { get; }
-
-            public Decl Decl => Alias;
-        }
-
         public sealed class Callable : TypeImpl
         {
             public Callable(Module module, Type result, params Type[] parameters)
@@ -122,21 +108,5 @@ namespace Six.Six.Sema
             protected Module Module { get; }
             protected TypeChecker Checker => Module.Checker;
         }
-    }
-
-    public sealed record LazyType : Entity
-    {
-        private Type? type = null;
-        private readonly Func<Type> resolver;
-
-        public LazyType(Module module, Func<Type> resolver)
-        {
-            Module = module;
-            this.resolver = resolver;
-        }
-
-        public Module Module { get; }
-
-        public Type Type => type ??= resolver();
     }
 }

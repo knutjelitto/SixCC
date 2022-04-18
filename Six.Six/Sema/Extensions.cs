@@ -6,23 +6,6 @@ namespace Six.Six.Sema
 {
     public static class Extensions
     {
-        public static T FindMember<T>(this Decl.Classy classy, ILocation location, string name)
-            where T : Decl
-        {
-            var found = classy.Block.Content.TryFind(name);
-
-            if (found is T foundAsT)
-            {
-                return foundAsT;
-            }
-            if (classy.Extends != null)
-            {
-                return classy.Extends.FindMember<T>(location, name);
-            }
-
-            throw classy.Module.Errors.CantResolveMember(location, name);
-        }
-
         [DebuggerStepThrough]
         public static ILocation GetLocation(this A.TreeNode node)
         {

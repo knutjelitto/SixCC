@@ -7,7 +7,6 @@ namespace Six.Six.Wasms
         public WaInstructionList(IWithWriter withWriter)
             : base(withWriter)
         {
-
         }
     }
 }

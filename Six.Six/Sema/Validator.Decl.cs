@@ -19,6 +19,13 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
+        private void Decl(Decl.Alias decl)
+        {
+            _ = decl.Type;
+
+            Assert(slip);
+        }
+
         private void Decl(Decl.Class decl)
         {
             ClassyDecl(decl);
@@ -60,7 +67,7 @@ namespace Six.Six.Sema
             // force layout
             //_ = decl.Layout;
 
-            Walk(decl.Block);
+            Walk(decl.Members);
 
             if (decl.IsStatic)
             {
@@ -128,7 +135,7 @@ namespace Six.Six.Sema
 
         private void Decl(Decl.Funcy decl)
         {
-            Walk(decl.Block);
+            Walk(decl.Members);
 
             FuncyDecl((dynamic)decl);
         }
@@ -241,6 +248,12 @@ namespace Six.Six.Sema
                 Assert(slip);
             }
             else if (decl.Parent is FuncBlock)
+            {
+                // LOCAL FUNCTION
+
+                Assert(slip);
+            }
+            else if (decl.Parent is CodeBlock)
             {
                 // LOCAL FUNCTION
 

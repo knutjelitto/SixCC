@@ -36,7 +36,7 @@ namespace Six.Six.Sema
 
         public void WalkBody(FuncBlock block, A.Body node)
         {
-            WalkBody(block.CodeBlock, (dynamic)node);
+            WalkBody(block.CodeBlock, node);
         }
 
         public void WalkBody(CodeBlock block, A.Body node)
@@ -44,7 +44,7 @@ namespace Six.Six.Sema
             FuncyBody(block, (dynamic)node);
         }
 
-        public void FuncyBody(CodeBlock block, A.Body node)
+        private void FuncyBody(CodeBlock block, A.Body node)
         {
             Assert(false);
             throw new NotImplementedException();
@@ -71,10 +71,7 @@ namespace Six.Six.Sema
 
         private void FuncyBody(CodeBlock block, A.Body.Deferred node)
         {
-            Assert(
-                block.Funcy.IsAbstract ||
-                block.Funcy.IsNative ||
-                block.Funcy is Decl.Constructor ctor && ctor.IsNative);
+            Assert(block.Funcy.IsAbstract || block.Funcy.IsNative);
 
             block.Add(new Stmt.Unreachable(node.GetLocation(), block));
         }

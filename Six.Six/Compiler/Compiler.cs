@@ -43,11 +43,6 @@ namespace Six.Six.Compiler
                 }
             }
 
-            using (var writer = $"{parser.__Name}-Global.txt".Writer())
-            {
-                Module.Dump(writer);
-            }
-
             using (var writer = $"{parser.__Name}-Timing.txt".Writer())
             {
                 var sorted = files.OrderBy(file => file.ParseLines / file.ParseTime.TotalSeconds);

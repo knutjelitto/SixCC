@@ -1,6 +1,6 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 #pragma warning disable IDE1006 // Naming Styles
 
@@ -9,7 +9,7 @@ namespace Six.Six.Types
     public sealed class Address : Builtin
     {
         public Address(Builtins builtins)
-            : base(builtins, Names.Core.Address, W.WasmType.Addr)
+            : base(builtins, Names.Core.Address, WasmType.Addr)
         {
             AddMethod(Module.DefaultCtor, 1, defaultCtor);
         }

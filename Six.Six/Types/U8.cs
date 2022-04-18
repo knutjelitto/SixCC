@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Types
 {
-    public sealed class U32 : I32<Insn.Num.U32Impl, uint>
+    public sealed class U8 : I32<Insn.Num.U8Impl, byte>
     {
-        protected override Insn.Num.U32Impl Impl => Insn.U32;
+        protected override Insn.Num.U8Impl Impl => Insn.U8;
 
-        public U32(Builtins builtins)
-            : base(builtins, Names.Core.U32)
+        public U8(Builtins builtins)
+            : base(builtins, Names.Core.U8)
         {
         }
 

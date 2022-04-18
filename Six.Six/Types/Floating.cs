@@ -1,24 +1,32 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public abstract class Floating<TInsn, TValue> : Number<TInsn, TValue>
-        where TInsn : Insn.Fnn<TValue>
+        where TInsn : Insn.Num.Fnn<TValue>
         where TValue : struct
     {
-        public Floating(Builtins builtins, string name, W.WasmType wasm)
+        public Floating(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
             prefix.Add("-", Neg);
+            prefix.Add("+", Pos);
         }
 
-        public Primitive.Unop Neg(Expr right)
+        public Primitive.Unop Neg(Expr arg)
         {
-            IsThis(right);
+            IsThis(arg);
 
-            return new Primitive.Unop(this, Impl.Neg, right);
+            return new Primitive.Unop(this, Impl.Neg, arg);
+        }
+
+        public Primitive.Unop Pos(Expr arg)
+        {
+            IsThis(arg);
+
+            return new Primitive.Unop(this, Impl.Nop, arg);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public sealed class String : Builtin
     {
         public String(Builtins builtins)
-            : base(builtins, Names.Core.String, W.WasmType.Addr)
+            : base(builtins, Names.Core.String, WasmType.Addr)
         {
             infix.Add("+", Add);
         }

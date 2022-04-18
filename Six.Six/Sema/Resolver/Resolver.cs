@@ -19,19 +19,17 @@ namespace Six.Six.Sema
             S = new StatementResolver(module, this);
             T = new TypeResolver(module, this);
             B = new BodyResolver(module, this);
+            M = new Members();
         }
 
         public Module Module { get; }
-        public Builtins Builtins => Module.Builtins;
-        public Emitter Emitter => Module.Emitter;
-        public Errors Errors => Module.Errors;
-        public TypeChecker Checker => Module.Checker;
 
         public DeclarationResolver D { get; }
         public ExpressionResolver E { get; }
         public StatementResolver S { get; }
         public TypeResolver T { get; }
         public BodyResolver B { get; }
+        public Members M { get; }
 
         public void Walk(A.Unit.Code code)
         {

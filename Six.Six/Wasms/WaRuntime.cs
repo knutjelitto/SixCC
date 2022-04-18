@@ -5,7 +5,7 @@ namespace Six.Six.Wasms
 {
     public class WaRuntime : WithWriter, Wamber
     {
-        public static uint PayloadOffset = 8;
+        public static uint PayloadOffset = WasmType.Addr.Size + WasmType.I32.Size;
 
         public WaRuntime(WaClass clazz)
             : base(clazz.Writer)
@@ -23,6 +23,8 @@ namespace Six.Six.Wasms
 
         public void Prepare()
         {
+            Assert(Address < uint.MaxValue);
+
             Size = 20;
         }
 

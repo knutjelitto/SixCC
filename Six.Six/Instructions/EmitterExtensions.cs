@@ -11,8 +11,6 @@ namespace Six.Six.Instructions
     {
         public static IEnumerable<Decl.Funcy> InnerFunctions(this Decl.Funcy funcy)
         {
-            Assert(funcy.Block.Members.Count == 0);
-
             foreach (var function in funcy.Functions)
             {
                 foreach (var inner in function.InnerFunctions())

@@ -1,9 +1,11 @@
-﻿using Six.Core;
+﻿using System;
+
+using Six.Core;
 using Six.Six.Sema;
 using Six.Six.Types;
 using Six.Six.Wasms;
 using Six.Six.Wasms.Instructions;
-using System;
+using Type = Six.Six.Sema.Type;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1822 // Mark members as static
@@ -21,6 +23,7 @@ namespace Six.Six.Instructions
         }
 
         public WaModule Module { get; }
+        public TypeResolver TypeResolver => Module.SemaModule.Resolver.T;
         public WaFunction? Function { get; private set; }
 
         private WaInstructionList Current => instructionsStack.Peek();
@@ -30,9 +33,9 @@ namespace Six.Six.Instructions
             return Module.SemaModule.Builtins.Resolve(named);
         }
 
-        public Builtin Lower(Sema.Type type)
+        public Builtin Lower(Type type)
         {
-            return Module.SemaModule.Emitter.Lower(type);
+            return TypeResolver.Lower(type);
         }
 
         private IDisposable Into(WaInstructionList list)
@@ -69,7 +72,7 @@ namespace Six.Six.Instructions
             return instructions;
         }
 
-        private string TypeFor(Sema.Type.Callable callable)
+        private string TypeFor(Type.Callable callable)
         {
             var signature = WaFuncSignature.From(
                 callable.Parameters.Select(p => Lower(p).Wasm),
@@ -92,16 +95,16 @@ namespace Six.Six.Instructions
                     Add(Insn.Call($"{clazz.FullName}.{Sema.Module.InitCtor}"));
                 }
 
-                Assert(funcy.Block.Members.Count == 0);
+                var stmts = funcy.Block.CodeBlock.Stmts;
 
-                foreach (var stmt in funcy.Block.CodeBlock.Stmts)
+                foreach (var stmt in stmts)
                 {
                     Walk(stmt);
                 }
 
-                foreach (var member in funcy.Block.Members)
+                if (stmts.Count > 0 && (stmts.Last() is not Stmt.Return))
                 {
-                    Walk(member);
+                    Add(Insn.Return);
                 }
 
                 Function = null;
@@ -124,7 +127,7 @@ namespace Six.Six.Instructions
             using (Into(function.Instructions))
             {
                 var get = Insn.Local.Get(0);
-                foreach (var field in clazz.Layout.Fields.Select(f => f.Field))
+                foreach (var field in clazz.Members.Fields)
                 {
                     Add(get);
                     Walk(field.Value);
@@ -175,16 +178,13 @@ namespace Six.Six.Instructions
         private void Build(Entity entity)
         {
             Assert(false);
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         private void Build(Decl.LetVar decl)
         {
             Assert(false);
-#if false
-            Walk(decl.Value);
-            Add(Insn.Local.Set(decl.Index));
-#endif
+            throw new InvalidOperationException();
         }
 
         private void Build(Decl.Funcy decl)
@@ -196,36 +196,44 @@ namespace Six.Six.Instructions
         private void Build(Decl.Parameter decl)
         {
             Assert(false);
-            // NOP
+            // NOP - handled elsewhere
         }
 
         private void Build(Decl.SelfParameter decl)
         {
             Assert(false);
-            // NOP
-        }
-
-        private void Build(Stmt.Block block)
-        {
-            foreach (var stmt in block.Stmts)
-            {
-                Walk(stmt);
-            }
+            // NOP - handled elsewhere
         }
 
         private void Build(Stmt.If block)
         {
             var condition = Nested(block.Condition);
-            var thenBlock = Nested(block.IfBlock);
+
+            var type = block.Type is Type.Void ? null : Lower(block.Type).Wasm;
+
+            var ifBlock = Nested(block.IfBlock);
+            
             if (block.ElseBlock != null)
             {
                 var elseBlock = Nested(block.ElseBlock);
-                Add(new WiIfBlock(Module, WasmType.I32, condition, thenBlock, elseBlock));
+                
+                Add(new WiIfBlock(Module, type, condition, ifBlock, elseBlock));
             }
             else
             {
-                Add(new WiIfBlock(Module, WasmType.I32, condition, thenBlock, null));
+                Add(new WiIfBlock(Module, type, condition, ifBlock, null));
             }
+        }
+
+        private void Build(Stmt.While block)
+        {
+            var condition = Nested(block.Condition);
+
+            var type = block.Type is Type.Void ? null : Lower(block.Type).Wasm;
+
+            var whileBlock = Nested(block.WhileBlock);
+
+            Add(new WiWhileBlock(Module, type, condition, whileBlock));
         }
 
         private void Build(Stmt.Return stmt)
@@ -510,7 +518,6 @@ namespace Six.Six.Instructions
             Add(Lower(expr.Field.Type).Load(expr.Field.Offset));
         }
 
-
         private void Build(Primitive.Binop primitive)
         {
             Walk(primitive.Arg1);
@@ -521,7 +528,10 @@ namespace Six.Six.Instructions
         private void Build(Primitive.Unop primitive)
         {
             Walk(primitive.Arg);
-            Add(primitive.Insn);
+            if (primitive.Insn is not Insn.Simple.Nop)
+            {
+                Add(primitive.Insn);
+            }
         }
 
         private void Build(Primitive.Arged primitive)

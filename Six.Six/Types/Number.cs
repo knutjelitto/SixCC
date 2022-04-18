@@ -1,14 +1,14 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public abstract class Number<TInsn, TValue> : Xnn<TInsn, TValue>
-        where TInsn : Insn.Xnn<TValue>
+        where TInsn : Insn.Num.Xnn<TValue>
         where TValue : struct
     {
-        public Number(Builtins builtins, string name, W.WasmType wasm)
+        public Number(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
             infix.Add("+", Add);

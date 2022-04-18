@@ -38,8 +38,10 @@ namespace Six.Six.Wasms
         {
             var missing = NextAddress - Address - Size;
             var fill = missing > 0 ? $" {EmitZeros(missing)}" : "";
+
             var classAddress = StringData.Module.StringClass.RuntimeType.Address;
             var classDispatch = (uint)StringData.Module.StringClass.Dispatches.Index;
+
             wl($"(; +{Address,4} 0x{Address:X4} ;) {EmitUInt32(classAddress)} {EmitUInt32(classDispatch)} {EmitUInt32(Count)} {EmitUtf8(Bytes)}{fill}");
         }
     }

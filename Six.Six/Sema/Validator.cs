@@ -20,7 +20,6 @@ namespace Six.Six.Sema
         public Module Module { get; }
         public Errors Errors => Module.Errors;
         public TypeChecker Checker => Module.Checker;
-        public Emitter Emitter => Module.Emitter;
 
         public void Validate()
         {
@@ -35,9 +34,25 @@ namespace Six.Six.Sema
             Module.Add(error);
         }
 
-        private void Walk(Block block)
+        private void Walk(NamespaceBlock block)
         {
             foreach (var member in block.Members)
+            {
+                Walk(member);
+            }
+        }
+
+        private void Walk(ClassMembers classMembers)
+        {
+            foreach (var member in classMembers.GetAll())
+            {
+                Walk(member);
+            }
+        }
+
+        private void Walk(FuncMembers funcyMembers)
+        {
+            foreach (var member in funcyMembers.GetAll())
             {
                 Walk(member);
             }

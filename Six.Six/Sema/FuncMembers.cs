@@ -9,33 +9,39 @@ namespace Six.Six.Sema
 {
     public class FuncMembers
     {
-        public readonly List<Decl.Local> Parameters = new();
-        public readonly List<Decl.Local> Locals = new();
-        public readonly List<Decl.Function> Functions = new();
+        public readonly List<Decl.Local> parameters = new();
+        public readonly List<Decl.Local> locals = new();
+        public readonly List<Decl.Funcy> functions = new();
+
+        public IEnumerable<Decl> GetAll() => Functions.Cast<Decl>();
+
+        public IReadOnlyList<Decl.Local> Parameters => parameters;
+        public IReadOnlyList<Decl.Local> Locals => locals;
+        public IReadOnlyList<Decl.Funcy> Functions => functions;
 
         public int AddParameter(Decl.Local parameter)
         {
             Assert(Locals.Count == 0);
 
-            parameter.Index = Parameters.Count;
+            parameter.Index = parameters.Count;
 
-            Parameters.Add(parameter);
+            parameters.Add(parameter);
 
             return parameter.Index;
         }
 
         public int AddLocal(Decl.Local local)
         {
-            local.Index = Parameters.Count + Locals.Count;
+            local.Index = parameters.Count + locals.Count;
 
-            Locals.Add(local);
+            locals.Add(local);
 
             return local.Index;
         }
 
-        public void AddFunction(Decl.Function function)
+        public void AddFunction(Decl.Funcy function)
         {
-            Functions.Add(function);
+            functions.Add(function);
         }
     }
 }

@@ -177,6 +177,7 @@ prefix-declaration
     ;
 
 prefix-operator
+    | '+'
     | '-'
     | '!'
     | '~'
@@ -192,12 +193,14 @@ infix-operator
     | '*'
     | '/'
     | '%'
+    | '<<' 
+    | '>>' 
+    | '==' 
+    | '!=' 
     | '<' 
     | '<=' 
     | '>'
     | '>='
-    | '==' 
-    | '!=' 
     | '==='
     | '!=='
     | '&'
@@ -674,23 +677,37 @@ level-compare-expression
     | less-equal-expression
     | greater-expression
     | greater-equal-expression
-    | level-add-expression
+    | level-shift-expression
     ;
 
 less-expression
-    : level-add-expression '<' level-add-expression
+    : level-shift-expression '<' level-shift-expression
     ;
 
 less-equal-expression
-    : level-add-expression '<=' level-add-expression
+    : level-shift-expression '<=' level-shift-expression
     ;
 
 greater-expression
-    : level-add-expression '>' level-add-expression
+    : level-shift-expression '>' level-shift-expression
     ;
 
 greater-equal-expression
-    : level-add-expression '>=' level-add-expression
+    : level-shift-expression '>=' level-shift-expression
+    ;
+
+level-shift-expression
+    | shift-left-expression
+    | shift-right-expression
+    | level-add-expression
+    ;
+
+shift-left-expression
+    : level-add-expression '<<' level-add-expression
+    ;
+
+shift-right-expression
+    : level-add-expression '>>' level-add-expression
     ;
 
 level-add-expression
@@ -760,12 +777,17 @@ intersection-expression
 
 level-negate-expression
     : negate-expression
+    | positive-expression
     | compl-expression
     | primary-expression
     ;
 
 negate-expression
     : '-' level-negate-expression
+    ;
+
+positive-expression
+    : '+' level-negate-expression
     ;
 
 compl-expression

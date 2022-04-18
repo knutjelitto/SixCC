@@ -195,6 +195,12 @@ namespace Six.Six.Wasms
                 wl();
                 RuntimeData.Emit();
                 wl();
+                DispatchTable.Emit();
+                wl();
+                GlobalFunctionTable.Emit();
+                wl();
+                FunctionTypes.Emit();
+                wl();
                 Globals.Emit();
                 wl();
                 initializer.Emit();
@@ -213,12 +219,6 @@ namespace Six.Six.Wasms
                     if (i > 0) wl();
                     Classes[i].Emit();
                 }
-                wl();
-                GlobalFunctionTable.Emit();
-                wl();
-                DispatchTable.Emit();
-                wl();
-                FunctionTypes.Emit();
             });
             wl(")");
         }

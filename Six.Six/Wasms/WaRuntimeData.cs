@@ -39,9 +39,9 @@ namespace Six.Six.Wasms
 
             foreach (var runtime in runtimes)
             {
-                runtime.Prepare();
-
                 runtime.Address = AlignCount(offset);
+
+                runtime.Prepare();
 
                 offset = AlignCount(offset + runtime.Size);
             }

@@ -1,14 +1,14 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public abstract class Integral<TInsn, TValue> : Number<TInsn, TValue>
-        where TInsn : Insn.Inn<TValue>
+        where TInsn : Insn.Num.Inn<TValue>
         where TValue : struct
     {
-        public Integral(Builtins builtins, string name, W.WasmType wasm)
+        public Integral(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
             prefix.Add("~", Not);
