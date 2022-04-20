@@ -10,22 +10,17 @@ namespace Six.Six.Wasms
     {
         public static uint Align16(uint offset)
         {
-            return WasmType.Align(16, offset);
+            return Align(16, offset);
         }
 
         public static uint Align8(uint offset)
         {
-            return WasmType.Align(8, offset);
+            return Align(8, offset);
         }
 
         public static uint Align(uint align, uint offset)
         {
-            return WasmType.Align(align, offset);
-        }
-
-        public static uint AlignPointer(uint offset)
-        {
-            return WasmType.Addr.Align(offset);
+            return (offset + (align - 1)) & ~(align - 1);
         }
 
         public static uint AlignCount(uint offset)

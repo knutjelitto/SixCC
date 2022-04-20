@@ -1,8 +1,11 @@
-﻿namespace Six.Six.Wasms
+﻿using Six.Runtime;
+
+namespace Six.Six.Wasms
 {
-    public class WaFunctionType
+    public class WaFunctionType : WithWriter, Wamber
     {
         public WaFunctionType(WaFunctionTypeList types, WaFuncSignature signature, uint index)
+            : base(types.Writer)
         {
             Types = types;
             Signature = signature;
@@ -14,6 +17,15 @@
         public WaFuncSignature Signature { get; }
         public uint Index { get; }
         public string Name { get; }
+
+        public void Prepare()
+        {
+        }
+
+        public void Emit()
+        {
+            wl($"(type ${Name} {Signature})");
+        }
 
         public override string ToString()
         {

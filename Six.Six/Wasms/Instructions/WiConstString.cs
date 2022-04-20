@@ -24,9 +24,9 @@ namespace Six.Six.Wasms.Instructions
 
         public override void Emit()
         {
-            Assert(ConstString.Address != uint.MaxValue);
+            Assert(ConstString.Address.IsValid);
 
-            wl($"{Insn.U32.Const(ConstString.Address)}");
+            wl($"{Insn.U32.Const(ConstString.Address.Address)}");
         }
     }
 }

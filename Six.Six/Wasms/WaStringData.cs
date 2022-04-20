@@ -42,20 +42,20 @@ namespace Six.Six.Wasms
             Assert(BaseOffset < uint.MaxValue);
             Assert(BaseOffset == Align16(BaseOffset));
 
-            var offset = BaseOffset;
+            var offset = WaPtr.Null.Offset(BaseOffset);
 
             foreach (var constString in strings.Values.OrderBy(s => s.Order))
             {
                 constString.Address = offset;
 
-                offset = WasmData.Align8(constString.Address + constString.Size);
+                offset = WaPtr.Null.Offset(Align8(constString.Address.Address + constString.Size));
 
                 constString.NextAddress = offset;
 
                 constString.Prepare();
             }
 
-            Size = Align16(offset) - BaseOffset;
+            Size = Align16(offset.Address) - BaseOffset;
         }
 
         public void Emit()

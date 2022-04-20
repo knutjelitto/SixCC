@@ -17,6 +17,10 @@ namespace Six.Six.Wasms
 
         public void Prepare()
         {
+            foreach (var sign in functionTypes.Values)
+            {
+                sign.Prepare();
+            }
         }
 
         public void Emit()
@@ -24,9 +28,9 @@ namespace Six.Six.Wasms
             if (functionTypes.Count > 0)
             {
                 wl();
-                foreach (var (funcType, index) in functionTypes.OrderBy(kv => kv.Value.Index))
+                foreach (var sign in functionTypes.Values.OrderBy(sign => sign.Index))
                 {
-                    wl($"(type ${index.Name} {index.Signature})");
+                    sign.Emit();
                 }
             }
         }

@@ -25,19 +25,14 @@ namespace Six.Six.Wasms
         public uint MemAlign { get; }
         public uint Size { get; }
 
-        public int Align(int offset)
-        {
-            return (int)Align(MemAlign, (uint)offset);
-        }
-
         public uint Align(uint offset)
         {
-            return Align(MemAlign, offset);
+            return WasmData.Align(MemAlign, offset);
         }
 
         public static uint Align(uint align, uint offset)
         {
-            return (offset + (align - 1)) & ~(align - 1);
+            return WasmData.Align(align, offset);
         }
 
         public override string ToString()

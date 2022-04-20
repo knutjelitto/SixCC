@@ -38,7 +38,7 @@ namespace Six.Six.Wasms
                 wl($"(; clazz          ;) {EmitUInt32(Module.MetaClass.RuntimeType.Address)}");
                 wl($"(; clazz-dispatch ;) {EmitUInt32((uint)Module.MetaClass.Dispatches.Index)}");
                 wl($"(; size           ;) {EmitUInt32(8 + Class.FieldsSize)}");
-                wl($"(; name           ;) {EmitAddress(Class.NameConst.Address)}");
+                wl($"(; name           ;) {EmitAddress(Class.NameConst.Address.Address)}");
                 wl($"(; dispatch {dispatch,5} ;) {EmitUInt32((uint)dispatch)}");
             });
         }
