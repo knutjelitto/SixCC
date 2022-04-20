@@ -11,42 +11,25 @@ namespace Six.Six.Types
         protected I32(Builtins builtins, string name)
             : base(builtins, name, WasmType.I32)
         {
-            prefix.Add("+", Pos);
+            AddPrefix("+", Pos);
 
-            infix.Add("%", Rem);
-            infix.Add("<<", Shl);
-            infix.Add(">>", Shr);
+            AddInfix("%", Rem);
+            AddInfix("<<", Shl);
+            AddInfix(">>", Shr);
         }
 
-        public Primitive.Unop Pos(Expr arg)
+        public Primitive.Unop Pos(List<Expr> args)
         {
-            IsThis(arg);
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
-            return new Primitive.Unop(this, Impl.Nop, arg);
+            return new Primitive.Unop(this, Impl.Nop, args[0]);
         }
 
-        public Primitive Rem(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
+        public Primitive Rem(List<Expr> args) => Binop(Impl.Rem, args);
 
-            return new Primitive.Binop(this, Impl.Rem, arg1, arg2);
-        }
+        public Primitive Shl(List<Expr> args) => Binop(Impl.Shl, args);
 
-        public Primitive Shl(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
-
-            return new Primitive.Binop(this, Impl.Shl, arg1, arg2);
-        }
-
-        public Primitive Shr(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
-
-            return new Primitive.Binop(this, Impl.Shr, arg1, arg2);
-        }
+        public Primitive Shr(List<Expr> args) => Binop(Impl.Shr, args);
     }
 }

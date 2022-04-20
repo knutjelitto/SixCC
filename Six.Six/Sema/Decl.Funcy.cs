@@ -11,13 +11,13 @@ namespace Six.Six.Sema
             private List<Type>? paramTypes = null;
             public readonly FuncMembers Members;
 
-            protected Funcy(Block parent, string name, A.Decl.Funcy aDecl)
-                : base(parent, aDecl)
+            protected Funcy(Block parent, A.Decl.Funcy aDecl, string name)
+                : base(parent, aDecl, name)
             {
                 Block = new FuncBlock(parent, this, name);
+                HasBody = aDecl.Body is not A.Body.Deferred;
                 AFuncy = aDecl;
                 Members = new FuncMembers();
-                //parent.DeclareContent(this, name);
             }
 
             public FuncBlock Block { get; }
@@ -30,7 +30,7 @@ namespace Six.Six.Sema
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();
 
-            public bool HasBody => AFuncy.Body is not A.Body.Deferred;
+            public bool HasBody { get; }
             public bool IsConcrete => HasBody && !IsAbstract;
             public bool IsDynamic => !IsStatic && (IsAbstract || IsVirtual || IsOverride);
             public bool IsClassMember => !IsStatic && Parent is ClassBlock;
@@ -61,8 +61,8 @@ namespace Six.Six.Sema
         {
             private readonly LazyType lazyResultType;
 
-            public Function(Block parent, A.Decl.Funcy aDecl, string? name)
-                : base(parent, name ?? aDecl.Name.Text, aDecl)
+            public Function(Block parent, A.Decl.Funcy aDecl, string? name = null)
+                : base(parent, aDecl, name ?? aDecl.Name.Text)
             {
                 var type = ((A.With.Type)aDecl).Type;
 
@@ -84,7 +84,7 @@ namespace Six.Six.Sema
             private readonly LazyType lazyResultType;
 
             public Constructor(ClassBlock parent, A.Decl.Funcy aFuncyDecl)
-                : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)
+                : base(parent, aFuncyDecl, aFuncyDecl.Name.Text)
             {
                 lazyResultType = new LazyType(() => parent.Classy);
             }
@@ -99,7 +99,7 @@ namespace Six.Six.Sema
             private readonly LazyType lazyResultType;
 
             public Attribute(Block parent, A.Decl.Attribute aDecl)
-                : base(parent, aDecl.Name.Text, aDecl)
+                : base(parent, aDecl, aDecl.Name.Text)
             {
                 lazyResultType = Resolver.T.ResolveTypeLazy(parent, aDecl.Type);
 

@@ -68,114 +68,127 @@ namespace Six.Six.Sema
             {
                 var primary = ResolveExpression(block, node.Expr).Value;
 
-                if (primary is Expr.AliasReference aliasRef)
+                if (primary is Expr.Reference reference)
                 {
-                    var resolved = aliasRef.Decl.Type;
-
-                    if (resolved is Decl.Classy classy)
+                    if (primary is Expr.AliasReference aliasRef)
                     {
-                        var found = classy.Block.Resolve(node.Reference);
+                        var resolved = aliasRef.Decl.Type;
 
-                        Assert(found.IsStatic);
-
-                        if (found is Decl.Attribute attribute)
+                        if (resolved is Decl.Classy classy)
                         {
-                            return Expr.CallFunction.From(attribute);
+                            var found = classy.Block.Resolve(node.Reference);
+
+                            Assert(found.IsStatic);
+
+                            if (found is Decl.Attribute attribute)
+                            {
+                                return Expr.CallFunction.From(attribute);
+                            }
+                            else if (found is Decl.Function function)
+                            {
+                                return new Expr.FunctionReference(function);
+                            }
+                            else if (found is Decl.Field field)
+                            {
+                                return new Expr.FieldReference(field);
+                            }
                         }
-                        else if (found is Decl.Function function)
+                        else
                         {
-                            return new Expr.FunctionReference(function);
+                            Assert(false);
+                            throw new NotImplementedException();
                         }
-                        else if (found is Decl.Field field)
+
+                        Assert(Module.HasErrors);
+                    }
+                    else
+                    {
+                        if (primary is Expr.ClassyReference classyReference)
                         {
-                            return new Expr.FieldReference(field);
+                            var found = classyReference.Decl.Type;
+
+                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                            {
+                                var referenced = classy.Block.Resolve(node.Reference);
+
+                                Assert(referenced.IsStatic);
+
+                                if (referenced is Decl.Attribute attribute)
+                                {
+                                    return Expr.CallFunction.From(attribute);
+                                }
+                                else if (referenced is Decl.Function function)
+                                {
+                                    return new Expr.FunctionReference(function);
+                                }
+                            }
+
+                            Assert(false);
                         }
-                    }
-                    else
-                    {
-                        Assert(false);
-                        throw new NotImplementedException();
-                    }
+                        else if (primary is Expr.ConstructorReference constructorReference)
+                        {
+                            var found = constructorReference.Decl.Type;
 
-                    Assert(Module.HasErrors);
-                }
-                else if (primary is Expr.ClassyReference classyReference)
-                {
-                    var classy = classyReference.ClassyDecl;
+                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                            {
+                                var referenced = classy.Block.Resolve(node.Reference);
 
-                    var found = classy.Block.Resolve(node.Reference);
+                                return select(primary, classy, referenced);
+                            }
+                            else
+                            {
+                                Assert(Module.HasErrors);
+                            }
+                        }
+                        else if (primary is Expr.ParameterReference parameterReference)
+                        {
+                            var found = parameterReference.Decl.Type;
 
-                    Assert(found.IsStatic);
+                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                            {
+                                var referenced = classy.Block.Resolve(node.Reference);
 
-                    if (found is Decl.Attribute attribute)
-                    {
-                        return Expr.CallFunction.From(attribute);
-                    }
-                    else if (found is Decl.Function function)
-                    {
-                        return new Expr.FunctionReference(function);
-                    }
+                                return select(primary, classy, referenced);
+                            }
+                            else
+                            {
+                                Assert(Module.HasErrors);
+                            }
+                        }
+                        else if (primary is Expr.LocalReference localReference)
+                        {
+                            var found = localReference.Decl.Type;
 
-                    Assert(false);
-                }
-                else if (primary is Expr.ConstructorReference constructorReference)
-                {
-                    var found = constructorReference.Decl.Type;
+                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                            {
+                                var referenced = classy.Block.Resolve(node.Reference);
 
-                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                    {
-                        var referenced = classy.Block.Resolve(node.Reference);
+                                return select(primary, classy, referenced);
+                            }
+                            else
+                            {
+                                Assert(Module.HasErrors);
+                            }
+                        }
+                        else if (primary is Expr.FieldReference fieldReference)
+                        {
+                            var found = fieldReference.Decl.Type;
 
-                        return select(primary, classy, referenced);
-                    }
-                    else
-                    {
-                        Assert(Module.HasErrors);
-                    }
-                }
-                else if (primary is Expr.ParameterReference parameterReference)
-                {
-                    var found = parameterReference.Decl.Type;
+                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
+                            {
+                                var referenced = classy.Block.Resolve(node.Reference);
 
-                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                    {
-                        var referenced = classy.Block.Resolve(node.Reference);
-
-                        return select(primary, classy, referenced);
-                    }
-                    else
-                    {
-                        Assert(Module.HasErrors);
-                    }
-                }
-                else if (primary is Expr.LocalReference localReference)
-                {
-                    var found = localReference.Decl.Type;
-
-                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                    {
-                        var referenced = classy.Block.Resolve(node.Reference);
-
-                        return select(primary, classy, referenced);
-                    }
-                    else
-                    {
-                        Assert(Module.HasErrors);
-                    }
-                }
-                else if (primary is Expr.FieldReference fieldReference)
-                {
-                    var found = fieldReference.Decl.Type;
-
-                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                    {
-                        var referenced = classy.Block.Resolve(node.Reference);
-
-                        return select(primary, classy, referenced);
-                    }
-                    else
-                    {
-                        Assert(Module.HasErrors);
+                                return select(primary, classy, referenced);
+                            }
+                            else
+                            {
+                                Assert(Module.HasErrors);
+                            }
+                        }
+                        else
+                        {
+                            Assert(Module.HasErrors);
+                        }
                     }
                 }
                 else if (primary is Expr.CallConstructor callConstructor)
@@ -418,25 +431,23 @@ namespace Six.Six.Sema
         {
             return new LazyExpr(() =>
             {
-                var left = ResolveExpression(block, node.Left);
-                var right = ResolveExpression(block, node.Right);
+                var left = ResolveExpression(block, node.Left).Value;
+                var right = ResolveExpression(block, node.Right).Value;
 
-                if (left.Value.Type is Decl.Classy classy)
+                var leftType = left.Type;
+
+                if (leftType is Decl.Classy classy)
                 {
                     var infix = classy.Block.Resolve(node.Op, node.InfixName());
 
                     if (infix is Decl.Function function)
                     {
-                        return new Expr.CallInfixMember(classy, function, left.Value, right.Value);
+                        return new Expr.CallInfixMember(classy, function, left, right);
                     }
 
                     Assert(false);
                 }
-                else if (left.Value.Type is Type.Builtin builtin)
-                {
-                    return builtin.Infix(node.Op, left.Value, right.Value);
-                }
-                else if (left.Value.Type is Type.Callable callable)
+                else if (leftType is Type.Callable callable)
                 {
                     Assert(false);
 
@@ -446,7 +457,7 @@ namespace Six.Six.Sema
 
                         if (infix is Decl.Function function)
                         {
-                            return new Expr.CallInfixMember(classy2, function, left.Value, right.Value);
+                            return new Expr.CallInfixMember(classy2, function, left, right);
                         }
 
                     }
@@ -507,7 +518,7 @@ namespace Six.Six.Sema
         {
             return new LazyExpr(() =>
             {
-                var resolved = block.Resolve(tree.GetLocation(), tree.Name.Text);
+                var resolved = block.Resolve(tree);
 
                 switch (resolved)
                 {

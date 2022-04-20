@@ -17,12 +17,13 @@ namespace Six.Six.Types
         {
         }
 
-        public override Primitive Not(Expr arg)
+        public override Primitive Not(List<Expr> args)
         {
-            Assert(IsThis(arg));
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
             var ones = new Primitive.ConstU32(this, uint.MaxValue);
-            return Xor(ones, arg);
+            return Xor(new List<Expr> { ones, args[0] });
         }
     }
 }

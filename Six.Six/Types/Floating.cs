@@ -11,22 +11,24 @@ namespace Six.Six.Types
         public Floating(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
-            prefix.Add("-", Neg);
-            prefix.Add("+", Pos);
+            AddPrefix("-", Neg);
+            AddPrefix("+", Pos);
         }
 
-        public Primitive.Unop Neg(Expr arg)
+        public Primitive.Unop Neg(List<Expr> args)
         {
-            IsThis(arg);
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
-            return new Primitive.Unop(this, Impl.Neg, arg);
+            return new Primitive.Unop(this, Impl.Neg, args[0]);
         }
 
-        public Primitive.Unop Pos(Expr arg)
+        public Primitive.Unop Pos(List<Expr> args)
         {
-            IsThis(arg);
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
-            return new Primitive.Unop(this, Impl.Nop, arg);
+            return new Primitive.Unop(this, Impl.Nop, args[0]);
         }
     }
 }

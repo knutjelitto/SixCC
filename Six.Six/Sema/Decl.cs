@@ -157,10 +157,10 @@ namespace Six.Six.Sema
             protected Type? type = null;
             private DeclAttr? attr;
 
-            protected Declaration(Block parent, A.Decl aDecl)
+            protected Declaration(Block parent, A.Decl aDecl, string? name = null)
             {
                 Parent = parent;
-                Name = aDecl.Name.Text;
+                Name = name ?? aDecl.Name.Text;
                 Location = aDecl.GetLocation();
                 LazyAttr = () => MakeAttr(aDecl);
             }

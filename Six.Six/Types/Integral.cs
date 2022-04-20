@@ -11,36 +11,19 @@ namespace Six.Six.Types
         public Integral(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
-            prefix.Add("~", Not);
-            infix.Add("&", And);
-            infix.Add("|", Or);
-            infix.Add("^", Xor);
+            AddPrefix("~", Not);
+
+            AddInfix("&", And);
+            AddInfix("|", Or);
+            AddInfix("^", Xor);
         }
 
-        public abstract Primitive Not(Expr arg);
+        public abstract Primitive Not(List<Expr> args);
 
-        public Primitive And(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
+        public Primitive And(List<Expr> args) => Binop(Impl.And, args);
 
-            return new Primitive.Binop(this, Impl.And, arg1, arg2);
-        }
+        public Primitive Or(List<Expr> args) => Binop(Impl.Or, args);
 
-        public Primitive Or(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
-
-            return new Primitive.Binop(this, Impl.Or, arg1, arg2);
-        }
-
-        public Primitive Xor(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
-
-            return new Primitive.Binop(this, Impl.Xor, arg1, arg2);
-        }
+        public Primitive Xor(List<Expr> args) => Binop(Impl.Xor, args);
     }
 }

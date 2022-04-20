@@ -28,6 +28,7 @@ shared class Derived : Abstract
         two();
         var x = int.max(ccc, one);
         var y = int.min(ccc, one);
+        var z = int.min(ccc, one) + int.max(ccc, one);
     }
 
     shared void check2 ()

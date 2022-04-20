@@ -9,7 +9,6 @@ namespace Six.Six.Types
         public String(Builtins builtins)
             : base(builtins, Names.Core.String, WasmType.Addr)
         {
-            infix.Add("+", Add);
         }
 
         public override Insn Load(uint offset)
@@ -22,14 +21,6 @@ namespace Six.Six.Types
         {
             Assert(false);
             throw new System.NotImplementedException();
-        }
-
-        public Primitive Add(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
-
-            return new Primitive.ToDo(this, "string + string", left, right);
         }
     }
 }

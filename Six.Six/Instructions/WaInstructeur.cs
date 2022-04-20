@@ -286,57 +286,66 @@ namespace Six.Six.Instructions
             Add(new WiIfBlock(Module, type, condition, then, @else));
         }
 
-        private void Build(Expr.GlobalReference expr)
+        private void Build(Expr.Reference reference)
         {
-            Add(Insn.Global.Get(expr.Decl.FullName));
+            BuildReference((dynamic)reference.Decl);
         }
 
-        private void Build(Expr.LocalReference expr)
+        private void BuildReference(Decl decl)
         {
-            Add(Insn.Local.Get(expr.LocalDecl.Index));
+            Assert(false);
+            throw new NotImplementedException();
         }
 
-        private void Build(Expr.ParameterReference expr)
+        private void BuildReference(Decl.Global decl)
         {
-            Add(Insn.Local.Get(expr.ParameterDecl.Index));
+            Add(Insn.Global.Get(decl.FullName));
         }
 
-        private void Build(Expr.SelfReference expr)
+        private void BuildReference(Decl.LetVar decl)
+        {
+            Add(Insn.Local.Get(decl.Index));
+        }
+
+        private void BuildReference(Decl.Parameter decl)
+        {
+            Add(Insn.Local.Get(decl.Index));
+        }
+
+        private void BuildReference(Decl.SelfParameter decl)
+        {
+            Assert(decl.Index == 0);
+            Add(Insn.Local.Get(decl.Index));
+        }
+
+        private void BuildReference(Decl.Classy decl)
         {
             Add(Insn.Local.Get(0));
         }
 
-        private void Build(Expr.FunctionReference expr)
+        private void BuildReference(Decl.Function decl)
         {
-            Assert(expr.Decl.Validated);
+            Assert(decl.Validated);
 
-            var funcy = expr.FunctionDecl;
-            var name = funcy.FullName;
+            var name = decl.FullName;
 
-            var function = WaFunction.From(Module, funcy.FullName);
+            var function = WaFunction.From(Module, name);
 
             var index = Module.GlobalFunctionTable.Add(function, name);
 
             Add(Insn.U32.Const(index));
         }
 
-        private void Build(Expr.ClassReference expr)
+        private void BuildReference(Decl.Object decl)
         {
-            Assert(false);
-            throw new NotImplementedException();
-        }
-
-
-        private void Build(Expr.ObjectReference expr)
-        {
-            if (expr.Decl.IsNative)
+            if (decl.IsNative)
             {
-                if (expr.Decl.FullName == "six.core.true")
+                if (decl.FullName == "six.core.true")
                 {
                     Add(Insn.Boolean.True);
                     return;
                 }
-                if (expr.Decl.FullName == "six.core.false")
+                if (decl.FullName == "six.core.false")
                 {
                     Add(Insn.Boolean.False);
                     return;
@@ -347,18 +356,16 @@ namespace Six.Six.Instructions
             throw new NotImplementedException();
         }
 
-        private void Build(Expr.FieldReference expr)
+        private void BuildReference(Decl.Field decl)
         {
-            var field = expr.FieldDecl;
-
-            if (field.IsStatic)
+            if (decl.IsStatic)
             {
-                if (field.Parent is ClassBlock classBlock)
+                if (decl.Parent is ClassBlock classBlock)
                 {
                     var classy = classBlock.Classy;
                 }
 
-                var staticField = Module.FindStaticField(field.StaticName);
+                var staticField = Module.FindStaticField(decl.StaticName);
 
                 Add(new WiGetStaticField(staticField));
             }
@@ -366,7 +373,7 @@ namespace Six.Six.Instructions
             {
                 Add(Insn.Local.Get(0));
 
-                Add(Lower(field.Type).Load(field.Offset));
+                Add(Lower(decl.Type).Load(decl.Offset));
             }
         }
 
@@ -375,27 +382,6 @@ namespace Six.Six.Instructions
             Assert(expr.Ctor.IsNative);
 
             Walk(Resolve(expr.Class).Method(expr.Ctor.Name, expr.Arguments.Count)(expr.Arguments));
-        }
-
-        private void Build(Expr.CallMember expr)
-        {
-            if (expr.Function.IsNative)
-            {
-                Walk(expr.Make);
-
-                Walk(Resolve(expr.Classy).Method(expr.Function.Name, expr.Arguments.Count)(expr.Arguments));
-            }
-            else
-            {
-                Walk(expr.Make);
-
-                foreach (var arg in expr.Arguments)
-                {
-                    Walk(arg);
-                }
-
-                Add(Insn.Call(expr.Function.FullName));
-            }
         }
 
         private void Build(Expr.CallConstructor expr)
@@ -426,7 +412,7 @@ namespace Six.Six.Instructions
         {
             if (expr.Function.IsNative)
             {
-                Walk(Resolve(expr.Classy).Infix(expr.Function.Name)(expr.Arg1, expr.Arg2));
+                Walk(Resolve(expr.Classy).Method(expr.Function.Name, 2)(new List<Expr> { expr.Arg1, expr.Arg2 }));
             }
             else
             {
@@ -439,7 +425,7 @@ namespace Six.Six.Instructions
         {
             if (expr.Function.IsNative)
             {
-                Walk(Resolve(expr.Classy).Prefix(expr.Function.Name)(expr.Arg));
+                Walk(Resolve(expr.Classy).Method(expr.Function.Name, 1)(new List<Expr> { expr.Arg }));
             }
             else
             {
@@ -493,6 +479,27 @@ namespace Six.Six.Instructions
             }
 
             Add(Insn.Call(expr.Funcy.FullName));
+        }
+
+        private void Build(Expr.CallMember expr)
+        {
+            if (expr.Function.IsNative)
+            {
+                Walk(expr.Make);
+
+                Walk(Resolve(expr.Classy).Method(expr.Function.Name, expr.Arguments.Count)(expr.Arguments));
+            }
+            else
+            {
+                Walk(expr.Make);
+
+                foreach (var arg in expr.Arguments)
+                {
+                    Walk(arg);
+                }
+
+                Add(Insn.Call(expr.Function.FullName));
+            }
         }
 
         private void Build(Expr.CallDynamicFunction expr)

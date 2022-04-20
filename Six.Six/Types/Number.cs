@@ -11,18 +11,18 @@ namespace Six.Six.Types
         public Number(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
-            infix.Add("+", Add);
-            infix.Add("-", Sub);
-            infix.Add("*", Mul);
-            infix.Add("/", Div);
+            AddInfix("+", Add);
+            AddInfix("-", Sub);
+            AddInfix("*", Mul);
+            AddInfix("/", Div);
 
-            infix.Add("==", EQ);
-            infix.Add("!=", NE);
+            AddInfix("==", EQ);
+            AddInfix("!=", NE);
 
-            infix.Add("<=", LE);
-            infix.Add("<", LT);
-            infix.Add(">=", GE);
-            infix.Add(">", GT);
+            AddInfix("<=", LE);
+            AddInfix("<", LT);
+            AddInfix(">=", GE);
+            AddInfix(">", GT);
         }
 
         protected abstract TInsn Impl { get; }
@@ -37,88 +37,24 @@ namespace Six.Six.Types
             return Impl.Store(offset);
         }
 
-        public Primitive Add(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
+        public Primitive Add(List<Expr> args) => Binop(Impl.Add, args);
 
-            return new Primitive.Binop(this, Impl.Add, left, right);
-        }
+        public Primitive Sub(List<Expr> args) => Binop(Impl.Sub, args);
 
-        public Primitive Sub(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
+        public Primitive Mul(List<Expr> args) => Binop(Impl.Mul, args);
 
-            return new Primitive.Binop(this, Impl.Sub, left, right);
-        }
+        public Primitive Div(List<Expr> args) => Binop(Impl.Div, args);
 
-        public Primitive Mul(Expr left, Expr right)
-        {
-            if (!IsThis(left))
-            {
-                Assert(false);
-            }
-            Assert(IsThis(left));
-            Assert(IsThis(right));
+        public Primitive EQ(List<Expr> args) => PredBinop(Impl.EQ, args);
 
-            return new Primitive.Binop(this, Impl.Mul, left, right);
-        }
+        public Primitive NE(List<Expr> args) => PredBinop(Impl.NE, args);
 
-        public Primitive Div(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
+        public Primitive LE(List<Expr> args) => PredBinop(Impl.LE, args);
 
-            return new Primitive.Binop(this, Impl.Div, left, right);
-        }
+        public Primitive LT(List<Expr> args) => PredBinop(Impl.LT, args);
 
-        public Primitive EQ(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
+        public Primitive GE(List<Expr> args) => PredBinop(Impl.GE, args);
 
-            return new Primitive.Binop(Builtins.Boolean, Impl.EQ, left, right);
-        }
-
-        public Primitive NE(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
-
-            return new Primitive.Binop(Builtins.Boolean, Impl.NE, left, right);
-        }
-
-        public Primitive LE(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
-
-            return new Primitive.Binop(Builtins.Boolean, Impl.LE, left, right);
-        }
-
-        public Primitive LT(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
-
-            return new Primitive.Binop(Builtins.Boolean, Impl.LT, left, right);
-        }
-
-        public Primitive GE(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
-
-            return new Primitive.Binop(Builtins.Boolean, Impl.GE, left, right);
-        }
-
-        public Primitive GT(Expr left, Expr right)
-        {
-            Assert(IsThis(left));
-            Assert(IsThis(right));
-
-            return new Primitive.Binop(Builtins.Boolean, Impl.GT, left, right);
-        }
+        public Primitive GT(List<Expr> args) => PredBinop(Impl.GT, args);
     }
 }

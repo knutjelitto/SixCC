@@ -10,23 +10,25 @@ namespace Six.Six.Types
 
         public S32(Builtins builtins) : base(builtins, Names.Core.S32)
         {
-            prefix.Add("-", Neg);
+            AddPrefix("-", Neg);
         }
 
-        public Primitive Neg(Expr right)
+        public Primitive Neg(List<Expr> args)
         {
-            Assert(IsThis(right));
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
             var zero = new Primitive.ConstS32(this, 0);
-            return Sub(zero, right);
+            return Sub(new List<Expr> { zero, args[0] });
         }
 
-        public override Primitive Not(Expr arg)
+        public override Primitive Not(List<Expr> args)
         {
-            Assert(IsThis(arg));
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
             var ones = new Primitive.ConstS32(this, -1);
-            return Xor(ones, arg);
+            return Xor(new List<Expr> { ones, args[0] });
         }
 
     }
