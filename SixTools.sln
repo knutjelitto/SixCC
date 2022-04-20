@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32106.194
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DC97C789-F078-4CCA-978E-B7AF26AC7879}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,6 +23,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Runtime", "Six.Runtime\Six.Runtime.csproj", "{5315C9FB-1F05-4D07-9084-245C292D9F49}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Six.Six", "Six.Six\Six.Six.csproj", "{60815213-9F5B-4B79-ACA3-074F25848D00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Six.Wasm", "Six.Wasm\Six.Wasm.csproj", "{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +132,18 @@ Global
 		{60815213-9F5B-4B79-ACA3-074F25848D00}.Release|x64.Build.0 = Release|Any CPU
 		{60815213-9F5B-4B79-ACA3-074F25848D00}.Release|x86.ActiveCfg = Release|Any CPU
 		{60815213-9F5B-4B79-ACA3-074F25848D00}.Release|x86.Build.0 = Release|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Debug|x64.Build.0 = Debug|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Debug|x86.Build.0 = Debug|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Release|x64.ActiveCfg = Release|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Release|x64.Build.0 = Release|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{85CEB30C-03E8-4336-A11B-EDDCE4787F6D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
