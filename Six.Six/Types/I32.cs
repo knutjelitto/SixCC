@@ -1,26 +1,35 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public abstract class I32<TInsn, TValue> : Integral<TInsn, TValue>
-        where TInsn : Insn.Inn<TValue>
+        where TInsn : Insn.Num.Inn<TValue>
         where TValue : struct
     {
         protected I32(Builtins builtins, string name)
-            : base(builtins, name, W.WasmType.I32)
+            : base(builtins, name, WasmType.I32)
         {
-            infix.Add("%", Rem);
+            AddPrefix("+", Pos);
+
+            AddInfix("%", Rem);
+            AddInfix("<<", Shl);
+            AddInfix(">>", Shr);
         }
 
-        public Primitive Rem(Expr arg1, Expr arg2)
+        public Primitive.Unop Pos(List<Expr> args)
         {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
-            return new Primitive.Binop(this, Impl.Rem, arg1, arg2);
+            return new Primitive.Unop(this, Impl.Nop, args[0]);
         }
+
+        public Primitive Rem(List<Expr> args) => Binop(Impl.Rem, args);
+
+        public Primitive Shl(List<Expr> args) => Binop(Impl.Shl, args);
+
+        public Primitive Shr(List<Expr> args) => Binop(Impl.Shr, args);
     }
 }

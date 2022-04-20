@@ -12,11 +12,14 @@ namespace Six.Six.Types
             Module = module;
 
             S32 = Add(new S32(this));
+            U8 = Add(new U8(this));
             U32 = TableIndex = Add(new U32(this));
             F32 = Add(new F32(this));
             F64 = Add(new F64(this));
             Anything = Add(new Anything(this));
             Boolean = Add(new Boolean(this));
+            True = Add(new Boolean.True(this));
+            False = Add(new Boolean.False(this));
             Bytes = Add(new Bytes(this));
             String = Add(new String(this));
             Address = Add(new Address(this));
@@ -25,6 +28,8 @@ namespace Six.Six.Types
         }
         public Builtin TableIndex { get; }
         public Builtin Boolean { get; }
+        public Builtin True { get; }
+        public Builtin False { get; }
         public Builtin Bytes { get; }
         public Builtin String { get; }
         public Builtin Anything { get; }
@@ -32,6 +37,7 @@ namespace Six.Six.Types
         public Builtin Builtin { get; }
         public Builtin Runtime { get; }
 
+        public Builtin U8 { get; }
         public Builtin U32 { get; }
         public Builtin S32 { get; }
 

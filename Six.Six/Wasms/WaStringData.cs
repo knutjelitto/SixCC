@@ -46,9 +46,9 @@ namespace Six.Six.Wasms
 
             foreach (var constString in strings.Values.OrderBy(s => s.Order))
             {
-                constString.Address = WasmData.AlignCount(offset);
+                constString.Address = offset;
 
-                offset = WasmData.AlignCount(constString.Address + constString.Size);
+                offset = WasmData.Align8(constString.Address + constString.Size);
 
                 constString.NextAddress = offset;
 

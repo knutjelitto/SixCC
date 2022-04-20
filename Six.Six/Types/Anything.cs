@@ -2,14 +2,14 @@
 
 using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public sealed class Anything : Builtin
     {
         public Anything(Builtins builtins)
-            : base(builtins, Names.Core.Anything, W.WasmType.Addr)
+            : base(builtins, Names.Core.Anything, WasmType.Addr)
         { }
 
         public override Insn Load(uint offset)

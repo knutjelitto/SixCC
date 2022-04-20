@@ -8,8 +8,13 @@ using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
-    public partial class Resolver
+    public class BodyResolver : ResolverCore
     {
+        public BodyResolver(Module module, Resolver resolver)
+            : base(module, resolver)
+        {
+        }
+
         public void WalkBody(ClassBlock block, A.Body node)
         {
             ClassyBody(block, (dynamic)node);
@@ -25,26 +30,37 @@ namespace Six.Six.Sema
         {
             foreach (var decl in node.Declarations)
             {
-                WalkDeclaration(block, decl);
+                D.WalkDeclaration(block, decl);
             }
         }
 
         public void WalkBody(FuncBlock block, A.Body node)
         {
+            WalkBody(block.CodeBlock, node);
+        }
+
+        public void WalkBody(CodeBlock block, A.Body node)
+        {
             FuncyBody(block, (dynamic)node);
         }
 
-        private void FuncyBody(FuncBlock block, A.Body.Block node)
+        private void FuncyBody(CodeBlock block, A.Body node)
+        {
+            Assert(false);
+            throw new NotImplementedException();
+        }
+
+        private void FuncyBody(CodeBlock block, A.Body.Block node)
         {
             foreach (var member in node.Statelarations)
             {
                 if (member is A.Decl decl)
                 {
-                    WalkDeclaration(block, decl);
+                    D.WalkDeclaration(block, decl);
                 }
                 else if (member is A.Stmt stmt)
                 {
-                    WalkStatement(block, stmt);
+                    block.Add(S.WalkStatement(block, stmt));
                 }
                 else
                 {
@@ -53,21 +69,18 @@ namespace Six.Six.Sema
             }
         }
 
-        private void FuncyBody(FuncBlock block, A.Body.Deferred node)
+        private void FuncyBody(CodeBlock block, A.Body.Deferred node)
         {
-            Assert(
-                block.Funcy.IsAbstract ||
-                block.Funcy.IsNative ||
-                block.Funcy is Decl.Constructor ctor && ctor.IsNative);
+            Assert(block.Funcy.IsAbstract || block.Funcy.IsNative);
 
-            _ = new Stmt.Unreachable(node.GetLocation(), block);
+            block.Add(new Stmt.Unreachable(node.GetLocation(), block));
         }
 
-        private void FuncyBody(FuncBlock block, A.Body.Expr node)
+        private void FuncyBody(CodeBlock block, A.Body.Expr node)
         {
-            var delayed = ResolveExpression(block, node.Expression);
+            var delayed = E.ResolveExpression(block, node.Expression);
 
-            _ = new Stmt.Return(node.Expression.GetLocation(), block, delayed);
+            block.Add(new Stmt.Return(node.Expression.GetLocation(), block, delayed));
         }
     }
 }

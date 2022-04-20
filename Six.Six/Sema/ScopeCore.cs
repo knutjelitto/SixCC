@@ -17,26 +17,10 @@ namespace Six.Six.Sema
         }
 
         public Module Module { get; }
-        public Resolver Resolver => Module.Resolver;
         public Errors Errors => Module.Errors;
 
         public string Name { get; }
         public Scope Parent { get; }
-
-        public IEnumerable<Decl> GetDeclarations()
-        {
-            return declarations.Values;
-        }
-
-        public virtual Decl Find(ILocation location, string name)
-        {
-            if (declarations.TryGetValue(name, out var decl))
-            {
-                return decl;
-            }
-
-            throw Errors.CantResolveMember(location, name);
-        }
 
         public virtual Decl? TryFind(string name)
         {

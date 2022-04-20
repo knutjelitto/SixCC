@@ -1,9 +1,9 @@
-﻿using Six.Six.Sema;
-using W = Six.Six.Wasms;
-using System;
+﻿using System;
 using System.Collections;
+using Six.Six.Instructions;
+using Six.Six.Wasms;
 
-namespace Six.Six.Instructions
+namespace Six.Six.Sema
 {
     public class ClassLayout
     {
@@ -21,7 +21,7 @@ namespace Six.Six.Instructions
         public Decl.Classy Classy { get; }
         public Module Module => Classy.Block.Module;
         public Resolver Resolver => Module.Resolver;
-        public Emitter Emitter => Module.Emitter;
+        public TypeResolver TypeResolver => Module.Resolver.T;
 
         public uint MetaSize { get; private set; } = uint.MaxValue;
 
@@ -35,7 +35,7 @@ namespace Six.Six.Instructions
 
         private void MakeFields()
         {
-            var fieldOffset = W.WasmType.Addr.Size + W.WasmType.I32.Size;
+            var fieldOffset = WasmType.Addr.Size + WasmType.I32.Size;
 
             if (Classy.Extends is Decl.Class extended)
             {
@@ -50,11 +50,11 @@ namespace Six.Six.Instructions
 
             foreach (var field in Fields)
             {
-                var builtin = Emitter.Lower(field.Field.Type);
+                var builtin = TypeResolver.Lower(field.Type);
 
                 fieldOffset = builtin.Wasm.Align(fieldOffset);
 
-                field.Field.Offset = fieldOffset;
+                field.Offset = fieldOffset;
 
                 fieldOffset += builtin.Wasm.MemSize;
             }
@@ -75,7 +75,7 @@ namespace Six.Six.Instructions
                     || Classy is Decl.Interface && !f.IsStatic;
             }
 
-            foreach (var funcy in Classy.Block.Members.OfType<Decl.Funcy>().Where(f => SlotMember(f)))
+            foreach (var funcy in Classy.Members.Functions.Where(f => SlotMember(f)))
             {
                 Slots.AddOrUpdate(funcy);
             }
@@ -173,28 +173,23 @@ namespace Six.Six.Instructions
             public Decl.Field Field { get; }
         }
 
-        public class FieldList : IReadOnlyList<LField>
+        public class FieldList : IReadOnlyList<Decl.Field>
         {
-            public readonly List<LField> Fields = new();
+            public readonly List<Decl.Field> Fields = new();
 
             public void Add(Decl.Field field)
-            {
-                Fields.Add(new LField(field));
-            }
-
-            public void Add(LField field)
             {
                 Fields.Add(field);
             }
 
-            public void AddRange(IEnumerable<LField> fields)
+            public void AddRange(IEnumerable<Decl.Field> fields)
             {
                 Fields.AddRange(fields);
             }
 
-            public LField this[int index] => Fields[index];
+            public Decl.Field this[int index] => Fields[index];
             public int Count => Fields.Count;
-            public IEnumerator<LField> GetEnumerator() => Fields.GetEnumerator();
+            public IEnumerator<Decl.Field> GetEnumerator() => Fields.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Fields).GetEnumerator();
         }
 

@@ -1,16 +1,13 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
-
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable IDE1006 // Naming Styles
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public sealed class Runtime : Builtin
     {
         public Runtime(Builtins builtins)
-            : base(builtins, Names.Core.Runtime, W.WasmType.Void)
+            : base(builtins, Names.Core.Runtime, WasmType.Void)
         {
             AddMethod(nameof(Print), 1, Print);
             AddMethod(nameof(Identical), 2, Identical);

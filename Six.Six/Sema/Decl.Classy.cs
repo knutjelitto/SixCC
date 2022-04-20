@@ -1,43 +1,39 @@
-﻿using Six.Six.Instructions;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
     public partial interface Decl
     {
-        public abstract class Classy : Declaration, Typy
+        public abstract class Classy : Declaration, Type.Declared
         {
             private ClassLayout? layout;
             private Class? extends;
             private List<Interface>? satisfies;
 
-            public Classy(Block parent, A.Decl.Classy aDecl)
+            protected Classy(Block parent, A.Decl.Classy aDecl)
                 : base(parent, aDecl)
             {
                 Block = new ClassBlock(parent, this);
                 AClassy = aDecl;
-                parent.Content.Declare(this, aDecl.Name.Text);
-                parent.Members.Add(this);
+                parent.DeclareContent(this, aDecl.Name.Text);
             }
 
             public ClassBlock Block { get; }
             public A.Decl.Classy AClassy { get; }
             public ClassLayout Layout => layout ??= new ClassLayout(this);
 
-            public IReadOnlyList<Field> Fields { get; } = new List<Field>();
+            public ClassMembers Members { get; } = new();
+
+            public IReadOnlyList<Field> Fields => Members.Fields;
 
 
             public override string FullName => Block.FullName();
+            public sealed override Type Type => this;
 
-            public Class? Extends => extends ??= Resolver.ResolveExtends(this);
-            public List<Interface> Satisfies => satisfies ??= Resolver.ResolveSatisfies(this);
+            public Class? Extends => extends ??= Resolver.T.ResolveExtends(this);
+            public List<Interface> Satisfies => satisfies ??= Resolver.T.ResolveSatisfies(this);
 
-            public void AddField(Field field)
-            {
-                ((List<Field>)Fields).Add(field);
-                Block.Members.Add(field);
-            }
-
+            public Decl Decl => this;
         }
 
         public class Class : Classy
@@ -46,11 +42,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
-
-                Type = new Type.ClassReference(Module, this);
             }
-
-            public override Type Type { get; }
 
             public override string ToString() => $"{Name}";
         }
@@ -61,11 +53,7 @@ namespace Six.Six.Sema
                 : base(parent, aDecl)
             {
                 Assert(aDecl is A.With.Extends);
-
-                Type = new Type.ObjectReference(Module, this);
             }
-
-            public override Type Type { get; }
 
             public override string ToString() => $"{Name}";
         }
@@ -75,11 +63,7 @@ namespace Six.Six.Sema
             public Interface(Block parent, A.Decl.Interface aDecl)
                 : base(parent, aDecl)
             {
-
-                Type = new Type.InterfaceReference(Module, this);
             }
-
-            public override Type Type { get; }
         }
     }
 }

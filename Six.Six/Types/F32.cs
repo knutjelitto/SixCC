@@ -1,16 +1,15 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public class F32 : Floating<Insn.F32Impl, float>
+    public class F32 : Floating<Insn.Num.F32Impl, float>
     {
-        protected override Insn.F32Impl Impl => Insn.F32;
+        protected override Insn.Num.F32Impl Impl => Insn.F32;
 
         public F32(Builtins builtins)
-            : base(builtins, Names.Core.F32, W.WasmType.F32)
+            : base(builtins, Names.Core.F32, WasmType.F32)
         {
         }
     }

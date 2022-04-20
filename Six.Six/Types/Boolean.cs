@@ -1,19 +1,20 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
+using Six.Six.Wasms;
 using System;
-using W = Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class Boolean : Builtin
+    public class Boolean : Builtin
     {
-        public Boolean(Builtins builtins)
-            : base(builtins, Names.Core.Boolean, W.WasmType.Bool)
+        public Boolean(Builtins builtins, string? name = null)
+            : base(builtins, name ?? Names.Core.Boolean, WasmType.Bool)
         {
-            prefix.Add("!", Not);
-            infix.Add("&", And);
-            infix.Add("|", Or);
-            infix.Add("^", Xor);
+            AddPrefix("!", Not);
+
+            AddInfix("&", And);
+            AddInfix("|", Or);
+            AddInfix("^", Xor);
         }
 
         public override Insn Load(uint offset)
@@ -28,36 +29,35 @@ namespace Six.Six.Types
             throw new NotImplementedException();
         }
 
-        public Primitive Not(Expr arg)
+        public Primitive Not(List<Expr> args)
         {
-            Assert(IsThis(arg));
+            Assert(args.Count == 1);
+            Assert(IsThis(args[0]));
 
             var ones = new Primitive.ConstS32(this, -1);
-            return Xor(ones, arg);
+            return Xor(new List<Expr> { ones, args[0] });
         }
 
-        public Primitive And(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
+        public Primitive And(List<Expr> args) => Binop(Insn.Boolean.And, args);
 
-            return new Primitive.Binop(this, Insn.Boolean.And, arg1, arg2);
+        public Primitive Or(List<Expr> args) => Binop(Insn.Boolean.Or, args);
+
+        public Primitive Xor(List<Expr> args) => Binop(Insn.Boolean.Xor, args);
+
+        public class True : Boolean
+        {
+            public True(Builtins builtins)
+                : base(builtins, Names.Core.True)
+            {
+            }
         }
 
-        public Primitive Or(Expr arg1, Expr arg2)
+        public class False : Boolean
         {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
-
-            return new Primitive.Binop(this, Insn.Boolean.Or, arg1, arg2);
-        }
-
-        public Primitive Xor(Expr arg1, Expr arg2)
-        {
-            Assert(IsThis(arg1));
-            Assert(IsThis(arg2));
-
-            return new Primitive.Binop(this, Insn.Boolean.Xor, arg1, arg2);
+            public False(Builtins builtins)
+                : base(builtins, Names.Core.False)
+            {
+            }
         }
     }
 }

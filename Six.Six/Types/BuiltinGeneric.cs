@@ -1,13 +1,13 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public sealed class BuiltinGeneric : Builtin
     {
         public BuiltinGeneric(Builtins builtins)
-            : base(builtins, Names.Core.Builtin, W.WasmType.Addr)
+            : base(builtins, Names.Core.Builtin, WasmType.Addr)
         {
         }
 

@@ -15,19 +15,29 @@ shared native class s32 : Builtin
     shared static s32 minValue => 0;
 
     shared static s32 min(s32 x, s32 y) => if (x < y) then x else y;
- 
-    shared native prefix s32 - () => -self;
-    shared native infix s32 + (s32 other) => self + other;
-    shared native infix s32 - (s32 other) => self - other;
-    shared native infix s32 * (s32 other) => self * other;
-    shared native infix s32 / (s32 other) => self / other;
-    shared native infix s32 % (s32 other) => self % other;
+    shared static s32 max(s32 x, s32 y) => if (x >= y) then x else y;
 
+    shared native infix bool == (s32 other) => self == other;
+    shared native infix bool != (s32 other) => self != other;
+ 
     shared native infix bool <= (s32 other) => self <= other;
     shared native infix bool < (s32 other) => self < other;
     shared native infix bool >= (s32 other) => self >= other;
     shared native infix bool > (s32 other) => self > other;
 
+    shared native infix s32 << (s32 other) => self << other;
+    shared native infix s32 >> (s32 other) => self >> other;
+
+    shared native infix s32 + (s32 other) => self + other;
+    shared native infix s32 - (s32 other) => self - other;
+
+    shared native infix s32 * (s32 other) => self * other;
+    shared native infix s32 / (s32 other) => self / other;
+    shared native infix s32 % (s32 other) => self % other;
+
+    shared native prefix s32 + () => +self;
+    shared native prefix s32 - () => -self;
+    
     shared native prefix s32 ~ () => ~self;
     shared native infix s32 & (s32 other) => self & other;
     shared native infix s32 | (s32 other) => self | other;

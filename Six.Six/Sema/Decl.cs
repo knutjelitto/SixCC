@@ -24,7 +24,7 @@ namespace Six.Six.Sema
 
         public abstract class Local : Declaration
         {
-            public Local(FuncBlock parent, A.Decl ADecl)
+            public Local(Block parent, A.Decl ADecl)
                 : base(parent, ADecl)
             {
             }
@@ -34,23 +34,21 @@ namespace Six.Six.Sema
             public override string FullName => Name;
         }
 
-        public sealed class Parameter : Local
+        public class Parameter : Local
         {
             private readonly LazyExpr? lazyDefault;
+            private readonly LazyType lazyType;
 
             public Parameter(FuncBlock parent, A.Decl.Parameter aDecl, LazyExpr? lazyDefault)
                 : base(parent, aDecl)
             {
-                parent.Funcy.AddParameter(this);
                 this.lazyDefault = lazyDefault;
-                TypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
+                lazyType = Resolver.T.ResolveTypeLazy(parent, aDecl.Type);
             }
 
-            public Expr? Default => lazyDefault?.Expr;
+            public Expr? Default => lazyDefault?.Value;
 
-            public Func<Type> TypeResolver { get; init; }
-
-            public override Type Type => type ??= TypeResolver();
+            public override Type Type => lazyType.Value;
         }
 
         [DebuggerDisplay("{GetType().Name.ToLowerInvariant()} {SelfName}")]
@@ -59,8 +57,6 @@ namespace Six.Six.Sema
             public SelfParameter(FuncBlock parent, Type type)
                 : base(parent, new A.Decl.SelfValue(new A.Name.ArtificalId(parent.Funcy.AFuncy.Name.Tree, Names.Core.SelfValue)))
             {
-                parent.Funcy.AddParameter(this);
-                parent.Head.Declare(this, Names.Core.SelfValue);
                 Type = type;
             }
 
@@ -72,46 +68,42 @@ namespace Six.Six.Sema
         public sealed class LetVar : Local
         {
             private readonly LazyExpr lazyValue;
+            private readonly LazyType lazyType;
 
-            public LetVar(FuncBlock parent, A.Decl.LetVar aDecl, bool writeable)
+            public LetVar(CodeBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
-                lazyValue = Resolver.ResolveExpression(Parent, aDecl.Value);
-                TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
+                lazyValue = Resolver.E.ResolveExpression(Parent, aDecl.Value);
+                lazyType = Resolver.T.ResolveTypeLazy(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
-                parent.Funcy.AddLocal(this);
             }
 
             public bool Writeable { get; }
 
-            public Func<Type> TypeResolver { get; init; }
+            public override Type Type => lazyType.Value;
 
-            public override Type Type => type ??= TypeResolver();
-
-            public Expr Value => lazyValue.Expr;
+            public Expr Value => lazyValue.Value;
         }
 
         public sealed class Field : Declaration
         {
             private readonly LazyExpr lazyValue;
+            private readonly LazyType lazyType;
 
             public Field(ClassBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
-                lazyValue = Resolver.ResolveExpression(parent, aDecl.Value);
-                TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
+                lazyValue = Resolver.E.ResolveExpression(parent, aDecl.Value);
+                lazyType = Resolver.T.ResolveTypeLazy(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
-                parent.Classy.AddField(this);
             }
 
             public bool Writeable { get; }
             public uint Offset { get; set; } = uint.MaxValue;
 
-            public Func<Type> TypeResolver { get; init; }
+            public override Type Type => lazyType.Value;
 
-            public override Type Type => type ??= TypeResolver();
-
-            public Expr Value => lazyValue.Expr;
+            public Expr Value => lazyValue.Value;
 
             public override string FullName => Name;
 
@@ -121,46 +113,41 @@ namespace Six.Six.Sema
         public sealed class Global : Declaration
         {
             private readonly LazyExpr lazyValue;
-            public readonly A.Decl.LetVar ALetVar;
+            private readonly LazyType lazyType;
 
             public Global(NamespaceBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
                 Assert(aDecl.Type != null);
 
-                ALetVar = aDecl;
-                lazyValue = Resolver.ResolveExpression(parent, ALetVar.Value);
-                TypeResolver = () => LazyTypeResolver(parent, lazyValue, aDecl.Type);
+                lazyValue = Resolver.E.ResolveExpression(parent, aDecl.Value);
+                lazyType = Resolver.T.ResolveTypeLazy(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
-                parent.Members.Add(this);
                 FullName = $"{Parent.FullName()}.{Name}";
             }
 
             public bool Writeable { get; }
 
-            public Func<Type> TypeResolver { get; init; }
+            public override Type Type => lazyType.Value;
 
-            public override Type Type => type ??= TypeResolver();
-
-            public Expr Value => lazyValue.Expr;
+            public Expr Value => lazyValue.Value;
 
             public override string FullName { get; }
         }
 
-        public sealed class Alias : Declaration, Typy
+        public sealed class Alias : Declaration, Type
         {
+            private readonly LazyType lazyType;
+
             public Alias(Block parent, A.Decl.Alias aDecl)
                 : base(parent, aDecl)
             {
-                TypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
-                parent.Content.Declare(this);
+                lazyType = Resolver.T.ResolveTypeLazy(parent, aDecl.Type);
             }
 
             public override string FullName => $"{Parent.FullName()}.{Name}";
 
-            public Func<Type> TypeResolver { get; init; }
-
-            public override Type Type => type ??= TypeResolver();
+            public override Type Type => lazyType.Value;
 
         }
 
@@ -170,10 +157,10 @@ namespace Six.Six.Sema
             protected Type? type = null;
             private DeclAttr? attr;
 
-            protected Declaration(Block parent, A.Decl aDecl)
+            protected Declaration(Block parent, A.Decl aDecl, string? name = null)
             {
                 Parent = parent;
-                Name = aDecl.Name.Text;
+                Name = name ?? aDecl.Name.Text;
                 Location = aDecl.GetLocation();
                 LazyAttr = () => MakeAttr(aDecl);
             }
@@ -187,8 +174,8 @@ namespace Six.Six.Sema
 
             public Func<DeclAttr> LazyAttr { get; init; }
 
-            public Module Module => Parent.Content.Module;
-            public Resolver Resolver => Parent.Content.Module.Resolver;
+            public Module Module => Parent.Module;
+            public Resolver Resolver => Parent.Module.Resolver;
             public bool Validated { get; set; }
 
 
@@ -214,23 +201,6 @@ namespace Six.Six.Sema
                 if (aDecl.IsWith(Names.Attr.Sealed)) attr |= DeclAttr.Sealed;
 
                 return attr;
-            }
-
-            public static Type LazyTypeResolver(Block parent, A.Type aType)
-            {
-                return parent.Resolver.ResolveType(parent.Content, aType);
-            }
-
-            public static Type LazyTypeResolver(Block parent, LazyExpr value, A.Type? aType)
-            {
-                if (aType != null)
-                {
-                    return parent.Resolver.ResolveType(parent.Content, aType);
-                }
-                else
-                {
-                    return value.Expr.Type;
-                }
             }
         }
     }

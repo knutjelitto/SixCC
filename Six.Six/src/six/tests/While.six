@@ -1,0 +1,24 @@
+namespace six.core.tests;
+
+shared int WhileLoop()
+{
+    var sum = 0;
+
+    var ii = 10;
+
+    while (ii > 0)
+    {
+        var jj = ii;
+
+        while (jj > 0)
+        {
+            jj = jj - 1;
+
+            sum = sum + 1;
+        }
+
+        ii = ii - 1;
+    }
+
+    return sum;
+}

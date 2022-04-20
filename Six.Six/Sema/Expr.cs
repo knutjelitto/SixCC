@@ -62,7 +62,8 @@ namespace Six.Six.Sema
         public abstract record CallFunction(Decl.Funcy Funcy, List<Expr> Arguments)
             : Primitive(Funcy.Type)
         {
-            public CallFunction(Decl.Funcy Funcy) : this(Funcy, new List<Expr>())
+            protected CallFunction(Decl.Funcy Funcy)
+                : this(Funcy, new List<Expr>())
             {
             }
 
@@ -87,7 +88,7 @@ namespace Six.Six.Sema
                 {
                     return new CallStaticFunction(funcy, arguments);
                 }
-                else if (funcy.IsMember)
+                else if (funcy.IsClassMember)
                 {
                     if (funcy.Parent is ClassBlock classBlock)
                     {
@@ -129,7 +130,7 @@ namespace Six.Six.Sema
                 {
                     return new CallStaticFunction(funcy, arguments);
                 }
-                else if (funcy.IsMember)
+                else if (funcy.IsClassMember)
                 {
                     if (funcy.Parent is ClassBlock classBlock)
                     {
@@ -195,11 +196,14 @@ namespace Six.Six.Sema
             public override Type Type => Callable.Result;
         }
 
+        public abstract record SelectMember(Expr Reference, Decl.Classy Classy, Type Type)
+            : Primitive(Type);
+
         public sealed record SelectFunction(Expr Reference, Decl.Classy Classy, Decl.Function Function)
-            : Primitive(Function.ResultType);
+            : SelectMember(Reference, Classy, Function.ResultType);
 
         public sealed record SelectField(Expr Reference, Decl.Classy Classy, Decl.Field Field)
-            : Primitive(Field.Type);
+            : SelectMember(Reference, Classy, Field.Type);
 
         public sealed record CallMember(Decl.Classy Classy, Decl.Function Function, Expr Make, List<Expr> Arguments)
             : Expr
@@ -223,7 +227,8 @@ namespace Six.Six.Sema
             public Type Type => Function.ResultType;
         }
 
-        public sealed record AndThen(Type Type, LazyExpr And, LazyExpr Then) : Expr
+        public sealed record AndThen(Type Type, LazyExpr And, LazyExpr Then)
+            : Expr
         {
         }
 
@@ -238,26 +243,13 @@ namespace Six.Six.Sema
                 }
             }
 
-            public Expr Condition => LazyCondition.Expr;
-            public Expr Then => LazyThen.Expr;
-            public Expr Else => LazyElse.Expr;
+            public Expr Condition => LazyCondition.Value;
+            public Expr Then => LazyThen.Value;
+            public Expr Else => LazyElse.Value;
         }
-    }
 
-    public sealed record LazyExpr : Entity
-    {
-        private Expr? expr = null;
-        private readonly Func<Expr> resolver;
-
-        public LazyExpr(Module module, Func<Expr> resolver)
+        public sealed record Return(Type Type, LazyExpr? Expr) : Expr
         {
-            Module = module;
-            this.resolver = resolver;
         }
-
-        public Module Module { get; }
-        public Builtins Builtins => Module.Builtins;
-
-        public Expr Expr => expr ??= resolver();
     }
 }

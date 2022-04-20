@@ -11,13 +11,27 @@ shared abstract class Abstract : Base
     shared int a => one;
     shared static int b => one;
     shared abstract int c;
+    shared static void two() => one;
 }
 
 shared class Derived : Abstract
 {
     let Derived x = Derived();
 
-    shared new ()
+    shared new()
+    {
+    }
+
+    shared void check1 ()
+    {
+        one;
+        two();
+        var x = int.max(ccc, one);
+        var y = int.min(ccc, one);
+        var z = int.min(ccc, one) + int.max(ccc, one);
+    }
+
+    shared void check2 ()
     {
         var y = 0;
 
@@ -30,6 +44,8 @@ shared class Derived : Abstract
         y = ccc;
 
         y = int.min(ccc, one);
+
+        y = s32.min(ccc, one);
 
         var f = int.min;
     }

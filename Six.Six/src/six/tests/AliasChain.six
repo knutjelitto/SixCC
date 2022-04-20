@@ -1,0 +1,11 @@
+namespace six.core.tests;
+
+alias loop1 => loop2;
+alias loop2 => loop;
+
+alias loop => int;
+
+shared loop1 use_loop(loop1 x)
+{
+    return x;
+}

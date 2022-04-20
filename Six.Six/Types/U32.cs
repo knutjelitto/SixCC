@@ -8,21 +8,22 @@ using System.Threading.Tasks;
 
 namespace Six.Six.Types
 {
-    public sealed class U32 : I32<Insn.U32Impl, uint>
+    public sealed class U32 : I32<Insn.Num.U32Impl, uint>
     {
-        protected override Insn.U32Impl Impl => Insn.U32;
+        protected override Insn.Num.U32Impl Impl => Insn.U32;
 
         public U32(Builtins builtins)
             : base(builtins, Names.Core.U32)
         {
         }
 
-        public override Primitive Not(Expr arg)
+        public override Primitive Not(List<Expr> args)
         {
-            Assert(IsThis(arg));
+            Assert(args.Count == 1);
+            IsThis(args[0]);
 
             var ones = new Primitive.ConstU32(this, uint.MaxValue);
-            return Xor(ones, arg);
+            return Xor(new List<Expr> { ones, args[0] });
         }
     }
 }

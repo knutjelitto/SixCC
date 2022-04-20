@@ -19,6 +19,8 @@
 
             public static string Char => "char";
             public static string Boolean => "Boolean";
+            public static string True => "true";
+            public static string False => "false";
             public static string Address => "Address";
             public static string Runtime => "Runtime";
 
@@ -53,9 +55,10 @@
         public static class Nouns
         {
             public static readonly string Class = "class";
+            public static readonly string Interface = "interface";
+            public static readonly string Object = "object";
             public static readonly string Function = "function";
             public static readonly string Method = "method";
-            public static readonly string Interface = "interface";
             public static readonly string Member = "member";
         }
     }

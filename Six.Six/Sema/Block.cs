@@ -23,8 +23,18 @@ namespace Six.Six.Sema
         public virtual BlockScope Content => content ??= new BlockScope(Module, Name, Head);
         public virtual BlockScope Head => head ??= new BlockScope(Module, Name, Parent.Content);
         public Resolver Resolver => Module.Resolver;
-        public List<Member> Members { get; } = new();
 
+        public virtual T DeclareContent<T>(T decl, string? name = null)
+            where T : Decl
+        {
+            return Content.Declare<T>(decl, name);
+        }
+
+        public virtual T DeclareHead<T>(T decl, string? name = null)
+            where T : Decl
+        {
+            return Head.Declare<T>(decl, name);
+        }
 
         public virtual Decl? TryFind(string name)
         {
@@ -34,6 +44,17 @@ namespace Six.Six.Sema
                 found = Head.TryFind(name);
             }
             return found;
+        }
+
+        public virtual T Find<T>(ILocation location, string name)
+            where T : Decl
+        {
+            var found = Content.TryFind(name);
+            if (found is T foundAsT)
+            {
+                return foundAsT;
+            }
+            throw Module.Errors.CantResolveMember(location, name);
         }
 
         public virtual Decl Resolve(ILocation location, string name)
@@ -49,6 +70,11 @@ namespace Six.Six.Sema
             }
             return found;
         }
+
+        public virtual Decl Resolve(A.Reference reference, string? name = null)
+        {
+            return Resolve(reference.GetLocation(), name ?? reference.Name.Text);
+        }
     }
 
     public abstract class LinkedBlock : Block
@@ -60,20 +86,6 @@ namespace Six.Six.Sema
         }
 
         public override Block Parent { get; }
-    }
-
-    public sealed class ContentBlock : LinkedBlock
-    {
-        public ContentBlock(Block parent, string name) : base(parent, name)
-        {
-        }
-    }
-
-    public sealed class HeadBlock : LinkedBlock
-    {
-        public HeadBlock(Block parent, string name) : base(parent, name)
-        {
-        }
     }
 
     public sealed class ClassBlock : LinkedBlock
@@ -103,13 +115,48 @@ namespace Six.Six.Sema
             : base(parent, name ?? funcy.Name)
         {
             Funcy = funcy;
+            CodeBlock = new CodeBlock(this, funcy, name ?? funcy.Name);
         }
 
         public Decl.Funcy Funcy { get; }
+        public CodeBlock CodeBlock { get; }
+    }
 
-        public override Decl Resolve(ILocation location, string name)
+    public sealed class CodeBlock : LinkedBlock
+    {
+        public CodeBlock(Block parent, Decl.Funcy funcy, string name)
+            : base(parent, name)
         {
-            return base.Resolve(location, name);
+            Funcy = funcy;
+        }
+
+        public Decl.Funcy Funcy { get; }
+        public List<Stmt> Stmts { get; } = new();
+        public Type StmtsType
+        { 
+            get
+            {
+                Type type = new Type.Void(Module);
+                foreach (var stmt in Stmts)
+                {
+                    type = stmt.Type;
+                    if (stmt is Stmt.Return)
+                    {
+                        break;
+                    }
+                }
+                return type;
+            }
+        }
+
+        public void Add(Stmt stmt)
+        {
+            Stmts.Add(stmt);
+        }
+
+        public CodeBlock NewNested()
+        {
+            return new CodeBlock(this, Funcy, Name);
         }
     }
 
@@ -123,11 +170,19 @@ namespace Six.Six.Sema
 
     public sealed class NamespaceBlock : LinkedBlock
     {
+        private readonly List<Member> members = new();
         public readonly Dictionary<string, NamespaceBlock> Children = new();
 
         public NamespaceBlock(Block parent, string name)
             : base(parent, name)
         {
+        }
+
+        public IReadOnlyList<Member> Members => members;
+
+        public void AddMember(Member member)
+        {
+            members.Add(member);
         }
 
         public NamespaceBlock? Get(string name)

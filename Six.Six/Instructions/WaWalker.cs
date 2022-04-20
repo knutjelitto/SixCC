@@ -8,16 +8,34 @@ namespace Six.Six.Instructions
 {
     public class WaWalker
     {
-        public WaWalker(WaModule module, Emitter emitter)
+        public WaWalker(WaModule module)
         {
             Module = module;
-            Emitter = emitter;
             Instructeur = new WaInstructeur(Module);
         }
 
         public WaModule Module { get; }
-        public Emitter Emitter { get; }
         public WaInstructeur Instructeur { get; }
+
+        public void Walk()
+        {
+            foreach (var global in Module.SemaModule.GetGlobals())
+            {
+                AddGlobal(global);
+            }
+
+            foreach (var function in Module.SemaModule.GetFunctions())
+            {
+                AddFunction(function);
+            }
+
+            foreach (var classy in Module.SemaModule.GetClassies())
+            {
+                AddClass(classy);
+            }
+
+            AddModuleInitializer();
+        }
 
         public void AddGlobal(Decl.Global glob)
         {
@@ -87,7 +105,7 @@ namespace Six.Six.Instructions
                 function.AddLocal(new WaLocal(function, local.Name, type));
             }
 
-            if (funcy.Resolver.ResolveType(funcy.ResultType) is not Type.Void)
+            if (funcy.ResultType is not Type.Void)
             {
                 var type = Instructeur.Lower(funcy.ResultType).Wasm;
 
@@ -148,7 +166,7 @@ namespace Six.Six.Instructions
 
             var count = 0;
 
-            foreach (var innerClass in decl.Block.Members.OfType<Decl.Classy>())
+            foreach (var innerClass in decl.Members.Classes)
             {
                 var inner = CreateClass(innerClass);
 
@@ -157,7 +175,7 @@ namespace Six.Six.Instructions
                 count++;
             }
 
-            foreach (var field in decl.Block.Members.OfType<Decl.Field>())
+            foreach (var field in decl.Fields)
             {
                 if (field.IsStatic)
                 {
@@ -168,8 +186,6 @@ namespace Six.Six.Instructions
                 {
                     clazz.AddMemberField(new WaMemberField(clazz, field.Name, Instructeur.Lower(field.Type).Wasm));
                 }
-
-                count++;
             }
 
             if (decl is Decl.Class klass)
@@ -192,7 +208,7 @@ namespace Six.Six.Instructions
 #endif
             }
 
-            foreach (var funcy in decl.Block.Members.OfType<Decl.Funcy>())
+            foreach (var funcy in decl.Members.Functions)
             {
                 var function = CreateFunction(funcy);
 
@@ -200,8 +216,6 @@ namespace Six.Six.Instructions
 
                 count++;
             }
-
-            Assert(count == decl.Block.Members.Count);
 
             CreateClassDispatch(clazz, decl);
 

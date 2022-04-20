@@ -1,13 +1,13 @@
 ﻿using Six.Six.Instructions;
-using W = Six.Six.Wasms;
+using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
     public abstract class Xnn<TInsn,TValue> : Builtin
-        where TInsn : Insn.Xnn<TValue>
+        where TInsn : Insn.Num.Xnn<TValue>
         where TValue : struct
     {
-        protected Xnn(Builtins builtins, string name, W.WasmType wasm)
+        protected Xnn(Builtins builtins, string name, WasmType wasm)
             : base(builtins, name, wasm)
         {
         }

@@ -1,9 +1,11 @@
-﻿using Six.Core;
+﻿using System;
+
+using Six.Core;
 using Six.Six.Sema;
 using Six.Six.Types;
 using Six.Six.Wasms;
 using Six.Six.Wasms.Instructions;
-using System;
+using Type = Six.Six.Sema.Type;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1822 // Mark members as static
@@ -21,6 +23,7 @@ namespace Six.Six.Instructions
         }
 
         public WaModule Module { get; }
+        public TypeResolver TypeResolver => Module.SemaModule.Resolver.T;
         public WaFunction? Function { get; private set; }
 
         private WaInstructionList Current => instructionsStack.Peek();
@@ -30,9 +33,9 @@ namespace Six.Six.Instructions
             return Module.SemaModule.Builtins.Resolve(named);
         }
 
-        public Builtin Lower(Sema.Type type)
+        public Builtin Lower(Type type)
         {
-            return Module.SemaModule.Emitter.Lower(type);
+            return TypeResolver.Lower(type);
         }
 
         private IDisposable Into(WaInstructionList list)
@@ -54,7 +57,22 @@ namespace Six.Six.Instructions
             return instructions;
         }
 
-        private string TypeFor(Sema.Type.Callable callable)
+        private WaInstructionList Nested(CodeBlock block)
+        {
+            var instructions = new WaInstructionList(Module);
+
+            using (Into(instructions))
+            {
+                foreach (var stmt in block.Stmts)
+                {
+                    Walk(stmt);
+                }
+            }
+
+            return instructions;
+        }
+
+        private string TypeFor(Type.Callable callable)
         {
             var signature = WaFuncSignature.From(
                 callable.Parameters.Select(p => Lower(p).Wasm),
@@ -67,66 +85,79 @@ namespace Six.Six.Instructions
 
         public void Walk(WaFunction function, Decl.Funcy funcy)
         {
-            Function = function;
-            instructionsStack.Push(function.Instructions);
-
-            if (funcy is Decl.Constructor ctor && ctor.Parent is ClassBlock classBlock && classBlock.Classy is Decl.Class clazz && !clazz.IsNative)
+            using (Into(function.Instructions))
             {
-                Add(Insn.Local.Get(0));
-                Add(Insn.Call($"{clazz.FullName}.{Sema.Module.InitCtor}"));
-            }
+                Function = function;
 
-            foreach (var member in funcy.Block.Members)
-            {
-                Walk(member);
+                if (funcy is Decl.Constructor ctor && ctor.Parent is ClassBlock classBlock && classBlock.Classy is Decl.Class clazz && !clazz.IsNative)
+                {
+                    Add(Insn.Local.Get(0));
+                    Add(Insn.Call($"{clazz.FullName}.{Sema.Module.InitCtor}"));
+                }
+
+                var stmts = funcy.Block.CodeBlock.Stmts;
+
+                foreach (var stmt in stmts)
+                {
+                    Walk(stmt);
+                }
+
+                if (stmts.Count > 0 && (stmts.Last() is not Stmt.Return))
+                {
+                    Add(Insn.Return);
+                }
+
+                Function = null;
             }
-            instructionsStack.Pop();
-            Function = null;
 
         }
 
         public void Walk(WaInstructionList instructions, Expr expr)
         {
-            instructionsStack.Push(instructions);
-            Walk(expr);
-            instructionsStack.Pop();
+            using (Into(instructions))
+            {
+                Walk(expr);
+            }
         }
 
         public void CreateInitCtor(WaFunction function, Decl.Classy clazz)
         {
             // move all field initializations into init@ctor
 
-            instructionsStack.Push(function.Instructions);
-            var get = Insn.Local.Get(0);
-            foreach (var field in clazz.Layout.Fields.Select(f => f.Field))
+            using (Into(function.Instructions))
             {
-                Add(get);
-                Walk(field.Value);
-                Add(Lower(field.Type).Store(field.Offset));
+                var get = Insn.Local.Get(0);
+                foreach (var field in clazz.Members.Fields)
+                {
+                    Add(get);
+                    Walk(field.Value);
+                    Add(Lower(field.Type).Store(field.Offset));
+                }
+                Add(Insn.Return);
             }
-            Add(Insn.Return);
-            instructionsStack.Pop();
         }
 
         public void CreateDefaultCtor(WaFunction function, Decl.Classy clazz)
         {
-            instructionsStack.Push(function.Instructions);
-            Add(Insn.Local.Get(0));
-            Add(Insn.Return);
-            instructionsStack.Pop();
+            using (Into(function.Instructions))
+            {
+                Add(Insn.Local.Get(0));
+                Add(Insn.Return);
+            }
         }
 
         public void CreateModuleCtor(WaFunction function)
         {
             // initialize all static fields
 
-            instructionsStack.Push(function.Instructions);
-            foreach (var field in Module.StaticData)
+            using (Into(function.Instructions))
             {
-                Add(new WiInitStaticField(field));
+                foreach (var field in Module.StaticData)
+                {
+                    Add(new WiInitStaticField(field));
+                }
+                Add(Insn.Return);
             }
-            Add(Insn.Return);
-            instructionsStack.Pop();
         }
 
         private void Walk(Entity entity)
@@ -152,23 +183,57 @@ namespace Six.Six.Instructions
 
         private void Build(Decl.LetVar decl)
         {
-            Walk(decl.Value);
-            Add(Insn.Local.Set(decl.Index));
+            Assert(false);
+            throw new InvalidOperationException();
         }
 
         private void Build(Decl.Funcy decl)
         {
+            Assert(false);
             // NOP - handled elsewhere
         }
 
         private void Build(Decl.Parameter decl)
         {
-            // NOP
+            Assert(false);
+            // NOP - handled elsewhere
         }
 
         private void Build(Decl.SelfParameter decl)
         {
-            // NOP
+            Assert(false);
+            // NOP - handled elsewhere
+        }
+
+        private void Build(Stmt.If block)
+        {
+            var condition = Nested(block.Condition);
+
+            var type = block.Type is Type.Void ? null : Lower(block.Type).Wasm;
+
+            var ifBlock = Nested(block.IfBlock);
+            
+            if (block.ElseBlock != null)
+            {
+                var elseBlock = Nested(block.ElseBlock);
+                
+                Add(new WiIfBlock(Module, type, condition, ifBlock, elseBlock));
+            }
+            else
+            {
+                Add(new WiIfBlock(Module, type, condition, ifBlock, null));
+            }
+        }
+
+        private void Build(Stmt.While block)
+        {
+            var condition = Nested(block.Condition);
+
+            var type = block.Type is Type.Void ? null : Lower(block.Type).Wasm;
+
+            var whileBlock = Nested(block.WhileBlock);
+
+            Add(new WiWhileBlock(Module, type, condition, whileBlock));
         }
 
         private void Build(Stmt.Return stmt)
@@ -221,57 +286,66 @@ namespace Six.Six.Instructions
             Add(new WiIfBlock(Module, type, condition, then, @else));
         }
 
-        private void Build(Expr.GlobalReference expr)
+        private void Build(Expr.Reference reference)
         {
-            Add(Insn.Global.Get(expr.Decl.FullName));
+            BuildReference((dynamic)reference.Decl);
         }
 
-        private void Build(Expr.LocalReference expr)
+        private void BuildReference(Decl decl)
         {
-            Add(Insn.Local.Get(expr.LocalDecl.Index));
+            Assert(false);
+            throw new NotImplementedException();
         }
 
-        private void Build(Expr.ParameterReference expr)
+        private void BuildReference(Decl.Global decl)
         {
-            Add(Insn.Local.Get(expr.ParameterDecl.Index));
+            Add(Insn.Global.Get(decl.FullName));
         }
 
-        private void Build(Expr.SelfReference expr)
+        private void BuildReference(Decl.LetVar decl)
+        {
+            Add(Insn.Local.Get(decl.Index));
+        }
+
+        private void BuildReference(Decl.Parameter decl)
+        {
+            Add(Insn.Local.Get(decl.Index));
+        }
+
+        private void BuildReference(Decl.SelfParameter decl)
+        {
+            Assert(decl.Index == 0);
+            Add(Insn.Local.Get(decl.Index));
+        }
+
+        private void BuildReference(Decl.Classy decl)
         {
             Add(Insn.Local.Get(0));
         }
 
-        private void Build(Expr.FunctionReference expr)
+        private void BuildReference(Decl.Function decl)
         {
-            Assert(expr.Decl.Validated);
+            Assert(decl.Validated);
 
-            var funcy = expr.FunctionDecl;
-            var name = funcy.FullName;
+            var name = decl.FullName;
 
-            var function = WaFunction.From(Module, funcy.FullName);
+            var function = WaFunction.From(Module, name);
 
             var index = Module.GlobalFunctionTable.Add(function, name);
 
             Add(Insn.U32.Const(index));
         }
 
-        private void Build(Expr.ClassReference expr)
+        private void BuildReference(Decl.Object decl)
         {
-            Assert(false);
-            throw new NotImplementedException();
-        }
-
-
-        private void Build(Expr.ObjectReference expr)
-        {
-            if (expr.Decl.IsNative)
+            if (decl.IsNative)
             {
-                if (expr.Decl.FullName == "six.core.true")
+                if (decl.FullName == "six.core.true")
                 {
                     Add(Insn.Boolean.True);
                     return;
                 }
-                if (expr.Decl.FullName == "six.core.false")
+                if (decl.FullName == "six.core.false")
                 {
                     Add(Insn.Boolean.False);
                     return;
@@ -282,18 +356,16 @@ namespace Six.Six.Instructions
             throw new NotImplementedException();
         }
 
-        private void Build(Expr.FieldReference expr)
+        private void BuildReference(Decl.Field decl)
         {
-            var field = expr.FieldDecl;
-
-            if (field.IsStatic)
+            if (decl.IsStatic)
             {
-                if (field.Parent is ClassBlock classBlock)
+                if (decl.Parent is ClassBlock classBlock)
                 {
                     var classy = classBlock.Classy;
                 }
 
-                var staticField = Module.FindStaticField(field.StaticName);
+                var staticField = Module.FindStaticField(decl.StaticName);
 
                 Add(new WiGetStaticField(staticField));
             }
@@ -301,7 +373,7 @@ namespace Six.Six.Instructions
             {
                 Add(Insn.Local.Get(0));
 
-                Add(Lower(field.Type).Load(field.Offset));
+                Add(Lower(decl.Type).Load(decl.Offset));
             }
         }
 
@@ -310,27 +382,6 @@ namespace Six.Six.Instructions
             Assert(expr.Ctor.IsNative);
 
             Walk(Resolve(expr.Class).Method(expr.Ctor.Name, expr.Arguments.Count)(expr.Arguments));
-        }
-
-        private void Build(Expr.CallMember expr)
-        {
-            if (expr.Function.IsNative)
-            {
-                Walk(expr.Make);
-
-                Walk(Resolve(expr.Classy).Method(expr.Function.Name, expr.Arguments.Count)(expr.Arguments));
-            }
-            else
-            {
-                Walk(expr.Make);
-
-                foreach (var arg in expr.Arguments)
-                {
-                    Walk(arg);
-                }
-
-                Add(Insn.Call(expr.Function.FullName));
-            }
         }
 
         private void Build(Expr.CallConstructor expr)
@@ -361,7 +412,7 @@ namespace Six.Six.Instructions
         {
             if (expr.Function.IsNative)
             {
-                Walk(Resolve(expr.Classy).Infix(expr.Function.Name)(expr.Arg1, expr.Arg2));
+                Walk(Resolve(expr.Classy).Method(expr.Function.Name, 2)(new List<Expr> { expr.Arg1, expr.Arg2 }));
             }
             else
             {
@@ -374,7 +425,7 @@ namespace Six.Six.Instructions
         {
             if (expr.Function.IsNative)
             {
-                Walk(Resolve(expr.Classy).Prefix(expr.Function.Name)(expr.Arg));
+                Walk(Resolve(expr.Classy).Method(expr.Function.Name, 1)(new List<Expr> { expr.Arg }));
             }
             else
             {
@@ -430,6 +481,27 @@ namespace Six.Six.Instructions
             Add(Insn.Call(expr.Funcy.FullName));
         }
 
+        private void Build(Expr.CallMember expr)
+        {
+            if (expr.Function.IsNative)
+            {
+                Walk(expr.Make);
+
+                Walk(Resolve(expr.Classy).Method(expr.Function.Name, expr.Arguments.Count)(expr.Arguments));
+            }
+            else
+            {
+                Walk(expr.Make);
+
+                foreach (var arg in expr.Arguments)
+                {
+                    Walk(arg);
+                }
+
+                Add(Insn.Call(expr.Function.FullName));
+            }
+        }
+
         private void Build(Expr.CallDynamicFunction expr)
         {
             Walk(expr.Reference);
@@ -453,7 +525,6 @@ namespace Six.Six.Instructions
             Add(Lower(expr.Field.Type).Load(expr.Field.Offset));
         }
 
-
         private void Build(Primitive.Binop primitive)
         {
             Walk(primitive.Arg1);
@@ -464,7 +535,10 @@ namespace Six.Six.Instructions
         private void Build(Primitive.Unop primitive)
         {
             Walk(primitive.Arg);
-            Add(primitive.Insn);
+            if (primitive.Insn is not Insn.Simple.Nop)
+            {
+                Add(primitive.Insn);
+            }
         }
 
         private void Build(Primitive.Arged primitive)

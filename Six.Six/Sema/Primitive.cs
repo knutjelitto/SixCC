@@ -32,9 +32,6 @@ namespace Six.Six.Sema
         public sealed record ConstNatural(Type Type, ulong Value) : Primitive(Type);
         public sealed record ConstString(Type Type, string Value) : Primitive(Type);
 
-        //TODO:
-        public sealed record AllocClass(Decl.Class Class) : Primitive(Class.Type);
-
         public sealed record Arged(Builtin Builtin, Expr Arg)
             : Primitive(Builtin);
 

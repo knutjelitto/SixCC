@@ -11,39 +11,20 @@ namespace Six.Six.Instructions
             : base(new Writer())
         {
             Module = module;
-            Emitter = new Emitter(Module);
-            WaModule = Emitter.WaModule;
-            WaWalker = Emitter.WaWalker;
+
+            WaModule = new WaModule(module, Module.MetaClassName, Module.StringClassName);
+            WaWalker = new WaWalker(WaModule);
         }
 
-        public readonly Emitter Emitter;
         public readonly Module Module;
         public readonly WaModule WaModule;
         public readonly WaWalker WaWalker;
 
         public void EmitModule()
         {
-            if (Module.HasErrors)
-            {
-                return;
-            }
+            Assert(!Module.HasErrors);
 
-            foreach (var global in Module.GetGlobals())
-            {
-                WaWalker.AddGlobal(global);
-            }
-
-            foreach (var function in Module.GetFunctions())
-            {
-                WaWalker.AddFunction(function);
-            }
-
-            foreach (var classy in Module.GetClassies())
-            {
-                WaWalker.AddClass(classy);
-            }
-
-            WaWalker.AddModuleInitializer();
+            WaWalker.Walk();
 
             WaModule.Prepare();
             WaModule.Emit();

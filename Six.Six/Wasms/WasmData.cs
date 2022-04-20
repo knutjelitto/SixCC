@@ -13,6 +13,11 @@ namespace Six.Six.Wasms
             return WasmType.Align(16, offset);
         }
 
+        public static uint Align8(uint offset)
+        {
+            return WasmType.Align(8, offset);
+        }
+
         public static uint Align(uint align, uint offset)
         {
             return WasmType.Align(align, offset);
@@ -41,13 +46,6 @@ namespace Six.Six.Wasms
         public static string EmitBytes(byte[] bytes)
         {
             return $"\"{CvtBytes(bytes)}\"";
-        }
-
-        public static string EmitPtr(Ptr value)
-        {
-            var bytes = BitConverter.GetBytes(value.Value);
-            Assert(bytes.Length == 4);
-            return EmitBytes(bytes);
         }
 
         public static string EmitAddress(uint value)

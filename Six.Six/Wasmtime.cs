@@ -42,6 +42,15 @@ namespace Six.Six
 
             linker.DefineFunction<int>("six.core.RT", "Print", (ptr) =>
             {
+                Assert(true);
+
+                if (memory != null)
+                {
+                    var length = memory.ReadInt32(store, ptr + 8);
+                    var message = memory.ReadString(store, ptr + 12, length);
+
+                    Console.Write(message);
+                }
             });
 
             linker.DefineWasi();
@@ -93,33 +102,37 @@ namespace Six.Six
             var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
             Assert(complex2 == heap_start + 160);
 
-            result = CallInt32Function(store, instance, "six.core.Complex.Re", complex1);
+            result = CallInt32Function(store, instance, "six.core.Complex.Real", complex1);
             Assert(result == 1);
-            result = CallInt32Function(store, instance, "six.core.Complex.Im", complex1);
+            result = CallInt32Function(store, instance, "six.core.Complex.Imag", complex1);
             Assert(result == 2);
 
-            result = CallInt32Function(store, instance, "six.core.Complex.Re", complex2);
+            result = CallInt32Function(store, instance, "six.core.Complex.Real", complex2);
             Assert(result == 1);
-            result = CallInt32Function(store, instance, "six.core.Complex.Im", complex2);
+            result = CallInt32Function(store, instance, "six.core.Complex.Imag", complex2);
             Assert(result == 2);
 
             var sum = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
             Assert(sum == heap_start + 176);
 
-            result = CallInt32Function(store, instance, "six.core.Complex.Re", sum);
+            result = CallInt32Function(store, instance, "six.core.Complex.Real", sum);
             Assert(result == 2);
-            result = CallInt32Function(store, instance, "six.core.Complex.Im", sum);
+            result = CallInt32Function(store, instance, "six.core.Complex.Imag", sum);
             Assert(result == 4);
 
             result = CallInt32Function(store, instance, "six.core.complex_string");
             Assert(true);
 
+            CallVoidFunction(store, instance, "six.core.PrintHello");
+
             result = CallInt32Function(store, instance, "six.core.tests.ShapeTest");
             Assert(result == 4);
 
-            var address = CallInt32Function(store, instance, "six.core.tests.ShapeTest2");
-        
+            var address = CallInt32Function(store, instance, "six.core.tests.ShapeTest2");        
             Assert(true);
+
+            result = CallInt32Function(store, instance, "six.core.tests.WhileLoop");
+            Assert(result == 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1);
 
             var mem = instance.GetMemory(store, "six.core.Data&Heap")!;
 
@@ -130,6 +143,11 @@ namespace Six.Six
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)
         {
             return (int)GetFunction(store, instance, name).Invoke(store, parameters)!;
+        }
+
+        private void CallVoidFunction(Store store, Instance instance, string name, params object[] parameters)
+        {
+            _ = GetFunction(store, instance, name).Invoke(store, parameters)!;
         }
 
         private Function GetFunction(Store store, Instance instance, string name)

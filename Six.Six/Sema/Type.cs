@@ -1,12 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
 namespace Six.Six.Sema
 {
-    public interface Typy
-    {
-    }
-
-    public interface Type : Typy, Entity
+    public interface Type : Entity
     {
         public interface Declared : Type
         {
@@ -15,75 +12,6 @@ namespace Six.Six.Sema
 
         public interface Builtin : Type
         {
-        }
-
-        [DebuggerDisplay("reference <{Decl}>")]
-        public abstract class Reference : TypeImpl, Declared
-        {
-            public Reference(Module module, Decl decl)
-                : base(module)
-            {
-                Decl = decl;
-            }
-
-            public Decl Decl { get; }
-            
-            public override string ToString()
-            {
-                return $"{Decl.Name}";
-            }
-        }
-
-        public sealed class AliasReference : Reference
-        {
-            public AliasReference(Module module, Decl.Alias alias)
-                : base(module, alias)
-            {
-            }
-        }
-        
-        public abstract class ClassyReference : Reference
-        {
-            protected ClassyReference(Module module, Decl.Classy classy)
-                : base(module, classy)
-            {
-                Classy = classy;
-            }
-
-            public Decl.Classy Classy { get; }
-        }
-
-        public sealed class ClassReference : ClassyReference
-        {
-            public ClassReference(Module module, Decl.Class clazz)
-                : base(module, clazz)
-            {
-                Class = clazz;
-            }
-
-            public Decl.Class Class { get; }
-        }
-
-        public sealed class InterfaceReference : ClassyReference
-        {
-            public InterfaceReference(Module module, Decl.Interface interFace)
-                : base(module, interFace)
-            {
-                Interface = interFace;
-            }
-
-            public Decl.Interface Interface { get; }
-        }
-
-        public sealed class ObjectReference : ClassyReference
-        {
-            public ObjectReference(Module module, Decl.Object obJect)
-                : base(module, obJect)
-            {
-                Object = obJect;
-            }
-
-            public Decl.Object Object { get; }
         }
 
         public sealed class Callable : TypeImpl

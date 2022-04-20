@@ -9,33 +9,32 @@ namespace Six.Six.Sema
         public abstract class Funcy : Declaration
         {
             private List<Type>? paramTypes = null;
-            private Type? resultType = null;
+            public readonly FuncMembers Members;
 
-            protected Funcy(Block parent, string name, A.Decl.Funcy aDecl)
-                : base(parent, aDecl)
+            protected Funcy(Block parent, A.Decl.Funcy aDecl, string name)
+                : base(parent, aDecl, name)
             {
-                parent.Members.Add(this);
                 Block = new FuncBlock(parent, this, name);
+                HasBody = aDecl.Body is not A.Body.Deferred;
                 AFuncy = aDecl;
-                Layout = new FuncLayout();
-                parent.Content.Declare(this, name);
+                Members = new FuncMembers();
             }
 
             public FuncBlock Block { get; }
             public A.Decl.Funcy AFuncy { get; }
-            public FuncLayout Layout { get; }
 
-            public IReadOnlyList<Local> Parameters => Layout.Parameters;
-            public IReadOnlyList<Local> Locals => Layout.Locals;
+            public IReadOnlyList<Local> Parameters => Members.Parameters;
+            public IReadOnlyList<Local> Locals => Members.Locals;
+            public IReadOnlyList<Funcy> Functions => Members.Functions;
 
             public List<Type> ParamTypes =>
                 paramTypes ??= Parameters.Select(param => param.Type).ToList();
 
-            public bool HasBody => AFuncy.Body is not A.Body.Deferred;
+            public bool HasBody { get; }
             public bool IsConcrete => HasBody && !IsAbstract;
             public bool IsDynamic => !IsStatic && (IsAbstract || IsVirtual || IsOverride);
-            public bool IsMember => !IsStatic && Parent is ClassBlock;
-            public bool IsLocalFunction => Parent is FuncBlock;
+            public bool IsClassMember => !IsStatic && Parent is ClassBlock;
+            public bool IsLocalFunction => Parent is CodeBlock;
             public bool IsGlobalFunction => Parent is NamespaceBlock;
 
             public override string FullName => Block.FullName();
@@ -43,64 +42,73 @@ namespace Six.Six.Sema
             public override Type Type =>
                 type ??= new Type.Callable(Module, ResultType, ParamTypes);
 
-            public Func<Type> ResultTypeResolver { get; init; } = () => throw new NotImplementedException();
-            public Type ResultType => resultType ??= ResultTypeResolver();
+            public abstract Type ResultType { get; }
 
             public Type.Callable CallableType => (Type.Callable)Type;
 
-            public void AddParameter(Local parameter)
+            public void AddParameter(Decl.Parameter parameter)
             {
-                Layout.AddParameter(parameter);
-                Block.Members.Add(parameter);
+                Members.AddParameter(parameter);
             }
 
-            public void AddLocal(Local local)
+            public void AddParameter(Decl.SelfParameter parameter)
             {
-                Layout.AddLocal(local);
-                Block.Members.Add(local);
+                Members.AddParameter(parameter);
             }
         }
 
         public sealed class Function : Funcy
         {
-            public Function(Block parent, A.Decl.Funcy aDecl, string? name)
-                : base(parent, name ?? aDecl.Name.Text, aDecl)
+            private readonly LazyType lazyResultType;
+
+            public Function(Block parent, A.Decl.Funcy aDecl, string? name = null)
+                : base(parent, aDecl, name ?? aDecl.Name.Text)
             {
-                ResultTypeResolver = () =>
+                var type = ((A.With.Type)aDecl).Type;
+
+                if (type is A.Reference reference && reference.Name.Text == "void")
                 {
-                    var type = ((A.With.Type)aDecl).Type;
-
-                    if (type is A.Reference reference && reference.Name.Text == "void")
-                    {
-                        return new Type.Void(Module);
-                    }
-
-                    return LazyTypeResolver(parent, ((A.With.Type)aDecl).Type);
-                };
+                    lazyResultType = new LazyType(() => new Type.Void(Module));
+                }
+                else
+                {
+                    lazyResultType = Resolver.T.ResolveTypeLazy(parent, type);
+                }
             }
+
+            public override Type ResultType => lazyResultType.Value;
         }
 
         public sealed class Constructor : Funcy
         {
+            private readonly LazyType lazyResultType;
+
             public Constructor(ClassBlock parent, A.Decl.Funcy aFuncyDecl)
-                : base(parent, aFuncyDecl.Name.Text, aFuncyDecl)
+                : base(parent, aFuncyDecl, aFuncyDecl.Name.Text)
             {
-                ResultTypeResolver = () => Resolver.ResolveType(parent.Classy.Type);
+                lazyResultType = new LazyType(() => parent.Classy);
             }
 
             public override bool IsStatic => true;
+
+            public override Type ResultType => lazyResultType.Value;
         }
 
         public sealed class Attribute : Funcy
         {
+            private readonly LazyType lazyResultType;
+
             public Attribute(Block parent, A.Decl.Attribute aDecl)
-                : base(parent, aDecl.Name.Text, aDecl)
+                : base(parent, aDecl, aDecl.Name.Text)
             {
-                ResultTypeResolver = () => LazyTypeResolver(parent, aDecl.Type);
+                lazyResultType = Resolver.T.ResolveTypeLazy(parent, aDecl.Type);
+
                 FullName = $"{parent.FullName()}.{Name}";
             }
 
             public override string FullName { get; }
+
+            public override Type ResultType => lazyResultType.Value;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
-        public DiagnosticException CantResolveInCore(string what, string name)
+        public DiagnosticException CanNotResolveInCore(string what, string name)
         {
             var diagnostic = new InternalError($"can't resolve {what} ``{name}´´ in ``{Module.CoreNamespace}´´");
 
@@ -99,6 +99,13 @@ namespace Six.Six.Sema
         public DiagnosticException CanNotCreateInstanceOfAbstractClass(Decl.Classy classy, string subject)
         {
             var diagnostic = new SemanticError(classy.Location, $"can not create instance of {Names.Attr.Abstract} {subject} '{classy.Name}'");
+
+            return new DiagnosticException(diagnostic);
+        }
+
+        public DiagnosticException TypeRecursionDetected(ILocation location, string name)
+        {
+            var diagnostic = new SemanticError(location, $"type '{name}' in recursion chain");
 
             return new DiagnosticException(diagnostic);
         }
