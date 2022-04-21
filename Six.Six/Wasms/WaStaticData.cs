@@ -29,13 +29,11 @@ namespace Six.Six.Wasms
             Assert(BaseOffset < uint.MaxValue);
             Assert(BaseOffset == Align16(BaseOffset));
 
-            var offset = BaseOffset;
-
-            Assert(offset == Align16(offset));
+            var offset = WaPtr.Null.Offset(BaseOffset);
 
             foreach (var field in this)
             {
-                var newOffset = field.Type.Align(offset);
+                var newOffset = offset.Align(field.Type);
                 if (newOffset > offset)
                 {
                     wl(EmitZeros(newOffset - offset));
@@ -44,12 +42,12 @@ namespace Six.Six.Wasms
 
                 field.Address = offset;
 
-                offset = field.Address + field.Size;
+                offset = offset.Offset(field.Size);
 
                 field.Prepare();
             }
 
-            Size = Align16(offset) - BaseOffset;
+            Size = offset.Align16() - WaPtr.Null.Offset(BaseOffset);
         }
 
         public override void Emit()

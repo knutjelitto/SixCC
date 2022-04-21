@@ -11,18 +11,23 @@ namespace Six.Six.Wasms
             Instructions = new WaInstructionList(withWriter);
         }
 
-        public uint Address { get; set; } = uint.MaxValue;
+        public WaPtr Address { get; set; } = WaPtr.Invalid;
         public uint Size => Type.MemSize;
         public WaInstructionList Instructions { get; }
 
         public override void Prepare()
         {
-            Assert(Address < uint.MaxValue);
+            Assert(Address.IsValid);
         }
 
         public override void Emit()
         {
-            wl($"(; +{Address,4} 0x{Address:X4} {Name} ;) {EmitZeros(Type.MemSize)}");
+            wl($"(; +{Address.Address,4} 0x{Address.Address:X4} {Name} ;) {EmitZeros(Size)}");
+        }
+
+        public void EmitAddress()
+        {
+            Address.EmitAddress(Writer);
         }
     }
 }

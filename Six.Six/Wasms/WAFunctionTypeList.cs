@@ -27,7 +27,6 @@ namespace Six.Six.Wasms
         {
             if (functionTypes.Count > 0)
             {
-                wl();
                 foreach (var sign in functionTypes.Values.OrderBy(sign => sign.Index))
                 {
                     sign.Emit();

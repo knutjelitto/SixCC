@@ -197,9 +197,9 @@ namespace Six.Six.Wasms
                 wl();
                 DispatchTable.Emit();
                 wl();
-                GlobalFunctionTable.Emit();
-                wl();
                 FunctionTypes.Emit();
+                wl();
+                GlobalFunctionTable.Emit();
                 wl();
                 Globals.Emit();
                 wl();

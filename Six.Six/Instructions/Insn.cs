@@ -54,6 +54,45 @@
             public static LocalGet Get(int index) => new(index);
             public static LocalSet Set(int index) => new(index);
             public static LocalTee Tee(int index) => new(index);
+
+            public abstract class IndexRef : Insn
+            {
+                public IndexRef(int index)
+                {
+                    Index = index;
+                }
+
+                public int Index { get; }
+            }
+
+            public class LocalGet : IndexRef
+            {
+                public LocalGet(int index)
+                    : base(index)
+                {
+                }
+
+                public override string ToString() => $"local.get {Index}";
+            }
+
+            public class LocalSet : IndexRef
+            {
+                public LocalSet(int index) : base(index)
+                {
+                }
+
+                public override string ToString() => $"local.set {Index}";
+            }
+
+            public class LocalTee : IndexRef
+            {
+                public LocalTee(int index) : base(index)
+                {
+                }
+
+                public override string ToString() => $"local.tee {Index}";
+            }
+
         }
 
         public static class Global
@@ -61,7 +100,6 @@
             public static Insn Get(string name) => new Simplest($"global.get ${name}");
             public static Insn Set(string name) => new Simplest($"global.set ${name}");
         }
-
 
         public static class Num
         {
@@ -195,7 +233,7 @@
         public static readonly Num.F32Impl F32 = new();
         public static readonly Num.F64Impl F64 = new();
 
-        public static readonly Pointer Ptr = new();
+        public static readonly Pointer Address = new();
 
         public class Pointer
         {
@@ -231,6 +269,9 @@
             }
 
             public static Insn Neg(ValueType type) => new Unop(type, "neg", OpSign.Neutral);
+            public static Insn Clz(ValueType type) => new Unop(type, "clz", OpSign.Neutral);
+            public static Insn Ctz(ValueType type) => new Unop(type, "ctz", OpSign.Neutral);
+            public static Insn Popcnt(ValueType type) => new Unop(type, "popcnt", OpSign.Neutral);
         }
 
         public class Binop : Insn
@@ -263,6 +304,8 @@
 
             public static Insn Shl(ValueType type) => new Binop(type, "shl", OpSign.Neutral);
             public static Insn Shr(ValueType type, OpSign signedness) => new Binop(type, "shr", signedness);
+            public static Insn Rotl(ValueType type) => new Binop(type, "rotl", OpSign.Neutral);
+            public static Insn Rotr(ValueType type) => new Binop(type, "rotr", OpSign.Neutral);
 
             public static Insn EqZ(ValueType type) => new Binop(type, "eqz", OpSign.Neutral);
             public static Insn Eq(ValueType type) => new Binop(type, "eq", OpSign.Neutral);
@@ -320,44 +363,6 @@
             {
                 return $"{Value.Type}.const {Value}";
             }
-        }
-
-        public abstract class IndexRef : Insn
-        {
-            public IndexRef(int index)
-            {
-                Index = index;
-            }
-
-            public int Index { get; }
-        }
-
-        public class LocalGet : IndexRef
-        {
-            public LocalGet(int index)
-                : base(index)
-            {
-            }
-
-            public override string ToString() => $"local.get {Index}";
-        }
-
-        public class LocalSet : IndexRef
-        {
-            public LocalSet(int index) : base(index)
-            {
-            }
-
-            public override string ToString() => $"local.set {Index}";
-        }
-
-        public class LocalTee : IndexRef
-        {
-            public LocalTee(int index) : base(index)
-            {
-            }
-
-            public override string ToString() => $"local.tee {Index}";
         }
     }
 

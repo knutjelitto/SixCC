@@ -19,14 +19,14 @@ namespace Six.Six.Wasms.Instructions
 
         public override void Emit()
         {
-            Assert(Field.Address < uint.MaxValue);
+            Assert(Field.Address.IsValid);
 
-            wl($"{Insn.U32.Const(Field.Address)}");
+            Field.EmitAddress();
             foreach (var insn in Field.Instructions)
             {
                 wl($"{insn}");
             }
-            wl($"{Insn.Ptr.Store(0)}");
+            wl($"{Insn.Address.Store(0)}");
         }
     }
 }

@@ -1,0 +1,28 @@
+namespace six.core.tests;
+
+shared void int32tests()
+{
+    let i1 = 1;
+    let i2 = 2;
+
+    var b = false;
+    var x = 0;
+
+    b = 1 == 2;
+    b = 1 != 2;
+
+    b = 1 < 2;
+    b = 1 <= 2;
+
+    b = 1 > 2;
+    b = 1 >= 2;
+
+    b = i1 == i2;
+    b = i1 != i2;
+
+    b = i1 < i2;
+    b = i1 <= i2;
+
+    b = i1 > i2;
+    b = i1 >= i2;
+}

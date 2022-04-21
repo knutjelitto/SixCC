@@ -23,10 +23,10 @@ namespace Six.Six.Wasms.Instructions
 
         public override void Emit()
         {
-            Assert(Field.Address < uint.MaxValue);
+            Assert(Field.Address.IsValid);
 
-            wl($"{Insn.U32.Const(Field.Address)}");
-            wl($"{Insn.Ptr.Load(0)}");
+            Field.EmitAddress();
+            wl($"{Insn.Address.Load(0)}");
         }
     }
 }
