@@ -4,16 +4,6 @@ namespace Six.Six.Wasms
 {
     public sealed class WaClass : WithWriter, Wamber
     {
-        public struct Class
-        {
-            public Class()
-            {
-                Ptr = WaPtr.Invalid;
-            }
-
-            WaPtr Ptr;
-        };
-
         public readonly WaConstString NameConst;
         public readonly WaRuntime RuntimeType;
         public readonly WaDispatches Dispatches;
@@ -43,11 +33,6 @@ namespace Six.Six.Wasms
             
             Bases = new WaClassList(Module);
             Interfaces = new WaClassList(Module);
-
-            unsafe
-            {
-                var x = sizeof(Class);
-            }
         }
 
         public static WaClass From(WaModule module, string name)
