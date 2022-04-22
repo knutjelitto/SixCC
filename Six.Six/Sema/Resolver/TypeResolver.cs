@@ -79,7 +79,7 @@ namespace Six.Six.Sema
             }
             else if (classy.AClassy is A.With.Extends extends && extends.Extends is A.Type extended)
             {
-                var super = ResolveType(classy.Block.Head, extended);
+                var super = ResolveType(classy.Block.Content, extended);
 
                 if (super is Decl.Class superClass)
                 {
@@ -110,7 +110,7 @@ namespace Six.Six.Sema
             {
                 foreach (var aType in aTypes)
                 {
-                    var type = ResolveType(classy.Block.Head, aType);
+                    var type = ResolveType(classy.Block.Content, aType);
 
                     if (type is Decl.Interface iface)
                     {

@@ -9,7 +9,6 @@ namespace Six.Six.Sema
     public abstract class Block
     {
         private BlockScope? content;
-        private BlockScope? head;
 
         protected Block(Module module, string name)
         {
@@ -20,29 +19,19 @@ namespace Six.Six.Sema
         public Module Module { get; }
         public string Name { get; }
         public abstract Block Parent { get; }
-        public virtual BlockScope Content => content ??= new BlockScope(Module, Name, Head);
-        public virtual BlockScope Head => head ??= new BlockScope(Module, Name, Parent.Content);
+        public Errors Errors => Module.Errors;
+        public virtual BlockScope Content => content ??= new BlockScope(Module, Name, Parent.Content);
         public Resolver Resolver => Module.Resolver;
 
-        public virtual T DeclareContent<T>(T decl, string? name = null)
+        public virtual T Declare<T>(T decl, string? name = null)
             where T : Decl
         {
             return Content.Declare<T>(decl, name);
         }
 
-        public virtual T DeclareHead<T>(T decl, string? name = null)
-            where T : Decl
-        {
-            return Head.Declare<T>(decl, name);
-        }
-
-        public virtual Decl? TryFind(string name)
+        protected virtual Decl? TryFind(string name)
         {
             var found = Content.TryFind(name);
-            if (found == null)
-            {
-                found = Head.TryFind(name);
-            }
             return found;
         }
 
@@ -98,7 +87,7 @@ namespace Six.Six.Sema
 
         public Decl.Classy Classy { get; }
 
-        public override Decl? TryFind(string name)
+        protected override Decl? TryFind(string name)
         {
             var found = base.TryFind(name);
             if (found == null && Classy.Extends != null)
@@ -217,20 +206,22 @@ namespace Six.Six.Sema
                 return "";
             }
         }
+
+        public Decl? TryFind2(string name)
+        {
+            var found = Content.TryFind(name);
+            return found;
+        }
     }
 
     public class ModuleBlock : Block
     {
-        public readonly Dictionary<string, NamespaceBlock> Children = new();
-
         public ModuleBlock(Module module, string name)
             : base(module, name)
         {
-            Head = new BlockScope(module, name, new EmptyScope(module));
-            Content = new BlockScope(module, name, Head);
+            Content = new BlockScope(module, name, new EmptyScope(module));
         }
 
-        public override BlockScope Head { get; }
         public override BlockScope Content { get; }
         public override Block Parent => throw new InvalidOperationException();
     }

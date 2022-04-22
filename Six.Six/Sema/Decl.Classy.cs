@@ -15,7 +15,7 @@ namespace Six.Six.Sema
             {
                 Block = new ClassBlock(parent, this);
                 AClassy = aDecl;
-                parent.DeclareContent(this, aDecl.Name.Text);
+                parent.Declare(this, aDecl.Name.Text);
             }
 
             public ClassBlock Block { get; }

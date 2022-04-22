@@ -136,7 +136,7 @@ namespace Six.Six.Sema
         {
             var core = GetCoreNamespace();
 
-            var decl = core.TryFind(name);
+            var decl = core.TryFind2(name);
             if (decl is Decl.Classy classy)
             {
                 return classy;
@@ -151,20 +151,6 @@ namespace Six.Six.Sema
             var core = GetCoreNamespace();
 
             return core.Find<Decl.Class>(location, name);
-        }
-
-        public Decl.Function CoreFindFunction(string name)
-        {
-            var core = GetCoreNamespace();
-
-            var decl = core.TryFind(name);
-            if (decl is Decl.Function function)
-            {
-                return function;
-            }
-
-            Assert(false);
-            throw Errors.CanNotResolveInCore("function", name);
         }
 
         public NamespaceBlock GetCoreNamespace()
