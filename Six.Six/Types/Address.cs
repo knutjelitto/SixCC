@@ -2,8 +2,6 @@
 using Six.Six.Sema;
 using Six.Six.Wasms;
 
-#pragma warning disable IDE1006 // Naming Styles
-
 namespace Six.Six.Types
 {
     public sealed class Address : Builtin
@@ -11,10 +9,10 @@ namespace Six.Six.Types
         public Address(Builtins builtins)
             : base(builtins, Names.Core.Address, WasmType.Addr)
         {
-            AddMethod(Module.DefaultCtor, 1, defaultCtor);
+            AddMethod(Module.DefaultCtor, 1, DefaultCtor);
         }
 
-        public Primitive defaultCtor(List<Expr> args)
+        public Primitive DefaultCtor(List<Expr> args)
         {
             Assert(args.Count == 1);
 
