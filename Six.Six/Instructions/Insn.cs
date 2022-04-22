@@ -118,7 +118,7 @@
                 public Insn Mul => Binop.Mul(ValueType);
                 public Insn Div => Binop.Div(ValueType, Signedness);
 
-                public Insn EQZ => Binop.EqZ(ValueType);
+                public Insn EQZ => Unop.EqZ(ValueType);
                 public Insn EQ => Binop.Eq(ValueType);
                 public Insn NE => Binop.Ne(ValueType);
                 public Insn LE => Binop.Le(ValueType, Signedness);
@@ -243,8 +243,8 @@
 
         public static class Boolean
         {
-            public static Insn False => S32.Const(0);
-            public static Insn True => S32.Const(1);
+            public static Const False => S32.Const(0);
+            public static Const True => S32.Const(1);
             public static Insn And => S32.And;
             public static Insn Or => S32.Or;
             public static Insn Xor => S32.Xor;
@@ -272,6 +272,7 @@
             public static Insn Clz(ValueType type) => new Unop(type, "clz", OpSign.Neutral);
             public static Insn Ctz(ValueType type) => new Unop(type, "ctz", OpSign.Neutral);
             public static Insn Popcnt(ValueType type) => new Unop(type, "popcnt", OpSign.Neutral);
+            public static Insn EqZ(ValueType type) => new Unop(type, "eqz", OpSign.Neutral);
         }
 
         public class Binop : Insn
@@ -307,7 +308,6 @@
             public static Insn Rotl(ValueType type) => new Binop(type, "rotl", OpSign.Neutral);
             public static Insn Rotr(ValueType type) => new Binop(type, "rotr", OpSign.Neutral);
 
-            public static Insn EqZ(ValueType type) => new Binop(type, "eqz", OpSign.Neutral);
             public static Insn Eq(ValueType type) => new Binop(type, "eq", OpSign.Neutral);
             public static Insn Ne(ValueType type) => new Binop(type, "ne", OpSign.Neutral);
             public static Insn Lt(ValueType type, OpSign signedness) => new Binop(type, "lt", signedness);
