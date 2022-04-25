@@ -178,13 +178,13 @@ namespace Six.Six.Sema
         public sealed record CallDynamicFunction(Decl.Classy Classy, Decl.Funcy Funcy, Expr Reference, uint SlotNo, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
+        public sealed record CallConstructor(Decl.Classy Class, Decl.Constructor Ctor, List<Expr> Arguments)
             : Primitive(Ctor.Type)
         {
             public override Type Type => Ctor.ResultType;
         }
 
-        public sealed record CallNativeConstructor(Decl.Class Class, Decl.Constructor Ctor, List<Expr> Arguments)
+        public sealed record CallNativeConstructor(Decl.Classy Class, Decl.Constructor Ctor, List<Expr> Arguments)
             : Primitive(Ctor.Type)
         {
             public override Type Type => Ctor.ResultType;

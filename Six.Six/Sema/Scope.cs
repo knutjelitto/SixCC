@@ -6,7 +6,7 @@ namespace Six.Six.Sema
     {
         Scope Parent { get; }
         public Module Module => Parent.Module;
-        T Declare<T>(T decl, string? name = null) where T : Decl;
+        T Declare<T>(T decl) where T : Decl;
         Decl Resolve(A.TreeNode tree, string name);
     }
 }

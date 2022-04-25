@@ -46,9 +46,9 @@ namespace Six.Six.Sema
             return Parent.Resolve(tree, name);
         }
 
-        public T Declare<T>(T decl, string? name = null) where T : Decl
+        public T Declare<T>(T decl) where T : Decl
         {
-            name ??= decl.Name;
+            var name = decl.Name;
 
             if (declarations.TryGetValue(name, out var already))
             {

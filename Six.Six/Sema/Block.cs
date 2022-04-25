@@ -23,10 +23,10 @@ namespace Six.Six.Sema
         public virtual BlockScope Content => content ??= new BlockScope(Module, Name, Parent.Content);
         public Resolver Resolver => Module.Resolver;
 
-        public virtual T Declare<T>(T decl, string? name = null)
+        public virtual T Declare<T>(T decl)
             where T : Decl
         {
-            return Content.Declare<T>(decl, name);
+            return Content.Declare<T>(decl);
         }
 
         protected virtual Decl? TryFind(string name)

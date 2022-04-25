@@ -92,14 +92,19 @@ namespace Six.Six.Sema
                             {
                                 return new Expr.FieldReference(field);
                             }
+                            else if (found is Decl.Constructor ctor)
+                            {
+                                return new Expr.ConstructorReference(ctor);
+                            }
+
+                            Assert(false);
+                            throw new NotImplementedException();
                         }
                         else
                         {
                             Assert(false);
                             throw new NotImplementedException();
                         }
-
-                        Assert(Module.HasErrors);
                     }
                     else
                     {
@@ -241,10 +246,15 @@ namespace Six.Six.Sema
         {
             return new LazyExpr(() =>
             {
-                var func = ResolveExpression(block, node.Expr);
+                var func = ResolveExpression(block, node.Expr).Value;
                 var args = GetArguments(block, node.Arguments).ToList();
 
-                if (func.Value is Expr.FunctionReference functionReference)
+                if (func is Expr.AliasReference aliasReference)
+                {
+                    Assert(false);
+                    throw new NotImplementedException();
+                }
+                else if (func is Expr.FunctionReference functionReference)
                 {
                     var function = functionReference.FunctionDecl;
 
@@ -253,54 +263,85 @@ namespace Six.Six.Sema
 
                     return Expr.CallFunction.From(functionReference.FunctionDecl, arguments);
                 }
-                else if (func.Value is Expr.ClassReference classReference)
+                else if (func is Expr.ClassReference classReference)
                 {
-                    var clazz = classReference.ClassDecl;
+                    var classy = classReference.ClassDecl;
 
-                    if (clazz.IsAbstract)
+                    if (classy.IsAbstract)
                     {
-                        throw Errors.CanNotCreateInstanceOfAbstractClass(clazz, Names.Nouns.Class);
+                        throw Errors.CanNotCreateInstanceOfAbstractClass(classy, Names.Nouns.Class);
                     }
 
-                    var defaultCtor = clazz.Block.Find<Decl.Constructor>(node.Expr.GetLocation(), Module.DefaultCtor);
+                    var ctor = classy.Block.Find<Decl.Constructor>(node.Expr.GetLocation(), Module.DefaultCtor);
 
-                    var prms = defaultCtor.Parameters;
+                    Assert(ctor.IsStatic);
 
-                    if (defaultCtor.IsNative)
+                    var prms = ctor.Parameters;
+
+                    if (ctor.IsNative)
                     {
                         Assert(true);
 
                         var arguments = MakeArguments(prms, args);
 
-                        return new Expr.CallNativeConstructor(clazz, defaultCtor, arguments);
+                        return new Expr.CallNativeConstructor(classy, ctor, arguments);
                     }
                     else
                     {
                         var arguments = MakeMemberArguments(prms, args);
 
-                        return new Expr.CallConstructor(clazz, defaultCtor, arguments);
+                        return new Expr.CallConstructor(classy, ctor, arguments);
                     }
 
                 }
-                else if (func.Value is Expr.LocalReference local)
+                else if (func is Expr.ConstructorReference ctorRef && ctorRef.Decl is Decl.Constructor ctor)
+                {
+                    var classy = ctor.Class;
+
+                    if (classy.IsAbstract)
+                    {
+                        throw Errors.CanNotCreateInstanceOfAbstractClass(classy, Names.Nouns.Class);
+                    }
+
+                    Assert(ctor.IsStatic);
+
+                    var prms = ctor.Parameters;
+
+                    if (ctor.IsNative)
+                    {
+                        Assert(true);
+
+                        var arguments = MakeArguments(prms, args);
+
+                        return new Expr.CallNativeConstructor(classy, ctor, arguments);
+                    }
+                    else
+                    {
+                        var arguments = MakeMemberArguments(prms, args);
+
+                        return new Expr.CallConstructor(classy, ctor, arguments);
+                    }
+                }
+                else if (func is Expr.LocalReference local)
                 {
                     Assert(local.Decl.Type is Type.Callable);
 
                     return ResolveIndirect(local, local.Decl.Type as Type.Callable);
                 }
-                else if (func.Value is Expr.ParameterReference parameter)
+                else if (func is Expr.ParameterReference parameter)
                 {
                     Assert(parameter.Decl.Type is Type.Callable);
 
                     return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
                 }
-                else if (func.Value is Expr.SelectFunction selectFunction)
+                else if (func is Expr.SelectFunction selectFunction)
                 {
                     var function = selectFunction.Function;
 
                     if (selectFunction.Function.IsStatic)
                     {
                         Assert(false);
+                        throw new NotImplementedException();
                     }
                     else
                     {
@@ -315,11 +356,9 @@ namespace Six.Six.Sema
                 }
                 else
                 {
-                    Assert(Module.HasErrors);
+                    Assert(false);
+                    throw new NotImplementedException();
                 }
-
-                Assert(false);
-                throw new NotImplementedException();
 
                 Expr ResolveIndirect(Expr value, Type.Callable? callable)
                 {
@@ -519,6 +558,11 @@ namespace Six.Six.Sema
             return new LazyExpr(() =>
             {
                 var resolved = block.Resolve(tree);
+
+                if (resolved is Type type)
+                {
+                    Assert(true);
+                }
 
                 switch (resolved)
                 {
