@@ -52,21 +52,21 @@ namespace Six.Six.Sema
 
         private void Declare(Block parent, A.Decl.Class node)
         {
-            var decl = M.AddMember(parent, new Decl.Class(parent, node));
+            var decl = M.AddMember(parent, parent.Declare(new Decl.Class(parent, node)));
 
             WalkClassBody(decl, node);
         }
 
         private void Declare(Block parent, A.Decl.Interface node)
         {
-            var decl = M.AddMember(parent, new Decl.Interface(parent, node));
+            var decl = M.AddMember(parent, parent.Declare(new Decl.Interface(parent, node)));
 
             WalkClassBody(decl, node);
         }
 
         private void Declare(Block parent, A.Decl.Object node)
         {
-            var decl = M.AddMember(parent, new Decl.Object(parent, node));
+            var decl = M.AddMember(parent, parent.Declare(new Decl.Object(parent, node)));
 
             WalkClassBody(decl, node);
         }
@@ -95,7 +95,7 @@ namespace Six.Six.Sema
         {
             Assert(node.Parameters.Count == 1);
 
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, node.InfixName()), node.InfixName()));
+            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, node.InfixName())));
 
             DeclareFunction(decl, node);
         }
@@ -104,7 +104,7 @@ namespace Six.Six.Sema
         {
             Assert(node.Parameters.Count == 0);
 
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, node.PrefixName()), node.PrefixName()));
+            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, node.PrefixName())));
 
             DeclareFunction(decl, node);
         }
@@ -122,8 +122,6 @@ namespace Six.Six.Sema
 
             if (decl.IsNative)
             {
-                Assert(true);
-
                 DeclareParameters(decl.Block, node);
                 B.WalkBody(decl.Block, node.Body);
             }
@@ -145,9 +143,9 @@ namespace Six.Six.Sema
             M.AddMember(parent, parent.Declare(new Decl.Alias(parent, node)));
         }
 
-        private void Declare(CodeBlock parent, A.Decl.Var node)
+        private void DeclareLetVar(CodeBlock parent, A.Decl.LetVar node, bool writeable)
         {
-            var letvar = M.AddMember(parent, parent.Declare(new Decl.LetVar(parent, node, true)));
+            var letvar = M.AddMember(parent, parent.Declare(new Decl.LetVar(parent, node, writeable)));
 
             parent.Add(new Stmt.Assign(
                 node.GetLocation(),
@@ -156,16 +154,14 @@ namespace Six.Six.Sema
                 E.ResolveExpression(parent, node.Value)));
         }
 
+        private void Declare(CodeBlock parent, A.Decl.Var node)
+        {
+            DeclareLetVar(parent, node, true);
+        }
+
         private void Declare(CodeBlock parent, A.Decl.Let node)
         {
-            var letvar = M.AddMember(parent, parent.Declare(new Decl.LetVar(parent, node, false)));
-
-            parent.Add(
-                new Stmt.Assign(
-                    node.GetLocation(),
-                    parent,
-                    new LazyExpr(() => new Expr.LocalReference(letvar)),
-                    E.ResolveExpression(parent, node.Value)));
+            DeclareLetVar(parent, node, false);
         }
 
         private void Declare(ClassBlock parent, A.Decl.Var node)
@@ -177,7 +173,6 @@ namespace Six.Six.Sema
         {
             M.AddMember(parent, parent.Declare(new Decl.Field(parent, node, false)));
         }
-
 
         private void Declare(NamespaceBlock parent, A.Decl.Var node)
         {
@@ -201,9 +196,7 @@ namespace Six.Six.Sema
 
         private void DeclareSelfParameter(FuncBlock parent, Decl.Classy classy)
         {
-            var parameter = parent.Declare(new Decl.SelfParameter(parent, classy.Type));
-
-            M.AddMember(parent, parameter);
+            M.AddMember(parent, parent.Declare(new Decl.SelfParameter(parent, classy.Type)));
         }
 
         private void Declare(FuncBlock parent, A.Decl.ValueParameter node)

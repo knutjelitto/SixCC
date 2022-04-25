@@ -92,6 +92,7 @@ namespace Six.Six.Sema
             public override bool IsStatic => true;
 
             public override Type ResultType => lazyResultType.Value;
+            public Decl.Classy Class => (Decl.Classy)ResultType;
         }
 
         public sealed class Attribute : Funcy

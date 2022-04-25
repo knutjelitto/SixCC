@@ -1,0 +1,23 @@
+namespace six.core.tests;
+
+shared class Box
+{
+    shared new WithInt(int i)
+    {
+    }
+
+    shared static void StaticCheck()
+    {
+    }
+}
+
+shared alias box => Box;
+
+shared void SelectTests()
+{
+    box.StaticCheck();
+
+    let x = box.WithInt(1);
+    let y = box();
+}
+

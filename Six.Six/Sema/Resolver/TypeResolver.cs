@@ -24,7 +24,7 @@ namespace Six.Six.Sema
 
         public LazyType ResolveTypeLazy(Block parent, A.Type aType)
         {
-            return new LazyType(() => ResolveType(parent.Content, aType));
+            return new LazyType(() => ResolveType(parent, aType));
         }
 
         public LazyType ResolveTypeLazy(Block parent, LazyExpr value, A.Type? aType)
@@ -33,7 +33,7 @@ namespace Six.Six.Sema
             {
                 return new LazyType(() => value.Value.Type);
             }
-            return new LazyType(() => ResolveType(parent.Content, aType));
+            return new LazyType(() => ResolveType(parent, aType));
         }
 
         public Type LowerType(Type type)
@@ -79,7 +79,7 @@ namespace Six.Six.Sema
             }
             else if (classy.AClassy is A.With.Extends extends && extends.Extends is A.Type extended)
             {
-                var super = ResolveType(classy.Block.Content, extended);
+                var super = ResolveType(classy.Parent, extended);
 
                 if (super is Decl.Class superClass)
                 {
@@ -110,7 +110,7 @@ namespace Six.Six.Sema
             {
                 foreach (var aType in aTypes)
                 {
-                    var type = ResolveType(classy.Block.Content, aType);
+                    var type = ResolveType(classy.Block, aType);
 
                     if (type is Decl.Interface iface)
                     {
@@ -139,11 +139,11 @@ namespace Six.Six.Sema
             return new Disposable(() => { });
         }
 
-        public Type ResolveType(Scope scope, A.Type tree)
+        public Type ResolveType(Block block, A.Type tree)
         {
             using (UseInner())
             {
-                return Inner.ResolveType(scope, tree);
+                return Inner.ResolveType(block, tree);
             }
         }
 
@@ -158,37 +158,42 @@ namespace Six.Six.Sema
 
             public TypeResolver Outer { get; }
 
-            public Type ResolveType(Scope scope, A.Type tree)
+            public Type ResolveType(Block block, A.Type tree)
             {
-                return TypeOf(scope, (dynamic)tree);
+                return TypeOf(block, (dynamic)tree);
             }
 
-            private Type TypeOf(Scope scope, A.Type tree)
+            private Type TypeOf(Block block, A.Type tree)
             {
                 Assert(false);
                 throw new NotImplementedException();
             }
 
-            private Type TypeOf(Scope scope, A.Type.Array tree)
+            private Type TypeOf(Block block, A.Type.Array tree)
             {
-                var type = ResolveType(scope, tree.Type);
+                var type = ResolveType(block, tree.Type);
 
                 return new Type.Array(Outer.Module, type);
             }
 
-            private Type TypeOf(Scope scope, A.Type.Callable tree)
+            private Type TypeOf(Block block, A.Type.Callable tree)
             {
-                var result = ResolveType(scope, tree.Type);
-                var parameters = tree.Arguments.Select(type => ResolveType(scope, type));
+                var result = ResolveType(block, tree.Type);
+                var parameters = tree.Arguments.Select(type => ResolveType(block, type));
 
                 return new Type.Callable(Outer.Module, result, parameters.ToList());
             }
 
-            private Type TypeOf(Scope scope, A.Reference tree)
+            private Type TypeOf(Block block, A.Reference tree)
             {
                 var name = tree.Name.Text;
 
-                var resolved = scope.Resolve(tree, name);
+                var resolved = block.Resolve(tree, name);
+
+                if (resolved is not Type)
+                {
+                    return ResolveType(block.Parent, tree);
+                }
 
                 if (already.Contains(resolved.FullName))
                 {
@@ -197,10 +202,6 @@ namespace Six.Six.Sema
 
                 already.Add(resolved.FullName);
 
-                if (resolved is not Type)
-                {
-                    return ResolveType(scope.Parent, tree);
-                }
 
                 return resolved.Type;
             }
