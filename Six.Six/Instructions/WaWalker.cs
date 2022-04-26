@@ -197,13 +197,13 @@ namespace Six.Six.Instructions
                     clazz.AddFunction(function);
                 }
 #if false
-                var needDefaultCtor = decl.Block.Members.OfType<Decl.Funcy>().All(f => f.Name != Sema.Module.DefaultCtor);
+                var needDefaultCtor = decl.Members.Functions.All(f => f.Name != Sema.Module.DefaultCtor);
 
                 if (needDefaultCtor)
                 {
                     var function = CreateDefaultCtor(klass);
 
-                    clazz.Add(function);
+                    clazz.AddFunction(function);
                 }
 #endif
             }

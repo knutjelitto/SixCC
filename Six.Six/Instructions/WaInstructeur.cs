@@ -377,24 +377,24 @@ namespace Six.Six.Instructions
             }
         }
 
-        private void Build(Expr.CallNativeConstructor expr)
-        {
-            Assert(expr.Ctor.IsNative);
-
-            Walk(Resolve(expr.Class).Method(expr.Ctor.Name, expr.Arguments.Count)(expr.Arguments));
-        }
-
         private void Build(Expr.CallConstructor expr)
         {
-            var clazz = WaClass.From(Module, expr.Class.FullName);
-            Add(new WiGetRuntimeType(clazz));
-            Add(Insn.Call(Sema.Module.CoreClassAlloc));
-
-            foreach (var argument in expr.Arguments)
+            if (expr.Ctor.IsNative)
             {
-                Walk(argument);
+                Walk(Resolve(expr.Class).Method(expr.Ctor.Name, expr.Arguments.Count)(expr.Arguments));
             }
-            Add(Insn.Call(expr.Ctor.FullName));
+            else
+            {
+                var classy = WaClass.From(Module, expr.Class.FullName);
+                Add(new WiGetRuntimeType(classy));
+                Add(Insn.Call(Sema.Module.CoreClassAlloc));
+
+                foreach (var argument in expr.Arguments)
+                {
+                    Walk(argument);
+                }
+                Add(Insn.Call(expr.Ctor.FullName));
+            }
         }
 
         private void Build(Expr.CallIndirect expr)

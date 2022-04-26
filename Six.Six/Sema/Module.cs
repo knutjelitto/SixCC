@@ -2,6 +2,8 @@
 using Six.Core.Errors;
 using Six.Six.Instructions;
 using Six.Six.Types;
+using Six.Six.Wasms;
+
 using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
@@ -59,12 +61,17 @@ namespace Six.Six.Sema
 
             if (!HasErrors)
             {
-                var emitter = new WaEmitter(this);
-                emitter.EmitModule();
+                var waModule = new WaModule(this, Module.MetaClassName, Module.StringClassName);
+                var waWalker = new WaWalker(waModule);
+
+                waWalker.Walk();
+
+                waModule.Prepare();
+                waModule.Emit();
 
                 if (!HasErrors)
                 {
-                    var wat = emitter.WaModule.Writer.ToString();
+                    var wat = waModule.Writer.ToString();
 
                     using (var dumper = $"six.core.wat".Writer())
                     {

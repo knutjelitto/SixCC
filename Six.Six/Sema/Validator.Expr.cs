@@ -36,13 +36,6 @@ namespace Six.Six.Sema
             Assert(slip);
         }
 
-        private void Expr(Expr.CallNativeConstructor expr)
-        {
-            Walk(expr.Arguments);
-
-            Assert(slip);
-        }
-
         private void Expr(Expr.CallStaticFunction expr)
         {
             Walk(expr.Arguments);

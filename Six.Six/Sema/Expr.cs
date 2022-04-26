@@ -75,55 +75,6 @@ namespace Six.Six.Sema
                 return From(funcy, arguments.ToList());
             }
 
-            public static CallFunction From(Decl.Classy classy, Decl.Funcy funcy, List<Expr> arguments)
-            {
-                var reference = new SelfReference(classy);
-
-                return From(funcy, arguments);
-            }
-
-            public static CallFunction From(Expr reference, Decl.Funcy funcy, List<Expr> arguments)
-            {
-                if (funcy.IsStatic || funcy.IsLocalFunction || funcy.IsGlobalFunction)
-                {
-                    return new CallStaticFunction(funcy, arguments);
-                }
-                else if (funcy.IsClassMember)
-                {
-                    if (funcy.Parent is ClassBlock classBlock)
-                    {
-                        var classy = classBlock.Classy;
-
-                        if (funcy.IsDynamic)
-                        {
-                            var slot = classy.Slot(funcy);
-
-                            if (slot == null)
-                            {
-                                Assert(false);
-                                throw new InvalidOperationException();
-                            }
-
-                            return new CallDynamicFunction(classy, funcy, reference, (uint)slot.Index, arguments);
-                        }
-                        else
-                        {
-                            return new CallMemberFunction(classy, funcy, reference, arguments);
-                        }
-                    }
-                    else
-                    {
-                        Assert(false);
-                        throw new NotImplementedException();
-                    }
-                }
-                else
-                {
-                    Assert(false);
-                    throw new NotImplementedException();
-                }
-            }
-
             public static CallFunction From(Decl.Funcy funcy, List<Expr> arguments)
             {
                 if (funcy.IsStatic || funcy.IsLocalFunction || funcy.IsGlobalFunction)
@@ -148,11 +99,11 @@ namespace Six.Six.Sema
                                 throw new InvalidOperationException();
                             }
 
-                            return new CallDynamicFunction(classy, funcy, reference, (uint)slot.Index, arguments);
+                            return new CallDynamicFunction(funcy, reference, (uint)slot.Index, arguments);
                         }
                         else
                         {
-                            return new CallMemberFunction(classy, funcy, reference, arguments);
+                            return new CallMemberFunction(funcy, reference, arguments);
                         }
                     }
                     else
@@ -172,22 +123,22 @@ namespace Six.Six.Sema
         public sealed record CallStaticFunction(Decl.Funcy Funcy, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallMemberFunction(Decl.Classy Classy, Decl.Funcy Funcy, Expr Reference, List<Expr> Arguments)
+        public sealed record CallMemberFunction(Decl.Funcy Funcy, Expr Reference, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallDynamicFunction(Decl.Classy Classy, Decl.Funcy Funcy, Expr Reference, uint SlotNo, List<Expr> Arguments)
+        public sealed record CallDynamicFunction(Decl.Funcy Funcy, Expr Reference, uint SlotNo, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
+        [DebuggerDisplay("{Dbg()}")]
         public sealed record CallConstructor(Decl.Classy Class, Decl.Constructor Ctor, List<Expr> Arguments)
             : Primitive(Ctor.Type)
         {
             public override Type Type => Ctor.ResultType;
-        }
 
-        public sealed record CallNativeConstructor(Decl.Classy Class, Decl.Constructor Ctor, List<Expr> Arguments)
-            : Primitive(Ctor.Type)
-        {
-            public override Type Type => Ctor.ResultType;
+            public string Dbg()
+            {
+                return $"call {Class.Name}.ctor.{Ctor.Name}";
+            }
         }
 
         public sealed record CallIndirect(Expr Value, Type.Callable Callable, List<Expr> Arguments)

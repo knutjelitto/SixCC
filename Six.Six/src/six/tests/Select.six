@@ -2,12 +2,26 @@ namespace six.core.tests;
 
 shared class Box
 {
+    shared new ()
+    {
+    }
+    
     shared new WithInt(int i)
     {
     }
 
     shared static void StaticCheck()
     {
+    }
+
+    shared int CheckMember()
+    {
+        return 1;
+    }
+
+    shared virtual int CheckVirtual()
+    {
+        return 1;
     }
 }
 
@@ -17,7 +31,10 @@ shared void SelectTests()
 {
     box.StaticCheck();
 
-    let x = box.WithInt(1);
-    let y = box();
+    let a = box.WithInt(1);
+    let b = box();
+
+    let c = a.CheckMember();
+    let d = a.CheckVirtual();
 }
 

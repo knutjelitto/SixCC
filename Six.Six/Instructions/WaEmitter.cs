@@ -7,13 +7,13 @@ namespace Six.Six.Instructions
 {
     public class WaEmitter : WithWriter
     {
-        public WaEmitter(Module module)
+        public WaEmitter(Module module, WaModule waModule, WaWalker waWalker)
             : base(new Writer())
         {
             Module = module;
 
-            WaModule = new WaModule(module, Module.MetaClassName, Module.StringClassName);
-            WaWalker = new WaWalker(WaModule);
+            WaModule = waModule;
+            WaWalker = waWalker;
         }
 
         public readonly Module Module;

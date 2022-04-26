@@ -1,5 +1,9 @@
-﻿using System;   
+﻿using System;
+using System.Collections;
 using Six.Six.Types;
+
+using static Six.Six.Ast.Meta;
+using static Six.Six.Sema.Expr;
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -11,9 +15,14 @@ namespace Six.Six.Sema
 {
     public class ExpressionResolver : ResolverCore
     {
+        private readonly ExpressionSelect Select;
+        private readonly ExpressionCall Call;
+
         public ExpressionResolver(Module module, Resolver resolver)
             : base(module, resolver)
         {
+            Select = new ExpressionSelect();
+            Call = new ExpressionCall(resolver);
         }
 
         public LazyExpr ResolveExpression(Block block, A.Expression node)
@@ -68,177 +77,7 @@ namespace Six.Six.Sema
             {
                 var primary = ResolveExpression(block, node.Expr).Value;
 
-                if (primary is Expr.Reference reference)
-                {
-                    if (primary is Expr.AliasReference aliasRef)
-                    {
-                        var resolved = aliasRef.Decl.Type;
-
-                        if (resolved is Decl.Classy classy)
-                        {
-                            var found = classy.Block.Resolve(node.Reference);
-
-                            Assert(found.IsStatic);
-
-                            if (found is Decl.Attribute attribute)
-                            {
-                                return Expr.CallFunction.From(attribute);
-                            }
-                            else if (found is Decl.Function function)
-                            {
-                                return new Expr.FunctionReference(function);
-                            }
-                            else if (found is Decl.Field field)
-                            {
-                                return new Expr.FieldReference(field);
-                            }
-                            else if (found is Decl.Constructor ctor)
-                            {
-                                return new Expr.ConstructorReference(ctor);
-                            }
-
-                            Assert(false);
-                            throw new NotImplementedException();
-                        }
-                        else
-                        {
-                            Assert(false);
-                            throw new NotImplementedException();
-                        }
-                    }
-                    else
-                    {
-                        if (primary is Expr.ClassyReference classyReference)
-                        {
-                            var found = classyReference.Decl.Type;
-
-                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                            {
-                                var referenced = classy.Block.Resolve(node.Reference);
-
-                                Assert(referenced.IsStatic);
-
-                                if (referenced is Decl.Attribute attribute)
-                                {
-                                    return Expr.CallFunction.From(attribute);
-                                }
-                                else if (referenced is Decl.Function function)
-                                {
-                                    return new Expr.FunctionReference(function);
-                                }
-                            }
-
-                            Assert(false);
-                        }
-                        else if (primary is Expr.ConstructorReference constructorReference)
-                        {
-                            var found = constructorReference.Decl.Type;
-
-                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                            {
-                                var referenced = classy.Block.Resolve(node.Reference);
-
-                                return select(primary, classy, referenced);
-                            }
-                            else
-                            {
-                                Assert(Module.HasErrors);
-                            }
-                        }
-                        else if (primary is Expr.ParameterReference parameterReference)
-                        {
-                            var found = parameterReference.Decl.Type;
-
-                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                            {
-                                var referenced = classy.Block.Resolve(node.Reference);
-
-                                return select(primary, classy, referenced);
-                            }
-                            else
-                            {
-                                Assert(Module.HasErrors);
-                            }
-                        }
-                        else if (primary is Expr.LocalReference localReference)
-                        {
-                            var found = localReference.Decl.Type;
-
-                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                            {
-                                var referenced = classy.Block.Resolve(node.Reference);
-
-                                return select(primary, classy, referenced);
-                            }
-                            else
-                            {
-                                Assert(Module.HasErrors);
-                            }
-                        }
-                        else if (primary is Expr.FieldReference fieldReference)
-                        {
-                            var found = fieldReference.Decl.Type;
-
-                            if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                            {
-                                var referenced = classy.Block.Resolve(node.Reference);
-
-                                return select(primary, classy, referenced);
-                            }
-                            else
-                            {
-                                Assert(Module.HasErrors);
-                            }
-                        }
-                        else
-                        {
-                            Assert(Module.HasErrors);
-                        }
-                    }
-                }
-                else if (primary is Expr.CallConstructor callConstructor)
-                {
-                    var found = callConstructor.Class.Type;
-
-                    if (found is Type.Declared declared && declared.Decl is Decl.Classy classy)
-                    {
-                        var referenced = classy.Block.Resolve(node.Reference);
-
-                        return select(primary, classy, referenced);
-                    }
-                    else
-                    {
-                        Assert(Module.HasErrors);
-                    }
-                }
-                else
-                {
-                    Assert(Module.HasErrors);
-                }
-
-                Assert(false);
-                throw new NotImplementedException();
-
-                static Expr select(Expr reference, Decl.Classy classy, Decl referenced)
-                {
-                    if (referenced is Decl.Attribute attribute)
-                    {
-                        return Expr.CallFunction.From(reference, attribute, new List<Expr>());
-                    }
-                    else if (referenced is Decl.Function function)
-                    {
-                        return new Expr.SelectFunction(reference, classy, function);
-                    }
-                    else if (referenced is Decl.Field field)
-                    {
-                        return new Expr.SelectField(reference, classy, field);
-                    }
-                    else
-                    {
-                        Assert(false);
-                        throw new NotImplementedException();
-                    }
-                }
+                return Select.SelectOnAny(block, primary, primary, node.Reference);
             });
         }
 
@@ -246,224 +85,19 @@ namespace Six.Six.Sema
         {
             return new LazyExpr(() =>
             {
-                var func = ResolveExpression(block, node.Expr).Value;
+                var primary = ResolveExpression(block, node.Expr).Value;
                 var args = GetArguments(block, node.Arguments).ToList();
 
-                if (func is Expr.AliasReference aliasReference)
-                {
-                    Assert(false);
-                    throw new NotImplementedException();
-                }
-                else if (func is Expr.FunctionReference functionReference)
-                {
-                    var function = functionReference.FunctionDecl;
-
-                    var prms = function.Parameters;
-                    var arguments = function.IsClassMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
-
-                    return Expr.CallFunction.From(functionReference.FunctionDecl, arguments);
-                }
-                else if (func is Expr.ClassReference classReference)
-                {
-                    var classy = classReference.ClassDecl;
-
-                    if (classy.IsAbstract)
-                    {
-                        throw Errors.CanNotCreateInstanceOfAbstractClass(classy, Names.Nouns.Class);
-                    }
-
-                    var ctor = classy.Block.Find<Decl.Constructor>(node.Expr.GetLocation(), Module.DefaultCtor);
-
-                    Assert(ctor.IsStatic);
-
-                    var prms = ctor.Parameters;
-
-                    if (ctor.IsNative)
-                    {
-                        Assert(true);
-
-                        var arguments = MakeArguments(prms, args);
-
-                        return new Expr.CallNativeConstructor(classy, ctor, arguments);
-                    }
-                    else
-                    {
-                        var arguments = MakeMemberArguments(prms, args);
-
-                        return new Expr.CallConstructor(classy, ctor, arguments);
-                    }
-
-                }
-                else if (func is Expr.ConstructorReference ctorRef && ctorRef.Decl is Decl.Constructor ctor)
-                {
-                    var classy = ctor.Class;
-
-                    if (classy.IsAbstract)
-                    {
-                        throw Errors.CanNotCreateInstanceOfAbstractClass(classy, Names.Nouns.Class);
-                    }
-
-                    Assert(ctor.IsStatic);
-
-                    var prms = ctor.Parameters;
-
-                    if (ctor.IsNative)
-                    {
-                        Assert(true);
-
-                        var arguments = MakeArguments(prms, args);
-
-                        return new Expr.CallNativeConstructor(classy, ctor, arguments);
-                    }
-                    else
-                    {
-                        var arguments = MakeMemberArguments(prms, args);
-
-                        return new Expr.CallConstructor(classy, ctor, arguments);
-                    }
-                }
-                else if (func is Expr.LocalReference local)
-                {
-                    Assert(local.Decl.Type is Type.Callable);
-
-                    return ResolveIndirect(local, local.Decl.Type as Type.Callable);
-                }
-                else if (func is Expr.ParameterReference parameter)
-                {
-                    Assert(parameter.Decl.Type is Type.Callable);
-
-                    return ResolveIndirect(parameter, parameter.ParameterDecl.Type as Type.Callable);
-                }
-                else if (func is Expr.SelectFunction selectFunction)
-                {
-                    var function = selectFunction.Function;
-
-                    if (selectFunction.Function.IsStatic)
-                    {
-                        Assert(false);
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        var prms = function.Parameters;
-                        var arguments = function.IsClassMember ? MakeMemberArguments(prms, args) : MakeArguments(prms, args);
-                        return new Expr.CallMember(
-                            selectFunction.Classy,
-                            function,
-                            selectFunction.Reference,
-                            arguments);
-                    }
-                }
-                else
-                {
-                    Assert(false);
-                    throw new NotImplementedException();
-                }
-
-                Expr ResolveIndirect(Expr value, Type.Callable? callable)
-                {
-                    Assert(callable != null);
-                    var prms = callable.Parameters;
-
-                    Assert(prms.Count >= args.Count);
-                    var arguments = new List<Expr>();
-
-                    var index = 0;
-                    for (; index < Math.Min(prms.Count, args.Count); ++index)
-                    {
-                        var argType = args[index].Value.Type;
-                        var prmType = prms[index];
-
-                        Assert(Checker.CanAssign(prmType, argType));
-
-                        arguments.Add(args[index].Value);
-                    }
-                    for (; index < prms.Count; ++index)
-                    {
-                        Assert(false);
-                    }
-
-                    Assert(arguments.Count == prms.Count);
-
-                    return new Expr.CallIndirect(value, callable, arguments);
-                }
+                return Call.On(primary, args);
             });
         }
 
-        private IEnumerable<LazyExpr> GetArguments(Block block, A.Arguments arguments)
+        private IEnumerable<Expr> GetArguments(Block block, A.Arguments arguments)
         {
             foreach (var argument in arguments)
             {
-                yield return ResolveExpression(block, argument);
+                yield return ResolveExpression(block, argument).Value;
             }
-        }
-
-        private List<Expr> MakeMemberArguments(IReadOnlyList<Decl.Local> prms, List<LazyExpr> args)
-        {
-            Assert(prms.Count > args.Count);
-            var arguments = new List<Expr>();
-
-            var index = 0;
-            for (; index < args.Count; ++index)
-            {
-                var prmType = T.LowerType(prms[index + 1].Type);
-                var argType = T.LowerType(args[index].Value.Type);
-
-                Assert(Checker.CanAssign(prmType, argType));
-
-                arguments.Add(args[index].Value);
-            }
-            for (; ++index < prms.Count;)
-            {
-                if (prms[index] is Decl.Parameter param)
-                {
-                    Assert(param.Default != null);
-
-                    arguments.Add(param.Default!);
-                }
-                else
-                {
-                    Assert(prms[index] is Decl.Parameter);
-                }
-            }
-
-            Assert(arguments.Count == prms.Count - 1);
-
-            return arguments;
-        }
-
-        private List<Expr> MakeArguments(IReadOnlyList<Decl.Local> prms, List<LazyExpr> args)
-        {
-            Assert(prms.Count >= args.Count);
-            var arguments = new List<Expr>();
-
-            var index = 0;
-            for (; index < Math.Min(prms.Count, args.Count); ++index)
-            {
-                var argType = args[index].Value.Type;
-                var prmType = prms[index].Type;
-
-                Assert(Checker.CanAssign(prmType, argType));
-
-                arguments.Add(args[index].Value);
-            }
-            for (; index < prms.Count; ++index)
-            {
-                if (prms[index] is Decl.Parameter param)
-                {
-                    Assert(param.Default != null);
-
-                    arguments.Add(param.Default!);
-                }
-                else
-                {
-                    Assert(prms[index] is Decl.Parameter);
-                }
-            }
-
-            Assert(arguments.Count == prms.Count);
-
-            return arguments;
         }
 
         private LazyExpr Expression(Block block, A.Expression.Infix node)
@@ -587,7 +221,7 @@ namespace Six.Six.Sema
                     case Decl.Field decl:
                         return new Expr.FieldReference(decl);
                     case Decl.Attribute decl:
-                        return Expr.CallFunction.From(decl);
+                        return CallFunction.From(decl);
                     default:
                         Assert(false);
                         throw new NotImplementedException();
