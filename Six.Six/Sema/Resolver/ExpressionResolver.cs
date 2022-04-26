@@ -50,7 +50,6 @@ namespace Six.Six.Sema
                     return new AndThen(type, first, ExpressionConditions(block, conditions.Skip(1)));
                 }
             });
-
         }
 
         private LazyExpr Expression(Block block, A.Expression node)
