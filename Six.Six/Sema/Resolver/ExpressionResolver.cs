@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
+
 using Six.Six.Types;
 
-using static Six.Six.Ast.Meta;
 using static Six.Six.Sema.Expr;
+
 using A = Six.Six.Ast;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -38,7 +38,7 @@ namespace Six.Six.Sema
             return new LazyExpr(() =>
             {
                 var first = ResolveExpression(block, conditions[0]);
-                var type = Module.CoreFindType(Names.Core.Boolean);
+                var type = Module.FindCoreClass(Names.Core.Boolean);
 
                 if (conditions.Count == 1)
                 {
@@ -47,7 +47,7 @@ namespace Six.Six.Sema
                 else
                 {
                     Assert(conditions.Count > 1);
-                    return new Expr.AndThen(type, first, ExpressionConditions(block, conditions.Skip(1)));
+                    return new AndThen(type, first, ExpressionConditions(block, conditions.Skip(1)));
                 }
             });
 
@@ -67,7 +67,7 @@ namespace Six.Six.Sema
                 var then = ResolveExpression(block, node.Then);
                 var @else = ResolveExpression(block, node.Else);
 
-                return new Expr.If(condition, then, @else);
+                return new If(condition, then, @else);
             });
         }
 
@@ -77,7 +77,7 @@ namespace Six.Six.Sema
             {
                 var primary = ResolveExpression(block, node.Expr).Value;
 
-                return Select.SelectOnAny(block, primary, primary, node.Reference);
+                return Select.SelectOnAny(primary, node.Reference);
             });
         }
 
@@ -115,7 +115,7 @@ namespace Six.Six.Sema
 
                     if (infix is Decl.Function function)
                     {
-                        return new Expr.CallInfixMember(classy, function, left, right);
+                        return new CallInfixMember(classy, function, left, right);
                     }
 
                     Assert(false);
@@ -130,7 +130,7 @@ namespace Six.Six.Sema
 
                         if (infix is Decl.Function function)
                         {
-                            return new Expr.CallInfixMember(classy2, function, left, right);
+                            return new CallInfixMember(classy2, function, left, right);
                         }
 
                     }
@@ -158,7 +158,7 @@ namespace Six.Six.Sema
 
                     if (prefix is Decl.Function function)
                     {
-                        return new Expr.CallPrefixMember(classy, function, right.Value);
+                        return new CallPrefixMember(classy, function, right.Value);
                     }
 
                     Assert(false);
@@ -201,25 +201,25 @@ namespace Six.Six.Sema
                 switch (resolved)
                 {
                     case Decl.Parameter decl:
-                        return new Expr.ParameterReference(decl);
+                        return new ParameterReference(decl);
                     case Decl.SelfParameter decl:
-                        return new Expr.ParameterReference(decl);
+                        return new ParameterReference(decl);
                     case Decl.LetVar decl:
-                        return new Expr.LocalReference(decl);
+                        return new LocalReference(decl);
                     case Decl.Global decl:
-                        return new Expr.GlobalReference(decl);
+                        return new GlobalReference(decl);
                     case Decl.Function decl:
-                        return new Expr.FunctionReference(decl);
+                        return new FunctionReference(decl);
                     case Decl.Constructor decl:
-                        return new Expr.ConstructorReference(decl);
+                        return new ConstructorReference(decl);
                     case Decl.Class decl:
-                        return new Expr.ClassReference(decl);
+                        return new ClassReference(decl);
                     case Decl.Object decl:
-                        return new Expr.ObjectReference(decl);
+                        return new ObjectReference(decl);
                     case Decl.Alias decl:
-                        return new Expr.AliasReference(decl);
+                        return new AliasReference(decl);
                     case Decl.Field decl:
-                        return new Expr.FieldReference(decl);
+                        return new FieldReference(decl);
                     case Decl.Attribute decl:
                         return CallFunction.From(decl);
                     default:
@@ -241,30 +241,30 @@ namespace Six.Six.Sema
                     if (value > int.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), int.MaxValue);
+                        return new Primitive.ConstS32(Module.FindCoreClass(Names.Core.S32), int.MaxValue);
                     }
-                    return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                    return new Primitive.ConstS32(Module.FindCoreClass(Names.Core.S32), (int)value);
                 case "s64":
                     if (value > long.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), long.MaxValue);
+                        return new Primitive.ConstS64(Module.FindCoreClass(Names.Core.S64), long.MaxValue);
                     }
-                    return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
+                    return new Primitive.ConstS64(Module.FindCoreClass(Names.Core.S64), (long)value);
                 case "u32":
                     if (value > uint.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), uint.MaxValue);
+                        return new Primitive.ConstU32(Module.FindCoreClass(Names.Core.U32), uint.MaxValue);
                     }
-                    return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
+                    return new Primitive.ConstU32(Module.FindCoreClass(Names.Core.U32), (uint)value);
                 case "u64":
                     if (value > ulong.MaxValue)
                     {
                         Module.Add(Errors.TooBigInteger(tree, $"{suffix}"));
-                        return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), ulong.MaxValue);
+                        return new Primitive.ConstU64(Module.FindCoreClass(Names.Core.U64), ulong.MaxValue);
                     }
-                    return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), value);
+                    return new Primitive.ConstU64(Module.FindCoreClass(Names.Core.U64), value);
                 case "":
                     Assert(value <= ulong.MaxValue);
 
@@ -320,19 +320,19 @@ namespace Six.Six.Sema
 
                     if (value > long.MaxValue)
                     {
-                        return new Primitive.ConstU64(Module.CoreFindType(Names.Core.U64), value);
+                        return new Primitive.ConstU64(Module.FindCoreClass(Names.Core.U64), value);
                     }
                     else if (value > int.MaxValue)
                     {
                         if (value > uint.MaxValue)
                         {
-                            return new Primitive.ConstS64(Module.CoreFindType(Names.Core.S64), (long)value);
+                            return new Primitive.ConstS64(Module.FindCoreClass(Names.Core.S64), (long)value);
                         }
-                        return new Primitive.ConstU32(Module.CoreFindType(Names.Core.U32), (uint)value);
+                        return new Primitive.ConstU32(Module.FindCoreClass(Names.Core.U32), (uint)value);
                     }
                     else
                     {
-                        return new Primitive.ConstS32(Module.CoreFindType(Names.Core.S32), (int)value);
+                        return new Primitive.ConstS32(Module.FindCoreClass(Names.Core.S32), (int)value);
                     }
 #endif
                 default:
@@ -437,7 +437,7 @@ namespace Six.Six.Sema
 
         private Expr PlainString(A.Expression.String.Plain tree)
         {
-            var type = Module.CoreFindType(Names.Core.String);
+            var type = Module.FindCoreClass(Names.Core.String);
 
             return new Primitive.ConstString(type, tree.Text);
         }

@@ -360,11 +360,6 @@ namespace Six.Six.Instructions
         {
             if (decl.IsStatic)
             {
-                if (decl.Parent is ClassBlock classBlock)
-                {
-                    var classy = classBlock.Classy;
-                }
-
                 var staticField = Module.FindStaticField(decl.StaticName);
 
                 Add(new WiGetStaticField(staticField));

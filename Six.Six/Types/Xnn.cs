@@ -3,7 +3,7 @@ using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public abstract class Xnn<TInsn,TValue> : Builtin
+    public abstract class Xnn<TInsn,TValue> : Value
         where TInsn : Insn.Num.Xnn<TValue>
         where TValue : struct
     {

@@ -139,7 +139,7 @@ namespace Six.Six.Sema
             return Root.GetNamespaces();
         }
 
-        public Decl.Classy CoreFindType(string name)
+        public Decl.Classy FindCoreClass(string name)
         {
             var core = GetCoreNamespace();
 

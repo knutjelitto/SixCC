@@ -75,6 +75,13 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
+        public DiagnosticException SubjectShouldBeMarkedAs(Decl.Funcy funcy, string subject, string attribute)
+        {
+            var diagnostic = new SemanticError(funcy.Location, $"{subject} '{funcy.Name}' should be marked as '{attribute}'");
+
+            return new DiagnosticException(diagnostic);
+        }
+
         public DiagnosticException SubjectMustBeImplemented(Decl.Funcy funcy, string subject)
         {
             var diagnostic = new SemanticError(funcy.Location, $"{subject} '{funcy.Name}' must have an implementation");

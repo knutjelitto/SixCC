@@ -4,7 +4,7 @@ using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public sealed class String : Builtin
+    public sealed class String : Reference
     {
         public String(Builtins builtins)
             : base(builtins, Names.Core.String, WasmType.Addr)

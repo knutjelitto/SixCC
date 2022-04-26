@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
 
 namespace Six.Six.Sema
 {
@@ -64,14 +63,19 @@ namespace Six.Six.Sema
 
         private void ClassyDecl(Decl.Classy decl)
         {
-            // force layout
-            //_ = decl.Layout;
-
             Walk(decl.Members);
 
             if (decl.IsStatic)
             {
+                foreach (var function in decl.Members.Functions)
+                {
+                    if (!function.IsStatic)
+                    {
+                        var subject = $"the {Names.Nouns.Function} member";
 
+                        Add(Errors.SubjectShouldBeMarkedAs(function, subject, Names.Attr.Static));
+                    }
+                }
             }
 
             if (!decl.IsAbstract)
@@ -184,7 +188,7 @@ namespace Six.Six.Sema
 
                 Assert(slip);
             }
-            else if (decl.Parent is ClassBlock classBlock)
+            else if (decl.Parent is ClassBlock)
             {
                 // METHOD
 
