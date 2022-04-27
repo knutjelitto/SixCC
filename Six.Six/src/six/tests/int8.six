@@ -1,0 +1,18 @@
+namespace six.core.tests;
+
+shared class int8store
+{
+    var sbyte x = 0;
+    var sbyte y = 0;
+
+    shared new ()
+    {
+        self.x = 0;
+        self.y = 0;
+    }
+}
+
+shared void int8tests()
+{
+    var s = int8store();
+}

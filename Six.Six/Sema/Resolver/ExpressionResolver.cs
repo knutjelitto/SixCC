@@ -218,12 +218,17 @@ namespace Six.Six.Sema
                     case Decl.Alias decl:
                         return new AliasReference(decl);
                     case Decl.Field decl:
-                        return new FieldReference(decl);
+                        return selectField(decl);
                     case Decl.Attribute decl:
                         return CallFunction.From(decl);
                     default:
                         Assert(false);
                         throw new NotImplementedException();
+                }
+
+                Expr selectField(Decl.Field decl)
+                {
+                    return new FieldReference(decl);
                 }
             });
         }

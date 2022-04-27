@@ -4,12 +4,12 @@ using System;
 
 namespace Six.Six.Types
 {
-    public class S32 : I32<Insn.Num.S32Impl, int>
+    public class S16 : I32<Insn.Num.S16Impl, short>
     {
-        protected override Insn.Num.S32Impl Impl => Insn.S32;
+        protected override Insn.Num.S16Impl Impl => Insn.S16;
 
-        public S32(Builtins builtins)
-            : base(builtins, Names.Core.S32)
+        public S16(Builtins builtins)
+            : base(builtins, Names.Core.S16)
         {
             AddPrefix("-", Neg);
         }
@@ -31,6 +31,5 @@ namespace Six.Six.Types
             var ones = new Primitive.ConstS32(this, -1);
             return Xor(new List<Expr> { ones, args[0] });
         }
-
     }
 }

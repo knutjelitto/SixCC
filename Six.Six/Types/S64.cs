@@ -4,12 +4,12 @@ using System;
 
 namespace Six.Six.Types
 {
-    public class S32 : I32<Insn.Num.S32Impl, int>
+    public class S64 : I64<Insn.Num.S64Impl, long>
     {
-        protected override Insn.Num.S32Impl Impl => Insn.S32;
+        protected override Insn.Num.S64Impl Impl => Insn.S64;
 
-        public S32(Builtins builtins)
-            : base(builtins, Names.Core.S32)
+        public S64(Builtins builtins)
+            : base(builtins, Names.Core.S64)
         {
             AddPrefix("-", Neg);
         }
@@ -19,7 +19,7 @@ namespace Six.Six.Types
             Assert(args.Count == 1);
             IsThis(args[0]);
 
-            var zero = new Primitive.ConstS32(this, 0);
+            var zero = new Primitive.ConstS64(this, 0);
             return Sub(new List<Expr> { zero, args[0] });
         }
 
@@ -28,7 +28,7 @@ namespace Six.Six.Types
             Assert(args.Count == 1);
             IsThis(args[0]);
 
-            var ones = new Primitive.ConstS32(this, -1);
+            var ones = new Primitive.ConstS64(this, -1);
             return Xor(new List<Expr> { ones, args[0] });
         }
 

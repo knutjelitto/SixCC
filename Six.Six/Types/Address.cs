@@ -18,8 +18,6 @@ namespace Six.Six.Types
 
             var arg = args[0];
 
-            Assert(Builtins.U32.IsThis(arg));
-
             return new Primitive.Arged(this, arg);
         }
 

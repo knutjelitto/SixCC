@@ -262,6 +262,10 @@ namespace Six.Six.Instructions
                     Walk(stmt.Right);
                     Add(Insn.Local.Set(localReference.LocalDecl.Index));
                     return;
+                case Expr.FieldReference fieldReference:
+                    Walk(stmt.Right);
+                    Assert(false);
+                    return;
                 default:
                     Assert(false);
                     throw new NotImplementedException();

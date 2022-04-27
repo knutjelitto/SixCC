@@ -11,7 +11,10 @@ namespace Six.Six.Types
         {
             Module = module;
 
+            S8 = Add(new S8(this));
+            S16 = Add(new S16(this));
             S32 = Add(new S32(this));
+            S64 = Add(new S64(this));
             U8 = Add(new U8(this));
             U32 = TableIndex = Add(new U32(this));
             F32 = Add(new F32(this));
@@ -39,7 +42,11 @@ namespace Six.Six.Types
 
         public Builtin U8 { get; }
         public Builtin U32 { get; }
+
+        public Builtin S8 { get; }
+        public Builtin S16 { get; }
         public Builtin S32 { get; }
+        public Builtin S64 { get; }
 
         public Builtin F32 { get; }
         public Builtin F64 { get; }

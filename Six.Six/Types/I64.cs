@@ -4,12 +4,12 @@ using Six.Six.Wasms;
 
 namespace Six.Six.Types
 {
-    public abstract class I32<TInsn, TValue> : Inn<TInsn, TValue>
+    public abstract class I64<TInsn, TValue> : Inn<TInsn, TValue>
         where TInsn : Insn.Num.Inn<TValue>
         where TValue : struct
     {
-        protected I32(Builtins builtins, string name)
-            : base(builtins, name, WasmType.I32)
+        protected I64(Builtins builtins, string name)
+            : base(builtins, name, WasmType.I64)
         {
         }
     }

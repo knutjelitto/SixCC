@@ -496,7 +496,8 @@
 
         public string Store(uint offset)
         {
-            return $"{ValueType}.store{Bits}{Sign} offset={offset}";
+            return $"{ValueType}.store{Bits} offset={offset}";
+            //return $"{ValueType}.store{Bits}{Sign} offset={offset}";
         }
 
         private string Bits => Bytes == ValueType.Bytes ? "" : $"{Bytes * 8}";

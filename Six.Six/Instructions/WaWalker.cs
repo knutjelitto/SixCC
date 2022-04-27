@@ -159,6 +159,26 @@ namespace Six.Six.Instructions
         {
             var clazz = WaClass.From(Module, decl.FullName);
 
+            if (decl is Decl.Class klass)
+            {
+                if (!klass.IsNative)
+                {
+                    var function = CreateInitCtor(klass);
+
+                    clazz.AddFunction(function);
+                }
+#if false
+                var needDefaultCtor = decl.Members.Functions.All(f => f.Name != Sema.Module.DefaultCtor);
+
+                if (needDefaultCtor)
+                {
+                    var function = CreateDefaultCtor(klass);
+
+                    clazz.AddFunction(function);
+                }
+#endif
+            }
+
             if (decl.Extends != null)
             {
                 clazz.AddBaseClass(WaClass.From(Module, decl.Extends.FullName));
@@ -186,26 +206,6 @@ namespace Six.Six.Instructions
                 {
                     clazz.AddMemberField(new WaMemberField(clazz, field.Name, Instructeur.Lower(field.Type).Wasm));
                 }
-            }
-
-            if (decl is Decl.Class klass)
-            {
-                if (!klass.IsNative)
-                {
-                    var function = CreateInitCtor(klass);
-
-                    clazz.AddFunction(function);
-                }
-#if false
-                var needDefaultCtor = decl.Members.Functions.All(f => f.Name != Sema.Module.DefaultCtor);
-
-                if (needDefaultCtor)
-                {
-                    var function = CreateDefaultCtor(klass);
-
-                    clazz.AddFunction(function);
-                }
-#endif
             }
 
             foreach (var funcy in decl.Members.Functions)
