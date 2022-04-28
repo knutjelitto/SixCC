@@ -52,11 +52,11 @@ namespace Six.Six.Sema
             {
                 var builtin = TypeResolver.Lower(field.Type);
 
-                fieldOffset = builtin.Wasm.Align(fieldOffset);
+                fieldOffset = builtin.MemAlign(fieldOffset);
 
                 field.Offset = fieldOffset;
 
-                fieldOffset += builtin.Wasm.MemSize;
+                fieldOffset = builtin.MemAlign(fieldOffset + 1);
             }
 
             MetaSize = fieldOffset;

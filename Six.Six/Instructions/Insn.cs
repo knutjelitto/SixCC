@@ -107,9 +107,9 @@
                 where TValue : struct
             {
                 protected Value.ValueT<TValue> Value(TValue value) => new Value.ValueT<TValue>(ValueType, value);
-                protected abstract ValueType ValueType { get; }
-                protected abstract MemType MemType { get; }
-                protected abstract OpSign Signedness { get; }
+                public abstract ValueType ValueType { get; }
+                public abstract MemType MemType { get; }
+                public abstract OpSign Signedness { get; }
 
                 public Const Const(TValue value) => new(Value(value));
 
@@ -146,58 +146,58 @@
 
             public class S8Impl : Inn<sbyte>
             {
-                protected override ValueType ValueType { get; } = ValueType.I32;
-                protected override MemType MemType { get; } = MemType.S8;
-                protected override OpSign Signedness => OpSign.Signed;
+                public override ValueType ValueType { get; } = ValueType.I32;
+                public override MemType MemType { get; } = MemType.S8;
+                public override OpSign Signedness => OpSign.Signed;
             }
 
             public class S16Impl : Inn<short>
             {
-                protected override ValueType ValueType { get; } = ValueType.I32;
-                protected override MemType MemType { get; } = MemType.S16;
-                protected override OpSign Signedness => OpSign.Signed;
+                public override ValueType ValueType { get; } = ValueType.I32;
+                public override MemType MemType { get; } = MemType.S16;
+                public override OpSign Signedness => OpSign.Signed;
             }
 
             public class S32Impl : Inn<int>
             {
-                protected override ValueType ValueType { get; } = ValueType.I32;
-                protected override MemType MemType { get; } = MemType.S32;
-                protected override OpSign Signedness => OpSign.Signed;
+                public override ValueType ValueType { get; } = ValueType.I32;
+                public override MemType MemType { get; } = MemType.S32;
+                public override OpSign Signedness => OpSign.Signed;
             }
 
             public class S64Impl : Inn<long>
             {
-                protected override ValueType ValueType { get; } = ValueType.I64;
-                protected override MemType MemType { get; } = MemType.S64;
-                protected override OpSign Signedness => OpSign.Signed;
+                public override ValueType ValueType { get; } = ValueType.I64;
+                public override MemType MemType { get; } = MemType.S64;
+                public override OpSign Signedness => OpSign.Signed;
             }
 
             public class U8Impl : Inn<byte>
             {
-                protected override ValueType ValueType { get; } = ValueType.I32;
-                protected override MemType MemType { get; } = MemType.U8;
-                protected override OpSign Signedness => OpSign.Unsigned;
+                public override ValueType ValueType { get; } = ValueType.I32;
+                public override MemType MemType { get; } = MemType.U8;
+                public override OpSign Signedness => OpSign.Unsigned;
             }
 
             public class U16Impl : Inn<ushort>
             {
-                protected override ValueType ValueType { get; } = ValueType.I32;
-                protected override MemType MemType { get; } = MemType.U16;
-                protected override OpSign Signedness => OpSign.Unsigned;
+                public override ValueType ValueType { get; } = ValueType.I32;
+                public override MemType MemType { get; } = MemType.U16;
+                public override OpSign Signedness => OpSign.Unsigned;
             }
 
             public class U32Impl : Inn<uint>
             {
-                protected override ValueType ValueType { get; } = ValueType.I32;
-                protected override MemType MemType { get; } = MemType.U32;
-                protected override OpSign Signedness => OpSign.Unsigned;
+                public override ValueType ValueType { get; } = ValueType.I32;
+                public override MemType MemType { get; } = MemType.U32;
+                public override OpSign Signedness => OpSign.Unsigned;
             }
 
             public class U64Impl : Inn<ulong>
             {
-                protected override ValueType ValueType { get; } = ValueType.I64;
-                protected override MemType MemType { get; } = MemType.U64;
-                protected override OpSign Signedness => OpSign.Unsigned;
+                public override ValueType ValueType { get; } = ValueType.I64;
+                public override MemType MemType { get; } = MemType.U64;
+                public override OpSign Signedness => OpSign.Unsigned;
             }
 
             public abstract class Fnn<TValue> : Xnn<TValue>
@@ -208,16 +208,16 @@
 
             public class F32Impl : Fnn<float>
             {
-                protected override ValueType ValueType { get; } = ValueType.F32;
-                protected override MemType MemType { get; } = MemType.F32;
-                protected override OpSign Signedness => OpSign.Neutral;
+                public override ValueType ValueType { get; } = ValueType.F32;
+                public override MemType MemType { get; } = MemType.F32;
+                public override OpSign Signedness => OpSign.Neutral;
             }
 
             public class F64Impl : Fnn<double>
             {
-                protected override ValueType ValueType { get; } = ValueType.F64;
-                protected override MemType MemType { get; } = MemType.F64;
-                protected override OpSign Signedness => OpSign.Neutral;
+                public override ValueType ValueType { get; } = ValueType.F64;
+                public override MemType MemType { get; } = MemType.F64;
+                public override OpSign Signedness => OpSign.Neutral;
             }
         }
 
@@ -456,14 +456,14 @@
 
     public class ValueType
     {
-        private ValueType(string name, int bytes)
+        private ValueType(string name, uint bytes)
         {
             Name = name;
             Bytes = bytes;
         }
 
         public string Name { get; }
-        public int Bytes { get; }
+        public uint Bytes { get; }
 
         public override string ToString()
         {
@@ -478,7 +478,7 @@
 
     public class MemType
     {
-        private MemType(ValueType valueType, int bytes, OpSign opSign)
+        private MemType(ValueType valueType, uint bytes, OpSign opSign)
         {
             ValueType = valueType;
             Bytes = bytes;
@@ -486,7 +486,7 @@
         }
 
         public ValueType ValueType { get; }
-        public int Bytes { get; }
+        public uint Bytes { get; }
         public OpSign OpSign { get; }
 
         public string Load(uint offset)
@@ -497,7 +497,6 @@
         public string Store(uint offset)
         {
             return $"{ValueType}.store{Bits} offset={offset}";
-            //return $"{ValueType}.store{Bits}{Sign} offset={offset}";
         }
 
         private string Bits => Bytes == ValueType.Bytes ? "" : $"{Bytes * 8}";

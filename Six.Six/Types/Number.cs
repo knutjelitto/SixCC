@@ -27,6 +27,11 @@ namespace Six.Six.Types
 
         protected abstract TInsn Impl { get; }
 
+        public ValueType ValueType => Impl.ValueType;
+        public MemType MemType => Impl.MemType;
+
+        public override uint MemAlign(uint offset) => WasmData.Align(MemType.Bytes, offset);
+
         public override Insn Load(uint offset)
         {
             return Impl.Load(offset);

@@ -18,6 +18,8 @@ namespace Six.Six.Types
             AddInfix("^", Xor);
         }
 
+
+
         public abstract Primitive Not(List<Expr> args);
 
         public Primitive And(List<Expr> args) => Binop(Impl.And, args);

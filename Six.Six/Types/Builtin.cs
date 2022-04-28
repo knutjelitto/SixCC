@@ -33,6 +33,8 @@ namespace Six.Six.Types
         
         public bool IsThis(Expr expr) => Checker.CanAssign(this, Resolver.T.LowerType(expr.Type));
 
+        public virtual uint MemAlign(uint offset) => Wasm.Align(offset);
+
         public abstract Insn Load(uint offset);
         public abstract Insn Store(uint offset);
 

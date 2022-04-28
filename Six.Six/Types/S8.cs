@@ -1,6 +1,5 @@
 ﻿using Six.Six.Instructions;
 using Six.Six.Sema;
-using System;
 
 namespace Six.Six.Types
 {
