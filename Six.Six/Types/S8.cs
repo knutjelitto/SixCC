@@ -30,10 +30,5 @@ namespace Six.Six.Types
             var ones = new Primitive.ConstS32(this, -1);
             return Xor(new List<Expr> { ones, args[0] });
         }
-
-        public override Insn Store(uint offset)
-        {
-            return base.Store(offset);
-        }
     }
 }

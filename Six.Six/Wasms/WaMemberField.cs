@@ -9,12 +9,13 @@ namespace Six.Six.Wasms
 {
     public class WaMemberField : WaField
     {
-        public WaMemberField(IWithWriter withWriter, string name, WasmType type)
+        public WaMemberField(IWithWriter withWriter, string name, uint offset, WasmType type)
             : base(withWriter, name, type)
         {
+            Offset = offset;
         }
 
-        public uint Offset { get; set; } = uint.MaxValue;
+        public uint Offset { get; }
 
         public override void Prepare()
         {

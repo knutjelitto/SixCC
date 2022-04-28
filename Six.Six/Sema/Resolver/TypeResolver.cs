@@ -60,7 +60,7 @@ namespace Six.Six.Sema
                 case Decl.Classy:
                     return Builtins.Address;
                 case Type.Callable:
-                    return Builtins.TableIndex;
+                    return Builtins.U32;
                 default:
                     Assert(false);
                     throw new NotImplementedException();

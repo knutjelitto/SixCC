@@ -4,11 +4,16 @@ namespace Six.Six.Wasms
 {
     public class WasmType
     {
-        public static readonly Address Addr = new();
+        public static readonly WasmType Addr = new Address();
         public static readonly WasmType Void = new("VOID", 0, 0, 0);
         public static readonly WasmType Bool = new("i32", 1, 1, 4);
         public static readonly WasmType I32 = new("i32", 4, 4, 4);
+        public static readonly WasmType I32_8 = new("i32", 1, 1, 4);
+        public static readonly WasmType I32_16 = new("i32", 2, 2, 4);
         public static readonly WasmType I64 = new("i64", 8, 8, 8);
+        public static readonly WasmType I64_8 = new("i64", 1, 1, 8);
+        public static readonly WasmType I64_16 = new("i64", 2, 2, 8);
+        public static readonly WasmType I64_32 = new("i64", 4, 4, 8);
         public static readonly WasmType F32 = new("f32", 4, 4, 4);
         public static readonly WasmType F64 = new("f64", 8, 8, 8);
 

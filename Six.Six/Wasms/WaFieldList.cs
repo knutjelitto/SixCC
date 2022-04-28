@@ -19,9 +19,7 @@ namespace Six.Six.Wasms
 
             foreach (var field in this)
             {
-                offset = field.Type.Align(offset);
-                field.Offset = offset;
-                offset += field.Type.MemSize;
+                Assert(field.Offset >= 0);
             }
 
             Size = offset;

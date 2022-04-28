@@ -390,49 +390,6 @@
         }
 
         public ValueType Type { get; }
-
-        public class ValueI32 : ValueT<int>
-        {
-            public ValueI32(int value) : base(ValueType.I32, value)
-            {
-            }
-        }
-
-        public class ValueU32 : ValueT<uint>
-        {
-            public ValueU32(uint value) : base(ValueType.I32, value)
-            {
-            }
-        }
-
-        public class ValueI64 : ValueT<long>
-        {
-            public ValueI64(long value) : base(ValueType.I64, value)
-            {
-            }
-        }
-
-        public class ValueU64 : ValueT<ulong>
-        {
-            public ValueU64(ulong value) : base(ValueType.I64, value)
-            {
-            }
-        }
-
-        public class ValueF32 : ValueT<float>
-        {
-            public ValueF32(float value) : base(ValueType.F32, value)
-            {
-            }
-        }
-
-        public class ValueF64 : ValueT<double>
-        {
-            public ValueF64(double value) : base(ValueType.F64, value)
-            {
-            }
-        }
-
     }
 
     public class OpSign
@@ -474,6 +431,7 @@
         public static ValueType I64 { get; } = new ValueType("i64", 8);
         public static ValueType F32 { get; } = new ValueType("f32", 4);
         public static ValueType F64 { get; } = new ValueType("f64", 8);
+        public static ValueType V128 { get; } = new ValueType("v128", 16);
     }
 
     public class MemType

@@ -16,7 +16,9 @@ namespace Six.Six.Types
             S32 = Add(new S32(this));
             S64 = Add(new S64(this));
             U8 = Add(new U8(this));
-            U32 = TableIndex = Add(new U32(this));
+            U16 = Add(new U16(this));
+            U32 = Add(new U32(this));
+            U64 = Add(new U64(this));
             F32 = Add(new F32(this));
             F64 = Add(new F64(this));
             Anything = Add(new Anything(this));
@@ -29,7 +31,7 @@ namespace Six.Six.Types
             Builtin = Add(new BuiltinGeneric(this));
             Runtime = Add(new Runtime(this));
         }
-        public Builtin TableIndex { get; }
+
         public Builtin Boolean { get; }
         public Builtin True { get; }
         public Builtin False { get; }
@@ -40,21 +42,24 @@ namespace Six.Six.Types
         public Builtin Builtin { get; }
         public Builtin Runtime { get; }
 
-        public Builtin U8 { get; }
-        public Builtin U32 { get; }
+        public U8 U8 { get; }
+        public U16 U16 { get; }
+        public U32 U32 { get; }
+        public U64 U64 { get; }
 
-        public Builtin S8 { get; }
-        public Builtin S16 { get; }
-        public Builtin S32 { get; }
-        public Builtin S64 { get; }
+        public S8 S8 { get; }
+        public S16 S16 { get; }
+        public S32 S32 { get; }
+        public S64 S64 { get; }
 
-        public Builtin F32 { get; }
-        public Builtin F64 { get; }
+        public F32 F32 { get; }
+        public F64 F64 { get; }
 
         public Module Module { get; }
         public Resolver Resolver => Module.Resolver;
 
-        private Builtin Add(Builtin builtin)
+        private T Add<T>(T builtin)
+            where T : Builtin
         {
             buildins.Add(builtin.Name, builtin);
             return builtin;

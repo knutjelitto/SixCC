@@ -204,7 +204,7 @@ namespace Six.Six.Instructions
                 }
                 else
                 {
-                    clazz.AddMemberField(new WaMemberField(clazz, field.Name, Instructeur.Lower(field.Type).Wasm));
+                    clazz.AddMemberField(new WaMemberField(clazz, field.Name, field.Offset, Instructeur.Lower(field.Type).Wasm));
                 }
             }
 
