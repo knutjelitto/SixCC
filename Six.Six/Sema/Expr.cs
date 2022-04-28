@@ -36,7 +36,13 @@ namespace Six.Six.Sema
             : Reference(LocalDecl);
 
         public sealed record SelfReference(Decl.Classy ClassyDecl)
-            : Reference(ClassyDecl);
+            : Reference(ClassyDecl)
+        {
+            public override string ToString()
+            {
+                return $"(self)";
+            }
+        }
 
         public sealed record AliasReference(Decl.Alias AliasDecl)
             : Reference(AliasDecl);
@@ -147,14 +153,20 @@ namespace Six.Six.Sema
             public override Type Type => Callable.Result;
         }
 
-        public abstract record SelectMember(Expr Reference, Decl.Classy Classy, Type Type)
+        public abstract record SelectMember(Expr Reference, Type Type)
             : Primitive(Type);
 
-        public sealed record SelectFunction(Expr Reference, Decl.Classy Classy, Decl.Function Function)
-            : SelectMember(Reference, Classy, Function.ResultType);
+        public sealed record SelectFunction(Expr Reference, Decl.Function Function)
+            : SelectMember(Reference, Function.ResultType);
 
-        public sealed record SelectField(Expr Reference, Decl.Classy Classy, Decl.Field Field)
-            : SelectMember(Reference, Classy, Field.Type);
+        public sealed record SelectField(Expr Reference, Decl.Field Field)
+            : SelectMember(Reference, Field.Type)
+        {
+            public override string ToString()
+            {
+                return $"{Reference}.{Field}";
+            }
+        }
 
         public sealed record CallMember(Decl.Classy Classy, Decl.Function Function, Expr Make, List<Expr> Arguments)
             : Expr

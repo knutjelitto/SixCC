@@ -35,7 +35,7 @@ namespace Six.Six.Sema
             public Decl Decl => this;
         }
 
-        public class Class : Classy
+        public class Class : Classy, Concrete
         {
             public Class(Block parent, A.Decl.Class aDecl)
                 : base(parent, aDecl)
@@ -46,7 +46,7 @@ namespace Six.Six.Sema
             public override string ToString() => $"{Name}";
         }
 
-        public class Object : Classy
+        public class Object : Classy, Concrete
         {
             public Object(Block parent, A.Decl.Object aDecl)
                 : base(parent, aDecl)

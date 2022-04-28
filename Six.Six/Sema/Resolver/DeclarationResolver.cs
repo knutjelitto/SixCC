@@ -151,7 +151,7 @@ namespace Six.Six.Sema
                 node.GetLocation(),
                 parent,
                 new LazyExpr(() => new Expr.LocalReference(letvar)),
-                E.ResolveExpression(parent, node.Value)));
+                E.ResolveExpressionLazy(parent, node.Value)));
         }
 
         private void Declare(CodeBlock parent, A.Decl.Var node)
@@ -205,7 +205,7 @@ namespace Six.Six.Sema
                 new Decl.Parameter(
                     parent,
                     node,
-                    node.Default == null ? null : E.ResolveExpression(parent, node.Default)));
+                    node.Default == null ? null : E.ResolveExpressionLazy(parent, node.Default)));
 
             M.AddMember(parent, parameter);
         }

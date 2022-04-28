@@ -2,7 +2,7 @@
 
 using Six.Runtime;
 using Six.Six.Instructions;
-using static Six.Six.Wasms.WasmData;
+using static Six.Six.Wasms.WasmAlign;
 
 namespace Six.Six.Wasms
 {

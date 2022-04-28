@@ -1,12 +1,7 @@
 ﻿using Six.Runtime;
 using Six.Six.Instructions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using static Six.Six.Wasms.WasmData;
+using static Six.Six.Wasms.WasmAlign;
 
 namespace Six.Six.Wasms
 {

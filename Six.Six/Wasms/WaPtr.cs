@@ -25,7 +25,7 @@ namespace Six.Six.Wasms
 
         public WaPtr Align16()
         {
-            return new WaPtr(WasmData.Align16(Address));
+            return new WaPtr(WasmAlign.Align16(Address));
         }
 
         public void EmitAddress(Writer writer)

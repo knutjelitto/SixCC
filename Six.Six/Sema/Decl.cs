@@ -6,6 +6,10 @@ namespace Six.Six.Sema
 {
     public partial interface Decl : Member
     {
+        public interface Concrete
+        {
+        }
+
         ILocation Location { get; }
         Type Type { get; }
         string Name { get; }
@@ -73,7 +77,7 @@ namespace Six.Six.Sema
             public LetVar(CodeBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
-                lazyValue = Resolver.E.ResolveExpression(Parent, aDecl.Value);
+                lazyValue = Resolver.E.ResolveExpressionLazy(Parent, aDecl.Value);
                 lazyType = Resolver.T.ResolveTypeLazy(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
             }
@@ -93,13 +97,17 @@ namespace Six.Six.Sema
             public Field(ClassBlock parent, A.Decl.LetVar aDecl, bool writeable)
                 : base(parent, aDecl)
             {
-                lazyValue = Resolver.E.ResolveExpression(parent, aDecl.Value);
+                Assert(parent.Classy is Class || parent.Classy is Object);
+
+                Class = parent.Classy;
+                lazyValue = Resolver.E.ResolveExpressionLazy(parent, aDecl.Value);
                 lazyType = Resolver.T.ResolveTypeLazy(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
             }
 
             public bool Writeable { get; }
             public uint Offset { get; set; } = uint.MaxValue;
+            public Classy Class { get; }
 
             public override Type Type => lazyType.Value;
 
@@ -108,6 +116,11 @@ namespace Six.Six.Sema
             public override string FullName => Name;
 
             public string StaticName => $"{Parent.FullName()}.{Name}";
+
+            public override string ToString()
+            {
+                return Name;
+            }
         }
 
         public sealed class Global : Declaration
@@ -120,7 +133,7 @@ namespace Six.Six.Sema
             {
                 Assert(aDecl.Type != null);
 
-                lazyValue = Resolver.E.ResolveExpression(parent, aDecl.Value);
+                lazyValue = Resolver.E.ResolveExpressionLazy(parent, aDecl.Value);
                 lazyType = Resolver.T.ResolveTypeLazy(parent, lazyValue, aDecl.Type);
                 Writeable = writeable;
                 FullName = $"{Parent.FullName()}.{Name}";
