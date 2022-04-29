@@ -1,4 +1,6 @@
-﻿using Six.Core;
+﻿using System.Drawing;
+
+using Six.Core;
 using Six.Six.Instructions;
 
 namespace Six.Six.Wasms
@@ -39,7 +41,7 @@ namespace Six.Six.Wasms
 
         public static uint operator -(WaPtr ptr1, WaPtr ptr2)
         {
-            Assert(ptr2 < ptr1);
+            Assert(ptr2 <= ptr1);
             return ptr1.Address - ptr2.Address;
         }
 
@@ -48,9 +50,24 @@ namespace Six.Six.Wasms
             return ptr1.Address < ptr2.Address;
         }
 
+        public static bool operator <=(WaPtr ptr1, WaPtr ptr2)
+        {
+            return ptr1.Address <= ptr2.Address;
+        }
+
         public static bool operator >(WaPtr ptr1, WaPtr ptr2)
         {
             return ptr1.Address > ptr2.Address;
+        }
+
+        public static bool operator >=(WaPtr ptr1, WaPtr ptr2)
+        {
+            return ptr1.Address >= ptr2.Address;
+        }
+
+        public override string ToString()
+        {
+            return $"+{Address,4} 0x{Address:X4}";
         }
     }
 }

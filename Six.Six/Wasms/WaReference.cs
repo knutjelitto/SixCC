@@ -17,6 +17,6 @@ namespace Six.Six.Wasms
             Address = new IntPtr(address);
         }
 
-        public string Comment => $"(; +{Address,4} 0x{Address:X4} ;)";
+        public string Comment => $"(; {Address} ;)";
     }
 }

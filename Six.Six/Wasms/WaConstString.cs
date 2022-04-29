@@ -25,7 +25,7 @@ namespace Six.Six.Wasms
 
         public WaPtr Address { get; set; } = WaPtr.Invalid;
         public WaPtr NextAddress { get; set; } = WaPtr.Invalid;
-        public WaPtr Payload => Address.Offset(WaRuntime.PayloadOffset);
+        public WaPtr Payload => Address.Offset(WaRuntime.HeaderSize);
 
         public void Prepare()
         {
@@ -39,10 +39,10 @@ namespace Six.Six.Wasms
             var missing = NextAddress - Address - Size;
             var fill = missing > 0 ? $" {EmitZeros(missing)}" : "";
 
-            var classAddress = StringData.Module.StringClass.RuntimeType.Address;
+            var classAddress = StringData.Module.StringClass.RuntimeType.Address.Address;
             var classDispatch = (uint)StringData.Module.StringClass.Dispatches.Index;
 
-            wl($"(; +{Address.Address,4} 0x{Address.Address:X4} ;) {EmitUInt32(classAddress)} {EmitUInt32(classDispatch)} {EmitUInt32(Count)} {EmitUtf8(Bytes)}{fill}");
+            wl($"(; {Address} ;) {EmitUInt32(classAddress)} {EmitUInt32(classDispatch)} {EmitUInt32(Count)} {EmitUtf8(Bytes)}{fill}");
         }
     }
 }
