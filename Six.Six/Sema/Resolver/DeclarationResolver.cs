@@ -52,21 +52,25 @@ namespace Six.Six.Sema
 
         private void Declare(Block parent, A.Decl.Class node)
         {
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Class(parent, node)));
+            Assert(node.TypeParameters == null);
+
+            var decl = M.AddAndDeclareMember(parent, new Decl.Class(parent, node));
 
             WalkClassBody(decl, node);
         }
 
         private void Declare(Block parent, A.Decl.Interface node)
         {
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Interface(parent, node)));
+            //Assert(node.TypeParameters == null);
+
+            var decl = M.AddAndDeclareMember(parent, new Decl.Interface(parent, node));
 
             WalkClassBody(decl, node);
         }
 
         private void Declare(Block parent, A.Decl.Object node)
         {
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Object(parent, node)));
+            var decl = M.AddAndDeclareMember(parent, new Decl.Object(parent, node));
 
             WalkClassBody(decl, node);
         }
@@ -86,7 +90,7 @@ namespace Six.Six.Sema
         {
             Assert(node.Parameters.Count == 0);
 
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Attribute(parent, node)));
+            var decl = M.AddAndDeclareMember(parent, new Decl.Attribute(parent, node));
 
             DeclareFunction(decl, node);
         }
@@ -95,7 +99,7 @@ namespace Six.Six.Sema
         {
             Assert(node.Parameters.Count == 1);
 
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, node.InfixName())));
+            var decl = M.AddAndDeclareMember(parent, new Decl.Function(parent, node, node.InfixName()));
 
             DeclareFunction(decl, node);
         }
@@ -104,21 +108,21 @@ namespace Six.Six.Sema
         {
             Assert(node.Parameters.Count == 0);
 
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, node.PrefixName())));
+            var decl = M.AddAndDeclareMember(parent, new Decl.Function(parent, node, node.PrefixName()));
 
             DeclareFunction(decl, node);
         }
 
         private void Declare(Block parent, A.Decl.Function node)
         {
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Function(parent, node, null)));
+            var decl = M.AddAndDeclareMember(parent, new Decl.Function(parent, node, null));
 
             DeclareFunction(decl, node);
         }
 
         private void Declare(ClassBlock parent, A.Decl.Constructor node)
         {
-            var decl = M.AddMember(parent, parent.Declare(new Decl.Constructor(parent, node)));
+            var decl = M.AddAndDeclareMember(parent, new Decl.Constructor(parent, node));
 
             if (decl.IsNative)
             {
@@ -140,12 +144,12 @@ namespace Six.Six.Sema
 
         private void Declare(Block parent, A.Decl.Alias node)
         {
-            M.AddMember(parent, parent.Declare(new Decl.Alias(parent, node)));
+            M.AddAndDeclareMember(parent, new Decl.Alias(parent, node));
         }
 
         private void DeclareLetVar(CodeBlock parent, A.Decl.LetVar node, bool writeable)
         {
-            var letvar = M.AddMember(parent, parent.Declare(new Decl.LetVar(parent, node, writeable)));
+            var letvar = M.AddAndDeclareMember(parent, new Decl.LetVar(parent, node, writeable));
 
             parent.Add(new Stmt.Assign(
                 node.GetLocation(),
@@ -166,22 +170,22 @@ namespace Six.Six.Sema
 
         private void Declare(ClassBlock parent, A.Decl.Var node)
         {
-            M.AddMember(parent, parent.Declare(new Decl.Field(parent, node, true)));
+            M.AddAndDeclareMember(parent, new Decl.Field(parent, node, true));
         }
 
         private void Declare(ClassBlock parent, A.Decl.Let node)
         {
-            M.AddMember(parent, parent.Declare(new Decl.Field(parent, node, false)));
+            M.AddAndDeclareMember(parent, new Decl.Field(parent, node, false));
         }
 
         private void Declare(NamespaceBlock parent, A.Decl.Var node)
         {
-            M.AddMember(parent, parent.Declare(new Decl.Global(parent, node, true)));
+            M.AddAndDeclareMember(parent, new Decl.Global(parent, node, true));
         }
 
         private void Declare(NamespaceBlock parent, A.Decl.Let node)
         {
-            M.AddMember(parent, parent.Declare(new Decl.Global(parent, node, false)));
+            M.AddAndDeclareMember(parent, new Decl.Global(parent, node, false));
         }
 
         private void Declare(Block block, A.Decl.TypeParameters node)
@@ -196,18 +200,18 @@ namespace Six.Six.Sema
 
         private void DeclareSelfParameter(FuncBlock parent, Decl.Classy classy)
         {
-            M.AddMember(parent, parent.Declare(new Decl.SelfParameter(parent, classy.Type)));
+            M.AddAndDeclareMember(parent, new Decl.SelfParameter(parent, classy.Type));
         }
 
         private void Declare(FuncBlock parent, A.Decl.ValueParameter node)
         {
-            var parameter = parent.Declare(
+            var parameter =
                 new Decl.Parameter(
                     parent,
                     node,
-                    node.Default == null ? null : E.ResolveExpressionLazy(parent, node.Default)));
+                    node.Default == null ? null : E.ResolveExpressionLazy(parent, node.Default));
 
-            M.AddMember(parent, parameter);
+            M.AddAndDeclareMember(parent, parameter);
         }
     }
 }

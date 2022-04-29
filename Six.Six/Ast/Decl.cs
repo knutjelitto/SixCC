@@ -202,7 +202,13 @@ namespace Six.Six.Ast
             : Classy,
               With.Generics,
               With.Satisfies,
-              With.Cases;
+              With.Cases
+        {
+            public override string ToString()
+            {
+                return $"interface {Name}";
+            }
+        }
 
         public sealed record Alias(
             IRNode Tree,

@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0060 // Remove unused parameter
 
 namespace Six.Six.Sema
 {
     public class Members
     {
-        public T AddMember<T>(Block block, T decl)
+        public T AddAndDeclareMember<T>(Block block, T decl)
             where T : Decl
         {
             AddTo((dynamic)block, (dynamic)decl);
 
-            return decl;
+            return block.Declare(decl);
         }
 
         private void AddTo(Block block, Decl decl)

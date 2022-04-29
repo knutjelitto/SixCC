@@ -1,6 +1,4 @@
-﻿using Six.Six.Instructions;
-using System;
-using A = Six.Six.Ast;
+﻿using A = Six.Six.Ast;
 
 namespace Six.Six.Sema
 {
@@ -46,12 +44,12 @@ namespace Six.Six.Sema
 
             public Type.Callable CallableType => (Type.Callable)Type;
 
-            public void AddParameter(Decl.Parameter parameter)
+            public void AddParameter(Parameter parameter)
             {
                 Members.AddParameter(parameter);
             }
 
-            public void AddParameter(Decl.SelfParameter parameter)
+            public void AddParameter(SelfParameter parameter)
             {
                 Members.AddParameter(parameter);
             }
@@ -92,7 +90,7 @@ namespace Six.Six.Sema
             public override bool IsStatic => true;
 
             public override Type ResultType => lazyResultType.Value;
-            public Decl.Classy Class => (Decl.Classy)ResultType;
+            public Classy Class => (Classy)ResultType;
         }
 
         public sealed class Attribute : Funcy

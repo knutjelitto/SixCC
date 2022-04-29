@@ -2,14 +2,12 @@
 using System;
 using A = Six.Six.Ast;
 
+#pragma warning disable IDE1006 // Naming Styles
+
 namespace Six.Six.Sema
 {
     public partial interface Decl : Member
     {
-        public interface Concrete
-        {
-        }
-
         ILocation Location { get; }
         Type Type { get; }
         string Name { get; }
