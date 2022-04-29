@@ -25,18 +25,23 @@ namespace Six.Six.Sema
             Call = new ExpressionCall(resolver);
         }
 
-        public LazyExpr ResolveExpression(Block block, A.Expression node)
+        public LazyExpr ResolveExpressionLazy(Block block, A.Expression node)
+        {
+            return Expression((dynamic)block, (dynamic)node);
+        }
+
+        private LazyExpr ResolveExpression(Block block, A.Expression node)
         {
             return Expression((dynamic)block, (dynamic)node);
         }
 
         public LazyExpr ExpressionConditions(Block block, IEnumerable<A.Expression> nodes)
         {
-            var conditions = nodes.ToList();
-            Assert(conditions.Count >= 1);
-
             return new LazyExpr(() =>
             {
+                var conditions = nodes.ToList();
+                Assert(conditions.Count >= 1);
+
                 var first = ResolveExpression(block, conditions[0]);
                 var type = Module.FindCoreClass(Names.Core.Boolean);
 
@@ -226,9 +231,9 @@ namespace Six.Six.Sema
                         throw new NotImplementedException();
                 }
 
-                Expr selectField(Decl.Field decl)
+                Expr selectField(Decl.Field field)
                 {
-                    return new FieldReference(decl);
+                    return new SelectField(new SelfReference(field.Class), field);
                 }
             });
         }

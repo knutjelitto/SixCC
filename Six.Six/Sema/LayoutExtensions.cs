@@ -1,6 +1,4 @@
-﻿using Six.Six.Sema;
-
-namespace Six.Six.Instructions
+﻿namespace Six.Six.Sema
 {
     public static class LayoutExtensions
     {

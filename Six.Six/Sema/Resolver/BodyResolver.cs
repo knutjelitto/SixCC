@@ -78,7 +78,7 @@ namespace Six.Six.Sema
 
         private void FuncyBody(CodeBlock block, A.Body.Expr node)
         {
-            var delayed = E.ResolveExpression(block, node.Expression);
+            var delayed = E.ResolveExpressionLazy(block, node.Expression);
 
             block.Add(new Stmt.Return(node.Expression.GetLocation(), block, delayed));
         }

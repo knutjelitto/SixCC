@@ -43,6 +43,11 @@ namespace Six.Six.Sema
             throw new NotImplementedException();
         }
 
+        private Expr DoSelectOnAny(Expr primary, SelectField selectField, A.Reference reference)
+        {
+            return SelectOnObject(selectField, selectField.Type, reference);
+        }
+
         private Expr DoSelectOnAny(Expr primary, ClassReference classyReference, A.Reference reference)
         {
             return SelectOnType(classyReference.Decl, reference);
@@ -83,11 +88,11 @@ namespace Six.Six.Sema
             }
             else if (referenced is Decl.Function function)
             {
-                return new SelectFunction(objekt, classy, function);
+                return new SelectFunction(objekt, function);
             }
             else if (referenced is Decl.Field field)
             {
-                return new SelectField(objekt, classy, field);
+                return new SelectField(objekt, field);
             }
 
             Assert(false);

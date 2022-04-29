@@ -32,7 +32,7 @@ namespace Six.Six.Sema
             return new Stmt.Expression(
                     node.GetLocation(),
                     block,
-                    E.ResolveExpression(block, node.Expression));
+                    E.ResolveExpressionLazy(block, node.Expression));
         }
 
         private Stmt Statement(CodeBlock block, A.Stmt.Assign node)
@@ -40,8 +40,8 @@ namespace Six.Six.Sema
             return new Stmt.Assign(
                     node.GetLocation(),
                     block,
-                    E.ResolveExpression(block, node.Left),
-                    E.ResolveExpression(block, node.Right));
+                    E.ResolveExpressionLazy(block, node.Left),
+                    E.ResolveExpressionLazy(block, node.Right));
         }
 
         private Stmt Statement(CodeBlock block, A.Stmt.Return node)
@@ -49,7 +49,7 @@ namespace Six.Six.Sema
             return new Stmt.Return(
                     node.GetLocation(),
                     block,
-                    node.Expression == null ? null : E.ResolveExpression(block, node.Expression));
+                    node.Expression == null ? null : E.ResolveExpressionLazy(block, node.Expression));
         }
 
         private Stmt Statement(CodeBlock block, A.Stmt.If node)

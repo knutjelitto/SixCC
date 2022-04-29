@@ -30,7 +30,7 @@ namespace Six.Six.Types
         public ValueType ValueType => Impl.ValueType;
         public MemType MemType => Impl.MemType;
 
-        public override uint MemAlign(uint offset) => WasmData.Align(MemType.Bytes, offset);
+        public override uint MemAlign(uint offset) => WasmAlign.Align(MemType.Bytes, offset);
 
         public override Insn Load(uint offset)
         {
