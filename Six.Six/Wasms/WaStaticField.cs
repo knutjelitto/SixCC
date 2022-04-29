@@ -22,7 +22,7 @@ namespace Six.Six.Wasms
 
         public override void Emit()
         {
-            wl($"(; +{Address.Address,4} 0x{Address.Address:X4} {Name} ;) {EmitZeros(Size)}");
+            wl($"(; {Address} {Name} ;) {EmitZeros(Size)}");
         }
 
         public void EmitAddress()

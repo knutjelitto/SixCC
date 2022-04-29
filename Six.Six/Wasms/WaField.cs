@@ -4,7 +4,7 @@ namespace Six.Six.Wasms
 {
     public abstract class WaField : WithWriter, Wamber
     {
-        public WaField(IWithWriter withWriter, string name, WasmType type)
+        protected WaField(IWithWriter withWriter, string name, WasmType type)
             : base(withWriter.Writer)
         {
             Name = name;

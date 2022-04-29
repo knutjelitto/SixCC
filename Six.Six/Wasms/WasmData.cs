@@ -46,11 +46,17 @@ namespace Six.Six.Wasms
 
         public static string EmitZeros(uint count)
         {
+            Assert(count < 16);
+
             var builder = new StringBuilder();
-            while (count > 0)
+
+            if (count > 0)
             {
-                builder.Append(CvtByte(0));
-                count--;
+                while (count > 0)
+                {
+                    builder.Append(CvtByte(0));
+                    count--;
+                }
             }
 
             return $"\"{builder}\"";

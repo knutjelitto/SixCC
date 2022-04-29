@@ -8,7 +8,7 @@ namespace Six.Six.Sema
     [DebuggerDisplay("{GetType().Name} {Name}")]
     public abstract class Block
     {
-        private BlockScope? content;
+        private Scope? content;
 
         protected Block(Module module, string name)
         {
@@ -20,7 +20,7 @@ namespace Six.Six.Sema
         public string Name { get; }
         public abstract Block Parent { get; }
         public Errors Errors => Module.Errors;
-        public virtual BlockScope Content => content ??= new BlockScope(Module, Name, Parent.Content);
+        public virtual Scope Content => content ??= new Scope(Module);
         public Resolver Resolver => Module.Resolver;
 
         public virtual T Declare<T>(T decl)
@@ -219,10 +219,10 @@ namespace Six.Six.Sema
         public ModuleBlock(Module module, string name)
             : base(module, name)
         {
-            Content = new BlockScope(module, name, new EmptyScope(module));
+            Content = new Scope(module);
         }
 
-        public override BlockScope Content { get; }
+        public override Scope Content { get; }
         public override Block Parent => throw new InvalidOperationException();
     }
 }
