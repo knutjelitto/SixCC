@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-using Six.Core;
+﻿using Six.Core;
 using Six.Six.Instructions;
 
 namespace Six.Six.Wasms
