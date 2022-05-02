@@ -1,6 +1,6 @@
 ﻿using Six.Runtime;
 
-using static Six.Six.Wasms.WasmData;
+using Data = Six.Six.Wasms.WasmData;
 
 namespace Six.Six.Wasms
 {
@@ -40,13 +40,22 @@ namespace Six.Six.Wasms
 
             var dispatch = (uint)meta.Dispatches.Index;
 
-            var missing = NextAddress - Address - Size;
-            var fill = missing > 0 ? $" {EmitZeros(missing)}" : "";
+            var missing = NextAddress - Address - WaRef.HeaderSize - Count;
+            var fill = missing > 0 ? $" {Data.EmitZeros(missing)}" : "";
 
-            var classAddress = meta.RuntimeType.Address.Address;
-
-
+#if true
+            wl($"(; {Address} ;)");
+            wl($"(; heap           ;) {Data.EmitInt32(-1)}");
+            wl($"(; clazz          ;) {Data.EmitPtr(meta.RuntimeType.Address)}");
+            wl($"(; clazz-dispatch ;) {Data.EmitInt32(meta.Dispatches.Index)}");
+            wl($"(; size           ;) {Data.EmitUInt32(Count)}");
+            wl($"(; +{WaRef.PayloadOffset,2}            ;)");
+            wl($"(; name           ;) {Data.EmitUtf8(Bytes)}");
+            wl($"(; align-fill     ;){fill}");
+            wl($"(; +{(NextAddress.Address - Address.Address),2}            ;)");
+#else
             wl($"(; {Address} ;) {EmitPtr(meta.RuntimeType.Address)} {EmitUInt32(dispatch)} {EmitUInt32(Count)} {EmitUtf8(Bytes)}{fill}");
+#endif
         }
     }
 }

@@ -35,10 +35,10 @@ namespace Six.Six.Wasms
 
             var offset = BaseOffset;
 
-            Assert(offset == Align16(offset));
-
             foreach (var runtime in runtimes)
             {
+                Assert(offset == Align16(offset));
+
                 runtime.Address = WaPtr.Null.Offset(offset);
 
                 offset = Align16(offset + runtime.Size);

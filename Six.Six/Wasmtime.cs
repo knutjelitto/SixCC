@@ -49,9 +49,9 @@ namespace Six.Six
                 if (memory != null)
                 {
                     var str = WaRef.FromHeaderAddress((uint)ptr);
-                    var length = memory.ReadInt32(store, ptr + (int)str[0]);
+                    var length = memory.ReadInt32(store, ptr + (int)WaRef.OffsetOfSize());
                     Assert(length == 5);
-                    var message = memory.ReadString(store, ptr + (int)str[4], length);
+                    var message = memory.ReadString(store, ptr + (int)WaRef.OffsetOfPayload(), length);
 
                     Console.Write(message);
                 }
@@ -104,7 +104,7 @@ namespace Six.Six
             var complex1 = CallInt32Function(store, instance, "six.core.get_complex");
             Assert(complex1 == heap_start + 144);
             var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
-            Assert(complex2 == heap_start + 160);
+            Assert(complex2 == heap_start + 144 + 32);
 
             result = CallInt32Function(store, instance, "six.core.Complex.Real", complex1);
             Assert(result == 1);
@@ -117,7 +117,7 @@ namespace Six.Six
             Assert(result == 2);
 
             var sum = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
-            Assert(sum == heap_start + 176);
+            Assert(sum == heap_start + 144 + 32 + 32);
 
             result = CallInt32Function(store, instance, "six.core.Complex.Real", sum);
             Assert(result == 2);

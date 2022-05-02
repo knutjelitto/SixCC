@@ -238,21 +238,19 @@ namespace Six.Six.Wasms
                 wl($"(result {WasmType.Addr})");
                 wl($"(local {WasmType.Addr})");
                 wl("(;-----;)");
-                emit(Insn.Local.Get(0));            // [clazz]
-                emit(Insn.U32.Load(8));             // [clazz.size]
-                emit(Insn.U32.Const(8));            // [clazz.size headersize]
-                emit(Insn.U32.Add);                 // [size]
-                emit(Insn.Call(Module.CoreAlloc));  // [object]
-                emit(Insn.Local.Tee(1));            // [object]
-                emit(Insn.Local.Get(0));            // [object clazz]
-                emit(Insn.U32.Store(0));            // [] object.clazz = clazz
-
-                emit(Insn.Local.Get(1));            // [object]
-                emit(Insn.Local.Get(0));            // [object clazz]
-                emit(Insn.U32.Load(16));            // [object clazz.dispatch]
-                emit(Insn.U32.Store(4));            // [] object.dispatch = clazz.dispatch
-
-                emit(Insn.Local.Get(1));            // [object]
+                emit(Insn.Local.Get(0));                        // [clazz]
+                emit(Insn.U32.Load(WaRef.OffsetOfSize()));      // [clazz.size]
+                emit(Insn.U32.Const(WaRef.HeaderSize));         // [clazz.size headersize]
+                emit(Insn.U32.Add);                             // [size]
+                emit(Insn.Call(Module.CoreAlloc));              // [object]
+                emit(Insn.Local.Tee(1));                        // [object]
+                emit(Insn.Local.Get(0));                        // [object clazz]
+                emit(Insn.U32.Store(0));                        // [] object.clazz = clazz
+                emit(Insn.Local.Get(1));                        // [object]
+                emit(Insn.Local.Get(0));                        // [object clazz]
+                emit(Insn.U32.Load(WaRef.PayloadOffset + 4));   // [object clazz.dispatch]
+                emit(Insn.U32.Store(WaRef.OffsetOfDispatch())); // [] object.dispatch = clazz.dispatch
+                emit(Insn.Local.Get(1));                        // [object]
                 emit(Insn.Return);
                 wl("(;-----;)");
             });

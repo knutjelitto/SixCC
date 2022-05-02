@@ -49,6 +49,11 @@ namespace Six.Six.Wasms
             return HeadOffset + 12;
         }
 
+        public static uint OffsetOfPayload()
+        {
+            return PayloadOffset;
+        }
+
         public uint this[uint offset] => PayloadOffset + offset;
 
         public override string ToString()

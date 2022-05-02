@@ -1,7 +1,7 @@
 ﻿using Six.Runtime;
 using Six.Six.Instructions;
 
-using static Six.Six.Wasms.WasmAlign;
+using Align = Six.Six.Wasms.WasmAlign;
 
 namespace Six.Six.Wasms
 {
@@ -35,22 +35,24 @@ namespace Six.Six.Wasms
         public void Prepare()
         {
             Assert(BaseOffset < uint.MaxValue);
-            Assert(BaseOffset == Align16(BaseOffset));
+            Assert(BaseOffset == Align.Align16(BaseOffset));
 
-            var offset = WaPtr.Null.Offset(BaseOffset);
+            var offset = BaseOffset;
 
             foreach (var constString in strings.Values.OrderBy(s => s.Order))
             {
-                constString.Address = offset;
+                Assert(offset == Align.Align16(offset));
 
-                offset = WaPtr.Null.Offset(Align8(constString.Address.Address + constString.Size));
+                constString.Address = WaPtr.Null.Offset(offset);
 
-                constString.NextAddress = offset;
+                offset = Align.Align16(offset + WaRef.HeaderSize + constString.Count);
+
+                constString.NextAddress = WaPtr.Null.Offset(offset);
 
                 constString.Prepare();
             }
 
-            Size = Align16(offset.Address) - BaseOffset;
+            Size = offset - BaseOffset;
         }
 
         public void Emit()

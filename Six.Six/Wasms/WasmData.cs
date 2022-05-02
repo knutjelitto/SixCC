@@ -53,7 +53,7 @@ namespace Six.Six.Wasms
 
         public static string EmitZeros(uint count)
         {
-            Assert(count < 16);
+            Assert(count < 32);
 
             var builder = new StringBuilder();
 

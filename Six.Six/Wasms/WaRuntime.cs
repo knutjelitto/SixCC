@@ -5,8 +5,8 @@ namespace Six.Six.Wasms
 {
     public class WaRuntime : WithWriter, Wamber
     {
-        public static readonly uint HeaderSize = WasmType.Addr.Size + WasmType.I32.Size;
-        public static readonly uint PayloadSize = WasmType.I32.Size + WasmType.Addr.Size + WasmType.I32.Size;
+        public static readonly uint HeaderSize = WasmType.I32.Size +  WasmType.Addr.Size + WasmType.I32.Size + WasmType.I32.Size;
+        public static readonly uint PayloadSize = WasmType.Addr.Size + WasmType.I32.Size;
 
         public WaRuntime(WaClass clazz)
             : base(clazz.Writer)
@@ -27,7 +27,6 @@ namespace Six.Six.Wasms
         {
             Assert(Address.IsValid);
             Assert(NextAddress.IsValid);
-
             Assert(NextAddress > Address);
         }
 
@@ -37,7 +36,7 @@ namespace Six.Six.Wasms
 
             Assert(WaRef.HeaderSize == HeaderSize);
 
-            wl($"(; {reference.Header} - {Class.Name} ;)");
+            wl($"(; class {Class.Name} ;)");
             indent(() =>
             {
                 var meta = Module.MetaClass;
@@ -47,6 +46,7 @@ namespace Six.Six.Wasms
                 var missing = NextAddress - Address - Size;
                 var fill = missing > 0 ? $" {Data.EmitZeros(missing)}" : "";
 
+                wl($"(; {reference.Header} ;)");
                 wl($"(; heap           ;) {Data.EmitInt32(-1)}");
                 wl($"(; clazz          ;) {Data.EmitPtr(meta.RuntimeType.Address)}");
                 wl($"(; clazz-dispatch ;) {Data.EmitInt32(meta.Dispatches.Index)}");
@@ -55,7 +55,7 @@ namespace Six.Six.Wasms
                 wl($"(; name           ;) {Data.EmitPtr(Class.NameConst.Address)}");
                 wl($"(; dispatch {dispatch,5} ;) {Data.EmitInt32(dispatch)}");
 
-                wl($"(; fill           ;){fill}");
+                wl($"(; align-fill     ;){fill}");
 
             });
         }
