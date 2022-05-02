@@ -105,6 +105,7 @@ namespace Six.Six.Sema
 
             public bool Writeable { get; }
             public uint Offset { get; set; } = uint.MaxValue;
+            public uint Size { get; set; } = uint.MaxValue;
             public Classy Class { get; }
 
             public override Type Type => lazyType.Value;

@@ -33,19 +33,26 @@ namespace Six.Six.Wasms
 
         public void Emit()
         {
-            wl($"(; {Address} - {Class.Name} ;)");
+            var reference = new WaRef(Address);
+
+            Assert(WaRef.HeaderSize == HeaderSize);
+
+            wl($"(; {reference.Header} - {Class.Name} ;)");
             indent(() =>
             {
+                var meta = Module.MetaClass;
+
                 var dispatch = Class.Dispatches.Count > 0 ? Class.Dispatches.Index : -1;
+
                 var missing = NextAddress - Address - Size;
                 var fill = missing > 0 ? $" {Data.EmitZeros(missing)}" : "";
 
-
-                wl($"(; clazz          ;) {Data.EmitUInt32(Module.MetaClass.RuntimeType.Address.Address)}");
-                wl($"(; clazz-dispatch ;) {Data.EmitUInt32((uint)Module.MetaClass.Dispatches.Index)}");
-                wl($"(; {Address.Offset(HeaderSize)} ;)");
-                wl($"(; size           ;) {Data.EmitUInt32(8 + Class.FieldsSize)}");
-                wl($"(; name           ;) {Data.EmitAddress(Class.NameConst.Address.Address)}");
+                wl($"(; heap           ;) {Data.EmitInt32(-1)}");
+                wl($"(; clazz          ;) {Data.EmitPtr(meta.RuntimeType.Address)}");
+                wl($"(; clazz-dispatch ;) {Data.EmitInt32(meta.Dispatches.Index)}");
+                wl($"(; size           ;) {Data.EmitUInt32(Class.FieldsSize)}");
+                wl($"(; {reference.Payload} ;)");
+                wl($"(; name           ;) {Data.EmitPtr(Class.NameConst.Address)}");
                 wl($"(; dispatch {dispatch,5} ;) {Data.EmitInt32(dispatch)}");
 
                 wl($"(; fill           ;){fill}");

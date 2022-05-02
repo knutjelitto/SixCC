@@ -61,21 +61,21 @@ namespace Six.Six.Wasms
             StaticData.Size +
             RuntimeData.Size;
 
-        public WaClass NewClass(string name, Func<WaClass> create)
+        public WaClass NewClass(string name, Func<WaClass> createClass)
         {
             if (!ClassIndex.TryGetValue(name, out var clazz))
             {
-                clazz = create();
+                clazz = createClass();
                 ClassIndex.Add(name, clazz);
             }
             return clazz;
         }
 
-        public WaFunction NewFunction(string name, Func<WaFunction> create)
+        public WaFunction NewFunction(string name, Func<WaFunction> createFunction)
         {
             if (!FunctionIndex.TryGetValue(name, out var function))
             {
-                function = create();
+                function = createFunction();
                 FunctionIndex.Add(name, function);
             }
             return function;
@@ -240,6 +240,8 @@ namespace Six.Six.Wasms
                 wl("(;-----;)");
                 emit(Insn.Local.Get(0));            // [clazz]
                 emit(Insn.U32.Load(8));             // [clazz.size]
+                emit(Insn.U32.Const(8));            // [clazz.size headersize]
+                emit(Insn.U32.Add);                 // [size]
                 emit(Insn.Call(Module.CoreAlloc));  // [object]
                 emit(Insn.Local.Tee(1));            // [object]
                 emit(Insn.Local.Get(0));            // [object clazz]

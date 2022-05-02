@@ -9,7 +9,7 @@ namespace Six.Six.Sema
     {
         public readonly FieldList Fields = new();
         public readonly SlotList Slots = new();
-        public readonly InterFaceList InterFaces = new();
+        public readonly InterfaceList Interfaces = new();
 
         public ClassLayout(Decl.Classy classy)
         {
@@ -21,7 +21,10 @@ namespace Six.Six.Sema
         public Decl.Classy Classy { get; }
         public Module Module => Classy.Block.Module;
         public Resolver Resolver => Module.Resolver;
-        public TypeResolver TypeResolver => Module.Resolver.T;
+        public TypeResolver T => Resolver.T;
+
+        public IEnumerable<Decl.Field> StaticFields => Fields.Where(f => f.IsStatic);
+        public IEnumerable<Decl.Field> MemberFields => Fields.Where(f => !f.IsStatic);
 
         public uint MetaSize { get; private set; } = uint.MaxValue;
 
@@ -35,12 +38,9 @@ namespace Six.Six.Sema
 
         private void MakeFields()
         {
-            var fieldOffset = WasmType.Addr.Size + WasmType.I32.Size;
-
             if (Classy.Extends is Decl.Class extended)
             {
                 Fields.AddRange(extended.Layout.Fields);
-                fieldOffset = extended.Layout.MetaSize;
             }
 
             foreach (var field in Classy.Fields)
@@ -48,15 +48,24 @@ namespace Six.Six.Sema
                 Fields.Add(field);
             }
 
-            foreach (var field in Fields)
+            var fieldOffset = 0u;
+
+            foreach (var field in MemberFields)
             {
-                var builtin = TypeResolver.Lower(field.Type);
+                var builtin = T.Lower(field.Type);
 
                 fieldOffset = builtin.MemAlign(fieldOffset);
 
                 field.Offset = fieldOffset;
 
                 fieldOffset = builtin.MemAlign(fieldOffset + 1);
+
+                field.Size = fieldOffset - field.Offset;
+
+                if (field.Size == 1)
+                {
+                    Assert(true);
+                }
             }
 
             MetaSize = fieldOffset;
@@ -85,12 +94,12 @@ namespace Six.Six.Sema
         {
             foreach (var iface in Classy.Closure())
             {
-                InterFaces.Add(Classy, iface);
+                Interfaces.Add(Classy, iface);
             }
 
-            foreach (var interFace in InterFaces)
+            foreach (var interFace in Interfaces)
             {
-                interFace.Slots.AddRange(interFace.Interface.Layout.Slots);
+                interFace.Slots.AddRange(interFace.Iface.Layout.Slots);
 
                 foreach (var islot in interFace.Slots.ToList())
                 {
@@ -113,7 +122,7 @@ namespace Six.Six.Sema
             {
                 if (slot.Funcy.IsAbstract)
                 {
-                    var interFaceSlots = InterFaces
+                    var interFaceSlots = Interfaces
                         .SelectMany(iface => iface.Slots)
                         .Where(islot => islot.Funcy.IsConcrete && islot.Funcy.Name == slot.Funcy.Name)
                         .ToList();
@@ -126,21 +135,21 @@ namespace Six.Six.Sema
             }
         }
 
-        public class InterFace
+        public class Interface
         {
             public readonly SlotList Slots = new();
 
-            public InterFace(Decl.Classy classy, Decl.Interface iface)
+            public Interface(Decl.Classy classy, Decl.Interface iface)
             {
                 Classy = classy;
-                Interface = iface;
+                Iface = iface;
             }
 
             public Decl.Classy Classy { get; }
-            public Decl.Interface Interface { get; }
-            public string Name => Interface.Name;
+            public Decl.Interface Iface { get; }
+            public string Name => Iface.Name;
 
-            public string FullName => $"{Classy.FullName}@{Interface.FullName}";
+            public string FullName => $"{Classy.FullName}@{Iface.FullName}";
 
             public override string ToString()
             {
@@ -148,29 +157,19 @@ namespace Six.Six.Sema
             }
         }
 
-        public class InterFaceList : IReadOnlyList<InterFace>
+        public class InterfaceList : IReadOnlyList<Interface>
         {
-            public List<InterFace> IFaces = new();
+            public List<Interface> IFaces = new();
 
             public void Add(Decl.Classy classy, Decl.Interface @interface)
             {
-                IFaces.Add(new InterFace(classy, @interface));
+                IFaces.Add(new Interface(classy, @interface));
             }
 
-            public InterFace this[int index] => IFaces[index];
+            public Interface this[int index] => IFaces[index];
             public int Count => IFaces.Count;
-            public IEnumerator<InterFace> GetEnumerator() => IFaces.GetEnumerator();
+            public IEnumerator<Interface> GetEnumerator() => IFaces.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)IFaces).GetEnumerator();
-        }
-
-        public class LField
-        {
-            public LField(Decl.Field field)
-            {
-                Field = field;
-            }
-
-            public Decl.Field Field { get; }
         }
 
         public class FieldList : IReadOnlyList<Decl.Field>

@@ -4,27 +4,56 @@ namespace Six.Six.Wasms
 {
     public class WaRef
     {
-        public static unsafe readonly uint HeadSize = (uint)sizeof(Layout);
-
         public struct Layout
         {
+            public readonly uint Heap;
             public readonly WaPtr ClassPtr;
-            public uint DispatchIndex;
+            public readonly uint DispatchIndex;
+            public readonly uint Size;
         }
 
-        public WaRef(WaPtr headPtr)
+        public static unsafe readonly uint HeaderSize = (uint)sizeof(Layout);
+
+        public WaRef(WaPtr headerPtr)
         {
-            Assert(headPtr.IsValid);
+            Assert(HeaderSize == 16);
+            Assert(headerPtr.IsValid);
 
-            HeadPtr = headPtr;
-
-            Assert(HeadSize == 8);
+            Header = headerPtr;
+            Payload = Header.Offset(HeaderSize);
         }
 
-        public WaPtr HeadPtr { get; }
+        public static WaRef FromHeaderAddress(uint headerAddress)
+        {
+            return new WaRef(WaPtr.Null.Offset(headerAddress));
+        }
 
-        public WaPtr PayloadPtr => HeadPtr.Offset(HeadSize);
+        public WaPtr Header { get; }
+        public static uint HeadOffset => unchecked((uint)0);
 
-        public string Comment => $"(; {HeadPtr} ;)";
+        public WaPtr Payload { get; }
+        public static uint PayloadOffset => HeaderSize;
+
+        public static uint OffsetOf(uint offset)
+        {
+            return PayloadOffset + offset;
+        }
+
+        public static uint OffsetOfDispatch()
+        {
+            return HeadOffset + 8;
+        }
+
+        public static uint OffsetOfSize()
+        {
+            return HeadOffset + 12;
+        }
+
+        public uint this[uint offset] => PayloadOffset + offset;
+
+        public override string ToString()
+        {
+            return $"ref [{Header.Address},{Payload.Address}]";
+        }
     }
 }

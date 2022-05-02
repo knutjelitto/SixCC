@@ -94,6 +94,7 @@ namespace Six.Six.Sema
                         var classy = classBlock.Classy;
 
                         var reference = new SelfReference(classy);
+                        arguments = Enumerable.Repeat(reference, 1).Concat(arguments).ToList();
 
                         if (funcy.IsDynamic)
                         {
@@ -104,12 +105,11 @@ namespace Six.Six.Sema
                                 Assert(false);
                                 throw new InvalidOperationException();
                             }
-
-                            return new CallDynamicFunction(funcy, reference, (uint)slot.Index, arguments);
+                            return new CallDynamicFunction(funcy, (uint)slot.Index, arguments);
                         }
                         else
                         {
-                            return new CallMemberFunction(funcy, reference, arguments);
+                            return new CallMemberFunction(funcy, arguments);
                         }
                     }
                     else
@@ -129,10 +129,10 @@ namespace Six.Six.Sema
         public sealed record CallStaticFunction(Decl.Funcy Funcy, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallMemberFunction(Decl.Funcy Funcy, Expr Reference, List<Expr> Arguments)
+        public sealed record CallMemberFunction(Decl.Funcy Funcy, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
-        public sealed record CallDynamicFunction(Decl.Funcy Funcy, Expr Reference, uint SlotNo, List<Expr> Arguments)
+        public sealed record CallDynamicFunction(Decl.Funcy Funcy, uint SlotNo, List<Expr> Arguments)
             : CallFunction(Funcy, Arguments);
 
         [DebuggerDisplay("{Dbg()}")]
@@ -166,16 +166,6 @@ namespace Six.Six.Sema
             {
                 return $"{Reference}.{Field}";
             }
-        }
-
-        public sealed record CallMember(Decl.Classy Classy, Decl.Function Function, Expr Make, List<Expr> Arguments)
-            : Expr
-        {
-            public CallMember(Decl.Classy classy, Decl.Function function, Expr make, params Expr[] arguments)
-                : this(classy, function, make, arguments.ToList())
-            {
-            }
-            public Type Type => Function.ResultType;
         }
 
         public sealed record CallInfixMember(Decl.Classy Classy, Decl.Function Function, Expr Arg1, Expr Arg2)

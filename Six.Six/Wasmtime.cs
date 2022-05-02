@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Six.Six.Wasms;
+
 using Wasmtime;
 
 using S = Six.Six.Sema;
@@ -42,12 +44,14 @@ namespace Six.Six
 
             linker.DefineFunction<int>("six.core.RT", "Print", (ptr) =>
             {
-                Assert(true);
+                Assert(memory != null);
 
                 if (memory != null)
                 {
-                    var length = memory.ReadInt32(store, ptr + 8);
-                    var message = memory.ReadString(store, ptr + 12, length);
+                    var str = WaRef.FromHeaderAddress((uint)ptr);
+                    var length = memory.ReadInt32(store, ptr + (int)str[0]);
+                    Assert(length == 5);
+                    var message = memory.ReadString(store, ptr + (int)str[4], length);
 
                     Console.Write(message);
                 }

@@ -120,18 +120,18 @@ namespace Six.Six.Instructions
             }
         }
 
-        public void CreateInitCtor(WaFunction function, Decl.Classy clazz)
+        public void CreateInitCtor(WaFunction function, Decl.Classy classy)
         {
             // move all field initializations into init@ctor
 
             using (Into(function.Instructions))
             {
                 var get = Insn.Local.Get(0);
-                foreach (var field in clazz.Members.Fields)
+                foreach (var field in classy.Members.Fields)
                 {
                     Add(get);
                     Walk(field.Value);
-                    Add(Lower(field.Type).Store(field.Offset));
+                    Add(Lower(field.Type).Store(WaRef.OffsetOf(field.Offset)));
                 }
                 Add(Insn.Return);
             }
@@ -184,7 +184,7 @@ namespace Six.Six.Instructions
         private void Build(Decl.LetVar decl)
         {
             Assert(false);
-            throw new InvalidOperationException();
+            // NOP - handled elsewhere
         }
 
         private void Build(Decl.Funcy decl)
@@ -252,7 +252,7 @@ namespace Six.Six.Instructions
                 case Expr.SelectField select:
                     Walk(select.Reference);
                     Walk(stmt.Right);
-                    Add(Lower(select.Field.Type).Store(select.Field.Offset));
+                    Add(Lower(select.Field.Type).Store(WaRef.OffsetOf(select.Field.Offset)));
                     return;
                 case Expr.GlobalReference globalReference:
                     Walk(stmt.Right);
@@ -280,14 +280,14 @@ namespace Six.Six.Instructions
         private void Build(Expr.If expr)
         {
             var condition = Nested(expr.Condition);
-            var then = Nested(expr.Then);
-            var @else = Nested(expr.Else);
+            var thenExpr = Nested(expr.Then);
+            var elseExpr = Nested(expr.Else);
 
             var type = Lower(expr.Then.Type).Wasm;
             var type2 = Lower(expr.Else.Type).Wasm;
             Assert(type == type2);
 
-            Add(new WiIfBlock(Module, type, condition, then, @else));
+            Add(new WiIfBlock(Module, type, condition, thenExpr, elseExpr));
         }
 
         private void Build(Expr.Reference reference)
@@ -360,11 +360,11 @@ namespace Six.Six.Instructions
             throw new NotImplementedException();
         }
 
-        private void BuildReference(Decl.Field decl)
+        private void BuildReference(Decl.Field field)
         {
-            if (decl.IsStatic)
+            if (field.IsStatic)
             {
-                var staticField = Module.FindStaticField(decl.StaticName);
+                var staticField = Module.FindStaticField(field.StaticName);
 
                 Add(new WiGetStaticField(staticField));
             }
@@ -372,7 +372,7 @@ namespace Six.Six.Instructions
             {
                 Add(Insn.Local.Get(0));
 
-                Add(Lower(decl.Type).Load(decl.Offset));
+                Add(Lower(field.Type).Load(WaRef.OffsetOf(field.Offset)));
             }
         }
 
@@ -409,27 +409,28 @@ namespace Six.Six.Instructions
 
         private void Build(Expr.CallInfixMember expr)
         {
-            if (expr.Function.IsNative)
-            {
-                Walk(Resolve(expr.Classy).Method(expr.Function.Name, 2)(new List<Expr> { expr.Arg1, expr.Arg2 }));
-            }
-            else
-            {
-                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg1, expr.Arg2);
-                Walk(callMember);
-            }
+            Build(expr.Classy, expr.Function, expr.Arg1, expr.Arg2);
         }
 
         private void Build(Expr.CallPrefixMember expr)
         {
-            if (expr.Function.IsNative)
+            Build(expr.Classy, expr.Function, expr.Arg);
+        }
+
+        private void Build(Decl.Classy classy, Decl.Function function, params Expr[] args)
+        {
+            if (function.IsNative)
             {
-                Walk(Resolve(expr.Classy).Method(expr.Function.Name, 1)(new List<Expr> { expr.Arg }));
+                Walk(Resolve(classy).Method(function.Name, args.Length)(args.ToList()));
             }
             else
             {
-                var callMember = new Expr.CallMember(expr.Classy, expr.Function, expr.Arg);
-                Walk(callMember);
+                foreach (var arg in args)
+                {
+                    Walk(arg);
+                }
+
+                Add(Insn.Call(function.FullName));
             }
         }
 
@@ -470,8 +471,6 @@ namespace Six.Six.Instructions
                 throw new NotImplementedException();
             }
 
-            Walk(expr.Reference);
-
             foreach (var argument in expr.Arguments)
             {
                 Walk(argument);
@@ -480,38 +479,15 @@ namespace Six.Six.Instructions
             Add(Insn.Call(expr.Funcy.FullName));
         }
 
-        private void Build(Expr.CallMember expr)
-        {
-            if (expr.Function.IsNative)
-            {
-                Walk(expr.Make);
-
-                Walk(Resolve(expr.Classy).Method(expr.Function.Name, expr.Arguments.Count)(expr.Arguments));
-            }
-            else
-            {
-                Walk(expr.Make);
-
-                foreach (var arg in expr.Arguments)
-                {
-                    Walk(arg);
-                }
-
-                Add(Insn.Call(expr.Function.FullName));
-            }
-        }
-
         private void Build(Expr.CallDynamicFunction expr)
         {
-            Walk(expr.Reference);
-         
             foreach (var argument in expr.Arguments)
             {
                 Walk(argument);
             }
 
             Add(Insn.Local.Get(0));
-            Add(Insn.U32.Load(4));
+            Add(Insn.U32.Load(WaRef.OffsetOfDispatch()));
             Add(Insn.U32.Const(expr.SlotNo));
             Add(Insn.U32.Add);
             Add(Insn.CallIndirect(Sema.Module.DispatchTableName, TypeFor(expr.Funcy.CallableType)));
@@ -521,7 +497,7 @@ namespace Six.Six.Instructions
         {
             Walk(expr.Reference);
 
-            Add(Lower(expr.Field.Type).Load(expr.Field.Offset));
+            Add(Lower(expr.Field.Type).Load(WaRef.OffsetOf(expr.Field.Offset)));
         }
 
         private void Build(Primitive.Binop primitive)

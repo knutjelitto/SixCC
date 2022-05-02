@@ -1,8 +1,11 @@
 ﻿using Six.Six.Sema;
 using Six.Six.Wasms;
 using Six.Six.Wasms.Instructions;
-using System;
+
 using Type = Six.Six.Sema.Type;
+
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0051 // Remove unused private members
 
 namespace Six.Six.Instructions
 {
@@ -184,28 +187,23 @@ namespace Six.Six.Instructions
                 clazz.AddBaseClass(WaClass.From(Module, decl.Extends.FullName));
             }
 
-            var count = 0;
-
             foreach (var innerClass in decl.Members.Classes)
             {
                 var inner = CreateClass(innerClass);
 
                 clazz.AddClass(inner);
-
-                count++;
             }
 
-            foreach (var field in decl.Fields)
+
+            foreach (var field in decl.Fields.Where(f => f.IsStatic))
             {
-                if (field.IsStatic)
-                {
-                    var staticField = clazz.AddStaticField(new WaStaticField(clazz, field.StaticName, Instructeur.Lower(field.Type).Wasm));
-                    Instructeur.Walk(staticField.Instructions, field.Value);
-                }
-                else
-                {
-                    clazz.AddMemberField(new WaMemberField(clazz, field.Name, field.Offset, Instructeur.Lower(field.Type).Wasm));
-                }
+                var staticField = clazz.AddStaticField(new WaStaticField(clazz, field.StaticName, Instructeur.Lower(field.Type).Wasm));
+                Instructeur.Walk(staticField.Instructions, field.Value);
+            }
+
+            foreach (var field in decl.Layout.MemberFields)
+            {
+                clazz.AddMemberField(new WaMemberField(clazz, field.Name, field.Offset, field.Size, Instructeur.Lower(field.Type).Wasm));
             }
 
             foreach (var funcy in decl.Members.Functions)
@@ -213,8 +211,6 @@ namespace Six.Six.Instructions
                 var function = CreateFunction(funcy);
 
                 clazz.AddFunction(function);
-
-                count++;
             }
 
             CreateClassDispatch(clazz, decl);

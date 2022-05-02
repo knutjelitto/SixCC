@@ -30,6 +30,13 @@ namespace Six.Six.Wasms
             return EmitBytes(bytes);
         }
 
+        public static string EmitPtr(WaPtr value)
+        {
+            var bytes = BitConverter.GetBytes(value.Address);
+            Assert(bytes.Length == 4);
+            return EmitBytes(bytes);
+        }
+
         public static string EmitUInt32(uint value)
         {
             var bytes = BitConverter.GetBytes(value);

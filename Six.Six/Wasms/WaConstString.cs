@@ -36,13 +36,17 @@ namespace Six.Six.Wasms
 
         public void Emit()
         {
+            var meta = StringData.Module.StringClass;
+
+            var dispatch = (uint)meta.Dispatches.Index;
+
             var missing = NextAddress - Address - Size;
             var fill = missing > 0 ? $" {EmitZeros(missing)}" : "";
 
-            var classAddress = StringData.Module.StringClass.RuntimeType.Address.Address;
-            var classDispatch = (uint)StringData.Module.StringClass.Dispatches.Index;
+            var classAddress = meta.RuntimeType.Address.Address;
 
-            wl($"(; {Address} ;) {EmitUInt32(classAddress)} {EmitUInt32(classDispatch)} {EmitUInt32(Count)} {EmitUtf8(Bytes)}{fill}");
+
+            wl($"(; {Address} ;) {EmitPtr(meta.RuntimeType.Address)} {EmitUInt32(dispatch)} {EmitUInt32(Count)} {EmitUtf8(Bytes)}{fill}");
         }
     }
 }

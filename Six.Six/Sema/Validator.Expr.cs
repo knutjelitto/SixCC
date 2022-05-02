@@ -45,7 +45,6 @@ namespace Six.Six.Sema
 
         private void Expr(Expr.CallDynamicFunction expr)
         {
-            Walk(expr.Reference);
             Walk(expr.Arguments);
 
             Assert(slip);
@@ -53,7 +52,6 @@ namespace Six.Six.Sema
 
         private void Expr(Expr.CallMemberFunction expr)
         {
-            Walk(expr.Reference);
             Walk(expr.Arguments);
 
             Assert(slip);
@@ -62,14 +60,6 @@ namespace Six.Six.Sema
         private void Expr(Expr.CallIndirect expr)
         {
             Walk(expr.Value);
-            Walk(expr.Arguments);
-
-            Assert(slip);
-        }
-
-        private void Expr(Expr.CallMember expr)
-        {
-            Walk(expr.Make);
             Walk(expr.Arguments);
 
             Assert(slip);

@@ -1,28 +1,29 @@
 ﻿using Six.Runtime;
 
-using static Six.Six.Wasms.WasmData;
-
 namespace Six.Six.Wasms
 {
     public class WaMemberFieldList : WaListOf<WaMemberField>
     {
-        public WaMemberFieldList(IWithWriter withWriter)
-            : base(withWriter)
+        public WaMemberFieldList(WaClass @class)
+            : base(@class)
         {
+            Class = @class;
         }
 
+        public WaClass Class { get; }
         public uint Size { get; set; } = uint.MaxValue;
 
         public override void Prepare()
         {
-            uint offset = 0;
+            Size = 0;
 
-            foreach (var field in this)
+            if (Count > 0)
             {
-                Assert(field.Offset >= 0);
-            }
+                Assert(this[0].Offset == 0);
 
-            Size = offset;
+                var last = this[Count - 1];
+                Size = last.Offset + last.Size;
+            }
         }
     }
 

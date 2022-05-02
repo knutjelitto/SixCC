@@ -29,9 +29,9 @@
                     {
                         if (fromClassy is Decl.Class clazz)
                         {
-                            foreach (var x in clazz.Layout.InterFaces)
+                            foreach (var x in clazz.Layout.Interfaces)
                             {
-                                if (ReferenceEquals(iface, x.Interface))
+                                if (ReferenceEquals(iface, x.Iface))
                                 {
                                     return true;
                                 }

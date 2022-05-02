@@ -1,5 +1,22 @@
 namespace six.core.tests;
 
+class X1
+{
+    let int x1 = 1;
+}
+
+class X2 : X1
+{
+    let int x2 = 2;
+}
+
+class X3: X2
+{
+    let int x3 = 3;
+
+    int sum() => x1 + x2 + x3;
+}
+
 shared class Base
 {
     shared static let int ccc = 12;
@@ -48,6 +65,10 @@ shared class Derived : Abstract
         y = s32.min(ccc, one);
 
         var f = int.min;
+    }
+
+    void check3()
+    {
     }
 
     shared override int c => a;

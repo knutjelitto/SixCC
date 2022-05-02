@@ -124,5 +124,10 @@ namespace Six.Six.Wasms
                 Functions[i].Emit();
             }
         }
+
+        public override string ToString()
+        {
+            return $"class {Name}";
+        }
     }
 }
