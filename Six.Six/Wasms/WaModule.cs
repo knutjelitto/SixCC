@@ -71,6 +71,11 @@ namespace Six.Six.Wasms
             return clazz;
         }
 
+        public WaClass FindClass(string name)
+        {
+            return ClassIndex[name];
+        }
+
         public WaFunction NewFunction(string name, Func<WaFunction> createFunction)
         {
             if (!FunctionIndex.TryGetValue(name, out var function))
@@ -105,11 +110,6 @@ namespace Six.Six.Wasms
             Classes.Add(clazz);
 
             return clazz;
-        }
-
-        public WaClass FindClass(string name)
-        {
-            return ClassIndex[name];
         }
 
         public WaRuntime AddType(WaRuntime type)

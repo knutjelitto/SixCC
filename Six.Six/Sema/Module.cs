@@ -18,6 +18,7 @@ namespace Six.Six.Sema
         public static string ModuleCtor => "module@initialize";
         public static string DefaultCtor => "ctor@default";
         public static string InitCtor => "ctor@initialize";
+        public static string GetClass => "get@class";
         public static string MetaClassName => $"{MetaNamespace}.Class";
         public static string StringClassName => $"{CoreNamespace}.String";
         public static string ModuleFunctionsTableName => $"{CoreNamespace}.functions";

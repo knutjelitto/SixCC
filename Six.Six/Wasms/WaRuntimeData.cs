@@ -9,6 +9,7 @@ namespace Six.Six.Wasms
     public class WaRuntimeData : WithWriter
     {
         private List<WaRuntime> runtimes = new();
+        private Dictionary<string, WaRuntime> index = new();
 
         public WaRuntimeData(WaModule module, string memoryName)
             : base(module.Writer)
@@ -26,6 +27,12 @@ namespace Six.Six.Wasms
         public void Add(WaRuntime runtime)
         {
             runtimes.Add(runtime);
+            index.Add(runtime.Class.Name, runtime);
+        }
+
+        public WaRuntime Get(string className)
+        {
+            return index[className];
         }
 
         public void Prepare()

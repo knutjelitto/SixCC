@@ -137,6 +137,17 @@ namespace Six.Six.Instructions
             }
         }
 
+        public void CreateGetClass(WaFunction function, Decl.Classy classy)
+        {
+            var klass = Module.FindClass(classy.FullName);
+
+            using (Into(function.Instructions))
+            {
+                Add(new WiGetRuntimeType(klass));
+                Add(Insn.Return);
+            }
+        }
+
         public void CreateDefaultCtor(WaFunction function, Decl.Classy clazz)
         {
             using (Into(function.Instructions))

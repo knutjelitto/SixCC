@@ -129,5 +129,10 @@ namespace Six.Six.Wasms
         {
             return $"class {Name}";
         }
+
+        public void EmitDispatch()
+        {
+
+        }
     }
 }

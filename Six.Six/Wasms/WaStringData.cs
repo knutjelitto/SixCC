@@ -45,7 +45,7 @@ namespace Six.Six.Wasms
 
                 constString.Address = WaPtr.Null.Offset(offset);
 
-                offset = Align.Align16(offset + WaRef.HeaderSize + constString.Count);
+                offset = Align.Align16(offset + WaRef.HeaderSize + constString.PayloadSize);
 
                 constString.NextAddress = WaPtr.Null.Offset(offset);
 

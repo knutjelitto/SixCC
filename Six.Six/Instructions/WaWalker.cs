@@ -1,4 +1,5 @@
 ﻿using Six.Six.Sema;
+using Six.Six.Types;
 using Six.Six.Wasms;
 using Six.Six.Wasms.Instructions;
 
@@ -158,17 +159,32 @@ namespace Six.Six.Instructions
             return function;
         }
 
+        private WaFunction CreateGetClass(Decl.Classy decl)
+        {
+            var name = $"{decl.FullName}.{Sema.Module.GetClass}";
+
+            var function = WaFunction.From(Module, name);
+
+            var type = Instructeur.Lower(Module.SemaModule.Builtins.Address).Wasm;
+
+            function.AddResult(new WaResult(type));
+
+            Instructeur.CreateGetClass(function, decl);
+
+            return function;
+        }
+
         private WaClass CreateClass(Decl.Classy decl)
         {
             var clazz = WaClass.From(Module, decl.FullName);
+
+            clazz.AddFunction(CreateGetClass(decl));
 
             if (decl is Decl.Class klass)
             {
                 if (!klass.IsNative)
                 {
-                    var function = CreateInitCtor(klass);
-
-                    clazz.AddFunction(function);
+                    clazz.AddFunction(CreateInitCtor(decl));
                 }
 #if false
                 var needDefaultCtor = decl.Members.Functions.All(f => f.Name != Sema.Module.DefaultCtor);

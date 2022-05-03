@@ -6,7 +6,12 @@ namespace Six.Six.Wasms
     public class WaRuntime : WithWriter, Wamber
     {
         public static readonly uint HeaderSize = WasmType.I32.Size +  WasmType.Addr.Size + WasmType.I32.Size + WasmType.I32.Size;
-        public static readonly uint PayloadSize = WasmType.Addr.Size + WasmType.I32.Size;
+
+        public struct PayloadLayout
+        {
+            public readonly WaPtr Name;
+            public readonly uint Dispatch;
+        }
 
         public WaRuntime(WaClass clazz)
             : base(clazz.Writer)
@@ -20,7 +25,8 @@ namespace Six.Six.Wasms
 
         public WaPtr Address { get; set; } = WaPtr.Invalid;
         public WaPtr NextAddress { get; set; } = WaPtr.Invalid;
-        public WaPtr Payload => Address.Offset(HeaderSize);
+
+        public unsafe uint PayloadSize => (uint)sizeof(PayloadLayout);
         public uint Size => HeaderSize + PayloadSize;
 
         public void Prepare()
@@ -54,9 +60,7 @@ namespace Six.Six.Wasms
                 wl($"(; {reference.Payload} ;)");
                 wl($"(; name           ;) {Data.EmitPtr(Class.NameConst.Address)}");
                 wl($"(; dispatch {dispatch,5} ;) {Data.EmitInt32(dispatch)}");
-
                 wl($"(; align-fill     ;){fill}");
-
             });
         }
     }
