@@ -2,7 +2,7 @@
 
 namespace Six.Six.Wasms
 {
-    public class WaRef
+    public sealed class WaRef
     {
         public struct Layout
         {
@@ -14,7 +14,7 @@ namespace Six.Six.Wasms
 
         public static unsafe readonly uint HeaderSize = (uint)sizeof(Layout);
 
-        public WaRef(WaPtr headerPtr)
+        private WaRef(WaPtr headerPtr)
         {
             Assert(HeaderSize == 16);
             Assert(headerPtr.IsValid);
@@ -26,6 +26,11 @@ namespace Six.Six.Wasms
         public static WaRef FromHeaderAddress(uint headerAddress)
         {
             return new WaRef(WaPtr.Null.Offset(headerAddress));
+        }
+
+        public static WaRef FromHeaderAddress(WaPtr headerPtr)
+        {
+            return new WaRef(headerPtr);
         }
 
         public WaPtr Header { get; }

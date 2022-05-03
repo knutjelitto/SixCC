@@ -38,7 +38,7 @@ namespace Six.Six.Wasms
 
         public void Emit()
         {
-            var reference = new WaRef(Address);
+            var reference = WaRef.FromHeaderAddress(Address);
 
             Assert(WaRef.HeaderSize == HeaderSize);
 
