@@ -6,10 +6,10 @@ namespace Six.Six.Wasms
     {
         public struct Layout
         {
-            public readonly uint Heap;
-            public readonly WaPtr ClassPtr;
-            public readonly uint DispatchIndex;
-            public readonly uint Size;
+            /* + 0 */ public readonly uint Heap;
+            /* + 4 */ public readonly WaPtr ClassPtr;
+            /* + 8 */ public readonly uint DispatchIndex;
+            /* +12 */ public readonly uint Size;
         }
 
         public static unsafe readonly uint HeaderSize = (uint)sizeof(Layout);
@@ -44,15 +44,13 @@ namespace Six.Six.Wasms
             return PayloadOffset + offset;
         }
 
-        public static uint OffsetOfDispatch()
-        {
-            return HeadOffset + 8;
-        }
+        public static uint OffsetOfDummy => HeadOffset + 0;
 
-        public static uint OffsetOfSize()
-        {
-            return HeadOffset + 12;
-        }
+        public static uint OffsetOfClass => HeadOffset + 4;
+
+        public static uint OffsetOfDispatch => HeadOffset + 8;
+
+        public static uint OffsetOfSize => HeadOffset + 12;
 
         public static uint OffsetOfPayload()
         {

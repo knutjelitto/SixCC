@@ -98,7 +98,7 @@ namespace Six.Six.Sema
 
                         if (funcy.IsDynamic)
                         {
-                            var slot = classy.Slot(funcy);
+                            var slot = classy.Slot(funcy.Name);
 
                             if (slot == null)
                             {

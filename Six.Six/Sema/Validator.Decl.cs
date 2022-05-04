@@ -47,14 +47,14 @@ namespace Six.Six.Sema
             {
                 foreach (var slot in decl.Layout.Slots)
                 {
-                    if (slot.Funcy.IsConcrete)
+                    if (slot.IsConcrete)
                     {
                         continue;
                     }
 
                     var subject = $"the {Names.Attr.Abstract} member";
 
-                    Add(Errors.AbstractNotImplemented(decl, slot.Funcy, subject));
+                    Add(Errors.AbstractNotImplemented(decl, slot.Name, subject));
                 }
             }
 
@@ -82,14 +82,14 @@ namespace Six.Six.Sema
             {
                 foreach (var slot in decl.Layout.Slots)
                 {
-                    if (slot.Funcy.IsConcrete)
+                    if (slot.IsConcrete)
                     {
                         continue;
                     }
 
                     var subject = $"the {Names.Attr.Abstract} member";
 
-                    Add(Errors.AbstractNotImplemented(decl, slot.Funcy, subject));
+                    Add(Errors.AbstractNotImplemented(decl, slot.Name, subject));
                 }
             }
 

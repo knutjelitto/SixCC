@@ -238,7 +238,7 @@ namespace Six.Six.Instructions
         {
             foreach (var slot in decl.Layout.Slots)
             {
-                clazz.Dispatches.Add(new WaDispatch(clazz, slot.Funcy.FullName));
+                clazz.Dispatches.Add(new WaDispatch(clazz, slot.FullName));
             }
         }
     }

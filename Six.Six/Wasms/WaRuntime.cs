@@ -9,8 +9,9 @@ namespace Six.Six.Wasms
 
         public struct PayloadLayout
         {
-            public readonly WaPtr Name;
-            public readonly uint Dispatch;
+            /* + 0 */ public readonly WaPtr Name;
+            /* + 4 */ public readonly uint Size;
+            /* + 8 */ public readonly uint Dispatch;
         }
 
         public WaRuntime(WaClass clazz)
@@ -53,12 +54,13 @@ namespace Six.Six.Wasms
                 var fill = missing > 0 ? $" {Data.EmitZeros(missing)}" : "";
 
                 wl($"(; {reference.Header} ;)");
-                wl($"(; heap           ;) {Data.EmitInt32(-1)}");
-                wl($"(; clazz          ;) {Data.EmitPtr(meta.RuntimeType.Address)}");
+                wl($"(; ???            ;) {Data.EmitInt32(-1)}");
+                wl($"(; object-id      ;) {Data.EmitPtr(meta.RuntimeType.Address)}");
                 wl($"(; clazz-dispatch ;) {Data.EmitInt32(meta.Dispatches.Index)}");
-                wl($"(; size           ;) {Data.EmitUInt32(Class.FieldsSize)}");
+                wl($"(; payload-size   ;) {Data.EmitUInt32(PayloadSize)}");
                 wl($"(; {reference.Payload} ;)");
                 wl($"(; name           ;) {Data.EmitPtr(Class.NameConst.Address)}");
+                wl($"(; size           ;) {Data.EmitUInt32(Class.FieldsSize)}");
                 wl($"(; dispatch {dispatch,5} ;) {Data.EmitInt32(dispatch)}");
                 wl($"(; align-fill     ;){fill}");
             });

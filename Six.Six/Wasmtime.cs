@@ -49,7 +49,7 @@ namespace Six.Six
                 if (memory != null)
                 {
                     var str = WaRef.FromHeaderAddress((uint)ptr);
-                    var length = memory.ReadInt32(store, ptr + (int)WaRef.OffsetOfSize());
+                    var length = memory.ReadInt32(store, ptr + (int)WaRef.OffsetOfSize);
                     Assert(length == 5);
                     var message = memory.ReadString(store, ptr + (int)WaRef.OffsetOfPayload(), length);
 

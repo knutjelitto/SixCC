@@ -498,7 +498,7 @@ namespace Six.Six.Instructions
             }
 
             Add(Insn.Local.Get(0));
-            Add(Insn.U32.Load(WaRef.OffsetOfDispatch()));
+            Add(Insn.U32.Load(WaRef.OffsetOfDispatch));
             Add(Insn.U32.Const(expr.SlotNo));
             Add(Insn.U32.Add);
             Add(Insn.CallIndirect(Sema.Module.DispatchTableName, TypeFor(expr.Funcy.CallableType)));

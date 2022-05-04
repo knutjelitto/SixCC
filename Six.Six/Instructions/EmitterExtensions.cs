@@ -22,9 +22,9 @@ namespace Six.Six.Instructions
             }
         }
 
-        public static ClassLayout.DispatchSlot? Slot(this Decl.Classy classy, Decl.Funcy funcy)
+        public static ClassLayout.Slot? Slot(this Decl.Classy classy, string name)
         {
-            return classy.Layout.Slots.Where(s => s.Funcy.Name == funcy.Name).SingleOrDefault();
+            return classy.Layout.Slots.Where(s => s.Name == name).SingleOrDefault();
         }
     }
 }

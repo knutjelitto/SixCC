@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 
+using Six.Six.Ast;
 using Six.Six.Instructions;
 using Six.Six.Wasms;
 
@@ -73,18 +74,24 @@ namespace Six.Six.Sema
 
         private void MakeSlots()
         {
-            if (Classy.Extends is Decl.Class extended)
             {
-                Slots.AddRange(extended.Layout.Slots);
+                var name = Sema.Module.GetClass;
+                var fullName = $"{Classy.FullName}.{Sema.Module.GetClass}";
+                Slots.Add(Slot.From(0, name, fullName));
             }
 
-            bool SlotMember(Decl.Funcy f)
+            if (Classy.Extends is Decl.Class extended)
+            {
+                Slots.AddRange(extended.Layout.Slots.Skip(1));
+            }
+
+            bool IsSlotMember(Decl.Funcy f)
             {
                 return f.IsDynamic
                     || Classy is Decl.Interface && !f.IsStatic;
             }
 
-            foreach (var funcy in Classy.Members.Functions.Where(f => SlotMember(f)))
+            foreach (var funcy in Classy.Members.Functions.Where(f => IsSlotMember(f)))
             {
                 Slots.AddOrUpdate(funcy);
             }
@@ -104,8 +111,8 @@ namespace Six.Six.Sema
                 foreach (var islot in interFace.Slots.ToList())
                 {
                     var cslot = Slots
-                        .Where(s => s.Funcy.Name == islot.Funcy.Name)
-                        .Where(s => s.Funcy.IsConcrete)
+                        .Where(s => s.Name == islot.Name)
+                        .Where(s => s.IsConcrete)
                         .SingleOrDefault();
 
                     if (cslot != null)
@@ -120,11 +127,11 @@ namespace Six.Six.Sema
         {
             foreach (var slot in Slots.ToList())
             {
-                if (slot.Funcy.IsAbstract)
+                if (slot.IsAbstract)
                 {
                     var interFaceSlots = Interfaces
                         .SelectMany(iface => iface.Slots)
-                        .Where(islot => islot.Funcy.IsConcrete && islot.Funcy.Name == slot.Funcy.Name)
+                        .Where(islot => islot.IsConcrete && islot.Name == slot.Name)
                         .ToList();
 
                     if (interFaceSlots.Count == 1)
@@ -192,58 +199,78 @@ namespace Six.Six.Sema
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Fields).GetEnumerator();
         }
 
-        public class DispatchSlot
+        public class Slot
         {
-            public DispatchSlot(int index, Decl.Funcy funcy)
+            public Slot(int index, Decl.Funcy funcy)
+                : this(index, funcy.Name, funcy.FullName, funcy.IsConcrete, funcy.IsAbstract)
+            {
+            }
+
+            private Slot(int index, string name, string fullName, bool isConcrete, bool isAbstract)
             {
                 Index = index;
-                Funcy = funcy;
+                Name = name;
+                FullName = fullName;
+                IsConcrete = isConcrete;
+                IsAbstract = isAbstract;
+
             }
 
             public int Index { get; }
-            public Decl.Funcy Funcy { get; }
+
+            public string Name { get; }
+            public string FullName { get; }
+            public bool IsConcrete { get; }
+            public bool IsAbstract { get; }
+
+            public static Slot From(int index, string name, string fullName)
+            {
+                Assert(index == 0);
+                return new Slot(index, name, fullName, true, false);
+            }
+
 
             public override string ToString()
             {
-                return Funcy.FullName;
+                return FullName;
             }
         }
 
-        public class SlotList : IReadOnlyList<DispatchSlot>
+        public class SlotList : IReadOnlyList<Slot>
         {
-            public readonly List<DispatchSlot> Slots = new();
+            public readonly List<Slot> Slots = new();
 
-            public void Set(int index, DispatchSlot slot)
+            public void Set(int index, Slot slot)
             {
                 Slots[index] = slot;
             }
 
-            public void Add(DispatchSlot slot)
+            public void Add(Slot slot)
             {
                 Slots.Add(slot);
             }
 
-            public void AddRange(IEnumerable<DispatchSlot> slots)
+            public void AddRange(IEnumerable<Slot> slots)
             {
                 Slots.AddRange(slots);
             }
 
             public void AddOrUpdate(Decl.Funcy funcy)
             {
-                var already = Slots.Where(s => s.Funcy.Name == funcy.Name).FirstOrDefault();
+                var already = Slots.Where(s => s.Name == funcy.Name).FirstOrDefault();
                 if (already != null)
                 {
-                    Slots[already.Index] = new DispatchSlot(already.Index, funcy);
+                    Slots[already.Index] = new Slot(already.Index, funcy);
                 }
                 else
                 {
-                    Slots.Add(new DispatchSlot(Slots.Count, funcy));
+                    Slots.Add(new Slot(Slots.Count, funcy));
                 }
             }
 
-            public DispatchSlot this[int index] => Slots[index];
+            public Slot this[int index] => Slots[index];
             public int Count => Slots.Count;
-            public IEnumerator<DispatchSlot> GetEnumerator() => Slots.GetEnumerator();
+            public IEnumerator<Slot> GetEnumerator() => Slots.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Slots).GetEnumerator();
         }
     }

@@ -96,9 +96,9 @@ namespace Six.Six.Sema
             return new DiagnosticException(diagnostic);
         }
 
-        public DiagnosticException AbstractNotImplemented(Decl.Classy classy, Decl.Funcy funcy, string subject)
+        public DiagnosticException AbstractNotImplemented(Decl.Classy classy, string name, string subject)
         {
-            var diagnostic = new SemanticError(classy.Location, $"{subject} '{funcy.Name}' is not implemented");
+            var diagnostic = new SemanticError(classy.Location, $"{subject} '{name}' is not implemented");
 
             return new DiagnosticException(diagnostic);
         }
