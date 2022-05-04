@@ -257,7 +257,7 @@ namespace Six.Six.Wasms
                 emit(Insn.U32.Store(WaRef.OffsetOfDispatch));   // [] object.dispatch = clazz.dispatch
                 emit(Insn.Local.Get(1));                        // [object]
                 emit(Insn.Local.Get(2));                        // [object payload-size]
-                emit(Insn.U32.Store(WaRef.OffsetOfDispatch));   // [] object.dispatch = clazz.dispatch
+                emit(Insn.U32.Store(WaRef.OffsetOfSize));       // [] object.dispatch = clazz.dispatch
                 emit(Insn.Local.Get(1));                        // [object]
                 emit(Insn.Return);
                 wl("(;-----;)");
