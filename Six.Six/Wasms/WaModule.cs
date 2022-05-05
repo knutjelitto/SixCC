@@ -12,9 +12,11 @@ namespace Six.Six.Wasms
     {
         public static string GlobalFunctionsTableName => Module.ModuleFunctionsTableName;
 
-        private readonly WaFunctionList Initializers;
         private readonly WaFunctionList Functions;
         private readonly WaClassList Classes;
+        private readonly Dictionary<string, WaFunction> FunctionIndex;
+        private readonly Dictionary<string, WaClass> ClassIndex;
+
 
         private readonly WaGlobalList Globals;
         private readonly WaStringData StringData;
@@ -24,16 +26,21 @@ namespace Six.Six.Wasms
         public readonly WaDispatchTable DispatchTable;
         public readonly WaFunctionTypeList FunctionTypes;
 
-        private readonly Dictionary<string, WaFunction> FunctionIndex;
-        private readonly Dictionary<string, WaClass> ClassIndex;
+        public readonly WaFunction ModuleCtor;
+
+        public uint NextObjectId = 1;
 
         public WaModule(Module semaModule, string metaClassName, string stringClassName) : base(new Writer())
         {
             SemaModule = semaModule;
 
-            Initializers = new(this);
             Functions = new(this);
             Classes = new(this);
+
+            FunctionIndex = new();
+            ClassIndex = new();
+
+            ModuleCtor = WaFunction.From(this, $"{Sema.Module.CoreNamespace}.{Sema.Module.ModuleCtor}");
 
             Globals = new WaGlobalList(this);
             StringData = new(this, Module.DataAndHeapMemory);
@@ -42,9 +49,6 @@ namespace Six.Six.Wasms
             GlobalFunctionTable = new WaFunctionTable(this, GlobalFunctionsTableName);
             DispatchTable = new WaDispatchTable(this, Module.DispatchTableName);
             FunctionTypes = new(this);
-            
-            FunctionIndex = new();
-            ClassIndex = new();
 
             MetaClass = WaClass.From(this, metaClassName);
             StringClass = WaClass.From(this, stringClassName);
@@ -98,13 +102,6 @@ namespace Six.Six.Wasms
             return function;
         }
 
-        public WaFunction AddInitializer(WaFunction function)
-        {
-            Initializers.Add(function);
-
-            return function;
-        }
-
         public WaClass AddClass(WaClass clazz)
         {
             Classes.Add(clazz);
@@ -112,7 +109,7 @@ namespace Six.Six.Wasms
             return clazz;
         }
 
-        public WaRuntime AddType(WaRuntime type)
+        public WaRunType AddType(WaRunType type)
         {
             RuntimeData.Add(type);
 
@@ -163,13 +160,13 @@ namespace Six.Six.Wasms
             }
 
             Globals.Prepare();
-            Initializers.Prepare();
             StringData.BaseOffset = DataStart;
             StringData.Prepare();
             StaticData.BaseOffset = DataStart + StringData.Size;
             StaticData.Prepare();
             RuntimeData.BaseOffset = DataStart + StringData.Size + StaticData.Size;
             RuntimeData.Prepare();
+            ModuleCtor.Prepare();
             GlobalFunctionTable.Prepare();
             DispatchTable.Prepare();
             FunctionTypes.Prepare();
@@ -180,18 +177,17 @@ namespace Six.Six.Wasms
             wl("(module");
             indent(() =>
             {
-                Assert(Initializers.Count == 1);
-                var initializer = Initializers.Single();
-
-                wl($"(start ${initializer.Name})");
+                wl($"(start ${ModuleCtor.Name})");
                 wl();
                 EmitImports();
                 wl();
                 wl($"(memory ${Module.DataAndHeapMemory} (export \"{Module.DataAndHeapMemory}\") 16 16)");
                 wl();
-                StringData.Emit();
-                wl();
                 StaticData.Emit();
+                wl();
+                Globals.Emit();
+                wl();
+                StringData.Emit();
                 wl();
                 RuntimeData.Emit();
                 wl();
@@ -201,9 +197,7 @@ namespace Six.Six.Wasms
                 wl();
                 GlobalFunctionTable.Emit();
                 wl();
-                Globals.Emit();
-                wl();
-                initializer.Emit();
+                ModuleCtor.Emit();
                 wl();
                 EmitClassAlloc();
                 wl();

@@ -14,9 +14,13 @@ namespace Six.Six.Wasms
             Text = text;
 
             Bytes = Encoding.UTF8.GetBytes(Text);
+
+            ObjectId = Module.NextObjectId++;
         }
 
+        public uint ObjectId { get; }
         public WaStringData StringData { get; }
+        public WaModule Module => StringData.Module;
         public int Order { get; }
         public string Text { get; }
         public byte[] Bytes { get; }
@@ -25,7 +29,7 @@ namespace Six.Six.Wasms
 
         public WaPtr Address { get; set; } = WaPtr.Invalid;
         public WaPtr NextAddress { get; set; } = WaPtr.Invalid;
-        public WaPtr Payload => Address.Offset(WaRuntime.HeaderSize);
+        public WaPtr Payload => Address.Offset(WaRunType.HeaderSize);
 
         public void Prepare()
         {
@@ -44,13 +48,13 @@ namespace Six.Six.Wasms
             var fill = missing > 0 ? $" {Data.EmitZeros(missing)}" : "";
 
             wl($"(; {Address} ;)");
-            wl($"(; heap           ;) {Data.EmitInt32(-1)}");
-            wl($"(; clazz          ;) {Data.EmitPtr(meta.RuntimeType.Address)}");
-            wl($"(; clazz-dispatch ;) {Data.EmitInt32(meta.Dispatches.Index)}");
-            wl($"(; size           ;) {Data.EmitUInt32(PayloadSize)}");
+            wl($"(; ???            ;) {Data.EmitInt32(-1)}");
+            wl($"(; object-id {ObjectId,4} ;) {Data.EmitUInt32(ObjectId)}");
+            wl($"(; dispatch       ;) {Data.EmitInt32(meta.Dispatches.Index)}");
+            wl($"(; payload-size   ;) {Data.EmitUInt32(PayloadSize)}");
             wl($"(; +{WaRef.PayloadOffset,2}            ;)");
-            wl($"(; name           ;) {Data.EmitUtf8(Bytes)}");
-            wl($"(; align-fill     ;){fill}");
+            wl($"(; name      {Bytes.Length,4} ;) {Data.EmitUtf8(Bytes)}");
+            wl($"(; fill      {missing,4} ;){fill}");
             wl($"(; +{(NextAddress.Address - Address.Address),2}            ;)");
         }
     }

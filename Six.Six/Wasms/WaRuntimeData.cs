@@ -8,8 +8,8 @@ namespace Six.Six.Wasms
 {
     public class WaRuntimeData : WithWriter
     {
-        private List<WaRuntime> runtimes = new();
-        private Dictionary<string, WaRuntime> index = new();
+        private List<WaRunType> runtimes = new();
+        private Dictionary<string, WaRunType> index = new();
 
         public WaRuntimeData(WaModule module, string memoryName)
             : base(module.Writer)
@@ -24,13 +24,13 @@ namespace Six.Six.Wasms
         public uint BaseOffset { get; set; } = uint.MaxValue;
         public uint Size { get; private set; } = 0;
 
-        public void Add(WaRuntime runtime)
+        public void Add(WaRunType runtime)
         {
             runtimes.Add(runtime);
             index.Add(runtime.Class.Name, runtime);
         }
 
-        public WaRuntime Get(string className)
+        public WaRunType Get(string className)
         {
             return index[className];
         }
@@ -46,7 +46,7 @@ namespace Six.Six.Wasms
             {
                 Assert(offset == Align16(offset));
 
-                runtime.Address = WaPtr.Null.Offset(offset);
+                runtime.StartAddress = WaPtr.Null.Offset(offset);
 
                 offset = Align16(offset + runtime.Size);
 

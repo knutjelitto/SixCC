@@ -12,3 +12,17 @@ shared Address alloc(uint size)
     return Address(allocated);
 }
 
+shared void classAlloc2(RTClass classDescriptor)
+{
+    let size = classDescriptor.Size;
+    let obj = alloc(16u32 + size);
+    return;
+}
+
+class RTClass
+{
+    var uint Name = 0;
+    var uint Size = 0;
+    var uint Dispatch = 0;
+}
+

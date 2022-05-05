@@ -38,7 +38,7 @@ namespace Six.Six.Instructions
                 AddClass(classy);
             }
 
-            AddModuleInitializer();
+            DefineModuleCtor();
         }
 
         public void AddGlobal(Decl.Global glob)
@@ -60,17 +60,6 @@ namespace Six.Six.Instructions
             var clazz = CreateClass(classy);
 
             Module.AddClass(clazz);
-        }
-
-        public void AddModuleInitializer()
-        {
-            var name = $"{Sema.Module.CoreNamespace}.{Sema.Module.ModuleCtor}";
-
-            var function = WaFunction.From(Module, name);
-
-            Instructeur.CreateModuleCtor(function);
-
-            Module.AddInitializer(function);
         }
 
         private WaGlobal CreateGlobal(Decl.Global decl)
@@ -126,6 +115,12 @@ namespace Six.Six.Instructions
             }
 
             return function;
+        }
+
+
+        public void DefineModuleCtor()
+        {
+            Instructeur.CreateModuleCtor(Module.ModuleCtor);
         }
 
         private WaFunction CreateInitCtor(Decl.Classy decl)

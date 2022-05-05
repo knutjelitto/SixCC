@@ -7,9 +7,10 @@ namespace Six.Six.Wasms
         public struct Layout
         {
             /* + 0 */ public readonly uint Heap;
-            /* + 4 */ public readonly WaPtr ClassPtr;
-            /* + 8 */ public readonly uint DispatchIndex;
+            /* + 4 */ public readonly uint ObjectId;
+            /* + 8 */ public readonly uint Dispatch;
             /* +12 */ public readonly uint Size;
+            /* +16 */ // Size bytes
         }
 
         public static unsafe readonly uint HeaderSize = (uint)sizeof(Layout);
@@ -31,6 +32,11 @@ namespace Six.Six.Wasms
         public static WaRef FromHeaderAddress(WaPtr headerPtr)
         {
             return new WaRef(headerPtr);
+        }
+
+        public static WaRef FromContentAddress(WaPtr contentPtr)
+        {
+            return new WaRef(WaPtr.Null.Offset(unchecked((uint)(contentPtr.Address - HeaderSize))));
         }
 
         public WaPtr Header { get; }

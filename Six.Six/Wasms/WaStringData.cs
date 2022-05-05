@@ -57,6 +57,7 @@ namespace Six.Six.Wasms
 
         public void Emit()
         {
+            wl("(; STRINGS ;)");
             wl($"(data (memory ${MemoryName}) (offset {Insn.U32.Const(BaseOffset)})");
             indent(() =>
             {

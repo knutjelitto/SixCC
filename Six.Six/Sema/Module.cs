@@ -27,6 +27,7 @@ namespace Six.Six.Sema
         public static string Data_Start => $"{CoreNamespace}.__data_start";
         public static string Heap_Start => $"{CoreNamespace}.__heap_start";
         public static string Heap_Current => $"{CoreNamespace}.__heap_current";
+        public static string Next_Object_Id => $"{CoreNamespace}.__next_object_id";
 
         public static string Allocator => "alloc";
         public static string ClassAlloc => "classAlloc";

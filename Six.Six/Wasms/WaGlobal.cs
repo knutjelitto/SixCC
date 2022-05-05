@@ -47,6 +47,10 @@ namespace Six.Six.Wasms
                 {
                     wl($"{Insn.U32.Const(Align16(Module.HeapStart))}");
                 }
+                else if (Name == Sema.Module.Next_Object_Id)
+                {
+                    wl($"{Insn.U32.Const(Module.NextObjectId)}");
+                }
                 else
                 {
                     Instructions.Emit();

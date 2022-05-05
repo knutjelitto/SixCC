@@ -5,7 +5,7 @@ namespace Six.Six.Wasms
     public sealed class WaClass : WithWriter, Wamber
     {
         public readonly WaConstString NameConst;
-        public readonly WaRuntime RuntimeType;
+        public readonly WaRunType RuntimeType;
         public readonly WaDispatches Dispatches;
 
         private readonly WaMemberFieldList MemberFields;
@@ -23,7 +23,7 @@ namespace Six.Six.Wasms
             Name = name;
 
             NameConst = module.AddString(Name);
-            RuntimeType = module.AddType(new WaRuntime(this));
+            RuntimeType = module.AddType(new WaRunType(this));
             Dispatches = module.AddDispatches(new WaDispatches(this));
 
             MemberFields = new WaMemberFieldList(this);
@@ -128,11 +128,6 @@ namespace Six.Six.Wasms
         public override string ToString()
         {
             return $"class {Name}";
-        }
-
-        public void EmitDispatch()
-        {
-
         }
     }
 }
