@@ -13,61 +13,51 @@ namespace Six.Six.Wasms
             /* +16 */ // Size bytes
         }
 
+        public static class Head
+        {
+            public const uint Heap = 0;
+            public const uint ObjectId = 4;
+            public const uint Dispatch = 8;
+            public const uint Size = 12;
+        }
+
         public static unsafe readonly uint HeaderSize = (uint)sizeof(Layout);
 
-        private WaRef(WaPtr headerPtr)
+        private WaRef(WaPtr objectPtr)
         {
             Assert(HeaderSize == 16);
-            Assert(headerPtr.IsValid);
+            Assert(objectPtr.IsValid);
 
-            Header = headerPtr;
-            Payload = Header.Offset(HeaderSize);
+            Object = objectPtr;
+            Header = objectPtr.Offset(HeadOffset);
         }
 
-        public static WaRef FromHeaderAddress(uint headerAddress)
+        public static WaRef FromObjectAddress(WaPtr objectPtr)
         {
-            return new WaRef(WaPtr.Null.Offset(headerAddress));
+            return new WaRef(objectPtr);
         }
 
-        public static WaRef FromHeaderAddress(WaPtr headerPtr)
+        public static WaRef FromObjectAddress(uint objectAddress)
         {
-            return new WaRef(headerPtr);
-        }
-
-        public static WaRef FromContentAddress(WaPtr contentPtr)
-        {
-            return new WaRef(WaPtr.Null.Offset(unchecked((uint)(contentPtr.Address - HeaderSize))));
+            return FromObjectAddress(WaPtr.Null.Offset(objectAddress));
         }
 
         public WaPtr Header { get; }
-        public static uint HeadOffset => unchecked((uint)0);
+        public static uint HeadOffset => unchecked((uint)-HeaderSize);
 
-        public WaPtr Payload { get; }
-        public static uint PayloadOffset => HeaderSize;
+        public WaPtr Object { get; }
+        public static uint ObjectOffset => 0;
 
         public static uint OffsetOf(uint offset)
         {
-            return PayloadOffset + offset;
+            return ObjectOffset + offset;
         }
 
-        public static uint OffsetOfDummy => HeadOffset + 0;
-
-        public static uint OffsetOfClass => HeadOffset + 4;
-
-        public static uint OffsetOfDispatch => HeadOffset + 8;
-
-        public static uint OffsetOfSize => HeadOffset + 12;
-
-        public static uint OffsetOfPayload()
-        {
-            return PayloadOffset;
-        }
-
-        public uint this[uint offset] => PayloadOffset + offset;
+        public uint this[uint offset] => ObjectOffset + offset;
 
         public override string ToString()
         {
-            return $"ref [{Header.Address},{Payload.Address}]";
+            return $"ref [{Header.Address},{Object.Address}]";
         }
     }
 }

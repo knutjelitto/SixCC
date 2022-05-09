@@ -43,7 +43,7 @@ namespace Six.Six.Wasms
             {
                 Assert(offset == Align.Align16(offset));
 
-                constString.Address = WaPtr.Null.Offset(offset);
+                constString.StartAddress = WaPtr.Null.Offset(offset);
 
                 offset = Align.Align16(offset + WaRef.HeaderSize + constString.PayloadSize);
 

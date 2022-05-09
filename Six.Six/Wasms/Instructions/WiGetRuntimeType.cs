@@ -14,7 +14,7 @@ namespace Six.Six.Wasms.Instructions
 
         public override void Emit()
         {
-            var address = Class.RuntimeType.StartAddress;
+            var address = Class.RuntimeType.ObjectAddress;
             Assert(address.IsValid);
 
             wl($"{Insn.U32.Const(address.Address)}");

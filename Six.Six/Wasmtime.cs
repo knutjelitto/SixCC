@@ -4,7 +4,7 @@ using Six.Six.Wasms;
 
 using Wasmtime;
 
-using S = Six.Six.Sema;
+using SModule = Six.Six.Sema.Module;
 
 #pragma warning disable CA1822 // Mark members as static
 
@@ -12,7 +12,7 @@ namespace Six.Six
 {
     public class Wasmtime
     {
-        public void Run(S.Module smodule)
+        public void Run(SModule smodule)
         {
             if (smodule.HasErrors)
             {
@@ -36,7 +36,7 @@ namespace Six.Six
 
             using var engine = new Engine(config);
 
-            using var module = Module.FromText(engine, S.Module.CoreNamespace, wat);
+            using var module = Module.FromText(engine, SModule.CoreNamespace, wat);
             using var linker = new Linker(engine);
             using var store = new Store(engine);
 
@@ -48,10 +48,11 @@ namespace Six.Six
 
                 if (memory != null)
                 {
-                    var str = WaRef.FromHeaderAddress((uint)ptr);
-                    var length = memory.ReadInt32(store, ptr + (int)WaRef.OffsetOfSize);
+                    var str = WaRef.FromObjectAddress((uint)ptr);
+                    var length = memory.ReadInt32(store,(int)((uint)ptr - WaRef.HeaderSize + WaRef.Head.Size));
                     Assert(length == 5);
-                    var message = memory.ReadString(store, ptr + (int)WaRef.OffsetOfPayload(), length);
+                    var message = memory.ReadString(store, ptr + (int)WaRef.OffsetOf(0), length);
+                    Assert(message[0] == 'H');
 
                     Console.Write(message);
                 }
@@ -61,7 +62,7 @@ namespace Six.Six
 
             var instance = linker.Instantiate(store, module);
 
-            memory = instance.GetMemory(store, "six.core.Data&Heap")!;
+            memory = instance.GetMemory(store, SModule.LinearMemory)!;
 
             var result = CallInt32Function(store, instance, "six.core.result_with_consts", 42);
             Assert(result == 48);
@@ -80,31 +81,31 @@ namespace Six.Six
 
             var heap_start = (int)instance.GetGlobal(store, "six.core.__heap_start")!.GetValue(store)!;
 
-            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 7)!;
+            result = CallInt32Function(store, instance, SModule.CoreAlloc, 7)!;
             Assert(result == heap_start);
 
-            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 17);
+            result = CallInt32Function(store, instance, SModule.CoreAlloc, 17);
             Assert(result == heap_start + 16);
 
-            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 17);
+            result = CallInt32Function(store, instance, SModule.CoreAlloc, 17);
             Assert(result == heap_start + 16 + 32);
 
-            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 17);
+            result = CallInt32Function(store, instance, SModule.CoreAlloc, 17);
             Assert(result == heap_start + 16 + 32 + 32);
 
-            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 7);
+            result = CallInt32Function(store, instance, SModule.CoreAlloc, 7);
             Assert(result == heap_start + 16 + 32 + 32 + 32);
 
-            result = CallInt32Function(store, instance, S.Module.CoreAlloc, 7);
+            result = CallInt32Function(store, instance, SModule.CoreAlloc, 7);
             Assert(result == heap_start + 16 + 32 + 32 + 32 + 16);
 
             var heap_current = (int)instance.GetGlobal(store, "six.core.__heap_current")!.GetValue(store)!;
             Assert(heap_current == heap_start + 16 + 32 + 32 + 32 + 16 + 7);
 
             var complex1 = CallInt32Function(store, instance, "six.core.get_complex");
-            Assert(complex1 == heap_start + 144);
+            Assert(complex1 == heap_start + 160);
             var complex2 = CallInt32Function(store, instance, "six.core.get_complex");
-            Assert(complex2 == heap_start + 144 + 32);
+            Assert(complex2 == heap_start + 160 + 32);
 
             result = CallInt32Function(store, instance, "six.core.Complex.Real", complex1);
             Assert(result == 1);
@@ -117,7 +118,7 @@ namespace Six.Six
             Assert(result == 2);
 
             var sum = CallInt32Function(store, instance, "six.core.add_complex", complex1, complex2);
-            Assert(sum == heap_start + 144 + 32 + 32);
+            Assert(sum == heap_start + 160 + 32 + 32);
 
             result = CallInt32Function(store, instance, "six.core.Complex.Real", sum);
             Assert(result == 2);
@@ -138,10 +139,8 @@ namespace Six.Six
             result = CallInt32Function(store, instance, "six.core.tests.WhileLoop");
             Assert(result == 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1);
 
-            var mem = instance.GetMemory(store, "six.core.Data&Heap")!;
-
-            var vtable = $"{mem.ReadInt32(store, address + 0):X4}";
-            var dispatch = $"{mem.ReadInt32(store, address + 4):X4}";
+            var vtable = $"{memory.ReadInt32(store, address + 0):X4}";
+            var dispatch = $"{memory.ReadInt32(store, address + 4):X4}";
         }
 
         private int CallInt32Function(Store store, Instance instance, string name, params object[] parameters)

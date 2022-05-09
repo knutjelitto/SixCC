@@ -43,9 +43,9 @@ namespace Six.Six.Wasms
             ModuleCtor = WaFunction.From(this, $"{Sema.Module.CoreNamespace}.{Sema.Module.ModuleCtor}");
 
             Globals = new WaGlobalList(this);
-            StringData = new(this, Module.DataAndHeapMemory);
-            StaticData = new(this, Module.DataAndHeapMemory);
-            RuntimeData = new WaRuntimeData(this, Module.DataAndHeapMemory);
+            StringData = new(this, Module.LinearMemory);
+            StaticData = new(this, Module.LinearMemory);
+            RuntimeData = new WaRuntimeData(this, Module.LinearMemory);
             GlobalFunctionTable = new WaFunctionTable(this, GlobalFunctionsTableName);
             DispatchTable = new WaDispatchTable(this, Module.DispatchTableName);
             FunctionTypes = new(this);
@@ -181,7 +181,7 @@ namespace Six.Six.Wasms
                 wl();
                 EmitImports();
                 wl();
-                wl($"(memory ${Module.DataAndHeapMemory} (export \"{Module.DataAndHeapMemory}\") 16 16)");
+                wl($"(memory ${Module.LinearMemory} (export \"{Module.LinearMemory}\") 16 16)");
                 wl();
                 StaticData.Emit();
                 wl();
@@ -230,29 +230,30 @@ namespace Six.Six.Wasms
                 wl($"(export \"{Module.CoreClassAlloc}\")");
                 wl($"(param {WasmType.Addr})");
                 wl($"(result {WasmType.Addr})");
-                wl($"(local {WasmType.Addr})");
-                wl($"(local {WasmType.I32})");
+                wl($"(local {WasmType.Addr} {WasmType.I32})");
                 wl("(;-----;)");
-                emit(Insn.Local.Get(0));                        // [clazz]
-                emit(Insn.U32.Load(WaRef.PayloadOffset + 4));   // [payload-size]
+                emit(Insn.Local.Get(0));                        // [class-object]
+                emit(Insn.U32.Load(WaRef.ObjectOffset + 4));    // [payload-size]
                 emit(Insn.Local.Tee(2));                        // [payload-size]
                 emit(Insn.U32.Const(WaRef.HeaderSize));         // [payload-size header-size]
                 emit(Insn.U32.Add);                             // [alloc-size]
-                emit(Insn.Call(Module.CoreAlloc));              // [object]
-                emit(Insn.Local.Tee(1));                        // [object]
-                emit(Insn.S32.Const(-1));                       // [object -1]
-                emit(Insn.U32.Store(WaRef.OffsetOfDummy));      // [] object.dummy = -1
-                emit(Insn.Local.Get(1));                        // [object]
-                emit(Insn.Local.Get(0));                        // [object clazz]
-                emit(Insn.U32.Store(WaRef.OffsetOfClass));      // [] object.clazz = clazz
-                emit(Insn.Local.Get(1));                        // [object]
-                emit(Insn.Local.Get(0));                        // [object clazz]
-                emit(Insn.U32.Load(WaRef.PayloadOffset + 8));   // [object clazz.dispatch]
-                emit(Insn.U32.Store(WaRef.OffsetOfDispatch));   // [] object.dispatch = clazz.dispatch
-                emit(Insn.Local.Get(1));                        // [object]
-                emit(Insn.Local.Get(2));                        // [object payload-size]
-                emit(Insn.U32.Store(WaRef.OffsetOfSize));       // [] object.dispatch = clazz.dispatch
-                emit(Insn.Local.Get(1));                        // [object]
+                emit(Insn.Call(Module.CoreAlloc));              // [header]
+                emit(Insn.Local.Tee(1));                        // [header]
+                emit(Insn.S32.Const(-1));                       // [header -1]
+                emit(Insn.U32.Store(WaRef.Head.Heap));         // [] header.dummy = -1
+                emit(Insn.Local.Get(1));                        // [header]
+                emit(Insn.Local.Get(0));                        // [header class]
+                emit(Insn.U32.Store(WaRef.Head.ObjectId));         // [] header.class = clazz
+                emit(Insn.Local.Get(1));                        // [header]
+                emit(Insn.Local.Get(0));                        // [header class-object]
+                emit(Insn.U32.Load(WaRef.ObjectOffset + 8));    // [header dispatch]
+                emit(Insn.U32.Store(WaRef.Head.Dispatch));      // [] object.dispatch = dispatch
+                emit(Insn.Local.Get(1));                        // [header]
+                emit(Insn.Local.Get(2));                        // [header payload-size]
+                emit(Insn.U32.Store(WaRef.Head.Size));          // [] header.size = payload-size
+                emit(Insn.Local.Get(1));                        // [header]
+                emit(Insn.U32.Const(WaRef.HeaderSize));         //
+                emit(Insn.U32.Add);                             //
                 emit(Insn.Return);
                 wl("(;-----;)");
             });

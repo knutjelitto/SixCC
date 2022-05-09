@@ -21,9 +21,9 @@ namespace Six.Six.Sema
         public static string GetClass => "get@class";
         public static string MetaClassName => $"{MetaNamespace}.Class";
         public static string StringClassName => $"{CoreNamespace}.String";
-        public static string ModuleFunctionsTableName => $"{CoreNamespace}.functions";
-        public static string DispatchTableName => $"{CoreNamespace}.dispatch";
-        public static string DataAndHeapMemory => $"{CoreNamespace}.Data&Heap";
+        public static string ModuleFunctionsTableName => $"{CoreNamespace}.table@functions";
+        public static string DispatchTableName => $"{CoreNamespace}.table@dispatch";
+        public static string LinearMemory => $"{CoreNamespace}.memory@linear";
         public static string Data_Start => $"{CoreNamespace}.__data_start";
         public static string Heap_Start => $"{CoreNamespace}.__heap_start";
         public static string Heap_Current => $"{CoreNamespace}.__heap_current";
