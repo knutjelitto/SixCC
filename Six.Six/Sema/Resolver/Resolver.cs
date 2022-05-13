@@ -40,10 +40,20 @@ namespace Six.Six.Sema
         {
             var namespaceBlock = Module.OpenNamespace(code.Namespace);
 
+            foreach (var use in code.Usings)
+            {
+                Use(namespaceBlock, use);
+            }
+
             foreach (var declaration in code.Declarations)
             {
                 D.WalkDeclaration(namespaceBlock, declaration);
             }
+        }
+
+        private void Use(NamespaceBlock namespaceBlock, A.Using use)
+        {
+
         }
     }
 }

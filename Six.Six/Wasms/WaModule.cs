@@ -240,10 +240,14 @@ namespace Six.Six.Wasms
                 emit(Insn.Call(Module.CoreAlloc));              // [header]
                 emit(Insn.Local.Tee(1));                        // [header]
                 emit(Insn.S32.Const(-1));                       // [header -1]
-                emit(Insn.U32.Store(WaRef.Head.Heap));         // [] header.dummy = -1
+                emit(Insn.U32.Store(WaRef.Head.Heap));          // [] header.dummy = -1
                 emit(Insn.Local.Get(1));                        // [header]
-                emit(Insn.Local.Get(0));                        // [header class]
-                emit(Insn.U32.Store(WaRef.Head.ObjectId));         // [] header.class = clazz
+                emit(Insn.Global.Get(Module.Next_Object_Id));   // [header next-object-id]
+                emit(Insn.U32.Store(WaRef.Head.ObjectId));      // [] header.object-id = next-object-id
+                emit(Insn.Global.Get(Module.Next_Object_Id));   // [next-object-id]
+                emit(Insn.U32.Const(1));                        // [next-object-id 1]
+                emit(Insn.U32.Add);                             // [next-object-id+1]
+                emit(Insn.Global.Set(Module.Next_Object_Id));   // [] next-object-id = next-object-id+1
                 emit(Insn.Local.Get(1));                        // [header]
                 emit(Insn.Local.Get(0));                        // [header class-object]
                 emit(Insn.U32.Load(WaRef.ObjectOffset + 8));    // [header dispatch]
@@ -252,7 +256,7 @@ namespace Six.Six.Wasms
                 emit(Insn.Local.Get(2));                        // [header payload-size]
                 emit(Insn.U32.Store(WaRef.Head.Size));          // [] header.size = payload-size
                 emit(Insn.Local.Get(1));                        // [header]
-                emit(Insn.U32.Const(WaRef.HeaderSize));         //
+                emit(Insn.U32.Const(WaRef.HeaderSize));         // 
                 emit(Insn.U32.Add);                             //
                 emit(Insn.Return);
                 wl("(;-----;)");
@@ -264,6 +268,5 @@ namespace Six.Six.Wasms
                 wl($"{insn}");
             }
         }
-
     }
 }

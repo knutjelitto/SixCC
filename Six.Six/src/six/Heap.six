@@ -1,5 +1,7 @@
 namespace six.core;
 
+using six.core.meta { ... }
+
 shared let uint __data_start = 0u32;
 shared let uint __heap_start = 0u32;
 shared var uint __heap_current = 0u32;
